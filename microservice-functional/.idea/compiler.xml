@@ -7,20 +7,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="microservice-perms" />
-        <module name="microservice-organization" />
-        <module name="microservice-gateway-admin" />
-        <module name="microservice-common-web" />
         <module name="microservice-mobile-attendance" />
-        <module name="microservice-common-feign" />
-        <module name="microservice-gateway-web" />
-        <module name="microservice-common-core" />
-        <module name="microservice-oauth" />
-        <module name="microservice-webapps-parent" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="microservice-mobile-attendance" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
