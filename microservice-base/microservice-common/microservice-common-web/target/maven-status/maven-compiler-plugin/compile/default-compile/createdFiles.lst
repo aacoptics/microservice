@@ -1,0 +1,14 @@
+com\aacoptics\common\web\entity\form\BaseForm.class
+com\aacoptics\common\web\interceptor\UserInterceptor.class
+com\aacoptics\common\web\entity\dto\XiaomiApiForm.class
+com\aacoptics\common\web\entity\param\BaseParam.class
+com\aacoptics\common\web\entity\vo\BaseVo.class
+com\aacoptics\common\web\config\CorsConfig.class
+com\aacoptics\common\web\config\RedisConfig.class
+com\aacoptics\common\web\entity\ResourceDefinition.class
+com\aacoptics\common\web\entity\ResourceDefinition$ResourceDefinitionBuilder.class
+com\aacoptics\common\web\handler\PoMetaObjectHandler.class
+com\aacoptics\common\web\entity\enums\PermissionType.class
+com\aacoptics\common\web\entity\form\BaseQueryForm.class
+com\aacoptics\common\web\exception\DefaultGlobalExceptionHandlerAdvice.class
+com\aacoptics\common\web\entity\po\BasePo.class

@@ -1,0 +1,13 @@
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\form\BaseForm.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\handler\PoMetaObjectHandler.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\ResourceDefinition.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\po\BasePo.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\config\CorsConfig.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\config\RedisConfig.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\form\BaseQueryForm.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\enums\PermissionType.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\param\BaseParam.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\dto\XiaomiApiForm.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\entity\vo\BaseVo.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\interceptor\UserInterceptor.java
+D:\程序\microservice\microservice-base\microservice-common\microservice-common-web\src\main\java\com\aacoptics\common\web\exception\DefaultGlobalExceptionHandlerAdvice.java

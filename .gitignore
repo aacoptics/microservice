@@ -1,0 +1,10 @@
+# Project exclude paths
+/iot-micro-auth/target/
+/iot-micro-common/target/
+/iot-micro-gateway/target/
+/iot-micro-redis/target/
+/iot-micro-shiro/target/
+/iot-micro-test/target/
+/iot-provider-account/target/
+/iot-provider-ims-xml/target/
+/iot-scheduler/target/

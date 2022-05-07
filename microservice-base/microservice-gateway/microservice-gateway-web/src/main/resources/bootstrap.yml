@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: microservice-gateway-web
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.233.76.32:8848
+        namespace: microservice-prod
+        group: microservice-base
+      config:
+        server-addr: 10.233.76.32:8848
+        namespace: microservice-prod
+        group: microservice-base
+        file-extension: yaml
+    sentinel:
+      transport:
+        dashboard: 10.233.76.40:8844
+        client-ip: 127.0.0.1
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allow-credentials: true
+            allowed-origins: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+            max-age: 3600

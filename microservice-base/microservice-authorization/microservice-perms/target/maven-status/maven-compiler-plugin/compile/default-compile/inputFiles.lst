@@ -1,0 +1,15 @@
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\service\NewMvcRequestMatcher.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\config\SwaggerConfig.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\provider\ResourceProviderFallback.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\service\IAuthenticationService.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\controller\HttpServletRequestAuthWrapper.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\PermsApplication.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\service\IResourceService.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\events\BusReceiver.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\provider\ResourceProvider.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\service\impl\ResourceService.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\controller\AuthenticationController.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\service\impl\AuthenticationService.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\config\ResourceServerConfig.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\config\LoadResourceDefine.java
+D:\程序\microservice\microservice-base\microservice-authorization\microservice-perms\src\main\java\com\aacoptics\perms\config\BusConfig.java

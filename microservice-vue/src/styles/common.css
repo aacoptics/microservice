@@ -1,0 +1,233 @@
+.typeItem_orderNum {
+    display: inline-block;
+    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.statue_count_div {
+    position: relative;
+    width: 150px;
+    margin-left: 30px;
+    height: 90px;
+    float: left;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+    font-family: 楷体;
+    font-size: 22px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.toolbar {
+    float: right;
+}
+
+.item_disconnect {
+    background-color: gray;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_manual {
+    background-color: dodgerblue;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_wait {
+    background-color: yellow;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_automatic {
+    background-color: green;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_alarm {
+    background-color: red;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_hold {
+    background-color: hotpink;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_semiAuto {
+    background-color: chocolate;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.item_otherStatus {
+    background-color: orangered;
+    line-height: 85px;
+    text-align: center;
+    height: 100%;
+    font-weight: bold;
+    color: white;
+    border: 1px solid cornflowerblue;
+    border-radius: 3px;
+}
+
+.tableHead {
+    font-size: xx-small;
+    color: black;
+    text-align: center;
+}
+
+.equip_card_type {
+    width: 200px;
+    height: 150px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.secs_equip_card_type {
+    width: 200px;
+    height: 150px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.mqtt_equip_card_type {
+    width: 200px;
+    height: 150px;
+    border: 1px solid cornflowerblue !important;
+    background-color: #f0f0f0 !important;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.status_radio_type {
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 5px;
+    font-family: 'Microsoft YaHei', serif;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.coating_card_type {
+    width: 240px;
+    height: 60px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+.lenspacker_card_type {
+    width: 260px;
+    height: 120px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 50px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.mold_card_type {
+    width: 80px;
+    height: 50px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+.coating_div_type {
+    width: 230px;
+    border: 1px solid cornflowerblue;
+    background-color: #f0f0f0;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    float: left;
+}
+
+.item_coating_offline {
+    background-color: gray;
+    font-family: "Microsoft YaHei", monospace;
+    font-weight: bold;
+    color: black;
+
+}
+
+.item_coating_running {
+    background-color: green;
+    font-family: "Microsoft YaHei", monospace;
+    font-weight: bold;
+    color: black;
+
+}
+
+.item_coating_alarm {
+    background-color: red;
+    font-family: "Microsoft YaHei", monospace;
+    font-weight: bold;
+    color: white;
+}
