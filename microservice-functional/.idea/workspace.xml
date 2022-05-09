@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/entity/AccessTokenResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/entity/AttendanceResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/ResourceProviderFallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/test/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/bootstrap.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/MobileAttendanceApplication.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/entity/AccessTokenResult.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-archiver/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/microservice-mobile-attendance-1.0.0.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/test-classes/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/MobileAttendanceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/MobileAttendanceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="alwaysUpdateSnapshots" value="true" />
+        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+        <option name="userSettingsFile" value="D:\Package\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="28ouYpheDvx4pJUAxvHUOl8NTzH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="File.Encoding" />
+  </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.aacoptics.mobile.attendance.config" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\provider" />
+      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
+      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.FeishuAppKeyConfigTest.test">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FeishuAppKeyConfigTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="microservice-mobile-attendance" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.aacoptics.mobile.attendance.config.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.aacoptics.mobile.attendance.config" />
+      <option name="MAIN_CLASS_NAME" value="com.aacoptics.mobile.attendance.config.FeishuAppKeyConfigTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MobileAttendanceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="microservice-mobile-attendance" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.aacoptics.mobile.attendance.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.aacoptics.mobile.attendance.MobileAttendanceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.FeishuAppKeyConfigTest.test" />
+        <item itemvalue="Spring Boot.MobileAttendanceApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="" />
+      <created>1651895311675</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651895311675</updated>
+      <workItem from="1651895313917" duration="5483000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="366" height="466" key="DebuggerActiveHint" timestamp="1651915925986">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="366" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1651915925986" />
+    <state width="1921" height="460" key="GridCell.Tab.0.bottom" timestamp="1651917238914">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1651917238914" />
+    <state width="1921" height="460" key="GridCell.Tab.0.center" timestamp="1651917238914">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1651917238914" />
+    <state width="1921" height="460" key="GridCell.Tab.0.left" timestamp="1651917238913">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1651917238913" />
+    <state width="1921" height="460" key="GridCell.Tab.0.right" timestamp="1651917238914">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1651917238914" />
+    <state width="1921" height="460" key="GridCell.Tab.1.bottom" timestamp="1651917258273">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1651917258273" />
+    <state width="1921" height="460" key="GridCell.Tab.1.center" timestamp="1651917258273">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1651917258273" />
+    <state width="1921" height="460" key="GridCell.Tab.1.left" timestamp="1651917258273">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1651917258273" />
+    <state width="1921" height="460" key="GridCell.Tab.1.right" timestamp="1651917258273">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="460" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1651917258273" />
+    <state width="1921" height="356" key="GridCell.Tab.2.bottom" timestamp="1651914889279">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1651914889279" />
+    <state width="1921" height="356" key="GridCell.Tab.2.center" timestamp="1651914889278">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1651914889278" />
+    <state width="1921" height="356" key="GridCell.Tab.2.left" timestamp="1651914889278">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1651914889278" />
+    <state width="1921" height="356" key="GridCell.Tab.2.right" timestamp="1651914889279">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1921" height="356" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1651914889279" />
+    <state x="461" y="164" key="SettingsEditor" timestamp="1651914424828">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1651914424828" />
+    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1651914772874">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1651914772874" />
+    <state x="490" y="180" key="new project wizard" timestamp="1651895405349">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="490" y="180" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1651895405349" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/microservice-mobile-attendance/src/test/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.java</url>
+          <line>29</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
