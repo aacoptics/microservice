@@ -42,6 +42,7 @@
       <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/microservice-mobile-attendance-1.0.0.jar" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/test-classes/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-base/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" afterDir="false" />
@@ -168,7 +169,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1651895311675</updated>
-      <workItem from="1651895313917" duration="5483000" />
+      <workItem from="1651895313917" duration="6067000" />
     </task>
     <servers />
   </component>
