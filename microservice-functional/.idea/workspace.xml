@@ -23,31 +23,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/entity/AccessTokenResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/entity/AttendanceResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/ResourceProviderFallback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/test/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/bootstrap.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/MobileAttendanceApplication.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/entity/AccessTokenResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/classes/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-archiver/pom.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/microservice-mobile-attendance-1.0.0.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/target/test-classes/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-authorization/microservice-oauth/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-authorization/microservice-perms/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-admin/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-web/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/logback.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../microservice-base/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/MobileAttendanceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/MobileAttendanceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,17 +96,6 @@
     </key>
   </component>
   <component name="RunManager" selected="JUnit.FeishuAppKeyConfigTest.test">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="FeishuAppKeyConfigTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="microservice-mobile-attendance" />
       <extension name="coverage">
@@ -169,7 +140,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1651895311675</updated>
-      <workItem from="1651895313917" duration="6067000" />
+      <workItem from="1651895313917" duration="6662000" />
+      <workItem from="1652316248755" duration="592000" />
     </task>
     <servers />
   </component>
@@ -186,6 +158,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state width="366" height="466" key="DebuggerActiveHint" timestamp="1651915925986">
