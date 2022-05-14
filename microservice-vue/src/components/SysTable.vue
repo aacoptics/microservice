@@ -1,11 +1,11 @@
 <template>
   <div>
     <!--表格栏-->
-    <el-table ref="sysTable" v-loading="loading" :align="align"
-              :border="border" :cell-style="cellStyle"
-              :data="data.records" :element-loading-text="action.loading" :header-cell-style="headerCellStyle"
-              :height="height" :highlight-current-row="highlightCurrentRow" :max-height="maxHeight"
-              :row-class-name="rowClassName"
+    <el-table :id="randomId" ref="sysTable" v-loading="loading" :align="align"
+              :border="border" :cell-style="cellStyle" :data="data.records"
+              :element-loading-text="action.loading" :header-cell-style="headerCellStyle"
+              :height="computedHeight" :highlight-current-row="highlightCurrentRow"
+              :max-height="computedMaxHeight" :row-class-name="rowClassName"
               :show-overflow-tooltip="showOverflowTooltip" :size="size" :stripe="stripe" style="width:100%;"
               @selection-change="selectionChange" @current-change="handleCurrentChange">
       <el-table-column v-if="showBatchDelete & showOperation" type="selection" width="40"></el-table-column>
@@ -40,9 +40,9 @@
                  style="float:left;" type="danger" @click="handleBatchDelete()">
         {{ action.batchDelete }}
       </el-button>
-      <el-pagination :current-page="pageRequest.current" :page-size="pageRequest.size"
-                     :total="data.total" layout="total, prev, pager, next, jumper" style="float:right;"
-                     @current-change="refreshPageRequest">
+      <el-pagination :current-page="pageRequest.current" :page-size="pageRequest.size" :page-sizes="pageSizes"
+                     :total="data.total" layout="total, sizes, prev, pager, next, jumper" style="float:right;"
+                     @current-change="refreshPageRequest" @size-change="handleSizeChange">
       </el-pagination>
     </div>
   </div>
@@ -50,10 +50,10 @@
 
 <script>
 import {getResponseDataMessage} from "@/utils/commonUtils";
+import {v4 as uuidV4} from 'uuid';
 
 export default {
   name: 'SysTable',
-
   props: {
     columns: Array, // 表格列配置
     data: Object, // 表格分页数据
@@ -110,9 +110,28 @@ export default {
     rowClassName: [String, Function],
     headerCellStyle: Object,
     cellStyle: Object,
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    pageSizes: {
+      type: Array,
+      default: () => [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500]
+    },
+  },
+  computed: {
+    computedHeight() {
+      return this.changeHeight > this.height ? this.changeHeight : this.height
+    },
+    computedMaxHeight() {
+      return this.changeMaxHeight > this.maxHeight ? this.changeMaxHeight : this.maxHeight
+    },
   },
   data() {
     return {
+      changeHeight: -1,
+      changeMaxHeight: -1,
+      randomId: uuidV4(),
       action: {
         operation: "操作",
         add: "新增",
@@ -125,12 +144,11 @@ export default {
         confirm: "确定",
         cancel: "取消",
         reset: "重置"
-
       },
       // 分页信息
       pageRequest: {
         current: 1,
-        size: 10
+        size: this.pageSize
       },
       loading: false,  // 加载标识
       selections: []  // 列表选中列
@@ -141,6 +159,12 @@ export default {
     findPage: function () {
       this.loading = true
       let callback = () => {
+        this.$nextTick(() => {
+          let table = document.getElementById(this.randomId);
+          if (table === null || table === undefined) return
+          this.changeHeight = this.changeMaxHeight = Math.max(...[...table.getElementsByTagName('tbody')].map(t => t.clientHeight)) +
+              Math.max(...[...table.getElementsByTagName('thead')].map(t => t.clientHeight)) + 5
+        })
         this.loading = false
       }
       this.$emit('findPage', {pageRequest: this.pageRequest, callback: callback})
@@ -157,6 +181,11 @@ export default {
     // 换页刷新
     refreshPageRequest: function (pageNum) {
       this.pageRequest.current = pageNum
+      this.findPage()
+    },
+    // 换页刷新
+    handleSizeChange: function (size) {
+      this.pageRequest.size = size
       this.findPage()
     },
     // 编辑

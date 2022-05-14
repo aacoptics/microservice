@@ -39,7 +39,8 @@
             <el-table-column prop="path" label="菜单路径"  width="200" />
             <el-table-column prop="component" label="Vue组件"  width="280" />
             <el-table-column prop="description" label="描述"  width="180" />
-            <el-table-column prop="webUrl" label="URL"  width="300" />
+            <el-table-column label="菜单栏是否显示" prop="visible" width="120"/>
+            <el-table-column prop="webUrl" label="URL"  width="500" />
             <el-table-column label="操作" width="220" fixed="right">
               <template #default="scope">
                 <el-button size="mini" type="primary" @click="handleAdd(scope.row)"
@@ -56,7 +57,6 @@
                 >
               </template>
             </el-table-column>
-                 
           </el-table>
 
       <el-dialog :title="operation?'新增':'编辑'" width="40%" v-model="dialogVisible"
@@ -97,7 +97,8 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="排序" prop="orderNum">
-                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable style="width: 100%"></el-input-number>
+                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable
+                                 style="width: 100%"></el-input-number>
               </el-form-item>
             </el-col>
           </el-row>
@@ -105,6 +106,13 @@
             <el-col :span="24">
               <el-form-item label="URL" prop="webUrl">
                 <el-input v-model="dataForm.webUrl" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="菜单栏是否显示" prop="visible">
+                <el-switch v-model="dataForm.visible"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -128,8 +136,7 @@
 </template>
 
 <script>
-import {handleAdd, handleUpdate, deleteMenu} from "@/api/system/menu";
-import {findMenuTree} from "@/api/system/menu";
+import {deleteMenu, findMenuTree, handleAdd, handleUpdate} from "@/api/system/menu";
 
 export default {
   name: "menu",
@@ -159,11 +166,12 @@ export default {
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:'',
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: '',
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       },
       menuData: [],
       menuLoading: false,
@@ -187,11 +195,12 @@ export default {
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:0,
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: 0,
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       }
     },
     // 显示新增界面
@@ -205,11 +214,12 @@ export default {
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:0,
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: 0,
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       }
     },
     // 显示编辑界面
@@ -294,7 +304,6 @@ export default {
           } else {
             this.$message({message: '操作失败, ' + responseData.msg, type: 'error'})
           }
-          
         })
 
       }).catch((err) => {

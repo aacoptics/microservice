@@ -18,7 +18,7 @@ export function findIoTDashManagementMenuTree() {
             'Content-Type': 'application/json'
         },
         params: {
-            name: 'deviceDashBoard'
+            name: 'IoTDashboard'
         }
     })
 }

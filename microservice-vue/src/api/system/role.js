@@ -11,6 +11,16 @@ export function findRoleInfoPage(conditions) {
     })
 }
 
+export function findIoTDashManagementRole() {
+    return request({
+        url: '/organization/role/code/IoTDashboard',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 export function handleUpdate(updateForm) {
     return request({
         url: '/organization/role/' + updateForm.id,
