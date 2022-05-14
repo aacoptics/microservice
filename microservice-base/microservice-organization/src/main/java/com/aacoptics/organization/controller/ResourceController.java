@@ -8,18 +8,18 @@ import com.aacoptics.organization.entity.po.Resource;
 import com.aacoptics.organization.service.IResourceService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/resource")
 @Api("resource")
 @Slf4j
 public class ResourceController {
 
-    @Autowired
+    @javax.annotation.Resource
     private IResourceService resourceService;
 
     @ApiOperation(value = "新增资源", notes = "新增一个资源")
@@ -60,7 +60,7 @@ public class ResourceController {
     @ApiOperation(value = "获取资源", notes = "获取指定资源信息")
     @ApiImplicitParam(paramType = "path", name = "code", value = "资源Code", required = true, dataType = "String")
     @GetMapping()
-    public Result getByCode(@RequestParam(value="code") String code) {
+    public Result getByCode(@RequestParam(value = "code") String code) {
         log.debug("get with code:{}", code);
         return Result.success(resourceService.getByCode(code));
     }
@@ -71,9 +71,9 @@ public class ResourceController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/user/{username}")
-    public Result queryByUsername(@PathVariable String username) {
+    public Result listByUserName(@PathVariable String username) {
         log.debug("query with username:{}", username);
-        return Result.success(resourceService.query(username));
+        return Result.success(resourceService.listByUserName(username));
     }
 
     @ApiOperation(value = "查询资源", notes = "根据roleId查询用户所拥有的资源信息")
@@ -82,9 +82,9 @@ public class ResourceController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/role/{roleId}")
-    public Result queryByRoleId(@PathVariable Long roleId) {
+    public Result listByRoleId(@PathVariable Long roleId) {
         log.debug("query with roleId:{}", roleId);
-        return Result.success(resourceService.query(roleId));
+        return Result.success(resourceService.listByRoleId(roleId));
     }
 
     @ApiOperation(value = "查询所有资源", notes = "查询所有资源信息")
@@ -92,8 +92,8 @@ public class ResourceController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/all")
-    public Result queryAll() {
-        return Result.success(resourceService.getAll());
+    public Result listAll() {
+        return Result.success(resourceService.listAll());
     }
 
     @ApiOperation(value = "查询所有授权资源", notes = "查询所有授权资源信息")
@@ -101,8 +101,8 @@ public class ResourceController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/allAuthentication")
-    public Result queryAllAuthentication() {
-        return Result.success(resourceService.getAllAuthentication());
+    public Result listByAuthentication() {
+        return Result.success(resourceService.listByAuthentication());
     }
 
     @ApiOperation(value = "搜索资源", notes = "根据条件搜索资源信息")

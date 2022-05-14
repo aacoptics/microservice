@@ -11,16 +11,14 @@ import java.io.IOException;
 
 /**
  * 客户端工具类
- * 
+ *
  * @author ruoyi
  */
-public class ServletUtils
-{
+public class ServletUtils {
     /**
      * 获取String参数
      */
-    public static String getParameter(String name)
-    {
+    public static String getParameter(String name) {
         return getRequest().getParameter(name);
     }
 
@@ -28,50 +26,42 @@ public class ServletUtils
     /**
      * 获取request
      */
-    public static HttpServletRequest getRequest()
-    {
+    public static HttpServletRequest getRequest() {
         return getRequestAttributes().getRequest();
     }
 
     /**
      * 获取response
      */
-    public static HttpServletResponse getResponse()
-    {
+    public static HttpServletResponse getResponse() {
         return getRequestAttributes().getResponse();
     }
 
     /**
      * 获取session
      */
-    public static HttpSession getSession()
-    {
+    public static HttpSession getSession() {
         return getRequest().getSession();
     }
 
-    public static ServletRequestAttributes getRequestAttributes()
-    {
+    public static ServletRequestAttributes getRequestAttributes() {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         return (ServletRequestAttributes) attributes;
     }
 
     /**
      * 将字符串渲染到客户端
-     * 
+     *
      * @param response 渲染对象
-     * @param string 待渲染的字符串
+     * @param string   待渲染的字符串
      * @return null
      */
-    public static String renderString(HttpServletResponse response, String string)
-    {
-        try
-        {
+    public static String renderString(HttpServletResponse response, String string) {
+        try {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -84,7 +74,7 @@ public class ServletUtils
      * @param request
      * @return
      */
-    public static String getIpAddress(HttpServletRequest request){
+    public static String getIpAddress(HttpServletRequest request) {
         // 通过请求头获取ip地址
 
         String ip = request.getHeader("x-forwarded-for");

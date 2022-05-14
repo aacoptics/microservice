@@ -9,18 +9,19 @@ import com.aacoptics.organization.entity.po.Role;
 import com.aacoptics.organization.service.IRoleService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
+@SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/role")
 @Api("role")
 @Slf4j
 public class RoleController {
 
-    @Autowired
+    @Resource
     private IRoleService roleService;
 
     @ApiOperation(value = "新增角色", notes = "新增一个角色")
@@ -60,8 +61,15 @@ public class RoleController {
 
     @ApiOperation(value = "获取所有角色", notes = "获取所有角色")
     @GetMapping(value = "/all")
-    public Result get() {
-        return Result.success(roleService.getAll());
+    public Result listAll() {
+        return Result.success(roleService.listAll());
+    }
+
+    @ApiOperation(value = "获取角色", notes = "获取角色code查询角色信息")
+    @ApiImplicitParam(paramType = "path", name = "code", value = "角色Code", required = true, dataType = "String")
+    @GetMapping(value = "/code/{code}")
+    public Result listByCode(@PathVariable String code) {
+        return Result.success(roleService.listByCode(code));
     }
 
     @ApiOperation(value = "查询角色", notes = "根据用户id查询用户所拥有的角色信息")
@@ -70,9 +78,9 @@ public class RoleController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/user/{userId}")
-    public Result query(@PathVariable Long userId) {
+    public Result listByUserId(@PathVariable Long userId) {
         log.debug("query with userId:{}", userId);
-        return Result.success(roleService.query(userId));
+        return Result.success(roleService.listByUserId(userId));
     }
 
     @ApiOperation(value = "搜索角色", notes = "根据条件搜索角色信息")

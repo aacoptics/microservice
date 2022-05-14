@@ -14,38 +14,34 @@ import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
+    @Resource
     private MenuMapper menuMapper;
 
     @Override
     public boolean add(Menu menu) {
-        Set<String> keys = redisTemplate.keys("menu4user*");
-        if(CollUtil.isNotEmpty(keys)) redisTemplate.delete(keys);
         return this.save(menu);
     }
 
     @Override
     @CacheInvalidate(name = "menu::", key = "#id")
+    @CacheInvalidate(name = "menu4user::", key = "targetObject.getMenu4UserKeys()", multi = true)
     public boolean delete(Long id) {
-        Set<String> keys = redisTemplate.keys("menu4user*");
-        if(CollUtil.isNotEmpty(keys)) redisTemplate.delete(keys);
-        List<Menu> childMenu = this.queryByParentId(id);
+        List<Menu> childMenu = this.listByParentId(id);
         if (childMenu != null && childMenu.size() > 0) {
             throw new ExistChildMenuException("请先删除子菜单");
         }
@@ -55,9 +51,8 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuS
 
     @Override
     @CacheInvalidate(name = "menu::", key = "#menu.id")
+    @CacheInvalidate(name = "menu4user::", key = "targetObject.getMenu4UserKeys()", multi = true)
     public boolean update(Menu menu) {
-        Set<String> keys = redisTemplate.keys("menu4user*");
-        if(CollUtil.isNotEmpty(keys)) redisTemplate.delete(keys);
         return this.updateById(menu);
     }
 
@@ -67,39 +62,32 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuS
         return this.getById(id);
     }
 
-    //    @Override
-//    public List<Menu> query(MenuQueryParam menuQueryParam) {
-//        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq(null != menuQueryParam.getName(), "name", menuQueryParam.getName());
-//        return this.list(queryWrapper);
-//    }
-//
     @Override
-    public List<Menu> queryByParentId(Long id) {
-        return this.list(new QueryWrapper<Menu>().eq("parent_id", id));
+    public List<Menu> listByParentId(Long parentId) {
+        return this.list(new QueryWrapper<Menu>().eq("parent_id", parentId));
     }
 
     @Override
-    public List<Tree<String>> getAll() {
+    public List<Tree<String>> listAll() {
         List<Menu> allMenus = menuMapper.getAllMenu();
         return getMenuTrees(allMenus);
     }
 
     @Override
-    public List<Tree<String>> getByName(String name) {
+    public List<Tree<String>> listByName(String name) {
         List<Menu> allMenus = menuMapper.getAllMenu();
         return getMenuTreesByName(getMenuTrees(allMenus), name);
     }
 
     @Override
     @Cached(name = "menu4user::", key = "#username", cacheType = CacheType.REMOTE)
-    public List<Tree<String>> getByUsername(String username) {
+    public List<Tree<String>> listByUsername(String username) {
         List<Menu> allMenus = menuMapper.getMenuByUsername(username);
         return getMenuTrees(allMenus);
     }
 
     @Override
-    public List<Tree<String>> getByRoleId(Long roleId) {
+    public List<Tree<String>> listByRoleId(Long roleId) {
         List<Menu> allMenus = menuMapper.getMenuByRoleId(roleId);
         return getMenuTrees(allMenus);
     }
@@ -112,7 +100,7 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuS
         treeNodeConfig.setParentIdKey("parentId");
         treeNodeConfig.setIdKey("id");
         //转换器
-        List<Tree<String>> menus = TreeUtil.build(allMenus, "-1", treeNodeConfig, (treeNode, tree) -> {
+        return TreeUtil.build(allMenus, "-1", treeNodeConfig, (treeNode, tree) -> {
             tree.setId(treeNode.getId().toString());
             tree.setParentId(treeNode.getParentId().toString());
             tree.setWeight(treeNode.getOrderNum());
@@ -124,9 +112,9 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuS
             tree.putExtra("icon", treeNode.getIcon());
             tree.putExtra("description", treeNode.getDescription());
             tree.putExtra("webUrl", treeNode.getWebUrl());
+            tree.putExtra("visible", treeNode.getVisible());
             tree.putExtra("roles", treeNode.getRoles() == null ? null : Arrays.stream(treeNode.getRoles().split(",")).mapToInt(Integer::parseInt).toArray());
         });
-        return menus;
     }
 
     private List<Tree<String>> getMenuTreesByName(List<Tree<String>> allMenus, String name) {
@@ -140,6 +128,12 @@ public class MenuService extends ServiceImpl<MenuMapper, Menu> implements IMenuS
             }
         }
         return menus;
+    }
+
+    public Set<String> getMenu4UserKeys() {
+        Set<String> menu4UserKeys = stringRedisTemplate.keys("menu4user::*");
+        if (CollUtil.isEmpty(menu4UserKeys)) return Collections.singleton("menu4user::*");
+        return menu4UserKeys.stream().map(key -> key.replace("menu4user::", StringUtils.EMPTY)).collect(Collectors.toSet());
     }
 
 }

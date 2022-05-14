@@ -1,5 +1,6 @@
 package com.aacoptics.organization.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.aacoptics.organization.entity.po.RoleResource;
 import com.aacoptics.organization.mapper.RoleResourceMapper;
 import com.aacoptics.organization.service.IRoleResourceService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -49,6 +51,7 @@ public class RoleResourceService extends ServiceImpl<RoleResourceMapper, RoleRes
 
     @Override
     public List<RoleResource> queryByRoleIds(Set<Long> roleIds) {
+        if (CollUtil.isEmpty(roleIds)) return Collections.emptyList();
         QueryWrapper<RoleResource> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("role_id", roleIds);
         return this.list(queryWrapper);

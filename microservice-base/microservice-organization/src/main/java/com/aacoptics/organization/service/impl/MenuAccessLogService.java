@@ -11,16 +11,16 @@ import com.aacoptics.organization.util.ServletUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 @Service
 @Slf4j
 public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuAccessLog> implements IMenuAccessLogService {
 
-    @Autowired
+    @Resource
     private MenuAccessLogMapper menuAccessLogMapper;
 
     @Override
@@ -43,8 +43,6 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
 
     /**
      * 获取当前登录用户
-     *
-     * @return
      */
     private String getCurrentUsername() {
         return StringUtils.defaultIfBlank(UserContextHolder.getInstance().getUsername(), BasePo.DEFAULT_USERNAME);

@@ -9,18 +9,19 @@ import com.aacoptics.organization.entity.po.User;
 import com.aacoptics.organization.service.IUserService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
+@SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/user")
 @Api("user")
 @Slf4j
 public class UserController {
 
-    @Autowired
+    @Resource
     private IUserService userService;
 
     @ApiOperation(value = "新增用户", notes = "新增一个用户")
@@ -61,7 +62,7 @@ public class UserController {
     @ApiImplicitParam(paramType = "query", name = "uniqueId", value = "用户唯一标识", required = true, dataType = "string")
     @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
     @GetMapping
-    public Result query(@RequestParam String uniqueId) {
+    public Result getByUniqueId(@RequestParam String uniqueId) {
         log.debug("query with username or mobile:{}", uniqueId);
         return Result.success(userService.getByUniqueId(uniqueId));
     }
@@ -70,7 +71,7 @@ public class UserController {
     @ApiImplicitParam(paramType = "query", name = "username", value = "用户唯一标识", required = true, dataType = "string")
     @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
     @GetMapping("/byName")
-    public Result queryByUsername(@RequestParam String username) {
+    public Result getByUsername(@RequestParam String username) {
         log.debug("query with username or mobile:{}", username);
         return Result.success(userService.getByUsername(username));
     }
@@ -78,8 +79,8 @@ public class UserController {
     @ApiOperation(value = "获取所有用户", notes = "获取所有用户")
     @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
     @GetMapping("/queryAll")
-    public Result queryAll() {
-        return Result.success(userService.queryAll());
+    public Result listAll() {
+        return Result.success(userService.listAll());
     }
 
     @ApiOperation(value = "搜索用户", notes = "根据条件查询用户信息")
@@ -90,4 +91,5 @@ public class UserController {
         log.debug("search with userQueryForm:{}", userQueryForm);
         return Result.success(userService.query(userQueryForm.getPage(), userQueryForm.toParam(UserQueryParam.class)));
     }
+
 }

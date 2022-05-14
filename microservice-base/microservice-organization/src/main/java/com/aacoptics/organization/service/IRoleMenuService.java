@@ -10,10 +10,11 @@ public interface IRoleMenuService {
     /**
      * 批量给角色添加菜单
      *
-     * @param roleId      角色id
+     * @param roleId  角色id
      * @param menuIds 菜单id列表
      * @return 是否操作成功
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean saveBatch(Long roleId, Set<Long> menuIds);
 
     /**
@@ -22,6 +23,7 @@ public interface IRoleMenuService {
      * @param roleId 角色id
      * @return 是否操作成功
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean removeByRoleId(Long roleId);
 
     /**
@@ -39,4 +41,5 @@ public interface IRoleMenuService {
      * @return 角色菜单关系集合
      */
     List<RoleMenu> queryByRoleIds(Set<Long> roleIds);
+
 }

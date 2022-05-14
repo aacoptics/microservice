@@ -25,6 +25,7 @@ public class Menu extends BasePo {
     private Integer orderNum;
     private String description;
     private String webUrl;
+    private Boolean visible = true;
     @TableField(exist = false)
     private Set<Menu> children;
     @TableField(exist = false)

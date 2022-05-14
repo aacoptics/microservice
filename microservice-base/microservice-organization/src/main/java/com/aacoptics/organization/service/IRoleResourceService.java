@@ -14,6 +14,7 @@ public interface IRoleResourceService {
      * @param resourceIds 资源id列表
      * @return 是否操作成功
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean saveBatch(Long roleId, Set<Long> resourceIds);
 
     /**
@@ -22,6 +23,7 @@ public interface IRoleResourceService {
      * @param roleId 角色id
      * @return 是否操作成功
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean removeByRoleId(Long roleId);
 
     /**
@@ -39,4 +41,5 @@ public interface IRoleResourceService {
      * @return 角色资源关系集合
      */
     List<RoleResource> queryByRoleIds(Set<Long> roleIds);
+
 }

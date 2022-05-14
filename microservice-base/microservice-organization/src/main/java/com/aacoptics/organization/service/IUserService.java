@@ -9,53 +9,46 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.util.List;
 
 public interface IUserService {
+
+    /**
+     * 新增用户
+     */
+    boolean add(User user);
+
+    /**
+     * 根据id删除用户
+     */
+    boolean delete(Long id);
+
+    /**
+     * 更新用户信息
+     */
+    boolean update(User user);
+
     /**
      * 获取用户
-     *
-     * @param id 用户id
-     * @return UserVo
      */
     UserVo get(Long id);
 
     /**
      * 根据用户唯一标识获取用户信息
      * 目前用户标识为用户名或mobile
-     *
-     * @param uniqueId
-     * @return
      */
     User getByUniqueId(String uniqueId);
 
+    /**
+     * 根据用户名获取用户信息
+     */
     User getByUsername(String username);
 
     /**
-     * 新增用户
-     *
-     * @param user
-     * @return
+     * 获取所有用户
      */
-    boolean add(User user);
+    List<User> listAll();
 
     /**
      * 查询用户
-     *
-     * @return
      */
-    IPage<UserVo> query(Page<User> page, UserQueryParam userQueryParam);
+    IPage<UserVo> query(Page page, UserQueryParam userQueryParam);
 
-    List<User> queryAll();
-
-    /**
-     * 更新用户信息
-     *
-     * @param user
-     */
-    boolean update(User user);
-
-    /**
-     * 根据id删除用户
-     *
-     * @param id
-     */
-    boolean delete(Long id);
 }
