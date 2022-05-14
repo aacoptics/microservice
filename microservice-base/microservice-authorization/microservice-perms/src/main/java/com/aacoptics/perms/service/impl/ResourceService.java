@@ -23,13 +23,12 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ResourceService implements IResourceService {
-    @Autowired
-    private ResourceProvider resourceProvider;
-
     /**
      * 系统中所有权限集合
      */
     private static final Map<RequestMatcher, ConfigAttribute> resourceConfigAttributes = new HashMap<>();
+    @Autowired
+    private ResourceProvider resourceProvider;
 
     @Override
     public synchronized void saveResource(ResourceDefinition resourceDefinition) {

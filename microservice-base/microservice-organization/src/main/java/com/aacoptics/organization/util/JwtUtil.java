@@ -34,6 +34,7 @@ public class JwtUtil {
 
     @Autowired
     private ResourceService resourceService;
+
     /**
      * 校验token是否正确
      *
@@ -164,8 +165,8 @@ public class JwtUtil {
         return loginUser;
     }
 
-    public boolean checkUserPermission(String userName, String url){
-        List<Resource> permissionSet = resourceService.query(userName);
+    public boolean checkUserPermission(String userName, String url) {
+        List<Resource> permissionSet = resourceService.listByUserName(userName);
         return permissionSet.contains(url);
     }
 }

@@ -16,8 +16,9 @@ class LoadResourceDefine {
     private IResourceService resourceService;
 
     /**
-     *取消返回的bean防止外部出现线程安全问题
+     * 取消返回的bean防止外部出现线程安全问题
      * 2020/5/15
+     *
      * @return
      */
     @PostConstruct

@@ -13,6 +13,7 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Hashtable;
 import java.util.UUID;
@@ -28,24 +29,23 @@ public class PasswordUtil {
      * 定义使用的算法为:PBEWITHMD5andDES算法
      */
     public static final String ALGORITHM = "PBEWithMD5AndDES";//加密算法
-    public static String[] chars = new String[] { "a", "b", "c", "d", "e", "f",
-            "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
-            "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5",
-            "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I",
-            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-            "W", "X", "Y", "Z" };
-
     /**
      * 定义迭代次数为1000次
      */
     private static final int ITERATIONCOUNT = 1000;
+    public static String[] chars = new String[]{"a", "b", "c", "d", "e", "f",
+            "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+            "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5",
+            "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I",
+            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
+            "W", "X", "Y", "Z"};
 
     /**
      * 获取加密算法中使用的盐值,解密中使用的盐值必须与加密中使用的相同才能完成操作. 盐长度必须为8字节
      *
      * @return String 盐值
      */
-    public static String getSalt(){
+    public static String getSalt() {
         StringBuffer shortBuffer = new StringBuffer();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         for (int i = 0; i < 8; i++) {
@@ -99,7 +99,7 @@ public class PasswordUtil {
 
             cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
             //update-begin-author:sccott date:20180815 for:中文作为用户名时，加密的密码windows和linux会得到不同的结果 gitee/issues/IZUD7
-            encipheredData = cipher.doFinal(plaintext.getBytes("utf-8"));
+            encipheredData = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
             //update-end-author:sccott date:20180815 for:中文作为用户名时，加密的密码windows和linux会得到不同的结果 gitee/issues/IZUD7
         } catch (Exception e) {
         }
@@ -139,7 +139,7 @@ public class PasswordUtil {
      * @return
      */
     public static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
         }

@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 public class RouteService implements IRouteService {
 
     private static final String GATEWAY_ROUTES = "gateway_routes::";
+    private final Map<String, RouteDefinition> routeDefinitionMaps = new HashMap<>();
 
     @Value("${swagger.ignore.gatewayRoute}")
     private String ignoreSwaggerRoutes = "iot-auth-server";
@@ -37,8 +38,6 @@ public class RouteService implements IRouteService {
 
     @CreateCache(name = GATEWAY_ROUTES, cacheType = CacheType.REMOTE)
     private Cache<String, RouteDefinition> gatewayRouteCache;
-
-    private Map<String, RouteDefinition> routeDefinitionMaps = new HashMap<>();
 
     @PostConstruct
     private void loadRouteDefinition() {

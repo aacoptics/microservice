@@ -23,6 +23,9 @@ public class UserQueryForm extends BaseQueryForm<UserQueryParam> {
     @ApiModelProperty(value = "手机号")
     private String mobile;
 
+    @ApiModelProperty(value = "描述")
+    private String description;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Past(message = "查询开始时间必须小于当前日期")
     @ApiModelProperty(value = "查询开始时间")

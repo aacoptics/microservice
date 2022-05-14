@@ -9,21 +9,22 @@ import com.aacoptics.organization.service.IMenuAccessLogService;
 import com.aacoptics.organization.service.IMenuService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
+@SuppressWarnings("rawtypes")
 @RestController
 @RequestMapping("/menu")
 @Api("menu")
 @Slf4j
 public class MenuController {
 
-    @Autowired
+    @Resource
     private IMenuService menuService;
 
-    @Autowired
+    @Resource
     private IMenuAccessLogService menuAccessLogService;
 
     @ApiOperation(value = "新增菜单", notes = "新增一个菜单")
@@ -54,52 +55,13 @@ public class MenuController {
         return Result.success(menuService.update(menu));
     }
 
-//    @ApiOperation(value = "获取菜单", notes = "获取指定菜单信息")
-//    @ApiImplicitParam(paramType = "path", name = "id", value = "菜单ID", required = true, dataType = "Long")
-//    @GetMapping(value = "/{id}")
-//    public Result get(@PathVariable Long id) {
-//        log.debug("get with id:{}", id);
-//        return Result.success(menuService.get(id));
-//    }
-//
-//    @ApiOperation(value = "查询菜单", notes = "根据条件查询菜单信息，简单查询")
-//    @ApiImplicitParam(paramType = "query", name = "name", value = "菜单名称", required = true, dataType = "string")
-//    @ApiResponses(
-//            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
-//    )
-//    @GetMapping
-//    public Result query(@RequestParam String name) {
-//        log.debug("query with name:{}", name);
-//        MenuQueryParam menuQueryParam = new MenuQueryParam(name);
-//        return Result.success(menuService.query(menuQueryParam));
-//    }
-//
-//    @ApiOperation(value = "搜索菜单", notes = "根据条件查询菜单信息")
-//    @ApiImplicitParam(name = "menuQueryForm", value = "菜单查询参数", required = true, dataType = "MenuQueryForm")
-//    @ApiResponses(
-//            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
-//    )
-//    @PostMapping(value = "/conditions")
-//    public Result search(@Valid @RequestBody MenuQueryForm menuQueryForm) {
-//        log.debug("search with menuQueryForm:{}", menuQueryForm);
-//        return Result.success(menuService.query(menuQueryForm.toParam(MenuQueryParam.class)));
-//    }
-//
-//    @ApiOperation(value = "根据父id查询菜单", notes = "根据父id查询菜单列表")
-//    @ApiImplicitParam(paramType = "path", name = "id", value = "菜单父ID", required = true, dataType = "Long")
-//    @GetMapping(value = "/parent/{id}")
-//    public Result search(@PathVariable Long id) {
-//        log.debug("query with parent id:{}", id);
-//        return Result.success(menuService.queryByParentId(id));
-//    }
-
     @ApiOperation(value = "查询所有菜单", notes = "查询所有菜单信息")
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/all")
-    public Result queryAll() {
-        return Result.success(menuService.getAll());
+    public Result listAll() {
+        return Result.success(menuService.listAll());
     }
 
     @ApiOperation(value = "根据菜单名查询菜单", notes = "根据菜单名查询菜单信息")
@@ -108,8 +70,8 @@ public class MenuController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/byName")
-    public Result queryByName(@RequestParam String name) {
-        return Result.success(menuService.getByName(name));
+    public Result listByName(@RequestParam String name) {
+        return Result.success(menuService.listByName(name));
     }
 
     @ApiOperation(value = "根据用户查询菜单", notes = "根据用户查询菜单信息")
@@ -118,8 +80,8 @@ public class MenuController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/byUsername")
-    public Result queryByUserName(@RequestParam String username) {
-        return Result.success(menuService.getByUsername(username));
+    public Result listByUsername(@RequestParam String username) {
+        return Result.success(menuService.listByUsername(username));
     }
 
     @ApiOperation(value = "根据角色查询菜单", notes = "根据角色查询菜单信息")
@@ -128,16 +90,9 @@ public class MenuController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/byRole")
-    public Result queryByRole(@RequestParam Long roleId) {
-        return Result.success(menuService.getByRoleId(roleId));
+    public Result listByRoleId(@RequestParam Long roleId) {
+        return Result.success(menuService.listByRoleId(roleId));
     }
-
-//        @GetMapping
-//    public Result query(@RequestParam String name) {
-//        log.debug("query with name:{}", name);
-//        MenuQueryParam menuQueryParam = new MenuQueryParam(name);
-//        return Result.success("");
-//    }
 
     @ApiOperation(value = "记录菜单访问日志", notes = "记录菜单访问日志")
     @ApiImplicitParam(name = "menuForm", value = "菜单form表单", required = true, dataType = "MenuForm")
@@ -148,4 +103,5 @@ public class MenuController {
 
         return Result.success(menuAccessLogService.logMenuAccess(menuAccessLog));
     }
+
 }

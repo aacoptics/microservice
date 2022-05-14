@@ -42,20 +42,20 @@ public class RedisUtil {
         }
     }
 
-    public String create(String key){
-        if(StrUtil.isBlank(key)){
+    public String create(String key) {
+        if (StrUtil.isBlank(key)) {
             return null;
         }
         String secretKey;
-        if(redisTemplate.hasKey(key)){
-            if(redisTemplate.boundHashOps(key).getExpire() < CommonConstant.SECRET_LATS_TIME){
+        if (redisTemplate.hasKey(key)) {
+            if (redisTemplate.boundHashOps(key).getExpire() < CommonConstant.SECRET_LATS_TIME) {
                 redisTemplate.opsForValue().set(key,
                         SecureUtil.md5(UUID.randomUUID().toString()),
                         CommonConstant.SECRET_EXPIRATION,
                         TimeUnit.SECONDS);
             }
             secretKey = (String) redisTemplate.opsForValue().get(key);
-        }else{
+        } else {
             secretKey = SecureUtil.md5(UUID.randomUUID().toString());
             redisTemplate.opsForValue().set(key,
                     secretKey,
@@ -161,8 +161,8 @@ public class RedisUtil {
     /**
      * 递增
      *
-     * @param key 键
-     * @param delta  要增加几(大于0)
+     * @param key   键
+     * @param delta 要增加几(大于0)
      * @return
      */
     public long incr(String key, long delta) {

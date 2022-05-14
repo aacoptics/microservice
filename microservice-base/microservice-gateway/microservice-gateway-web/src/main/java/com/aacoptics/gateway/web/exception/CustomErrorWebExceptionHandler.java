@@ -46,6 +46,6 @@ public class CustomErrorWebExceptionHandler extends DefaultErrorWebExceptionHand
         return ServerResponse.status(errorStatus)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromObject(gateWayExceptionHandlerAdvice.handle(throwable)));
-                //.doOnNext((resp) -> logError(request, errorStatus));
+        //.doOnNext((resp) -> logError(request, errorStatus));
     }
 }

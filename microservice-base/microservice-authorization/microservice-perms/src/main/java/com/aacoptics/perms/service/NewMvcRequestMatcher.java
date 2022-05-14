@@ -9,8 +9,8 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @Getter
 public class NewMvcRequestMatcher extends MvcRequestMatcher {
 
-    private String pattern;
-    private String method;
+    private final String pattern;
+    private final String method;
 
     public NewMvcRequestMatcher(HandlerMappingIntrospector introspector, String pattern, String method) {
         super(introspector, pattern);

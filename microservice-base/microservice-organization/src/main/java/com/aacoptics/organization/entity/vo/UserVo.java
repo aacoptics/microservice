@@ -13,10 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserVo extends BaseVo<User> {
 
-    public UserVo(User user) {
-        BeanUtils.copyProperties(user, this);
-    }
-
     private String name;
     private String mobile;
     private String username;
@@ -27,4 +23,8 @@ public class UserVo extends BaseVo<User> {
     private String updatedBy;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+
+    public UserVo(User user) {
+        BeanUtils.copyProperties(user, this);
+    }
 }
