@@ -1,8 +1,8 @@
 package com.aacoptics.oauth.provider;
 
-import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.oauth.entity.Role;
 import com.aacoptics.oauth.entity.User;
+import com.aacoptics.common.core.vo.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
