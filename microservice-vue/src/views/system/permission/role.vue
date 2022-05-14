@@ -18,16 +18,16 @@
           </el-form-item>
         </el-form>
       </div>
-      <SysTable :height="460" :highlightCurrentRow="true" :stripe="false"
-                :data="pageResult" :columns="columns" :showBatchDelete="false"
-                @handleCurrentChange="handleRoleSelectChange"
-                ref="sysTable"
-                @findPage="findPage" @handleEdit="handleEdit" @handleDelete="handleDelete">
+      <SysTable ref="sysTable" :columns="columns" :data="pageResult"
+                :height="460" :highlightCurrentRow="true" :showBatchDelete="false"
+                :stripe="false"
+                @findPage="findPage"
+                @handleCurrentChange="handleRoleSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
       </SysTable>
-      <el-dialog :title="operation?'新增':'编辑'" width="80%" v-model="dialogVisible"
-                 :close-on-click-modal="false">
-        <el-form :model="dataForm" label-width="80px" :rules="dataFormRules" ref="dataForm" :size="size">
-          <el-form-item label="Id" prop="id" v-if="false">
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+                 width="80%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="80px">
+          <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="角色代码" prop="code">
@@ -42,19 +42,19 @@
         </el-form>
         <el-row>
           <el-col :span="12">
-            <div class="menu-container" :v-if="true" style="padding-top: 10px">
+            <div :v-if="true" class="menu-container" style="padding-top: 10px">
               <div class="menu-header">
                 <span><B>角色菜单授权</B></span>
               </div>
-              <el-tree :data="menuData"
-                       node-key="id"
-                       size="mini"
-                       show-checkbox
-                       :props="defaultProps"
-                       style="width: 100%;padding-top:20px;" ref="menuTree"
+              <el-tree ref="menuTree"
                        v-loading="menuLoading"
+                       :data="menuData"
+                       :props="defaultProps"
                        element-loading-text="拼命加载中"
-                       highlight-current>
+                       highlight-current node-key="id"
+                       show-checkbox
+                       size="mini"
+                       style="width: 100%;padding-top:20px;">
                 <template #default="{ data }">
                   <div style="width: 100%;font-weight: bold;font-family: 'Microsoft YaHei',serif">
                     <el-row>
@@ -83,19 +83,19 @@
             </div>
           </el-col>
           <el-col :span="12">
-            <div class="menu-container" :v-if="true" style="padding-top: 10px">
+            <div :v-if="true" class="menu-container" style="padding-top: 10px">
               <div class="menu-header">
                 <span><B>角色接口授权</B></span>
               </div>
-              <el-tree :data="resourceData"
-                       node-key="id"
-                       size="mini"
-                       show-checkbox
-                       :props="resourceProps"
-                       style="width: 100%;padding-top:20px;" ref="resourceTree"
+              <el-tree ref="resourceTree"
                        v-loading="resourceLoading"
+                       :data="resourceData"
+                       :props="resourceProps"
                        element-loading-text="拼命加载中"
-                       highlight-current>
+                       highlight-current node-key="id"
+                       show-checkbox
+                       size="mini"
+                       style="width: 100%;padding-top:20px;">
                 <template #default="{ data }">
                   <div style="width: 100%;font-weight: bold;font-family: 'Microsoft YaHei',serif">
                     <el-row>
@@ -125,7 +125,7 @@
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" @click="resetSelection">取消</el-button>
-            <el-button :size="size" type="primary" @click="submitForm" :loading="editLoading">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -135,7 +135,7 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {findRoleInfoPage, handleAdd, deleteRole, handleUpdate} from "@/api/system/role";
+import {deleteRole, findRoleInfoPage, handleAdd, handleUpdate} from "@/api/system/role";
 import {findMenuTree, findRoleMenus} from "@/api/system/menu";
 import {findResourceTree, findRoleResource} from "@/api/system/resource";
 
@@ -320,11 +320,11 @@ export default {
         this.resourceLoading = false
       })
     },
-    getChildrenList(arr, res){
+    getChildrenList(arr, res) {
       arr.forEach(item => {
-        if(item.children && item.children.length > 0){
+        if (item.children && item.children.length > 0) {
           this.getChildrenList(item.children, res)
-        }else{
+        } else {
           res.push(item)
         }
       })

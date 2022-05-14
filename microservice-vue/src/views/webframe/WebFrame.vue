@@ -1,11 +1,11 @@
 <template>
   <div class="container" style="margin:0; padding:0;border: 0;height:auto;width: 100%;overflow: auto">
     <iframe id='webFrame'
-            height='auto'
-            width='100%'
             :src='urlAddress'
             frameborder='0'
-            scrolling='auto'>
+            height='auto'
+            scrolling='auto'
+            width='100%'>
     </iframe>
   </div>
 </template>

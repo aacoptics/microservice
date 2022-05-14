@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-          <el-form :inline="true" :size="size">
+        <el-form :inline="true" :size="size">
           <el-form-item>
             <el-button icon="el-icon-search" type="primary"
                        @click="findMenuTreeData()">查询
@@ -15,67 +15,70 @@
           </el-form-item>
         </el-form>
       </div>
-          <el-table :data="menuData"
-                    row-key="id"
-                    size="mini"
-                    :height="600"
-                    :tree-props="defaultProps"
-                    style="width: 100%; margin-bottom: 20px"
-                    ref="treeTable"
-                    border
-                    v-loading="menuLoading"
-                    default-expand-all
-                    element-loading-text="加载中...">
-            <el-table-column prop="title" label="菜单名称"  width="180" />
-            <el-table-column label="图标" width="60">
-              <template #default="scope">
-                <div style="display: flex; align-items: center">
-                  <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"></i></span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="菜单编码"  width="200" />
-            <el-table-column prop="orderNum" label="排序"  width="120" />
-            <el-table-column prop="path" label="菜单路径"  width="200" />
-            <el-table-column prop="component" label="Vue组件"  width="280" />
-            <el-table-column prop="description" label="描述"  width="180" />
-            <el-table-column label="菜单栏是否显示" prop="visible" width="120"/>
-            <el-table-column prop="webUrl" label="URL"  width="500" />
-            <el-table-column label="操作" width="220" fixed="right">
-              <template #default="scope">
-                <el-button size="mini" type="primary" @click="handleAdd(scope.row)"
-                  >新增</el-button
-                >
-                <el-button size="mini" type="info" @click="handleEdit(scope.row)"
-                  >编辑</el-button
-                >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.row)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
+      <el-table ref="treeTable"
+                v-loading="menuLoading"
+                :data="menuData"
+                :height="600"
+                :tree-props="defaultProps"
+                border
+                default-expand-all
+                element-loading-text="加载中..."
+                row-key="id"
+                size="mini"
+                style="width: 100%; margin-bottom: 20px">
+        <el-table-column label="菜单名称" prop="title" width="180"/>
+        <el-table-column label="图标" width="60">
+          <template #default="scope">
+            <div style="display: flex; align-items: center">
+              <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"></i></span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="菜单编码" prop="name" width="200"/>
+        <el-table-column label="排序" prop="orderNum" width="120"/>
+        <el-table-column label="菜单路径" prop="path" width="200"/>
+        <el-table-column label="Vue组件" prop="component" width="280"/>
+        <el-table-column label="描述" prop="description" width="180"/>
+        <el-table-column label="菜单栏是否显示" prop="visible" width="120"/>
+        <el-table-column label="URL" prop="webUrl" width="500"/>
+        <el-table-column fixed="right" label="操作" width="220">
+          <template #default="scope">
+            <el-button size="mini" type="primary" @click="handleAdd(scope.row)"
+            >新增
+            </el-button
+            >
+            <el-button size="mini" type="info" @click="handleEdit(scope.row)"
+            >编辑
+            </el-button
+            >
+            <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.row)"
+            >删除
+            </el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
 
-      <el-dialog :title="operation?'新增':'编辑'" width="40%" v-model="dialogVisible"
-                 :close-on-click-modal="false">
-        <el-form :model="dataForm" label-width="100px" :rules="dataFormRules" ref="dataForm" :size="size">
-          <el-form-item label="Id" prop="id" v-if="false">
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+                 width="40%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+          <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="12">
               <el-form-item label="菜单编码" prop="name">
-                <el-input v-model="dataForm.name" auto-complete="off" :disabled="!operation" clearable></el-input>
+                <el-input v-model="dataForm.name" :disabled="!operation" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-          <el-form-item label="菜单名称" prop="title">
-            <el-input v-model="dataForm.title" auto-complete="off" clearable></el-input>
-          </el-form-item>
-           </el-col>
+              <el-form-item label="菜单名称" prop="title">
+                <el-input v-model="dataForm.title" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
@@ -127,7 +130,7 @@
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" @click="cancel">取消</el-button>
-            <el-button :size="size" type="primary" @click="submitForm" :loading="editLoading">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -184,7 +187,7 @@ export default {
   },
   methods: {
 
-        // 显示新增顶级菜单
+    // 显示新增顶级菜单
     handleAddTop: function () {
       this.editLoading = false
       this.dialogVisible = true
@@ -282,7 +285,7 @@ export default {
       })
     },
 
-      // 重置选择
+    // 重置选择
     resetSelection() {
       this.dialogVisible = false
     },
@@ -339,6 +342,7 @@ export default {
   color: rgb(20, 89, 121);
 
 }
+
 .custom-tree-node {
   flex: 1;
   display: flex;

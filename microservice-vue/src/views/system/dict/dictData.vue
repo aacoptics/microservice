@@ -6,21 +6,21 @@
           <el-form-item label="字典标签" prop="dictLabel">
             <el-input
                 v-model="filters.dictLabel"
-                placeholder="请输入字典标签"
                 clearable
+                placeholder="请输入字典标签"
                 size="small"
             />
           </el-form-item>
           <el-form-item label="字典键值" prop="dictLabel">
             <el-input
                 v-model="filters.dictValue"
-                placeholder="请输入字典键值"
                 clearable
+                placeholder="请输入字典键值"
                 size="small"
             />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select v-model="filters.status" placeholder="数据状态" clearable size="small">
+            <el-select v-model="filters.status" clearable placeholder="数据状态" size="small">
               <el-option
                   v-for="dict in statusOptions"
                   :key="dict.dictValue"
@@ -63,7 +63,7 @@
             <el-input v-model="dataForm.dictValue" placeholder="请输入数据键值"/>
           </el-form-item>
           <el-form-item label="显示排序" prop="dictSort">
-            <el-input-number v-model="dataForm.dictSort" controls-position="right" :min="0"/>
+            <el-input-number v-model="dataForm.dictSort" :min="0" controls-position="right"/>
           </el-form-item>
           <el-form-item label="状态" prop="status">
             <el-radio-group v-model="dataForm.status">
@@ -76,7 +76,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
-            <el-input v-model="dataForm.remark" type="textarea" placeholder="请输入内容"></el-input>
+            <el-input v-model="dataForm.remark" placeholder="请输入内容" type="textarea"></el-input>
           </el-form-item>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
@@ -277,7 +277,7 @@ export default {
     statusFormat(row) {
       return selectDictLabel(this.statusOptions, row.status);
     },
-    refreshDictData(){
+    refreshDictData() {
       this.getType(this.dictId);
       getDict("sys_normal_disable").then(response => {
         this.statusOptions = response.data.data
