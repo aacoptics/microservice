@@ -30,7 +30,7 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
                         .filter(predicateDefinition -> "Path".equalsIgnoreCase(predicateDefinition.getName()))
                         .peek(predicateDefinition -> log.debug("路由配置参数：{}", predicateDefinition.getArgs()))
                         .forEach(predicateDefinition -> {
-                            if(routeService.ignoreSwaggerRoute(routeDefinition.getId()))
+                            if (routeService.ignoreSwaggerRoute(routeDefinition.getId()))
                                 return;
                             resources.add(swaggerResource(routeDefinition.getId(),
                                     predicateDefinition.getArgs().get("pattern").replace("/**", API_URI)));

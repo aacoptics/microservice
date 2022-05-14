@@ -11,6 +11,6 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class BaseVo<T extends BasePo> implements Serializable {
-    @JsonSerialize(using= ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 }

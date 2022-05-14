@@ -39,10 +39,8 @@ import java.util.List;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    @Qualifier("authenticationManagerBean")
-    private AuthenticationManager authenticationManager;
-
+    @Resource
+    public RedisConnectionFactory redisConnectionFactory;
     @Qualifier("dataSource")
     @Autowired
     DataSource dataSource;
@@ -50,10 +48,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
-
-    @Resource
-    public RedisConnectionFactory redisConnectionFactory;
-
+    @Autowired
+    @Qualifier("authenticationManagerBean")
+    private AuthenticationManager authenticationManager;
     /**
      * jwt 对称加密密钥
      */

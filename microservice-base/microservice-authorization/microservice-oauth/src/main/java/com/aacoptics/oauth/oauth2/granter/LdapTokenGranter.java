@@ -23,8 +23,8 @@ public class LdapTokenGranter extends ResourceOwnerPasswordTokenGranter {
 
 
     public LdapTokenGranter(AuthenticationManager authenticationManager,
-                              AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService,
-                              OAuth2RequestFactory requestFactory) {
+                            AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService,
+                            OAuth2RequestFactory requestFactory) {
         super(authenticationManager, tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
         this.authenticationManager = authenticationManager;
     }

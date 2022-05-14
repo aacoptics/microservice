@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = false )
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class Role extends BasePo {
     private String code;

@@ -21,5 +21,5 @@ public interface ResourceProvider {
     Result<Set<ResourceDefinition>> resources(@PathVariable("username") String username);
 
     @GetMapping(value = "/resource")
-    Result<ResourceDefinition> resourceByCode(@RequestParam(value="code") String code);
+    Result<ResourceDefinition> resourceByCode(@RequestParam(value = "code") String code);
 }

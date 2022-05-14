@@ -26,11 +26,12 @@ public class UserContextHolder {
     }
 
     /**
-     * 静态内部类单例模式
-     * 单例初使化
+     * 获取上下文中的信息
+     *
+     * @return
      */
-    private static class SingletonHolder {
-        private static final UserContextHolder sInstance = new UserContextHolder();
+    public Map<String, String> getContext() {
+        return threadLocal.get();
     }
 
     /**
@@ -40,15 +41,6 @@ public class UserContextHolder {
      */
     public void setContext(Map<String, String> map) {
         threadLocal.set(map);
-    }
-
-    /**
-     * 获取上下文中的信息
-     *
-     * @return
-     */
-    public Map<String, String> getContext() {
-        return threadLocal.get();
     }
 
     /**
@@ -65,6 +57,14 @@ public class UserContextHolder {
      */
     public void clear() {
         threadLocal.remove();
+    }
+
+    /**
+     * 静态内部类单例模式
+     * 单例初使化
+     */
+    private static class SingletonHolder {
+        private static final UserContextHolder sInstance = new UserContextHolder();
     }
 
 }

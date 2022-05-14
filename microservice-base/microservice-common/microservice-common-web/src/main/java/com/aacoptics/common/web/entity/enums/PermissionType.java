@@ -20,15 +20,6 @@ public enum PermissionType {
 
     private final String description;
 
-    @JsonValue
-    public int getCode() {
-        return this.code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
     PermissionType(int code, String description) {
         this.code = code;
         this.description = description;
@@ -39,6 +30,15 @@ public enum PermissionType {
         return Arrays.stream(PermissionType.values())
                 .filter(p -> Objects.equals(p.getCode(), code))
                 .findFirst().orElse(null);
+    }
+
+    @JsonValue
+    public int getCode() {
+        return this.code;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 }

@@ -19,7 +19,7 @@ public class UnixTimeUtil {
         return instant.toEpochMilli();
     }
 
-    public static LocalDateTime getSameDayAppointedTime(Integer hour, Integer minute){
+    public static LocalDateTime getSameDayAppointedTime(Integer hour, Integer minute) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.MIN.withHour(hour).withMinute(minute));
     }
