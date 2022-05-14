@@ -19,7 +19,7 @@ public class LdapTokenGranter extends ResourceOwnerPasswordTokenGranter {
 
     private static final String GRANT_TYPE = "ldap";
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
 
     public LdapTokenGranter(AuthenticationManager authenticationManager,

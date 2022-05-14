@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class FeignOkHttpConfig {
 
-    private int feignOkHttpReadTimeout = 60;
-    private int feignConnectTimeout = 60;
-    private int feignWriteTimeout = 120;
+    private final int feignOkHttpReadTimeout = 60;
+    private final int feignConnectTimeout = 60;
+    private final int feignWriteTimeout = 120;
 
     @Bean
     public okhttp3.OkHttpClient okHttpClient() {

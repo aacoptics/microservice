@@ -13,6 +13,7 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Hashtable;
 import java.util.UUID;
@@ -98,7 +99,7 @@ public class PasswordUtil {
 
             cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
             //update-begin-author:sccott date:20180815 for:中文作为用户名时，加密的密码windows和linux会得到不同的结果 gitee/issues/IZUD7
-            encipheredData = cipher.doFinal(plaintext.getBytes("utf-8"));
+            encipheredData = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
             //update-end-author:sccott date:20180815 for:中文作为用户名时，加密的密码windows和linux会得到不同的结果 gitee/issues/IZUD7
         } catch (Exception e) {
         }
@@ -138,7 +139,7 @@ public class PasswordUtil {
      * @return
      */
     public static String bytesToHexString(byte[] src) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        StringBuilder stringBuilder = new StringBuilder();
         if (src == null || src.length <= 0) {
             return null;
         }

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
  */
 public class HttpServletRequestAuthWrapper extends HttpServletRequestWrapper {
 
-    private String url;
-    private String method;
+    private final String url;
+    private final String method;
 
     /**
      * @param url
