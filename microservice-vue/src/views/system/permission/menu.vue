@@ -30,7 +30,8 @@
         <el-table-column label="图标" width="60">
           <template #default="scope">
             <div style="display: flex; align-items: center">
-              <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"></i></span>
+              <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"
+                                               class="fa-lg"></i></span>
             </div>
           </template>
         </el-table-column>
@@ -81,14 +82,30 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="24">
+              <el-form-item label="图标" prop="icon">
+                <el-popover
+                    placement="bottom-start"
+                    :width="460"
+                    trigger="click"
+                    @show="$refs['iconSelect'].reset()">
+                  <template #reference>
+                    <el-input v-model="dataForm.icon" placeholder="点击选择图标" readonly>
+                      <template #prefix>
+                        <i v-if="dataForm.icon" :class="dataForm.icon" class="fa-lg"/>
+                        <i v-else class="fa fa-search fa-lg"/>
+                      </template>
+                    </el-input>
+                  </template>
+                  <IconSelect ref="iconSelect" @selected="selected"/>
+                </el-popover>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">
               <el-form-item label="Vue组件" prop="component">
                 <el-input v-model="dataForm.component" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="图标" prop="icon">
-                <el-input v-model="dataForm.icon" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -140,9 +157,11 @@
 
 <script>
 import {deleteMenu, findMenuTree, handleAdd, handleUpdate} from "@/api/system/menu";
+import IconSelect from "@/components/IconSelect";
 
 export default {
   name: "menu",
+  components: {IconSelect},
   data() {
     return {
       size: 'small',
@@ -186,7 +205,9 @@ export default {
     }
   },
   methods: {
-
+    selected(name) {
+      this.dataForm.icon = name
+    },
     // 显示新增顶级菜单
     handleAddTop: function () {
       this.editLoading = false
@@ -284,7 +305,6 @@ export default {
         this.menuLoading = false
       })
     },
-
     // 重置选择
     resetSelection() {
       this.dialogVisible = false
@@ -313,7 +333,6 @@ export default {
         console.log(err)
       })
     },
-
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
