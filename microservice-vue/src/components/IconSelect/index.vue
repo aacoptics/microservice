@@ -54,16 +54,16 @@ export default {
   overflow-y: scroll;
 }
 
-.ico-list .fa {
-  margin: 5px;
-  padding: 5px;
+.ico-list i {
+  margin: 2px;
+  padding: 2px;
   cursor: pointer;
   font-size: 18px;
-  width: 28px;
+  width: 22px;
   border-radius: 3px;
 }
 
-.ico-list .fa:hover {
+.ico-list i:hover {
   background-color: #1d9d74;
   color: #ffffff;
 }
