@@ -2,15 +2,19 @@
   <div>
     <div class="container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form :inline="true" :size="size">
+        <el-form :inline="true" size="default">
           <el-form-item>
-            <el-button icon="el-icon-search" type="primary"
-                       @click="findMenuTreeData()">查询
+            <el-button type="primary" @click="findMenuTreeData()">查询
+              <template #icon>
+                <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+              </template>
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" type="success"
-                       @click="handleAddTop">新增
+            <el-button type="success" @click="handleAddTop">新增
+              <template #icon>
+                <i class="fa-solid fa-plus fa-sm"></i>
+              </template>
             </el-button>
           </el-form-item>
         </el-form>
@@ -24,7 +28,7 @@
                 default-expand-all
                 element-loading-text="加载中..."
                 row-key="id"
-                size="mini"
+                :size="size"
                 style="width: 100%; margin-bottom: 20px">
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
@@ -41,9 +45,9 @@
         <el-table-column label="URL" prop="webUrl" width="500"/>
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
-            <el-button size="mini" type="primary" @click="handleAdd(scope.row)">新增</el-button>
-            <el-button size="mini" type="info" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button :size="size" type="primary" @click="handleAdd(scope.row)">新增</el-button>
+            <el-button :size="size" type="info" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button :size="size" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,7 +82,7 @@
                     <el-input v-model="dataForm.icon" auto-complete="off" clearable placeholder="点击选择图标">
                       <template #prefix>
                         <i v-if="dataForm.icon" :class="dataForm.icon" class="fa-lg" style="color: gray"/>
-                        <i v-else class="fa fa-search fa-lg"/>
+                        <i v-else class="fa-solid fa-magnifying-glass fa-lg"/>
                       </template>
                     </el-input>
                   </template>

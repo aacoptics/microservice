@@ -32,13 +32,17 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button icon="el-icon-search" type="primary"
-                       @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)">查询
+              <template #icon>
+                <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+              </template>
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" type="success"
-                       @click="handleAdd">新增
+            <el-button type="success" @click="handleAdd">新增
+              <template #icon>
+                <i class="fa-solid fa-plus fa-sm"></i>
+              </template>
             </el-button>
           </el-form-item>
         </el-form>
@@ -111,7 +115,7 @@ export default {
   },
   data() {
     return {
-      size: 'small',
+      size: 'default',
       filters: {
         dictType: undefined,
         dictLabel: undefined,

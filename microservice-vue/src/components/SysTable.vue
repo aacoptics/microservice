@@ -22,12 +22,17 @@
         <template v-slot="scope">
           <el-button-group>
             <el-tooltip v-if="showOperation & showOperationEdit" :content="action.edit" placement="top">
-              <el-button :size="size" icon="el-icon-edit" type="primary" @click="handleEdit(scope.$index, scope.row)">
+              <el-button :size="size" type="primary" @click="handleEdit(scope.$index, scope.row)">
+                <template #icon>
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </template>
               </el-button>
             </el-tooltip>
             <el-tooltip v-if="showOperation & showOperationDel" :content="action.delete" placement="top">
-              <el-button :size="size" icon="el-icon-delete" type="danger"
-                         @click="handleDelete(scope.$index, scope.row)">
+              <el-button :size="size" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                <template #icon>
+                  <i class="fa-regular fa-trash-can"></i>
+                </template>
               </el-button>
             </el-tooltip>
           </el-button-group>
@@ -61,7 +66,7 @@ export default {
     permsDelete: String,  // 删除权限标识
     size: { // 尺寸样式
       type: String,
-      default: 'mini'
+      default: 'small'
     },
     align: {  // 文本对齐方式
       type: String,

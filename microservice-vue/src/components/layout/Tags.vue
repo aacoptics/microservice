@@ -5,37 +5,42 @@
           v-for="(item,index) in tagsList"
           :key="index"
           :class="{'active': isActive(item.path)}"
-          class="tags-li"
-      >
+          class="tags-li">
         <router-link :to="item.path" class="tags-li-title">{{ item.title }}</router-link>
         <span class="tags-li-icon" @click="closeTags(index)">
-                    <i class="el-icon-close"></i>
-                </span>
+          <i class="fa-solid fa-xmark"></i>
+        </span>
       </li>
     </ul>
     <div class="tags-close-box">
-      <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
-        <i class="el-icon-full-screen" style="margin-right: 10px" @click="screen"></i>
-      </el-tooltip>
-
-      <el-dropdown @command="handleTags">
-        <el-button size="mini" type="primary">
-          标签选项
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu size="small">
-            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-            <el-dropdown-item command="all">关闭所有</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <el-row align="middle" justify="center">
+        <el-col :span="6">
+          <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
+            <i class="fa-solid fa-expand" @click="screen" style="margin-left: 1vh"></i>
+          </el-tooltip>
+        </el-col>
+        <el-col :span="18">
+          <el-dropdown @command="handleTags">
+            <el-button type="primary" size="small" style="height: 30px;width: 10vh">
+              标签选项
+              <i class="fa-solid fa-angle-down el-icon--right"></i>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu size="small">
+                <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+                <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 
 <script>
+
 export default {
   data() {
     return {

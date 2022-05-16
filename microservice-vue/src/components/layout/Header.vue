@@ -2,8 +2,8 @@
   <div class="header">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="collapseChange">
-      <i v-if="!collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
+      <i v-if="!collapse" class="fa-solid fa-align-left"></i>
+      <i v-else class="fa-solid fa-align-right"></i>
     </div>
     <div class="logo">模组IoT平台</div>
     <div class="header-right">
@@ -28,7 +28,7 @@
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{ userRealName }}
-                        <i class="el-icon-caret-bottom"></i>
+                      <i class="fa-solid fa-caret-down"></i>
                     </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -161,7 +161,7 @@ export default {
 }
 
 .user-name {
-  margin-left: 10px;
+  margin-left: 1px;
 }
 
 .user-avator {
