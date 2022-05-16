@@ -3,7 +3,7 @@
     <template v-if="item.subs">
       <el-sub-menu v-show="item.visible" :key="item.index" :index="item.index">
         <template #title>
-          <font-awesome-icon :icon="item.icon" class="mr2"/>
+          <i class="fa fa-bath"></i>
           <span>{{ item.title }}</span>
         </template>
         <MenuItem :items="item.subs"/>
