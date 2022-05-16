@@ -3,7 +3,7 @@
     <template v-if="item.subs">
       <el-sub-menu v-show="item.visible" :key="item.index" :index="item.index">
         <template #title>
-          <i :class="item.icon"></i>
+          <i v-if="item.icon" :class="item.icon" class="mr4"></i>
           <span>{{ item.title }}</span>
         </template>
         <MenuItem :items="item.subs"/>
@@ -11,7 +11,7 @@
     </template>
     <template v-else>
       <el-menu-item v-show="item.visible" :key="item.index" :index="item.index" @click="handleClick(item.index)">
-        <i :class="item.icon"></i>
+        <i v-if="item.icon" :class="item.icon" class="mr4"></i>
         <template #title>{{ item.title }}</template>
       </el-menu-item>
     </template>

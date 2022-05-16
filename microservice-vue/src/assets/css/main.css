@@ -91,6 +91,10 @@ a {
     margin-right: 0.2vw;
 }
 
+.mr4 {
+    margin-right: 0.4vw;
+}
+
 .move-enter-active,
 .move-leave-active {
     transition: opacity .1s ease;

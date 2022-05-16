@@ -29,10 +29,7 @@
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"
-                                               class="fa-lg"></i></span>
-            </div>
+            <i :class="scope.row.icon" class="fa-lg"></i>
           </template>
         </el-table-column>
         <el-table-column label="菜单编码" prop="name" width="200"/>
@@ -44,21 +41,9 @@
         <el-table-column label="URL" prop="webUrl" width="500"/>
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
-            <el-button size="mini" type="primary" @click="handleAdd(scope.row)"
-            >新增
-            </el-button
-            >
-            <el-button size="mini" type="info" @click="handleEdit(scope.row)"
-            >编辑
-            </el-button
-            >
-            <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.row)"
-            >删除
-            </el-button
-            >
+            <el-button size="mini" type="primary" @click="handleAdd(scope.row)">新增</el-button>
+            <el-button size="mini" type="info" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,14 +70,14 @@
             <el-col :span="24">
               <el-form-item label="图标" prop="icon">
                 <el-popover
+                    :width="500"
                     placement="bottom-start"
-                    :width="460"
                     trigger="click"
                     @show="$refs['iconSelect'].reset()">
                   <template #reference>
-                    <el-input v-model="dataForm.icon" placeholder="点击选择图标" readonly>
+                    <el-input v-model="dataForm.icon" auto-complete="off" clearable placeholder="点击选择图标">
                       <template #prefix>
-                        <i v-if="dataForm.icon" :class="dataForm.icon" class="fa-lg"/>
+                        <i v-if="dataForm.icon" :class="dataForm.icon" class="fa-lg" style="color: gray"/>
                         <i v-else class="fa fa-search fa-lg"/>
                       </template>
                     </el-input>

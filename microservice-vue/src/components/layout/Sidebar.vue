@@ -24,7 +24,7 @@ export default {
     return {
       items: [
         {
-          icon: "el-icon-s-home",
+          icon: "fas fa-house mr4",
           index: "dashboard",
           title: "系统首页",
           visible: true

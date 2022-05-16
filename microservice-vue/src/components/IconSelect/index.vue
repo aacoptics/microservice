@@ -1,6 +1,6 @@
 <template>
   <div class="ico-body">
-    <el-input v-model="filterName" style="position: relative;" clearable placeholder="请输入图标名称"
+    <el-input v-model="filterName" clearable placeholder="请输入图标名称" style="position: relative;"
               @clear="filterIcons"
               @input="filterIcons">
       <template #suffix>
@@ -55,8 +55,8 @@ export default {
 }
 
 .ico-list i {
-  margin: 2px;
-  padding: 2px;
+  margin: 3px;
+  padding: 3px;
   cursor: pointer;
   font-size: 18px;
   width: 22px;
