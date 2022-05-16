@@ -3,8 +3,8 @@
     <template v-if="item.subs">
       <el-sub-menu v-show="item.visible" :key="item.index" :index="item.index">
         <template #title>
-          <font-awesome-icon icon="square" />
-          <span style="margin-left: 3px">{{ item.title }}</span>
+          <font-awesome-icon :icon="item.icon" class="mr2"/>
+          <span>{{ item.title }}</span>
         </template>
         <MenuItem :items="item.subs"/>
       </el-sub-menu>
