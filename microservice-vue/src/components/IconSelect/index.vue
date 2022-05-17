@@ -8,7 +8,7 @@
       </template>
     </el-input>
     <div class="ico-list">
-      <el-tooltip placement="top" v-for="(item, index) in iconList" :content="item" :key="index">
+      <el-tooltip v-for="(item, index) in iconList" :key="index" :content="item" placement="top">
         <i :class="item" aria-hidden="true" @click="selectedIcon(item)"/>
       </el-tooltip>
     </div>

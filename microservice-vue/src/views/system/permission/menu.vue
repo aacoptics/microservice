@@ -23,12 +23,12 @@
                 v-loading="menuLoading"
                 :data="menuData"
                 :height="600"
+                :size="size"
                 :tree-props="defaultProps"
                 border
                 default-expand-all
                 element-loading-text="加载中..."
                 row-key="id"
-                :size="size"
                 style="width: 100%; margin-bottom: 20px">
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">

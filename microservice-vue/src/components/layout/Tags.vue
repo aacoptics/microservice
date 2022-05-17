@@ -16,12 +16,12 @@
       <el-row align="middle" justify="center">
         <el-col :span="6">
           <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
-            <i class="fa-solid fa-expand" @click="screen" style="margin-left: 1vh"></i>
+            <i class="fa-solid fa-expand" style="margin-left: 1vh" @click="screen"></i>
           </el-tooltip>
         </el-col>
         <el-col :span="18">
           <el-dropdown @command="handleTags">
-            <el-button type="primary" size="small" style="height: 30px;width: 10vh">
+            <el-button size="small" style="height: 30px;width: 10vh" type="primary">
               标签选项
               <i class="fa-solid fa-angle-down el-icon--right"></i>
             </el-button>
