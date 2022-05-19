@@ -2,11 +2,15 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">模组IoT平台</div>
-      <el-form ref="login" :model="param" :rules="rules" class="ms-content" label-width="0px">
+      <el-form ref="login" :model="param" :rules="rules" class="ms-content" label-width="0px" size="large">
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="用户名" tabindex="1">
             <template #prepend>
-              <el-button icon="el-icon-user" tabindex="-1"></el-button>
+              <el-button tabindex="-1">
+                <template #icon>
+                  <i class="fa-solid fa-user"></i>
+                </template>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>
@@ -19,7 +23,11 @@
               @keyup.enter="submitForm()"
           >
             <template #prepend>
-              <el-button icon="el-icon-lock" tabindex="-1"></el-button>
+              <el-button tabindex="-1">
+                <template #icon>
+                  <i class="fa-solid fa-lock"></i>
+                </template>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>

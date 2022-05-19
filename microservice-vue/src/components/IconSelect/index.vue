@@ -8,9 +8,8 @@
       </template>
     </el-input>
     <div class="ico-list">
-      <el-tooltip v-for="(item, index) in iconList" :key="index" :content="item" placement="top">
-        <i :class="item" aria-hidden="true" @click="selectedIcon(item)"/>
-      </el-tooltip>
+      <font-awesome-icon v-for="(item, index) in iconList" :key="index" :icon="item" aria-hidden="true"
+                         @click="selectedIcon(item)"/>
     </div>
   </div>
 </template>
@@ -35,7 +34,7 @@ export default {
       }
     },
     selectedIcon(name) {
-      this.$emit('selected', name)
+      this.$emit('selected', name.toString())
       document.body.click()
     },
     reset() {
@@ -56,7 +55,7 @@ export default {
   overflow-y: scroll;
 }
 
-.ico-list i {
+.ico-list svg {
   margin: 3px;
   padding: 3px;
   cursor: pointer;
@@ -65,7 +64,7 @@ export default {
   border-radius: 3px;
 }
 
-.ico-list i:hover {
+.ico-list svg:hover {
   background-color: #1d9d74;
   color: #ffffff;
 }
