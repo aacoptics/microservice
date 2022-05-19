@@ -3,7 +3,8 @@
     <template v-if="item.subs">
       <el-sub-menu v-show="item.visible" :key="item.index" :index="item.index">
         <template #title>
-          <font-awesome-icon v-if="item.icon" :icon="getFontAwesomeIcon(item.icon)" class="mr4"/>
+          <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
+                             :icon="fontAwesomeIconFormat(item.icon)" class="mr2" fixed-width/>
           <span>{{ item.title }}</span>
         </template>
         <MenuItem :items="item.subs"/>
@@ -11,7 +12,8 @@
     </template>
     <template v-else>
       <el-menu-item v-show="item.visible" :key="item.index" :index="item.index" @click="handleClick(item.index)">
-        <font-awesome-icon v-if="item.icon" :icon="getFontAwesomeIcon(item.icon)" class="mr4"/>
+        <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
+                           :icon="fontAwesomeIconFormat(item.icon)" class="mr2" fixed-width/>
         <template #title>{{ item.title }}</template>
       </el-menu-item>
     </template>
@@ -19,6 +21,8 @@
 </template>
 
 <script>
+import {fontAwesomeIconFormat} from "@/utils/commonUtils";
+
 export default {
   name: 'MenuItem',
   props: {
@@ -34,11 +38,7 @@ export default {
     handleClick(index) {
       this.$router.push({path: `/${index}`});
     },
-    getFontAwesomeIcon(icon) {
-      let icons = icon.split(',');
-      if (icons.length !== 2) return icon
-      return [icons[0], icons[1]]
-    }
+    fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon)
   },
 }
 </script>

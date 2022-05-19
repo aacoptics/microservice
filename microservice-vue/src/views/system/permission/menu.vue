@@ -6,14 +6,14 @@
           <el-form-item>
             <el-button type="primary" @click="findMenuTreeData()">查询
               <template #icon>
-                <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="success" @click="handleAddTop">新增
               <template #icon>
-                <i class="fa-solid fa-plus fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
           </el-form-item>
@@ -33,7 +33,8 @@
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">
-            <i :class="scope.row.icon" class="fa-lg"></i>
+            <font-awesome-icon v-if="fontAwesomeIconFormat(scope.row.icon) instanceof Array"
+                               :icon="fontAwesomeIconFormat(scope.row.icon)" pull="left" size="lg"/>
           </template>
         </el-table-column>
         <el-table-column label="菜单编码" prop="name" width="200"/>
@@ -79,10 +80,14 @@
                     trigger="click"
                     @show="$refs['iconSelect'].reset()">
                   <template #reference>
-                    <el-input v-model="dataForm.icon" auto-complete="off" clearable placeholder="点击选择图标">
+                    <el-input v-model="dataForm.icon" auto-complete="off" clearable placeholder="点击选择图标" readonly>
                       <template #prefix>
-                        <i v-if="dataForm.icon" :class="dataForm.icon" class="fa-lg" style="color: gray"/>
-                        <i v-else class="fa-solid fa-magnifying-glass fa-lg"/>
+                        <font-awesome-icon v-if="dataForm.icon" :icon="JSON.parse(dataForm.icon)" style="color: gray"/>
+                        <font-awesome-icon v-else :icon="['fa-solid', 'magnifying-glass']"/>
+                      </template>
+                      <template #append>
+                        <font-awesome-icon :icon="['fa-solid', 'circle-xmark']" style="cursor: pointer"
+                                           @click="dataForm.icon=''"/>
                       </template>
                     </el-input>
                   </template>
@@ -147,6 +152,7 @@
 <script>
 import {deleteMenu, findMenuTree, handleAdd, handleUpdate} from "@/api/system/menu";
 import IconSelect from "@/components/IconSelect";
+import {fontAwesomeIconFormat} from "@/utils/commonUtils";
 
 export default {
   name: "menu",
@@ -326,6 +332,7 @@ export default {
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
     },
+    fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon),
     // 取消
     cancel() {
       this.dialogVisible = false;

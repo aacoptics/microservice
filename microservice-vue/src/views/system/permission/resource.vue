@@ -36,14 +36,14 @@
           <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
-                <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="success" @click="handleAdd">新增
               <template #icon>
-                <i class="fa-solid fa-plus fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
           </el-form-item>

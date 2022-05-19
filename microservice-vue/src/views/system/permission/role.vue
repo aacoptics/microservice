@@ -9,14 +9,14 @@
           <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
-                <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="success" @click="handleAdd">新增
               <template #icon>
-                <i class="fa-solid fa-plus fa-sm"></i>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
           </el-form-item>
@@ -63,8 +63,12 @@
                   <div style="width: 100%;font-weight: bold;font-family: 'Microsoft YaHei',serif">
                     <el-row>
                       <el-col :span="8">
-                        <span style="text-align:center"><i :class="data.icon"
-                                                           style="margin-right: 10px"></i>{{ data.title }}</span>
+                        <span style="text-align:center">
+                          <font-awesome-icon v-if="fontAwesomeIconFormat(data.icon) instanceof Array"
+                                             :icon="fontAwesomeIconFormat(data.icon)" fixed-width
+                                             style="margin-right: 10px"/>
+                          {{ data.title }}
+                        </span>
                       </el-col>
                       <el-col :span="5">
                <span style="text-align:center">
@@ -142,6 +146,7 @@ import SysTable from "@/components/SysTable";
 import {deleteRole, findRoleInfoPage, handleAdd, handleUpdate} from "@/api/system/role";
 import {findMenuTree, findRoleMenus} from "@/api/system/menu";
 import {findResourceTree, findRoleResource} from "@/api/system/resource";
+import {fontAwesomeIconFormat} from "@/utils/commonUtils";
 
 export default {
   name: "role",
@@ -400,7 +405,8 @@ export default {
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
-    }
+    },
+    fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon),
   }
 }
 </script>

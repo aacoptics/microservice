@@ -24,14 +24,14 @@
             <el-tooltip v-if="showOperation & showOperationEdit" :content="action.edit" placement="top">
               <el-button :size="size" type="primary" @click="handleEdit(scope.$index, scope.row)">
                 <template #icon>
-                  <i class="fa-regular fa-pen-to-square"></i>
+                  <font-awesome-icon :icon="['far', 'pen-to-square']"/>
                 </template>
               </el-button>
             </el-tooltip>
             <el-tooltip v-if="showOperation & showOperationDel" :content="action.delete" placement="top">
               <el-button :size="size" type="danger" @click="handleDelete(scope.$index, scope.row)">
                 <template #icon>
-                  <i class="fa-regular fa-trash-can"></i>
+                  <font-awesome-icon :icon="['far', 'trash-can']"/>
                 </template>
               </el-button>
             </el-tooltip>

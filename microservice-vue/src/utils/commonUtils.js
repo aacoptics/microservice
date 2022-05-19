@@ -21,3 +21,11 @@ export function date2str(date) {
     }
     return '无';
 }
+
+export function fontAwesomeIconFormat(icon) {
+    try {
+        return JSON.parse(icon)
+    } catch (e) {
+        return icon.trim()
+    }
+}

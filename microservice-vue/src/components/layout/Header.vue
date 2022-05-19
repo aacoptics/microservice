@@ -2,24 +2,28 @@
   <div class="header">
     <!-- 折叠按钮 -->
     <div class="collapse-btn" @click="collapseChange">
-      <i v-if="!collapse" class="fa-solid fa-align-left"></i>
-      <i v-else class="fa-solid fa-align-right"></i>
+      <el-icon v-if="!collapse">
+        <Fold/>
+      </el-icon>
+      <el-icon v-else>
+        <Expand/>
+      </el-icon>
     </div>
     <div class="logo">模组IoT平台</div>
     <div class="header-right">
       <div class="header-user-con">
         <!-- 消息中心 -->
-        <!--div class="btn-bell">
+        <!--<div class="btn-bell">
           <el-tooltip
               effect="dark"
               :content="message?`有${message}条未读消息`:`消息中心`"
               placement="bottom">
             <router-link to="/tabs">
-              <i class="el-icon-bell"></i>
+              <font-awesome-icon :icon="['far', 'bell']" style="color: white"/>
             </router-link>
           </el-tooltip>
           <span class="btn-bell-badge" v-if="message"></span>
-        </div-->
+        </div>-->
         <!-- 用户头像 -->
         <div class="user-avator">
           <img src="../../assets/img/avator.png"/>
@@ -28,7 +32,7 @@
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{ userRealName }}
-                      <i class="fa-solid fa-caret-down"></i>
+                      <font-awesome-icon :icon="['fas', 'caret-down']"/>
                     </span>
           <template #dropdown>
             <el-dropdown-menu>
@@ -46,8 +50,10 @@
 <script>
 import {getUserDetail, getUsername, removeLoginInfo} from "@/utils/auth";
 import {logout} from "@/api/system/user";
+import {Expand, Fold} from "@element-plus/icons-vue";
 
 export default {
+  components: {Expand, Fold},
   data() {
     return {
       fullscreen: false,

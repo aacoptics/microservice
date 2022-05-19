@@ -8,7 +8,7 @@
             <template #prepend>
               <el-button tabindex="-1">
                 <template #icon>
-                  <i class="fa-solid fa-user"></i>
+                  <font-awesome-icon :icon="['fas','user']"/>
                 </template>
               </el-button>
             </template>
@@ -25,7 +25,7 @@
             <template #prepend>
               <el-button tabindex="-1">
                 <template #icon>
-                  <i class="fa-solid fa-lock"></i>
+                  <font-awesome-icon :icon="['fas','lock']"/>
                 </template>
               </el-button>
             </template>

@@ -8,7 +8,7 @@
           class="tags-li">
         <router-link :to="item.path" class="tags-li-title">{{ item.title }}</router-link>
         <span class="tags-li-icon" @click="closeTags(index)">
-          <i class="fa-solid fa-xmark"></i>
+          <font-awesome-icon :icon="['fas', ['xmark']]"/>
         </span>
       </li>
     </ul>
@@ -16,14 +16,15 @@
       <el-row align="middle" justify="center">
         <el-col :span="6">
           <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
-            <i class="fa-solid fa-expand" style="margin-left: 1vh" @click="screen"></i>
+            <font-awesome-icon v-if="fullscreenIcon" :icon="fullscreenIcon" size="lg" style="margin-left: 0.5vh"
+                               @click="screen"/>
           </el-tooltip>
         </el-col>
         <el-col :span="18">
           <el-dropdown @command="handleTags">
             <el-button size="small" style="height: 30px;width: 10vh" type="primary">
-              标签选项
-              <i class="fa-solid fa-angle-down el-icon--right"></i>
+              标签选项&nbsp;
+              <font-awesome-icon :icon="['fas','angle-down']" class="el-icon--right"></font-awesome-icon>
             </el-button>
             <template #dropdown>
               <el-dropdown-menu size="small">
@@ -44,7 +45,8 @@
 export default {
   data() {
     return {
-      fullscreen: false
+      fullscreen: false,
+      fullscreenIcon: ['fas', 'expand']
     };
   },
   computed: {
@@ -57,6 +59,7 @@ export default {
   },
   methods: {
     screen() {
+      this.fullscreenIcon = ''
       let element = document.documentElement;
       if (this.fullscreen) {
         if (document.exitFullscreen) {
@@ -81,6 +84,9 @@ export default {
         }
       }
       this.fullscreen = !this.fullscreen;
+      setTimeout(() => {
+        this.fullscreenIcon = this.fullscreen ? ['fas', 'compress'] : ['fas', 'expand'];
+      }, 100);
     },
     isActive(path) {
       return path === this.$route.fullPath;

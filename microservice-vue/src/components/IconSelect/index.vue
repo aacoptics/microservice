@@ -4,7 +4,7 @@
               @clear="filterIcons"
               @input="filterIcons">
       <template #suffix>
-        <i class="fa fa-search"/>
+        <font-awesome-icon :icon="['fa-solid', 'magnifying-glass']"/>
       </template>
     </el-input>
     <div class="ico-list">
@@ -30,11 +30,11 @@ export default {
     filterIcons() {
       this.iconList = icons
       if (this.filterName) {
-        this.iconList = this.iconList.filter(item => item.includes(this.filterName))
+        this.iconList = this.iconList.filter(items => items.filter(item => item.includes(this.filterName)).length > 0)
       }
     },
     selectedIcon(name) {
-      this.$emit('selected', name.toString())
+      this.$emit('selected', JSON.stringify(name))
       document.body.click()
     },
     reset() {
