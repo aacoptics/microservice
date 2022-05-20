@@ -17,10 +17,11 @@
                updated_time,
                created_by,
                updated_by,
-               visible
+               visible,
+               menu_type
         from menu a
         group by id, parent_id, path, component, icon, name, title, description, web_url, order_num, created_time,
-                 updated_time, created_by, updated_by, visible
+                 updated_time, created_by, updated_by, visible, menu_type
     </select>
 
 
@@ -39,7 +40,8 @@
                updated_time,
                created_by,
                updated_by,
-               visible
+               visible,
+               menu_type
         from menu a
         where id in (select t3.menu_id
                      from users t1
@@ -49,7 +51,7 @@
                                    on t2.role_id = t3.role_id
                      where username = #{username})
         group by id, parent_id, path, component, icon, name, title, description, web_url, order_num, created_time,
-                 updated_time, created_by, updated_by, visible
+                 updated_time, created_by, updated_by, visible, menu_type
         order by order_num
     </select>
 
@@ -68,13 +70,14 @@
                updated_time,
                created_by,
                updated_by,
-               visible
+               visible,
+               menu_type
         from menu a
         where id in (select menu_id
                      from role_menu_relation
                      where role_id = #{roleId})
         group by id, parent_id, path, component, icon, name, title, description, web_url, order_num, created_time,
-                 updated_time, created_by, updated_by, visible
+                 updated_time, created_by, updated_by, visible, menu_type
         order by order_num
     </select>
 </mapper>

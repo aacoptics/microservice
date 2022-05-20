@@ -194,10 +194,10 @@ export default {
     };
   },
   mounted() {
-    getDict("permission_type").then(response => {
+    getDict("sys_permission_type").then(response => {
       this.permissionTypeOptions = response.data.data
     })
-    getDict("request_method").then(response => {
+    getDict("sys_request_method").then(response => {
       this.methodOptions = response.data.data
     })
   },

@@ -95,6 +95,13 @@ a {
     margin-right: 0.4vw;
 }
 
+.el-table .warning-row {
+    --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+.el-table .success-row {
+    --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
+
 .move-enter-active,
 .move-leave-active {
     transition: opacity .1s ease;

@@ -17,19 +17,29 @@
               </template>
             </el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="info" plain @click="toggleExpandAll">展开/折叠
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']"/>
+              </template>
+            </el-button>
+          </el-form-item>
         </el-form>
       </div>
       <el-table ref="treeTable"
+                v-if="refreshTable"
+                :id="randomId"
                 v-loading="menuLoading"
                 :data="menuData"
-                :height="600"
+                :height="height"
                 :size="size"
                 :tree-props="defaultProps"
                 border
-                default-expand-all
+                :default-expand-all="isExpandAll"
                 element-loading-text="加载中..."
                 row-key="id"
-                style="width: 100%; margin-bottom: 20px">
+                style="width: 100%; margin-bottom: 20px"
+                :row-class-name="tableRowClassName">
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">
@@ -42,7 +52,7 @@
         <el-table-column label="菜单路径" prop="path" width="200"/>
         <el-table-column label="Vue组件" prop="component" width="280"/>
         <el-table-column label="描述" prop="description" width="180"/>
-        <el-table-column label="菜单栏是否显示" prop="visible" width="120"/>
+        <el-table-column label="显示状态" prop="visible" width="80"/>
         <el-table-column label="URL" prop="webUrl" width="500"/>
         <el-table-column fixed="right" label="操作" width="220">
           <template #default="scope">
@@ -55,19 +65,65 @@
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
                  width="40%">
-        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" label-width="100px" size="default">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
+            <el-col :span="24">
+              <el-form-item label="菜单类型" prop="menuType">
+                <el-radio-group v-model="dataForm.menuType">
+                  <el-radio
+                      v-for="item in menuTypeOptions"
+                      :key="item.dictValue"
+                      :label="item.dictValue">
+                    {{ item.dictLabel }}
+                  </el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item prop="name">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: userManagement" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      菜单编码
+                    </span>
+                </template>
+                <el-input v-model="dataForm.name" :disabled="!operation" auto-complete="off" clearable
+                          placeholder="请输入菜单编码"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item prop="title">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: 用户管理" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      菜单名称
+                    </span>
+                </template>
+                <el-input v-model="dataForm.title" auto-complete="off" clearable placeholder="请输入菜单名称"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">
-              <el-form-item label="菜单编码" prop="name">
-                <el-input v-model="dataForm.name" :disabled="!operation" auto-complete="off" clearable></el-input>
+              <el-form-item label="排序" prop="orderNum">
+                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable
+                                 style="width: 100%"></el-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="菜单名称" prop="title">
-                <el-input v-model="dataForm.title" auto-complete="off" clearable></el-input>
+              <el-form-item label="显示状态" prop="visible">
+                <el-switch v-model="dataForm.visible"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -96,37 +152,50 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="Vue组件" prop="component">
-                <el-input v-model="dataForm.component" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="菜单路径" prop="path">
-                <el-input v-model="dataForm.path" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="排序" prop="orderNum">
-                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable
-                                 style="width: 100%"></el-input-number>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
+          <el-row v-if="dataForm.menuType !== '0'">
             <el-col :span="24">
-              <el-form-item label="URL" prop="webUrl">
-                <el-input v-model="dataForm.webUrl" auto-complete="off" clearable></el-input>
+              <el-form-item prop="path">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: /user" placement="top">
+                         <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      路由地址
+                    </span>
+                </template>
+                <el-input v-model="dataForm.path" auto-complete="off" clearable placeholder="请输入路由地址"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="dataForm.menuType === '1'">
             <el-col :span="24">
-              <el-form-item label="菜单栏是否显示" prop="visible">
-                <el-switch v-model="dataForm.visible"/>
+              <el-form-item prop="component">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: views/system/permission/user.vue" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      组件路径
+                    </span>
+                </template>
+                <el-input v-model="dataForm.component" auto-complete="off" clearable
+                          placeholder="请输入组件路径"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="dataForm.menuType === '2'">
+            <el-col :span="24">
+              <el-form-item prop="webUrl">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: https://www.aacoptics.com/" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      外链地址
+                    </span>
+                </template>
+                <el-input v-model="dataForm.webUrl" auto-complete="off" clearable
+                          placeholder="请输入外链地址"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -153,6 +222,8 @@
 import {deleteMenu, findMenuTree, handleAdd, handleUpdate} from "@/api/system/menu";
 import IconSelect from "@/components/IconSelect";
 import {fontAwesomeIconFormat} from "@/utils/commonUtils";
+import {getDict} from "@/api/system/dictData";
+import {v4 as uuidV4} from "uuid";
 
 export default {
   name: "menu",
@@ -163,10 +234,17 @@ export default {
       filters: {
         code: ''
       },
+      height: 460,
+      randomId: uuidV4(),
+      refreshTable: true, // 重新渲染表格状态
+      isExpandAll: false,
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
+        menuType: [
+          {required: true, message: '请选择菜单类型', trigger: 'blur'}
+        ],
         name: [
           {required: true, message: '请输入菜单编码', trigger: 'blur'}
         ],
@@ -175,11 +253,15 @@ export default {
         ],
         orderNum: [
           {required: true, message: '请输入排序', trigger: 'blur'}
+        ],
+        visible: [
+          {required: true, message: '请选择是否显示', trigger: 'blur'}
         ]
       },
       // 新增编辑界面数据
       dataForm: {
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
@@ -196,7 +278,8 @@ export default {
         children: 'children',
         label: 'title'
       },
-
+      // 菜单
+      menuTypeOptions: []
     }
   },
   methods: {
@@ -211,6 +294,7 @@ export default {
       this.dataForm = {
         parentId: -1,
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
@@ -230,6 +314,7 @@ export default {
       this.dataForm = {
         parentId: params.id,
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
@@ -247,6 +332,7 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params)
+      this.dataForm.menuType = this.dataForm.menuType.toString()
     },
     // 编辑
     submitForm: function () {
@@ -255,6 +341,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
+            if (params.menuType === '2') params.component = 'views/webframe/WebFrame.vue'
             if (this.operation) {
               handleAdd(params).then((res) => {
                 const responseData = res.data
@@ -297,6 +384,7 @@ export default {
         if (responseData.code === '000000') {
           this.menuData = responseData.data
         }
+        this.refresh()
         this.menuLoading = false
       })
     },
@@ -328,6 +416,29 @@ export default {
         console.log(err)
       })
     },
+    tableRowClassName(row) {
+      if (this.isExpandAll === false) return ''
+      return row.row.menuType === 0 ? 'success-row' : row.row.menuType === 2 ? 'warning-row' : ''
+    },
+    refresh() {
+      this.$nextTick(() => {
+        let table = document.getElementById(this.randomId);
+        if (table === null || table === undefined) return
+        this.height = Math.max(...[...table.getElementsByTagName('tbody')].map(t => t.clientHeight)) +
+            Math.max(...[...table.getElementsByTagName('thead')].map(t => t.clientHeight)) + 5
+      })
+    },
+    // 展开/折叠操作
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+      setTimeout(() => {
+        this.refresh()
+      }, 0)
+    },
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
@@ -340,6 +451,9 @@ export default {
   },
   mounted() {
     this.findMenuTreeData();
+    getDict("sys_menu_type").then(response => {
+      this.menuTypeOptions = response.data.data
+    })
   }
 }
 </script>
