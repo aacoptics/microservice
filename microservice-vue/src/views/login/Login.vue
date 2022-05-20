@@ -2,29 +2,37 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">模组IoT平台</div>
-      <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+      <el-form ref="login" :model="param" :rules="rules" class="ms-content" label-width="0px" size="large">
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="用户名" tabindex="1">
             <template #prepend>
-              <el-button icon="el-icon-user" tabindex="-1"></el-button>
+              <el-button tabindex="-1">
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','user']"/>
+                </template>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
-              type="password"
-              placeholder="密码"
               v-model="param.password"
-              @keyup.enter="submitForm()"
+              placeholder="密码"
               tabindex="2"
+              type="password"
+              @keyup.enter="submitForm()"
           >
             <template #prepend>
-              <el-button icon="el-icon-lock" tabindex="-1"></el-button>
+              <el-button tabindex="-1">
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','lock']"/>
+                </template>
+              </el-button>
             </template>
           </el-input>
         </el-form-item>
         <div class="login-btn">
-          <el-button type="primary" @click="submitForm()" tabindex="3">登录</el-button>
+          <el-button tabindex="3" type="primary" @click="submitForm()">登录</el-button>
         </div>
       </el-form>
     </div>

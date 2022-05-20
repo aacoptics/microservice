@@ -20,7 +20,7 @@ const routes = [
         component: Login
     }
 ]
-const dynamiRouteDic = {}
+const dynamicRouteDic = {}
 
 let isFetchRemote = true;
 
@@ -31,6 +31,7 @@ const formatMenus = function (menuData, menuItems, levelInfo = '') {
     menuData.length && menuData.forEach(menu => {
         const newParent = levelInfo ? levelInfo + '|' + menu.title : '' + menu.title;
         const menuItem = {
+            visible: menu.visible,
             icon: menu.icon,
             index: menu.path ? menu.path.replace("/", "") : menu.name,
             title: menu.title,
@@ -83,9 +84,9 @@ const formatRoutes = function (routes, routeData) {
         if (route.path) {
             if (route.path.split('/').length > 2) {
                 let paths = route.path.split('/')
-                if (dynamiRouteDic[`${paths[1]}_${paths.length}`] === undefined)
-                    dynamiRouteDic[`${paths[1]}_${paths.length}`] = []
-                dynamiRouteDic[`${paths[1]}_${paths.length}`].push(route)
+                if (dynamicRouteDic[`${paths[1]}_${paths.length}`] === undefined)
+                    dynamicRouteDic[`${paths[1]}_${paths.length}`] = []
+                dynamicRouteDic[`${paths[1]}_${paths.length}`].push(route)
             } else {
                 routeData.children.push({
                     path: route.path.indexOf('?') > -1 ? route.path.split('?')[0] : route.path,
@@ -141,8 +142,8 @@ router.beforeEach((to, from, next) => {
                 const routesData = formatRoutes(menuData);
                 const menuItems = formatMenus(menuData);
                 setMenuItems(menuItems);
-                Object.keys(dynamiRouteDic).forEach(key => {
-                    let routes = dynamiRouteDic[key];
+                Object.keys(dynamicRouteDic).forEach(key => {
+                    let routes = dynamicRouteDic[key];
                     let paths = routes[0].path.split('/');
                     let path = `${paths[0]}/${paths[1]}/${Array.from({length: paths.length - 2}, (_, i) => i + 1).map(i => `:id${i}`).join('/')}`
                     routesData.children.push({

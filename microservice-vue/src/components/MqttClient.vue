@@ -53,6 +53,7 @@ export default {
           this.client = {
             connected: false
           }
+          console.log('断开连接成功')
         } catch (error) {
           console.log('断开连接失败！', error.toString())
         }

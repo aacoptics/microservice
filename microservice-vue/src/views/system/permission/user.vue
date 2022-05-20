@@ -7,27 +7,31 @@
             <el-input v-model="filters.username" placeholder="用户名"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-search" type="primary"
-                       @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)">查询
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+              </template>
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" type="success"
-                       @click="handleAdd">新增
+            <el-button type="success" @click="handleAdd">新增
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
+              </template>
             </el-button>
           </el-form-item>
         </el-form>
       </div>
-      <SysTable :height="460" :highlightCurrentRow="true" :stripe="false"
-                :data="pageResult" :columns="columns" :showBatchDelete="false"
-                @handleCurrentChange="handleUserSelectChange"
-                ref="sysTable"
-                @findPage="findPage" @handleEdit="handleEdit" @handleDelete="handleDelete">
+      <SysTable ref="sysTable" :columns="columns" :data="pageResult"
+                :height="460" :highlightCurrentRow="true" :showBatchDelete="false"
+                :stripe="false"
+                @findPage="findPage"
+                @handleCurrentChange="handleUserSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
       </SysTable>
-      <el-dialog :title="operation?'新增':'编辑'" width="40%" v-model="dialogVisible"
-                 :close-on-click-modal="false">
-        <el-form :model="dataForm" label-width="80px" :rules="dataFormRules" ref="dataForm" :size="size">
-          <el-form-item label="Id" prop="id" v-if="false">
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+                 width="40%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="80px">
+          <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="域账号" prop="username">
@@ -56,7 +60,7 @@
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" @click="resetSelection">取消</el-button>
-            <el-button :size="size" type="primary" @click="submitForm" :loading="editLoading">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -74,7 +78,7 @@ export default {
   components: {SysTable},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       filters: {
         username: ''
       },

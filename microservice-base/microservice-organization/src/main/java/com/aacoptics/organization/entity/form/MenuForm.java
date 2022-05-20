@@ -25,11 +25,9 @@ public class MenuForm extends BaseForm<Menu> {
     @ApiModelProperty(value = "菜单中文名称")
     private String title;
 
-    //    @NotBlank(message = "菜单路径不能为空")
     @ApiModelProperty(value = "菜单路径")
     private String path;
 
-    //    @NotBlank(message = "菜单VUE路径不能为空")
     @ApiModelProperty(value = "菜单VUE路径")
     private String component;
 
@@ -47,5 +45,9 @@ public class MenuForm extends BaseForm<Menu> {
 
     @ApiModelProperty(value = "visible")
     private Boolean visible = true;
+
+    @NotNull(message = "菜单类型不能为空")
+    @ApiModelProperty(value = "menuType")
+    private Integer menuType = 1;
 
 }

@@ -6,8 +6,8 @@
           <el-form-item label="字典类型" prop="dictType">
             <el-input
                 v-model="filters.dictType"
-                placeholder="请输入字典类型"
                 clearable
+                placeholder="请输入字典类型"
                 size="small"
                 style="width: 240px"
             />
@@ -15,8 +15,8 @@
           <el-form-item label="字典名称" prop="dictName">
             <el-input
                 v-model="filters.dictName"
-                placeholder="请输入字典名称"
                 clearable
+                placeholder="请输入字典名称"
                 size="small"
                 style="width: 240px"
             />
@@ -35,13 +35,17 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button icon="el-icon-search" type="primary"
-                       @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)">查询
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+              </template>
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" type="success"
-                       @click="handleAdd">新增
+            <el-button type="success" @click="handleAdd">新增
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
+              </template>
             </el-button>
           </el-form-item>
         </el-form>
@@ -52,12 +56,12 @@
                 :stripe="false"
                 @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
-          <el-table-column label="字典类型" width="200" fixed="right" header-align="center"
-                           align="center">
+          <el-table-column align="center" fixed="right" header-align="center" label="字典类型"
+                           width="200">
             <template v-slot="scope">
-                            <el-link type="primary" :underline="false" @click="openDictDetail(scope.row.id)">
-                                <span>{{ scope.row.dictType }}</span>
-                            </el-link>
+              <el-link :underline="false" type="primary" @click="openDictDetail(scope.row.id)">
+                <span>{{ scope.row.dictType }}</span>
+              </el-link>
             </template>
           </el-table-column>
         </template>
@@ -86,7 +90,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
-            <el-input v-model="dataForm.remark" type="textarea" placeholder="请输入内容"></el-input>
+            <el-input v-model="dataForm.remark" placeholder="请输入内容" type="textarea"></el-input>
           </el-form-item>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
@@ -96,7 +100,7 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="dictDataDialogVisible" width="90%"  destroy-on-close title="字典数据">
+      <el-dialog v-model="dictDataDialogVisible" destroy-on-close title="字典数据" width="90%">
         <dict-data ref="dictData" :dictId="dictId"></dict-data>
       </el-dialog>
     </div>
@@ -109,13 +113,14 @@ import SysTable from "@/components/SysTable";
 import {deleteDictType, findDictTypePage, handleAdd, handleUpdate} from "@/api/system/dictType";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import dictData from "./dictData"
+import {getResponseDataMessage} from "@/utils/commonUtils";
 
 export default {
   name: "environmentParameter",
   components: {SysTable, dictData},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       filters: {
         dictName: undefined,
         dictType: undefined,
@@ -219,7 +224,7 @@ export default {
                   this.$refs['dataForm'].resetFields()
                 } else {
                   this.$message({
-                    message: '操作失败, ' + responseData.msg + (responseData.data === undefined ? '' : responseData.data),
+                    message: `操作失败${getResponseDataMessage(responseData)}`,
                     type: 'error'
                   })
                 }
@@ -235,7 +240,7 @@ export default {
                   this.$refs['dataForm'].resetFields()
                 } else {
                   this.$message({
-                    message: '操作失败, ' + responseData.msg + (responseData.data === undefined ? '' : responseData.data),
+                    message: `操作失败${getResponseDataMessage(responseData)}`,
                     type: 'error'
                   })
                 }

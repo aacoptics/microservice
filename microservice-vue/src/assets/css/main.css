@@ -71,7 +71,7 @@ a {
     margin-bottom: 20px;
 }
 
-.el-button+.el-tooltip {
+.el-button + .el-tooltip {
     margin-left: 10px;
 }
 
@@ -81,6 +81,26 @@ a {
 
 .mgb20 {
     margin-bottom: 20px;
+}
+
+.ml2 {
+    margin-left: 0.2vw;
+}
+
+.mr2 {
+    margin-right: 0.2vw;
+}
+
+.mr4 {
+    margin-right: 0.4vw;
+}
+
+.el-table .warning-row {
+    --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+.el-table .success-row {
+    --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 
 .move-enter-active,

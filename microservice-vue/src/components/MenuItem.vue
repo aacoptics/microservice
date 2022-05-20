@@ -1,17 +1,19 @@
 <template>
   <template v-for="item in items">
     <template v-if="item.subs">
-      <el-sub-menu :key="item.index" :index="item.index">
+      <el-sub-menu v-show="item.visible" :key="item.index" :index="item.index">
         <template #title>
-          <i :class="item.icon"></i>
+          <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
+                             :icon="fontAwesomeIconFormat(item.icon)" class="mr2" fixed-width/>
           <span>{{ item.title }}</span>
         </template>
         <MenuItem :items="item.subs"/>
       </el-sub-menu>
     </template>
     <template v-else>
-      <el-menu-item :key="item.index" :index="item.index" @click="handleClick(item.index)">
-        <i :class="item.icon"></i>
+      <el-menu-item v-show="item.visible" :key="item.index" :index="item.index" @click="handleClick(item.index)">
+        <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
+                           :icon="fontAwesomeIconFormat(item.icon)" class="mr2" fixed-width/>
         <template #title>{{ item.title }}</template>
       </el-menu-item>
     </template>
@@ -19,6 +21,8 @@
 </template>
 
 <script>
+import {fontAwesomeIconFormat} from "@/utils/commonUtils";
+
 export default {
   name: 'MenuItem',
   props: {
@@ -34,7 +38,7 @@ export default {
     handleClick(index) {
       this.$router.push({path: `/${index}`});
     },
+    fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon)
   },
-
 }
 </script>

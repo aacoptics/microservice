@@ -5,41 +5,48 @@
           v-for="(item,index) in tagsList"
           :key="index"
           :class="{'active': isActive(item.path)}"
-          class="tags-li"
-      >
+          class="tags-li">
         <router-link :to="item.path" class="tags-li-title">{{ item.title }}</router-link>
         <span class="tags-li-icon" @click="closeTags(index)">
-                    <i class="el-icon-close"></i>
-                </span>
+          <font-awesome-icon :icon="['fas', ['xmark']]"/>
+        </span>
       </li>
     </ul>
     <div class="tags-close-box">
-      <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
-        <i class="el-icon-full-screen" style="margin-right: 10px" @click="screen"></i>
-      </el-tooltip>
-
-      <el-dropdown @command="handleTags">
-        <el-button size="mini" type="primary">
-          标签选项
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu size="small">
-            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-            <el-dropdown-item command="all">关闭所有</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <el-row align="middle" justify="center">
+        <el-col :span="6">
+          <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
+            <font-awesome-icon v-if="fullscreenIcon" :icon="fullscreenIcon" size="lg" style="margin-left: 0.5vh"
+                               @click="screen"/>
+          </el-tooltip>
+        </el-col>
+        <el-col :span="18">
+          <el-dropdown @command="handleTags">
+            <el-button size="small" style="height: 30px;width: 10vh" type="primary">
+              标签选项&nbsp;
+              <font-awesome-icon :icon="['fas','angle-down']" class="el-icon--right"></font-awesome-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu size="small">
+                <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+                <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 
 <script>
+
 export default {
   data() {
     return {
-      fullscreen: false
+      fullscreen: false,
+      fullscreenIcon: ['fas', 'expand']
     };
   },
   computed: {
@@ -52,6 +59,7 @@ export default {
   },
   methods: {
     screen() {
+      this.fullscreenIcon = ''
       let element = document.documentElement;
       if (this.fullscreen) {
         if (document.exitFullscreen) {
@@ -76,6 +84,9 @@ export default {
         }
       }
       this.fullscreen = !this.fullscreen;
+      setTimeout(() => {
+        this.fullscreenIcon = this.fullscreen ? ['fas', 'compress'] : ['fas', 'expand'];
+      }, 100);
     },
     isActive(path) {
       return path === this.$route.fullPath;

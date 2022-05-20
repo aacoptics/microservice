@@ -2,109 +2,200 @@
   <div>
     <div class="container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-          <el-form :inline="true" :size="size">
+        <el-form :inline="true" size="default">
           <el-form-item>
-            <el-button icon="el-icon-search" type="primary"
-                       @click="findMenuTreeData()">查询
+            <el-button type="primary" @click="findMenuTreeData()">查询
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+              </template>
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" type="success"
-                       @click="handleAddTop">新增
+            <el-button type="success" @click="handleAddTop">新增
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button plain type="info" @click="toggleExpandAll">展开/折叠
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']"/>
+              </template>
             </el-button>
           </el-form-item>
         </el-form>
       </div>
-          <el-table :data="menuData"
-                    row-key="id"
-                    size="mini"
-                    :height="600"
-                    :tree-props="defaultProps"
-                    style="width: 100%; margin-bottom: 20px"
-                    ref="treeTable"
-                    border
-                    v-loading="menuLoading"
-                    default-expand-all
-                    element-loading-text="加载中...">
-            <el-table-column prop="title" label="菜单名称"  width="180" />
-            <el-table-column label="图标" width="60">
-              <template #default="scope">
-                <div style="display: flex; align-items: center">
-                  <span style="text-align:left"><i :class="scope.row.icon" style="margin-right: 10px"></i></span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="菜单编码"  width="200" />
-            <el-table-column prop="orderNum" label="排序"  width="120" />
-            <el-table-column prop="path" label="菜单路径"  width="200" />
-            <el-table-column prop="component" label="Vue组件"  width="280" />
-            <el-table-column prop="description" label="描述"  width="180" />
-            <el-table-column prop="webUrl" label="URL"  width="300" />
-            <el-table-column label="操作" width="220" fixed="right">
-              <template #default="scope">
-                <el-button size="mini" type="primary" @click="handleAdd(scope.row)"
-                  >新增</el-button
-                >
-                <el-button size="mini" type="info" @click="handleEdit(scope.row)"
-                  >编辑</el-button
-                >
-                <el-button
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.row)"
-                  >删除</el-button
-                >
-              </template>
-            </el-table-column>
-                 
-          </el-table>
+      <el-table v-if="refreshTable"
+                :id="randomId"
+                ref="treeTable"
+                v-loading="menuLoading"
+                :data="menuData"
+                :default-expand-all="isExpandAll"
+                :height="height"
+                :row-class-name="tableRowClassName"
+                :size="size"
+                :tree-props="defaultProps"
+                border
+                element-loading-text="加载中..."
+                row-key="id"
+                style="width: 100%; margin-bottom: 20px">
+        <el-table-column label="菜单名称" prop="title" width="180"/>
+        <el-table-column label="图标" width="60">
+          <template #default="scope">
+            <font-awesome-icon v-if="fontAwesomeIconFormat(scope.row.icon) instanceof Array"
+                               :icon="fontAwesomeIconFormat(scope.row.icon)" pull="left" size="lg"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="菜单编码" prop="name" width="200"/>
+        <el-table-column label="排序" prop="orderNum" width="120"/>
+        <el-table-column label="菜单路径" prop="path" width="200"/>
+        <el-table-column label="Vue组件" prop="component" width="280"/>
+        <el-table-column label="描述" prop="description" width="180"/>
+        <el-table-column label="显示状态" prop="visible" width="80"/>
+        <el-table-column label="URL" prop="webUrl" width="500"/>
+        <el-table-column fixed="right" label="操作" width="220">
+          <template #default="scope">
+            <el-button :size="size" type="primary" @click="handleAdd(scope.row)">新增</el-button>
+            <el-button :size="size" type="info" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button :size="size" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-      <el-dialog :title="operation?'新增':'编辑'" width="40%" v-model="dialogVisible"
-                 :close-on-click-modal="false">
-        <el-form :model="dataForm" label-width="100px" :rules="dataFormRules" ref="dataForm" :size="size">
-          <el-form-item label="Id" prop="id" v-if="false">
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+                 width="40%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" label-width="100px" size="default">
+          <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="菜单编码" prop="name">
-                <el-input v-model="dataForm.name" auto-complete="off" :disabled="!operation" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-          <el-form-item label="菜单名称" prop="title">
-            <el-input v-model="dataForm.title" auto-complete="off" clearable></el-input>
-          </el-form-item>
-           </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="Vue组件" prop="component">
-                <el-input v-model="dataForm.component" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="图标" prop="icon">
-                <el-input v-model="dataForm.icon" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="菜单路径" prop="path">
-                <el-input v-model="dataForm.path" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="排序" prop="orderNum">
-                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable style="width: 100%"></el-input-number>
+            <el-col :span="24">
+              <el-form-item label="菜单类型" prop="menuType">
+                <el-radio-group v-model="dataForm.menuType">
+                  <el-radio
+                      v-for="item in menuTypeOptions"
+                      :key="item.dictValue"
+                      :label="item.dictValue">
+                    {{ item.dictLabel }}
+                  </el-radio>
+                </el-radio-group>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="URL" prop="webUrl">
-                <el-input v-model="dataForm.webUrl" auto-complete="off" clearable></el-input>
+              <el-form-item prop="name">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: userManagement" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      菜单编码
+                    </span>
+                </template>
+                <el-input v-model="dataForm.name" :disabled="!operation" auto-complete="off" clearable
+                          placeholder="请输入菜单编码"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item prop="title">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: 用户管理" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      菜单名称
+                    </span>
+                </template>
+                <el-input v-model="dataForm.title" auto-complete="off" clearable placeholder="请输入菜单名称"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="排序" prop="orderNum">
+                <el-input-number v-model="dataForm.orderNum" auto-complete="off" clearable
+                                 style="width: 100%"></el-input-number>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="显示状态" prop="visible">
+                <el-switch v-model="dataForm.visible"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="图标" prop="icon">
+                <el-popover
+                    :width="500"
+                    placement="bottom-start"
+                    trigger="click"
+                    @show="$refs['iconSelect'].reset()">
+                  <template #reference>
+                    <el-input v-model="dataForm.icon" auto-complete="off" clearable placeholder="点击选择图标" readonly>
+                      <template #prefix>
+                        <font-awesome-icon v-if="dataForm.icon" :icon="JSON.parse(dataForm.icon)" style="color: gray"/>
+                        <font-awesome-icon v-else :icon="['fa-solid', 'magnifying-glass']"/>
+                      </template>
+                      <template #append>
+                        <font-awesome-icon :icon="['fa-solid', 'circle-xmark']" style="cursor: pointer"
+                                           @click="dataForm.icon=''"/>
+                      </template>
+                    </el-input>
+                  </template>
+                  <IconSelect ref="iconSelect" @selected="selected"/>
+                </el-popover>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="dataForm.menuType !== '0'">
+            <el-col :span="24">
+              <el-form-item prop="path">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: /user" placement="top">
+                         <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      路由地址
+                    </span>
+                </template>
+                <el-input v-model="dataForm.path" auto-complete="off" clearable placeholder="请输入路由地址"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="dataForm.menuType === '1'">
+            <el-col :span="24">
+              <el-form-item prop="component">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: views/system/permission/user.vue" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      组件路径
+                    </span>
+                </template>
+                <el-input v-model="dataForm.component" auto-complete="off" clearable
+                          placeholder="请输入组件路径"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="dataForm.menuType === '2'">
+            <el-col :span="24">
+              <el-form-item prop="webUrl">
+                <template #label>
+                    <span>
+                      <el-tooltip content="例如: https://www.aacoptics.com/" placement="top">
+                        <font-awesome-icon :icon="['fa-solid', 'circle-question']"/>
+                      </el-tooltip>
+                      外链地址
+                    </span>
+                </template>
+                <el-input v-model="dataForm.webUrl" auto-complete="off" clearable
+                          placeholder="请输入外链地址"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -119,7 +210,7 @@
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" @click="cancel">取消</el-button>
-            <el-button :size="size" type="primary" @click="submitForm" :loading="editLoading">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -128,21 +219,32 @@
 </template>
 
 <script>
-import {handleAdd, handleUpdate, deleteMenu} from "@/api/system/menu";
-import {findMenuTree} from "@/api/system/menu";
+import {deleteMenu, findMenuTree, handleAdd, handleUpdate} from "@/api/system/menu";
+import IconSelect from "@/components/IconSelect";
+import {fontAwesomeIconFormat} from "@/utils/commonUtils";
+import {getDict} from "@/api/system/dictData";
+import {v4 as uuidV4} from "uuid";
 
 export default {
   name: "menu",
+  components: {IconSelect},
   data() {
     return {
       size: 'small',
       filters: {
         code: ''
       },
+      height: 460,
+      randomId: uuidV4(),
+      refreshTable: true, // 重新渲染表格状态
+      isExpandAll: false,
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
+        menuType: [
+          {required: true, message: '请选择菜单类型', trigger: 'blur'}
+        ],
         name: [
           {required: true, message: '请输入菜单编码', trigger: 'blur'}
         ],
@@ -151,19 +253,24 @@ export default {
         ],
         orderNum: [
           {required: true, message: '请输入排序', trigger: 'blur'}
+        ],
+        visible: [
+          {required: true, message: '请选择是否显示', trigger: 'blur'}
         ]
       },
       // 新增编辑界面数据
       dataForm: {
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:'',
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: '',
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       },
       menuData: [],
       menuLoading: false,
@@ -171,12 +278,15 @@ export default {
         children: 'children',
         label: 'title'
       },
-
+      // 菜单
+      menuTypeOptions: []
     }
   },
   methods: {
-
-        // 显示新增顶级菜单
+    selected(name) {
+      this.dataForm.icon = name
+    },
+    // 显示新增顶级菜单
     handleAddTop: function () {
       this.editLoading = false
       this.dialogVisible = true
@@ -184,14 +294,16 @@ export default {
       this.dataForm = {
         parentId: -1,
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:0,
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: 0,
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       }
     },
     // 显示新增界面
@@ -202,14 +314,16 @@ export default {
       this.dataForm = {
         parentId: params.id,
         id: 0,
+        menuType: '0',
         name: '',
         title: '',
         description: '',
-        icon:'',
-        orderNum:0,
-        path:'',
-        component:'',
-        webUrl:''
+        icon: '',
+        orderNum: 0,
+        path: '',
+        component: '',
+        webUrl: '',
+        visible: true
       }
     },
     // 显示编辑界面
@@ -218,6 +332,7 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params)
+      this.dataForm.menuType = this.dataForm.menuType.toString()
     },
     // 编辑
     submitForm: function () {
@@ -226,6 +341,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
+            if (params.menuType === '2') params.component = 'views/webframe/WebFrame.vue'
             if (this.operation) {
               handleAdd(params).then((res) => {
                 const responseData = res.data
@@ -268,11 +384,11 @@ export default {
         if (responseData.code === '000000') {
           this.menuData = responseData.data
         }
+        this.refresh()
         this.menuLoading = false
       })
     },
-
-      // 重置选择
+    // 重置选择
     resetSelection() {
       this.dialogVisible = false
     },
@@ -294,18 +410,40 @@ export default {
           } else {
             this.$message({message: '操作失败, ' + responseData.msg, type: 'error'})
           }
-          
         })
 
       }).catch((err) => {
         console.log(err)
       })
     },
-
+    tableRowClassName(row) {
+      if (this.isExpandAll === false) return ''
+      return row.row.menuType === 0 ? 'success-row' : row.row.menuType === 2 ? 'warning-row' : ''
+    },
+    refresh() {
+      this.$nextTick(() => {
+        let table = document.getElementById(this.randomId);
+        if (table === null || table === undefined) return
+        this.height = Math.max(...[...table.getElementsByTagName('tbody')].map(t => t.clientHeight)) +
+            Math.max(...[...table.getElementsByTagName('thead')].map(t => t.clientHeight)) + 5
+      })
+    },
+    // 展开/折叠操作
+    toggleExpandAll() {
+      this.refreshTable = false;
+      this.isExpandAll = !this.isExpandAll;
+      this.$nextTick(() => {
+        this.refreshTable = true;
+      });
+      setTimeout(() => {
+        this.refresh()
+      }, 0)
+    },
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
     },
+    fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon),
     // 取消
     cancel() {
       this.dialogVisible = false;
@@ -313,6 +451,9 @@ export default {
   },
   mounted() {
     this.findMenuTreeData();
+    getDict("sys_menu_type").then(response => {
+      this.menuTypeOptions = response.data.data
+    })
   }
 }
 </script>
@@ -330,6 +471,7 @@ export default {
   color: rgb(20, 89, 121);
 
 }
+
 .custom-tree-node {
   flex: 1;
   display: flex;

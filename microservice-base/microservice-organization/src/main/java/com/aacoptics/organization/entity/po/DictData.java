@@ -14,7 +14,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("sys_dict_data")
+@TableName("dict_data")
 public class DictData extends BasePo {
 
     /**

@@ -24,9 +24,10 @@ export default {
     return {
       items: [
         {
-          icon: "el-icon-s-home",
+          icon: '["fas","house"]',
           index: "dashboard",
-          title: "系统首页"
+          title: "系统首页",
+          visible: true
         }
       ]
     };

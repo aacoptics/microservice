@@ -1,10 +1,15 @@
-import {login, getUserInfo} from '@/api/system/user'
+import {getUserInfo, login} from '@/api/system/user'
 import {
-    getAccessToken, getRefreshToken,
-    setAccessToken, setRefreshToken,
-    getUsername, setUsername,
-    setUserDetail, setExpireTime,
-    getExpireTime, setRefreshTime
+    getAccessToken,
+    getExpireTime,
+    getRefreshToken,
+    getUsername,
+    setAccessToken,
+    setExpireTime,
+    setRefreshTime,
+    setRefreshToken,
+    setUserDetail,
+    setUsername
 } from '@/utils/auth'
 import {ElMessage} from "element-plus";
 
