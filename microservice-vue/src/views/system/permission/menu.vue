@@ -18,7 +18,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="info" plain @click="toggleExpandAll">展开/折叠
+            <el-button plain type="info" @click="toggleExpandAll">展开/折叠
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']"/>
               </template>
@@ -26,20 +26,20 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table ref="treeTable"
-                v-if="refreshTable"
+      <el-table v-if="refreshTable"
                 :id="randomId"
+                ref="treeTable"
                 v-loading="menuLoading"
                 :data="menuData"
+                :default-expand-all="isExpandAll"
                 :height="height"
+                :row-class-name="tableRowClassName"
                 :size="size"
                 :tree-props="defaultProps"
                 border
-                :default-expand-all="isExpandAll"
                 element-loading-text="加载中..."
                 row-key="id"
-                style="width: 100%; margin-bottom: 20px"
-                :row-class-name="tableRowClassName">
+                style="width: 100%; margin-bottom: 20px">
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">

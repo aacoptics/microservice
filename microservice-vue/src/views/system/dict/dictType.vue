@@ -113,6 +113,7 @@ import SysTable from "@/components/SysTable";
 import {deleteDictType, findDictTypePage, handleAdd, handleUpdate} from "@/api/system/dictType";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import dictData from "./dictData"
+import {getResponseDataMessage} from "@/utils/commonUtils";
 
 export default {
   name: "environmentParameter",
@@ -223,7 +224,7 @@ export default {
                   this.$refs['dataForm'].resetFields()
                 } else {
                   this.$message({
-                    message: '操作失败, ' + responseData.msg + (responseData.data === undefined ? '' : responseData.data),
+                    message: `操作失败${getResponseDataMessage(responseData)}`,
                     type: 'error'
                   })
                 }
@@ -239,7 +240,7 @@ export default {
                   this.$refs['dataForm'].resetFields()
                 } else {
                   this.$message({
-                    message: '操作失败, ' + responseData.msg + (responseData.data === undefined ? '' : responseData.data),
+                    message: `操作失败${getResponseDataMessage(responseData)}`,
                     type: 'error'
                   })
                 }

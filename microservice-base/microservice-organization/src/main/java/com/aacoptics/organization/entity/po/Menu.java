@@ -3,7 +3,6 @@ package com.aacoptics.organization.entity.po;
 import com.aacoptics.common.web.entity.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
