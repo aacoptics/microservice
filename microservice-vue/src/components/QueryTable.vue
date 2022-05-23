@@ -20,8 +20,10 @@
         <template v-slot="scope">
           <el-button-group>
             <el-tooltip :content="action.detail" placement="top">
-              <el-button :size="size" icon="el-icon-document" type="primary"
-                         @click="handleDetail(scope.$index, scope.row)">
+              <el-button :size="size" type="primary" @click="handleDetail(scope.$index, scope.row)">
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'file-lines']"/>
+                </template>
               </el-button>
             </el-tooltip>
 
@@ -50,7 +52,7 @@ export default {
     permsDelete: String,  // 删除权限标识
     size: { // 尺寸样式
       type: String,
-      default: 'mini'
+      default: 'small'
     },
     align: {  // 文本对齐方式
       type: String,

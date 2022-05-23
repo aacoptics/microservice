@@ -23,7 +23,7 @@
         </el-form>
       </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="460" :highlightCurrentRow="true" :showBatchDelete="false"
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
                 @handleCurrentChange="handleUserSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
