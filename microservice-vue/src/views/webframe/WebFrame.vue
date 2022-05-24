@@ -1,5 +1,5 @@
 <template>
-  <div class="container" style="margin:0; padding:0;border: 0;height:auto;width: 100%;overflow: auto">
+  <div class="aac-container" style="margin:0; padding:0;border: 0;height:auto;width: 100%;overflow: auto">
     <iframe id='webFrame'
             :src='urlAddress'
             frameborder='0'

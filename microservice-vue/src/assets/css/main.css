@@ -45,7 +45,7 @@ a {
     left: 65px;
 }
 
-.container {
+.aac-container {
     padding: 30px;
     background: #fff;
     border: 1px solid #ddd;
@@ -55,10 +55,6 @@ a {
 
 .crumbs {
     margin: 10px 0;
-}
-
-.el-table th {
-    background-color: #f5f7fa !important;
 }
 
 .pagination {
@@ -75,34 +71,6 @@ a {
     margin-left: 10px;
 }
 
-.el-table tr:hover {
-    background: #f6faff;
-}
-
-.mgb20 {
-    margin-bottom: 20px;
-}
-
-.ml2 {
-    margin-left: 0.2vw;
-}
-
-.mr2 {
-    margin-right: 0.2vw;
-}
-
-.mr4 {
-    margin-right: 0.4vw;
-}
-
-.el-table .warning-row {
-    --el-table-tr-bg-color: var(--el-color-warning-light-9);
-}
-
-.el-table .success-row {
-    --el-table-tr-bg-color: var(--el-color-success-light-9);
-}
-
 .move-enter-active,
 .move-leave-active {
     transition: opacity .1s ease;
@@ -111,6 +79,24 @@ a {
 .move-enter-from,
 .move-leave-to {
     opacity: 0;
+}
+
+/*el-table*/
+
+.el-table th {
+    background-color: #f5f7fa !important;
+}
+
+.el-table tr:hover {
+    background: #f6faff;
+}
+
+.el-table .warning-row {
+    --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+.el-table .success-row {
+    --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 
 /*BaseForm*/
