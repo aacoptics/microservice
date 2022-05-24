@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
           <el-form-item>
@@ -23,7 +23,7 @@
         </el-form>
       </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="460" :highlightCurrentRow="true" :showBatchDelete="false"
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
                 @handleCurrentChange="handleUserSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">

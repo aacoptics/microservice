@@ -16,15 +16,15 @@
       <el-row align="middle" justify="center">
         <el-col :span="6">
           <el-tooltip :content="fullscreen ? '退出全屏' : '全屏'" placement="bottom">
-            <font-awesome-icon v-if="fullscreenIcon" :icon="fullscreenIcon" size="lg" style="margin-left: 0.5vh"
+            <font-awesome-icon v-if="fullscreenIcon" :icon="fullscreenIcon" class="w-full" size="lg"
                                @click="screen"/>
           </el-tooltip>
         </el-col>
         <el-col :span="18">
-          <el-dropdown @command="handleTags">
-            <el-button size="small" style="height: 30px;width: 10vh" type="primary">
-              标签选项&nbsp;
-              <font-awesome-icon :icon="['fas','angle-down']" class="el-icon--right"></font-awesome-icon>
+          <el-dropdown class="w-full" @command="handleTags">
+            <el-button size="small" style="height: 30px;" type="primary">
+              标签选项
+              <font-awesome-icon :icon="['fas','angle-down']" class="ml-5"></font-awesome-icon>
             </el-button>
             <template #dropdown>
               <el-dropdown-menu size="small">
@@ -84,9 +84,9 @@ export default {
         }
       }
       this.fullscreen = !this.fullscreen;
-      setTimeout(() => {
-        this.fullscreenIcon = this.fullscreen ? ['fas', 'compress'] : ['fas', 'expand'];
-      }, 100);
+      this.$nextTick(() => {
+        this.fullscreenIcon = this.fullscreen ? ['fas', 'compress'] : ['fas', 'expand']
+      })
     },
     isActive(path) {
       return path === this.$route.fullPath;
