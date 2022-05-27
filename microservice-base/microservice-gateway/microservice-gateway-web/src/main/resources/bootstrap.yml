@@ -15,7 +15,7 @@ spring:
     sentinel:
       transport:
         dashboard: uds.aacoptics.com:30844
-        client-ip: localhost
+        port: 8719
     gateway:
       globalcors:
         cors-configurations:
