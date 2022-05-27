@@ -15,4 +15,3 @@ spring:
     sentinel:
       transport:
         dashboard: uds.aacoptics.com:30844
-        client-ip: localhost
