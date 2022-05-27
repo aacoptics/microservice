@@ -171,7 +171,7 @@ router.beforeEach((to, from, next) => {
             });
 
     } else {
-        var menuName = to.name;
+        const menuName = to.name;
         logMenuAccess({name: menuName});
         next();
     }

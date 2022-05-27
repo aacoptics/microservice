@@ -29,8 +29,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class AccessGatewayFilter implements GlobalFilter {
 
-    private static final String IOT_CLIENT_TOKEN_USER = "iot-client-token-user";
-    private static final String IOT_CLIENT_TOKEN = "iot-client-token";
+    private static final String MICROSERVICE_CLIENT_TOKEN_USER = "microservice-client-token-user";
+    private static final String MICROSERVICE_CLIENT_TOKEN = "microservice-client-token";
 
     /**
      * 由authentication-client模块提供签权的feign客户端
@@ -60,7 +60,7 @@ public class AccessGatewayFilter implements GlobalFilter {
         if (authService.ignoreAuthentication(url, method)) {
             ServerHttpRequest.Builder builder = request.mutate();
             //TODO 转发的请求都加上服务间认证token
-            builder.header(IOT_CLIENT_TOKEN, "test");
+            builder.header(MICROSERVICE_CLIENT_TOKEN, "test");
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 
@@ -70,9 +70,9 @@ public class AccessGatewayFilter implements GlobalFilter {
             if ((boolean) res.getData()) {
                 ServerHttpRequest.Builder builder = request.mutate();
                 //TODO 转发的请求都加上服务间认证token
-                builder.header(IOT_CLIENT_TOKEN, "test");
+                builder.header(MICROSERVICE_CLIENT_TOKEN, "test");
                 //将jwt token中的用户信息传给服务
-                builder.header(IOT_CLIENT_TOKEN_USER, getUserToken(authentication));
+                builder.header(MICROSERVICE_CLIENT_TOKEN_USER, getUserToken(authentication));
                 return chain.filter(exchange.mutate().request(builder.build()).build());
             } else {
                 res = Result.fail(SystemErrorType.AUTHORIZATION_FAILED);

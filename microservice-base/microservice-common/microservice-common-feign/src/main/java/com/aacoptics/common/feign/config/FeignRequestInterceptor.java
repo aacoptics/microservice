@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FeignRequestInterceptor implements RequestInterceptor {
-    private static final String IOT_CLIENT_TOKEN = "iot-client-token";
+    private static final String MICROSERVICE_CLIENT_TOKEN = "microservice-client-token";
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(IOT_CLIENT_TOKEN, "test");
+        template.header(MICROSERVICE_CLIENT_TOKEN, "test");
     }
 }

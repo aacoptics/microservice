@@ -20,9 +20,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuAccessLog> implements IMenuAccessLogService {
 
-    @Resource
-    private MenuAccessLogMapper menuAccessLogMapper;
-
     @Override
     public boolean logMenuAccess(MenuAccessLog menuAccessLog) {
         UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));

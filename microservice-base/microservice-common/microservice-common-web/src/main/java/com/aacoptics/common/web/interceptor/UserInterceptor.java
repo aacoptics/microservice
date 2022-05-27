@@ -23,23 +23,23 @@ public class UserInterceptor implements HandlerInterceptor {
      * "自定义key:"value"
      * }
      */
-    public static final String IOT_CLIENT_TOKEN_USER = "iot-client-token-user";
+    public static final String MICROSERVICE_CLIENT_TOKEN_USER = "microservice-client-token-user";
     /**
      * 服务间调用的认证token
      */
-    public static final String IOT_CLIENT_TOKEN = "iot-client-token";
+    public static final String MICROSERVICE_CLIENT_TOKEN = "microservice-client-token";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //从网关获取并校验,通过校验就可信任iot-client-token-user中的信息
-        checkToken(request.getHeader(IOT_CLIENT_TOKEN));
-        String userInfoString = StringUtils.defaultIfBlank(request.getHeader(IOT_CLIENT_TOKEN_USER), "{}");
+        //从网关获取并校验,通过校验就可信任microservice-client-token-user中的信息
+        checkToken(request.getHeader(MICROSERVICE_CLIENT_TOKEN));
+        String userInfoString = StringUtils.defaultIfBlank(request.getHeader(MICROSERVICE_CLIENT_TOKEN_USER), "{}");
         UserContextHolder.getInstance().setContext(new ObjectMapper().readValue(userInfoString, Map.class));
         return true;
     }
 
     private void checkToken(String token) {
-        //TODO 从网关获取并校验,通过校验就可信任iot-client-token-user中的信息
+        //TODO 从网关获取并校验,通过校验就可信任microservice-client-token-user中的信息
         log.debug("//TODO 校验token:{}", token);
     }
 
