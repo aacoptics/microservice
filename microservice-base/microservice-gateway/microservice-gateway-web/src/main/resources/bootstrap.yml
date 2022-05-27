@@ -14,7 +14,7 @@ spring:
         file-extension: yaml
     sentinel:
       transport:
-        dashboard: 10.233.76.40:8844
+        dashboard: uds.aacoptics.com:30844
         client-ip: 127.0.0.1
     gateway:
       globalcors:
