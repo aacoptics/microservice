@@ -21,6 +21,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Optional;
+
 /**
  * 请求url权限校验
  */
@@ -31,6 +35,9 @@ public class AccessGatewayFilter implements GlobalFilter {
 
     private static final String MICROSERVICE_CLIENT_TOKEN_USER = "microservice-client-token-user";
     private static final String MICROSERVICE_CLIENT_TOKEN = "microservice-client-token";
+    private static final String IP_UNKNOWN = "unknown";
+    private static final String IP_LOCAL = "127.0.0.1";
+    private static final int IP_LEN = 15;
 
     /**
      * 由authentication-client模块提供签权的feign客户端
@@ -55,12 +62,13 @@ public class AccessGatewayFilter implements GlobalFilter {
         String authentication = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         String method = request.getMethodValue();
         String url = request.getPath().value();
+        String ip = getIP(request);
         log.debug("url:{},method:{},headers:{}", url, method, request.getHeaders());
         //不需要网关签权的url
         if (authService.ignoreAuthentication(url, method)) {
             ServerHttpRequest.Builder builder = request.mutate();
             //TODO 转发的请求都加上服务间认证token
-            builder.header(MICROSERVICE_CLIENT_TOKEN, "test");
+            builder.header(MICROSERVICE_CLIENT_TOKEN, ip);
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 
@@ -70,7 +78,7 @@ public class AccessGatewayFilter implements GlobalFilter {
             if ((boolean) res.getData()) {
                 ServerHttpRequest.Builder builder = request.mutate();
                 //TODO 转发的请求都加上服务间认证token
-                builder.header(MICROSERVICE_CLIENT_TOKEN, "test");
+                builder.header(MICROSERVICE_CLIENT_TOKEN, ip);
                 //将jwt token中的用户信息传给服务
                 builder.header(MICROSERVICE_CLIENT_TOKEN_USER, getUserToken(authentication));
                 return chain.filter(exchange.mutate().request(builder.build()).build());
@@ -98,6 +106,45 @@ public class AccessGatewayFilter implements GlobalFilter {
             log.error("token json error:{}", e.getMessage());
         }
         return token;
+    }
+
+    /**
+     * 获取客户端真实ip
+     * @param request request
+     * @return 返回ip
+     */
+    public static String getIP(ServerHttpRequest request) {
+        HttpHeaders headers = request.getHeaders();
+        String ipAddress = headers.getFirst("x-forwarded-for");
+        if (ipAddress == null || ipAddress.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst("Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = headers.getFirst("WL-Proxy-Client-IP");
+        }
+        if (ipAddress == null || ipAddress.length() == 0 || IP_UNKNOWN.equalsIgnoreCase(ipAddress)) {
+            ipAddress = Optional.ofNullable(request.getRemoteAddress())
+                    .map(address -> address.getAddress().getHostAddress())
+                    .orElse("");
+            if (IP_LOCAL.equals(ipAddress)) {
+                // 根据网卡取本机配置的IP
+                try {
+                    InetAddress inet = InetAddress.getLocalHost();
+                    ipAddress = inet.getHostAddress();
+                } catch (UnknownHostException e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if (ipAddress != null && ipAddress.length() > IP_LEN) {
+            int index = ipAddress.indexOf(",");
+            if (index > 0) {
+                ipAddress = ipAddress.substring(0, index);
+            }
+        }
+        return ipAddress;
     }
 
 //    /**
