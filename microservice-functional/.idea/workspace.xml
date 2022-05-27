@@ -23,13 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-authorization/microservice-oauth/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-authorization/microservice-perms/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-admin/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-web/src/main/resources/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/logback.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

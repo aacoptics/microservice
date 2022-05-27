@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class BusConfig {
 
-    private static final String EXCHANGE_NAME = "aac-optics-iot";
+    private static final String EXCHANGE_NAME = "microservice-base";
     private static final String ROUTING_KEY = "organization-resource";
 
     @Value("${spring.application.name}")

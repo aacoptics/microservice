@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 public class BusConfig {
 
     public static final String QUEUE_NAME = "event-organization";
-    public static final String EXCHANGE_NAME = "aac-optics-iot";
+    public static final String EXCHANGE_NAME = "microservice-base";
     public static final String ROUTING_KEY = "organization-resource";
 
     @Bean
