@@ -14,7 +14,7 @@ import {ElMessage} from "element-plus";
 import {saveRefreshTime} from "@/api";
 
 const service = axios.create({
-    baseURL: 'http://iot.nnmz.aacoptics.com:8000'
+    baseURL: 'http://uds.aacoptics.com:30100'
 });
 
 service.interceptors.request.use(
