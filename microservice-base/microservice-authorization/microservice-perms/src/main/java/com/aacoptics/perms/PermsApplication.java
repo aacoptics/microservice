@@ -11,6 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableCreateCacheAnnotation
 public class PermsApplication {
+    @SuppressWarnings("resource")
     public static void main(String[] args) {
         SpringApplication.run(PermsApplication.class, args);
     }
