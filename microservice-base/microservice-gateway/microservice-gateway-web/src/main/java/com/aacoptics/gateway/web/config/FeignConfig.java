@@ -1,5 +1,6 @@
 package com.aacoptics.gateway.web.config;
 
+import com.aacoptics.common.feign.config.FeignRequestInterceptor;
 import feign.codec.Decoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.SpringBootConfiguration;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootConfiguration
-public class FeignConfig {
+public class FeignConfig extends FeignRequestInterceptor{
     @Bean
     public Decoder feignDecoder() {
         return new ResponseEntityDecoder(new SpringDecoder(feignHttpMessageConverter()));

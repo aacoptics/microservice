@@ -18,11 +18,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.aacoptics</groupId>
-            <artifactId>microservice-common-feign</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.alicp.jetcache</groupId>
             <artifactId>jetcache-starter-redis</artifactId>
         </dependency>
