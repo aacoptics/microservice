@@ -1,6 +1,9 @@
 package com.aacoptics.common.web.interceptor;
 
+import com.aacoptics.common.core.exception.SystemErrorType;
 import com.aacoptics.common.core.util.UserContextHolder;
+import com.aacoptics.common.core.vo.Result;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -38,8 +41,8 @@ public class UserInterceptor implements HandlerInterceptor {
         if (fromKey == null || !fromKey.equals("fromGateWay")) {
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();
-            response.setStatus(401); //权限不足
-            writer.write("禁止单独调用服务，请通过网关调用！");
+            response.setStatus(403);
+            writer.write(JSONObject.toJSONString(Result.fail(SystemErrorType.NOT_FROM_GATEWAY)));
             return false;
         }
         String userInfoString = StringUtils.defaultIfBlank(request.getHeader(MICROSERVICE_CLIENT_TOKEN_USER), "{}");

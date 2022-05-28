@@ -14,7 +14,9 @@ public enum SystemErrorType implements ErrorType {
     INVALID_TOKEN("020001", "无效token"),
     UPLOAD_FILE_SIZE_LIMIT("020010", "上传文件大小超过限制"),
     AUTHORIZATION_FAILED("040001", "无该操作权限，请联系系统管理员"),
+    NOT_FROM_GATEWAY("040003", "禁止单独调用服务，请通过网关调用"),
     DUPLICATE_PRIMARY_KEY("030000", "唯一键冲突");
+
 
 
     /**
