@@ -18,7 +18,6 @@ public enum SystemErrorType implements ErrorType {
     DUPLICATE_PRIMARY_KEY("030000", "唯一键冲突");
 
 
-
     /**
      * 错误类型码
      */

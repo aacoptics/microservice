@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootConfiguration
-public class FeignConfig extends FeignRequestInterceptor{
+public class FeignConfig extends FeignRequestInterceptor {
     @Bean
     public Decoder feignDecoder() {
         return new ResponseEntityDecoder(new SpringDecoder(feignHttpMessageConverter()));
