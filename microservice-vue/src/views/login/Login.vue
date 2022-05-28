@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap">
     <div class="ms-login">
-      <div class="ms-title">模组IoT平台</div>
+      <div class="ms-title">光学统一数据平台</div>
       <el-form ref="login" :model="param" :rules="rules" class="ms-content" label-width="0px" size="large">
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="用户名" tabindex="1">

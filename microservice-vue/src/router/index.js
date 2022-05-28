@@ -109,9 +109,9 @@ const formatRoutes = function (routes, routeData) {
 const updateDocumentTitle = function (to) {
     if (to.meta['title'] !== undefined) {
         if (to.meta['title'] instanceof Array) {
-            document.title = `${to.meta['title'].find(i => i.path === to.path).title} | 模组IoT平台`;
+            document.title = `${to.meta['title'].find(i => i.path === to.path).title} | 光学统一数据平台`;
         } else {
-            document.title = `${to.meta['title']} | 模组IoT平台`;
+            document.title = `${to.meta['title']} | 光学统一数据平台`;
         }
     }
 }
@@ -171,8 +171,8 @@ router.beforeEach((to, from, next) => {
             });
 
     } else {
-        const menuName = to.name;
-        logMenuAccess({name: menuName});
+        if (getAccessToken())
+            logMenuAccess({name: to.name});
         next();
     }
 });

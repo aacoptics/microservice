@@ -9,7 +9,7 @@
         <Expand/>
       </el-icon>
     </div>
-    <div class="logo">模组IoT平台</div>
+    <div class="logo">光学统一数据平台</div>
     <div class="header-right">
       <div class="header-user-con">
         <!-- 消息中心 -->
