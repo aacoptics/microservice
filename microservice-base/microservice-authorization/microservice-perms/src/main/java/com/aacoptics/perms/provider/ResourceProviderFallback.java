@@ -20,7 +20,7 @@ public class ResourceProviderFallback implements ResourceProvider {
     @Override
     public Result<Set<ResourceDefinition>> resources(String username) {
         log.error("认证服务查询用户异常！查询用户资源为空！");
-        return Result.success(new HashSet<ResourceDefinition>());
+        return Result.success(new HashSet<>());
     }
 
     @Override
