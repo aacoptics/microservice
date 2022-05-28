@@ -9,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -32,16 +33,26 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //从网关获取并校验,通过校验就可信任microservice-client-token-user中的信息
-        checkToken(request.getHeader(MICROSERVICE_CLIENT_TOKEN));
+//        checkToken(request.getHeader(MICROSERVICE_CLIENT_TOKEN));
+        String fromKey = request.getHeader(MICROSERVICE_CLIENT_TOKEN);
+        if (fromKey == null || !fromKey.equals("fromGateWay")) {
+            response.setContentType("application/json; charset=utf-8");
+            PrintWriter writer = response.getWriter();
+            response.setStatus(401); //权限不足
+            writer.write("禁止单独调用服务，请通过网关调用！");
+            return false;
+        }
         String userInfoString = StringUtils.defaultIfBlank(request.getHeader(MICROSERVICE_CLIENT_TOKEN_USER), "{}");
         UserContextHolder.getInstance().setContext(new ObjectMapper().readValue(userInfoString, Map.class));
         return true;
     }
 
-    private void checkToken(String token) {
-        //TODO 从网关获取并校验,通过校验就可信任microservice-client-token-user中的信息
-        log.debug("//TODO 校验token:{}", token);
-    }
+//    private boolean checkToken(String token) {
+//        if(token == null || !"".equals("fromGateWay")){
+//            return false;
+//        }
+//        return true;
+//    }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {

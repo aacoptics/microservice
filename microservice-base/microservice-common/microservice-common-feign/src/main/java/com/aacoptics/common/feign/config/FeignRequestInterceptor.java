@@ -10,6 +10,6 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        template.header(MICROSERVICE_CLIENT_TOKEN, "test");
+        template.header(MICROSERVICE_CLIENT_TOKEN, "fromGateWay");
     }
 }
