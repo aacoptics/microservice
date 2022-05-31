@@ -22,7 +22,7 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
     @Override
     public boolean logMenuAccess(MenuAccessLog menuAccessLog) {
         UserAgent userAgent = UserAgentUtil.parse(ServletUtils.getRequest().getHeader("User-Agent"));
-        String ip = ServletUtils.getIpAddress(ServletUtils.getRequest());
+//        String ip = ServletUtils.getIpAddress(ServletUtils.getRequest());
 
         menuAccessLog.setOs(userAgent.getOs().getName());
         menuAccessLog.setPlatform(userAgent.getPlatform().getName());
@@ -32,7 +32,7 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
         menuAccessLog.setUsername(this.getCurrentUsername());
         menuAccessLog.setBrowser(userAgent.getBrowser().getName());
         menuAccessLog.setVersion(userAgent.getVersion());
-        menuAccessLog.setIp(ip);
+//        menuAccessLog.setIp(ip);
 
         return this.save(menuAccessLog);
     }

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @TableName("menu_access_log")
 public class MenuAccessLog extends BasePo {
     private String name;
-    private String ip;
+//    private String ip;
     private String os;
     private String platform;
     private String browser;
