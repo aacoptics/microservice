@@ -15,7 +15,7 @@
 <script>
 
 export default {
-  name: 'nacos',
+  name: 'dashboard',
   mounted() {
     this.resizeFrame('webFrame')
   },

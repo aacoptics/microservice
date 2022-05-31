@@ -19,7 +19,6 @@
           <div id="pieChart"
                style="margin-top: 10px;height: 300px; width: 100%"></div>
         </el-col>
-
         <el-col :span="12">
           <div id="lineChart"
                style="margin-top: 10px;height: 300px; width: 100%"></div>
@@ -38,6 +37,7 @@
 import SysTable from "@/components/SysTable";
 import * as echarts from 'echarts';
 import {getLastMouthTotalCount, getLastWeekAccessLog, getLastWeekMenuCount} from "@/api/system/menu";
+import {findUserRolesById} from "@/api/system/user";
 
 export default {
   name: "menuAccessLog",
@@ -68,6 +68,21 @@ export default {
     }
   },
   methods: {
+    handleUserSelectChange(val) {
+      if (val == null || val.val == null) {
+        this.currentUserRoles = []
+        this.dataForm.roleIds = []
+        return
+      }
+      this.selectUser = val.val
+      findUserRolesById(val.val.id).then((res) => {
+        const responseData = res.data
+        if (responseData.code === '000000') {
+          this.currentUserRoles = responseData.data
+          this.getCurrentUserRoleIds()
+        }
+      })
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -79,11 +94,14 @@ export default {
           this.pageResult = responseData.data
         }
       }).then(data != null ? data.callback : '')
+    },
 
+    drawChart: function (){
       getLastWeekMenuCount().then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           const res = responseData.data
+          this.pieChartData = []
           res.forEach((item) => {
             this.pieChartData.push({value: item.totalCount, name: item.title})
           })
@@ -95,15 +113,18 @@ export default {
         const responseData = res.data
         if (responseData.code === '000000') {
           const res = responseData.data
+          this.lineChartData = {
+            name: [],
+            value: []
+          }
           res.forEach((item) => {
-            this.lineChartData.name.push(item.accessTime)
+            this.lineChartData.name.push(item.accessDate)
             this.lineChartData.value.push(item.totalCount)
           })
           this.drawLineChart()
         }
       })
     },
-
     drawPieChart() {
       const chartDom = document.getElementById('pieChart');
       const myChart = echarts.init(chartDom);
@@ -168,13 +189,21 @@ export default {
           }
         ]
       };
-
       option && myChart.setOption(option);
     },
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
     }
-  }
+  },
+  mounted() {
+    this.drawChart();
+  },
+  watch: {
+    // 如果路由有变化，会执行下面方法
+    $route() {
+      this.drawChart();
+    }
+  },
 }
 </script>

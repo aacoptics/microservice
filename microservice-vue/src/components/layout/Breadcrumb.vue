@@ -1,8 +1,8 @@
 <template>
   <div class="crumbs">
-    <el-breadcrumb v-if="$route.name !== 'dashboard'" separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="(item, index) of current.split('|')" :key="index">{{ item }}</el-breadcrumb-item>
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">系统首页</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="current !== undefined" v-for="(item, index) of current.split('|')" :key="index">{{ item }}</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
 </template>
