@@ -50,7 +50,7 @@
                 <!-- spring-boot-maven-plugin将maven打好的普通jar或war, 再次进行打包. 把之前maven默认打的包名字末尾添加上.original -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <executions>
                     <execution>
                         <id>repackage</id>

@@ -21,36 +21,37 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.cloud.version>Hoxton.SR8</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
-        <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
-        <baomidou.version>3.1.2</baomidou.version>
-        <baomidou.dynamic.datasource.version>3.2.0</baomidou.dynamic.datasource.version>
-        <mybatis.spring.version>2.0.4</mybatis.spring.version>
-        <mybatis.spring.boot.version>2.0.1</mybatis.spring.boot.version>
-        <mssql.version>9.2.1.jre8</mssql.version>
-        <rocketmq.client.version>4.7.1</rocketmq.client.version>
-        <commons.pool2.version>2.6.0</commons.pool2.version>
-        <jetcache.redis.version>2.6.0</jetcache.redis.version>
-        <spring.security.oauth2.version>2.3.5.RELEASE</spring.security.oauth2.version>
-        <jwt.version>3.10.3</jwt.version>
-        <spring.security.jwt.version>1.0.10.RELEASE</spring.security.jwt.version>
-        <swagger2.version>2.9.2</swagger2.version>
-        <shedlock.version>4.11.1</shedlock.version>
-        <jackson.databind.version>2.11.1</jackson.databind.version>
-        <barcode4j.version>2.0</barcode4j.version>
-        <poi.version>3.9</poi.version>
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+        <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <mybatis-plus.version>3.1.2</mybatis-plus.version>
+        <dynamic-datasource-spring-boot.version>3.2.0</dynamic-datasource-spring-boot.version>
+        <mybatis-spring.version>2.0.4</mybatis-spring.version>
+        <mybatis-spring-boot.version>2.0.1</mybatis-spring-boot.version>
+        <mssql-jdbc.version>9.2.1.jre8</mssql-jdbc.version>
+        <rocketmq-client.version>4.7.1</rocketmq-client.version>
+        <commons-pool2.version>2.6.0</commons-pool2.version>
+        <jetcache-starter-redis.version>2.6.0</jetcache-starter-redis.version>
+        <spring-security-oauth2.version>2.3.5.RELEASE</spring-security-oauth2.version>
+        <java-jwt.version>3.10.3</java-jwt.version>
+        <spring-security-jwt.version>1.0.10.RELEASE</spring-security-jwt.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <shedlock-spring.version>4.11.1</shedlock-spring.version>
+        <jackson-databind.version>2.11.1</jackson-databind.version>
+        <barcode4j-light.version>2.0</barcode4j-light.version>
+        <poi.version>4.1.1</poi.version>
+        <easypoi.version>4.4.0</easypoi.version>
         <dom4j.version>2.1.1</dom4j.version>
         <fastjson.version>1.2.58</fastjson.version>
         <hutool.version>5.8.1</hutool.version>
-        <commons.lang.version>2.6</commons.lang.version>
+        <commons-lang.version>2.6</commons-lang.version>
         <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.12</lombok.version>
-        <logstash.logback.encoder.version>7.0.1</logstash.logback.encoder.version>
+        <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
         <jsr305.version>3.0.2</jsr305.version>
         <HdrHistogram.version>2.1.12</HdrHistogram.version>
-        <bcpkix.jdk15on.version>1.60</bcpkix.jdk15on.version>
+        <bcpkix-jdk15on.version>1.60</bcpkix-jdk15on.version>
         <asm.version>5.0.4</asm.version>
         <woodstox-core.version>6.2.1</woodstox-core.version>
         <cxf-spring-boot-starter-jaxws.version>3.2.7</cxf-spring-boot-starter-jaxws.version>
@@ -63,113 +64,113 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${baomidou.version}</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
-                <version>${baomidou.version}</version>
+                <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                <version>${baomidou.dynamic.datasource.version}</version>
+                <version>${dynamic-datasource-spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
-                <version>${mybatis.spring.version}</version>
+                <version>${mybatis-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis.spring.boot.version}</version>
+                <version>${mybatis-spring-boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.sqlserver</groupId>
                 <artifactId>mssql-jdbc</artifactId>
-                <version>${mssql.version}</version>
+                <version>${mssql-jdbc.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-client</artifactId>
-                <version>${rocketmq.client.version}</version>
+                <version>${rocketmq-client.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
-                <version>${commons.pool2.version}</version>
+                <version>${commons-pool2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alicp.jetcache</groupId>
                 <artifactId>jetcache-starter-redis</artifactId>
-                <version>${jetcache.redis.version}</version>
+                <version>${jetcache-starter-redis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security.oauth</groupId>
                 <artifactId>spring-security-oauth2</artifactId>
-                <version>${spring.security.oauth2.version}</version>
+                <version>${spring-security-oauth2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.auth0</groupId>
                 <artifactId>java-jwt</artifactId>
-                <version>${jwt.version}</version>
+                <version>${java-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-jwt</artifactId>
-                <version>${spring.security.jwt.version}</version>
+                <version>${spring-security-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger2.version}</version>
+                <version>${springfox-swagger2.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger2.version}</version>
+                <version>${springfox-swagger2.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-spring</artifactId>
-                <version>${shedlock.version}</version>
+                <version>${shedlock-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.javacrumbs.shedlock</groupId>
                 <artifactId>shedlock-provider-redis-spring</artifactId>
-                <version>${shedlock.version}</version>
+                <version>${shedlock-spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${jackson.databind.version}</version>
+                <version>${jackson-databind.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.barcode4j</groupId>
                 <artifactId>barcode4j-light</artifactId>
-                <version>${barcode4j.version}</version>
+                <version>${barcode4j-light.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.poi</groupId>
@@ -180,6 +181,21 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-base</artifactId>
+                <version>${easypoi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-web</artifactId>
+                <version>${easypoi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-annotation</artifactId>
+                <version>${easypoi.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.dom4j</groupId>
@@ -199,7 +215,7 @@
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
-                <version>${commons.lang.version}</version>
+                <version>${commons-lang.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
@@ -219,7 +235,7 @@
             <dependency>
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
-                <version>${logstash.logback.encoder.version}</version>
+                <version>${logstash-logback-encoder.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
@@ -234,7 +250,7 @@
             <dependency>
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcpkix-jdk15on</artifactId>
-                <version>${bcpkix.jdk15on.version}</version>
+                <version>${bcpkix-jdk15on.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ow2.asm</groupId>
