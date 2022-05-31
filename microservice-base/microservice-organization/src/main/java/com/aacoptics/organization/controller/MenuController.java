@@ -7,6 +7,7 @@ import com.aacoptics.organization.entity.po.Menu;
 import com.aacoptics.organization.entity.po.MenuAccessLog;
 import com.aacoptics.organization.service.IMenuAccessLogService;
 import com.aacoptics.organization.service.IMenuService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -108,8 +109,9 @@ public class MenuController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/getLastWeekAccessLog")
-    public Result getLastWeekAccessLog() {
-        return Result.success(menuAccessLogService.getLastWeekAccessLog());
+    public Result getLastWeekAccessLog(@RequestParam Integer page, @RequestParam Integer size) {
+        Page<MenuAccessLog> iPage = new Page<>(page, size);
+        return Result.success(menuAccessLogService.getLastWeekAccessLog(iPage));
     }
 
     @ApiOperation(value = "获取上一月菜单访问次数趋势", notes = "获取上一月菜单访问次数趋势")

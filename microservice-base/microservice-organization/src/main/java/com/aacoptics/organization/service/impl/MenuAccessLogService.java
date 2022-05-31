@@ -8,6 +8,7 @@ import com.aacoptics.organization.entity.po.MenuAccessLog;
 import com.aacoptics.organization.mapper.MenuAccessLogMapper;
 import com.aacoptics.organization.service.IMenuAccessLogService;
 import com.aacoptics.organization.util.ServletUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -43,8 +44,8 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
     }
 
     @Override
-    public List<MenuAccessLog> getLastWeekAccessLog() {
-        return menuAccessLogMapper.getLastWeekAccessLog();
+    public Page<MenuAccessLog> getLastWeekAccessLog(Page<MenuAccessLog> iPage) {
+        return menuAccessLogMapper.getLastWeekAccessLog(iPage);
     }
 
     @Override

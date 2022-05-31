@@ -1,6 +1,7 @@
 package com.aacoptics.organization.service;
 
 import com.aacoptics.organization.entity.po.MenuAccessLog;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IMenuAccessLogService {
      */
     boolean logMenuAccess(MenuAccessLog menuAccessLog);
 
-    List<MenuAccessLog> getLastWeekAccessLog();
+    Page<MenuAccessLog> getLastWeekAccessLog(Page<MenuAccessLog> iPage);
 
     List<MenuAccessLog> getLastMouthTotalCount();
 

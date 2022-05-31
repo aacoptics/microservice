@@ -76,3 +76,17 @@ export function logMenuAccess(menuForm) {
         data: menuForm
     })
 }
+
+export function getLastWeekAccessLog(conditions) {
+    return request({
+        url: '/organization/menu/getLastWeekAccessLog',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            page: conditions.current,
+            size: conditions.size
+        }
+    })
+}
