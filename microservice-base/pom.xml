@@ -48,6 +48,13 @@
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.12</lombok.version>
         <logstash.logback.encoder.version>7.0.1</logstash.logback.encoder.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <HdrHistogram.version>2.1.12</HdrHistogram.version>
+        <bcpkix.jdk15on.version>1.60</bcpkix.jdk15on.version>
+        <asm.version>5.0.4</asm.version>
+        <woodstox-core.version>6.2.1</woodstox-core.version>
+        <cxf-spring-boot-starter-jaxws.version>3.2.7</cxf-spring-boot-starter-jaxws.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <maven.surefire.plugin.version>2.12.4</maven.surefire.plugin.version>
     </properties>
 
@@ -213,6 +220,41 @@
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash.logback.encoder.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hdrhistogram</groupId>
+                <artifactId>HdrHistogram</artifactId>
+                <version>${HdrHistogram.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>${bcpkix.jdk15on.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.woodstox</groupId>
+                <artifactId>woodstox-core</artifactId>
+                <version>${woodstox-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+                <version>${cxf-spring-boot-starter-jaxws.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
