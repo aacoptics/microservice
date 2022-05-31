@@ -32,10 +32,31 @@ public class ResourceService implements IResourceService {
 
     @Override
     public synchronized void saveResource(ResourceDefinition resourceDefinition) {
-        resourceConfigAttributes.put(
-                new NewMvcRequestMatcher(new HandlerMappingIntrospector(), resourceDefinition.getUrl(), resourceDefinition.getMethod()),
-                new SecurityConfig(resourceDefinition.getCode())
-        );
+        switch (resourceDefinition.getEditType()) {
+            case ADD:
+                resourceConfigAttributes.put(
+                        new NewMvcRequestMatcher(new HandlerMappingIntrospector(), resourceDefinition.getUrl(), resourceDefinition.getMethod()),
+                        new SecurityConfig(resourceDefinition.getCode())
+                );
+                break;
+            case UPDATE:
+                resourceConfigAttributes.keySet().stream()
+                        .filter(requestMatcher -> resourceConfigAttributes.get(requestMatcher).getAttribute().equals(resourceDefinition.getCode()))
+                        .findFirst().ifPresent(resourceConfigAttributes::remove);
+                resourceConfigAttributes.put(
+                        new NewMvcRequestMatcher(new HandlerMappingIntrospector(), resourceDefinition.getUrl(), resourceDefinition.getMethod()),
+                        new SecurityConfig(resourceDefinition.getCode())
+                );
+                break;
+            case DELETE:
+                resourceConfigAttributes.keySet().stream()
+                        .filter(requestMatcher -> resourceConfigAttributes.get(requestMatcher).getAttribute().equals(resourceDefinition.getCode()))
+                        .findFirst().ifPresent(resourceConfigAttributes::remove);
+                break;
+            default:
+                break;
+        }
+
         log.info("resourceConfigAttributes size:{}", resourceConfigAttributes.size());
     }
 
