@@ -1,6 +1,7 @@
 package com.aacoptics.organization.entity.po;
 
 import com.aacoptics.common.web.entity.po.BasePo;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +26,13 @@ public class MenuAccessLog extends BasePo {
     private String engineVersion;
     private String username;
     private LocalDateTime accessTime;
+
+    @TableField(exist = false)
+    private Integer totalCount;
+
+    @TableField(exist = false)
+    private String title;
+
+    @TableField(exist = false)
+    private String realName;
 }

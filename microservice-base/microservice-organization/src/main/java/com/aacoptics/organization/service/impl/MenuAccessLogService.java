@@ -13,11 +13,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
 public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuAccessLog> implements IMenuAccessLogService {
+
+    @Resource
+    MenuAccessLogMapper menuAccessLogMapper;
 
     @Override
     public boolean logMenuAccess(MenuAccessLog menuAccessLog) {
@@ -35,6 +40,21 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
 //        menuAccessLog.setIp(ip);
 
         return this.save(menuAccessLog);
+    }
+
+    @Override
+    public List<MenuAccessLog> getLastWeekAccessLog() {
+        return menuAccessLogMapper.getLastWeekAccessLog();
+    }
+
+    @Override
+    public List<MenuAccessLog> getLastMouthTotalCount() {
+        return menuAccessLogMapper.getLastMouthTotalCount();
+    }
+
+    @Override
+    public List<MenuAccessLog> getLastWeekMenuCount() {
+        return menuAccessLogMapper.getLastWeekMenuCount();
     }
 
     /**

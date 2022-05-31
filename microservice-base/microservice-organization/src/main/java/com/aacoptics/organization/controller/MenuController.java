@@ -100,8 +100,34 @@ public class MenuController {
     public Result logMenuAccess(@Valid @RequestBody MenuAccessLogForm menuAccessLogForm) {
         log.debug("name:{}", menuAccessLogForm);
         MenuAccessLog menuAccessLog = menuAccessLogForm.toPo(MenuAccessLog.class);
-
         return Result.success(menuAccessLogService.logMenuAccess(menuAccessLog));
+    }
+
+    @ApiOperation(value = "获取上一周菜单访问明细", notes = "获取上一周菜单访问明细")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @GetMapping(value = "/getLastWeekAccessLog")
+    public Result getLastWeekAccessLog() {
+        return Result.success(menuAccessLogService.getLastWeekAccessLog());
+    }
+
+    @ApiOperation(value = "获取上一月菜单访问次数趋势", notes = "获取上一月菜单访问次数趋势")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @GetMapping(value = "/getLastMouthTotalCount")
+    public Result getLastMouthTotalCount() {
+        return Result.success(menuAccessLogService.getLastMouthTotalCount());
+    }
+
+    @ApiOperation(value = "获取上一周菜单访问次数明细", notes = "获取上一周菜单访问次数明细")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @GetMapping(value = "/getLastWeekMenuCount")
+    public Result getLastWeekMenuCount() {
+        return Result.success(menuAccessLogService.getLastWeekMenuCount());
     }
 
 }
