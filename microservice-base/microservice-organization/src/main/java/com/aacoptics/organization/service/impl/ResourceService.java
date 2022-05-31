@@ -3,6 +3,7 @@ package com.aacoptics.organization.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.aacoptics.common.web.entity.ResourceDefinition;
+import com.aacoptics.common.web.entity.enums.EditType;
 import com.aacoptics.common.web.entity.enums.PermissionType;
 import com.aacoptics.common.web.entity.po.BasePo;
 import com.aacoptics.organization.config.BusConfig;
@@ -60,6 +61,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> imple
     public boolean add(Resource resource) {
         boolean isSuccess = this.save(resource);
         ResourceDefinition resourceDefinition = resourceToResourceDefinition(resource);
+        resourceDefinition.setEditType(EditType.ADD);
         eventSender.send(BusConfig.ROUTING_KEY, resourceDefinition);
         return isSuccess;
     }
@@ -69,6 +71,9 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> imple
     @CacheInvalidate(name = "resource::", key = "targetObject.getResourceKeys()", multi = true)
     @CacheInvalidate(name = "resource4user::", key = "targetObject.getResource4UserKeys()", multi = true)
     public boolean delete(Long id) {
+        ResourceDefinition resourceDefinition = resourceToResourceDefinition(get(id));
+        resourceDefinition.setEditType(EditType.DELETE);
+        eventSender.send(BusConfig.ROUTING_KEY, resourceDefinition);
         return this.removeById(id);
     }
 
@@ -77,6 +82,9 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> imple
     @CacheInvalidate(name = "resource::", key = "#resource.code")
     @CacheInvalidate(name = "resource4user::", key = "targetObject.getResource4UserKeys()", multi = true)
     public boolean update(Resource resource) {
+        ResourceDefinition resourceDefinition = resourceToResourceDefinition(resource);
+        resourceDefinition.setEditType(EditType.UPDATE);
+        eventSender.send(BusConfig.ROUTING_KEY, resourceDefinition);
         return this.updateById(resource);
     }
 

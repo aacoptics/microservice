@@ -1,5 +1,6 @@
 package com.aacoptics.common.web.entity;
 
+import com.aacoptics.common.web.entity.enums.EditType;
 import com.aacoptics.common.web.entity.enums.PermissionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +21,5 @@ public class ResourceDefinition implements Serializable {
     private String method;
     private String description;
     private PermissionType permissionType;
+    private EditType editType = EditType.ADD;
 }
