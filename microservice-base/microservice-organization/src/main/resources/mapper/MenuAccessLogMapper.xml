@@ -17,11 +17,12 @@
                  join menu c
                       on a.name = c.name
         where DateDiff(dd, access_time, getdate()) &lt;= 7
+        order by access_time desc
     </select>
 
     <!-- 获取30天访问趋势 -->
     <select id="getLastMouthTotalCount" resultType="com.aacoptics.organization.entity.po.MenuAccessLog">
-        select CONVERT(VARCHAR(10), access_time, 120) as access_time, count(1) AS total_count
+        select CONVERT(VARCHAR(10), access_time, 120) as access_date, count(1) AS total_count
         from menu_access_log
         where DateDiff(dd, access_time, getdate()) &lt;= 30
         group by CONVERT(VARCHAR(10), access_time, 120)

@@ -60,7 +60,7 @@ public class AccessGatewayFilter implements GlobalFilter {
         if (authService.ignoreAuthentication(url, method)) {
             ServerHttpRequest.Builder builder = request.mutate();
             //TODO 转发的请求都加上服务间认证token
-            builder.header(MICROSERVICE_CLIENT_TOKEN, "fromGateWay");
+            builder.header(MICROSERVICE_CLIENT_TOKEN, "fromGateway");
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 
@@ -70,7 +70,7 @@ public class AccessGatewayFilter implements GlobalFilter {
             if ((boolean) res.getData()) {
                 ServerHttpRequest.Builder builder = request.mutate();
                 //TODO 转发的请求都加上服务间认证token
-                builder.header(MICROSERVICE_CLIENT_TOKEN, "fromGateWay");
+                builder.header(MICROSERVICE_CLIENT_TOKEN, "fromGateway");
                 //将jwt token中的用户信息传给服务
                 builder.header(MICROSERVICE_CLIENT_TOKEN_USER, getUserToken(authentication));
                 return chain.filter(exchange.mutate().request(builder.build()).build());

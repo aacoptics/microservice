@@ -38,7 +38,7 @@ public class UserInterceptor implements HandlerInterceptor {
         //从网关获取并校验,通过校验就可信任microservice-client-token-user中的信息
 //        checkToken(request.getHeader(MICROSERVICE_CLIENT_TOKEN));
         String fromKey = request.getHeader(MICROSERVICE_CLIENT_TOKEN);
-        if (fromKey == null || !fromKey.equals("fromGateWay")) {
+        if (fromKey == null || !fromKey.equals("fromGateway")) {
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();
             response.setStatus(403);
@@ -51,7 +51,7 @@ public class UserInterceptor implements HandlerInterceptor {
     }
 
 //    private boolean checkToken(String token) {
-//        if(token == null || !"".equals("fromGateWay")){
+//        if(token == null || !"".equals("fromGateway")){
 //            return false;
 //        }
 //        return true;

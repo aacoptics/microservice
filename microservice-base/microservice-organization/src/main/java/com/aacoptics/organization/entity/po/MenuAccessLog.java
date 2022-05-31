@@ -35,4 +35,7 @@ public class MenuAccessLog extends BasePo {
 
     @TableField(exist = false)
     private String realName;
+
+    @TableField(exist = false)
+    private String accessDate;
 }

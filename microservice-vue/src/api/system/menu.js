@@ -90,3 +90,23 @@ export function getLastWeekAccessLog(conditions) {
         }
     })
 }
+
+export function getLastWeekMenuCount() {
+    return request({
+        url: '/organization/menu/getLastWeekMenuCount',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function getLastMouthTotalCount() {
+    return request({
+        url: '/organization/menu/getLastMouthTotalCount',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

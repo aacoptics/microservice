@@ -23,12 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-feign/src/main/java/com/aacoptics/common/feign/config/FeignRequestInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-feign/src/main/java/com/aacoptics/common/feign/config/FeignRequestInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-web/src/main/java/com/aacoptics/common/web/interceptor/UserInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-web/src/main/java/com/aacoptics/common/web/interceptor/UserInterceptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-web/src/main/java/com/aacoptics/gateway/web/filter/AccessGatewayFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-gateway/microservice-gateway-web/src/main/java/com/aacoptics/gateway/web/filter/AccessGatewayFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/java/com/aacoptics/organization/service/impl/MenuAccessLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/java/com/aacoptics/organization/service/impl/MenuAccessLogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/mapper/MenuAccessLogMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/mapper/MenuAccessLogMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/api/system/menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/api/system/menu.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,6 +138,7 @@
       <updated>1651895311675</updated>
       <workItem from="1651895313917" duration="6662000" />
       <workItem from="1652316248755" duration="592000" />
+      <workItem from="1653728104531" duration="591000" />
     </task>
     <servers />
   </component>

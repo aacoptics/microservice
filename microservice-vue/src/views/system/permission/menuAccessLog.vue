@@ -1,27 +1,30 @@
 <template>
   <div>
     <div class="aac-container">
-      <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form :inline="true" :size="size">
-          <el-form-item>
-            <el-input v-model="filters.username" placeholder="用户名"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="handleAdd">新增
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'plus']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+      <el-row>
+        <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+          <el-form :inline="true" :size="size">
+            <el-form-item>
+              <el-button type="primary" @click="findPage(null)">刷新
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <div id="pieChart"
+               style="margin-top: 10px;height: 300px; width: 100%"></div>
+        </el-col>
+
+        <el-col :span="12">
+          <div id="lineChart"
+               style="margin-top: 10px;height: 300px; width: 100%"></div>
+        </el-col>
+      </el-row>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
                 :stripe="false"
@@ -33,7 +36,8 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {getLastWeekAccessLog} from "@/api/system/menu";
+import * as echarts from 'echarts';
+import {getLastMouthTotalCount, getLastWeekAccessLog, getLastWeekMenuCount} from "@/api/system/menu";
 
 export default {
   name: "menuAccessLog",
@@ -45,17 +49,22 @@ export default {
         username: ''
       },
       columns: [
-        {prop: "title", label: "菜单名称", minWidth: 110},
-        {prop: "username", label: "访问人工号", minWidth: 100},
-        {prop: "realName", label: "访问人姓名", minWidth: 120},
-        {prop: "os", label: "操作系统", minWidth: 120},
-        {prop: "platform", label: "平台", minWidth: 100},
-        {prop: "browser", label: "浏览器", minWidth: 120},
+        {prop: "title", label: "菜单名称", minWidth: 80},
+        {prop: "username", label: "访问人工号", minWidth: 80},
+        {prop: "realName", label: "访问人姓名", minWidth: 80},
+        {prop: "os", label: "操作系统", minWidth: 160},
+        {prop: "platform", label: "平台", minWidth: 80},
+        {prop: "browser", label: "浏览器", minWidth: 100},
         {prop: "version", label: "版本", minWidth: 120},
         {prop: "accessTime", label: "访问时间", minWidth: 120, formatter: this.dateFormat},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
+      pieChartData: [],
+      lineChartData: {
+        name: [],
+        value: []
+      }
     }
   },
   methods: {
@@ -70,6 +79,97 @@ export default {
           this.pageResult = responseData.data
         }
       }).then(data != null ? data.callback : '')
+
+      getLastWeekMenuCount().then((res) => {
+        const responseData = res.data
+        if (responseData.code === '000000') {
+          const res = responseData.data
+          res.forEach((item) => {
+            this.pieChartData.push({value: item.totalCount, name: item.title})
+          })
+          this.drawPieChart()
+        }
+      })
+
+      getLastMouthTotalCount().then((res) => {
+        const responseData = res.data
+        if (responseData.code === '000000') {
+          const res = responseData.data
+          res.forEach((item) => {
+            this.lineChartData.name.push(item.accessTime)
+            this.lineChartData.value.push(item.totalCount)
+          })
+          this.drawLineChart()
+        }
+      })
+    },
+
+    drawPieChart() {
+      const chartDom = document.getElementById('pieChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        title: {
+          text: '近一周访问统计',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left',
+          type: 'scroll'
+        },
+        series: [
+          {
+            name: '受访菜单',
+            type: 'pie',
+            radius: '50%',
+            data: this.pieChartData,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+    drawLineChart() {
+      const chartDom = document.getElementById('lineChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        title: {
+          text: '近一个月访问趋势统计'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        xAxis: {
+          type: 'category',
+          data: this.lineChartData.name
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: this.lineChartData.value,
+            type: 'line',
+            smooth: true
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
     },
     // 时间格式化
     dateFormat: function (row, column) {
