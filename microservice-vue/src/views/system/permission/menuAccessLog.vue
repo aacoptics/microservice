@@ -24,7 +24,16 @@
                style="margin-top: 10px;height: 300px; width: 100%"></div>
         </el-col>
       </el-row>
-      <el-divider content-position="left">近一周访问明细</el-divider>
+      <el-date-picker
+          v-model="dateTimePickerValue"
+          type="datetimerange"
+          :shortcuts="shortcuts"
+          :size="size"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          class="float-right mb-4"
+      />
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
                 :stripe="false"
@@ -65,7 +74,40 @@ export default {
       lineChartData: {
         name: [],
         value: []
-      }
+      },
+      dateTimePickerValue: [
+        new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
+        new Date(),
+      ],
+      shortcuts: [
+        {
+          text: '上一周',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            return [start, end]
+          },
+        },
+        {
+          text: '上一个月',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            return [start, end]
+          },
+        },
+        {
+          text: '上三个月',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            return [start, end]
+          },
+        },
+      ]
     }
   },
   methods: {
@@ -89,6 +131,9 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
+
+      this.pageRequest.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      this.pageRequest.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
       getLastWeekAccessLog(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
@@ -199,12 +244,6 @@ export default {
   },
   mounted() {
     this.drawChart();
-  },
-  watch: {
-    // 如果路由有变化，会执行下面方法
-    $route() {
-      this.drawChart();
-    }
-  },
+  }
 }
 </script>

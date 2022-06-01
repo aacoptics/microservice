@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.organization.mapper.MenuAccessLogMapper">
     <!-- 获取近7天访问记录 -->
-    <select id="getLastWeekAccessLog" resultType="com.aacoptics.organization.entity.po.MenuAccessLog">
+    <select id="getAccessLogByTime" resultType="com.aacoptics.organization.entity.po.MenuAccessLog">
         SELECT c.title,
                a.username,
                b.name as real_name,
@@ -16,7 +16,7 @@
                       on a.username = b.username
                  join menu c
                       on a.name = c.name
-        where DateDiff(dd, access_time, getdate()) &lt;= 7
+        where access_time between #{startTime} and #{endTime}
         order by access_time desc
     </select>
 

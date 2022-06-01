@@ -86,7 +86,9 @@ export function getLastWeekAccessLog(conditions) {
         },
         params: {
             page: conditions.current,
-            size: conditions.size
+            size: conditions.size,
+            startTime: conditions.startTime,
+            endTime: conditions.endTime
         }
     })
 }

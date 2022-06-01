@@ -44,8 +44,10 @@ public class MenuAccessLogService extends ServiceImpl<MenuAccessLogMapper, MenuA
     }
 
     @Override
-    public Page<MenuAccessLog> getLastWeekAccessLog(Page<MenuAccessLog> iPage) {
-        return menuAccessLogMapper.getLastWeekAccessLog(iPage);
+    public Page<MenuAccessLog> getAccessLogByTime(Page<MenuAccessLog> iPage,
+                                                  LocalDateTime startTime,
+                                                  LocalDateTime endTime) {
+        return menuAccessLogMapper.getAccessLogByTime(iPage, startTime, endTime);
     }
 
     @Override

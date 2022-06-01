@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("rawtypes")
 @RestController
@@ -108,10 +110,16 @@ public class MenuController {
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
-    @GetMapping(value = "/getLastWeekAccessLog")
-    public Result getLastWeekAccessLog(@RequestParam Integer page, @RequestParam Integer size) {
+    @GetMapping(value = "/getAccessLogByTime")
+    public Result getAccessLogByTime(@RequestParam Integer page,
+                                       @RequestParam Integer size,
+                                       @RequestParam String startTime,
+                                       @RequestParam String endTime) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Page<MenuAccessLog> iPage = new Page<>(page, size);
-        return Result.success(menuAccessLogService.getLastWeekAccessLog(iPage));
+        return Result.success(menuAccessLogService.getAccessLogByTime(iPage,
+                LocalDateTime.parse(startTime, df),
+                LocalDateTime.parse(endTime, df)));
     }
 
     @ApiOperation(value = "获取上一月菜单访问次数趋势", notes = "获取上一月菜单访问次数趋势")

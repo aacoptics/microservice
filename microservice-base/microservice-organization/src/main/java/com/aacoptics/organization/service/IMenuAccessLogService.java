@@ -3,6 +3,7 @@ package com.aacoptics.organization.service;
 import com.aacoptics.organization.entity.po.MenuAccessLog;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IMenuAccessLogService {
@@ -12,7 +13,9 @@ public interface IMenuAccessLogService {
      */
     boolean logMenuAccess(MenuAccessLog menuAccessLog);
 
-    Page<MenuAccessLog> getLastWeekAccessLog(Page<MenuAccessLog> iPage);
+    Page<MenuAccessLog> getAccessLogByTime(Page<MenuAccessLog> iPage,
+                                           LocalDateTime startTime,
+                                           LocalDateTime endTime);
 
     List<MenuAccessLog> getLastMouthTotalCount();
 
