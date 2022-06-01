@@ -23,9 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/mapper/MenuAccessLogMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-organization/src/main/resources/mapper/MenuAccessLogMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/api/system/menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/api/system/menu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/components/layout/Sidebar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/components/layout/Sidebar.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/router/components.js" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/router/components.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/views/home/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/views/home/MainPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
