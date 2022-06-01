@@ -12,6 +12,11 @@
     <artifactId>microservice-perms</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.aacoptics</groupId>
+            <artifactId>microservice-common-cache</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!--oauth2认证-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

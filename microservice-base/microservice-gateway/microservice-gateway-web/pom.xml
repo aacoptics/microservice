@@ -12,6 +12,11 @@
     <artifactId>microservice-gateway-web</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.aacoptics</groupId>
+            <artifactId>microservice-common-cache</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!-- Mock 单元测试 -->
         <dependency>
             <groupId>org.mockito</groupId>
