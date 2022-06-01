@@ -12,7 +12,7 @@
     <artifactId>microservice-oauth</artifactId>
 
     <dependencies>
-        <!--oauth2认证-->
+        <!-- oauth2认证 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>

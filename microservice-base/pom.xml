@@ -49,13 +49,16 @@
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.12</lombok.version>
         <logstash-logback-encoder.version>7.0.1</logstash-logback-encoder.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <jsr305.version>3.0.2</jsr305.version>
         <HdrHistogram.version>2.1.12</HdrHistogram.version>
         <bcpkix-jdk15on.version>1.60</bcpkix-jdk15on.version>
         <asm.version>5.0.4</asm.version>
         <woodstox-core.version>6.2.1</woodstox-core.version>
         <cxf-spring-boot-starter-jaxws.version>3.2.7</cxf-spring-boot-starter-jaxws.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <checker-qual.version>2.11.1</checker-qual.version>
+        <error_prone_annotations.version>2.3.4</error_prone_annotations.version>
+        <objenesis.version>2.6</objenesis.version>
         <maven.surefire.plugin.version>2.12.4</maven.surefire.plugin.version>
     </properties>
 
@@ -238,6 +241,12 @@
                 <version>${logstash-logback-encoder.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <!-- webapps-parent and common-feign (nacos, openfeign) -->
+            <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
                 <version>${jsr305.version}</version>
@@ -252,6 +261,7 @@
                 <artifactId>bcpkix-jdk15on</artifactId>
                 <version>${bcpkix-jdk15on.version}</version>
             </dependency>
+            <!-- common-web (webservice) -->
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm</artifactId>
@@ -267,10 +277,21 @@
                 <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
                 <version>${cxf-spring-boot-starter-jaxws.version}</version>
             </dependency>
+            <!-- common-web (cache redis)  -->
             <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${jjwt.version}</version>
+                <groupId>org.checkerframework</groupId>
+                <artifactId>checker-qual</artifactId>
+                <version>${checker-qual.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_annotations</artifactId>
+                <version>${error_prone_annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
