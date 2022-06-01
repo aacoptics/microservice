@@ -201,6 +201,9 @@ export default {
             type: 'pie',
             radius: '50%',
             data: this.pieChartData,
+            label: {
+              formatter: '{b}：{d}%'
+            },
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
