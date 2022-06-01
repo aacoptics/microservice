@@ -25,7 +25,7 @@ export default {
       items: [
         {
           icon: '["fas","house"]',
-          index: "dashboard",
+          index: "mainPage",
           title: "系统首页",
           visible: true
         }

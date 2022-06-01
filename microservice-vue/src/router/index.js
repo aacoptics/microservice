@@ -9,7 +9,7 @@ import {logMenuAccess} from "@/api/system/menu";
 const routes = [
     {
         path: '/',
-        redirect: '/dashboard'
+        redirect: '/mainPage'
     },
     {
         path: "/login",
@@ -54,12 +54,12 @@ const formatRoutes = function (routes, routeData) {
             component: routeMap['Home'],
             children: [
                 {
-                    path: "/dashboard",
-                    name: "dashboard",
+                    path: "/mainPage",
+                    name: "mainPage",
                     meta: {
                         title: '系统首页'
                     },
-                    component: routeMap['Dashboard']
+                    component: routeMap['MainPage']
                 },
                 {
                     path: '/:catchAll(.*)',
@@ -171,7 +171,7 @@ router.beforeEach((to, from, next) => {
             });
 
     } else {
-        if (getAccessToken())
+        if (getAccessToken() && to.path !== '/login')
             logMenuAccess({name: to.name});
         next();
     }

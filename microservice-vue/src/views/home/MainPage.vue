@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="aac-container" style="margin:0; padding:0;border: 0;height:auto;width: 100%;overflow: auto">
       <iframe id='webFrame'
               frameborder='0'
@@ -15,7 +14,7 @@
 <script>
 
 export default {
-  name: 'dashboard',
+  name: 'mainPage',
   mounted() {
     this.resizeFrame('webFrame')
   },
