@@ -100,11 +100,11 @@ export default {
       dataFormRules: {
         username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
         name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
-        // mobile: [{
-        //   required: true, trigger: 'blur', validator: (r, v, b) => {
-        //     (!v ? b('请输入手机号') : (!(/^(?:(?:\+|00)86)?1\d{10}$/.test(v))) ? b('手机号格式不正确') : b())
-        //   }
-        // }]
+        mobile: [{
+          required: true, trigger: 'blur', validator: (r, v, b) => {
+            (!v ? b('请输入手机号') : (!(/^(?:(?:\+|00)86)?1\d{10}$/.test(v))) ? b('手机号格式不正确') : b())
+          }
+        }]
       },
       // 新增编辑界面数据
       dataForm: {
