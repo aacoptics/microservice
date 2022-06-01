@@ -82,7 +82,7 @@ export default {
       ],
       shortcuts: [
         {
-          text: '上一周',
+          text: '近一周',
           value: () => {
             const end = new Date()
             const start = new Date()
@@ -91,7 +91,7 @@ export default {
           },
         },
         {
-          text: '上一个月',
+          text: '近一个月',
           value: () => {
             const end = new Date()
             const start = new Date()
@@ -100,7 +100,7 @@ export default {
           },
         },
         {
-          text: '上三个月',
+          text: '近三个月',
           value: () => {
             const end = new Date()
             const start = new Date()
