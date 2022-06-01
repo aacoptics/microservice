@@ -26,13 +26,13 @@
       </el-row>
       <el-date-picker
           v-model="dateTimePickerValue"
-          type="datetimerange"
           :shortcuts="shortcuts"
           :size="size"
+          class="float-right mb-4"
+          end-placeholder="结束日期"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          class="float-right mb-4"
+          type="datetimerange"
           @change="findPage(null)"
       />
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
@@ -47,7 +47,7 @@
 <script>
 import SysTable from "@/components/SysTable";
 import * as echarts from 'echarts';
-import {getLastMouthTotalCount, getAccessLogByTime, getLastWeekMenuCount} from "@/api/system/menu";
+import {getAccessLogByTime, getLastMouthTotalCount, getLastWeekMenuCount} from "@/api/system/menu";
 import {findUserRolesById} from "@/api/system/user";
 
 export default {
@@ -133,8 +133,7 @@ export default {
         this.pageRequest = data.pageRequest
       }
 
-      if(this.dateTimePickerValue === null)
-      {
+      if (this.dateTimePickerValue === null) {
         this.$message.warning('必须选则查询的时间范围！')
         return
       }
@@ -149,7 +148,7 @@ export default {
       }).then(data != null ? data.callback : '')
     },
 
-    drawChart: function (){
+    drawChart: function () {
       getLastWeekMenuCount().then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {

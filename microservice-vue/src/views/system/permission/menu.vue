@@ -38,9 +38,9 @@
                 :tree-props="defaultProps"
                 border
                 element-loading-text="加载中..."
-                @expand-change="refresh"
                 row-key="id"
-                style="width: 100%; margin-bottom: 20px">
+                style="width: 100%; margin-bottom: 20px"
+                @expand-change="refresh">
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">
