@@ -17,6 +17,7 @@
         <module>microservice-common-feign</module>
         <module>microservice-common-web</module>
         <module>microservice-common-cache</module>
+        <module>microservice-common-cloud</module>
     </modules>
 
 </project>
