@@ -49,7 +49,7 @@ public class LdapAuthenticationProvider extends DaoAuthenticationProvider {
 //
 //import com.aacoptics.oauth.entity.SsoResult;
 //import com.aacoptics.oauth.provider.LdapProvider;
-//import com.aacoptics.oauth.provider.WebServiceUtil;
+//import com.aacoptics.common.web.util.WebServiceUtil;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.authentication.*;
 //import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

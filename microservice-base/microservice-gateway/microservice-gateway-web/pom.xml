@@ -13,19 +13,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-okhttp</artifactId>
+            <groupId>com.aacoptics</groupId>
+            <artifactId>microservice-common-cloud</artifactId>
+            <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.aacoptics</groupId>
+            <artifactId>microservice-common-cache</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- Mock 单元测试 -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-        <!--core基础类库-->
-        <dependency>
-            <groupId>com.aacoptics</groupId>
-            <artifactId>microservice-common-core</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+        <!-- gateway -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
@@ -41,16 +43,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--网关签权客户端-->
+        <!-- 网关签权客户端 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.aacoptics</groupId>
-            <artifactId>microservice-common-feign</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

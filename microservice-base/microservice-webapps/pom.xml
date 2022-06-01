@@ -11,9 +11,9 @@
 
     <artifactId>microservice-webapps</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>microservice-webapps-parent</module>
     </modules>
-
 
 </project>
