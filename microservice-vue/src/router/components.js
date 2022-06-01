@@ -5,7 +5,7 @@ const MainPage = () => import('@/views/home/MainPage')
 
 export default {
     Home,
-    MainPage: MainPage,
+    MainPage,
     NotFound,
     NoAuth
 };

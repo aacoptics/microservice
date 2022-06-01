@@ -22,6 +22,8 @@ const routes = [
 ]
 const dynamicRouteDic = {}
 
+const ignoreLogMenu = ['403', '404', 'mainPage', 'Login']
+
 let isFetchRemote = true;
 
 const formatMenus = function (menuData, menuItems, levelInfo = '') {
@@ -171,7 +173,7 @@ router.beforeEach((to, from, next) => {
             });
 
     } else {
-        if (getAccessToken() && to.path !== '/login')
+        if (getAccessToken() && ignoreLogMenu.indexOf(to.name) === -1)
             logMenuAccess({name: to.name});
         next();
     }
