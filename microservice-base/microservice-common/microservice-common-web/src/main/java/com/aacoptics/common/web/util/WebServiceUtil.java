@@ -6,7 +6,7 @@
  * ====================================================================================================
  * 2021-03-11     诚瑞光学      [Init] 调用WebService工具类.
  * ==================================================================================================== */
-package com.aacoptics.oauth.provider;
+package com.aacoptics.common.web.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.cxf.endpoint.Client;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
  * @version 1.0.0
  * @since jdk 1.8
  */
+@SuppressWarnings("unused")
 @Component
 public class WebServiceUtil {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,8 +37,7 @@ public class WebServiceUtil {
     public Object invokeWebService(String wsdl, Class<?> classType, String methodName, Object... params) throws Exception {
         // 创建动态客户端
         JaxWsDynamicClientFactory jaxWsDynamicClientFactory = JaxWsDynamicClientFactory.newInstance();
-        Client client = jaxWsDynamicClientFactory.createClient(wsdl);
-        try {
+        try (Client client = jaxWsDynamicClientFactory.createClient(wsdl)) {
             Object[] result = client.invoke(methodName, params);
             String resultString = (String) result[0];
             return objectMapper.readValue(resultString, classType);
@@ -57,8 +57,7 @@ public class WebServiceUtil {
     public Object[] invokeWebService(String wsdl, String methodName, Object... params) throws Exception {
         // 创建动态客户端
         JaxWsDynamicClientFactory jaxWsDynamicClientFactory = JaxWsDynamicClientFactory.newInstance();
-        Client client = jaxWsDynamicClientFactory.createClient(wsdl);
-        try {
+        try (Client client = jaxWsDynamicClientFactory.createClient(wsdl)) {
             return client.invoke(methodName, params);
         } catch (Exception e) {
             throw new Exception(e.getMessage());

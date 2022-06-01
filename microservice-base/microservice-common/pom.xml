@@ -11,11 +11,13 @@
 
     <artifactId>microservice-common</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>microservice-common-core</module>
         <module>microservice-common-feign</module>
         <module>microservice-common-web</module>
+        <module>microservice-common-cache</module>
+        <module>microservice-common-cloud</module>
     </modules>
-
 
 </project>
