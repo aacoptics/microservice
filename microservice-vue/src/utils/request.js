@@ -14,7 +14,7 @@ import {ElMessage} from "element-plus";
 import {saveRefreshTime} from "@/api";
 
 const service = axios.create({
-    baseURL: 'http://uds.aacoptics.com:30500'
+    baseURL: 'https://uds.aacoptics.com:8443'
 });
 
 service.interceptors.request.use(

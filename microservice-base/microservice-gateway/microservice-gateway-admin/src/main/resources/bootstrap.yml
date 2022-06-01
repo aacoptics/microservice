@@ -14,5 +14,5 @@ spring:
         file-extension: yaml
     sentinel:
       transport:
-        dashboard: uds.aacoptics.com:30844
+        dashboard: k8s.aacoptics.com:30844
         client-ip: localhost
