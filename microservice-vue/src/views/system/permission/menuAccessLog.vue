@@ -33,6 +33,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           class="float-right mb-4"
+          @change="findPage(null)"
       />
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
@@ -46,7 +47,7 @@
 <script>
 import SysTable from "@/components/SysTable";
 import * as echarts from 'echarts';
-import {getLastMouthTotalCount, getLastWeekAccessLog, getLastWeekMenuCount} from "@/api/system/menu";
+import {getLastMouthTotalCount, getAccessLogByTime, getLastWeekMenuCount} from "@/api/system/menu";
 import {findUserRolesById} from "@/api/system/user";
 
 export default {
@@ -132,9 +133,15 @@ export default {
         this.pageRequest = data.pageRequest
       }
 
+      if(this.dateTimePickerValue === null)
+      {
+        this.$message.warning('必须选则查询的时间范围！')
+        return
+      }
+
       this.pageRequest.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       this.pageRequest.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      getLastWeekAccessLog(this.pageRequest).then((res) => {
+      getAccessLogByTime(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data

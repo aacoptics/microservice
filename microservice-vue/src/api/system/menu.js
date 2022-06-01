@@ -77,9 +77,9 @@ export function logMenuAccess(menuForm) {
     })
 }
 
-export function getLastWeekAccessLog(conditions) {
+export function getAccessLogByTime(conditions) {
     return request({
-        url: '/organization/menu/getLastWeekAccessLog',
+        url: '/organization/menu/getAccessLogByTime',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
