@@ -24,6 +24,7 @@
                style="margin-top: 10px;height: 300px; width: 100%"></div>
         </el-col>
       </el-row>
+      <el-divider content-position="left">近一周访问明细</el-divider>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
                 :stripe="false"
