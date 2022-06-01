@@ -116,7 +116,7 @@ import dictData from "./dictData"
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 export default {
-  name: "environmentParameter",
+  name: "dictType",
   components: {SysTable, dictData},
   data() {
     return {
