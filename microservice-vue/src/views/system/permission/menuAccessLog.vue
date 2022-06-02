@@ -251,8 +251,13 @@ export default {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
     }
   },
-  mounted() {
-    this.drawChart();
+  activated() {
+    this.dateTimePickerValue = [
+      new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
+      new Date(),
+    ]
+    this.findPage(null)
+    this.drawChart()
   }
 }
 </script>
