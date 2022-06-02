@@ -4,11 +4,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 10.233.76.32:8848
+        server-addr: 10.233.76.32:8848,10.69.73.32:8848,10.89.148.32:8848
         namespace: microservice-prod
         group: microservice-base
       config:
-        server-addr: 10.233.76.32:8848
+        server-addr: 10.233.76.32:8848,10.69.73.32:8848,10.89.148.32:8848
         namespace: microservice-prod
         group: microservice-base
         file-extension: yaml
