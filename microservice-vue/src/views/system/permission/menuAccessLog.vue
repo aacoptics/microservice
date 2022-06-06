@@ -59,15 +59,16 @@ export default {
       filters: {
         username: ''
       },
+      firstLoad: true,
       columns: [
         {prop: "title", label: "菜单名称", minWidth: 80},
         {prop: "username", label: "访问人工号", minWidth: 80},
         {prop: "realName", label: "访问人姓名", minWidth: 80},
+        {prop: "accessTime", label: "访问时间", minWidth: 120, formatter: this.dateFormat},
         {prop: "os", label: "操作系统", minWidth: 160},
         {prop: "platform", label: "平台", minWidth: 80},
         {prop: "browser", label: "浏览器", minWidth: 100},
         {prop: "version", label: "版本", minWidth: 120},
-        {prop: "accessTime", label: "访问时间", minWidth: 120, formatter: this.dateFormat},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -132,12 +133,10 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-
       if (this.dateTimePickerValue === null) {
         this.$message.warning('必须选则查询的时间范围！')
         return
       }
-
       this.pageRequest.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       this.pageRequest.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
       getAccessLogByTime(this.pageRequest).then((res) => {
@@ -145,6 +144,7 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         }
+        this.drawChart()
       }).then(data != null ? data.callback : '')
     },
 
@@ -252,12 +252,14 @@ export default {
     }
   },
   activated() {
-    this.dateTimePickerValue = [
-      new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
-      new Date(),
-    ]
-    this.findPage(null)
-    this.drawChart()
+    if(!this.firstLoad) {
+      this.dateTimePickerValue = [
+        new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
+        new Date(),
+      ]
+      this.findPage(null)
+    }
+    this.firstLoad = false
   }
 }
 </script>
