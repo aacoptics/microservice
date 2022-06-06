@@ -1,6 +1,6 @@
 spring:
   application:
-    name: microservice-mobile-attendance
+    name: microservice-notification
   cloud:
     nacos:
       discovery:

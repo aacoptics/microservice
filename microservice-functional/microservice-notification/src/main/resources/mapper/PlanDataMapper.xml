@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aac.optics.message.system.mapper.PlanDataMapper">
+
+    <insert id="insertPlanData" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO MS_00_PLAN([PLAN_KEY], [PLAN_NAME], [PLAN_CRON], [MSG_TYPE], [NOTIFY_TYPE], [ROBOT], [SECRET_COL], [MSG_EXPR]
+  		                         ,[PLAN_MONTH], [PLAN_DAY], [PLAN_HOUR], [PLAN_MINUTE], [PLAN_SECOND]
+  		                         ,[TIME_PERIOD], [STATUS], [CREATE_USER], [UPDATE_USER], [CREATE_TIME], [UPDATE_TIME],[TRIGGER_TYPE])
+  		VALUES(#{PLAN_KEY}, #{PLAN_NAME}, #{PLAN_CRON}, #{MSG_TYPE}, #{NOTIFY_TYPE}, #{ROBOT}, #{SECRET_COL}, #{MSG_EXPR}, #{PLAN_MONTH}
+  		       , #{PLAN_DAY}, #{PLAN_HOUR}, #{PLAN_MINUTE}, #{PLAN_SECOND},#{TIME_PERIOD},#{STATUS},#{CREATE_USER},null, GETDATE(), NULL,#{TRIGGER_TYPE})
+	</insert>
+
+    <insert id="insertPlanContact" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO MS_PLAN_CONTACT([PLAN_KEY], [USER_NO], [CREATE_TIME])
+  		VALUES(#{PLAN_KEY}, #{USER_NO}, GETDATE())
+	</insert>
+
+	<insert id="insertContactData" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO MS_00_CONTACT([USER_NO], [USER_NAME], [USER_EMAIL], [USER_TEL], [CREATE_TIME])
+  		VALUES(#{USER_NO}, #{USER_NAME}, #{USER_EMAIL}, #{USER_TEL}, GETDATE())
+	</insert>
+
+	<insert id="insertPlanJob" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO MS_00_JOB([PLAN_KEY], [MSG], [WORK_DAY], [CREATE_TIME])
+  		VALUES(#{PLAN_KEY}, #{MSG}, #{WORK_DAY}, GETDATE())
+	</insert>
+
+	<delete id="deleteContactData" parameterType="java.lang.String">
+	        DELETE FROM [dbo].[MS_00_CONTACT] WHERE
+	        USER_NO = #{USER_NO}
+	</delete>
+
+    <delete id="deletePlanContact" parameterType="java.lang.String">
+	        DELETE FROM MS_PLAN_CONTACT WHERE
+	        PLAN_KEY = #{planKey}
+	</delete>
+
+    <update id="updatePlanData" parameterType="Map" flushCache="true" timeout="20">
+		UPDATE MS_00_PLAN
+		 SET [PLAN_NAME] = #{PLAN_NAME}
+		   , [PLAN_CRON] = #{PLAN_CRON}
+		   , [MSG_TYPE] = #{MSG_TYPE}
+		   , [NOTIFY_TYPE] = #{NOTIFY_TYPE}
+		   , [ROBOT] = #{ROBOT}
+		   , [SECRET_COL] = #{SECRET_COL}
+		   , [MSG_EXPR] = #{MSG_EXPR}
+  		   , [PLAN_MONTH] = #{PLAN_MONTH}
+  		   , [PLAN_DAY] = #{PLAN_DAY}
+  		   , [PLAN_HOUR] = #{PLAN_HOUR}
+  		   , [PLAN_MINUTE] = #{PLAN_MINUTE}
+  		   , [PLAN_SECOND] = #{PLAN_SECOND}
+  		   , [TIME_PERIOD] = #{TIME_PERIOD}
+  		   , [STATUS] = #{STATUS}
+  		   , [UPDATE_USER] = #{UPDATE_USER}
+  		   , [UPDATE_TIME] = GETDATE()
+		WHERE 1=1
+		AND PLAN_KEY = #{PLAN_KEY}
+    </update>
+
+	<select id="filterPlanData" parameterType="Map" resultType="Map">
+        SELECT [PLAN_KEY] as planKey
+             , [PLAN_NAME] as planName
+             , [PLAN_CRON] as planCron
+             , [MSG_TYPE] as msgType
+             , ISNULL([NOTIFY_TYPE],'') as notifyType
+             , ISNULL([ROBOT],'') as notifyRobot
+             , ISNULL([SECRET_COL],'') as sign
+             , [MSG_EXPR] as msgExpr
+             , [TRIGGER_TYPE] as triggerType
+  		     , ISNULL([PLAN_MONTH],'*') as planMonth
+  		     , ISNULL([PLAN_DAY],'*') as planDay
+  		     , ISNULL([PLAN_HOUR],'*') as planHour
+  		     , ISNULL([PLAN_MINUTE],'*') as planMinute
+  		     , ISNULL([PLAN_SECOND],'*') as planSecond
+  		     , ISNULL([TIME_PERIOD],0) as timePeriod
+  		     , [STATUS] as status
+        FROM MS_00_PLAN P
+        WHERE P.PLAN_KEY LIKE ('%' + #{planKey} + '%')
+        AND P.PLAN_NAME LIKE ('%' + cast(#{planName} as nvarchar(50)) + '%')
+    </select>
+
+	<select id="filterPlanJOB" parameterType="Map" resultType="Map">
+        SELECT P.PLAN_KEY as planKey
+             , P.PLAN_NAME as planName
+             , J.WORK_DAY as workDay
+             , J.MSG as msg
+        FROM MS_00_JOB J, MS_00_PLAN P
+        WHERE J.PLAN_KEY = P.PLAN_KEY
+        AND P.PLAN_KEY LIKE ('%' + #{planKey} + '%')
+        AND P.PLAN_NAME LIKE (cast('%' as nvarchar(50)) + #{planName} + cast('%' as nvarchar(50)))
+        AND J.WORK_DAY = #{workDay}
+    </select>
+
+	<select id="filterContactData" parameterType="Map" resultType="Map">
+        SELECT TOP 100 USER_NO as userNo
+              ,USER_NAME as userName
+        FROM MS_00_CONTACT C
+        WHERE C.USER_NAME LIKE (cast('%' as nvarchar(50)) + #{userName} + cast('%' as nvarchar(50)))
+    </select>
+
+	<select id="filterPlanContact" parameterType="Map" resultType="Map">
+        SELECT  PC.USER_NO as userNo
+              , C.USER_NAME as userName
+              , C.USER_EMAIL as email
+              , C.USER_TEL as tel 
+        FROM MS_PLAN_CONTACT PC, MS_00_CONTACT C
+        WHERE 1=1
+        AND PC.USER_NO = C.USER_NO
+        AND PC.PLAN_KEY = #{planKey}
+    </select>
+
+	<select id="queryScheduledPlan" parameterType="Map" resultType="Map">
+        SELECT [PLAN_KEY] as planKey
+             , [PLAN_NAME] as planName
+             , [PLAN_CRON] as planCron
+             , [MSG_TYPE] as msgType
+             , [MSG_EXPR] as msgExpr
+             , ISNULL([ROBOT],'') as robotURL
+             , ISNULL([SECRET_COL],'') as secret
+  		     , ISNULL([PLAN_MONTH],'*') as planMonth
+  		     , ISNULL([PLAN_DAY],'*') as planDay
+  		     , ISNULL([PLAN_HOUR],'*') as planHour
+  		     , ISNULL([PLAN_MINUTE],'*') as planMinute
+  		     , ISNULL([PLAN_SECOND],'*') as planSecond
+  		     , ISNULL([TIME_PERIOD],0) as timePeriod
+  		     , [STATUS] as status
+        FROM MS_00_PLAN P
+        WHERE P.STATUS = 1
+    </select>
+
+</mapper>
