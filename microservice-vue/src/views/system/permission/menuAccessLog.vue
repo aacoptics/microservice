@@ -59,6 +59,8 @@ export default {
       filters: {
         username: ''
       },
+      pieChart: null,
+      lineChart: null,
       firstLoad: true,
       columns: [
         {prop: "title", label: "菜单名称", minWidth: 80},
@@ -179,7 +181,7 @@ export default {
     },
     drawPieChart() {
       const chartDom = document.getElementById('pieChart');
-      const myChart = echarts.init(chartDom);
+      this.pieChart = echarts.init(chartDom);
       let option;
 
       option = {
@@ -215,11 +217,11 @@ export default {
         ]
       };
 
-      option && myChart.setOption(option);
+      option && this.pieChart.setOption(option);
     },
     drawLineChart() {
       const chartDom = document.getElementById('lineChart');
-      const myChart = echarts.init(chartDom);
+      this.lineChart = echarts.init(chartDom);
       let option;
 
       option = {
@@ -244,7 +246,7 @@ export default {
           }
         ]
       };
-      option && myChart.setOption(option);
+      option && this.lineChart.setOption(option);
     },
     // 时间格式化
     dateFormat: function (row, column) {
@@ -260,6 +262,17 @@ export default {
       this.findPage(null)
     }
     this.firstLoad = false
+  },
+  beforeUnmount() {
+    if (this.lineChart) {
+      this.lineChart.dispose()
+      this.lineChart = null
+    }
+
+    if (this.pieChart) {
+      this.pieChart.dispose()
+      this.pieChart = null
+    }
   }
 }
 </script>
