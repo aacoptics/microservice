@@ -22,38 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="">
-      <change afterPath="$PROJECT_DIR$/microservice-notification/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/NotificationApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/MybatisConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/MessagePlanController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownGroupMessage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/PlanData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UserData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/PlanDataMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UserMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/DingTalkApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/FeishuApi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/OkHttpCli.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/DynamicNotifyTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/PlanService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/PlanServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/utils/DingTalkUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/utils/HttpClientUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/utils/SqlSourceUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/bootstrap.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/mapper/PlanDataMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/mapper/UserMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/provider/FeishuApiProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources/bootstrap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources/bootstrap.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台">
+      <change afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +68,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -117,11 +88,11 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification" />
+      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\resources" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\resources" />
+      <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\provider" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
-      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -197,8 +168,16 @@
       <workItem from="1651895313917" duration="6662000" />
       <workItem from="1652316248755" duration="592000" />
       <workItem from="1653728104531" duration="591000" />
-      <workItem from="1654503781095" duration="2580000" />
+      <workItem from="1654503781095" duration="3453000" />
     </task>
+    <task id="LOCAL-00001" summary="添加消息平台">
+      <created>1654506624870</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1654506624870</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,43 +195,47 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="添加消息平台" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加消息平台" />
+  </component>
   <component name="WindowStateProjectService">
     <state width="366" height="466" key="DebuggerActiveHint" timestamp="1651915925986">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="366" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1651915925986" />
-    <state width="1479" height="374" key="GridCell.Tab.0.bottom" timestamp="1654505136847">
+    <state width="1479" height="374" key="GridCell.Tab.0.bottom" timestamp="1654506593119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136847" />
-    <state width="1479" height="374" key="GridCell.Tab.0.center" timestamp="1654505136846">
+    <state width="1479" height="374" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593119" />
+    <state width="1479" height="374" key="GridCell.Tab.0.center" timestamp="1654506593118">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136846" />
-    <state width="1479" height="374" key="GridCell.Tab.0.left" timestamp="1654505136846">
+    <state width="1479" height="374" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593118" />
+    <state width="1479" height="374" key="GridCell.Tab.0.left" timestamp="1654506593118">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136846" />
-    <state width="1479" height="374" key="GridCell.Tab.0.right" timestamp="1654505136846">
+    <state width="1479" height="374" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593118" />
+    <state width="1479" height="374" key="GridCell.Tab.0.right" timestamp="1654506593118">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136846" />
-    <state width="1479" height="374" key="GridCell.Tab.1.bottom" timestamp="1654505136847">
+    <state width="1479" height="374" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593118" />
+    <state width="1479" height="374" key="GridCell.Tab.1.bottom" timestamp="1654506593119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136847" />
-    <state width="1479" height="374" key="GridCell.Tab.1.center" timestamp="1654505136847">
+    <state width="1479" height="374" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593119" />
+    <state width="1479" height="374" key="GridCell.Tab.1.center" timestamp="1654506593119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136847" />
-    <state width="1479" height="374" key="GridCell.Tab.1.left" timestamp="1654505136847">
+    <state width="1479" height="374" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593119" />
+    <state width="1479" height="374" key="GridCell.Tab.1.left" timestamp="1654506593119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136847" />
-    <state width="1479" height="374" key="GridCell.Tab.1.right" timestamp="1654505136847">
+    <state width="1479" height="374" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593119" />
+    <state width="1479" height="374" key="GridCell.Tab.1.right" timestamp="1654506593119">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1479" height="374" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654505136847" />
+    <state width="1479" height="374" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654506593119" />
     <state width="1921" height="356" key="GridCell.Tab.2.bottom" timestamp="1651914889279">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -273,6 +256,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1651914424828" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1654506630614">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1654506630614" />
     <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1651914772874">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
