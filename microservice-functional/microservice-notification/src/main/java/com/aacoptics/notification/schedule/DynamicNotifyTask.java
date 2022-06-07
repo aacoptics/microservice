@@ -7,9 +7,10 @@ import com.aacoptics.notification.utils.DingTalkUtil;
 import com.aacoptics.notification.utils.SqlSourceUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,10 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
+@Slf4j
 public class DynamicNotifyTask  implements Runnable {
-
-    private static final Logger logger = LoggerFactory.getLogger(DynamicNotifyTask.class);
-
     @Resource
     PlanDataMapper planDataMapper;
 
@@ -37,15 +36,8 @@ public class DynamicNotifyTask  implements Runnable {
     @Resource
     private SqlSourceUtil sqlSourceUtil;
 
-
-    public String getPlanKey() {
-        return planKey;
-    }
-
-    public void setPlanKey(String planKey) {
-        this.planKey = planKey;
-    }
-
+    @Getter
+    @Setter
     private String planKey;
 
     @Override
@@ -252,7 +244,7 @@ public class DynamicNotifyTask  implements Runnable {
             try {
                 messageJson = JSONObject.parseObject(resultMesaage);
             } catch (Exception err) {
-                logger.error("解析返回值失败！{}", err.getMessage());
+                log.error("解析返回值失败！{}", err.getMessage());
                 insertJobParam.put("MSG", err.getMessage());
                 planDataMapper.insertPlanJob(insertJobParam);
                 return;
@@ -261,7 +253,7 @@ public class DynamicNotifyTask  implements Runnable {
         insertJobParam.put("MSG", notifyMessage.toString());
         planDataMapper.insertPlanJob(insertJobParam);
 
-        logger.info("DynamicNotifyTask execute times:{}");
+        log.info("DynamicNotifyTask execute times:{}");
     }
 
     public Map<String, Object> excuteDynamicSQL(String groupName, Map<String,String> keyMap)
