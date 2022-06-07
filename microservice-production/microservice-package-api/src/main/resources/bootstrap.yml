@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: microservice-package-api
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.233.76.32:8848,10.69.73.32:8848,10.89.148.32:8848
+        namespace: microservice-prod
+        group: microservice-production
+      config:
+        server-addr: 10.233.76.32:8848,10.69.73.32:8848,10.89.148.32:8848
+        namespace: microservice-prod
+        group: microservice-production
+        file-extension: yaml
+    sentinel:
+      transport:
+        dashboard: k8s.aacoptics.com:30844
