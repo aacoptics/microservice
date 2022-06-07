@@ -1,4 +1,4 @@
-package com.aacoptics.notification.config;
+package com.aacoptics.pack.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.springframework.context.annotation.Bean;
