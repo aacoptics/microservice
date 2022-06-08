@@ -1,11 +1,12 @@
 <template>
-  <div v-if="showTags" class="tags">
+  <div class="tags" v-if="showTags">
     <ul>
       <li
+          class="tags-li"
           v-for="(item,index) in tagsList"
-          :key="index"
           :class="{'active': isActive(item.path)}"
-          class="tags-li">
+          :key="index"
+          >
         <router-link :to="item.path" class="tags-li-title">{{ item.title }}</router-link>
         <span class="tags-li-icon" @click="closeTags(index)">
           <font-awesome-icon :icon="['fas', ['xmark']]"/>

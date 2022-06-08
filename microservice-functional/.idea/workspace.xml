@@ -23,7 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台逻辑">
-      <change beforePath="$PROJECT_DIR$/../microservice-vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/src/components/layout/Tags.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/src/components/layout/Tags.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,15 +110,13 @@
     </option>
   </component>
   <component name="RunManager" selected="JUnit.UmsContentServiceImplTest.Test">
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -195,6 +194,7 @@
       <workItem from="1653728104531" duration="591000" />
       <workItem from="1654503781095" duration="9393000" />
       <workItem from="1654594675780" duration="7769000" />
+      <workItem from="1654657524255" duration="1059000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
@@ -258,29 +258,29 @@
     </state>
     <state width="369" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1654596541186" />
     <state width="500" height="628" key="DebuggerActiveHint/0.0.2560.1400@0.0.2560.1400" timestamp="1654605037554" />
-    <state width="1398" height="328" key="GridCell.Tab.0.bottom" timestamp="1654652556659">
-      <screen x="0" y="0" width="1440" height="860" />
+    <state width="1877" height="411" key="GridCell.Tab.0.bottom" timestamp="1654657982444">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.bottom/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="334" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="1877" height="411" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654657982444" />
     <state width="2517" height="595" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
-    <state width="1398" height="328" key="GridCell.Tab.0.center" timestamp="1654652556659">
-      <screen x="0" y="0" width="1440" height="860" />
+    <state width="1877" height="411" key="GridCell.Tab.0.center" timestamp="1654657982442">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.center/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="334" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="1877" height="411" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654657982442" />
     <state width="2517" height="595" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="1398" height="328" key="GridCell.Tab.0.left" timestamp="1654652556659">
-      <screen x="0" y="0" width="1440" height="860" />
+    <state width="1877" height="411" key="GridCell.Tab.0.left" timestamp="1654657982442">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.left/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="334" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="1877" height="411" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654657982442" />
     <state width="2517" height="595" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="1398" height="328" key="GridCell.Tab.0.right" timestamp="1654652556659">
-      <screen x="0" y="0" width="1440" height="860" />
+    <state width="1877" height="411" key="GridCell.Tab.0.right" timestamp="1654657982442">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.right/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="334" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="1877" height="411" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654657982442" />
     <state width="2517" height="595" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
     <state width="2517" height="432" key="GridCell.Tab.1.bottom" timestamp="1654652556631">
       <screen x="0" y="0" width="1440" height="860" />
