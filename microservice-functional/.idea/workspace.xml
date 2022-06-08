@@ -22,9 +22,24 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台">
+    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="优化">
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/controller/CustomerShipmentInfoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/po/CustomerShipmentInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/mapper/CustomerShipmentInfoMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/ICustomerShipmentInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/CustomerShipmentInfoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/DynamicNotifyTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/DynamicNotifyTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +51,7 @@
       <list>
         <option value="JUnit5 Test Class" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -68,7 +84,8 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/config" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -79,20 +96,25 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.aacoptics.notification.service.impl" />
       <recent name="com.aacoptics.mobile.attendance.config" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.aacoptics.notification" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.aacoptics.notification.service.impl" />
+      <recent name="com.aacoptics.notification.service" />
+      <recent name="com.aacoptics.notification.mapper" />
+      <recent name="com.aacoptics.notification.entity" />
+      <recent name="com.aacoptics.notification" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
+      <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification\config" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\resources" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\resources" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification" />
-      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\provider" />
-      <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -102,14 +124,16 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.NotificationApplication">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.UmsContentServiceImplTest.Test">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -125,6 +149,22 @@
       <option name="PACKAGE_NAME" value="com.aacoptics.mobile.attendance.config" />
       <option name="MAIN_CLASS_NAME" value="com.aacoptics.mobile.attendance.config.FeishuAppKeyConfigTest" />
       <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UmsContentServiceImplTest.Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="microservice-notification" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.aacoptics.notification.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.aacoptics.notification.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.aacoptics.notification.service.impl.UmsContentServiceImplTest" />
+      <option name="METHOD_NAME" value="Test" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -152,6 +192,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UmsContentServiceImplTest.Test" />
         <item itemvalue="Spring Boot.MobileAttendanceApplication" />
         <item itemvalue="JUnit.FeishuAppKeyConfigTest.test" />
       </list>
@@ -168,7 +209,8 @@
       <workItem from="1651895313917" duration="6662000" />
       <workItem from="1652316248755" duration="592000" />
       <workItem from="1653728104531" duration="591000" />
-      <workItem from="1654503781095" duration="5737000" />
+      <workItem from="1654503781095" duration="9393000" />
+      <workItem from="1654594675780" duration="7131000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
@@ -184,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654507571956</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="优化">
+      <created>1654566312701</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1654566312701</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,45 +253,59 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="添加消息平台" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加消息平台" />
+    <MESSAGE value="优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="366" height="466" key="DebuggerActiveHint" timestamp="1651915925986">
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser" timestamp="1654595296139">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="366" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1651915925986" />
-    <state width="1479" height="543" key="GridCell.Tab.0.bottom" timestamp="1654509179793">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1654595296139" />
+    <state width="500" height="628" key="DebuggerActiveHint" timestamp="1654605037554">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179793" />
-    <state width="1479" height="543" key="GridCell.Tab.0.center" timestamp="1654509179793">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="369" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1654596541186" />
+    <state width="500" height="628" key="DebuggerActiveHint/0.0.2560.1400@0.0.2560.1400" timestamp="1654605037554" />
+    <state width="2517" height="595" key="GridCell.Tab.0.bottom" timestamp="1654607809642">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179793" />
-    <state width="1479" height="543" key="GridCell.Tab.0.left" timestamp="1654509179793">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="334" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="2517" height="595" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
+    <state width="2517" height="595" key="GridCell.Tab.0.center" timestamp="1654607809641">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179793" />
-    <state width="1479" height="543" key="GridCell.Tab.0.right" timestamp="1654509179793">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="334" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="2517" height="595" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
+    <state width="2517" height="595" key="GridCell.Tab.0.left" timestamp="1654607809641">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179793" />
-    <state width="1479" height="543" key="GridCell.Tab.1.bottom" timestamp="1654509179794">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="334" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="2517" height="595" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
+    <state width="2517" height="595" key="GridCell.Tab.0.right" timestamp="1654607809642">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179794" />
-    <state width="1479" height="543" key="GridCell.Tab.1.center" timestamp="1654509179794">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="334" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
+    <state width="2517" height="595" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
+    <state width="2517" height="432" key="GridCell.Tab.1.bottom" timestamp="1654605161138">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179794" />
-    <state width="1479" height="543" key="GridCell.Tab.1.left" timestamp="1654509179793">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="447" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522328" />
+    <state width="2517" height="432" key="GridCell.Tab.1.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
+    <state width="2517" height="432" key="GridCell.Tab.1.center" timestamp="1654605161138">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179793" />
-    <state width="1479" height="543" key="GridCell.Tab.1.right" timestamp="1654509179794">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="447" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
+    <state width="2517" height="432" key="GridCell.Tab.1.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
+    <state width="2517" height="432" key="GridCell.Tab.1.left" timestamp="1654605161138">
+      <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1479" height="543" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654509179794" />
+    <state width="1877" height="447" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
+    <state width="2517" height="432" key="GridCell.Tab.1.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
+    <state width="2517" height="432" key="GridCell.Tab.1.right" timestamp="1654605161138">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="1877" height="447" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
+    <state width="2517" height="432" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
     <state width="1921" height="356" key="GridCell.Tab.2.bottom" timestamp="1651914889279">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -263,18 +326,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1651914424828" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1654507576857">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1654566316312">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1654507576857" />
-    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1651914772874">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1654566316312" />
+    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1654596342687">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1651914772874" />
-    <state x="490" y="180" key="new project wizard" timestamp="1654504598098">
+    <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1654596342687" />
+    <state x="494" y="223" key="new project wizard" timestamp="1654566477814">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="490" y="180" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1654504598098" />
+    <state x="494" y="223" key="new project wizard/0.0.1920.1040@0.0.1920.1040" timestamp="1654566477814" />
+    <state x="936" y="330" key="run.anything.popup" timestamp="1654602859062">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="936" y="330" key="run.anything.popup/0.0.2560.1400@0.0.2560.1400" timestamp="1654602859062" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -283,6 +350,11 @@
           <url>file://$PROJECT_DIR$/microservice-mobile-attendance/src/test/java/com/aacoptics/mobile/attendance/config/FeishuAppKeyConfigTest.java</url>
           <line>29</line>
           <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java</url>
+          <line>47</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
