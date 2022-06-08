@@ -22,24 +22,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="优化">
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/controller/CustomerShipmentInfoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/po/CustomerShipmentInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/mapper/CustomerShipmentInfoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/ICustomerShipmentInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/CustomerShipmentInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台逻辑">
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +194,7 @@
       <workItem from="1652316248755" duration="592000" />
       <workItem from="1653728104531" duration="591000" />
       <workItem from="1654503781095" duration="9393000" />
-      <workItem from="1654594675780" duration="7131000" />
+      <workItem from="1654594675780" duration="7769000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
@@ -233,7 +217,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654566312701</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="添加消息平台逻辑">
+      <created>1654648086990</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1654648086990</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,7 +245,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="添加消息平台" />
     <MESSAGE value="优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化" />
+    <MESSAGE value="添加消息平台逻辑" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加消息平台逻辑" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="225" key="#com.intellij.ide.util.MemberChooser" timestamp="1654595296139">
@@ -266,44 +258,52 @@
     </state>
     <state width="369" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1654596541186" />
     <state width="500" height="628" key="DebuggerActiveHint/0.0.2560.1400@0.0.2560.1400" timestamp="1654605037554" />
-    <state width="2517" height="595" key="GridCell.Tab.0.bottom" timestamp="1654607809642">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1398" height="328" key="GridCell.Tab.0.bottom" timestamp="1654652556659">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="1398" height="328" key="GridCell.Tab.0.bottom/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
     <state width="1877" height="334" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
     <state width="2517" height="595" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
-    <state width="2517" height="595" key="GridCell.Tab.0.center" timestamp="1654607809641">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1398" height="328" key="GridCell.Tab.0.center" timestamp="1654652556659">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="1398" height="328" key="GridCell.Tab.0.center/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
     <state width="1877" height="334" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
     <state width="2517" height="595" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="2517" height="595" key="GridCell.Tab.0.left" timestamp="1654607809641">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1398" height="328" key="GridCell.Tab.0.left" timestamp="1654652556659">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="1398" height="328" key="GridCell.Tab.0.left/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
     <state width="1877" height="334" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
     <state width="2517" height="595" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="2517" height="595" key="GridCell.Tab.0.right" timestamp="1654607809642">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="1398" height="328" key="GridCell.Tab.0.right" timestamp="1654652556659">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="1398" height="328" key="GridCell.Tab.0.right/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
     <state width="1877" height="334" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654596495235" />
     <state width="2517" height="595" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
-    <state width="2517" height="432" key="GridCell.Tab.1.bottom" timestamp="1654605161138">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="2517" height="432" key="GridCell.Tab.1.bottom" timestamp="1654652556631">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="2517" height="432" key="GridCell.Tab.1.bottom/0.0.1440.860@0.0.1440.860" timestamp="1654652556631" />
     <state width="1877" height="447" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522328" />
     <state width="2517" height="432" key="GridCell.Tab.1.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
-    <state width="2517" height="432" key="GridCell.Tab.1.center" timestamp="1654605161138">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="2517" height="432" key="GridCell.Tab.1.center" timestamp="1654652556630">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="2517" height="432" key="GridCell.Tab.1.center/0.0.1440.860@0.0.1440.860" timestamp="1654652556630" />
     <state width="1877" height="447" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
     <state width="2517" height="432" key="GridCell.Tab.1.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
-    <state width="2517" height="432" key="GridCell.Tab.1.left" timestamp="1654605161138">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="2517" height="432" key="GridCell.Tab.1.left" timestamp="1654652556630">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="2517" height="432" key="GridCell.Tab.1.left/0.0.1440.860@0.0.1440.860" timestamp="1654652556630" />
     <state width="1877" height="447" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
     <state width="2517" height="432" key="GridCell.Tab.1.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
-    <state width="2517" height="432" key="GridCell.Tab.1.right" timestamp="1654605161138">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state width="2517" height="432" key="GridCell.Tab.1.right" timestamp="1654652556631">
+      <screen x="0" y="0" width="1440" height="860" />
     </state>
+    <state width="2517" height="432" key="GridCell.Tab.1.right/0.0.1440.860@0.0.1440.860" timestamp="1654652556631" />
     <state width="1877" height="447" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654596522327" />
     <state width="2517" height="432" key="GridCell.Tab.1.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654605161138" />
     <state width="1921" height="356" key="GridCell.Tab.2.bottom" timestamp="1651914889279">
@@ -326,10 +326,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1651914424828" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1654566316312">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1654648089567">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1654566316312" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1654648089567" />
     <state x="703" y="252" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1654596342687">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
