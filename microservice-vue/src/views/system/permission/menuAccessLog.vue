@@ -54,13 +54,13 @@ export default {
   name: "menuAccessLog",
   components: {SysTable},
   data() {
+    this.pieChart = null
+    this.lineChart = null
     return {
       size: 'default',
       filters: {
         username: ''
       },
-      pieChart: null,
-      lineChart: null,
       firstLoad: true,
       columns: [
         {prop: "title", label: "菜单名称", minWidth: 80},
@@ -181,6 +181,9 @@ export default {
     },
     drawPieChart() {
       const chartDom = document.getElementById('pieChart');
+      if (this.pieChart != null && this.pieChart !== "" && this.pieChart !== undefined) {
+        this.pieChart.dispose();//销毁
+      }
       this.pieChart = echarts.init(chartDom);
       let option;
 
@@ -221,6 +224,9 @@ export default {
     },
     drawLineChart() {
       const chartDom = document.getElementById('lineChart');
+      if (this.lineChart != null && this.lineChart !== "" && this.lineChart !== undefined) {
+        this.lineChart.dispose();//销毁
+      }
       this.lineChart = echarts.init(chartDom);
       let option;
 
@@ -262,17 +268,6 @@ export default {
       this.findPage(null)
     }
     this.firstLoad = false
-  },
-  beforeUnmount() {
-    if (this.lineChart) {
-      this.lineChart.dispose()
-      this.lineChart = null
-    }
-
-    if (this.pieChart) {
-      this.pieChart.dispose()
-      this.pieChart = null
-    }
   }
 }
 </script>
