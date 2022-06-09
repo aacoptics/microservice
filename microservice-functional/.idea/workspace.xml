@@ -23,29 +23,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台逻辑">
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/FeignConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/XxlJobConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MessageTypeInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/NotificationEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/XxlJobProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/NotificationHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-feign/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-common/microservice-common-feign/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/dto/QtPackageParam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/po/ShipmentBatchInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/mapper/ShipmentBatchInfoMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/provider/QtPackageProvider.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/provider/QtPackageProviderFallback.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/IShipmentBatchInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/IUploadPackageInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/ShipmentBatchInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/UploadPackageInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/util/CommonUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/resources/mapper/ShipmentBatchInfoMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/test/java/com/aacoptics/pack/service/IShipmentBatchInfoServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-webapps/microservice-webapps-parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-webapps/microservice-webapps-parent/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/NotificationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/NotificationApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownGroupMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownGroupMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/FeishuApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/FeishuApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/DynamicNotifyTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/DynamicNotifyTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/resources/mapper/PlanDataMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/mapper/PlanDataMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/PackageApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/PackageApiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservice-vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,14 +123,16 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.UmsContentServiceImplTest.Test">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+  <component name="RunManager" selected="Spring Boot.NotificationApplication">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -154,6 +149,21 @@
       <option name="MAIN_CLASS_NAME" value="com.aacoptics.mobile.attendance.config.FeishuAppKeyConfigTest" />
       <option name="METHOD_NAME" value="test" />
       <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UmsContentServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="microservice-notification" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.aacoptics.notification.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.aacoptics.notification.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.aacoptics.notification.service.impl.UmsContentServiceImplTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -196,6 +206,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.UmsContentServiceImplTest" />
         <item itemvalue="JUnit.UmsContentServiceImplTest.Test" />
         <item itemvalue="Spring Boot.MobileAttendanceApplication" />
         <item itemvalue="JUnit.FeishuAppKeyConfigTest.test" />
@@ -216,6 +227,7 @@
       <workItem from="1654503781095" duration="9393000" />
       <workItem from="1654594675780" duration="7769000" />
       <workItem from="1654657524255" duration="17794000" />
+      <workItem from="1654745008428" duration="4798000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
@@ -295,29 +307,29 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1479" height="319" key="GridCell.Tab.-1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654680107658" />
-    <state width="1877" height="440" key="GridCell.Tab.0.bottom" timestamp="1654739775758">
+    <state width="1877" height="411" key="GridCell.Tab.0.bottom" timestamp="1654745241481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.bottom/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="440" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654739775758" />
+    <state width="1877" height="411" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1654745241481" />
     <state width="2517" height="595" key="GridCell.Tab.0.bottom/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
-    <state width="1877" height="440" key="GridCell.Tab.0.center" timestamp="1654739775758">
+    <state width="1877" height="411" key="GridCell.Tab.0.center" timestamp="1654745241481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.center/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="440" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654739775758" />
+    <state width="1877" height="411" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1654745241481" />
     <state width="2517" height="595" key="GridCell.Tab.0.center/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="1877" height="440" key="GridCell.Tab.0.left" timestamp="1654739775758">
+    <state width="1877" height="411" key="GridCell.Tab.0.left" timestamp="1654745241481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.left/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="440" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654739775758" />
+    <state width="1877" height="411" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1654745241481" />
     <state width="2517" height="595" key="GridCell.Tab.0.left/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809641" />
-    <state width="1877" height="440" key="GridCell.Tab.0.right" timestamp="1654739775758">
+    <state width="1877" height="411" key="GridCell.Tab.0.right" timestamp="1654745241481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1398" height="328" key="GridCell.Tab.0.right/0.0.1440.860@0.0.1440.860" timestamp="1654652556659" />
-    <state width="1877" height="440" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654739775758" />
+    <state width="1877" height="411" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1654745241481" />
     <state width="2517" height="595" key="GridCell.Tab.0.right/0.0.2560.1400@0.0.2560.1400" timestamp="1654607809642" />
     <state width="1877" height="440" key="GridCell.Tab.1.bottom" timestamp="1654739799111">
       <screen x="0" y="0" width="1920" height="1040" />
