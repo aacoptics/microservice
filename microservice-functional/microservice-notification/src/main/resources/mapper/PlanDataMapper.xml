@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aac.optics.message.system.mapper.PlanDataMapper">
+<mapper namespace="com.aacoptics.notification.mapper.PlanDataMapper">
 
     <insert id="insertPlanData" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
   		INSERT INTO MS_00_PLAN([PLAN_KEY], [PLAN_NAME], [PLAN_CRON], [MSG_TYPE], [NOTIFY_TYPE], [ROBOT], [SECRET_COL], [MSG_EXPR]

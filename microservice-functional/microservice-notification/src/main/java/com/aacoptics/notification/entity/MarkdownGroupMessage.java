@@ -32,12 +32,37 @@ public class MarkdownGroupMessage {
 
     public void addContent(String content)
     {
-        this.contents.add(content + "  \n");
+        this.contents.add(content + " \n");
     }
 
-    public void addBlobContent(String content)
+    public String addBlobContent(String content)
     {
-        this.contents.add("**" + content + "**  \n");
+        return "**" + content + "**";
+    }
+
+    public String addDeleteLine(String content)
+    {
+        return "~~" + content + "~~";
+    }
+
+    public String addItalics(String content)
+    {
+        return "*" + content + "*";
+    }
+
+    public String addUnderline(String content)
+    {
+        return "~" + content + "~";
+    }
+
+    public String addSeqNo(String content, String seqNo)
+    {
+        return seqNo + ".  " + content;
+    }
+
+    public String addList(String content)
+    {
+        return "-  " + content;
     }
 
     public void addBlankLine(){

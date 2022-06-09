@@ -16,9 +16,17 @@ import java.util.List;
 public class UmsContentServiceImpl extends ServiceImpl<UmsContentMapper, UmsContent> implements UmsContentService {
 
     @Override
-    public List<UmsContent> getUmsContent() {
+    public List<UmsContent> getUmsContent(String conType) {
         QueryWrapper<UmsContent> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_status", "0");
+        queryWrapper.eq("is_status", "0")
+        .eq("con_type", conType);
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<UmsContent> getUmsContentByBatchId(String batchId) {
+        QueryWrapper<UmsContent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("batch_id", batchId);
         return this.list(queryWrapper);
     }
 

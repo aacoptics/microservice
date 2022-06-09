@@ -38,6 +38,16 @@ public class UmsContentSub implements Serializable {
 
     private String isBold;
 
+    private String isDeleteline;
+
+    private String isItalics;
+
+    private String isUnderline;
+
+    private String isSeqno;
+
+    private String isList;
+
     private String isColour;
 
     private String isTypeface;

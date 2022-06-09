@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public interface UmsContentService extends IService<UmsContent> {
-    List<UmsContent> getUmsContent();
+    List<UmsContent> getUmsContent(String conType);
 
+    List<UmsContent> getUmsContentByBatchId(String batchId);
 }

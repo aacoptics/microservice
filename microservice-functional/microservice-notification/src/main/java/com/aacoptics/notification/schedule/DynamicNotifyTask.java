@@ -199,57 +199,57 @@ public class DynamicNotifyTask  implements Runnable {
 
         jsonMarkdown.put("markdown", markdown);
 
-        if("DingTalk".equals(msgType))
-        {
-            //获取token
-            OapiGettokenResponse oapiGettokenResponse = null;
-            try {
-                oapiGettokenResponse = dingTalkApi.getAccessToken();
-                String accessToken = oapiGettokenResponse.getAccessToken();
-                if(!"Robot".equals(notifyType))
-                {
-                    DingTalkUtil.sendCardCorpConversation(accessToken, agentId, userids, title, jsonMarkdown.toJSONString(), "查看详情", url);
-                }
-                else
-                {
-                    String notifyURL = notifyRobot;
-                            // "https://oapi.dingtalk.com/robot/send?access_token=48df943458770124cbeaf8a983032d3fca5a7d88bcf10dfeef2049857c254f20";
-                    Long timestamp = System.currentTimeMillis();
-                    // String secret = "SECf5213c029551084197995dc59bd0328ea177fcf7a4b0c33d7057a8487e5d4ff5";
-
-                    String stringToSign = timestamp + "\n" + secret;
-                    Mac mac = Mac.getInstance("HmacSHA256");
-                    mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-                    byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
-                    String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
-
-                    if(!"".equals(secret))
-                    {
-                        notifyURL += ("&timestamp=" + timestamp);
-                        notifyURL += ("&sign=" + sign);
-                    }
-
-                    notifyMessage = new StringBuilder(notifyMessage.toString().replaceAll("&&t", "\\\n"));
-
-                    DingTalkUtil.sendGroupRobotMessage(notifyURL, title, notifyMessage.toString());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else if("FeiShu".equals(msgType))
-        {
-            String resultMesaage = feishuApi.SendGroupMessage(notifyRobot, notifyMessage.toString());
-            JSONObject messageJson = new JSONObject();
-            try {
-                messageJson = JSONObject.parseObject(resultMesaage);
-            } catch (Exception err) {
-                log.error("解析返回值失败！{}", err.getMessage());
-                insertJobParam.put("MSG", err.getMessage());
-                planDataMapper.insertPlanJob(insertJobParam);
-                return;
-            }
-        }
+//        if("DingTalk".equals(msgType))
+//        {
+//            //获取token
+//            OapiGettokenResponse oapiGettokenResponse = null;
+//            try {
+//                oapiGettokenResponse = dingTalkApi.getAccessToken();
+//                String accessToken = oapiGettokenResponse.getAccessToken();
+//                if(!"Robot".equals(notifyType))
+//                {
+//                    DingTalkUtil.sendCardCorpConversation(accessToken, agentId, userids, title, jsonMarkdown.toJSONString(), "查看详情", url);
+//                }
+//                else
+//                {
+//                    String notifyURL = notifyRobot;
+//                            // "https://oapi.dingtalk.com/robot/send?access_token=48df943458770124cbeaf8a983032d3fca5a7d88bcf10dfeef2049857c254f20";
+//                    Long timestamp = System.currentTimeMillis();
+//                    // String secret = "SECf5213c029551084197995dc59bd0328ea177fcf7a4b0c33d7057a8487e5d4ff5";
+//
+//                    String stringToSign = timestamp + "\n" + secret;
+//                    Mac mac = Mac.getInstance("HmacSHA256");
+//                    mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+//                    byte[] signData = mac.doFinal(stringToSign.getBytes(StandardCharsets.UTF_8));
+//                    String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
+//
+//                    if(!"".equals(secret))
+//                    {
+//                        notifyURL += ("&timestamp=" + timestamp);
+//                        notifyURL += ("&sign=" + sign);
+//                    }
+//
+//                    notifyMessage = new StringBuilder(notifyMessage.toString().replaceAll("&&t", "\\\n"));
+//
+//                    DingTalkUtil.sendGroupRobotMessage(notifyURL, title, notifyMessage.toString());
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        else if("FeiShu".equals(msgType))
+//        {
+//            String resultMesaage = feishuApi.SendGroupMessage(notifyRobot, notifyMessage.toString());
+//            JSONObject messageJson = new JSONObject();
+//            try {
+//                messageJson = JSONObject.parseObject(resultMesaage);
+//            } catch (Exception err) {
+//                log.error("解析返回值失败！{}", err.getMessage());
+//                insertJobParam.put("MSG", err.getMessage());
+//                planDataMapper.insertPlanJob(insertJobParam);
+//                return;
+//            }
+//        }
         insertJobParam.put("MSG", notifyMessage.toString());
         planDataMapper.insertPlanJob(insertJobParam);
 

@@ -2,9 +2,7 @@ package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.notification.entity.MarkdownGroupMessage;
-import com.aacoptics.notification.entity.UmsContent;
-import com.aacoptics.notification.entity.UmsContentSub;
+import com.aacoptics.notification.entity.*;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;
@@ -15,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.management.Notification;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,26 +31,52 @@ public class SendMessageServiceImpl implements SendMessageService {
     FeishuApi feishuApi;
 
     @Override
-    public void sendFeishuMessage(String robotWebhook) {
-        List<UmsContent> messageBatches = umsContentService.getUmsContent();
+    public void sendHandledMessage(NotificationEntity notificationEntity) throws Exception {
+        List<UmsContent> messageBatches;
+        if (StrUtil.isBlank(notificationEntity.getBatchId())) {
+            messageBatches = umsContentService.getUmsContent(notificationEntity.getPlanKey());
+        } else {
+            messageBatches = umsContentService.getUmsContentByBatchId(notificationEntity.getBatchId());
+        }
+        if (messageBatches.size() <= 0) {
+            String msg = "查询不到该批次号{" + notificationEntity.getBatchId() + "}";
+            log.error(msg);
+            throw new Exception(msg);
+        }
+        for (UmsContent messageBatch : messageBatches) {
+            String markdownGroupMessage = getMarkDownMessage(messageBatch);
+            if (markdownGroupMessage == null) {
+                String msg = "拼接消息失败，请检查！";
+                log.error(msg);
+                throw new Exception(msg);
+            }
 
-        if (messageBatches.size() > 0) {
-            for (UmsContent messageBatch : messageBatches) {
-                String markdownGroupMessage = getMarkDownMessage(messageBatch);
-                if (markdownGroupMessage != null) {
+            if(notificationEntity.getMsgTypeInfo() == null || notificationEntity.getMsgTypeInfo().size() <= 0){
+                String msg = "未配置消息类型，请检查！";
+                log.error(msg);
+                throw new Exception(msg);
+            }
 
-                    String message = feishuApi.SendGroupMessage(robotWebhook, markdownGroupMessage);
+            for (MessageTypeInfo messageTypeInfo : notificationEntity.getMsgTypeInfo()) {
+                if(messageTypeInfo.getMsgType().equals("FeiShu")){
+                    String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage);
                     JSONObject messageJson = new JSONObject();
                     try {
                         messageJson = JSONObject.parseObject(message);
                     } catch (Exception err) {
-                        log.error("解析返回值失败！{}", err.getMessage());
+                        String msg = "解析返回值失败！{" + err.getMessage() + "}";
+                        log.error(msg);
+                        throw new Exception(msg);
                     }
                     if (messageJson.containsKey("StatusCode") && messageJson.getInteger("StatusCode") == 0) {
+                        messageBatch.setIsStatus("1");
+                        umsContentService.updateById(messageBatch);
                     } else {
                         String errorMsg = null;
                         if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getString("msg"))) {
                             errorMsg = messageJson.getString("msg");
+                            log.error(errorMsg);
+                            throw new Exception(errorMsg);
                         }
                     }
                 }
@@ -58,6 +84,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
     }
 
+    @Override
     public String getMarkDownMessage(UmsContent messageBatch) {
         List<UmsContentSub> messageValues = umsContentSubService.getUmsContentSub(messageBatch.getBatchId());
 
@@ -70,11 +97,27 @@ public class SendMessageServiceImpl implements SendMessageService {
                     continue;
                 }
 
+                String msgContent = messageValue.getValueDesc();
                 if (!StrUtil.isBlank(messageValue.getIsBold()) && messageValue.getIsBold().equals("Y")) {
-                    markdownGroupMessage.addBlobContent(messageValue.getValueDesc());
-                } else {
-                    markdownGroupMessage.addContent(messageValue.getValueDesc());
+                    msgContent = markdownGroupMessage.addBlobContent(msgContent);
                 }
+                if (!StrUtil.isBlank(messageValue.getIsItalics()) && messageValue.getIsItalics().equals("Y")) {
+                    msgContent = markdownGroupMessage.addItalics(msgContent);
+                }
+                if (!StrUtil.isBlank(messageValue.getIsDeleteline()) && messageValue.getIsDeleteline().equals("Y")) {
+                    msgContent = markdownGroupMessage.addDeleteLine(msgContent);
+                }
+                if (!StrUtil.isBlank(messageValue.getIsUnderline()) && messageValue.getIsUnderline().equals("Y")) {
+                    msgContent = markdownGroupMessage.addUnderline(msgContent);
+                }
+                if (!StrUtil.isBlank(messageValue.getIsSeqno())) {
+                    msgContent = markdownGroupMessage.addSeqNo(msgContent, messageValue.getIsSeqno());
+                }
+                else if(!StrUtil.isBlank(messageValue.getIsList()) && messageValue.getIsList().equals("Y")){
+                    msgContent = markdownGroupMessage.addList(msgContent);
+                }
+                markdownGroupMessage.addContent(msgContent);
+
             }
             if (!StrUtil.isBlank(messageBatch.getLinkUrl())) {
                 markdownGroupMessage.addContent("[查看详情](" + messageBatch.getLinkUrl() + ")");
