@@ -1,40 +1,48 @@
 <template>
   <div>
     <div class="aac-container">
-      <el-row>
         <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-          <el-form :inline="true" :size="size">
-            <el-form-item>
-              <el-button type="primary" @click="findPage(null)">刷新
-                <template #icon>
-                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-                </template>
-              </el-button>
-            </el-form-item>
+          <el-form ref="dataForm" :inline="true" :size="size" :model="filters" :rules="dataFormRules">
+            <el-row>
+              <el-form-item label="客户" prop="customer">
+                <el-select v-model="filters.customer" clearable placeholder="请选择客户">
+                  <el-option
+                      v-for="item in customerOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="订单号"  prop="orderNo">
+                <el-input v-model="filters.orderNo" placeholder="请输入订单号"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="findPage(null)">查询
+                  <template #icon>
+                    <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                  </template>
+                </el-button>
+              </el-form-item>
+            </el-row>
+            <el-row>
+              <el-form-item label="快递单"  prop="expressNo">
+                <el-input v-model="filters.expressNo" placeholder="请输入快递单"></el-input>
+              </el-form-item>
+              <el-form-item label="ASN单/出货"  prop="asnNo">
+                <el-input v-model="filters.asnNo" placeholder="请输入ASN单/出货"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="success" @click="uploadPackageInfo">信息上传
+                  <template #icon>
+                    <font-awesome-icon :icon="['fa', 'cloud-upload']"/>
+                  </template>
+                </el-button>
+              </el-form-item>
+            </el-row>
           </el-form>
         </div>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <div id="pieChart"
-               style="margin-top: 10px;height: 300px; width: 100%"></div>
-        </el-col>
-        <el-col :span="12">
-          <div id="lineChart"
-               style="margin-top: 10px;height: 300px; width: 100%"></div>
-        </el-col>
-      </el-row>
-      <el-date-picker
-          v-model="dateTimePickerValue"
-          :shortcuts="shortcuts"
-          :size="size"
-          class="float-right mb-4"
-          end-placeholder="结束日期"
-          range-separator="至"
-          start-placeholder="开始日期"
-          type="datetimerange"
-          @change="findPage(null)"
-      />
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
                 :stripe="false"
@@ -48,85 +56,57 @@
 import SysTable from "@/components/SysTable";
 import * as echarts from 'echarts';
 import {getAccessLogByTime, getLastMouthTotalCount, getLastWeekMenuCount} from "@/api/system/menu";
-import {findUserRolesById} from "@/api/system/user";
+import {findUserInfoPage, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
+import {getDict} from "@/api/system/dictData";
+import {ElMessageBox} from "element-plus";
+import {getShipmentInfos} from "@/api/lens/package/packageApi";
 
 export default {
   name: "menuAccessLog",
   components: {SysTable},
   data() {
-    this.pieChart = null
-    this.lineChart = null
     return {
       size: 'default',
       filters: {
-        username: ''
+        customer: '',
+        orderNo: '',
+        expressNo: '',
+        asnNo: ''
       },
-      firstLoad: true,
+      customerOptions: [],
+      dataFormRules: {
+        orderNo: [{required: true, message: '请输入订单号', trigger: 'blur'}],
+        expressNo: [{required: true, message: '请输入快递单', trigger: 'blur'}],
+        asnNo: [{required: true, message: '请输入ASN单/出货', trigger: 'blur'}],
+        customer: [{required: true, message: "请选择客户", trigger: "blur"},],
+      },
       columns: [
-        {prop: "title", label: "菜单名称", minWidth: 80},
-        {prop: "username", label: "访问人工号", minWidth: 80},
-        {prop: "realName", label: "访问人姓名", minWidth: 80},
-        {prop: "accessTime", label: "访问时间", minWidth: 120, formatter: this.dateFormat},
-        {prop: "os", label: "操作系统", minWidth: 160},
-        {prop: "platform", label: "平台", minWidth: 80},
-        {prop: "browser", label: "浏览器", minWidth: 100},
-        {prop: "version", label: "版本", minWidth: 120},
+        {prop: "customer", label: "客户", minWidth: 80},
+        {prop: "customerMaterialNo", label: "客户料号", minWidth: 80},
+        {prop: "batchName", label: "品名", minWidth: 80},
+        {prop: "supplier", label: "供应商", minWidth: 120},
+        {prop: "outerBox", label: "大箱号", minWidth: 160},
+        {prop: "outerBoxQty", label: "大箱数量", minWidth: 80},
+        {prop: "outerBoxTime", label: "大箱时间", minWidth: 100, formatter: this.dateFormat},
+        {prop: "spotTicket", label: "现品票", minWidth: 120},
+        {prop: "spotQty", label: "现品票数量", minWidth: 160},
+        {prop: "spotTime", label: "现品票时间", minWidth: 80, formatter: this.dateFormat},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
-      pieChartData: [],
-      lineChartData: {
-        name: [],
-        value: []
-      },
-      dateTimePickerValue: [
-        new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
-        new Date(),
-      ],
-      shortcuts: [
-        {
-          text: '近一周',
-          value: () => {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            return [start, end]
-          },
-        },
-        {
-          text: '近一个月',
-          value: () => {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            return [start, end]
-          },
-        },
-        {
-          text: '近三个月',
-          value: () => {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            return [start, end]
-          },
-        },
-      ]
     }
   },
   methods: {
-    handleUserSelectChange(val) {
-      if (val == null || val.val == null) {
-        this.currentUserRoles = []
-        this.dataForm.roleIds = []
-        return
-      }
-      this.selectUser = val.val
-      findUserRolesById(val.val.id).then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.currentUserRoles = responseData.data
-          this.getCurrentUserRoleIds()
+    uploadPackageInfo(){
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          ElMessageBox.confirm('确认上传至客户吗？')
+              .then(() => {
+                done()
+              })
+              .catch(() => {
+                // catch error
+              })
         }
       })
     },
@@ -135,18 +115,13 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      if (this.dateTimePickerValue === null) {
-        this.$message.warning('必须选则查询的时间范围！')
-        return
-      }
-      this.pageRequest.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-      this.pageRequest.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      getAccessLogByTime(this.pageRequest).then((res) => {
+      this.pageRequest.customer = this.filters.customer
+      this.pageRequest.orderNo = this.filters.orderNo
+      getShipmentInfos(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         }
-        this.drawChart()
       }).then(data != null ? data.callback : '')
     },
 
@@ -256,8 +231,13 @@ export default {
     },
     // 时间格式化
     dateFormat: function (row, column) {
-      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
+      return this.$moment(row[column.property]).format('YYYY-MM-DD')
     }
+  },
+  mounted() {
+    getDict("package_customer").then(response => {
+      this.customerOptions = response.data.data
+    })
   },
   activated() {
     if(!this.firstLoad) {
