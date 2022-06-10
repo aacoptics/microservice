@@ -32,7 +32,7 @@ public class IShipmentBatchInfoServiceTest {
 
     @Test
     public void test(){
-        uploadPackageInfoService.uploadPackageInfo(uploadPackageInfoService.getQtPackageInfo("丘钛", "12345678901234", "test", "test1"));
+//        uploadPackageInfoService.uploadPackageInfo("丘钛", "12345678901234", "test", "test1");
 
         String asd = CommonUtil.flushLeft("0", 6, "asdfg");
         QtPackageProvider.QtUserInfo test6 = new QtPackageProvider.QtUserInfo("admin", "GQDstcKsx0");

@@ -1,12 +1,18 @@
 package com.aacoptics.pack.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONConverter;
+import com.aacoptics.common.core.exception.SystemErrorType;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.pack.entity.dto.OuterBoxInfo;
 import com.aacoptics.pack.entity.dto.QtPackageParam;
 import com.aacoptics.pack.entity.dto.SpotTicketInfo;
+import com.aacoptics.pack.entity.form.CustomerShipmentInfoForm;
+import com.aacoptics.pack.entity.po.CustomerShipmentInfo;
 import com.aacoptics.pack.entity.po.ShipmentBatchInfo;
+import com.aacoptics.pack.exception.UploadErrorType;
 import com.aacoptics.pack.provider.QtPackageProvider;
+import com.aacoptics.pack.service.ICustomerShipmentInfoService;
 import com.aacoptics.pack.service.IShipmentBatchInfoService;
 import com.aacoptics.pack.service.IUploadPackageInfoService;
 import com.aacoptics.pack.util.CommonUtil;
@@ -33,6 +39,9 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
     @Resource
     QtPackageProvider qtPackageProvider;
 
+    @Resource
+    ICustomerShipmentInfoService customerShipmentInfoService;
+
     @Value("${aacoptics.factory.code}")
     String factoryCode;
 
@@ -43,14 +52,15 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
     String password;
 
     @Override
-    public QtPackageParam getQtPackageInfo(String customer, String orderNo, String asnNo, String emsNo) {
-        List<ShipmentBatchInfo> batchInfos = shipmentBatchInfoService.getShipmentBatchInfo(customer, orderNo);
+    public QtPackageParam getQtPackageInfo(CustomerShipmentInfoForm customerShipmentInfoForm) {
+        List<ShipmentBatchInfo> batchInfos = shipmentBatchInfoService.getShipmentBatchInfo(customerShipmentInfoForm.getCustomer(),
+                customerShipmentInfoForm.getOrderNo());
         QtPackageParam qtPackageParam = new QtPackageParam();
         if (batchInfos.size() > 0) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            qtPackageParam.setAsnNo(asnNo);
-            qtPackageParam.setEmsNo(emsNo);
+            qtPackageParam.setAsnNo(customerShipmentInfoForm.getAsnNo());
+            qtPackageParam.setEmsNo(customerShipmentInfoForm.getExpressNo());
             qtPackageParam.setItemCode(CommonUtil.flushLeft("0", 15, batchInfos.get(0).getCustomerMaterialNo()));
             qtPackageParam.setMpartSpec(batchInfos.get(0).getBatchName());
             qtPackageParam.setVendorCode(batchInfos.get(0).getSupplier());
@@ -59,7 +69,7 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
             OuterBoxInfo outerBox = null;
             for (ShipmentBatchInfo batchInfo : batchInfos) {
                 if (!batchInfo.getOuterBox().equals(shipmentBatch)) {
-                    if(outerBox != null)
+                    if (outerBox != null)
                         qtPackageParam.getPalletNoLists().add(outerBox);
 
                     outerBox = new OuterBoxInfo();
@@ -76,21 +86,57 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
                 assert outerBox != null;
                 outerBox.getCartonNoLists().add(spotTicketInfo);
             }
+        } else {
+            return null;
         }
         return qtPackageParam;
     }
 
     @Override
-    public Result uploadPackageInfo(QtPackageParam qtPackageParam){
+    public Result uploadPackageInfo(CustomerShipmentInfoForm customerShipmentInfoForm) {
+        QtPackageParam qtPackageParam = getQtPackageInfo(customerShipmentInfoForm);
+        if (qtPackageParam == null)
+            return Result.fail(new UploadErrorType("005000", "查询不到该订单数据！"));
         JSONObject tokenRes = qtPackageProvider.getToken(new QtPackageProvider.QtUserInfo(username, password));
-        if(tokenRes.getBoolean("Success") != null && tokenRes.getBoolean("Success")){
+        JSONObject uploadRes;
+        CustomerShipmentInfo customerShipmentInfo = customerShipmentInfoService.getByOrderNo(customerShipmentInfoForm.getCustomer(),
+                customerShipmentInfoForm.getOrderNo());
+        if (customerShipmentInfo == null) {
+            customerShipmentInfo = new CustomerShipmentInfo();
+            customerShipmentInfo.setAsnNo(qtPackageParam.getAsnNo());
+            customerShipmentInfo.setCustomer(customerShipmentInfoForm.getCustomer());
+            customerShipmentInfo.setOrderNo(customerShipmentInfoForm.getOrderNo());
+            customerShipmentInfo.setExpressNo(qtPackageParam.getEmsNo());
+            customerShipmentInfo.setErrCount(0);
+        }
+        Result finalRes;
+        if (tokenRes.getBoolean("Success") != null && tokenRes.getBoolean("Success")) {
             String token = tokenRes.getString("Token");
-            String json = JSON.toJSONString(qtPackageParam);
-            JSONObject uploadRes = qtPackageProvider.uploadQtPackageInfo(qtPackageParam, token);
+            uploadRes = qtPackageProvider.uploadQtPackageInfo(qtPackageParam, token);
+
+            if (uploadRes.getInteger("Code") != null && uploadRes.getInteger("Code") == 200) {
+                customerShipmentInfo.setUploadFlg(1);
+                finalRes = Result.success();
+            } else {
+                String msg = "未知错误，请联系IT";
+                if (!StrUtil.isBlank(uploadRes.getString("Msg"))) {
+                    msg = uploadRes.getString("Msg");
+                }
+                customerShipmentInfo.setErrMessage(msg);
+                customerShipmentInfo.setUploadFlg(2);
+                customerShipmentInfo.setErrCount(customerShipmentInfo.getErrCount() + 1);
+                finalRes = Result.fail(new UploadErrorType("005000", msg));
+            }
+        } else {
+            customerShipmentInfo.setUploadFlg(2);
+            customerShipmentInfo.setErrCount(customerShipmentInfo.getErrCount() + 1);
+            customerShipmentInfo.setErrMessage("Token获取失败");
+            finalRes = Result.fail(new UploadErrorType("004003", "Token获取失败"));
         }
-        else{
-            return Result.fail();
-        }
-        return Result.success();
+        if(customerShipmentInfo.getId() != null)
+            customerShipmentInfoService.updateById(customerShipmentInfo);
+        else
+            customerShipmentInfoService.add(customerShipmentInfo);
+        return finalRes;
     }
 }
