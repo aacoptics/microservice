@@ -322,7 +322,7 @@
         <repository>
             <id>nexus-releases</id>
             <name>releases</name>
-            <url>http://10.233.32.11:30782/repository/maven-releases/</url>
+            <url>https://nexus.aacoptics.com/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
