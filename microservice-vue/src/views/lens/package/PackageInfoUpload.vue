@@ -136,7 +136,7 @@ export default {
             } else {
               this.$message.error(responseData.msg)
             }
-          })
+          }).then(data != null ? data.callback : '')
         }
       }).then(data != null ? data.callback : '')
     },

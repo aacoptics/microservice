@@ -113,7 +113,7 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
         if (tokenRes.getBoolean("Success") != null && tokenRes.getBoolean("Success")) {
             String token = tokenRes.getString("Token");
             uploadRes = qtPackageProvider.uploadQtPackageInfo(qtPackageParam, token);
-
+            log.info(JSONObject.toJSONString(uploadRes));
             if (uploadRes.getInteger("Code") != null && uploadRes.getInteger("Code") == 200) {
                 customerShipmentInfo.setUploadFlg(1);
                 finalRes = Result.success();
