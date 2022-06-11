@@ -23,22 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息平台逻辑">
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/dto/QtPackageParam.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/entity/po/ShipmentBatchInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/mapper/ShipmentBatchInfoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/provider/QtPackageProvider.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/provider/QtPackageProviderFallback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/IShipmentBatchInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/IUploadPackageInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/ShipmentBatchInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/UploadPackageInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/util/CommonUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/resources/mapper/ShipmentBatchInfoMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/test/java/com/aacoptics/pack/service/IShipmentBatchInfoServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-base/microservice-webapps/microservice-webapps-parent/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-base/microservice-webapps/microservice-webapps-parent/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/PackageApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/PackageApiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-vue/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-vue/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources/bootstrap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-mobile-attendance/src/main/resources/bootstrap.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/resources/bootstrap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/resources/bootstrap.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +213,7 @@
       <workItem from="1654503781095" duration="9393000" />
       <workItem from="1654594675780" duration="7769000" />
       <workItem from="1654657524255" duration="17794000" />
-      <workItem from="1654745008428" duration="4798000" />
+      <workItem from="1654745008428" duration="6635000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
