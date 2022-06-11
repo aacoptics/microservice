@@ -70,6 +70,7 @@ export default {
         expressNo: '',
         asnNo: ''
       },
+      isFirst: true,
       customerOptions: [],
       btnLoading: false,
       dataFormRules: {
@@ -125,18 +126,18 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      this.$refs.dataForm.validate((valid) => {
-        if (valid) {
-          this.pageRequest.customer = this.filters.customer
-          this.pageRequest.orderNo = this.filters.orderNo
-          getShipmentInfos(this.pageRequest).then((res) => {
-            const responseData = res.data
-            if (responseData.code === '000000') {
-              this.pageResult = responseData.data
-            } else {
-              this.$message.error(responseData.msg)
-            }
-          }).then(data != null ? data.callback : '')
+      this.pageRequest.customer = this.filters.customer
+      this.pageRequest.orderNo = this.filters.orderNo
+      getShipmentInfos(this.pageRequest).then((res) => {
+        const responseData = res.data
+        if (responseData.code === '000000') {
+          this.pageResult = responseData.data
+        } else {
+          if(this.isFirst){
+            this.isFirst = false
+          }else{
+            this.$message.error(responseData.msg)
+          }
         }
       }).then(data != null ? data.callback : '')
     },
