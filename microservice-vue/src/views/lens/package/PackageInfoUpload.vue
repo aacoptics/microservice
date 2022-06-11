@@ -1,48 +1,48 @@
 <template>
   <div>
     <div class="aac-container">
-        <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-          <el-form ref="dataForm" :inline="true" :size="size" :model="filters" :rules="dataFormRules">
-            <el-row>
-              <el-form-item label="客户" prop="customer">
-                <el-select v-model="filters.customer" clearable placeholder="请选择客户">
-                  <el-option
-                      v-for="item in customerOptions"
-                      :key="item.dictValue"
-                      :label="item.dictLabel"
-                      :value="item.dictValue"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="订单号"  prop="orderNo">
-                <el-input v-model="filters.orderNo" placeholder="请输入订单号"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="findPage(null)">查询
-                  <template #icon>
-                    <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-                  </template>
-                </el-button>
-              </el-form-item>
-            </el-row>
-            <el-row>
-              <el-form-item label="快递单"  prop="expressNo">
-                <el-input v-model="filters.expressNo" placeholder="请输入快递单"></el-input>
-              </el-form-item>
-              <el-form-item label="ASN单/出货"  prop="asnNo">
-                <el-input v-model="filters.asnNo" placeholder="请输入ASN单/出货"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="success" @click="uploadPackageInfo" v-loading="btnLoading">信息上传
-                  <template #icon>
-                    <font-awesome-icon :icon="['fa', 'cloud-upload']"/>
-                  </template>
-                </el-button>
-              </el-form-item>
-            </el-row>
-          </el-form>
-        </div>
+      <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+        <el-form ref="dataForm" :inline="true" :size="size" :model="filters" :rules="dataFormRules">
+          <el-row>
+            <el-form-item label="客户" prop="customer">
+              <el-select v-model="filters.customer" clearable placeholder="请选择客户">
+                <el-option
+                    v-for="item in customerOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="订单号" prop="orderNo">
+              <el-input v-model="filters.orderNo" placeholder="请输入订单号"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="findPage(null)">查询
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="快递单" prop="expressNo">
+              <el-input v-model="filters.expressNo" placeholder="请输入快递单"></el-input>
+            </el-form-item>
+            <el-form-item label="ASN单/出货" prop="asnNo">
+              <el-input v-model="filters.asnNo" placeholder="请输入ASN单/出货"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="uploadPackageInfo" :loading="btnLoading">信息上传
+                <template #icon>
+                  <font-awesome-icon :icon="['fa', 'cloud-upload']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-row>
+        </el-form>
+      </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showOperation="false"
                 :stripe="false"
@@ -76,7 +76,7 @@ export default {
         orderNo: [{required: true, message: '请输入订单号', trigger: 'blur'}],
         expressNo: [{required: true, message: '请输入快递单', trigger: 'blur'}],
         asnNo: [{required: true, message: '请输入ASN单/出货', trigger: 'blur'}],
-        customer: [{required: true, message: "请选择客户", trigger: "blur"},],
+        customer: [{required: true, message: "请选择客户", trigger: "change"},],
       },
       columns: [
         {prop: "customer", label: "客户", minWidth: 80},
@@ -95,7 +95,7 @@ export default {
     }
   },
   methods: {
-    uploadPackageInfo(){
+    uploadPackageInfo() {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           ElMessageBox.confirm('确认上传至客户吗？')
@@ -104,9 +104,8 @@ export default {
                 uploadShipmentInfos(this.filters).then((res) => {
                   const responseData = res.data
                   if (responseData.code === '000000') {
-                    this.$message.info("成功上传！")
-                  }
-                  else{
+                    this.$message.success("成功上传！")
+                  } else {
                     this.$message.error(responseData.msg)
                   }
                   this.btnLoading = false
@@ -126,15 +125,18 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      this.pageRequest.customer = this.filters.customer
-      this.pageRequest.orderNo = this.filters.orderNo
-      getShipmentInfos(this.pageRequest).then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.pageResult = responseData.data
-        }
-        else{
-          this.$message.error(responseData.msg)
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.pageRequest.customer = this.filters.customer
+          this.pageRequest.orderNo = this.filters.orderNo
+          getShipmentInfos(this.pageRequest).then((res) => {
+            const responseData = res.data
+            if (responseData.code === '000000') {
+              this.pageResult = responseData.data
+            } else {
+              this.$message.error(responseData.msg)
+            }
+          })
         }
       }).then(data != null ? data.callback : '')
     },
