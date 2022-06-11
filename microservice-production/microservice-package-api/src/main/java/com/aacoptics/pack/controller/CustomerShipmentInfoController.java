@@ -41,10 +41,6 @@ public class CustomerShipmentInfoController {
                                  @RequestParam Integer size,
                                  @RequestParam String customer,
                                  @RequestParam String orderNo) {
-        CustomerShipmentInfo customerShipmentInfo = customerShipmentInfoService.getByOrderNo(customer, orderNo);
-        if(customerShipmentInfo != null && customerShipmentInfo.getUploadFlg() == 1)
-            return Result.fail(new UploadErrorType("005001", "该订单号已上传！"));
-
         Page<ShipmentBatchInfo> iPage = new Page<>(page, size);
         Page<ShipmentBatchInfo> res = shipmentBatchInfoService.getShipmentBatchInfo(iPage, customer, orderNo);
         if(res.getTotal() == 0)

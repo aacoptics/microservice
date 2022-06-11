@@ -34,7 +34,7 @@
                 <el-input v-model="filters.asnNo" placeholder="请输入ASN单/出货"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="success" @click="uploadPackageInfo">信息上传
+                <el-button type="success" @click="uploadPackageInfo" v-loading="btnLoading">信息上传
                   <template #icon>
                     <font-awesome-icon :icon="['fa', 'cloud-upload']"/>
                   </template>
@@ -54,12 +54,9 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import * as echarts from 'echarts';
-import {getAccessLogByTime, getLastMouthTotalCount, getLastWeekMenuCount} from "@/api/system/menu";
-import {findUserInfoPage, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
 import {getDict} from "@/api/system/dictData";
 import {ElMessageBox} from "element-plus";
-import {getShipmentInfos} from "@/api/lens/package/packageApi";
+import {getShipmentInfos, uploadShipmentInfos} from "@/api/lens/package/packageApiXny";
 
 export default {
   name: "menuAccessLog",
@@ -74,6 +71,7 @@ export default {
         asnNo: ''
       },
       customerOptions: [],
+      btnLoading: false,
       dataFormRules: {
         orderNo: [{required: true, message: '请输入订单号', trigger: 'blur'}],
         expressNo: [{required: true, message: '请输入快递单', trigger: 'blur'}],
@@ -102,7 +100,20 @@ export default {
         if (valid) {
           ElMessageBox.confirm('确认上传至客户吗？')
               .then(() => {
-                done()
+                this.btnLoading = true
+                uploadShipmentInfos(this.filters).then((res) => {
+                  const responseData = res.data
+                  if (responseData.code === '000000') {
+                    this.$message.info("成功上传！")
+                  }
+                  else{
+                    this.$message.error(responseData.msg)
+                  }
+                  this.btnLoading = false
+                }).catch((err) => {
+                  this.$message.error(err.message)
+                  this.btnLoading = false
+                })
               })
               .catch(() => {
                 // catch error
@@ -122,112 +133,10 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         }
+        else{
+          this.$message.error(responseData.msg)
+        }
       }).then(data != null ? data.callback : '')
-    },
-
-    drawChart: function () {
-      getLastWeekMenuCount().then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          const res = responseData.data
-          this.pieChartData = []
-          res.forEach((item) => {
-            this.pieChartData.push({value: item.totalCount, name: item.title})
-          })
-          this.drawPieChart()
-        }
-      })
-
-      getLastMouthTotalCount().then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          const res = responseData.data
-          this.lineChartData = {
-            name: [],
-            value: []
-          }
-          res.forEach((item) => {
-            this.lineChartData.name.push(item.accessDate)
-            this.lineChartData.value.push(item.totalCount)
-          })
-          this.drawLineChart()
-        }
-      })
-    },
-    drawPieChart() {
-      const chartDom = document.getElementById('pieChart');
-      if (this.pieChart != null && this.pieChart !== "" && this.pieChart !== undefined) {
-        this.pieChart.dispose();//销毁
-      }
-      this.pieChart = echarts.init(chartDom);
-      let option;
-
-      option = {
-        title: {
-          text: '近一周访问统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          type: 'scroll'
-        },
-        series: [
-          {
-            name: '受访菜单',
-            type: 'pie',
-            radius: '50%',
-            data: this.pieChartData,
-            label: {
-              formatter: '{b}：{d}%'
-            },
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      };
-
-      option && this.pieChart.setOption(option);
-    },
-    drawLineChart() {
-      const chartDom = document.getElementById('lineChart');
-      if (this.lineChart != null && this.lineChart !== "" && this.lineChart !== undefined) {
-        this.lineChart.dispose();//销毁
-      }
-      this.lineChart = echarts.init(chartDom);
-      let option;
-
-      option = {
-        title: {
-          text: '近一个月访问趋势统计'
-        },
-        tooltip: {
-          trigger: 'axis'
-        },
-        xAxis: {
-          type: 'category',
-          data: this.lineChartData.name
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            data: this.lineChartData.value,
-            type: 'line',
-            smooth: true
-          }
-        ]
-      };
-      option && this.lineChart.setOption(option);
     },
     // 时间格式化
     dateFormat: function (row, column) {
@@ -238,16 +147,6 @@ export default {
     getDict("package_customer").then(response => {
       this.customerOptions = response.data.data
     })
-  },
-  activated() {
-    if(!this.firstLoad) {
-      this.dateTimePickerValue = [
-        new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
-        new Date(),
-      ]
-      this.findPage(null)
-    }
-    this.firstLoad = false
   }
 }
 </script>
