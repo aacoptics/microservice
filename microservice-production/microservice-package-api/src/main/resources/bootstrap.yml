@@ -1,4 +1,6 @@
 spring:
+#  application:
+#    name: microservice-package-api-xny
   cloud:
     nacos:
       discovery:
