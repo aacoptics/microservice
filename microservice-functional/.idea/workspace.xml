@@ -22,38 +22,20 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="优化">
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/NotificationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form/XxlJobInfoForm.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/param/XxlJobInfoQueryParam.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/XxlJobInfoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/XxlJobInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/XxlJobInfoServiceImpl.java" afterDir="false" />
+    <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="添加消息推送类">
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/RobotController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form/RobotForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form/RobotQueryForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form/XxlJobInfoQueryForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/param/RobotQueryParam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/Robot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/RobotMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/RobotService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/RobotServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/SwaggerConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MarkdownCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownGroupMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MarkdownGroupMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MessageTypeInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MessageTypeInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/NotificationEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/NotificationEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/PlanData.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/PlanData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UmsContent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UmsContentSub.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UserData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/XxlJobInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/XxlJobResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/PlanDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/PlanDataMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/XxlJobProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/XxlJobProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/NotificationHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/NotificationHandle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/NotificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/XxlJobInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/XxlJobInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/XxlJobInfoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/XxlJobInfoServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +80,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-mobile-attendance/src/main/java/com/aacoptics/mobile/attendance/config" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -117,18 +99,18 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.aacoptics.notification.entity.form" />
-      <recent name="com.aacoptics.notification.entity.param" />
+      <recent name="com.aacoptics.notification.controller" />
       <recent name="com.aacoptics.notification.service.impl" />
       <recent name="com.aacoptics.notification.service" />
       <recent name="com.aacoptics.notification.mapper" />
+      <recent name="com.aacoptics.notification.entity.po" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification\entity\form" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification\config" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\resources" />
       <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\resources" />
-      <recent name="D:\程序\microservice\microservice-functional\microservice-notification\src\main\java\com\aacoptics\notification" />
     </key>
   </component>
   <component name="RunDashboard">

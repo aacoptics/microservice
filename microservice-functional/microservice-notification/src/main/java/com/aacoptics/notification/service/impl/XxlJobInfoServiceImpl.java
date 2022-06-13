@@ -28,7 +28,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Integer id) {
         return this.removeById(id);
     }
 

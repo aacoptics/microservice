@@ -14,7 +14,7 @@ public interface XxlJobInfoService extends IService<XxlJobInfo> {
 
     boolean update(XxlJobInfo xxlJobInfo);
 
-    boolean delete(Long id);
+    boolean delete(Integer id);
 
     IPage<XxlJobInfo> query(Page page, XxlJobInfoQueryParam xxlJobInfoQueryParam);
 }
