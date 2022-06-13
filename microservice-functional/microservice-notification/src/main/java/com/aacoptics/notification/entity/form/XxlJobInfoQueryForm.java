@@ -1,6 +1,6 @@
 package com.aacoptics.notification.entity.form;
 
-import com.aacoptics.notification.entity.param.XxlJobInfoQueryParam;
+import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,11 +9,7 @@ import org.springframework.beans.BeanUtils;
 
 @ApiModel
 @Data
-public class XxlJobInfoQueryForm extends XxlJobInfoQueryParam {
-
-    @ApiModelProperty(value = "计划名称")
-    private String jobDesc;
-
+public class XxlJobInfoQueryForm extends XxlJobInfo {
     /**
      * 分页查询的参数，当前页数
      */
@@ -23,8 +19,8 @@ public class XxlJobInfoQueryForm extends XxlJobInfoQueryParam {
      */
     private long size = 10;
 
-    public XxlJobInfoQueryParam toParam() {
-        XxlJobInfoQueryParam p = new XxlJobInfoQueryParam();
+    public XxlJobInfo toParam() {
+        XxlJobInfo p = new XxlJobInfo();
         BeanUtils.copyProperties(this, p);
         return p;
     }

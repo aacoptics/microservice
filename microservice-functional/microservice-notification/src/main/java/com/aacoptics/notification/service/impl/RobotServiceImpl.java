@@ -5,6 +5,7 @@ import com.aacoptics.notification.entity.param.RobotQueryParam;
 import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.mapper.RobotMapper;
 import com.aacoptics.notification.service.RobotService;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@DS("msg_db")
 public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements RobotService {
 
     @Override
@@ -44,6 +46,7 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
         QueryWrapper<Robot> queryWrapper = robotQueryParam.build();
         queryWrapper.eq(StringUtils.isNotBlank(robotQueryParam.getRobotType()), "robot_type", robotQueryParam.getRobotType());
         queryWrapper.like(StringUtils.isNotBlank(robotQueryParam.getRobotName()), "robot_name", robotQueryParam.getRobotName());
+        queryWrapper.eq("status", true);
         return this.page(page, queryWrapper);
     }
 }

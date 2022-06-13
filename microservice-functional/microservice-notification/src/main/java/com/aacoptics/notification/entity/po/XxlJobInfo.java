@@ -17,7 +17,7 @@ import java.util.Date;
 @EqualsAndHashCode()
 @Accessors(chain = true)
 @TableName("xxl_job_info")
-public class XxlJobInfo  implements Serializable {
+public class XxlJobInfo implements Serializable {
 
     public XxlJobInfo() {
         this.triggerStatus = 0;

@@ -27,5 +27,5 @@ public class RobotForm extends BaseForm<Robot> {
     private String robotType;
 
     @ApiModelProperty(value = "机器人状态，1为可用")
-    private Integer status = 1;
+    private Boolean status = true;
 }

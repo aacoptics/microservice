@@ -20,5 +20,5 @@ public class Robot extends BasePo {
     private String robotUrl;
     private String robotName;
     private String robotType;
-    private Integer status;
+    private Boolean status;
 }

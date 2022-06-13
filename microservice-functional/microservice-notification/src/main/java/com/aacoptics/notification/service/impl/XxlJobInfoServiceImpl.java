@@ -1,9 +1,9 @@
 package com.aacoptics.notification.service.impl;
 
 import com.aacoptics.notification.entity.po.XxlJobInfo;
-import com.aacoptics.notification.entity.param.XxlJobInfoQueryParam;
 import com.aacoptics.notification.mapper.XxlJobInfoMapper;
 import com.aacoptics.notification.service.XxlJobInfoService;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@DS("msg_db")
 public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobInfo> implements XxlJobInfoService {
 
     @Override
@@ -33,9 +34,9 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     }
 
     @Override
-    public IPage<XxlJobInfo> query(Page page, XxlJobInfoQueryParam xxlJobInfoQueryParam) {
+    public IPage<XxlJobInfo> query(Page page, XxlJobInfo xxlJobInfo) {
         QueryWrapper<XxlJobInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(xxlJobInfoQueryParam.getJobDesc()), "job_desc", xxlJobInfoQueryParam.getJobDesc());
+        queryWrapper.like(StringUtils.isNotBlank(xxlJobInfo.getJobDesc()), "job_desc", xxlJobInfo.getJobDesc());
         return this.page(page, queryWrapper);
     }
 }
