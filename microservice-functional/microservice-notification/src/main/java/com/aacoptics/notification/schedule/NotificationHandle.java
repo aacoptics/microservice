@@ -1,6 +1,6 @@
 package com.aacoptics.notification.schedule;
 
-import com.aacoptics.notification.entity.NotificationEntity;
+import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.service.SendMessageService;
 import com.alibaba.fastjson.JSONObject;
 import com.xxl.job.core.context.XxlJobHelper;

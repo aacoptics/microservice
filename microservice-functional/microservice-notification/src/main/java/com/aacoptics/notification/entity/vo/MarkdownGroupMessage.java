@@ -1,4 +1,4 @@
-package com.aacoptics.notification.entity;
+package com.aacoptics.notification.entity.vo;
 
 import java.util.ArrayList;
 import java.util.Iterator;

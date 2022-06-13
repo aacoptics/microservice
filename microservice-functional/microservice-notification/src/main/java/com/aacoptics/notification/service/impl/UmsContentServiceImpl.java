@@ -1,6 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
-import com.aacoptics.notification.entity.UmsContent;
+import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.mapper.UmsContentMapper;
 import com.aacoptics.notification.service.UmsContentService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

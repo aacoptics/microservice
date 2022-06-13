@@ -1,6 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
-import com.aacoptics.notification.entity.XxlJobResult;
+import com.aacoptics.notification.entity.po.XxlJobResult;
 import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;

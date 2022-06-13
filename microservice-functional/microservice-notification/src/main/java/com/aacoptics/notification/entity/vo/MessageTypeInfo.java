@@ -1,4 +1,4 @@
-package com.aacoptics.notification.entity;
+package com.aacoptics.notification.entity.vo;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -23,10 +23,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea20b573-d95d-440c-9ac5-56675e2e8247" name="默认的" comment="优化">
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/controller/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/form/XxlJobInfoForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/param/XxlJobInfoQueryParam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/XxlJobInfoMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/XxlJobInfoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/XxlJobInfoServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/UploadPackageInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/java/com/aacoptics/pack/service/impl/UploadPackageInfoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/resources/bootstrap.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/main/resources/bootstrap.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/test/java/com/aacoptics/pack/service/IShipmentBatchInfoServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservice-production/microservice-package-api/src/test/java/com/aacoptics/pack/service/IShipmentBatchInfoServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/SwaggerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/SwaggerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MarkdownCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MarkdownGroupMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MarkdownGroupMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/MessageTypeInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/MessageTypeInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/NotificationEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/vo/NotificationEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/PlanData.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/PlanData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UmsContent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UmsContentSub.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UmsContentSub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/UserData.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/UserData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/XxlJobInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/XxlJobResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/entity/po/XxlJobResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/PlanDataMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/PlanDataMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/mapper/UmsContentSubMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/XxlJobProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/provider/XxlJobProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/NotificationHandle.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/schedule/NotificationHandle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/SendMessageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/UmsContentSubService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/UmsContentSubServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/microservice-notification/src/test/java/com/aacoptics/notification/service/impl/UmsContentServiceImplTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,15 +113,15 @@
       <recent name="com.aacoptics.notification.service.impl" />
       <recent name="com.aacoptics.mobile.attendance.config" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.aacoptics.notification.provider" />
-      <recent name="com.aacoptics.notification.entity" />
-      <recent name="com.aacoptics.notification.config" />
-      <recent name="com.aacoptics.notification.service.impl" />
-      <recent name="com.aacoptics.notification.service" />
-    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.aacoptics.notification.entity.form" />
+      <recent name="com.aacoptics.notification.entity.param" />
+      <recent name="com.aacoptics.notification.service.impl" />
+      <recent name="com.aacoptics.notification.service" />
+      <recent name="com.aacoptics.notification.mapper" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\程序\microservice\microservice-functional\microservice-mobile-attendance\src\main\java\com\aacoptics\mobile\attendance\config" />
@@ -214,7 +241,7 @@
       <workItem from="1654594675780" duration="7769000" />
       <workItem from="1654657524255" duration="17794000" />
       <workItem from="1654745008428" duration="8454000" />
-      <workItem from="1654929831538" duration="5627000" />
+      <workItem from="1654929831538" duration="8009000" />
     </task>
     <task id="LOCAL-00001" summary="添加消息平台">
       <created>1654506624870</created>
@@ -414,33 +441,18 @@
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java</url>
-          <line>47</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/config/StaticScheduleTask.java</url>
-          <line>43</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>124</line>
+          <line>125</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>121</line>
+          <line>122</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>122</line>
+          <line>123</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -455,42 +467,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>34</line>
+          <line>35</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>35</line>
+          <line>36</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>37</line>
+          <line>38</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>36</line>
+          <line>37</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>38</line>
+          <line>39</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>39</line>
+          <line>40</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>40</line>
+          <line>41</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/microservice-notification/src/main/java/com/aacoptics/notification/service/impl/SendMessageServiceImpl.java</url>
-          <line>41</line>
+          <line>42</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

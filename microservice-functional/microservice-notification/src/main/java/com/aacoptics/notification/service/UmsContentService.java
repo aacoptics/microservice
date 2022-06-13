@@ -1,7 +1,7 @@
 package com.aacoptics.notification.service;
 
 
-import com.aacoptics.notification.entity.UmsContent;
+import com.aacoptics.notification.entity.po.UmsContent;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

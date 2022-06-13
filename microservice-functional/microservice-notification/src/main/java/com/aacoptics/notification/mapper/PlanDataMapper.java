@@ -1,6 +1,6 @@
 package com.aacoptics.notification.mapper;
 
-import com.aacoptics.notification.entity.PlanData;
+import com.aacoptics.notification.entity.po.PlanData;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;

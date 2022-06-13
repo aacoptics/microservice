@@ -1,4 +1,4 @@
-package com.aacoptics.notification.entity;
+package com.aacoptics.notification.entity.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

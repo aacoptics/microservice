@@ -1,4 +1,4 @@
-package com.aacoptics.notification.entity;
+package com.aacoptics.notification.entity.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -22,43 +22,21 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("MS_00_PLAN")
-public class PlanData implements Serializable {
+@TableName("MS_00_CONTACT")
+public class UserData implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long ID;
 
-    private String PLAN_KEY;
+    private String USER_NO;
 
-    private String PLAN_NAME;
+    private String USER_NAME;
 
-    private String PLAN_CRON;
+    private String USER_EMAIL;
 
-    private String MSG_TYPE;
-
-    private String MSG_EXPR;
-
-    private String PLAN_MONTH;
-
-    private String PLAN_DAY;
-
-    private String PLAN_HOUR;
-
-    private String PLAN_MINUTE;
-
-    private String PLAN_SECOND;
-
-    @TableField("TIME_PERIOD")
-    private Long TIME_PERIOD;
-
-    @TableField("STATUS")
-    private Long STATUS;
-
-    private String CREATE_USER;
-
-    private String UPDATE_USER;
+    private String USER_TEL;
 
     @TableField("CREATE_TIME")
     private LocalDateTime CREATE_TIME;

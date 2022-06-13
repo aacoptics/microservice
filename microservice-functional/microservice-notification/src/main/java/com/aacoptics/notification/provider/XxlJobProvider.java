@@ -1,7 +1,7 @@
 package com.aacoptics.notification.provider;
 
 import com.aacoptics.notification.config.FeignConfig;
-import com.aacoptics.notification.entity.XxlJobResult;
+import com.aacoptics.notification.entity.po.XxlJobResult;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;

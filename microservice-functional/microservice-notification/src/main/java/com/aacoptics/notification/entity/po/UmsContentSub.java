@@ -1,4 +1,4 @@
-package com.aacoptics.notification.entity;
+package com.aacoptics.notification.entity.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("ums_01_content")
-public class UmsContent implements Serializable {
+@TableName("ums_01_content_sub")
+public class UmsContentSub implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,13 +32,25 @@ public class UmsContent implements Serializable {
 
     private String batchId;
 
-    private String conType;
+    private String seqNo;
 
-    private String conTypeDesc;
+    private String valueDesc;
 
-    private String isStatus;
+    private String isBold;
 
-    private String linkUrl;
+    private String isDeleteline;
+
+    private String isItalics;
+
+    private String isUnderline;
+
+    private String isSeqno;
+
+    private String isList;
+
+    private String isColour;
+
+    private String isTypeface;
 
     private String createdBy;
 
@@ -47,4 +59,5 @@ public class UmsContent implements Serializable {
     private String updatedBy;
 
     private LocalDateTime updatedTime;
+
 }

@@ -1,7 +1,7 @@
 package com.aacoptics.notification.service;
 
-import com.aacoptics.notification.entity.NotificationEntity;
-import com.aacoptics.notification.entity.UmsContent;
+import com.aacoptics.notification.entity.vo.NotificationEntity;
+import com.aacoptics.notification.entity.po.UmsContent;
 
 public interface SendMessageService {
 

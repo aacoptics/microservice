@@ -1,8 +1,11 @@
 package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.notification.entity.*;
+import com.aacoptics.notification.entity.po.UmsContent;
+import com.aacoptics.notification.entity.po.UmsContentSub;
+import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
+import com.aacoptics.notification.entity.vo.MessageTypeInfo;
+import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;
@@ -13,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.management.Notification;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
