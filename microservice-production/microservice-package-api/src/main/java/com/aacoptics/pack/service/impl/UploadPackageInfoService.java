@@ -1,8 +1,6 @@
 package com.aacoptics.pack.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONConverter;
-import com.aacoptics.common.core.exception.SystemErrorType;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.pack.entity.dto.OuterBoxInfo;
 import com.aacoptics.pack.entity.dto.QtPackageParam;
@@ -16,16 +14,13 @@ import com.aacoptics.pack.service.ICustomerShipmentInfoService;
 import com.aacoptics.pack.service.IShipmentBatchInfoService;
 import com.aacoptics.pack.service.IUploadPackageInfoService;
 import com.aacoptics.pack.util.CommonUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 

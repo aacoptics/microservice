@@ -1,6 +1,8 @@
 package com.aacoptics.pack.service;
 
 
+import com.aacoptics.pack.entity.form.CustomerShipmentInfoForm;
+import com.aacoptics.pack.entity.po.CustomerShipmentInfo;
 import com.aacoptics.pack.entity.po.ShipmentBatchInfo;
 import com.aacoptics.pack.provider.QtPackageProvider;
 import com.aacoptics.pack.util.CommonUtil;
@@ -32,7 +34,12 @@ public class IShipmentBatchInfoServiceTest {
 
     @Test
     public void test(){
-//        uploadPackageInfoService.uploadPackageInfo("丘钛", "12345678901234", "test", "test1");
+        CustomerShipmentInfoForm customerShipmentInfoForm = new CustomerShipmentInfoForm();
+        customerShipmentInfoForm.setAsnNo("test");
+        customerShipmentInfoForm.setExpressNo("test");
+        customerShipmentInfoForm.setCustomer("丘钛");
+        customerShipmentInfoForm.setOrderNo("K-AN3-22030353");
+        uploadPackageInfoService.uploadPackageInfo(customerShipmentInfoForm);
 
         String asd = CommonUtil.flushLeft("0", 6, "asdfg");
         QtPackageProvider.QtUserInfo test6 = new QtPackageProvider.QtUserInfo("admin", "GQDstcKsx0");
