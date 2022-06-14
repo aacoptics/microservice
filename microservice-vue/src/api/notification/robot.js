@@ -43,3 +43,24 @@ export function handleUpdate(updateForm) {
         data: updateForm
     })
 }
+
+export function getAllRobotInfo() {
+    return request({
+        url: '/notification-server/robot/listAll',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function findByNames(robotNames) {
+    return request({
+        url: '/notification-server/robot/findByNames',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: robotNames
+    })
+}
