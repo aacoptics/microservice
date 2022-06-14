@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
@@ -83,7 +82,6 @@
         </div>
       </el-dialog>
     </div>
-  </div>
 </template>
 
 <script>

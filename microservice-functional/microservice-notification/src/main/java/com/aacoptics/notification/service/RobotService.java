@@ -15,4 +15,8 @@ public interface RobotService {
     boolean update(Robot robot);
     IPage<Robot> query(Page page, RobotQueryParam robotQueryParam);
 
+    List<Robot> listAll();
+
+    List<Robot> findByName(List<String> robotNames);
+
 }

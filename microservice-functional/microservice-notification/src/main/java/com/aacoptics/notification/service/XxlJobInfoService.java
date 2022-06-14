@@ -16,4 +16,6 @@ public interface XxlJobInfoService extends IService<XxlJobInfo> {
     boolean delete(Integer id);
 
     IPage<XxlJobInfo> query(Page page, XxlJobInfo xxlJobInfo);
+
+    IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo);
 }

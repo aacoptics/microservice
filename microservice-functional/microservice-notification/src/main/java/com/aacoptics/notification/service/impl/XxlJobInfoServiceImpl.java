@@ -12,19 +12,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.Date;
+
 
 @Service
 @Slf4j
 @DS("msg_db")
 public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobInfo> implements XxlJobInfoService {
+    @Resource
+    XxlJobInfoMapper xxlJobInfoMapper;
 
     @Override
     public boolean add(XxlJobInfo xxlJobInfo) {
+        xxlJobInfo.setId(xxlJobInfoMapper.maxId() + 1);
+        xxlJobInfo.setAddTime(new Date());
+        xxlJobInfo.setUpdateTime(new Date());
+        xxlJobInfo.setGlueUpdatetime(new Date());
         return this.save(xxlJobInfo);
     }
 
     @Override
     public boolean update(XxlJobInfo xxlJobInfo) {
+        xxlJobInfo.setUpdateTime(new Date());
         return this.updateById(xxlJobInfo);
     }
 
@@ -38,5 +48,10 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
         QueryWrapper<XxlJobInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(xxlJobInfo.getJobDesc()), "job_desc", xxlJobInfo.getJobDesc());
         return this.page(page, queryWrapper);
+    }
+
+    @Override
+    public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo) {
+        return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey());
     }
 }

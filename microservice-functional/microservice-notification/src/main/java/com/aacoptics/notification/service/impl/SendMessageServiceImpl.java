@@ -1,6 +1,7 @@
 package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.UmsContentSub;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
@@ -58,10 +59,11 @@ public class SendMessageServiceImpl implements SendMessageService {
                 throw new Exception(msg);
             }
 
-            for (MessageTypeInfo messageTypeInfo : notificationEntity.getMsgTypeInfo()) {
-                if(messageTypeInfo.getMsgType().equals("FeiShu")){
+            for (Robot messageTypeInfo : notificationEntity.getMsgTypeInfo()) {
+                if(messageTypeInfo.getRobotType().equals("FeiShu")){
                     String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage);
-                    JSONObject messageJson = new JSONObject();
+                    new JSONObject();
+                    JSONObject messageJson;
                     try {
                         messageJson = JSONObject.parseObject(message);
                     } catch (Exception err) {
@@ -73,7 +75,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("1");
                         umsContentService.updateById(messageBatch);
                     } else {
-                        String errorMsg = null;
+                        String errorMsg;
                         if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getString("msg"))) {
                             errorMsg = messageJson.getString("msg");
                             log.error(errorMsg);

@@ -49,4 +49,19 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
         queryWrapper.eq("status", true);
         return this.page(page, queryWrapper);
     }
+
+    @Override
+    public List<Robot> listAll() {
+        QueryWrapper<Robot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", true);
+        return this.list(queryWrapper);
+    }
+
+    @Override
+    public List<Robot> findByName(List<String> robotNames) {
+        QueryWrapper<Robot> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("robot_name", robotNames);
+        queryWrapper.eq("status", true);
+        return this.list(queryWrapper);
+    }
 }

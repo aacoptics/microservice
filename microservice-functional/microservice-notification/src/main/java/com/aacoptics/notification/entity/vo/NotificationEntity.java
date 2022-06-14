@@ -1,5 +1,6 @@
 package com.aacoptics.notification.entity.vo;
 
+import com.aacoptics.notification.entity.po.Robot;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -24,5 +25,5 @@ public class NotificationEntity implements Serializable {
 
     private String batchId;
 
-    private List<MessageTypeInfo> msgTypeInfo;
+    private List<Robot> msgTypeInfo;
 }

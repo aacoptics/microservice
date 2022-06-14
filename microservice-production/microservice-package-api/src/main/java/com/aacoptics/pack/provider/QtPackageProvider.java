@@ -28,7 +28,7 @@ public interface QtPackageProvider {
 
     @PostMapping(value = "/Vendor/VendorCarton")
     @Headers("Content-Type: application/json")
-    JSONObject uploadQtPackageInfo(@RequestBody QtPackageParam qtPackageParam, @RequestHeader("Header") String token);
+    JSONObject uploadQtPackageInfo(@RequestBody JSONObject qtPackageParam, @RequestHeader("Header") String token);
 
 
     @Data

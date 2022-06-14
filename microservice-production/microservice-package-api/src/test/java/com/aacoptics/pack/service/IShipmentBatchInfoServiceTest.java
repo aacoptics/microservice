@@ -38,7 +38,7 @@ public class IShipmentBatchInfoServiceTest {
         customerShipmentInfoForm.setAsnNo("test");
         customerShipmentInfoForm.setExpressNo("test");
         customerShipmentInfoForm.setCustomer("丘钛");
-        customerShipmentInfoForm.setOrderNo("K-AN3-22030353");
+        customerShipmentInfoForm.setOrderNo("K-P03-22030568");
         uploadPackageInfoService.uploadPackageInfo(customerShipmentInfoForm);
 
         String asd = CommonUtil.flushLeft("0", 6, "asdfg");

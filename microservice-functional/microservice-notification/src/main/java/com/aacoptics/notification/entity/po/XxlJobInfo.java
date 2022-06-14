@@ -97,4 +97,7 @@ public class XxlJobInfo implements Serializable {
 
     @TableField("trigger_next_time")
     private Long triggerNextTime;    // 下次调度时间
+
+    @TableField(exist = false)
+    private String planKey;
 }

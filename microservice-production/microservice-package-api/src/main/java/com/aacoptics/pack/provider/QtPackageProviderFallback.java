@@ -20,7 +20,7 @@ public class QtPackageProviderFallback implements QtPackageProvider {
     }
 
     @Override
-    public JSONObject uploadQtPackageInfo(QtPackageParam qtPackageParam, String token) {
+    public JSONObject uploadQtPackageInfo(JSONObject qtPackageParam, String token) {
         return (JSONObject) new JSONObject().put("Success", false);
     }
 }

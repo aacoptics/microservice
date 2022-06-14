@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 @SuppressWarnings("rawtypes")
 @RestController
@@ -56,5 +57,21 @@ public class RobotController {
     public Result search(@Valid @RequestBody RobotQueryForm robotQueryForm) {
         log.debug("search with robotQueryForm:{}", robotQueryForm);
         return Result.success(robotService.query(robotQueryForm.getPage(), robotQueryForm.toParam(RobotQueryParam.class)));
+    }
+
+    @ApiOperation(value = "获取所有机器人", notes = "获取所有机器人")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @GetMapping(value = "/listAll")
+    public Result listGroup() {
+        return Result.success(robotService.listAll());
+    }
+
+    @ApiOperation(value = "根据名称搜索机器人", notes = "根据名称搜索机器人")
+    @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
+    @PostMapping(value = "/findByNames")
+    public Result findByNames(@Valid @RequestBody List<String> robotNames) {
+        return Result.success(robotService.findByName(robotNames));
     }
 }
