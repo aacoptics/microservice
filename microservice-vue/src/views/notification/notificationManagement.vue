@@ -432,7 +432,6 @@ export default {
     },
     // 重置选择
     resetSelection() {
-      this.getCurrentUserRoleIds()
       this.dialogVisible = false
     },
     // 时间格式化
