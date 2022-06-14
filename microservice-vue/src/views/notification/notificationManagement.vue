@@ -40,19 +40,6 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
-                           width="80">
-            <template v-slot="scope">
-              <el-button v-if="scope.row.triggerStatus === 1"
-                         round size="small" type="success">
-                启动中
-              </el-button>
-              <el-button v-else round size="small" type="danger">
-                停止
-              </el-button>
-            </template>
-          </el-table-column>
-
         </template>
       </SysTable>
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
