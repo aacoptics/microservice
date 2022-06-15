@@ -16,6 +16,7 @@ import com.aacoptics.pack.service.IUploadPackageInfoService;
 import com.aacoptics.pack.util.CommonUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -92,8 +93,7 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
         QtPackageParam qtPackageParam = getQtPackageInfo(customerShipmentInfoForm);
         if (qtPackageParam == null)
             return Result.fail(new UploadErrorType("005000", "查询不到该订单数据！"));
-        JSONObject tokenRes = qtPackageProvider.getToken(new QtPackageProvider.QtUserInfo(username, password));
-        JSONObject uploadRes;
+
         CustomerShipmentInfo customerShipmentInfo = customerShipmentInfoService.getByOrderNo(customerShipmentInfoForm.getCustomer(),
                 customerShipmentInfoForm.getOrderNo());
         if (customerShipmentInfo == null) {
@@ -104,24 +104,32 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
             customerShipmentInfo.setExpressNo(qtPackageParam.getEmsNo());
             customerShipmentInfo.setErrCount(0);
         }
-        Result finalRes;
+        Result finalRes = Result.fail(new UploadErrorType("005000", "无信息"));
+        List<List<OuterBoxInfo>> splitOuterInfo = CommonUtil.splitList(qtPackageParam.getPalletNoLists(), 50);
+        JSONObject tokenRes = qtPackageProvider.getToken(new QtPackageProvider.QtUserInfo(username, password));
+        JSONObject uploadRes;
         if (tokenRes.getBoolean("Success") != null && tokenRes.getBoolean("Success")) {
             String token = tokenRes.getString("Token");
-            JSONObject qtPackageParamJson = (JSONObject)JSONObject.toJSON(qtPackageParam);
-            uploadRes = qtPackageProvider.uploadQtPackageInfo(qtPackageParamJson, token);
-            log.info(JSONObject.toJSONString(uploadRes));
-            if (uploadRes.getInteger("Code") != null && uploadRes.getInteger("Code") == 200) {
-                customerShipmentInfo.setUploadFlg(1);
-                finalRes = Result.success();
-            } else {
-                String msg = "未知错误，请联系IT";
-                if (!StrUtil.isBlank(uploadRes.getString("Msg"))) {
-                    msg = uploadRes.getString("Msg");
+            for (List<OuterBoxInfo> outerBoxInfos : splitOuterInfo) {
+                QtPackageParam uploadParam = new QtPackageParam();
+                BeanUtils.copyProperties(qtPackageParam, uploadParam);
+                uploadParam.setPalletNoLists(outerBoxInfos);
+                JSONObject qtPackageParamJson = (JSONObject) JSONObject.toJSON(uploadParam);
+                uploadRes = qtPackageProvider.uploadQtPackageInfo(qtPackageParamJson, token);
+                log.info(JSONObject.toJSONString(uploadRes));
+                if (uploadRes.getInteger("Code") != null && uploadRes.getInteger("Code") == 200) {
+                    customerShipmentInfo.setUploadFlg(1);
+                    finalRes = Result.success();
+                } else {
+                    String msg = "未知错误，请联系IT";
+                    if (!StrUtil.isBlank(uploadRes.getString("Msg"))) {
+                        msg = uploadRes.getString("Msg");
+                    }
+                    customerShipmentInfo.setErrMessage(msg);
+                    customerShipmentInfo.setUploadFlg(2);
+                    customerShipmentInfo.setErrCount(customerShipmentInfo.getErrCount() + 1);
+                    finalRes = Result.fail(new UploadErrorType("005000", msg));
                 }
-                customerShipmentInfo.setErrMessage(msg);
-                customerShipmentInfo.setUploadFlg(2);
-                customerShipmentInfo.setErrCount(customerShipmentInfo.getErrCount() + 1);
-                finalRes = Result.fail(new UploadErrorType("005000", msg));
             }
         } else {
             customerShipmentInfo.setUploadFlg(2);
@@ -129,7 +137,7 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
             customerShipmentInfo.setErrMessage("Token获取失败");
             finalRes = Result.fail(new UploadErrorType("004003", "Token获取失败"));
         }
-        if(customerShipmentInfo.getId() != null)
+        if (customerShipmentInfo.getId() != null)
             customerShipmentInfoService.updateById(customerShipmentInfo);
         else
             customerShipmentInfoService.add(customerShipmentInfo);
