@@ -15,7 +15,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("notifiction_robot_details")
+@TableName("notification_robot_details")
 public class Robot extends BasePo {
     private String robotUrl;
     private String robotName;
