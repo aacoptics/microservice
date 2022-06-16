@@ -8,6 +8,7 @@ import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.notification.entity.vo.MessageTypeInfo;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.provider.FeishuApi;
+import com.aacoptics.notification.service.RobotService;
 import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;
 import com.aacoptics.notification.service.UmsContentSubService;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,6 +33,9 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Resource
     FeishuApi feishuApi;
+
+    @Resource
+    RobotService robotService;
 
     @Override
     public void sendHandledMessage(NotificationEntity notificationEntity) throws Exception {
@@ -58,8 +63,9 @@ public class SendMessageServiceImpl implements SendMessageService {
                 log.error(msg);
                 throw new Exception(msg);
             }
-
-            for (Robot messageTypeInfo : notificationEntity.getMsgTypeInfo()) {
+            List<String> robotNames = notificationEntity.getMsgTypeInfo().stream().map(Robot::getRobotName).collect(Collectors.toList());
+            List<Robot> robotList = robotService.findByName(robotNames);
+            for (Robot messageTypeInfo : robotList) {
                 if(messageTypeInfo.getRobotType().equals("FeiShu")){
                     String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage);
                     new JSONObject();
