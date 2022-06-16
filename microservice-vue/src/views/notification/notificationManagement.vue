@@ -373,9 +373,7 @@ export default {
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName':item.robotName,
-                    'robotType': item.robotType,
-                    'robotUrl': item.robotUrl
+                    'robotName':item.robotName
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
