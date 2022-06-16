@@ -370,7 +370,14 @@ export default {
             const executorParams= {}
             executorParams.planKey = params.planKey
             executorParams.batchId = ""
-            executorParams.msgTypeInfo = this.currentRobotsInfo
+            executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
+              return Object.assign({},
+                  {
+                    'robotName':item.robotName,
+                    'robotType': item.robotType,
+                    'robotUrl': item.robotUrl
+                  })
+            })
             params.executorParam = JSON.stringify(executorParams)
 
             if (this.operation) {
