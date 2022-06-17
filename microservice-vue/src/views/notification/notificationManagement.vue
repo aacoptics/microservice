@@ -254,6 +254,7 @@ export default {
         executorRouteStrategy: [{required: true, message: '请选择路由策略', trigger: 'change'}],
         executorBlockStrategy: [{required: true, message: '请选择阻塞处理策略', trigger: 'change'}],
         author: [{required: true, message: '请输入负责人', trigger: 'blur'}],
+        executorHandler: [{required: true, message: '请选择消息Handle', trigger: 'change'}]
       },
       // 新增编辑界面数据
       dataForm: {
