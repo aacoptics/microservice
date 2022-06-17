@@ -1,6 +1,5 @@
 package com.aacoptics.notification.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.aacoptics.notification.entity.param.RobotQueryParam;
 import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.mapper.RobotMapper;
@@ -12,14 +11,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
