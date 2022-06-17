@@ -81,6 +81,18 @@
           </el-row>
           <el-row>
             <el-col :span="12">
+              <el-form-item label="消息Handle" prop="executorHandler">
+                <el-select v-model="dataForm.executorHandler" placeholder="请选择">
+                  <el-option
+                      v-for="item in executorHandlerOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="消息机器人" prop="currentRobotsInfo">
                 <el-select v-model="currentRobotsInfo" multiple placeholder="请选择"
                            value-key="id">
@@ -89,18 +101,6 @@
                       :key="item.id"
                       :label="item.robotName"
                       :value="item">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="消息Handle" prop="executorHandler">
-                <el-select v-model="dataForm.executorHandler" placeholder="请选择">
-                  <el-option
-                      v-for="item in executorHandlerOptions"
-                      :key="item.dictValue"
-                      :label="item.dictLabel"
-                      :value="item.dictValue">
                   </el-option>
                 </el-select>
               </el-form-item>
