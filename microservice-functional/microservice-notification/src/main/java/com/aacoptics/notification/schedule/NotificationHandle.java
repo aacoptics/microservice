@@ -17,8 +17,8 @@ public class NotificationHandle {
     @Resource
     SendMessageService sendMessageService;
 
-    @XxlJob("NotificationHandle")
-    public void NotificationHandle() {
+    @XxlJob("RobotHandle")
+    public void RobotHandle() {
         String param = XxlJobHelper.getJobParam(); //执行参数
         NotificationEntity jobParam = JSONObject.parseObject(param, NotificationEntity.class);
         try {
