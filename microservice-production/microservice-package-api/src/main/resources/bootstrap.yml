@@ -27,3 +27,9 @@ spring:
   profiles: xbprod
   application:
     name: microservice-package-api-xb
+
+---
+spring:
+  profiles: szprod
+  application:
+    name: microservice-package-api-sz
