@@ -80,7 +80,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="24">
+            <el-col :span="12">
               <el-form-item label="消息机器人" prop="currentRobotsInfo">
                 <el-select v-model="currentRobotsInfo" multiple placeholder="请选择"
                            value-key="id">
@@ -89,6 +89,18 @@
                       :key="item.id"
                       :label="item.robotName"
                       :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="消息Handle" prop="executorHandler">
+                <el-select v-model="dataForm.executorHandler" placeholder="请选择">
+                  <el-option
+                      v-for="item in executorHandlerOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -260,7 +272,7 @@ export default {
         executorBlockStrategy: '',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: 'NotificationHandle',
+        executorHandler: '',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
@@ -268,6 +280,7 @@ export default {
       },
       executorInfo: [],
       robotOptions: [],
+      executorHandlerOptions: [],
       currentRobotsInfo: [],
       scheduleTypeOptions: [],
       misfireStrategyOptions: [],
@@ -313,6 +326,10 @@ export default {
         this.misfireStrategyOptions = response.data.data
       })
 
+      getDict("notification_handle").then(response => {
+        this.executorHandlerOptions = response.data.data
+      })
+
       getDict("notification_executor_route").then(response => {
         this.executorRouteOptions = response.data.data
       })
@@ -347,7 +364,7 @@ export default {
         executorBlockStrategy: 'SERIAL_EXECUTION',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: 'NotificationHandle',
+        executorHandler: '',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
