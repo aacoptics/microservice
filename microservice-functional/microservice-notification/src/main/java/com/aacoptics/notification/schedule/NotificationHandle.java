@@ -18,10 +18,15 @@ public class NotificationHandle {
     SendMessageService sendMessageService;
 
     @XxlJob("NotificationHandle")
-    public void NotificationHandle() throws Exception {
-
+    public void NotificationHandle() {
         String param = XxlJobHelper.getJobParam(); //执行参数
         NotificationEntity jobParam = JSONObject.parseObject(param, NotificationEntity.class);
-        sendMessageService.sendHandledMessage(jobParam);
+        try {
+            sendMessageService.sendHandledMessage(jobParam);
+            XxlJobHelper.handleSuccess();
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail(e.getMessage());
+        }
     }
 }
