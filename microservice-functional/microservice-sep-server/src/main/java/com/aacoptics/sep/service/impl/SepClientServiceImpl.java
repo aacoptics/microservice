@@ -87,8 +87,8 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
         }
         if (resJson.size() <= 0)
             return Result.fail(res);
-        Integer responseCode = ((JSONObject) resJson.get(0)).getInteger("responseCode");
-        if (responseCode != null && responseCode == 200)
+        String responseCode = ((JSONObject) resJson.get(0)).getString("responseCode");
+        if (responseCode != null && responseCode.equals("200"))
             return Result.success(res);
         else
             return Result.fail(res);
