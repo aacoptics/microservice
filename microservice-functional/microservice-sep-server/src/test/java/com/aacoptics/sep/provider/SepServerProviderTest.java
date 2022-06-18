@@ -1,13 +1,10 @@
 package com.aacoptics.sep.provider;
 
 
-import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.sep.entity.SepTokenResult;
+import com.aacoptics.sep.entity.vo.SepTokenResult;
 import com.aacoptics.sep.entity.form.ChangeForm;
 import com.aacoptics.sep.entity.form.LoginForm;
 import com.aacoptics.sep.entity.vo.Group;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

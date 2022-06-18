@@ -1,4 +1,4 @@
-package com.aacoptics.sep.entity;
+package com.aacoptics.sep.entity.vo;
 
 import lombok.Data;
 

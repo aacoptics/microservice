@@ -1,6 +1,6 @@
 package com.aacoptics.sep.provider;
 
-import com.aacoptics.sep.entity.SepTokenResult;
+import com.aacoptics.sep.entity.vo.SepTokenResult;
 import com.aacoptics.sep.entity.form.ChangeForm;
 import com.aacoptics.sep.entity.form.LoginForm;
 import com.alibaba.fastjson.JSONObject;

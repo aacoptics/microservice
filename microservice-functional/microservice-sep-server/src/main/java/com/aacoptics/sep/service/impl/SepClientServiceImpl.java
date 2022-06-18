@@ -1,7 +1,7 @@
 package com.aacoptics.sep.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.aacoptics.sep.entity.SepTokenResult;
+import com.aacoptics.sep.entity.vo.SepTokenResult;
 import com.aacoptics.sep.entity.form.ChangeForm;
 import com.aacoptics.sep.entity.form.LoginForm;
 import com.aacoptics.sep.entity.form.QueryForm;
