@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.sep.mapper.SepClientMapper">
+
+	<select id="getHardwareKey" resultType="com.aacoptics.sep.entity.po.SepClient">
+        SELECT [CLIENT_ID]
+             ,HARDWARE_KEY
+             ,COMPUTER_NAME
+        FROM SEM_CLIENT
+        where UPPER(COMPUTER_NAME) = #{computerName}
+	</select>
+</mapper>

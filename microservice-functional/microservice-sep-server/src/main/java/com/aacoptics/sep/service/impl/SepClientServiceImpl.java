@@ -32,6 +32,9 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
     SepServerProvider sepServerProvider;
 
     @Resource
+    SepClientMapper sepClientMapper;
+
+    @Resource
     LoginForm loginForm;
 
     public static final Map<String, String> GROUP_MAP;
@@ -51,9 +54,7 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
 
     @Override
     public List<SepClient> getHardwareKey(String computerName){
-        QueryWrapper<SepClient> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("COMPUTER_NAME", computerName);
-        return this.list(queryWrapper);
+        return sepClientMapper.getHardwareKey(computerName.toUpperCase());
     }
 
     @Override
