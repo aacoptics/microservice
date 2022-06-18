@@ -28,11 +28,6 @@
             <artifactId>microservice-common-feign</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.netflix.feign</groupId> <!-- Also tried io.github.openfeign -->
-            <artifactId>feign-httpclient</artifactId>
-            <version>8.18.0</version>
-        </dependency>
     </dependencies>
 
     <build>

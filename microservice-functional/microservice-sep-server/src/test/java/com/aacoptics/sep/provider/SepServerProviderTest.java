@@ -1,10 +1,12 @@
 package com.aacoptics.sep.provider;
 
 
+import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.sep.entity.SepTokenResult;
 import com.aacoptics.sep.entity.form.ChangeForm;
 import com.aacoptics.sep.entity.form.LoginForm;
 import com.aacoptics.sep.entity.vo.Group;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -38,7 +40,7 @@ public class SepServerProviderTest {
         changeForm.setHardwareKey("AE12FD4000C600F21BF5A9B463BCD7EC");
         changeForms.add(changeForm);
 
-        JSONObject res3 = sepServerProvider.changeClientGroup(changeForms, "Bearer ea28412f-d5b7-4f34-89cd-ed0e8a6133cb");
+        Object res3 = sepServerProvider.changeClientGroup(changeForms, "Bearer ea28412f-d5b7-4f34-89cd-ed0e8a6133cb");
         SepTokenResult res = sepServerProvider.getToken(loginForm);
         SepTokenResult res1 = sepServerProvider.getToken(loginForm);
 

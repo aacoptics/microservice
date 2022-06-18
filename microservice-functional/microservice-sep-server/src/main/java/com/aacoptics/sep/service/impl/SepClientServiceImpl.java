@@ -10,9 +10,9 @@ import com.aacoptics.sep.entity.vo.Group;
 import com.aacoptics.sep.mapper.SepClientMapper;
 import com.aacoptics.sep.provider.SepServerProvider;
 import com.aacoptics.sep.service.SepClientService;
-import com.aacoptics.sep.utils.HttpClientUtil;
 import com.aacoptics.common.core.vo.Result;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,23 +53,22 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
     }
 
     @Override
-    public List<SepClient> getHardwareKey(String computerName){
+    public List<SepClient> getHardwareKey(String computerName) {
         return sepClientMapper.getHardwareKey(computerName.toUpperCase());
     }
 
     @Override
-    public Result ChangeGroup(QueryForm queryForm){
+    public Result ChangeGroup(QueryForm queryForm) {
         List<SepClient> clintInfo = getHardwareKey(queryForm.getComputerName());
-        if(clintInfo.size() <= 0){
+        if (clintInfo.size() <= 0) {
             return Result.fail("查询不到该机器");
         }
         List<ChangeForm> changeForms = new ArrayList<>();
         ChangeForm changeForm = new ChangeForm();
         Group group = new Group();
-        if(GROUP_MAP.containsKey(queryForm.getGroup())){
+        if (GROUP_MAP.containsKey(queryForm.getGroup())) {
             group.setId(GROUP_MAP.get(queryForm.getGroup()));
-        }
-        else{
+        } else {
             group.setId(GROUP_MAP.get("default"));
         }
 
@@ -77,10 +76,21 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
         changeForm.setHardwareKey(clintInfo.get(0).getHardwareKey());
         changeForms.add(changeForm);
         SepTokenResult tokenRes = sepServerProvider.getToken(loginForm);
-        if(tokenRes == null || StrUtil.isBlank(tokenRes.getToken()))
+        if (tokenRes == null || StrUtil.isBlank(tokenRes.getToken()))
             return Result.fail("获取token失败");
-        String res = HttpClientUtil.doGet("https://10.233.65.50:8446/sepm/api/v1/computers", changeForms, tokenRes.getToken());
-
-        return Result.success(res);
+        Object res = sepServerProvider.changeClientGroup(changeForms, "Bearer " + tokenRes.getToken());
+        JSONArray resJson;
+        try {
+            resJson = JSONArray.parseArray(JSONArray.toJSONString(res));
+        } catch (Exception err) {
+            return Result.fail("解析sep返回的结果json失败");
+        }
+        if (resJson.size() <= 0)
+            return Result.fail(res);
+        Integer responseCode = ((JSONObject) resJson.get(0)).getInteger("responseCode");
+        if (responseCode != null && responseCode == 200)
+            return Result.success(res);
+        else
+            return Result.fail(res);
     }
 }
