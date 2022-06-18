@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface SepGroupConstant {
-    Map<String, String> GROUP_MAP = new HashMap() {
+    Map<String, String> GROUP_MAP = new HashMap<String, String>() {
         {
             put("01_ImagingDevice", "474A02F50AE94132420A7FCB54116797");
             put("02_UsbKey", "7CE7C1520AE9413208BAECAD7C21CE28");
