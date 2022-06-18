@@ -17,18 +17,9 @@ public class SepController {
     @Resource
     SepClientService sepClientService;
 
-
-
     @ApiOperation(value = "修改Clinet组", notes = "修改Clinet组")
     @PostMapping("/changeGroup")
     public Result changeGroup(@RequestBody QueryForm queryForm) {
-        return sepClientService.ChangeGroup(queryForm);
-    }
-
-    @ApiOperation(value = "修改Clinet组", notes = "修改Clinet组")
-    @PostMapping("/changeToDefault")
-    public Result changeToDefault(@RequestBody QueryForm queryForm) {
-        queryForm.setGroup("default");
         return sepClientService.ChangeGroup(queryForm);
     }
 }
