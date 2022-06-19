@@ -1,4 +1,4 @@
-package com.aacoptics.pack.config;
+package com.aacoptics.gaia.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +18,15 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.pack"))
+                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.gaia"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("包装出货上传数据接口")
-                .description("包装出货上传数据接口")
+                .title("星级人员盖亚接口")
+                .description("星级人员盖亚接口")
                 .version("2.0")
                 .build();
     }
