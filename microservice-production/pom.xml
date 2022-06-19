@@ -9,6 +9,7 @@
     <version>1.0.0</version>
     <modules>
         <module>microservice-package-api</module>
+        <module>microservice-gaia-api</module>
     </modules>
 
     <packaging>pom</packaging>
