@@ -20,7 +20,7 @@ import java.util.List;
  * @author yanshangqi
  */
 @RestController
-@RequestMapping("/customerShipment")
+@RequestMapping("/gaiaApi")
 @Api("CustomerShipmentInfoController")
 @Slf4j
 public class GaiaController {
