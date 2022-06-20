@@ -2,20 +2,20 @@ package com.aacoptics.notification.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
+import com.aacoptics.notification.entity.po.DingtalkUser;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.vo.DingTalkMessage;
 import com.aacoptics.notification.provider.XxlJobProvider;
-import com.aacoptics.notification.service.SendMessageService;
-import com.aacoptics.notification.service.UmsContentService;
-import com.aacoptics.notification.service.XxlGroupInfoService;
-import com.aacoptics.notification.service.XxlJobInfoService;
+import com.aacoptics.notification.service.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
@@ -32,7 +32,7 @@ public class NotificationController {
     SendMessageService sendMessageService;
 
     @Resource
-    XxlJobProvider xxlJobProvider;
+    DingtalkUserService dingtalkUserService;
 
     @ApiOperation(value = "保存消息推送计划", notes = "保存消息推送计划")
     @ApiImplicitParam(name = "xxlJobInfo", value = "新增消息推送计划表单", required = true, dataType = "XxlJobInfo")
@@ -85,7 +85,17 @@ public class NotificationController {
     )
     @PostMapping(value = "/sendDingTalkNotification")
     public Result sendDingTalkNotification(@Valid @RequestBody DingTalkMessage dingTalkMessage) {
-        return sendMessageService.sendDingTalkNotification(dingTalkMessage.getUserIdList(),
+        String[] userNoArray =  dingTalkMessage.getUserIdList().split(",");
+        List<String> dingTalkUserIdList = new ArrayList<>();
+        if(userNoArray.length > 0){
+            for (String userNoInfo : userNoArray) {
+                List<DingtalkUser> dingtalkUser = dingtalkUserService.GetUsersInfoFromDingtalk(userNoInfo);
+                if(dingtalkUser.size() > 0)
+                    dingTalkUserIdList.add(dingtalkUser.get(0).getUserid());
+            }
+        }
+        String userIds = String.join(",", dingTalkUserIdList);
+        return sendMessageService.sendDingTalkNotification(userIds,
                 dingTalkMessage.getTitle(),
                 dingTalkMessage.getContent());
     }

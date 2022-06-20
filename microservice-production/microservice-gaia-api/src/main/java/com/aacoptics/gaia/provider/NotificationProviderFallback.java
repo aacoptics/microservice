@@ -1,18 +1,20 @@
 package com.aacoptics.gaia.provider;
-import com.aacoptics.common.core.exception.BaseException;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.gaia.entity.po.DingTalkMessage;
-import com.aacoptics.gaia.exception.CommonErrorType;
-import com.alibaba.fastjson.JSONObject;
+import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class NotificationProviderFallback implements NotificationProvider {
-
+public class NotificationProviderFallback implements FallbackFactory<NotificationProvider> {
     @Override
-    public Result sendDingTalkNotification(DingTalkMessage dingTalkMessage) {
-        return Result.fail("消息发送失败！");
+    public NotificationProvider create(Throwable throwable) {
+        return new NotificationProvider() {
+            @Override
+            public Result sendDingTalkNotification(DingTalkMessage dingTalkMessage) {
+                return Result.fail(throwable);
+            }
+        };
     }
 }

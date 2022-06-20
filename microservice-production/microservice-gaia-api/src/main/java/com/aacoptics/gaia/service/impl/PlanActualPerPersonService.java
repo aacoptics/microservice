@@ -59,6 +59,9 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
         if(workDateList.size() <= 0)
             return messages;
         for (PlanActualPerPerson workDate : workDateList) {
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+            LocalDate workDateLocal = LocalDate.parse(workDate.getWorkDate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String workDateStr = workDateLocal.format(df);
             List<PlanActualPerPerson> needToSendMsg = getDataByWorkDate(workDate.getWorkDate());
             if(needToSendMsg.size() > 0){
                 String jobNumber = "";
@@ -69,7 +72,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
                         if(!StrUtil.isBlank(message.toString())){
                             MessageInfo messageInfo = new MessageInfo();
                             messageInfo.setJobNumber(jobNumber);
-                            messageInfo.setMessage(message.toString());
+                            messageInfo.setMessage(message.toString().trim());
                             messageInfo.setIdList(idList);
                             messages.add(messageInfo);
                             message = new StringBuilder();
@@ -79,28 +82,31 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
                     }
                     if(StrUtil.isBlank(message.toString())){
                         message.append(planActualPerPerson.getName())
-                                .append("，您好，")
-                                .append(planActualPerPerson.getWorkDate())
-                                .append("出勤时长").append(planActualPerPerson.getWorkTime()).append("\n")
-                                .append("生产拆分工时").append(planActualPerPerson.getSplitWorkTime())
-                                .append("，你计划生产数量是").append(planActualPerPerson.getPlanDailyCapacityOfProduction().intValue())
-                                .append("，实际生产数量").append(planActualPerPerson.getActualDailyCapacityOfProduction().intValue())
-                                .append("，质量扣除数量").append(planActualPerPerson.getCapacityOfProductionDeduct().intValue())
-                                .append("，综合产能").append(planActualPerPerson.getComprehensiveCapacityOfProduction().intValue()).append("\n");
+                                .append("，您好\n")
+                                .append(workDateStr).append("\n")
+                                .append("出勤时长：").append(planActualPerPerson.getWorkTime()).append("\n")
+                                .append("\n")
+                                .append("生产拆分工时：").append(planActualPerPerson.getSplitWorkTime()).append("\n")
+                                .append("计划生产数量：").append(planActualPerPerson.getPlanDailyCapacityOfProduction().intValue()).append("\n")
+                                .append("实际生产数量：").append(planActualPerPerson.getActualDailyCapacityOfProduction().intValue()).append("\n")
+                                .append("质量扣除数量：").append(planActualPerPerson.getCapacityOfProductionDeduct().intValue()).append("\n")
+                                .append("综合产能：").append(planActualPerPerson.getComprehensiveCapacityOfProduction().intValue()).append("\n")
+                                .append("\n");
                     }
                     else{
-                        message.append("生产拆分工时").append(planActualPerPerson.getSplitWorkTime())
-                                .append("，你计划生产数量是").append(planActualPerPerson.getPlanDailyCapacityOfProduction().intValue())
-                                .append("，实际生产数量").append(planActualPerPerson.getActualDailyCapacityOfProduction().intValue())
-                                .append("，质量扣除数量").append(planActualPerPerson.getCapacityOfProductionDeduct().intValue())
-                                .append("，综合产能").append(planActualPerPerson.getComprehensiveCapacityOfProduction().intValue()).append("\n");
+                        message.append("生产拆分工时：").append(planActualPerPerson.getSplitWorkTime()).append("\n")
+                                .append("计划生产数量：").append(planActualPerPerson.getPlanDailyCapacityOfProduction().intValue()).append("\n")
+                                .append("实际生产数量：").append(planActualPerPerson.getActualDailyCapacityOfProduction().intValue()).append("\n")
+                                .append("质量扣除数量：").append(planActualPerPerson.getCapacityOfProductionDeduct().intValue()).append("\n")
+                                .append("综合产能：").append(planActualPerPerson.getComprehensiveCapacityOfProduction().intValue()).append("\n")
+                                .append("\n");
                     }
                     idList.add(planActualPerPerson.getId());
                 }
                 MessageInfo messageInfo = new MessageInfo();
                 messageInfo.setJobNumber(jobNumber);
                 messageInfo.setIdList(idList);
-                messageInfo.setMessage(message.toString());
+                messageInfo.setMessage(message.toString().trim());
                 messages.add(messageInfo);
             }
         }
@@ -113,7 +119,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
         if(messageInfos.size() > 0){
             for (MessageInfo messageInfo : messageInfos) {
                 DingTalkMessage dingTalkMessage = new DingTalkMessage();
-                dingTalkMessage.setUserIdList("360459130919866978");
+                dingTalkMessage.setUserIdList("60054916");
                 dingTalkMessage.setTitle("测试消息");
                 dingTalkMessage.setContent(messageInfo.getMessage());
                 Result res = notificationProvider.sendDingTalkNotification(dingTalkMessage);
