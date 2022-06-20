@@ -113,7 +113,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
         if(messageInfos.size() > 0){
             for (MessageInfo messageInfo : messageInfos) {
                 DingTalkMessage dingTalkMessage = new DingTalkMessage();
-                dingTalkMessage.setUserIdList("360459130919866978");
+                dingTalkMessage.setUserIdList("60054916");
                 dingTalkMessage.setTitle("测试消息");
                 dingTalkMessage.setContent(messageInfo.getMessage());
                 Result res = notificationProvider.sendDingTalkNotification(dingTalkMessage);

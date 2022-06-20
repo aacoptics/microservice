@@ -1,14 +1,12 @@
 package com.aacoptics.notification.service.impl;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.notification.entity.po.DingtalkUser;
 import com.aacoptics.notification.entity.po.XxlGroupInfo;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.po.XxlJobResult;
 import com.aacoptics.notification.provider.XxlJobProvider;
-import com.aacoptics.notification.service.SendMessageService;
-import com.aacoptics.notification.service.UmsContentService;
-import com.aacoptics.notification.service.XxlGroupInfoService;
-import com.aacoptics.notification.service.XxlJobInfoService;
+import com.aacoptics.notification.service.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +37,13 @@ public class UmsContentServiceImplTest {
     @Resource
     XxlGroupInfoService xxlGroupInfoService;
 
+    @Resource
+    DingtalkUserService dingtalkUserService;
+
     @Test
     public void Test() {
 
+        List<DingtalkUser> dingtalkUsers = dingtalkUserService.GetUsersInfoFromDingtalk("60054916");
         List<XxlGroupInfo> xxlGroupInfoList = xxlGroupInfoService.list();
 
 //        XxlJobInfo xxlJobInfo = new XxlJobInfo();
