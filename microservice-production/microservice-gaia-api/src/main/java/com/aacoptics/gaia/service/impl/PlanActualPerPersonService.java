@@ -1,9 +1,12 @@
 package com.aacoptics.gaia.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.gaia.entity.po.DingTalkMessage;
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
 import com.aacoptics.gaia.entity.vo.MessageInfo;
 import com.aacoptics.gaia.mapper.PlanActualPerPersonMapper;
+import com.aacoptics.gaia.provider.NotificationProvider;
 import com.aacoptics.gaia.service.IPlanActualPerPersonService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -26,6 +29,9 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
 
     @Resource
     PlanActualPerPersonMapper planActualPerPersonMapper;
+
+    @Resource
+    NotificationProvider notificationProvider;
 
     @Override
     public List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate) {
@@ -57,14 +63,17 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
             if(needToSendMsg.size() > 0){
                 String jobNumber = "";
                 StringBuilder message = new StringBuilder();
+                List<Integer> idList = new ArrayList<>();
                 for (PlanActualPerPerson planActualPerPerson : needToSendMsg) {
                     if(!planActualPerPerson.getEmployeeID().equals(jobNumber)){
                         if(!StrUtil.isBlank(message.toString())){
                             MessageInfo messageInfo = new MessageInfo();
                             messageInfo.setJobNumber(jobNumber);
                             messageInfo.setMessage(message.toString());
+                            messageInfo.setIdList(idList);
                             messages.add(messageInfo);
                             message = new StringBuilder();
+                            idList = new ArrayList<>();
                         }
                         jobNumber = planActualPerPerson.getEmployeeID();
                     }
@@ -86,14 +95,42 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
                                 .append("，质量扣除数量").append(planActualPerPerson.getCapacityOfProductionDeduct().intValue())
                                 .append("，综合产能").append(planActualPerPerson.getComprehensiveCapacityOfProduction().intValue()).append("\n");
                     }
+                    idList.add(planActualPerPerson.getId());
                 }
                 MessageInfo messageInfo = new MessageInfo();
                 messageInfo.setJobNumber(jobNumber);
+                messageInfo.setIdList(idList);
                 messageInfo.setMessage(message.toString());
                 messages.add(messageInfo);
             }
         }
         return messages;
+    }
+
+    @Override
+    public void sendDingTalkMessage(){
+        List<MessageInfo> messageInfos = getPersonPlanMsg();
+        if(messageInfos.size() > 0){
+            for (MessageInfo messageInfo : messageInfos) {
+                DingTalkMessage dingTalkMessage = new DingTalkMessage();
+                dingTalkMessage.setUserIdList("360459130919866978");
+                dingTalkMessage.setTitle("测试消息");
+                dingTalkMessage.setContent(messageInfo.getMessage());
+                Result res = notificationProvider.sendDingTalkNotification(dingTalkMessage);
+                if(res.isSuccess()){
+                    UpdateWrapper<PlanActualPerPerson> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.set("dd_transfer_flg", 1)
+                            .in("ID", messageInfo.getIdList());
+                    this.update(null, updateWrapper);
+                }
+                else{
+                    UpdateWrapper<PlanActualPerPerson> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.set("dd_transfer_flg", 2)
+                            .in("ID", messageInfo.getIdList());
+                    this.update(null, updateWrapper);
+                }
+            }
+        }
     }
 
     @Override

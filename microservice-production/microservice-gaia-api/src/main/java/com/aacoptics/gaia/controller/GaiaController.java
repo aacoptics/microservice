@@ -55,13 +55,13 @@ public class GaiaController {
         }
     }
 
-    @ApiOperation(value = "获取人员计划消息", notes = "获取人员计划消息")
-    @PostMapping("/getSendMessage")
-    public Result getSendMessage() {
-        try {
-            return Result.success(planActualPerPersonService.getPersonPlanMsg());
-        } catch (Exception err) {
-            return Result.fail(err);
-        }
-    }
+//    @ApiOperation(value = "获取人员计划消息", notes = "获取人员计划消息")
+//    @PostMapping("/getSendMessage")
+//    public Result getSendMessage() {
+//        try {
+//            return Result.success(planActualPerPersonService.getPersonPlanMsg());
+//        } catch (Exception err) {
+//            return Result.fail(err);
+//        }
+//    }
 }

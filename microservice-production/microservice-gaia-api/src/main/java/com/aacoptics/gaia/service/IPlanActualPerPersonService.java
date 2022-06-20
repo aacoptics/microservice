@@ -18,4 +18,6 @@ public interface IPlanActualPerPersonService extends IService<PlanActualPerPerso
     List<PlanActualPerPerson> getDataByWorkDate(String workDate);
 
     List<PlanActualPerPerson> getWorkDate();
+
+    void sendDingTalkMessage();
 }

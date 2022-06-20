@@ -17,6 +17,6 @@ public class PlanActualPerPersonServiceTest {
 
     @Test
     public void sendPersonPlanMsg() {
-        planActualPerPersonService.getPersonPlanMsg();
+        planActualPerPersonService.sendDingTalkMessage();
     }
 }
