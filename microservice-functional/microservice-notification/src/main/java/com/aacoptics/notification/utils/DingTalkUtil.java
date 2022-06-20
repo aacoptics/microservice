@@ -1,5 +1,6 @@
 package com.aacoptics.notification.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiMessageCorpconversationAsyncsendV2Request;
@@ -17,33 +18,35 @@ public class DingTalkUtil {
 
     private static Logger logger = LoggerFactory.getLogger(DingTalkUtil.class);
 
-    public static void sendCardCorpConversation(String accessToken, long agentId, String useridList, String title, String markdown, String singleTile, String singleUrl) throws ApiException {
+    public static OapiMessageCorpconversationAsyncsendV2Response sendCardCorpConversation(String accessToken, long agentId, String useridList, String title, String markdown) throws ApiException {
         DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/topapi/message/corpconversation/asyncsend_v2");
         OapiMessageCorpconversationAsyncsendV2Request request = new OapiMessageCorpconversationAsyncsendV2Request();
         request.setAgentId(agentId);
-        if(!"".equals(useridList))
-        {
+        if (!"".equals(useridList)) {
             request.setUseridList(useridList);
             request.setToAllUser(false);
-        }
-        else
-        {
+        } else {
             request.setToAllUser(true);
         }
 
+//        OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
+
+//        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
+//        msg.setMsgtype("action_card");
+//        msg.getActionCard().setTitle(title);
+//        msg.getActionCard().setMarkdown(markdown);
+//        msg.getActionCard().setSingleTitle(singleTile);
+//        msg.getActionCard().setSingleUrl(singleUrl);
+//        request.setMsg(msg);
         OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();
-
-        msg.setActionCard(new OapiMessageCorpconversationAsyncsendV2Request.ActionCard());
-        msg.setMsgtype("action_card");
-        msg.getActionCard().setTitle(title);
-        msg.getActionCard().setMarkdown(markdown);
-        msg.getActionCard().setSingleTitle(singleTile);
-        msg.getActionCard().setSingleUrl(singleUrl);
-
+        msg.setOa(new OapiMessageCorpconversationAsyncsendV2Request.OA());
+        msg.getOa().setHead(new OapiMessageCorpconversationAsyncsendV2Request.Head());
+        msg.getOa().setBody(new OapiMessageCorpconversationAsyncsendV2Request.Body());
+        msg.getOa().getBody().setTitle(title);
+        msg.getOa().getBody().setContent(markdown);
+        msg.setMsgtype("oa");
         request.setMsg(msg);
-
-        OapiMessageCorpconversationAsyncsendV2Response rsp = client.execute(request, accessToken);
-        logger.info(rsp.getBody());
+        return client.execute(request, accessToken);
     }
 
     /**
@@ -75,7 +78,7 @@ public class DingTalkUtil {
         logger.info(response.getBody());
 
         Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("result", response.isSuccess()+"");
+        resultMap.put("result", response.isSuccess() + "");
         resultMap.put("message", response.getMessage());
 
         return resultMap;

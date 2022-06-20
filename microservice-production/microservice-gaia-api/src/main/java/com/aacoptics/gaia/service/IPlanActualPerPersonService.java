@@ -1,6 +1,7 @@
 package com.aacoptics.gaia.service;
 
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
+import com.aacoptics.gaia.entity.vo.MessageInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.time.LocalDateTime;
@@ -11,4 +12,12 @@ public interface IPlanActualPerPersonService extends IService<PlanActualPerPerso
     List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate);
 
     void updatePlanResult(List<PlanActualPerPerson> planActualPerPersons);
+
+    List<MessageInfo> getPersonPlanMsg();
+
+    List<PlanActualPerPerson> getDataByWorkDate(String workDate);
+
+    List<PlanActualPerPerson> getWorkDate();
+
+    void sendDingTalkMessage();
 }

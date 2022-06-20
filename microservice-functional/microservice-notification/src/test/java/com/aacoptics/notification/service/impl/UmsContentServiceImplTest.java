@@ -1,5 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
+import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.po.XxlGroupInfo;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.po.XxlJobResult;

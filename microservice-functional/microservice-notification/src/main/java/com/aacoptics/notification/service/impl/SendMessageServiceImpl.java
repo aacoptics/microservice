@@ -1,18 +1,24 @@
 package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.UmsContentSub;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.notification.entity.vo.MessageTypeInfo;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
+import com.aacoptics.notification.provider.DingTalkApi;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.service.RobotService;
 import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;
 import com.aacoptics.notification.service.UmsContentSubService;
+import com.aacoptics.notification.utils.DingTalkUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
+import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -37,6 +43,9 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Resource
     RobotService robotService;
 
+    @Resource
+    DingTalkApi dingTalkApi;
+
     @Override
     public void sendHandledMessage(NotificationEntity notificationEntity) throws Exception {
         List<UmsContent> messageBatches;
@@ -58,7 +67,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                 throw new Exception(msg);
             }
 
-            if(notificationEntity.getMsgTypeInfo() == null || notificationEntity.getMsgTypeInfo().size() <= 0){
+            if (notificationEntity.getMsgTypeInfo() == null || notificationEntity.getMsgTypeInfo().size() <= 0) {
                 String msg = "未配置消息类型，请检查！";
                 log.error(msg);
                 throw new Exception(msg);
@@ -66,7 +75,7 @@ public class SendMessageServiceImpl implements SendMessageService {
             List<String> robotNames = notificationEntity.getMsgTypeInfo().stream().map(Robot::getRobotName).collect(Collectors.toList());
             List<Robot> robotList = robotService.findByName(robotNames);
             for (Robot messageTypeInfo : robotList) {
-                if(messageTypeInfo.getRobotType().equals("FeiShu")){
+                if (messageTypeInfo.getRobotType().equals("FeiShu")) {
                     String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage);
                     new JSONObject();
                     JSONObject messageJson;
@@ -121,8 +130,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                 }
                 if (!StrUtil.isBlank(messageValue.getIsSeqno())) {
                     msgContent = markdownGroupMessage.addSeqNo(msgContent, messageValue.getIsSeqno());
-                }
-                else if(!StrUtil.isBlank(messageValue.getIsList()) && messageValue.getIsList().equals("Y")){
+                } else if (!StrUtil.isBlank(messageValue.getIsList()) && messageValue.getIsList().equals("Y")) {
                     msgContent = markdownGroupMessage.addList(msgContent);
                 }
                 markdownGroupMessage.addContent(msgContent);
@@ -134,6 +142,28 @@ public class SendMessageServiceImpl implements SendMessageService {
             return markdownGroupMessage.toString();
         } else {
             return null;
+        }
+    }
+
+    @Override
+    public Result sendDingTalkNotification(String jobNumber, String title, String content) {
+        //获取token
+        OapiGettokenResponse oapiGettokenResponse = null;
+        try {
+            oapiGettokenResponse = dingTalkApi.getAccessToken();
+        } catch (ApiException e) {
+            return Result.fail(e);
+        }
+        String accessToken = oapiGettokenResponse.getAccessToken();
+        try {
+            OapiMessageCorpconversationAsyncsendV2Response res = DingTalkUtil.sendCardCorpConversation(accessToken, 1186196480L
+                    , jobNumber, title, content);
+            if (res.isSuccess())
+                return Result.success();
+            else
+                return Result.fail(res);
+        } catch (ApiException e) {
+            return Result.fail(e);
         }
     }
 }

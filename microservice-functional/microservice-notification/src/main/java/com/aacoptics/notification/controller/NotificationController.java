@@ -4,7 +4,9 @@ import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
+import com.aacoptics.notification.entity.vo.DingTalkMessage;
 import com.aacoptics.notification.provider.XxlJobProvider;
+import com.aacoptics.notification.service.SendMessageService;
 import com.aacoptics.notification.service.UmsContentService;
 import com.aacoptics.notification.service.XxlGroupInfoService;
 import com.aacoptics.notification.service.XxlJobInfoService;
@@ -25,6 +27,9 @@ public class NotificationController {
 
     @Resource
     XxlGroupInfoService xxlGroupInfoService;
+
+    @Resource
+    SendMessageService sendMessageService;
 
     @Resource
     XxlJobProvider xxlJobProvider;
@@ -71,5 +76,17 @@ public class NotificationController {
     @GetMapping(value = "/listGroup")
     public Result listGroup() {
         return Result.success(xxlGroupInfoService.list());
+    }
+
+    @ApiOperation(value = "推送钉钉工作通知", notes = "推送钉钉工作通知")
+    @ApiImplicitParam(name = "dingTalkMessage", value = "钉钉工作通知参数", required = true, dataType = "DingTalkMessage")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/sendDingTalkNotification")
+    public Result sendDingTalkNotification(@Valid @RequestBody DingTalkMessage dingTalkMessage) {
+        return sendMessageService.sendDingTalkNotification(dingTalkMessage.getUserIdList(),
+                dingTalkMessage.getTitle(),
+                dingTalkMessage.getContent());
     }
 }
