@@ -1,5 +1,6 @@
 package com.aacoptics.gaia.service;
 
+import com.aacoptics.gaia.entity.form.PlanActualPerPersonForm;
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
 import com.aacoptics.gaia.entity.vo.MessageInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -11,7 +12,7 @@ public interface IPlanActualPerPersonService extends IService<PlanActualPerPerso
 
     List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate);
 
-    void updatePlanResult(List<PlanActualPerPerson> planActualPerPersons);
+    void updatePlanResult(List<PlanActualPerPersonForm> planActualPerPersons);
 
     List<MessageInfo> getPersonPlanMsg();
 

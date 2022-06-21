@@ -1,6 +1,7 @@
 package com.aacoptics.gaia.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.gaia.entity.form.PlanActualPerPersonForm;
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
 import com.aacoptics.gaia.exception.CommonErrorType;
 import com.aacoptics.gaia.service.IPlanActualPerPersonService;
@@ -46,7 +47,7 @@ public class GaiaController {
 
     @ApiOperation(value = "返回排班结果信息", notes = "返回排班结果信息")
     @PostMapping("/updatePlanResult")
-    public Result updatePlanResult(@RequestBody List<PlanActualPerPerson> planActualPerPersons) {
+    public Result updatePlanResult(@RequestBody List<PlanActualPerPersonForm> planActualPerPersons) {
         try {
             planActualPerPersonService.updatePlanResult(planActualPerPersons);
             return Result.success();

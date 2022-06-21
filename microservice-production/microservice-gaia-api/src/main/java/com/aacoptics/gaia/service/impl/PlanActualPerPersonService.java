@@ -2,6 +2,7 @@ package com.aacoptics.gaia.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.gaia.entity.form.PlanActualPerPersonForm;
 import com.aacoptics.gaia.entity.po.DingTalkMessage;
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
 import com.aacoptics.gaia.entity.vo.MessageInfo;
@@ -39,8 +40,8 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
     }
 
     @Override
-    public void updatePlanResult(List<PlanActualPerPerson> planActualPerPersons){
-        for (PlanActualPerPerson planActualPerPerson : planActualPerPersons) {
+    public void updatePlanResult(List<PlanActualPerPersonForm> planActualPerPersons){
+        for (PlanActualPerPersonForm planActualPerPerson : planActualPerPersons) {
             UpdateWrapper<PlanActualPerPerson> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("ID", planActualPerPerson.getId());
             updateWrapper.set("gy_transfer_flg",  planActualPerPerson.getGyTransferFlg());
