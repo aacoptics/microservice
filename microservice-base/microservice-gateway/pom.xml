@@ -20,6 +20,8 @@
     <modules>
         <module>microservice-gateway-admin</module>
         <module>microservice-gateway-web</module>
+        <module>microservice-gateway-public-admin</module>
+        <module>microservice-gateway-public-web</module>
     </modules>
 
     <dependencies>
