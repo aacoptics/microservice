@@ -7,7 +7,7 @@
                              :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
           <span>{{ item.title }}</span>
         </template>
-        <MenuItem :items="item.subs"/>
+        <sys-menu-item :items="item.subs"/>
       </el-sub-menu>
     </template>
     <template v-else>
@@ -24,7 +24,7 @@
 import {fontAwesomeIconFormat} from "@/utils/commonUtils";
 
 export default {
-  name: 'MenuItem',
+  name: 'SysMenuItem',
   props: {
     items: {
       type: Array,

@@ -9,17 +9,17 @@
         router
         text-color="#bfcbd9"
         unique-opened>
-      <MenuItem :items="items"></MenuItem>
+      <sys-menu-item :items="items"></sys-menu-item>
     </el-menu>
   </div>
 </template>
 
 <script>
 import {getMenuItems} from "@/utils/auth";
-import MenuItem from "@/components/MenuItem";
+import SysMenuItem from "@/components/SysMenuItem";
 
 export default {
-  components: {MenuItem},
+  components: {SysMenuItem},
   data() {
     return {
       items: [

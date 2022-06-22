@@ -126,10 +126,10 @@ export default {
   },
   computed: {
     computedHeight() {
-      return this.changeHeight > this.height ? this.changeHeight : this.height
+      return Math.max(...[this.changeHeight, this.height])
     },
     computedMaxHeight() {
-      return this.changeMaxHeight > this.maxHeight ? this.changeMaxHeight : this.maxHeight
+      return Math.max(...[this.changeMaxHeight, this.maxHeight])
     },
   },
   data() {
