@@ -227,7 +227,7 @@ import {getDict} from "@/api/system/dictData";
 import {v4 as uuidV4} from "uuid";
 
 export default {
-  name: "menu",
+  name: "menuManagement",
   components: {IconSelect},
   data() {
     return {
