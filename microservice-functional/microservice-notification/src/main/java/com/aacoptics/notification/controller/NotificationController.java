@@ -101,8 +101,8 @@ public class NotificationController {
                 dingTalkMessage.getContent());
     }
 
-    @ApiOperation(value = "推送钉钉工作通知", notes = "推送钉钉工作通知")
-    @ApiImplicitParam(name = "dingTalkMessage", value = "钉钉工作通知参数", required = true, dataType = "DingTalkMessage")
+    @ApiOperation(value = "手动触发Task", notes = "手动触发Task")
+    @ApiImplicitParam(name = "triggerJobForm", value = "触发参数实体", required = true, dataType = "TriggerJobForm")
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
