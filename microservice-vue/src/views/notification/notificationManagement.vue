@@ -26,7 +26,7 @@
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
-                @handleCurrentChange="handleUserSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
+                @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
@@ -37,6 +37,14 @@
               </el-button>
               <el-button v-else round size="small" type="danger">
                 停止
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" fixed="right" header-align="center" label="执行"
+                           width="80">
+            <template v-slot="scope">
+              <el-button size="small" type="warning" @click="handleTrigger(scope.row)">
+                执行一次
               </el-button>
             </template>
           </el-table-column>
@@ -215,13 +223,63 @@
           </slot>
         </div>
       </el-dialog>
+      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次"
+                 width="40%" @open="handleTriggerDialogOpen">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="110px">
+          <el-form-item v-if="false" label="Id" prop="id">
+            <el-input v-model="dataForm.id" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="任务Key" prop="planKey">
+                <el-input v-model="dataForm.planKey" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="任务批次" prop="batchId">
+                <el-input v-model="batchId" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="消息机器人" prop="currentRobotsInfo">
+                <el-select v-model="currentRobotsInfo" multiple placeholder="请选择"
+                           value-key="id">
+                  <el-option
+                      v-for="item in robotOptions"
+                      :key="item.id"
+                      :label="item.robotName"
+                      :value="item">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button :size="size" @click="closeTriggerDialog">取消</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="triggerJob">触发</el-button>
+          </slot>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteTask, findTaskInfoPage, getGroupInfo, handleAdd, handleUpdate} from "@/api/notification/notificationTask";
+import {
+  deleteTask,
+  findTaskInfoPage,
+  getGroupInfo,
+  handleAdd,
+  handleUpdate,
+  triggerNotificationJob
+} from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
 import {findByNames, getAllRobotInfo} from "@/api/notification/robot";
 
@@ -245,6 +303,7 @@ export default {
       pageResult: {},
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
+      triggerDialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
         jobGroup: [{required: true, message: '请选择执行器', trigger: 'change'}],
@@ -256,6 +315,7 @@ export default {
         author: [{required: true, message: '请输入负责人', trigger: 'blur'}],
         executorHandler: [{required: true, message: '请选择消息Handle', trigger: 'change'}]
       },
+      batchId: '',
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -340,6 +400,15 @@ export default {
       })
     },
 
+    handleTriggerDialogOpen() {
+      getAllRobotInfo().then((res) => {
+        const responseData = res.data
+        if (responseData.code === '000000') {
+          this.robotOptions = responseData.data
+        }
+      })
+    },
+
     // 批量删除
     handleDelete: function (data) {
       if (data.params.length > 0)
@@ -377,6 +446,10 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
+    },
+    handleTrigger: function (params) {
+      this.triggerDialogVisible = true
+      this.dataForm = Object.assign({}, params)
     },
     // 编辑
     submitForm: function () {
@@ -427,7 +500,45 @@ export default {
         }
       })
     },
-    handleUserSelectChange(val) {
+    triggerJob: function () {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.$confirm('确认触发吗？', '提示', {}).then(() => {
+            this.editLoading = true
+            let params = Object.assign({}, this.dataForm)
+            const executorParams= {}
+            executorParams.planKey = params.planKey
+            executorParams.batchId = this.batchId
+            executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
+              return Object.assign({},
+                  {
+                    'robotName':item.robotName
+                  })
+            })
+            params.executorParam = JSON.stringify(executorParams)
+
+            const triggerParam = {
+              jobId: params.id,
+              executorParam: params.executorParam,
+              addressList: ''
+            }
+            triggerNotificationJob(triggerParam).then((res) => {
+              const responseData = res.data
+              this.editLoading = false
+              if (responseData.code === '000000') {
+                this.$message({message: '操作成功', type: 'success'})
+                this.triggerDialogVisible = false
+                this.$refs['dataForm'].resetFields()
+              } else {
+                this.$message({message: '操作失败, ' + responseData.msg, type: 'error'})
+              }
+              this.findPage(null)
+            })
+          })
+        }
+      })
+    },
+    handleTaskSelectChange(val) {
       this.currentRobotsInfo = []
       if (val == null || val.val == null) {
         return
@@ -456,6 +567,10 @@ export default {
     // 重置选择
     resetSelection() {
       this.dialogVisible = false
+    },
+
+    closeTriggerDialog() {
+      this.triggerDialogVisible = false
     },
     // 时间格式化
     dateFormat: function (row, column) {
