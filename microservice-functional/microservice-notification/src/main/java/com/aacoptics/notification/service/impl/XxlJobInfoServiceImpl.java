@@ -1,13 +1,18 @@
 package com.aacoptics.notification.service.impl;
 
+import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.notification.entity.form.TriggerJobForm;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
+import com.aacoptics.notification.entity.po.XxlJobResult;
 import com.aacoptics.notification.mapper.XxlJobInfoMapper;
+import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.XxlJobInfoService;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import feign.Param;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,9 @@ import java.util.Date;
 public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobInfo> implements XxlJobInfoService {
     @Resource
     XxlJobInfoMapper xxlJobInfoMapper;
+
+    @Resource
+    XxlJobProvider xxlJobProvider;
 
     @Override
     public boolean add(XxlJobInfo xxlJobInfo) {
@@ -53,5 +61,16 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     @Override
     public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo) {
         return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey());
+    }
+
+    @Override
+    public Result triggerJob(TriggerJobForm triggerJobForm) {
+        XxlJobResult xxlJobResult = xxlJobProvider.triggerJob(triggerJobForm.getJobId(),
+                triggerJobForm.getExecutorParam(),
+                triggerJobForm.getAddressList());
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("触发成功");
+        else
+            return Result.fail(xxlJobResult);
     }
 }
