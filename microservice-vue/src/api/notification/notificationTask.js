@@ -53,3 +53,14 @@ export function getGroupInfo() {
         }
     })
 }
+
+export function triggerNotificationJob(triggerJobForm) {
+    return request({
+        url: '/notification-server/notification/triggerNotificationJob',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: triggerJobForm
+    })
+}
