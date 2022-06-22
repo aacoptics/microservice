@@ -74,7 +74,7 @@ import {handleRoleData} from "@/api/system/role";
 import {deleteUser, findUserInfoPage, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
 
 export default {
-  name: "user",
+  name: "userManagement",
   components: {SysTable},
   data() {
     return {

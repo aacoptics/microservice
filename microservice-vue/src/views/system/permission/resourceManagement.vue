@@ -140,7 +140,7 @@ import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 export default {
-  name: "resource",
+  name: "resourceManagement",
   components: {SysTable},
   data() {
     return {

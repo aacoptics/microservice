@@ -48,7 +48,7 @@
           <el-col :span="12">
             <div :v-if="true" class="menu-container" style="padding-top: 10px">
               <div class="menu-header">
-                <span><B>角色菜单授权</B></span>
+                <span>角色菜单授权</span>
               </div>
               <el-tree ref="menuTree"
                        v-loading="menuLoading"
@@ -93,7 +93,7 @@
           <el-col :span="12">
             <div :v-if="true" class="menu-container" style="padding-top: 10px">
               <div class="menu-header">
-                <span><B>角色接口授权</B></span>
+                <span>角色接口授权</span>
               </div>
               <el-tree ref="resourceTree"
                        v-loading="resourceLoading"
@@ -149,7 +149,7 @@ import {findResourceTree, findRoleResource} from "@/api/system/resource";
 import {fontAwesomeIconFormat} from "@/utils/commonUtils";
 
 export default {
-  name: "role",
+  name: "roleManagement",
   components: {SysTable},
   data() {
     return {
