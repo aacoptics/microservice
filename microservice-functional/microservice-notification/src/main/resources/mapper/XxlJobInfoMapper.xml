@@ -41,10 +41,8 @@
                           join xxl_job_group b
                                on a.job_group = b.id
                  where b.app_name = 'notification-center') t
-        where (JSON_VALUE(executor_param, '$.planKey') = #{planKey}
-            or #{planKey} is null
-            or #{planKey} = '')
+        where #{planKey} is null
+           or #{planKey} = ''
+           or JSON_VALUE(executor_param, '$.planKey') = #{planKey}
     </select>
-
-
 </mapper>
