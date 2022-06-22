@@ -1,6 +1,7 @@
 package com.aacoptics.notification.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.notification.entity.form.TriggerJobForm;
 import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
 import com.aacoptics.notification.entity.po.DingtalkUser;
 import com.aacoptics.notification.entity.po.UmsContent;
@@ -98,5 +99,15 @@ public class NotificationController {
         return sendMessageService.sendDingTalkNotification(userIds,
                 dingTalkMessage.getTitle(),
                 dingTalkMessage.getContent());
+    }
+
+    @ApiOperation(value = "推送钉钉工作通知", notes = "推送钉钉工作通知")
+    @ApiImplicitParam(name = "dingTalkMessage", value = "钉钉工作通知参数", required = true, dataType = "DingTalkMessage")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/triggerNotificationJob")
+    public Result triggerNotificationJob(@Valid @RequestBody TriggerJobForm triggerJobForm) {
+        return xxlJobInfoService.triggerJob(triggerJobForm);
     }
 }
