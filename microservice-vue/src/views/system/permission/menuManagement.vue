@@ -418,7 +418,6 @@ export default {
       })
     },
     tableRowClassName(row) {
-      if (this.isExpandAll === false) return ''
       return row.row.menuType === 0 ? 'success-row' : row.row.menuType === 2 ? 'warning-row' : ''
     },
     refresh() {
