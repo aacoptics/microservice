@@ -44,7 +44,7 @@
         <el-table-column label="菜单名称" prop="title" width="180"/>
         <el-table-column label="图标" width="60">
           <template #default="scope">
-            <font-awesome-icon v-if="fontAwesomeIconFormat(scope.row.icon) instanceof Array"
+            <font-awesome-icon v-if="scope.row.icon && fontAwesomeIconFormat(scope.row.icon) instanceof Array"
                                :icon="fontAwesomeIconFormat(scope.row.icon)" pull="left" size="lg"/>
           </template>
         </el-table-column>
