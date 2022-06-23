@@ -51,7 +51,7 @@ service.interceptors.response.use(
                             //ElMessage.success('刷新Token成功! 加载中...')
                             const {access_token, refresh_token, expires_in} = response.data
                             setAccessToken(access_token)
-                            setRefreshToken(refresh_token)
+                            //setRefreshToken(refresh_token)
                             const curTime = new Date();
                             const expireDate = new Date(curTime.setSeconds(curTime.getSeconds() + expires_in));
                             setExpireTime(expireDate)
