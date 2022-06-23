@@ -21,54 +21,35 @@ export function listAllUser() {
     })
 }
 
-export function findEnvironmentDataById(personPlacementDayId) {
+export function handleUpdate(updateForm) {
     return request({
-        url: '/xiaomi/environment/environmentData/' + personPlacementDayId,
-        method: 'get',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-}
-
-export function deleteEnvironmentData(factoryCode, deleteForm) {
-    return request({
-        url: '/xiaomi/environment/environmentData/' + deleteForm.id,
-        method: 'delete',
-        params: {
-            'factoryCode': factoryCode
-        },
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-}
-
-export function handleAdd(factoryCode, addForm) {
-    return request({
-        url: '/xiaomi/environment/environmentData',
-        method: 'post',
-        params: {
-            'factoryCode': factoryCode
-        },
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        data: addForm
-    })
-}
-
-export function handleUpdate(factoryCode, updateForm) {
-    return request({
-        url: '/xiaomi/environment/environmentData/' + updateForm.id,
+        url: '/quality-daily/qualityMil/update',
         method: 'put',
-        params: {
-            'factoryCode': factoryCode
-        },
         headers: {
             'Content-Type': 'application/json'
         },
         data: updateForm
+    })
+}
+
+export function handleDelete(milType, id) {
+    return request({
+        url: `/quality-daily/qualityMil/delete/${milType}/${id}`,
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function handleAdd(addForm) {
+    return request({
+        url: '/quality-daily/qualityMil/add',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: addForm
     })
 }
 
@@ -84,24 +65,11 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/xiaomi/environment/environmentData/exportExcel',
+        url: '/quality-daily/qualityMil/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
         },
         responseType: 'blob'
     })
-}
-
-export const validateNumber = (rule, value, callback) => {
-    let numberReg = /^\d+$|^\d+[.]?\d+$/;
-    if (value !== '' && value !== null) {
-        if (!numberReg.test(value)) {
-            callback(new Error('请输入数字'));
-        } else {
-            callback();
-        }
-    } else {
-        callback();
-    }
 }

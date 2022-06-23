@@ -22,11 +22,11 @@
           </el-form-item>
           <el-form-item label="开始时间" prop="startEventHappenDate">
             <el-date-picker v-model="filters.startEventHappenDate" auto-complete="off" type="datetime"
-                            ></el-date-picker>
+            ></el-date-picker>
           </el-form-item>
           <el-form-item label="终止时间" prop="endEventHappenDate">
             <el-date-picker v-model="filters.endEventHappenDate" auto-complete="off" type="datetime"
-                            ></el-date-picker>
+            ></el-date-picker>
           </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size">
@@ -39,8 +39,8 @@
           <el-form-item label="状态" prop="status">
             <el-input v-model="filters.status" clearable placeholder="状态"></el-input>
           </el-form-item>
-          <el-form-item label="责任人" prop="responsibility">
-            <el-select v-model="filters.responsibility" clearable placeholder="责任人">
+          <el-form-item label="责任人" prop="responsibilities">
+            <el-select v-model="filters.responsibilities" multiple clearable placeholder="责任人">
               <el-option
                   v-for="item in userOptions"
                   :key="item.id"
@@ -60,6 +60,20 @@
             </el-button>
           </el-form-item>
           <el-form-item>
+            <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量MIL模板')">导出模板
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'download']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="success" @click="handleAdd">新增
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'plus']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+          <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
@@ -69,47 +83,45 @@
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="false"
-                @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :show-operation="false"
+                :stripe="false" @findPage="findPage">
+        <template v-slot:custom-column>
+          <el-table-column label="操作" align="center" fixed="right" header-align="center"
+                           width="120">
+            <template v-slot="scope">
+              <el-button-group>
+                <el-tooltip content="编辑" placement="top">
+                  <el-button size="small" type="primary" @click="handleEdit({index: scope.index, row: scope.row})">
+                    <template #icon>
+                      <font-awesome-icon :icon="['far', 'pen-to-square']"/>
+                    </template>
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip content="删除" placement="top">
+                  <el-button size="small" type="danger" @click="handleDelete(scope.row)">
+                    <template #icon>
+                      <font-awesome-icon :icon="['far', 'trash-can']"/>
+                    </template>
+                  </el-button>
+                </el-tooltip>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </template>
       </SysTable>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
-                 width="40%">
+                 width="90%">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="接口编码" prop="code">
-                <el-input v-model="dataForm.code" :disabled="!operation" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="接口类型" prop="type">
-                <el-input v-model="dataForm.type" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="名称" prop="name">
-                <el-input v-model="dataForm.name" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="URL" prop="url">
-                <el-input v-model="dataForm.url" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="请求方法" prop="method">
-                <el-select v-model="dataForm.method" clearable placeholder="请求方法" style="width:100%">
+          <el-row v-if="operation">
+            <el-col :span="24">
+              <el-form-item label="milType" prop="milType">
+                <el-select v-model="dataForm.milType" clearable placeholder="milType">
                   <el-option
-                      v-for="item in methodOptions"
+                      v-for="item in qualityMilTypeAddOptions"
                       :key="item.dictValue"
                       :label="item.dictLabel"
                       :value="item.dictValue"
@@ -118,24 +130,183 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="描述" prop="description">
-                <el-input v-model="dataForm.description" auto-complete="off" clearable></el-input>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="项目" prop="project">
+                <el-input v-model="dataForm.project" autosize type="textarea" :disabled="!operation" auto-complete="off"
+                          clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="分类" prop="type" v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'">
+                <el-input v-model="dataForm.type" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="风险分项" prop="risk" v-if="'' +dataForm.milType === '4'">
+                <el-input v-model="dataForm.risk" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              <el-form-item clearable label="权限类型" prop="permissionType">
-                <el-select v-model="dataForm.permissionType" auto-complete="off"
-                           placeholder="权限类型">
+            <el-col :span="8">
+              <el-form-item label="风险类别" prop="riskType">
+                <el-input v-model="dataForm.riskType" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="严重等级" prop="severityLevel">
+                <el-input v-model="dataForm.severityLevel" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="发生时间" prop="eventHappenDate">
+                <el-date-picker v-model="dataForm.eventHappenDate" :disabled="!operation" auto-complete="off"
+                                type="datetime">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="客户" prop="customer" v-if="'' +dataForm.milType === '4'">
+                <el-input v-model="dataForm.customer" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="厂区" prop="site">
+                <el-input v-model="dataForm.site" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="工段" prop="workshop"
+                            v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'">
+                <el-input v-model="dataForm.workshop" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="站别" prop="station">
+                <el-input v-model="dataForm.station" autosize type="textarea" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="问题描述" prop="questionPresentation">
+                <el-input v-model="dataForm.questionPresentation" autosize :disabled="!operation" type="textarea"
+                          auto-complete="off"
+                          clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="原因分析" prop="reasonAnalysis">
+                <el-input v-model="dataForm.reasonAnalysis" autosize type="textarea" auto-complete="off"
+                          clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="对策&处理进展" prop="solutionProgress" v-if="'' +dataForm.milType === '4'">
+                <el-input v-model="dataForm.solutionProgress" autosize type="textarea" :disabled="!operation"
+                          auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="标准化" prop="lessonLearn">
+                <el-input v-model="dataForm.lessonLearn" autosize type="textarea" auto-complete="off"
+                          clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="负责人" prop="responsibilities">
+                <el-select v-model="dataForm.responsibilities" multiple clearable placeholder="责任人">
                   <el-option
-                      v-for="item in permissionTypeOptions"
-                      :key="item.dictValue"
-                      :label="item.dictLabel"
-                      :value="item.dictValue"
-                  />
+                      v-for="item in userOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                  >
+                  </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="生产经理" prop="productionManager" v-if="dataForm.milType !== 4">
+                <el-select v-model="dataForm.productionManager" clearable placeholder="生产经理">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="状态" prop="status">
+                <el-input v-model="dataForm.status" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="计划完成时间" prop="planFinishDate">
+                <el-date-picker v-model="dataForm.planFinishDate" auto-complete="off" type="datetime">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="实际完成时间" prop="actualFinishDate">
+                <el-date-picker v-model="dataForm.actualFinishDate" auto-complete="off" type="datetime">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="处罚责任人" prop="punishmentPerson">
+                <el-select v-model="dataForm.punishmentPerson" clearable placeholder="处罚责任人">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="处罚措施" prop="punishmentMeasures">
+                <el-input v-model="dataForm.punishmentMeasures" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="是否再次发生" prop="happenTimes">
+                <el-input-number v-model="dataForm.happenTimes" auto-complete="off" clearable></el-input-number>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="再次不良比例" prop="badAgainRate">
+                <el-input v-model="dataForm.badAgainRate" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="备注" prop="remark">
+                <el-input v-model="dataForm.remark" autosize type="textarea" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="每日状态更新" prop="statusSync" v-if="dataForm.milType === 4">
+                <el-input v-model="dataForm.statusSync" autosize type="textarea" auto-complete="off"
+                          clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -171,10 +342,17 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteResource, handleAdd, handleUpdate,} from "@/api/system/resource";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
-import {getResponseDataMessage} from "@/utils/commonUtils";
-import {findQualityMilPage, listAllUser, uploadExcel} from "@/api/lens/quality/qualityMil";
+import {date2str, getResponseDataMessage} from "@/utils/commonUtils";
+import {
+  exportExcel,
+  findQualityMilPage,
+  handleAdd,
+  handleDelete,
+  handleUpdate,
+  listAllUser,
+  uploadExcel
+} from "@/api/lens/quality/qualityMil";
 
 export default {
   name: "qualityMil",
@@ -191,7 +369,7 @@ export default {
         riskType: "",
         severityLevel: "",
         status: "",
-        responsibility: "",
+        responsibilities: [],
       },
       columns: [
         {prop: "index", label: "序号", minWidth: 80},
@@ -213,8 +391,8 @@ export default {
         {prop: "responsibility", label: "负责人", minWidth: 100, formatter: this.userFormat},
         {prop: "productionManager", label: "生产经理", minWidth: 100},
         {prop: "status", label: "状态", minWidth: 100},
-        {prop: "planFinishDate", label: "计划完成时间", minWidth: 150, formatter: this.dateFormat},
-        {prop: "actualFinishDate", label: "实际完成时间", minWidth: 150, formatter: this.dateFormat},
+        {prop: "planFinishDate", label: "计划完成时间", minWidth: 150, formatter: this.dateTimeFormat},
+        {prop: "actualFinishDate", label: "实际完成时间", minWidth: 150, formatter: this.dateTimeFormat},
         {prop: "punishmentPerson", label: "处罚责任人", minWidth: 150},
         {prop: "punishmentMeasures", label: "处罚措施", minWidth: 150},
         {prop: "happenTimes", label: "是否再次发生", minWidth: 150},
@@ -232,33 +410,59 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       excelUploadDialogVisible: false,
+      exportLoading: false,
       dataFormRules: {
-        code: [{required: true, message: "请输入接口编码", trigger: "blur"}],
-        type: [{required: true, message: "请输入接口类型", trigger: "blur"}],
-        name: [{required: true, message: "请输入接口名称", trigger: "blur"},],
-        url: [{required: true, message: "请输入URL", trigger: "blur"},],
-        method: [{required: true, message: "请输入接口方法", trigger: "blur"},],
-        description: [{required: true, message: "请输入描述", trigger: "blur"},],
-        permissionType: [{required: true, message: "请选择权限类型", trigger: "blur"},],
+        project: [{required: true, message: '请输入项目', trigger: 'blur'}],
+        eventHappenDate: [{required: true, message: '请输入发生时间', trigger: 'blur'}],
+        customer: [{required: true, message: '请输入客户', trigger: 'blur'}],
+        site: [{required: true, message: '请输入厂区', trigger: 'blur'}],
+        questionPresentation: [{required: true, message: '请输入问题描述', trigger: 'blur'}],
+        solutionProgress: [{required: true, message: '请输入对策&处理进展', trigger: 'blur'}],
+        responsibilities: [{required: true, message: '请输入负责人', trigger: 'blur'}],
       },
       qualityMilTypeOptions: [],
+      qualityMilTypeAddOptions: [],
       userOptions: [],
       // 新增编辑界面数据
       dataForm: {
-        id: 0,
-        code: "",
+        milType: "0",
+        id: "0",
+        project: "",
         type: "",
-        name: "",
-        url: "",
-        method: "",
-        description: "",
-        permissionType: null,
+        risk: "",
+        riskType: "",
+        severityLevel: "",
+        eventHappenDate: "",
+        customer: "",
+        site: "",
+        workshop: "",
+        station: "",
+        questionPresentation: "",
+        reasonAnalysis: "",
+        solutionProgress: "",
+        lessonLearn: "",
+        responsibility: "",
+        responsibilities: [],
+        productionManager: "",
+        status: "",
+        planFinishDate: "",
+        actualFinishDate: "",
+        punishmentPerson: "",
+        punishmentMeasures: "",
+        happenTimes: "",
+        badAgainRate: "",
+        remark: "",
+        statusSync: "",
       },
     };
   },
   mounted() {
     getDict("quality_mil_type").then(response => {
       this.qualityMilTypeOptions = response.data.data
+    })
+    getDict("quality_mil_type").then(response => {
+      response.data.data.shift()
+      this.qualityMilTypeAddOptions = response.data.data
     })
     listAllUser().then(response => {
       this.userOptions = response.data.data
@@ -278,7 +482,7 @@ export default {
       this.pageRequest.riskType = this.filters.riskType;
       this.pageRequest.severityLevel = this.filters.severityLevel;
       this.pageRequest.status = this.filters.status;
-      this.pageRequest.responsibility = this.filters.responsibility;
+      this.pageRequest.responsibilities = this.filters.responsibilities;
       findQualityMilPage(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
@@ -291,8 +495,26 @@ export default {
 
     // 批量删除
     handleDelete: function (data) {
-      if (data.params.length > 0)
-        deleteResource(data.params[0]).then(data.callback);
+      this.$confirm('确认删除选中记录吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        handleDelete(data.milType, data.id).then(res => {
+          const responseData = res.data
+          if (responseData.code === '000000') {
+            this.findPage(null);
+            this.$message({message: '删除成功', type: 'success'})
+          } else {
+            this.$message({
+              message: `操作失败${getResponseDataMessage(responseData)}`,
+              type: 'error'
+            })
+          }
+        });
+      }).catch((err) => {
+        console.log(err)
+      })
     },
     // 显示新增界面
     handleAdd: function () {
@@ -300,14 +522,34 @@ export default {
       this.operation = true;
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
-        id: 0,
-        code: "",
-        milType: "",
-        name: "",
-        url: "",
-        method: "",
-        description: "",
-        permissionType: "1",
+        milType: "1",
+        id: "0",
+        project: "",
+        type: "",
+        risk: "",
+        riskType: "",
+        severityLevel: "",
+        eventHappenDate: date2str(new Date()) + "T00:00:00",
+        customer: "NULL",
+        site: "",
+        workshop: "",
+        station: "",
+        questionPresentation: "",
+        reasonAnalysis: "",
+        solutionProgress: "NULL",
+        lessonLearn: "",
+        responsibility: "NULL",
+        responsibilities: [],
+        productionManager: "",
+        status: "",
+        planFinishDate: "",
+        actualFinishDate: "",
+        punishmentPerson: "",
+        punishmentMeasures: "",
+        happenTimes: "",
+        badAgainRate: "",
+        remark: "",
+        statusSync: "",
       };
     },
 
@@ -316,6 +558,7 @@ export default {
       this.dialogVisible = true;
       this.operation = false;
       this.dataForm = Object.assign({}, params.row);
+      this.dataForm.responsibilities = params.row.responsibility.split(',')
     },
     // 编辑
     submitForm: function () {
@@ -329,15 +572,11 @@ export default {
                 const responseData = res.data;
                 this.editLoading = false;
                 if (responseData.code === "000000") {
-                  this.$message({message: "操作成功", milType: "success"});
+                  this.$message({message: "操作成功", type: "success"});
                   this.dialogVisible = false;
                   this.$refs["dataForm"].resetFields();
                 } else {
-                  this.$message({
-                    message:
-                        "操作失败 " + getResponseDataMessage(responseData),
-                    milType: "error",
-                  });
+                  this.$message({message: "操作失败 " + getResponseDataMessage(responseData), type: "error",});
                 }
                 this.findPage(null);
               });
@@ -346,22 +585,18 @@ export default {
                 const responseData = res.data;
                 this.editLoading = false;
                 if (responseData.code === "000000") {
-                  this.$message({message: "操作成功", milType: "success"});
+                  this.$message({message: "操作成功", type: "success"});
                   this.dialogVisible = false;
                   this.$refs["dataForm"].resetFields();
                 } else {
-                  this.$message({
-                    message:
-                        "操作失败, " + getResponseDataMessage(responseData),
-                    milType: "error",
-                  });
+                  this.$message({message: "操作失败" + getResponseDataMessage(responseData), type: "error",});
                 }
                 this.findPage(null);
-              });
+              })
             }
-          });
+          })
         }
-      });
+      })
     },
     handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true
@@ -388,15 +623,30 @@ export default {
         this.excelUploadDialogVisible = false;
       })
     },
+    exportExcelData(excelFileName) {
+      this.exportLoading = true;
+      exportExcel().then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      })
+    },
     // 取消
     cancel() {
       this.dialogVisible = false;
     },
     // 时间格式化
     dateFormat: function (row, column) {
+      if (row[column.property] == null) return '-';
       return this.$moment(row[column.property]).format("YYYY-MM-DD");
     },
     dateTimeFormat: function (row, column) {
+      if (row[column.property] == null) return '-';
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
     },
     milTypeFormat: function (row) {
