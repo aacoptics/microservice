@@ -3,69 +3,91 @@
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
-          <el-form-item label="MIL类型" prop="milType">
-            <el-select v-model="filters.milType" clearable placeholder="MIL类型">
-              <el-option
-                  v-for="item in qualityMilTypeOptions"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="厂区" prop="site">
-            <el-input v-model="filters.site" clearable placeholder="厂区"></el-input>
-          </el-form-item>
-          <el-form-item label="项目" prop="project">
-            <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
-          </el-form-item>
-          <el-form-item label="开始时间" prop="startEventHappenDate">
-            <el-date-picker v-model="filters.startEventHappenDate" auto-complete="off" type="datetime"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="终止时间" prop="endEventHappenDate">
-            <el-date-picker v-model="filters.endEventHappenDate" auto-complete="off" type="datetime"
-            ></el-date-picker>
-          </el-form-item>
+          <el-row>
+            <el-col :span="4">
+              <el-form-item label="MIL类型" prop="milType">
+                <el-select v-model="filters.milType" clearable placeholder="MIL类型">
+                  <el-option
+                      v-for="item in qualityMilTypeOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="厂区" prop="site">
+                <el-input v-model="filters.site" clearable placeholder="厂区"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="项目" prop="project">
+                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="开始时间" prop="startEventHappenDate">
+                <el-date-picker v-model="filters.startEventHappenDate" auto-complete="off" type="datetime"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="终止时间" prop="endEventHappenDate">
+                <el-date-picker v-model="filters.endEventHappenDate" auto-complete="off" type="datetime"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
-          <el-form-item label="风险类别" prop="riskType">
-            <el-input v-model="filters.riskType" clearable placeholder="风险类别"></el-input>
-          </el-form-item>
-          <el-form-item label="严重等级" prop="severityLevel">
-            <el-select v-model="filters.severityLevel" allow-create clearable filterable placeholder="严重等级">
-              <el-option
-                  v-for="item in qualityMilSeverityLevelOptions"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select v-model="filters.status" allow-create clearable filterable placeholder="状态">
-              <el-option
-                  v-for="item in qualityMilStatusOptions"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="责任人" prop="responsibilities">
-            <el-select v-model="filters.responsibilities" clearable filterable multiple placeholder="责任人">
-              <el-option
-                  v-for="item in userOptions"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <el-row>
+            <el-col :span="4">
+              <el-form-item label="风险类别" prop="riskType">
+                <el-input v-model="filters.riskType" clearable placeholder="风险类别"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="严重等级" prop="severityLevel">
+                <el-select v-model="filters.severityLevel" allow-create clearable filterable placeholder="严重等级">
+                  <el-option
+                      v-for="item in qualityMilSeverityLevelOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="状态" prop="status">
+                <el-select v-model="filters.status" allow-create clearable filterable placeholder="状态">
+                  <el-option
+                      v-for="item in qualityMilStatusOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="责任人" prop="responsibilities">
+                <el-select v-model="filters.responsibilities" clearable filterable multiple placeholder="责任人">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
