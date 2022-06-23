@@ -73,3 +73,15 @@ export function exportExcel() {
         responseType: 'blob'
     })
 }
+
+export function listQualityMilExportExcel(conditions) {
+    return request({
+        url: '/quality-daily/qualityMil/listQualityMil/exportExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

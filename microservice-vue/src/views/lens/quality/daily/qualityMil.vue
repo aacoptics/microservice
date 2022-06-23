@@ -40,7 +40,7 @@
             <el-input v-model="filters.status" clearable placeholder="状态"></el-input>
           </el-form-item>
           <el-form-item label="责任人" prop="responsibilities">
-            <el-select v-model="filters.responsibilities" multiple clearable placeholder="责任人">
+            <el-select v-model="filters.responsibilities" clearable multiple placeholder="责任人">
               <el-option
                   v-for="item in userOptions"
                   :key="item.id"
@@ -80,13 +80,20 @@
               </template>
             </el-button>
           </el-form-item>
+          <el-form-item class="float-right">
+            <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('Mil报表')">导出报表
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'download']"/>
+              </template>
+            </el-button>
+          </el-form-item>
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :show-operation="false"
+                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
                 :stripe="false" @findPage="findPage">
         <template v-slot:custom-column>
-          <el-table-column label="操作" align="center" fixed="right" header-align="center"
+          <el-table-column align="center" fixed="right" header-align="center" label="操作"
                            width="120">
             <template v-slot="scope">
               <el-button-group>
@@ -134,17 +141,17 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
-                <el-input v-model="dataForm.project" autosize type="textarea" :disabled="!operation" auto-complete="off"
-                          clearable></el-input>
+                <el-input v-model="dataForm.project" :disabled="!operation" auto-complete="off" autosize clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="分类" prop="type" v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'">
+              <el-form-item v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'" label="分类" prop="type">
                 <el-input v-model="dataForm.type" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="风险分项" prop="risk" v-if="'' +dataForm.milType === '4'">
+              <el-form-item v-if="'' +dataForm.milType === '4'" label="风险分项" prop="risk">
                 <el-input v-model="dataForm.risk" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
@@ -170,7 +177,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="客户" prop="customer" v-if="'' +dataForm.milType === '4'">
+              <el-form-item v-if="'' +dataForm.milType === '4'" label="客户" prop="customer">
                 <el-input v-model="dataForm.customer" :disabled="!operation" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
@@ -180,8 +187,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="工段" prop="workshop"
-                            v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'">
+              <el-form-item v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'" label="工段"
+                            prop="workshop">
                 <el-input v-model="dataForm.workshop" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
@@ -189,39 +196,39 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="站别" prop="station">
-                <el-input v-model="dataForm.station" autosize type="textarea" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.station" auto-complete="off" autosize clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="问题描述" prop="questionPresentation">
-                <el-input v-model="dataForm.questionPresentation" autosize :disabled="!operation" type="textarea"
-                          auto-complete="off"
-                          clearable></el-input>
+                <el-input v-model="dataForm.questionPresentation" :disabled="!operation" auto-complete="off" autosize
+                          clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="原因分析" prop="reasonAnalysis">
-                <el-input v-model="dataForm.reasonAnalysis" autosize type="textarea" auto-complete="off"
-                          clearable></el-input>
+                <el-input v-model="dataForm.reasonAnalysis" auto-complete="off" autosize clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="对策&处理进展" prop="solutionProgress" v-if="'' +dataForm.milType === '4'">
-                <el-input v-model="dataForm.solutionProgress" autosize type="textarea" :disabled="!operation"
-                          auto-complete="off" clearable></el-input>
+              <el-form-item v-if="'' +dataForm.milType === '4'" label="对策&处理进展" prop="solutionProgress">
+                <el-input v-model="dataForm.solutionProgress" :disabled="!operation" auto-complete="off" autosize
+                          clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="标准化" prop="lessonLearn">
-                <el-input v-model="dataForm.lessonLearn" autosize type="textarea" auto-complete="off"
-                          clearable></el-input>
+                <el-input v-model="dataForm.lessonLearn" auto-complete="off" autosize clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="负责人" prop="responsibilities">
-                <el-select v-model="dataForm.responsibilities" multiple clearable placeholder="责任人">
+                <el-select v-model="dataForm.responsibilities" clearable multiple placeholder="责任人">
                   <el-option
                       v-for="item in userOptions"
                       :key="item.id"
@@ -235,7 +242,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="生产经理" prop="productionManager" v-if="dataForm.milType !== 4">
+              <el-form-item v-if="dataForm.milType !== 4" label="生产经理" prop="productionManager">
                 <el-select v-model="dataForm.productionManager" clearable placeholder="生产经理">
                   <el-option
                       v-for="item in userOptions"
@@ -298,15 +305,15 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="备注" prop="remark">
-                <el-input v-model="dataForm.remark" autosize type="textarea" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.remark" auto-complete="off" autosize clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="每日状态更新" prop="statusSync" v-if="dataForm.milType === 4">
-                <el-input v-model="dataForm.statusSync" autosize type="textarea" auto-complete="off"
-                          clearable></el-input>
+              <el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
+                <el-input v-model="dataForm.statusSync" auto-complete="off" autosize clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -351,6 +358,7 @@ import {
   handleDelete,
   handleUpdate,
   listAllUser,
+  listQualityMilExportExcel,
   uploadExcel
 } from "@/api/lens/quality/qualityMil";
 
@@ -411,6 +419,7 @@ export default {
       editLoading: false,
       excelUploadDialogVisible: false,
       exportLoading: false,
+      exportReportLoading: false,
       dataFormRules: {
         project: [{required: true, message: '请输入项目', trigger: 'blur'}],
         eventHappenDate: [{required: true, message: '请输入发生时间', trigger: 'blur'}],
@@ -635,6 +644,29 @@ export default {
         document.body.appendChild(link);
         link.click();
       })
+    },
+    exportReportExcelData(excelFileName) {
+      this.pageRequest.milType = this.filters.milType;
+      this.pageRequest.site = this.filters.site;
+      this.pageRequest.project = this.filters.project;
+      this.pageRequest.startEventHappenDate = this.filters.startEventHappenDate;
+      this.pageRequest.endEventHappenDate = this.filters.endEventHappenDate;
+      this.pageRequest.riskType = this.filters.riskType;
+      this.pageRequest.severityLevel = this.filters.severityLevel;
+      this.pageRequest.status = this.filters.status;
+      this.pageRequest.responsibilities = this.filters.responsibilities;
+
+      this.exportReportLoading = true;
+      listQualityMilExportExcel(this.pageRequest).then(res => {
+        this.exportReportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
     },
     // 取消
     cancel() {
