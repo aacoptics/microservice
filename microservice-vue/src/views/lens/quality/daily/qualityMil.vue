@@ -34,13 +34,29 @@
             <el-input v-model="filters.riskType" clearable placeholder="风险类别"></el-input>
           </el-form-item>
           <el-form-item label="严重等级" prop="severityLevel">
-            <el-input v-model="filters.severityLevel" clearable placeholder="严重等级"></el-input>
+            <el-select v-model="filters.severityLevel" allow-create clearable filterable placeholder="严重等级">
+              <el-option
+                  v-for="item in qualityMilSeverityLevelOptions"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-input v-model="filters.status" clearable placeholder="状态"></el-input>
+            <el-select v-model="filters.status" allow-create clearable filterable placeholder="状态">
+              <el-option
+                  v-for="item in qualityMilStatusOptions"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="责任人" prop="responsibilities">
-            <el-select v-model="filters.responsibilities" clearable multiple placeholder="责任人">
+            <el-select v-model="filters.responsibilities" clearable filterable multiple placeholder="责任人">
               <el-option
                   v-for="item in userOptions"
                   :key="item.id"
@@ -104,7 +120,7 @@
                     </template>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip content="删除" placement="top">
+                <el-tooltip v-if="false" content="删除" placement="top">
                   <el-button size="small" type="danger" @click="handleDelete(scope.row)">
                     <template #icon>
                       <font-awesome-icon :icon="['far', 'trash-can']"/>
@@ -164,7 +180,15 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="严重等级" prop="severityLevel">
-                <el-input v-model="dataForm.severityLevel" auto-complete="off" clearable></el-input>
+                <el-select v-model="dataForm.severityLevel" allow-create clearable filterable placeholder="严重等级">
+                  <el-option
+                      v-for="item in qualityMilSeverityLevelOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -228,7 +252,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="负责人" prop="responsibilities">
-                <el-select v-model="dataForm.responsibilities" clearable multiple placeholder="责任人">
+                <el-select v-model="dataForm.responsibilities" clearable filterable multiple placeholder="责任人">
                   <el-option
                       v-for="item in userOptions"
                       :key="item.id"
@@ -243,7 +267,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item v-if="dataForm.milType !== 4" label="生产经理" prop="productionManager">
-                <el-select v-model="dataForm.productionManager" clearable placeholder="生产经理">
+                <el-select v-model="dataForm.productionManager" clearable filterable placeholder="生产经理">
                   <el-option
                       v-for="item in userOptions"
                       :key="item.name"
@@ -256,7 +280,15 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="状态" prop="status">
-                <el-input v-model="dataForm.status" auto-complete="off" clearable></el-input>
+                <el-select v-model="dataForm.status" allow-create clearable filterable placeholder="状态">
+                  <el-option
+                      v-for="item in qualityMilStatusOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -275,7 +307,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="处罚责任人" prop="punishmentPerson">
-                <el-select v-model="dataForm.punishmentPerson" clearable placeholder="处罚责任人">
+                <el-select v-model="dataForm.punishmentPerson" clearable filterable placeholder="处罚责任人">
                   <el-option
                       v-for="item in userOptions"
                       :key="item.name"
@@ -431,6 +463,8 @@ export default {
       },
       qualityMilTypeOptions: [],
       qualityMilTypeAddOptions: [],
+      qualityMilSeverityLevelOptions: [],
+      qualityMilStatusOptions: [],
       userOptions: [],
       // 新增编辑界面数据
       dataForm: {
@@ -472,6 +506,12 @@ export default {
     getDict("quality_mil_type").then(response => {
       response.data.data.shift()
       this.qualityMilTypeAddOptions = response.data.data
+    })
+    getDict("quality_mil_severity_level").then(response => {
+      this.qualityMilSeverityLevelOptions = response.data.data
+    })
+    getDict("quality_mil_status").then(response => {
+      this.qualityMilStatusOptions = response.data.data
     })
     listAllUser().then(response => {
       this.userOptions = response.data.data
@@ -539,15 +579,15 @@ export default {
         riskType: "",
         severityLevel: "",
         eventHappenDate: date2str(new Date()) + "T00:00:00",
-        customer: "NULL",
+        customer: "-",
         site: "",
         workshop: "",
         station: "",
         questionPresentation: "",
         reasonAnalysis: "",
-        solutionProgress: "NULL",
+        solutionProgress: "-",
         lessonLearn: "",
-        responsibility: "NULL",
+        responsibility: "-",
         responsibilities: [],
         productionManager: "",
         status: "",
