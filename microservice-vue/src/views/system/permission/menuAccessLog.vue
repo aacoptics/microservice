@@ -146,7 +146,6 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         }
-        this.drawChart()
       }).then(data != null ? data.callback : '')
     },
 
@@ -266,8 +265,16 @@ export default {
         new Date(),
       ]
       this.findPage(null)
+      this.$nextTick(()=>{
+        this.drawChart();
+      })
     }
     this.firstLoad = false
+  },
+  mounted() {
+    this.$nextTick(()=>{
+      this.drawChart();
+    })
   }
 }
 </script>
