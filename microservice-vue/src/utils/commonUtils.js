@@ -26,6 +26,6 @@ export function fontAwesomeIconFormat(icon) {
     try {
         return JSON.parse(icon)
     } catch (e) {
-        return icon.trim()
+        return icon?.trim()
     }
 }
