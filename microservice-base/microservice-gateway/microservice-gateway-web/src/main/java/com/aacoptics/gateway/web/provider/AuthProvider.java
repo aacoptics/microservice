@@ -58,7 +58,7 @@ public interface AuthProvider {
                 @Override
                 public Result auth(String authentication, String url, String method) {
                     throwable.printStackTrace();
-                    return Result.fail(PermissionErrorType.TOKEN_INVALID, throwable.getLocalizedMessage());
+                    return Result.fail(PermissionErrorType.PERMS_SERVER_ERROR, throwable.getLocalizedMessage());
                 }
 
                 /**
@@ -77,7 +77,7 @@ public interface AuthProvider {
                 @Override
                 public Result ignoreAuthentication(String url, String method) {
                     throwable.printStackTrace();
-                    return Result.fail(PermissionErrorType.TOKEN_INVALID, throwable.getLocalizedMessage());
+                    return Result.fail(PermissionErrorType.PERMS_SERVER_ERROR, throwable.getLocalizedMessage());
                 }
             };
 

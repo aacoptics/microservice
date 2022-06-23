@@ -8,8 +8,8 @@ public enum OrganizationErrorType implements ErrorType {
 
     USER_NOT_FOUND("030100", "用户未找到！"),
     ROLE_NOT_FOUND("030200", "角色未找到！"),
-    TOKEN_EXPIRE("030300", "Token已过期！"),
-    TOKEN_NOT_FOUND("030400", "Token为空！"),
+    TOKEN_EXPIRE("030300", "认证已过期！"),
+    TOKEN_NOT_FOUND("030400", "认证为空！"),
     TOKEN_INVALID("030500", "Token非法无效！"),
     UNIQUE_Exception("030600", "唯一性约束异常！"),
     DATA_NOT_FOUND("030700", "用户未找到！"),
