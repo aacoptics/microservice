@@ -5,7 +5,7 @@
         <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
           <el-form :inline="true" :size="size">
             <el-form-item>
-              <el-button type="primary" @click="findPage(null)">刷新
+              <el-button type="primary" @click="refreshPage">刷新
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
                 </template>
@@ -128,6 +128,12 @@ export default {
           this.currentUserRoles = responseData.data
           this.getCurrentUserRoleIds()
         }
+      })
+    },
+    refreshPage(){
+      this.findPage(null)
+      this.$nextTick(()=>{
+        this.drawChart();
       })
     },
     // 获取分页数据
