@@ -418,7 +418,7 @@ export default {
       })
     },
     tableRowClassName(row) {
-      return row.row.menuType === 0 ? 'success-row' : row.row.menuType === 2 ? 'warning-row' : ''
+      return row.row.menuType === 0 ? '' : row.row.menuType === 2 ? 'warning-row' : 'success-row'
     },
     refresh() {
       this.$nextTick(() => {
