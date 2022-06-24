@@ -1,6 +1,7 @@
 package com.aacoptics.gaia.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.gaia.entity.po.DingTalkMessage;
 import com.aacoptics.gaia.entity.po.GaiaClass;
@@ -72,10 +73,14 @@ public class GaiaClassService extends ServiceImpl<GaiaClassMapper, GaiaClass> im
     @Override
     public void GetClassInfoFromGaia(){
         JSONObject tokenRes = gaiaApiProvider.getToken(appId, secret, companyCode);
-        if(tokenRes.getBoolean("result")){
+        if(JSONUtil.isNull(tokenRes) &&
+                tokenRes.getBoolean("result") != null &&
+                tokenRes.getBoolean("result")){
             String token = tokenRes.getJSONObject("data").getString("accessToken");
             JSONObject classRes = gaiaApiProvider.getClassInfo(token);
-            if(classRes.getBoolean("result")){
+            if(JSONUtil.isNull(classRes) &&
+                    classRes.getBoolean("result") != null &&
+                    classRes.getBoolean("result")){
                 JSONArray classArray = classRes.getJSONArray("data");
                 if(classArray.size() > 0){
                     for (Object o : classArray) {
@@ -87,11 +92,11 @@ public class GaiaClassService extends ServiceImpl<GaiaClassMapper, GaiaClass> im
                 }
 
             }else{
-                log.error("获取盖亚Class Info失败！" + JSONObject.toJSONString(classRes));
+                log.error("获取盖亚Class Info失败！" + classRes);
             }
 
         }else{
-            log.error("获取盖亚token失败！" + JSONObject.toJSONString(tokenRes));
+            log.error("获取盖亚token失败！" + tokenRes);
         }
 
     }
