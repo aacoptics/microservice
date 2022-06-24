@@ -109,4 +109,7 @@ public class PlanActualPerPerson implements Serializable {
     @TableField("dd_transfer_flg")
     private Integer ddTransferFlg;
 
+    @TableField(exist = false)
+    private Integer flag;
+
 }
