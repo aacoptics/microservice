@@ -439,7 +439,7 @@ export default {
         {prop: "project", label: "项目", minWidth: 100},
         {prop: "type", label: "分类", minWidth: 100},
         {prop: "risk", label: "风险分项", minWidth: 100},
-        {prop: "risk_type", label: "风险类别", minWidth: 100},
+        {prop: "riskType", label: "风险类别", minWidth: 100},
         {prop: "severityLevel", label: "严重等级", minWidth: 100},
         {prop: "eventHappenDate", label: "发生时间", minWidth: 100, formatter: this.dateFormat},
         {prop: "customer", label: "客户", minWidth: 100},
