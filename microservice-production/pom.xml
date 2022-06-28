@@ -10,6 +10,7 @@
     <modules>
         <module>microservice-package-api</module>
         <module>microservice-gaia-api</module>
+        <module>wlg-iot-dashboard</module>
     </modules>
 
     <packaging>pom</packaging>

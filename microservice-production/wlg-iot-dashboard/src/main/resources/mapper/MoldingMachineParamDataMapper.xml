@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingMachineParamDataMapper">
+    <select id="getMoldingParamData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
+        select * from (
+        SELECT machine_name, wafer_id, recipe_name, recipe_phase, param_name, param_value, plc_time, a.create_time,
+        ROW_NUMBER() over (partition by wafer_id order by a.id) as plc_time_stamp
+--         datediff(second, min(plc_time) over (partition by wafer_id), plc_time) as plc_time_stamp
+        FROM t_wlg_molding_machine_param_data a
+        join t_wlg_molding_machine_param_data_base b
+        on a.serial_id = b.serial_id
+        join t_molding_machine_opc_ua_node c
+        on a.param_id = c.id
+        where machine_name = #{machineName}
+        and wafer_id in
+        <foreach item='waferId' index='index' collection='waferIds' open='(' separator=',' close=')'>
+            #{waferId}
+        </foreach>
+        and description + '_' + convert(varchar, array_id) = #{paramName}
+        )t
+        order by plc_time_stamp, wafer_id
+    </select>
+
+    <select id="getMachineName" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
+        SELECT distinct machine_name
+        from t_opc_ua_connections
+    </select>
+
+    <select id="getWaferIds" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
+        select distinct wafer_id
+        from t_wlg_molding_machine_param_data_base
+        where machine_name = #{machineName}
+          and create_time between #{startTime} and #{endTime}
+        order by wafer_id
+    </select>
+
+    <select id="getMoldingParamName" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
+        SELECT param_name + '_' + convert(varchar, array_id) as param_name
+        FROM t_wlg_molding_machine_param_data a
+        join t_wlg_molding_machine_param_data_base b
+        on a.serial_id = b.serial_id
+        join t_molding_machine_opc_ua_node c
+        on a.param_id = c.id
+        where machine_name = #{machineName}
+        and wafer_id in
+        <foreach item='waferId' index='index' collection='waferIds' open='(' separator=',' close=')'>
+            #{waferId}
+        </foreach>
+        group by param_name, array_id
+        order by param_name, array_id
+    </select>
+
+</mapper>
