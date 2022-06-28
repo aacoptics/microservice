@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function findQualityMilPage(conditions) {
+export function listHeaders(conditions) {
     return request({
-        url: '/quality-daily/qualityOqcPpm/listQualityOqcPpm',
+        url: '/quality-daily/qualityOqcPpm/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

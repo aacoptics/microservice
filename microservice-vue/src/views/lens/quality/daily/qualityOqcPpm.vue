@@ -49,7 +49,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage()">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -64,6 +64,22 @@
           </el-form-item>
         </el-form>
       </div>
+
+      <el-table :data="dataList">
+        <!-- 动态生成列 -->
+        <el-table-column
+            v-for="(item,index) in theadList"
+            :key="index"
+            :label="item"
+            prop="colprops"
+            align="center"
+        >
+          <template slot-scope="scope">
+            <div>{{ scope.row.colprops | transToValue(index) }}</div>
+          </template>
+        </el-table-column>
+        <!-- 动态生成列结束 -->
+      </el-table>
 
       <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'"
                  width="25%">
@@ -89,11 +105,16 @@
 <script>
 import SysTable from "@/components/SysTable";
 import {getResponseDataMessage} from "@/utils/commonUtils";
-import {exportExcel, listQualityMilExportExcel, uploadExcel} from "@/api/lens/quality/qualityOqcPpm";
+import {exportExcel, listHeaders, uploadExcel} from "@/api/lens/quality/qualityOqcPpm";
 
 export default {
   name: "qualityOqcPpm",
   components: {SysTable},
+  filters: {
+    transToValue(val, index) {
+      return val[index]
+    }
+  },
   data() {
     return {
       size: "default",
@@ -104,6 +125,8 @@ export default {
         endOqcTime: "",
         oqcType: "",
       },
+      theadList: [],
+      dataList: [],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       excelUploadDialogVisible: false,
@@ -113,23 +136,20 @@ export default {
   },
   methods: {
     // 获取分页数据
-    findPage: function (data) {
-      if (data !== null) {
-        this.pageRequest = data.pageRequest;
-      }
+    findPage: function () {
       this.pageRequest.site = this.filters.site;
       this.pageRequest.project = this.filters.project;
       this.pageRequest.startOqcTime = this.filters.startOqcTime;
       this.pageRequest.endOqcTime = this.filters.endOqcTime;
       this.pageRequest.oqcType = this.filters.oqcType;
-      // findQualityMilPage(this.pageRequest)
-      //     .then((res) => {
-      //       const responseData = res.data;
-      //       if (responseData.code === "000000") {
-      //         this.pageResult = responseData.data;
-      //       }
-      //     })
-      //     .then(data != null ? data.callback : "");
+
+      listHeaders(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.theadList = responseData.data;
+            }
+          })
     },
     handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true
