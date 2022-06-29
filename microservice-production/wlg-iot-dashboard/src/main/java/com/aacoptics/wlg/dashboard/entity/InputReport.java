@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_wlg_molding_machine_param_data")
+@TableName("t_wlg_molding_machine_input_per_six_hour")
 public class InputReport implements Serializable {
 
     @TableId(type = IdType.AUTO)
