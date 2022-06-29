@@ -9,26 +9,26 @@
                 <el-input v-model="filters.site" clearable placeholder="厂区"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="4">
+              <el-form-item label="数据类型" prop="oqcType">
+                <el-input v-model="filters.oqcType" clearable placeholder="数据类型"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="5">
               <el-form-item label="开始时间" prop="startOqcTime">
-                <el-date-picker v-model="filters.startOqcTime" auto-complete="off" type="datetime"
+                <el-date-picker v-model="filters.startOqcTime" auto-complete="off"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="终止时间" prop="endOqcTime">
-                <el-date-picker v-model="filters.endOqcTime" auto-complete="off" type="datetime"
+                <el-date-picker v-model="filters.endOqcTime" auto-complete="off"
                 ></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
-              <el-form-item label="数据类型" prop="oqcType">
-                <el-input v-model="filters.oqcType" clearable placeholder="数据类型"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -49,7 +49,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="findPage()">查询
+            <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -65,21 +65,10 @@
         </el-form>
       </div>
 
-      <el-table :data="dataList">
-        <!-- 动态生成列 -->
-        <el-table-column
-            v-for="(item,index) in theadList"
-            :key="index"
-            :label="item"
-            prop="colprops"
-            align="center"
-        >
-          <template slot-scope="scope">
-            <div>{{ scope.row.colprops | transToValue(index) }}</div>
-          </template>
-        </el-table-column>
-        <!-- 动态生成列结束 -->
-      </el-table>
+      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                :stripe="false" @findPage="findPage">
+      </SysTable>
 
       <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'"
                  width="25%">
@@ -104,29 +93,29 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {getResponseDataMessage} from "@/utils/commonUtils";
-import {exportExcel, listHeaders, uploadExcel} from "@/api/lens/quality/qualityOqcPpm";
+import {date2str, getResponseDataMessage} from "@/utils/commonUtils";
+import {
+  exportExcel,
+  listHeaders,
+  listSummary,
+  listSummaryExportExcel,
+  uploadExcel
+} from "@/api/lens/quality/qualityOqcPpm";
 
 export default {
   name: "qualityOqcPpm",
   components: {SysTable},
-  filters: {
-    transToValue(val, index) {
-      return val[index]
-    }
-  },
   data() {
     return {
       size: "default",
       filters: {
         site: "",
         project: "",
-        startOqcTime: "",
-        endOqcTime: "",
+        startOqcTime: date2str(new Date().setDate(new Date().getDate() - 10)) + "T00:00:00",
+        endOqcTime: date2str(new Date()) + "T00:00:00",
         oqcType: "",
       },
-      theadList: [],
-      dataList: [],
+      columns: [],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       excelUploadDialogVisible: false,
@@ -136,20 +125,33 @@ export default {
   },
   methods: {
     // 获取分页数据
-    findPage: function () {
+    findPage: function (data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
       this.pageRequest.site = this.filters.site;
       this.pageRequest.project = this.filters.project;
-      this.pageRequest.startOqcTime = this.filters.startOqcTime;
-      this.pageRequest.endOqcTime = this.filters.endOqcTime;
+      this.pageRequest.startOqcTime = date2str(this.filters.startOqcTime) + "T00:00:00";
+      this.pageRequest.endOqcTime = date2str(this.filters.endOqcTime) + "T00:00:00";
       this.pageRequest.oqcType = this.filters.oqcType;
 
       listHeaders(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
-              this.theadList = responseData.data;
+              this.columns = responseData.data;
+            } else {
+              this.$message({message: "操作失败" + getResponseDataMessage(responseData), type: "error",});
             }
           })
+      listSummary(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.pageResult = responseData.data;
+            }
+          })
+          .then(data != null ? data.callback : "");
     },
     handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true
@@ -190,18 +192,14 @@ export default {
       })
     },
     exportReportExcelData(excelFileName) {
-      this.pageRequest.milType = this.filters.milType;
       this.pageRequest.site = this.filters.site;
       this.pageRequest.project = this.filters.project;
-      this.pageRequest.startEventHappenDate = this.filters.startEventHappenDate;
-      this.pageRequest.endEventHappenDate = this.filters.endEventHappenDate;
-      this.pageRequest.riskType = this.filters.riskType;
-      this.pageRequest.severityLevel = this.filters.severityLevel;
-      this.pageRequest.status = this.filters.status;
-      this.pageRequest.responsibilities = this.filters.responsibilities;
+      this.pageRequest.startOqcTime = date2str(this.filters.startOqcTime) + "T00:00:00";
+      this.pageRequest.endOqcTime = date2str(this.filters.endOqcTime) + "T00:00:00";
+      this.pageRequest.oqcType = this.filters.oqcType;
 
       this.exportReportLoading = true;
-      listQualityMilExportExcel(this.pageRequest).then(res => {
+      listSummaryExportExcel(this.pageRequest).then(res => {
         this.exportReportLoading = false;
         let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
         let link = document.createElement('a');
@@ -211,20 +209,7 @@ export default {
         document.body.appendChild(link);
         link.click();
       });
-    },
-    // 取消
-    cancel() {
-      this.dialogVisible = false;
-    },
-    // 时间格式化
-    dateFormat: function (row, column) {
-      if (row[column.property] == null) return '-';
-      return this.$moment(row[column.property]).format("YYYY-MM-DD");
-    },
-    dateTimeFormat: function (row, column) {
-      if (row[column.property] == null) return '-';
-      return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
-    },
+    }
   },
 };
 </script>

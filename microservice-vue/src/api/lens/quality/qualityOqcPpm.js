@@ -11,6 +11,17 @@ export function listHeaders(conditions) {
     })
 }
 
+export function listSummary(conditions) {
+    return request({
+        url: '/quality-daily/qualityOqcPpm/listSummary',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
 export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
@@ -32,9 +43,9 @@ export function exportExcel() {
     })
 }
 
-export function listQualityOqcPpmExportExcel(conditions) {
+export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/quality-daily/qualityOqcPpm/listQualityOqcPpm/exportExcel',
+        url: '/quality-daily/qualityOqcPpm/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
