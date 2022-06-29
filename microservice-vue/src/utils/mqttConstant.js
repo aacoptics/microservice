@@ -1,6 +1,6 @@
 export default {
     MQTT_CONNECTION: {
-        host: '10.69.76.40',
+        host: 'uds.aacoptics.com',
         port: 8083,
         endpoint: '/mqtt',
         clean: true, // 保留会话

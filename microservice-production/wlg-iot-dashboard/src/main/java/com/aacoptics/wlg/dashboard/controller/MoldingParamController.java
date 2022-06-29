@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/moldingMachineParam")
-@Api("customerRequirement")
+@Api("moldingMachineParam")
 @Slf4j
 public class MoldingParamController {
 

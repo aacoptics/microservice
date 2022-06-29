@@ -20,7 +20,7 @@ export default {
   methods: {
     createMqttConnection() {
       const {host, port, endpoint, ...options} = Constant.MQTT_CONNECTION
-      const connectUrl = `ws://${host}:${port}${endpoint}`
+      const connectUrl = `wss://${host}:${port}${endpoint}`
       try {
         this.client = mqtt.connect(connectUrl, options)
       } catch (error) {

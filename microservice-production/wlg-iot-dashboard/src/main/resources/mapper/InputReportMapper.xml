@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.dashboard.mapper.InputReportMapper">
+
+
+    <select id="getByDateAndMachineName" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
+        SELECT *
+        FROM t_wlg_molding_machine_input_per_six_hour
+        where start_time between #{startTime} and #{endTime}
+        and machine_name in
+        <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
+            #{machineName}
+        </foreach>
+    </select>
+
+</mapper>
