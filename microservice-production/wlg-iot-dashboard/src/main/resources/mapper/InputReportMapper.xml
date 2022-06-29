@@ -7,10 +7,12 @@
         SELECT *
         FROM t_wlg_molding_machine_input_per_six_hour
         where start_time between #{startTime} and #{endTime}
+        and end_time is not null
         and machine_name in
         <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
             #{machineName}
         </foreach>
+        order by machine_name, start_time
     </select>
 
 </mapper>
