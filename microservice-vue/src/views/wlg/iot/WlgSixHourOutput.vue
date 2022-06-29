@@ -8,8 +8,7 @@
                          placeholder="请选择机台号"
                          multiple
                          collapse-tags
-                         :size="size"
-                         @change="getWaferIdArray">
+                         :size="size">
                 <el-checkbox v-model="okAllChecked" @change='okSelectAll'>全选</el-checkbox>
                 <el-option
                     v-for="item in machineNameArray"
@@ -27,14 +26,13 @@
                   range-separator="至"
                   start-placeholder="开始日期"
                   end-placeholder="结束日期"
-                  :size="size"
-                  @change="getWaferIdArray">
+                  :size="size">
               </el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
                          :loading="selectLoading"
-                         @click="drawAllChart()">查询
+                         @click="getByDateAndMachineNames">查询
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
                 </template>
@@ -53,28 +51,37 @@
 
       </div>
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180">
+        <el-table-column prop="machineName" label="机台号" width="180" />
+        <el-table-column prop="materialName" label="材料号" width="180" />
+        <el-table-column prop="projectName" label="项目" width="180" />
+        <el-table-column prop="modelName" label="模具" width="180" />
+        <el-table-column prop="cycleName" label="周期" width="180" />
+        <el-table-column prop="periodName" label="阶段" width="180" />
+        <el-table-column prop="startTime" label="开始时间" width="180" />
+        <el-table-column prop="endTime" label="结束时间" width="180" />
+        <el-table-column prop="avgCycle" label="平均周期" width="180" />
+        <el-table-column prop="inputQty" label="投入数" width="180" />
+        <el-table-column prop="startWaferId" label="起始模次号" width="180" />
+        <el-table-column prop="endWaferId" label="截止模次号" width="180" />
+        <el-table-column prop="avgCycle" label="平均周期" width="180" />
+
+        <el-table-column prop="brokenOk" label="碎裂可流转" width="180">
           <template v-slot="scope">
-            <input type="text" v-model="scope.row.date" v-show="scope.row.iseditor" />
-            <span v-show="!scope.row.iseditor">{{scope.row.date}}</span>
+            <el-input-number v-model="scope.row.brokenOk" v-show="scope.row.iseditor" />
+            <span v-show="!scope.row.iseditor">{{scope.row.brokenOk}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
+        <el-table-column prop="brokenNg" label="碎裂不可流转" width="180">
           <template v-slot="scope">
-            <input type="text" v-model="scope.row.name" v-show="scope.row.iseditor" />
-            <span v-show="!scope.row.iseditor">{{scope.row.name}}</span>
+            <el-input-number v-model="scope.row.brokenNg" v-show="scope.row.iseditor" />
+            <span v-show="!scope.row.iseditor">{{scope.row.brokenNg}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="地址">
-          <template v-slot="scope">
-            <input type="text" v-model="scope.row.address" v-show="scope.row.iseditor" />
-            <span v-show="!scope.row.iseditor">{{scope.row.address}}</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="outputQty" label="产出" width="180" />
         <el-table-column label="操作" width="180">
           <template v-slot="scope">
             <el-button type="warning" @click="edit(scope.row, scope)">编辑</el-button>
-            <el-button type="danger" @click="save(scope.row)">保存</el-button>
+            <el-button type="danger" @click="save(scope.row)">确认</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -86,7 +93,12 @@
 
 <script>
 
-import {getMachineName, getMoldParamValue, getWaferIds} from "@/api/wlg/iot/moldingMachineParamData";
+import {
+  getByDateAndMachineName,
+  getMachineName,
+  getMoldParamValue,
+  getWaferIds
+} from "@/api/wlg/iot/moldingMachineParamData";
 import * as echarts from 'echarts';
 
 export default {
@@ -141,32 +153,7 @@ export default {
   },
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          iseditor: false
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          iseditor: false
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          iseditor: false
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          iseditor: false
-        }
-      ],
+      tableData: [],
       machineNames:[],
       okAllChecked: false,
       ngAllChecked: false,
@@ -362,6 +349,21 @@ export default {
         }
       })
     },
+    getByDateAndMachineNames(){
+      this.selectLoading = true
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      getByDateAndMachineName({startTime: startTime, endTime: endTime, machineNames: this.machineNames}).then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.tableData = responseData.data
+          this.selectLoading = false
+        }
+      }).catch((err) => {
+        this.$message.error(err.message)
+        this.selectLoading = false
+      })
+    },
 
     getWaferIdArray() {
       this.selectLoading = true
@@ -374,7 +376,7 @@ export default {
       getWaferIds(this.formParam.machineName, startTime, endTime).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
-          this.waferIdArray = responseData.data
+          this.tableData = responseData.data
           this.selectLoading = false
         }
       }).catch((err) => {

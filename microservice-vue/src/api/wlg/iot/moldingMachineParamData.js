@@ -47,3 +47,25 @@ export function getMoldParamValue(params) {
         data: params
     })
 }
+
+export function updateOutPutInfo(params) {
+    return request({
+        url: '/wlg-iot-dashboard/InputReport/updateOutPutInfo',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: params
+    })
+}
+
+export function getByDateAndMachineName(params) {
+    return request({
+        url: '/wlg-iot-dashboard/InputReport/getByDateAndMachineName',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: params
+    })
+}
