@@ -131,8 +131,8 @@ export default {
       }
       this.pageRequest.site = this.filters.site;
       this.pageRequest.project = this.filters.project;
-      this.pageRequest.startOqcTime = date2str(this.filters.startOqcTime) + "T00:00:00";
-      this.pageRequest.endOqcTime = date2str(this.filters.endOqcTime) + "T00:00:00";
+      this.pageRequest.startOqcTime = this.filters.startOqcTime != null ? date2str(this.filters.startOqcTime) + "T00:00:00" : null;
+      this.pageRequest.endOqcTime = this.filters.endOqcTime != null ? date2str(this.filters.endOqcTime) + "T00:00:00" : null;
       this.pageRequest.oqcType = this.filters.oqcType;
 
       listHeaders(this.pageRequest)
@@ -194,8 +194,8 @@ export default {
     exportReportExcelData(excelFileName) {
       this.pageRequest.site = this.filters.site;
       this.pageRequest.project = this.filters.project;
-      this.pageRequest.startOqcTime = date2str(this.filters.startOqcTime) + "T00:00:00";
-      this.pageRequest.endOqcTime = date2str(this.filters.endOqcTime) + "T00:00:00";
+      this.pageRequest.startOqcTime = this.filters.startOqcTime != null ? date2str(this.filters.startOqcTime) + "T00:00:00" : null;
+      this.pageRequest.endOqcTime = this.filters.endOqcTime != null ? date2str(this.filters.endOqcTime) + "T00:00:00" : null;
       this.pageRequest.oqcType = this.filters.oqcType;
 
       this.exportReportLoading = true;
