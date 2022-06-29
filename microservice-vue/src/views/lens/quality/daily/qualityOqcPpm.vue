@@ -111,7 +111,7 @@ export default {
       filters: {
         site: "",
         project: "",
-        startOqcTime: date2str(new Date().setDate(new Date().getDate() - 10)) + "T00:00:00",
+        startOqcTime: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
         endOqcTime: date2str(new Date()) + "T00:00:00",
         oqcType: "",
       },

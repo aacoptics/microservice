@@ -55,7 +55,7 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" :span-method="objectSpanMethod"
                 :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>
@@ -100,7 +100,7 @@ export default {
       size: "default",
       filters: {
         customer: "",
-        startActualTime: date2str(new Date().setDate(new Date().getDate() - 10)) + "T00:00:00",
+        startActualTime: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
         endActualTime: date2str(new Date()) + "T00:00:00",
       },
       columns: [],
@@ -138,6 +138,26 @@ export default {
             }
           })
           .then(data != null ? data.callback : "");
+    },
+    objectSpanMethod: ({
+                         row,
+                         column,
+                         rowIndex,    // 需要合并的开始行
+                         columnIndex, // 需要合并的列
+                       }) => {
+      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
+        if (rowIndex % 5 === 0) {
+          return {
+            rowspan: 5,
+            colspan: 1,
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0,
+          }
+        }
+      }
     },
     handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true
