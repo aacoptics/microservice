@@ -55,8 +55,8 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" :span-method="objectSpanMethod"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" :height="400"
+                :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false" :span-method="objectSpanMethod"
                 :stripe="false" @findPage="findPage">
       </SysTable>
 
