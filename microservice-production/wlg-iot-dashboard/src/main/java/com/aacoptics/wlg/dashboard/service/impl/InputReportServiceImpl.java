@@ -31,15 +31,12 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
     }
 
     @Override
-    public void updateOutPutInfo(List<InputReport> inputReport) {
-        for (InputReport report : inputReport) {
+    public void updateOutPutInfo(InputReport inputReport) {
             UpdateWrapper<InputReport> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.set("broken_ok", report.getBrokenOk());
-            updateWrapper.set("broken_ng", report.getBrokenNg());
-            updateWrapper.set("output_qty", report.getOutputQty());
-            updateWrapper.eq("id", report.getId());
+            updateWrapper.set("broken_ok", inputReport.getBrokenOk());
+            updateWrapper.set("broken_ng", inputReport.getBrokenNg());
+            updateWrapper.set("output_qty", inputReport.getOutputQty());
+            updateWrapper.eq("id", inputReport.getId());
             this.update(updateWrapper);
-        }
-
     }
 }

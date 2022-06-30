@@ -34,9 +34,9 @@ public class InputReportController {
 
     @ApiOperation(value = "更新投入产出数据", notes = "更新投入产出数据")
     @PostMapping("/updateOutPutInfo")
-    public Result updateOutPutInfo(@RequestBody List<InputReport> inputReports) {
+    public Result updateOutPutInfo(@RequestBody InputReport inputReport) {
         try{
-            inputReportService.updateOutPutInfo(inputReports);
+            inputReportService.updateOutPutInfo(inputReport);
             return Result.success();
         }
         catch(Exception err){

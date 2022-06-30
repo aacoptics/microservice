@@ -10,5 +10,5 @@ import java.util.List;
 public interface InputReportService {
     List<InputReport> getByDateAndMachineName(InputReport inputReport);
 
-    void updateOutPutInfo(List<InputReport> inputReport);
+    void updateOutPutInfo(InputReport inputReport);
 }
