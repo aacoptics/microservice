@@ -38,10 +38,18 @@
                 </template>
               </el-button>
             </el-form-item>
+          <el-form-item>
+            <el-button type="success"
+                       @click="exportExcel('#inputReportTable', '投入产出报表.xlsx')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'cloud-arrow-down']"/>
+              </template>
+            </el-button>
+          </el-form-item>
         </el-form>
 
       </div>
-      <el-table :data="tableData" border style="width: 100%" :size="size" stripe>
+      <el-table :data="tableData" border style="width: 100%" :size="size" stripe id="inputReportTable">
         <el-table-column fixed prop="startTime" label="日期" width="80" :formatter="this.dateFormat"/>
         <el-table-column prop="machineName" label="机台号" width="80" />
         <el-table-column prop="materialName" label="材料号" width="100" />
@@ -91,6 +99,8 @@ import {
   getMachineName,
   updateOutPutInfo
 } from "@/api/wlg/iot/moldingMachineParamData";
+import XLSX from "xlsx";
+import FileSaver from 'file-saver'
 
 export default {
   name: "WlgSixHourOutput",
@@ -133,6 +143,16 @@ export default {
     }
   },
   methods: {
+    exportExcel(tableId, excelFileName) {
+      const wb = XLSX.utils.table_to_book(document.querySelector(tableId));
+      const wbOut = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
+      try {
+        FileSaver.saveAs(new Blob([wbOut], {type: 'application/octet-stream'}), excelFileName)
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbOut)
+      }
+      return wbOut
+    },
     dateTimeFormat: function (row, column) {
       if (row[column.property] == null) return '-';
       return this.$moment(row[column.property]).format("HH:mm");
