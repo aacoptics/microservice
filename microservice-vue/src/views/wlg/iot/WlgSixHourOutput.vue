@@ -38,15 +38,6 @@
                 </template>
               </el-button>
             </el-form-item>
-          <el-form-item v-show="this.tableData.length > 0">
-            <el-button type="success"
-                       :loading="selectLoading"
-                       @click="updateOutPutInfo">更新
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-              </template>
-            </el-button>
-          </el-form-item>
         </el-form>
 
       </div>
@@ -85,7 +76,7 @@
         <el-table-column label="操作" width="80" fixed="right">
           <template v-slot="scope">
             <el-button v-if="!scope.row.iseditor" :size="size" type="warning" @click="edit(scope.row, scope)">编辑</el-button>
-            <el-button v-else :size="size" type="success" @click="save(scope.row)">确认</el-button>
+            <el-button v-else :size="size" type="success" @click="updateOutPutInfo(scope.row)">确认</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -153,9 +144,6 @@ export default {
     edit(row) {
       row.iseditor = true;
     },
-    save(row) {
-      row.iseditor = false;
-    },
     okSelectAll() {
       this.machineNames = []
       if (this.okAllChecked) {
@@ -190,12 +178,13 @@ export default {
       })
     },
 
-    updateOutPutInfo(){
+    updateOutPutInfo(row){
       this.selectLoading = true
-      updateOutPutInfo(this.tableData).then((response) => {
+      updateOutPutInfo(row).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.$message.success('更新成功')
+          row.iseditor = false;
         }else{
           this.$message.error('更新失败，请联系IT')
         }
