@@ -6,7 +6,7 @@
     <select id="getByDateAndMachineName" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
         SELECT *
         FROM t_wlg_molding_machine_input_per_six_hour
-        where start_time between #{startTime} and #{endTime}
+        where start_time &gt;= #{startTime} and start_time &lt; #{endTime}
         and end_wafer_id is not null
         and machine_name in
         <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
