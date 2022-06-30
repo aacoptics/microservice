@@ -50,33 +50,33 @@
 
       </div>
       <el-table :data="tableData" border style="width: 100%" :size="size" stripe id="inputReportTable">
-        <el-table-column fixed prop="startTime" label="日期" width="80" :formatter="this.dateFormat"/>
-        <el-table-column prop="machineName" label="机台号" width="80" />
-        <el-table-column prop="materialName" label="材料号" width="100" />
-        <el-table-column prop="projectName" label="项目" width="100" />
-        <el-table-column prop="modelName" label="模具" width="60" />
-        <el-table-column prop="cycleName" label="周期" width="60" />
-        <el-table-column prop="periodName" label="阶段" width="60" />
-        <el-table-column prop="startTime" label="开始时间" width="80" :formatter="this.dateTimeFormat"/>
-        <el-table-column prop="endTime" label="结束时间" width="80" :formatter="this.dateTimeFormat"/>
-        <el-table-column prop="avgCycle" label="平均周期" width="80" />
-        <el-table-column prop="inputQty" label="投入数" width="60" />
-        <el-table-column prop="startWaferId" label="起始模次号" width="80" />
-        <el-table-column prop="endWaferId" label="截止模次号" width="80" />
+        <el-table-column fixed prop="startTime" label="日期" width="70" :formatter="this.dateFormat"/>
+        <el-table-column prop="machineName" label="机台号" width="70" />
+        <el-table-column prop="materialName" label="材料号" width="60" />
+        <el-table-column prop="projectName" label="项目" width="80" />
+        <el-table-column prop="modelName" label="模具" width="45" />
+        <el-table-column prop="cycleName" label="周期" width="45" />
+        <el-table-column prop="periodName" label="阶段" width="45" />
+        <el-table-column prop="startTime" label="开始时间" width="65" :formatter="this.dateTimeFormat"/>
+        <el-table-column prop="endTime" label="结束时间" width="65" :formatter="this.dateTimeFormat"/>
+        <el-table-column prop="avgCycle" label="平均周期" width="65" />
+        <el-table-column prop="inputQty" label="投入数" width="55" />
+        <el-table-column prop="startWaferId" label="起始模次" width="65" />
+        <el-table-column prop="endWaferId" label="截止模次" width="65" />
 
-        <el-table-column prop="brokenOk" label="碎裂可流转" width="130">
+        <el-table-column prop="brokenOk" label="碎裂可流转" width="90">
           <template v-slot="scope">
-            <el-input-number :size="size" controls-position="right" v-model="scope.row.brokenOk" v-show="scope.row.iseditor" />
+            <el-input-number style="width: 70px" :min="0" :max="scope.row.inputQty - scope.row.brokenNg" :size="size" controls-position="right" v-model="scope.row.brokenOk" v-show="scope.row.iseditor" />
             <span v-show="!scope.row.iseditor">{{scope.row.brokenOk}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="brokenNg" label="碎裂不可流转" width="130">
+        <el-table-column prop="brokenNg" label="碎裂不可流转" width="90">
           <template v-slot="scope">
-            <el-input-number :size="size" controls-position="right" v-model="scope.row.brokenNg" @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg" v-show="scope.row.iseditor" />
+            <el-input-number style="width: 70px" :min="0" :max="scope.row.inputQty - scope.row.brokenOk" :size="size" controls-position="right" v-model="scope.row.brokenNg" @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg" v-show="scope.row.iseditor" />
             <span v-show="!scope.row.iseditor">{{scope.row.brokenNg}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="outputQty" label="产出" width="80">
+        <el-table-column prop="outputQty" label="产出数" width="55">
           <template v-slot="scope">
             <span>{{scope.row.inputQty - scope.row.brokenNg}}</span>
           </template>
