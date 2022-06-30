@@ -164,8 +164,8 @@ export default {
     },
     getByDateAndMachineNames(){
       this.selectLoading = true
-      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD 00:00:00');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD 00:00:00');
       getByDateAndMachineName({startTime: startTime, endTime: endTime, machineNames: this.machineNames}).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
