@@ -72,15 +72,20 @@
         <el-table-column prop="cycleName" label="周期" width="45"/>
         <el-table-column prop="periodName" label="阶段" width="45"/>
         <el-table-column prop="avgCycle" label="平均周期" width="65"/>
-        <el-table-column prop="inputQty" label="投入数" width="55"/>
+
         <el-table-column prop="startWaferId" label="起始模次" width="65"/>
         <el-table-column prop="endWaferId" label="截止模次" width="65"/>
 
+        <el-table-column prop="inputQty" label="投入数" width="55">
+          <template v-slot="scope">
+            <el-tag style="width: 30px">{{ scope.row.inputQty }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="brokenOk" label="碎裂可流转" width="90">
           <template v-slot="scope">
             <el-input-number style="width: 70px" :min="0" :max="scope.row.inputQty - scope.row.brokenNg" :size="size"
                              controls-position="right" v-model="scope.row.brokenOk" v-show="scope.row.iseditor"/>
-            <span v-show="!scope.row.iseditor">{{ scope.row.brokenOk }}</span>
+            <el-tag v-show="!scope.row.iseditor" style="width: 30px" type="warning">{{ scope.row.brokenOk }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="brokenNg" label="碎裂不可流转" width="90">
@@ -89,14 +94,12 @@
                              controls-position="right" v-model="scope.row.brokenNg"
                              @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg"
                              v-show="scope.row.iseditor"/>
-            <span v-show="!scope.row.iseditor && scope.row.brokenNg > 0"
-                  style="color: #f02d2d">{{ scope.row.brokenNg }}</span>
-            <span v-show="!scope.row.iseditor && scope.row.brokenNg === 0">{{ scope.row.brokenNg }}</span>
+            <el-tag v-show="!scope.row.iseditor" style="width: 30px" type="danger">{{ scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="outputQty" label="产出数" width="55">
           <template v-slot="scope">
-            <span>{{ scope.row.inputQty - scope.row.brokenNg }}</span>
+            <el-tag style="width: 30px" type="success">{{ scope.row.inputQty - scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="80" fixed="right">
