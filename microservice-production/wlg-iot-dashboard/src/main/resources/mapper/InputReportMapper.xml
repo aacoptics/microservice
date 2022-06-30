@@ -12,7 +12,7 @@
         <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
             #{machineName}
         </foreach>
-        order by machine_name, start_time
+        order by start_time, machine_name
     </select>
 
 </mapper>

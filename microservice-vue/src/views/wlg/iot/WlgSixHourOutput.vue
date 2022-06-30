@@ -59,7 +59,7 @@
         <!--        </el-row>-->
 
       </div>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table :data="tableData" border style="width: 100%" :size="size">
         <el-table-column prop="machineName" label="机台号" width="100" />
         <el-table-column prop="materialName" label="材料号" width="100" />
         <el-table-column prop="projectName" label="项目" width="100" />
@@ -81,7 +81,7 @@
         </el-table-column>
         <el-table-column prop="brokenNg" label="碎裂不可流转">
           <template v-slot="scope">
-            <el-input-number v-model="scope.row.brokenNg" v-show="scope.row.iseditor" />
+            <el-input-number v-model="scope.row.brokenNg" @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg" v-show="scope.row.iseditor" />
             <span v-show="!scope.row.iseditor">{{scope.row.brokenNg}}</span>
           </template>
         </el-table-column>
@@ -90,7 +90,6 @@
             <span>{{scope.row.inputQty - scope.row.brokenNg}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="outputQty" label="产出" width="80" />
         <el-table-column label="操作" width="180" fixed="right">
           <template v-slot="scope">
             <el-button type="warning" @click="edit(scope.row, scope)">编辑</el-button>
@@ -371,8 +370,8 @@ export default {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.tableData = responseData.data
-          this.selectLoading = false
         }
+        this.selectLoading = false
       }).catch((err) => {
         this.$message.error(err.message)
         this.selectLoading = false
@@ -380,6 +379,7 @@ export default {
     },
 
     updateOutPutInfo(){
+      this.selectLoading = true
       updateOutPutInfo(this.tableData).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
@@ -387,6 +387,7 @@ export default {
         }else{
           this.$message.error('更新失败，请联系IT')
         }
+        this.selectLoading = false
       }).catch((err) => {
         this.$message.error('更新失败，请联系IT')
         this.selectLoading = false
