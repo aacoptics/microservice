@@ -4,30 +4,20 @@
       <div class="toolbar w-full" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
           <el-row>
-            <el-col :span="4">
-              <el-form-item label="厂区" prop="site">
-                <el-input v-model="filters.site" clearable placeholder="厂区"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item label="项目" prop="project">
-                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item label="数据类型" prop="oqcType">
-                <el-input v-model="filters.oqcType" clearable placeholder="数据类型"></el-input>
+            <el-col :span="5">
+              <el-form-item label="客户" prop="site">
+                <el-input v-model="filters.customer" clearable placeholder="客户"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="5">
-              <el-form-item label="开始时间" prop="startOqcTime">
-                <el-date-picker v-model="filters.startOqcTime" auto-complete="off"
+              <el-form-item label="开始时间" prop="startActualTime">
+                <el-date-picker v-model="filters.startActualTime" auto-complete="off"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="5">
-              <el-form-item label="终止时间" prop="endOqcTime">
-                <el-date-picker v-model="filters.endOqcTime" auto-complete="off"
+              <el-form-item label="终止时间" prop="endActualTime">
+                <el-date-picker v-model="filters.endActualTime" auto-complete="off"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
@@ -42,7 +32,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量OqcPpm模板')">导出模板
+            <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量客户评级模板')">导出模板
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
               </template>
@@ -56,7 +46,7 @@
             </el-button>
           </el-form-item>
           <el-form-item class="float-right">
-            <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('OqcPpm报表')">导出报表
+            <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('客户评级报表')">导出报表
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
               </template>
@@ -65,8 +55,9 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" :height="400"
+                :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                :span-method="objectSpanMethod"
                 :stripe="false" @findPage="findPage">
       </SysTable>
 
@@ -100,20 +91,18 @@ import {
   listSummary,
   listSummaryExportExcel,
   uploadExcel
-} from "@/api/lens/quality/qualityOqcPpm";
+} from "@/api/lens/quality/qualityCustomerGrade";
 
 export default {
-  name: "qualityOqcPpm",
+  name: "qualityCustomerGrade",
   components: {SysTable},
   data() {
     return {
       size: "default",
       filters: {
-        site: "",
-        project: "",
-        startOqcTime: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
-        endOqcTime: date2str(new Date()) + "T00:00:00",
-        oqcType: "",
+        customer: "",
+        startActualTime: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
+        endActualTime: date2str(new Date()) + "T00:00:00",
       },
       columns: [],
       pageRequest: {current: 1, size: 10},
@@ -129,11 +118,9 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.pageRequest.site = this.filters.site;
-      this.pageRequest.project = this.filters.project;
-      this.pageRequest.startOqcTime = this.filters.startOqcTime != null ? date2str(this.filters.startOqcTime) + "T00:00:00" : null;
-      this.pageRequest.endOqcTime = this.filters.endOqcTime != null ? date2str(this.filters.endOqcTime) + "T00:00:00" : null;
-      this.pageRequest.oqcType = this.filters.oqcType;
+      this.pageRequest.customer = this.filters.customer;
+      this.pageRequest.startActualTime = this.filters.startActualTime != null ? date2str(this.filters.startActualTime) + "T00:00:00" : null;
+      this.pageRequest.endActualTime = this.filters.endActualTime != null ? date2str(this.filters.endActualTime) + "T00:00:00" : null;
 
       listHeaders(this.pageRequest)
           .then((res) => {
@@ -152,6 +139,26 @@ export default {
             }
           })
           .then(data != null ? data.callback : "");
+    },
+    objectSpanMethod: ({
+                         row,
+                         column,
+                         rowIndex,    // 需要合并的开始行
+                         columnIndex, // 需要合并的列
+                       }) => {
+      if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2) {
+        if (rowIndex % 5 === 0) {
+          return {
+            rowspan: 5,
+            colspan: 1,
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0,
+          }
+        }
+      }
     },
     handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true
@@ -192,11 +199,9 @@ export default {
       })
     },
     exportReportExcelData(excelFileName) {
-      this.pageRequest.site = this.filters.site;
-      this.pageRequest.project = this.filters.project;
-      this.pageRequest.startOqcTime = this.filters.startOqcTime != null ? date2str(this.filters.startOqcTime) + "T00:00:00" : null;
-      this.pageRequest.endOqcTime = this.filters.endOqcTime != null ? date2str(this.filters.endOqcTime) + "T00:00:00" : null;
-      this.pageRequest.oqcType = this.filters.oqcType;
+      this.pageRequest.customer = this.filters.customer;
+      this.pageRequest.startActualTime = this.filters.startActualTime != null ? date2str(this.filters.startActualTime) + "T00:00:00" : null;
+      this.pageRequest.endActualTime = this.filters.endActualTime != null ? date2str(this.filters.endActualTime) + "T00:00:00" : null;
 
       this.exportReportLoading = true;
       listSummaryExportExcel(this.pageRequest).then(res => {

@@ -2,7 +2,7 @@
   <div>
     <!--表格栏-->
     <el-table :id="randomId" ref="sysTable" v-loading="loading" :align="align"
-              :border="border" :cell-style="cellStyle" :data="data.records"
+              :border="border" :cell-style="cellStyle" :span-method="spanMethod" :data="data.records"
               :element-loading-text="action.loading" :header-cell-style="headerCellStyle"
               :height="computedHeight" :highlight-current-row="highlightCurrentRow"
               :max-height="computedMaxHeight" :row-class-name="rowClassName"
@@ -123,6 +123,7 @@ export default {
       type: Array,
       default: () => [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500]
     },
+    spanMethod: Function,
   },
   computed: {
     computedHeight() {
