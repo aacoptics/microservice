@@ -612,7 +612,7 @@ export default {
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
         milType: "1",
-        id: "0",
+        id: null,
         project: "",
         type: "",
         risk: "",
