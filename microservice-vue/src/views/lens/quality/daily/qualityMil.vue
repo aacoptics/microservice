@@ -569,6 +569,8 @@ export default {
       this.pageRequest.riskType = this.filters.riskType;
       this.pageRequest.severityLevel = this.filters.severityLevel;
       this.pageRequest.status = this.filters.status;
+      this.pageRequest.workshop = this.filters.workshop;
+      this.pageRequest.station = this.filters.station;
       this.pageRequest.responsibilities = this.filters.responsibilities;
       findQualityMilPage(this.pageRequest)
           .then((res) => {
@@ -732,6 +734,8 @@ export default {
       this.pageRequest.riskType = this.filters.riskType;
       this.pageRequest.severityLevel = this.filters.severityLevel;
       this.pageRequest.status = this.filters.status;
+      this.pageRequest.workshop = this.filters.workshop;
+      this.pageRequest.station = this.filters.station;
       this.pageRequest.responsibilities = this.filters.responsibilities;
 
       this.exportReportLoading = true;
