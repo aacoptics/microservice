@@ -2,9 +2,9 @@
   <div>
     <div class="aac-container">
       <div class="toolbar w-full" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form :inline="true" :size="size">
+        <el-form :inline="true" :label-width="100" :size="size">
           <el-row>
-            <el-col :span="4">
+            <el-col :span="6">
               <el-form-item label="MIL类型" prop="milType">
                 <el-select v-model="filters.milType" clearable placeholder="MIL类型">
                   <el-option
@@ -17,23 +17,18 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="厂区" prop="site">
                 <el-input v-model="filters.site" clearable placeholder="厂区"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
-              <el-form-item label="项目" prop="project">
-                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="开始时间" prop="startEventHappenDate">
                 <el-date-picker v-model="filters.startEventHappenDate" auto-complete="off" type="datetime"
                 ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="终止时间" prop="endEventHappenDate">
                 <el-date-picker v-model="filters.endEventHappenDate" auto-complete="off" type="datetime"
                 ></el-date-picker>
@@ -41,14 +36,19 @@
             </el-col>
           </el-row>
         </el-form>
-        <el-form :inline="true" :size="size">
+        <el-form :inline="true" :label-width="100" :size="size">
           <el-row>
-            <el-col :span="4">
+            <el-col :span="6">
+              <el-form-item label="项目" prop="project">
+                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="风险类别" prop="riskType">
                 <el-input v-model="filters.riskType" clearable placeholder="风险类别"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="严重等级" prop="severityLevel">
                 <el-select v-model="filters.severityLevel" allow-create clearable filterable placeholder="严重等级">
                   <el-option
@@ -61,7 +61,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="状态" prop="status">
                 <el-select v-model="filters.status" allow-create clearable filterable placeholder="状态">
                   <el-option
@@ -74,7 +74,21 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+          </el-row>
+        </el-form>
+        <el-form :inline="true" :label-width="100" :size="size">
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="工段" prop="workshop">
+                <el-input v-model="filters.workshop" clearable placeholder="工段"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="站别" prop="station">
+                <el-input v-model="filters.station" clearable placeholder="站别"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="责任人" prop="responsibilities">
                 <el-select v-model="filters.responsibilities" clearable filterable multiple placeholder="责任人">
                   <el-option
@@ -89,7 +103,7 @@
             </el-col>
           </el-row>
         </el-form>
-        <el-form :inline="true" :size="size">
+        <el-form :inline="true" :label-width="100" :size="size">
           <el-form-item>
             <el-button type="info" @click="handleOpenExcelUpload">Excel导入
               <template #icon>
@@ -431,6 +445,8 @@ export default {
         riskType: "",
         severityLevel: "",
         status: "",
+        workshop: "",
+        station: "",
         responsibilities: [],
       },
       columns: [
