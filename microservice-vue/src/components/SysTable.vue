@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import {getResponseDataMessage} from "@/utils/commonUtils";
+import {debounce, getResponseDataMessage} from "@/utils/commonUtils";
 import {v4 as uuidV4} from 'uuid';
 
 export default {
@@ -127,10 +127,14 @@ export default {
   },
   computed: {
     computedHeight() {
-      return Math.max(...[this.changeHeight, this.height])
+      debounce(() => {
+        return Math.max(...[this.changeHeight, this.height])
+      }, 100);
     },
     computedMaxHeight() {
-      return Math.max(...[this.changeMaxHeight, this.maxHeight])
+      debounce(() => {
+        return Math.max(...[this.changeMaxHeight, this.maxHeight])
+      }, 100);
     },
   },
   data() {
