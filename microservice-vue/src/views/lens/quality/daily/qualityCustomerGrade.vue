@@ -92,6 +92,7 @@ import {
   listSummaryExportExcel,
   uploadExcel
 } from "@/api/lens/quality/qualityCustomerGrade";
+import {ElMessageBox} from "element-plus";
 
 export default {
   name: "qualityCustomerGrade",
@@ -174,14 +175,21 @@ export default {
       uploadExcel(params).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
-          alert('上传成功！' + getResponseDataMessage(responseData, '\n'))
+          ElMessageBox.alert('上传成功！' + getResponseDataMessage(responseData, '</br>'), '上传信息', {
+            dangerouslyUseHTMLString: true
+          })
         } else {
-          alert('上传失败！' + getResponseDataMessage(responseData, '\n'))
+          ElMessageBox.alert('上传失败！' + getResponseDataMessage(responseData, '</br>'), '上传信息', {
+            dangerouslyUseHTMLString: true
+          })
         }
         this.findPage(null);
         this.excelUploadDialogVisible = false;
       }).catch((err) => {
-        alert(err)
+        ElMessageBox.alert(err, '上传信息', {
+          dangerouslyUseHTMLString: true,
+          type: 'error'
+        })
         this.excelUploadDialogVisible = false;
       })
     },
