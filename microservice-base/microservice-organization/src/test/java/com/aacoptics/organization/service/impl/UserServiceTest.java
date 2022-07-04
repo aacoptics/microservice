@@ -67,6 +67,8 @@ public class UserServiceTest {
             User byUniqueId = userMapper.selectOne(new QueryWrapper<User>().eq("username", stringObjectMap.get("域账号").toString().trim()));
             if (ObjectUtil.isNotNull(byUniqueId)) {
                 byUniqueId.setDescription("质量日报用户");
+                byUniqueId.setMobile("12345678901");
+                byUniqueId.setRoleIds(ImmutableSet.of(qualityMil1.getId(), qualityMil2.getId()));
                 userService.update(byUniqueId);
                 log.info("update user: {}", byUniqueId.getUsername());
                 continue;
@@ -76,7 +78,7 @@ public class UserServiceTest {
             user.setDescription(stringObjectMap.get("姓名").toString().trim());
             user.setUsername(stringObjectMap.get("域账号").toString().trim());
             user.setPassword(UUID.randomUUID().toString());
-            user.setMobile("12345678910");
+            user.setMobile("12345678901");
             user.setRoleIds(ImmutableSet.of(qualityMil1.getId(), qualityMil2.getId()));
             user.setAccountNonExpired(true);
             user.setAccountNonLocked(true);
