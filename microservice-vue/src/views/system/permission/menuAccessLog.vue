@@ -130,9 +130,9 @@ export default {
         }
       })
     },
-    refreshPage(){
+    refreshPage() {
       this.findPage(null)
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.drawChart();
       })
     },
@@ -265,20 +265,20 @@ export default {
     }
   },
   activated() {
-    if(!this.firstLoad) {
+    if (!this.firstLoad) {
       this.dateTimePickerValue = [
         new Date(new Date().getTime() - 3600 * 1000 * 24 * 7),
         new Date(),
       ]
       this.findPage(null)
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.drawChart();
       })
     }
     this.firstLoad = false
   },
   mounted() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.drawChart();
     })
   }

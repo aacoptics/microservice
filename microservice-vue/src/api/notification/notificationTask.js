@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import * as qs from "qs";
 
 export function findTaskInfoPage(conditions) {
     return request({

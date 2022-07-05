@@ -2,7 +2,7 @@
   <div>
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form ref="dataForm" :inline="true" :size="size" :model="filters" :rules="dataFormRules">
+        <el-form ref="dataForm" :inline="true" :model="filters" :rules="dataFormRules" :size="size">
           <el-row>
             <el-form-item label="客户" prop="customer">
               <el-select v-model="filters.customer" clearable placeholder="请选择客户">
@@ -34,7 +34,7 @@
               <el-input v-model="filters.asnNo" placeholder="请输入ASN单/出货"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" @click="uploadPackageInfo" :loading="btnLoading">信息上传
+              <el-button :loading="btnLoading" type="success" @click="uploadPackageInfo">信息上传
                 <template #icon>
                   <font-awesome-icon :icon="['fa', 'cloud-upload']"/>
                 </template>
@@ -133,9 +133,9 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         } else {
-          if(this.isFirst){
+          if (this.isFirst) {
             this.isFirst = false
-          }else{
+          } else {
             this.$message.error(responseData.msg)
           }
         }
