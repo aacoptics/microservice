@@ -5,14 +5,18 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiCspaceAuditlogListRequest;
 import com.dingtalk.api.request.OapiGettokenRequest;
+import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiCspaceAuditlogListResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
+import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -61,5 +65,40 @@ public class DingTalkApi {
             log.error(ex.getErrMsg());
         }
         return rsp;
+    }
+
+    /**
+     * 推送数据到到钉钉群
+     *
+     * @param serverUrl 推送钉钉机器人地址
+     * @param title 标题
+     * @param message markdown消息内容
+     * @throws ApiException
+     */
+    public Map<String, String> sendGroupRobotMessage(String serverUrl, String title, String message) throws ApiException {
+
+        DingTalkClient client = new DefaultDingTalkClient(serverUrl);
+        OapiRobotSendRequest request = new OapiRobotSendRequest();
+        OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
+        // isAtAll类型如果不为Boolean，请升级至最新SDK
+        at.setIsAtAll(true);
+//        at.setAtMobiles(Arrays.asList("15351344650"));
+        request.setAt(at);
+
+        request.setMsgtype("markdown");
+        OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+        markdown.setTitle(title);
+        markdown.setText(message);
+
+        request.setMarkdown(markdown);
+
+        OapiRobotSendResponse response = client.execute(request);
+        log.info(response.getBody());
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("result", response.isSuccess()+"");
+        resultMap.put("message", response.getMessage());
+
+        return resultMap;
     }
 }
