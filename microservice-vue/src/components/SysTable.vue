@@ -2,11 +2,11 @@
   <div>
     <!--表格栏-->
     <el-table :id="randomId" ref="sysTable" v-loading="loading" :align="align"
-              :border="border" :cell-style="cellStyle" :span-method="spanMethod" :data="data.records"
-              :element-loading-text="action.loading" :header-cell-style="headerCellStyle"
-              :height="computedHeight" :highlight-current-row="highlightCurrentRow"
-              :max-height="computedMaxHeight" :row-class-name="rowClassName"
-              :show-overflow-tooltip="showOverflowTooltip" :size="size" :stripe="stripe" style="width:100%;"
+              :border="border" :cell-style="cellStyle" :data="data.records" :element-loading-text="action.loading"
+              :header-cell-style="headerCellStyle" :height="computedHeight"
+              :highlight-current-row="highlightCurrentRow" :max-height="computedMaxHeight"
+              :row-class-name="rowClassName" :show-overflow-tooltip="showOverflowTooltip"
+              :size="size" :span-method="spanMethod" :stripe="stripe" style="width:100%;"
               @selection-change="selectionChange" @current-change="handleCurrentChange">
       <el-table-column v-if="showBatchDelete & showOperation" type="selection" width="40"></el-table-column>
       <el-table-column v-for="column in columns" :key="column.prop" :fixed="column.fixed"
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import {getResponseDataMessage} from "@/utils/commonUtils";
+import {debounce, getResponseDataMessage} from "@/utils/commonUtils";
 import {v4 as uuidV4} from 'uuid';
 
 export default {
@@ -127,10 +127,14 @@ export default {
   },
   computed: {
     computedHeight() {
-      return Math.max(...[this.changeHeight, this.height])
+      debounce(() => {
+        return Math.max(...[this.changeHeight, this.height])
+      }, 100);
     },
     computedMaxHeight() {
-      return Math.max(...[this.changeMaxHeight, this.maxHeight])
+      debounce(() => {
+        return Math.max(...[this.changeMaxHeight, this.maxHeight])
+      }, 100);
     },
   },
   data() {

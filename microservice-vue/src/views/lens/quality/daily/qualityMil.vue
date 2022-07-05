@@ -156,7 +156,7 @@
                     </template>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip v-if="false" content="删除" placement="top">
+                <el-tooltip content="删除" placement="top">
                   <el-button size="small" type="danger" @click="handleDelete(scope.row)">
                     <template #icon>
                       <font-awesome-icon :icon="['far', 'trash-can']"/>
@@ -429,6 +429,7 @@ import {
   listQualityMilExportExcel,
   uploadExcel
 } from "@/api/lens/quality/qualityMil";
+import {ElMessageBox} from "element-plus";
 
 export default {
   name: "qualityMil",
@@ -701,14 +702,21 @@ export default {
       uploadExcel(params).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
-          alert('上传成功！' + getResponseDataMessage(responseData, '\n'))
+          ElMessageBox.alert('上传成功！' + getResponseDataMessage(responseData, '</br>'), '上传信息', {
+            dangerouslyUseHTMLString: true
+          })
         } else {
-          alert('上传失败！' + getResponseDataMessage(responseData, '\n'))
+          ElMessageBox.alert('上传失败！' + getResponseDataMessage(responseData, '</br>'), '上传信息', {
+            dangerouslyUseHTMLString: true
+          })
         }
         this.findPage(null);
         this.excelUploadDialogVisible = false;
       }).catch((err) => {
-        alert(err)
+        ElMessageBox.alert(err, '上传信息', {
+          dangerouslyUseHTMLString: true,
+          type: 'error'
+        })
         this.excelUploadDialogVisible = false;
       })
     },

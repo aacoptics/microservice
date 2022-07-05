@@ -9,8 +9,8 @@
         },
         {})" :key="index"
                :body-style="{ padding: '0px', height:'240px'}"
-               shadow="hover"
                class="molding_card_type"
+               shadow="hover"
                style="cursor: pointer">
 
         <el-row>
@@ -40,7 +40,7 @@
                   </div>
                 </el-col>
               </el-row>
-              <el-row style="height: 20px;" align="middle">
+              <el-row align="middle" style="height: 20px;">
                 <span>严重报警</span>
                 <span v-if="item.Data.unitcontrol_fatal_error == 'True'" class="status-legend"
                       style="background-color: rgba(238,102,102,1);margin-left: 4px"></span>
@@ -64,7 +64,8 @@
                 </el-col>
               </el-row>
               <el-divider content-position="left">事件：</el-divider>
-              <el-row v-if="moldingEventData[item.ClientId] && moldingEventData[item.ClientId].Data" style="height: 15px;line-height: 15px;font-size: xx-small;">
+              <el-row v-if="moldingEventData[item.ClientId] && moldingEventData[item.ClientId].Data"
+                      style="height: 15px;line-height: 15px;font-size: xx-small;">
                 <p v-for="(item, index) of moldingEventData[item.ClientId].Data" :key="index">
                   {{ item.EventInfo }}
                 </p>
@@ -146,15 +147,16 @@ export default {
 </script>
 
 <style>
-.molding_card_type{
+.molding_card_type {
   width: 260px;
   height: 240px;
-  border:1px solid cornflowerblue;
+  border: 1px solid cornflowerblue;
   background-color: #f0f0f0;
   margin-right: 50px;
   margin-bottom: 20px;
   float: left;
 }
+
 .status-legend {
   width: 14px;
   height: 14px;

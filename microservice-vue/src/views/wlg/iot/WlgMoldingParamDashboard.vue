@@ -2,161 +2,161 @@
   <div>
     <div class="aac-container">
       <el-row>
-      <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form :size="size" label-width="100px">
-          <el-row>
-            <el-form-item label="机台号" prop="machineName">
+        <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+          <el-form :size="size" label-width="100px">
+            <el-row>
+              <el-form-item label="机台号" prop="machineName">
 
-              <el-select v-model="formParam.machineName"
-                         placeholder="请选择机台号"
-                         :size="size"
-                         @change="getWaferIdArray">
-                <el-option
-                    v-for="item in machineNameArray"
-                    :key="item.machineName"
-                    :label="item.machineName"
-                    :value="item.machineName"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="时间" prop="dateTimePicker">
-              <el-date-picker
-                  v-model="dateTimePickerValue"
-                  type="datetimerange"
-                  :shortcuts="shortcuts"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :size="size"
-                  @change="getWaferIdArray">
-              </el-date-picker>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item label="OK模次号" prop="waferId">
-              <el-select
-                  v-model="okWaferIds"
-                  multiple
-                  collapse-tags
-                  placeholder="请选择OK模次号"
-                  :size="size"
-                  :v-loading="selectLoading"
-                  @change="okChangeSelect"
-              >
-                <el-checkbox v-model="okAllChecked" @change='okSelectAll'>全选</el-checkbox>
-                <el-option
-                    v-for="item in waferIdArray"
-                    :key="item.waferId"
-                    :label="item.waferId"
-                    :value="item.waferId"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="NG模次号" prop="waferId">
-              <el-select
-                  v-model="ngWaferIds"
-                  multiple
-                  collapse-tags
-                  placeholder="请选择NG模次号"
-                  :size="size"
-                  :v-loading="selectLoading"
-                  @change="ngChangeSelect"
-              >
-                <el-checkbox v-model="ngAllChecked" @change='ngSelectAll'>全选</el-checkbox>
-                <el-option
-                    v-for="item in waferIdArray"
-                    :key="item.waferId"
-                    :label="item.waferId"
-                    :value="item.waferId"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="参数名" prop="paramName">
-              <el-select
-                  v-model="paramNames"
-                  multiple
-                  collapse-tags
-                  placeholder="请选择参数"
-                  :size="size"
-                  :v-loading="selectLoading"
-              >
-                <!--                <el-option-->
-                <!--                    v-for="item in paramNameArray"-->
-                <!--                    :key="item.paramName"-->
-                <!--                    :label="item.paramName"-->
-                <!--                    :value="item.paramName"-->
-                <!--                />-->
-                <el-option
-                    v-for="item in paramNameArray"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                />
-              </el-select>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item label="对齐阶段" prop="recipePhase">
-              <el-select
-                  v-model="alignRecipePhase"
-                  placeholder="请选择需要对齐的阶段"
-                  :size="size"
-                  :v-loading="selectLoading"
-                  @change="okChangeSelect"
-              >
-                <el-option
-                    v-for="item in allRecipePhase"
-                    :key="item"
-                    :label="item"
-                    :value="item"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="对齐模次号" prop="waferId">
-              <el-select
-                  v-model="alignWaferId"
-                  placeholder="请选择对齐的模次号"
-                  :size="size"
-                  :v-loading="selectLoading"
-              >
-                <el-option
-                    v-for="item in allWaferIdsIncludeStatus"
-                    :key="item.waferId"
-                    :label="item.waferId"
-                    :value="item.waferId"
-                />
-              </el-select>
-            </el-form-item>
-          </el-row>
-        </el-form>
+                <el-select v-model="formParam.machineName"
+                           :size="size"
+                           placeholder="请选择机台号"
+                           @change="getWaferIdArray">
+                  <el-option
+                      v-for="item in machineNameArray"
+                      :key="item.machineName"
+                      :label="item.machineName"
+                      :value="item.machineName"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="时间" prop="dateTimePicker">
+                <el-date-picker
+                    v-model="dateTimePickerValue"
+                    :shortcuts="shortcuts"
+                    :size="size"
+                    end-placeholder="结束日期"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    type="datetimerange"
+                    @change="getWaferIdArray">
+                </el-date-picker>
+              </el-form-item>
+            </el-row>
+            <el-row>
+              <el-form-item label="OK模次号" prop="waferId">
+                <el-select
+                    v-model="okWaferIds"
+                    :size="size"
+                    :v-loading="selectLoading"
+                    collapse-tags
+                    multiple
+                    placeholder="请选择OK模次号"
+                    @change="okChangeSelect"
+                >
+                  <el-checkbox v-model="okAllChecked" @change='okSelectAll'>全选</el-checkbox>
+                  <el-option
+                      v-for="item in waferIdArray"
+                      :key="item.waferId"
+                      :label="item.waferId"
+                      :value="item.waferId"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="NG模次号" prop="waferId">
+                <el-select
+                    v-model="ngWaferIds"
+                    :size="size"
+                    :v-loading="selectLoading"
+                    collapse-tags
+                    multiple
+                    placeholder="请选择NG模次号"
+                    @change="ngChangeSelect"
+                >
+                  <el-checkbox v-model="ngAllChecked" @change='ngSelectAll'>全选</el-checkbox>
+                  <el-option
+                      v-for="item in waferIdArray"
+                      :key="item.waferId"
+                      :label="item.waferId"
+                      :value="item.waferId"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="参数名" prop="paramName">
+                <el-select
+                    v-model="paramNames"
+                    :size="size"
+                    :v-loading="selectLoading"
+                    collapse-tags
+                    multiple
+                    placeholder="请选择参数"
+                >
+                  <!--                <el-option-->
+                  <!--                    v-for="item in paramNameArray"-->
+                  <!--                    :key="item.paramName"-->
+                  <!--                    :label="item.paramName"-->
+                  <!--                    :value="item.paramName"-->
+                  <!--                />-->
+                  <el-option
+                      v-for="item in paramNameArray"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-row>
+            <el-row>
+              <el-form-item label="对齐阶段" prop="recipePhase">
+                <el-select
+                    v-model="alignRecipePhase"
+                    :size="size"
+                    :v-loading="selectLoading"
+                    placeholder="请选择需要对齐的阶段"
+                    @change="okChangeSelect"
+                >
+                  <el-option
+                      v-for="item in allRecipePhase"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="对齐模次号" prop="waferId">
+                <el-select
+                    v-model="alignWaferId"
+                    :size="size"
+                    :v-loading="selectLoading"
+                    placeholder="请选择对齐的模次号"
+                >
+                  <el-option
+                      v-for="item in allWaferIdsIncludeStatus"
+                      :key="item.waferId"
+                      :label="item.waferId"
+                      :value="item.waferId"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-row>
+          </el-form>
 
-        <el-form :inline="true" :size="size">
-          <el-form-item>
-            <el-button type="primary"
-                       :loading="selectLoading"
-                       @click="drawAllChart()">查询
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success"
-                       :loading="selectLoading"
-                       @click="alainAllChart">对齐
-              <template #icon>
-                <font-awesome-icon :icon="['fas','align-justify']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-        </el-form>
+          <el-form :inline="true" :size="size">
+            <el-form-item>
+              <el-button :loading="selectLoading"
+                         type="primary"
+                         @click="drawAllChart()">查询
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button :loading="selectLoading"
+                         type="success"
+                         @click="alainAllChart">对齐
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','align-justify']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-form>
 
-        <!--        <el-row v-for="(val, key, index) in paramNames" :key="index">-->
-        <!--          <div :id="val"-->
-        <!--               style="margin-top: 10px;height: 600px; width: 1280px"></div>-->
-        <!--        </el-row>-->
+          <!--        <el-row v-for="(val, key, index) in paramNames" :key="index">-->
+          <!--          <div :id="val"-->
+          <!--               style="margin-top: 10px;height: 600px; width: 1280px"></div>-->
+          <!--        </el-row>-->
 
-      </div>
+        </div>
 
 
       </el-row>
@@ -472,7 +472,7 @@ export default {
       const minStampArray = this.alignParamValue()
       let isFirst = true
       this.paramNames.forEach(item => {
-        if(isFirst){
+        if (isFirst) {
           this.drawLineChart(minStampArray[item])
           isFirst = false
         }

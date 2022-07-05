@@ -134,7 +134,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12" v-if="dataForm.scheduleType!=='NONE'">
+            <el-col v-if="dataForm.scheduleType!=='NONE'" :span="12">
               <el-form-item v-if="dataForm.scheduleType==='CRON'" label="CRON" prop="scheduleConf">
                 <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入CRON"></el-input>
               </el-form-item>
@@ -206,11 +206,11 @@
               <el-form-item label="是否启用" prop="executorTimeout">
                 <el-switch
                     v-model="dataForm.triggerStatus"
-                    inline-prompt
                     :active-value="1"
                     :inactive-value="0"
                     active-text="是"
                     inactive-text="否"
+                    inline-prompt
                 />
               </el-form-item>
             </el-col>
@@ -458,13 +458,13 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
-            const executorParams= {}
+            const executorParams = {}
             executorParams.planKey = params.planKey
             executorParams.batchId = ""
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName':item.robotName
+                    'robotName': item.robotName
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
@@ -506,13 +506,13 @@ export default {
           this.$confirm('确认触发吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
-            const executorParams= {}
+            const executorParams = {}
             executorParams.planKey = params.planKey
             executorParams.batchId = this.batchId
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName':item.robotName
+                    'robotName': item.robotName
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
