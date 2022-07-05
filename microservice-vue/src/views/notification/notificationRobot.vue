@@ -1,92 +1,92 @@
 <template>
-    <div class="aac-container">
-      <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-        <el-form :inline="true" :size="size">
-          <el-form-item label="机器人名称" prop="robotName">
-            <el-input v-model="filters.robotName" clearable placeholder="机器人名称"></el-input>
-          </el-form-item>
-          <el-form-item label="机器人类型" prop="robotType">
-            <el-select v-model="filters.robotType" clearable placeholder="机器人类型">
-              <el-option
-                  v-for="item in robotOptions"
-                  :key="item.dictValue"
-                  :label="item.dictLabel"
-                  :value="item.dictValue"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <el-form :inline="true" :size="size">
-          <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="handleAdd">新增
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'plus']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="false"
-                @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
-      </SysTable>
-
-      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
-                 width="40%">
-        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
-          <el-form-item v-if="false" label="Id" prop="id">
-            <el-input v-model="dataForm.id" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="机器人名称" prop="code">
-                <el-input v-model="dataForm.robotName" :disabled="!operation" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="机器人类型" prop="robotType">
-                <el-select v-model="dataForm.robotType" clearable placeholder="机器人类型" style="width:100%">
-                  <el-option
-                      v-for="item in robotOptions"
-                      :key="item.dictValue"
-                      :label="item.dictLabel"
-                      :value="item.dictValue"
-                  >
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="机器人链接" prop="robotUrl">
-                <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
-          <slot name="footer">
-            <el-button :size="size" @click="cancel">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
-          </slot>
-        </div>
-      </el-dialog>
+  <div class="aac-container">
+    <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
+      <el-form :inline="true" :size="size">
+        <el-form-item label="机器人名称" prop="robotName">
+          <el-input v-model="filters.robotName" clearable placeholder="机器人名称"></el-input>
+        </el-form-item>
+        <el-form-item label="机器人类型" prop="robotType">
+          <el-select v-model="filters.robotType" clearable placeholder="机器人类型">
+            <el-option
+                v-for="item in robotOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <el-form :inline="true" :size="size">
+        <el-form-item>
+          <el-button type="primary" @click="findPage(null)">查询
+            <template #icon>
+              <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+            </template>
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="success" @click="handleAdd">新增
+            <template #icon>
+              <font-awesome-icon :icon="['fas', 'plus']"/>
+            </template>
+          </el-button>
+        </el-form-item>
+      </el-form>
     </div>
+    <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+              :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
+              :stripe="false"
+              @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
+    </SysTable>
+
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+               width="40%">
+      <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+        <el-form-item v-if="false" label="Id" prop="id">
+          <el-input v-model="dataForm.id" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="机器人名称" prop="code">
+              <el-input v-model="dataForm.robotName" :disabled="!operation" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="机器人类型" prop="robotType">
+              <el-select v-model="dataForm.robotType" clearable placeholder="机器人类型" style="width:100%">
+                <el-option
+                    v-for="item in robotOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="机器人链接" prop="robotUrl">
+              <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+        <slot name="footer">
+          <el-button :size="size" @click="cancel">取消</el-button>
+          <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
+        </slot>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
 import SysTable from "@/components/SysTable";
-import {getDict, selectDictLabel} from "@/api/system/dictData";
+import {getDict} from "@/api/system/dictData";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {deleteRobot, findRobotInfoPage, handleAdd, handleUpdate} from "@/api/notification/robot";
 

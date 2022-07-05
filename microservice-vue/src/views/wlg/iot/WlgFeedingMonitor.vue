@@ -9,8 +9,8 @@
         },
         {})" :key="index"
                :body-style="{ padding: '0px', height:'240px'}"
-               shadow="hover"
                class="feeding_card_type"
+               shadow="hover"
                style="cursor: pointer">
 
         <el-row>
@@ -28,7 +28,7 @@
                 <!--                  </div>-->
                 <!--                </el-col>-->
               </el-row>
-              <el-row style="height: 20px;margin-top: 10px" align="middle">
+              <el-row align="middle" style="height: 20px;margin-top: 10px">
                 <el-col :span="8">
                   <span>初始化状态</span>
                 </el-col>
@@ -37,8 +37,8 @@
                     <template #content>
                       <p>{{ statusTypeName[1][item.Data[1]] }}</p>
                     </template>
-                    <div class="status-legend"
-                         :style="'background-color:' + statusType[1][item.Data[1]]"></div>
+                    <div :style="'background-color:' + statusType[1][item.Data[1]]"
+                         class="status-legend"></div>
                   </el-tooltip>
                 </el-col>
 
@@ -50,13 +50,13 @@
                     <template #content>
                       <p>{{ statusTypeName[2][item.Data[2]] }}</p>
                     </template>
-                    <div class="status-legend"
-                         :style="'background-color:' + statusType[2][item.Data[2]]">
+                    <div :style="'background-color:' + statusType[2][item.Data[2]]"
+                         class="status-legend">
                     </div>
                   </el-tooltip>
                 </el-col>
               </el-row>
-              <el-row style="height: 20px;margin-top: 10px" align="middle">
+              <el-row align="middle" style="height: 20px;margin-top: 10px">
                 <el-col :span="8">
                   <span>手动/自动</span>
                 </el-col>
@@ -65,8 +65,8 @@
                     <template #content>
                       <p>{{ statusTypeName[3][item.Data[3]] }}</p>
                     </template>
-                    <div class="status-legend"
-                         :style="'background-color:' + statusType[3][item.Data[3]]"></div>
+                    <div :style="'background-color:' + statusType[3][item.Data[3]]"
+                         class="status-legend"></div>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="8">
@@ -77,12 +77,12 @@
                     <template #content>
                       <p>{{ statusTypeName[4][item.Data[4]] }}</p>
                     </template>
-                    <div class="status-legend"
-                         :style="'background-color:' + statusType[4][item.Data[4]]"></div>
+                    <div :style="'background-color:' + statusType[4][item.Data[4]]"
+                         class="status-legend"></div>
                   </el-tooltip>
                 </el-col>
               </el-row>
-              <el-row style="height: 20px;margin-top: 10px" align="middle">
+              <el-row align="middle" style="height: 20px;margin-top: 10px">
                 <el-col :span="20">
                   <span>机器人连接状态</span>
                 </el-col>
@@ -91,8 +91,8 @@
                     <template #content>
                       <p>{{ statusTypeName[5][item.Data[5]] }}</p>
                     </template>
-                    <div class="status-legend"
-                         :style="'background-color:' + statusType[5][item.Data[5]]"></div>
+                    <div :style="'background-color:' + statusType[5][item.Data[5]]"
+                         class="status-legend"></div>
                   </el-tooltip>
                 </el-col>
               </el-row>

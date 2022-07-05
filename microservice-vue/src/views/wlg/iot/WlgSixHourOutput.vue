@@ -5,10 +5,10 @@
         <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="机台号" prop="machineName">
             <el-select v-model="machineNames"
-                       placeholder="请选择机台号"
-                       multiple
+                       :size="size"
                        collapse-tags
-                       :size="size">
+                       multiple
+                       placeholder="请选择机台号">
               <el-checkbox v-model="okAllChecked" @change='okSelectAll'>全选</el-checkbox>
               <el-option
                   v-for="item in machineNameArray"
@@ -21,17 +21,17 @@
           <el-form-item label="时间" prop="dateTimePicker">
             <el-date-picker
                 v-model="dateTimePickerValue"
-                type="daterange"
                 :shortcuts="shortcuts"
+                :size="size"
+                end-placeholder="结束日期"
                 range-separator="至"
                 start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :size="size">
+                type="daterange">
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"
-                       :loading="selectLoading"
+            <el-button :loading="selectLoading"
+                       type="primary"
                        @click="getByDateAndMachineNames">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
@@ -49,15 +49,15 @@
         </el-form>
 
       </div>
-      <el-table :data="tableData" style="width: 100%" :size="size" stripe id="inputReportTable">
-        <el-table-column fixed="left" prop="dateStr" label="日期" width="70">
+      <el-table id="inputReportTable" :data="tableData" :size="size" stripe style="width: 100%">
+        <el-table-column fixed="left" label="日期" prop="dateStr" width="70">
           <template v-slot="scope">
             <span style="font-weight: bold;color: black">{{
                 this.$moment(scope.row.startTime).format("YY/MM/DD")
               }}</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" prop="timeStr" label="时间" width="85">
+        <el-table-column fixed="left" label="时间" prop="timeStr" width="85">
           <template v-slot="scope">
             <span
                 style="font-weight: bold;color: black">{{
@@ -65,44 +65,44 @@
               }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="machineName" label="机台号" width="70"/>
-        <el-table-column prop="materialName" label="材料号" width="60"/>
-        <el-table-column prop="projectName" label="项目" width="80"/>
-        <el-table-column prop="modelName" label="模具" width="45"/>
-        <el-table-column prop="cycleName" label="周期" width="45"/>
-        <el-table-column prop="periodName" label="阶段" width="45"/>
-        <el-table-column prop="avgCycle" label="平均周期" width="65"/>
+        <el-table-column label="机台号" prop="machineName" width="70"/>
+        <el-table-column label="材料号" prop="materialName" width="60"/>
+        <el-table-column label="项目" prop="projectName" width="80"/>
+        <el-table-column label="模具" prop="modelName" width="45"/>
+        <el-table-column label="周期" prop="cycleName" width="45"/>
+        <el-table-column label="阶段" prop="periodName" width="45"/>
+        <el-table-column label="平均周期" prop="avgCycle" width="65"/>
 
-        <el-table-column prop="startWaferId" label="起始模次" width="65"/>
-        <el-table-column prop="endWaferId" label="截止模次" width="65"/>
+        <el-table-column label="起始模次" prop="startWaferId" width="65"/>
+        <el-table-column label="截止模次" prop="endWaferId" width="65"/>
 
-        <el-table-column prop="inputQty" label="投入数" width="55">
+        <el-table-column label="投入数" prop="inputQty" width="55">
           <template v-slot="scope">
             <el-tag style="width: 30px">{{ scope.row.inputQty }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="brokenOk" label="碎裂可流转" width="90">
+        <el-table-column label="碎裂可流转" prop="brokenOk" width="90">
           <template v-slot="scope">
-            <el-input-number style="width: 70px" :min="0" :max="scope.row.inputQty - scope.row.brokenNg" :size="size"
-                             controls-position="right" v-model="scope.row.brokenOk" v-show="scope.row.iseditor"/>
+            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenOk" :max="scope.row.inputQty - scope.row.brokenNg" :min="0"
+                             :size="size" controls-position="right" style="width: 70px"/>
             <el-tag v-show="!scope.row.iseditor" style="width: 30px" type="warning">{{ scope.row.brokenOk }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="brokenNg" label="碎裂不可流转" width="90">
+        <el-table-column label="碎裂不可流转" prop="brokenNg" width="90">
           <template v-slot="scope">
-            <el-input-number style="width: 70px" :min="0" :max="scope.row.inputQty - scope.row.brokenOk" :size="size"
-                             controls-position="right" v-model="scope.row.brokenNg"
-                             @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg"
-                             v-show="scope.row.iseditor"/>
+            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenNg" :max="scope.row.inputQty - scope.row.brokenOk" :min="0"
+                             :size="size" controls-position="right"
+                             style="width: 70px"
+                             @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg"/>
             <el-tag v-show="!scope.row.iseditor" style="width: 30px" type="danger">{{ scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="outputQty" label="产出数" width="55">
+        <el-table-column label="产出数" prop="outputQty" width="55">
           <template v-slot="scope">
             <el-tag style="width: 30px" type="success">{{ scope.row.inputQty - scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="80" fixed="right">
+        <el-table-column fixed="right" label="操作" width="80">
           <template v-slot="scope">
             <span v-if="scope.row.inputQty > 0">
             <el-button v-if="!scope.row.iseditor" :size="size" type="warning"
@@ -118,11 +118,7 @@
 
 <script>
 
-import {
-  getByDateAndMachineName,
-  getMachineName,
-  updateOutPutInfo
-} from "@/api/wlg/iot/moldingMachineParamData";
+import {getByDateAndMachineName, getMachineName, updateOutPutInfo} from "@/api/wlg/iot/moldingMachineParamData";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver'
 

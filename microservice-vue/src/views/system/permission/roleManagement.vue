@@ -330,7 +330,7 @@ export default {
       })
     },
     getChildrenList(arr, res) {
-      if(!arr || arr.length === 0)
+      if (!arr || arr.length === 0)
         return
       arr.forEach(item => {
         if (item.children && item.children.length > 0) {

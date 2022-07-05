@@ -5,8 +5,7 @@ import {
     getRefreshToken,
     removeLoginInfo,
     setAccessToken,
-    setExpireTime,
-    setRefreshToken
+    setExpireTime
 } from "@/utils/auth";
 import router from "@/router";
 import {refreshToken} from "@/api/system/user";
