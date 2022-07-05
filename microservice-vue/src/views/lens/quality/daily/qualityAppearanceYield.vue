@@ -130,7 +130,10 @@ export default {
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
-              this.columns = responseData.data;
+              this.columns = responseData.data.map(c => {
+                c.formatter = this.percentFormat
+                return c
+              });
             } else {
               this.$message({message: "操作失败" + getResponseDataMessage(responseData), type: "error",});
             }
@@ -278,6 +281,15 @@ export default {
       // option.yAxis.max = 100 - option.yAxis.max < 1 ? 100 : option.yAxis.max + 1;
       // option.yAxis.min = option.yAxis.min < 1 ? 0 : option.yAxis.min - 1;
       option && this.lineChart.setOption(option);
+    },
+    percentFormat: function (row, column) {
+      if (row[column.property] == null) return '-';
+      if (typeof row[column.property] === 'number') {
+        let value = row[column.property] * 100;
+        let valuePercent = value.toFixed(2);
+        return `${valuePercent - value === 0 ? value : valuePercent}%`;
+      } else
+        return row[column.property];
     },
   },
 };

@@ -83,14 +83,16 @@
         </el-table-column>
         <el-table-column label="碎裂可流转" prop="brokenOk" width="90">
           <template v-slot="scope">
-            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenOk" :max="scope.row.inputQty - scope.row.brokenNg" :min="0"
+            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenOk"
+                             :max="scope.row.inputQty - scope.row.brokenNg" :min="0"
                              :size="size" controls-position="right" style="width: 70px"/>
             <el-tag v-show="!scope.row.iseditor" style="width: 30px" type="warning">{{ scope.row.brokenOk }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="碎裂不可流转" prop="brokenNg" width="90">
           <template v-slot="scope">
-            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenNg" :max="scope.row.inputQty - scope.row.brokenOk" :min="0"
+            <el-input-number v-show="scope.row.iseditor" v-model="scope.row.brokenNg"
+                             :max="scope.row.inputQty - scope.row.brokenOk" :min="0"
                              :size="size" controls-position="right"
                              style="width: 70px"
                              @change="scope.row.outputQty = scope.row.inputQty - scope.row.brokenNg"/>
