@@ -55,6 +55,12 @@
                 :stripe="false" @findPage="findPage">
       </SysTable>
 
+      <el-row class="w-full">
+        <el-col :span="24">
+          <div id="lineChart" class="w-full h-full" style="height: 300px"></div>
+        </el-col>
+      </el-row>
+
       <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'"
                  width="25%">
         <el-upload
@@ -82,16 +88,19 @@ import {date2str, getResponseDataMessage} from "@/utils/commonUtils";
 import {
   exportExcel,
   listHeaders,
+  listLineChat,
   listSummary,
   listSummaryExportExcel,
   uploadExcel
 } from "@/api/lens/quality/qualityAppearanceYield";
 import {ElMessageBox} from "element-plus";
+import * as echarts from "echarts";
 
 export default {
   name: "qualityAppearanceYield",
   components: {SysTable},
   data() {
+    this.lineChart = null
     return {
       size: "default",
       filters: {
@@ -103,7 +112,8 @@ export default {
       pageResult: {},
       excelUploadDialogVisible: false,
       exportLoading: false,
-      exportReportLoading: false
+      exportReportLoading: false,
+      lineChartData: {},
     };
   },
   methods: {
@@ -130,6 +140,15 @@ export default {
             const responseData = res.data;
             if (responseData.code === "000000") {
               this.pageResult = responseData.data;
+            }
+          })
+          .then(data != null ? data.callback : "");
+      listLineChat(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.lineChartData = responseData.data;
+              this.drawLineChart()
             }
           })
           .then(data != null ? data.callback : "");
@@ -194,7 +213,72 @@ export default {
         document.body.appendChild(link);
         link.click();
       });
-    }
+    },
+    drawLineChart() {
+      const chartDom = document.getElementById('lineChart');
+      if (this.lineChart != null) {
+        this.lineChart.dispose();//销毁
+      }
+      this.lineChart = echarts.init(chartDom);
+      let option = {
+        title: {
+          text: '外观良率折线图'
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: '{b0}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%'//展示百分比  五条折线
+        },
+        legend: {
+          data: ['最终目标', '目标', '汇总']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: this.columns.map(item => item.label).slice(1)
+        },
+        yAxis: {
+          type: 'value',
+          axisLabel: {
+            show: true,
+            interval: 'auto',
+            formatter: '{value}%',
+          }
+        },
+        series: [
+          {
+            name: '最终目标',
+            type: 'line',
+            data: this.lineChartData['最终目标']
+          },
+          {
+            name: '目标',
+            type: 'line',
+            data: this.lineChartData['目标']
+          },
+          {
+            name: '汇总',
+            type: 'line',
+            data: this.lineChartData['汇总']
+          }
+        ]
+      };
+      option.yAxis.max = Math.ceil(Math.max(Math.max(...this.lineChartData['最终目标']), Math.max(...this.lineChartData['目标']), Math.max(...this.lineChartData['汇总'])))
+      option.yAxis.min = Math.floor(Math.min(Math.min(...this.lineChartData['最终目标']), Math.min(...this.lineChartData['目标']), Math.min(...this.lineChartData['汇总'])))
+      // option.yAxis.max = 100 - option.yAxis.max < 1 ? 100 : option.yAxis.max + 1;
+      // option.yAxis.min = option.yAxis.min < 1 ? 0 : option.yAxis.min - 1;
+      option && this.lineChart.setOption(option);
+    },
   },
 };
 </script>

@@ -54,3 +54,14 @@ export function listSummaryExportExcel(conditions) {
         data: conditions
     })
 }
+
+export function listLineChat(conditions) {
+    return request({
+        url: '/quality-daily/qualityAppearanceYield/listLineChat',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
