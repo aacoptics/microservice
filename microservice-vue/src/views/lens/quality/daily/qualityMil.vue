@@ -156,7 +156,7 @@
                     </template>
                   </el-button>
                 </el-tooltip>
-                <el-tooltip v-if="false" content="删除" placement="top">
+                <el-tooltip content="删除" placement="top">
                   <el-button size="small" type="danger" @click="handleDelete(scope.row)">
                     <template #icon>
                       <font-awesome-icon :icon="['far', 'trash-can']"/>
