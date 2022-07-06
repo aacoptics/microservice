@@ -101,7 +101,7 @@
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :show-operation="true" :show-batch-delete="false"
+                :height="400" :highlightCurrentRow="true" :show-batch-delete="false" :show-operation="true"
                 :stripe="false" @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
       </SysTable>
 
