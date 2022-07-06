@@ -623,7 +623,7 @@ export default {
         severityLevel: "",
         eventHappenDate: date2str(new Date()) + "T00:00:00",
         customer: "-",
-        site: "",
+        site: "-",
         workshop: "",
         station: "",
         questionPresentation: "",
