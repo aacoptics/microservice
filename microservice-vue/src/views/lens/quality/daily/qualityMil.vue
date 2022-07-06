@@ -105,13 +105,6 @@
         </el-form>
         <el-form :inline="true" :label-width="100" :size="size">
           <el-form-item>
-            <el-button type="info" @click="handleOpenExcelUpload">Excel导入
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'upload']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量MIL模板')">导出模板
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
@@ -132,13 +125,22 @@
               </template>
             </el-button>
           </el-form-item>
-          <el-form-item class="float-right">
-            <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('Mil报表')">导出报表
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'download']"/>
-              </template>
-            </el-button>
-          </el-form-item>
+          <el-row align="middle" justify="center" class="float-right">
+            <el-form-item>
+              <el-button type="info" @click="handleOpenExcelUpload" size="small">导入
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'upload']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('Mil报表')">导出报表
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'download']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-row>
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
