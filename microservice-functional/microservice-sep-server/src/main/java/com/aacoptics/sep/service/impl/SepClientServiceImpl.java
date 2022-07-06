@@ -53,7 +53,7 @@ public class SepClientServiceImpl extends ServiceImpl<SepClientMapper, SepClient
         if (SepGroupConstant.GROUP_MAP.containsKey(queryForm.getGroup())) {
             group.setId(SepGroupConstant.GROUP_MAP.get(queryForm.getGroup()));
         } else {
-            group.setId(SepGroupConstant.GROUP_MAP.get("default"));
+            return Result.fail("该权限组不存在，请检查！");
         }
 
         changeForm.setGroup(group);
