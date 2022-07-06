@@ -22,9 +22,9 @@ export function handleUpdate(updateForm) {
     })
 }
 
-export function handleDelete(id) {
+export function handleDelete(deleteForm) {
     return request({
-        url: `/quality-daily/qualityAppearanceYieldProblem/delete/${id}`,
+        url: `/quality-daily/qualityAppearanceYieldProblem/delete/${deleteForm.id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'

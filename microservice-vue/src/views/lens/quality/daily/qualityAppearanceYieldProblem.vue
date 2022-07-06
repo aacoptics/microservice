@@ -101,7 +101,7 @@
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :show-operation="true"
+                :height="400" :highlightCurrentRow="true" :show-operation="true" :show-batch-delete="false"
                 :stripe="false" @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
       </SysTable>
 
@@ -156,7 +156,15 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="生产经理" prop="projectManager">
-                <el-input v-model="dataForm.projectManager" auto-complete="off" clearable></el-input>
+                <el-select v-model="dataForm.projectManager" clearable filterable placeholder="生产经理">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.name"
+                      :label="item.name"
+                      :value="item.name"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -257,8 +265,8 @@ export default {
       size: "default",
       filters: {
         workshopProject: "",
-        startAppearanceDate: "",
-        endAppearanceDate: "",
+        startAppearanceDate: null,
+        endAppearanceDate: null,
         projectPd: "",
         projectQc: "",
         projectSop: "",
@@ -279,7 +287,7 @@ export default {
         {prop: "correctiveAction", label: "措施", minWidth: 120},
         {prop: "planFinishDate", label: "计划完成时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "actualFinishDate", label: "实际完成时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "remark", label: "备注", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "remark", label: "备注", minWidth: 120},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
