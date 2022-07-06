@@ -1,19 +1,12 @@
 package com.aacoptics.notification.event;
 
 import com.aacoptics.notification.entity.vo.MarkdownMessage;
-import com.aacoptics.notification.provider.DingTalkApi;
 import com.aacoptics.notification.utils.DingTalkUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
