@@ -25,13 +25,6 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="info" @click="handleOpenExcelUpload">Excel导入
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'upload']"/>
-              </template>
-            </el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量客户评级模板')">导出模板
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
@@ -45,13 +38,22 @@
               </template>
             </el-button>
           </el-form-item>
-          <el-form-item class="float-right">
-            <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('客户评级报表')">导出报表
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'download']"/>
-              </template>
-            </el-button>
-          </el-form-item>
+          <el-row align="middle" class="float-right" justify="center">
+            <el-form-item size="small">
+              <el-button type="info" @click="handleOpenExcelUpload">导入
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'upload']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('客户评级报表')">导出报表
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'download']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-row>
         </el-form>
       </div>
 
