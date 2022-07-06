@@ -1,8 +1,10 @@
 package com.aacoptics.notification.event;
 
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
+import com.aacoptics.notification.entity.vo.MarkdownMessage;
 import com.aacoptics.notification.provider.DingTalkApi;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.primitives.Ints;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -135,28 +137,24 @@ public class MqttConfig {
                 LocalDateTime time = LocalDateTime.now();
                 String localTimeStr = df.format(time);
                 JSONObject dataJson = msgJson.getJSONObject("Data");
-                MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+                MarkdownMessage markdownGroupMessage = new MarkdownMessage();
                 markdownGroupMessage.setTitle("加热棒状态报警");
                 String projectName = dataJson.getString("projectName");
                 String modelName = dataJson.getString("modelName");
                 String param = dataJson.getString("param");
                 String machineName = dataJson.getString("machineName");
-                String msgContent = machineName + " " + projectName + " " + modelName;
-                msgContent = markdownGroupMessage.addBlobContent(msgContent);
-                markdownGroupMessage.addContent(msgContent);
-                msgContent = localTimeStr;
-                msgContent = markdownGroupMessage.addBlobContent(msgContent);
-                markdownGroupMessage.addContent(msgContent);
+                int[] abnormalIdx = (int[])dataJson.get("abnormalIdx");
+                String abnormalStr = Ints.join(",", abnormalIdx);
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent(localTimeStr);
                 if (param.equals("lower")) {
-                    msgContent = "下加热床加热棒温度极差大于5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。";
+                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
                 } else {
-                    msgContent = "上加热床加热棒温度极差大于5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。";
+                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
                 }
-                markdownGroupMessage.addContent(msgContent);
                 String robotUrl = "https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a";
-                String title = markdownGroupMessage.getTitle();
                 try {
-                    Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage(robotUrl, title, markdownGroupMessage.toString());
+                    Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage(robotUrl, "加热棒状态报警", markdownGroupMessage.toString());
                     JSONObject resultMapJson = (JSONObject) JSONObject.toJSON(resultMap);
                     log.debug(JSONObject.toJSONString(resultMapJson));
                     String result = resultMap.get("result");
@@ -167,6 +165,7 @@ public class MqttConfig {
                 } catch (Exception err) {
 
                 }
+
 
 
             }
