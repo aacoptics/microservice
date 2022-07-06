@@ -1,8 +1,10 @@
 package com.aacoptics.notification.config;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 
 import com.aacoptics.notification.event.MqttConsumerCallBack;
+import com.aacoptics.notification.provider.DingTalkApi;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -37,6 +39,9 @@ public class MqttConsumerConfig {
      * 客户端对象
      */
     private MqttClient client;
+
+    @Resource
+    private DingTalkApi dingTalkApi;
 
     /**
      * 在bean初始化后连接到服务器

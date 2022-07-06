@@ -2,12 +2,16 @@ package com.aacoptics.notification.event;
 
 import com.aacoptics.notification.entity.vo.MarkdownMessage;
 import com.aacoptics.notification.provider.DingTalkApi;
+import com.aacoptics.notification.utils.DingTalkUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.paho.client.mqttv3.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -15,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Slf4j
+
 public class MqttConsumerCallBack implements MqttCallbackExtended{
 
     private MqttClient client;
@@ -22,9 +27,6 @@ public class MqttConsumerCallBack implements MqttCallbackExtended{
     private MqttConnectOptions options;
 
     private String subTopics;
-
-    @Resource
-    DingTalkApi dingTalkApi;
 
     public MqttConsumerCallBack(MqttClient client, MqttConnectOptions options, String subTopics) {
         this.client = client;
@@ -72,20 +74,12 @@ public class MqttConsumerCallBack implements MqttCallbackExtended{
             }
             String robotUrl = "https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a";
             try {
-                Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage(robotUrl, "加热棒状态报警", markdownGroupMessage.toString());
+                Map<String, String> resultMap = DingTalkUtil.sendGroupRobotMessage(robotUrl, "加热棒状态报警", markdownGroupMessage.toString());
                 JSONObject resultMapJson = (JSONObject) JSONObject.toJSON(resultMap);
                 log.debug(JSONObject.toJSONString(resultMapJson));
-                String result = resultMap.get("result");
-                String resMsg = resultMap.get("message");
-                if (!StringUtils.isEmpty(resMsg) && resMsg.length() > 1024) {
-                    resMsg = resMsg.substring(1024);
-                }
             } catch (Exception err) {
-
+                log.error("发送加热棒报警通知失败！", err);
             }
-
-
-
         }
     }
 
