@@ -49,7 +49,6 @@ public class MqttConsumerCallBack implements MqttCallbackExtended{
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        log.info(new String(message.getPayload()));
         JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
         if (msgJson.getString("Message").equals("DoMonitorTempAlarm")) {
             DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
