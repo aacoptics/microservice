@@ -38,7 +38,7 @@
               </template>
             </el-button>
           </el-form-item>
-          <el-row align="middle" justify="center" class="float-right">
+          <el-row align="middle" class="float-right" justify="center">
             <el-form-item size="small">
               <el-button type="info" @click="handleOpenExcelUpload">导入
                 <template #icon>
