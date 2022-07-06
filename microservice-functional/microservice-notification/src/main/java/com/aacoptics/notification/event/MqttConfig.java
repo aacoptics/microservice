@@ -3,6 +3,7 @@ package com.aacoptics.notification.event;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.notification.entity.vo.MarkdownMessage;
 import com.aacoptics.notification.provider.DingTalkApi;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.primitives.Ints;
 import lombok.Getter;
@@ -27,6 +28,7 @@ import org.springframework.messaging.MessageHandler;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -143,7 +145,8 @@ public class MqttConfig {
                 String modelName = dataJson.getString("modelName");
                 String param = dataJson.getString("param");
                 String machineName = dataJson.getString("machineName");
-                int[] abnormalIdx = (int[])dataJson.get("abnormalIdx");
+                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
+                int[] abnormalIdx =  JSONArray.toJavaObject(abnormalIdxJson, int[].class);
                 String abnormalStr = Ints.join(",", abnormalIdx);
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addBlobContent(localTimeStr);
