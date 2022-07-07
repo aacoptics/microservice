@@ -11,6 +11,7 @@
         <module>microservice-mobile-attendance</module>
         <module>microservice-notification</module>
         <module>microservice-sep-server</module>
+        <module>microservice-jacob-provider</module>
     </modules>
 
     <packaging>pom</packaging>
