@@ -4,6 +4,7 @@ import com.aacoptics.sale.entity.*;
 import com.aacoptics.sale.mapper.SendSalesDataMapper;
 import com.aacoptics.sale.provider.DingTalkApi;
 import com.aacoptics.sale.provider.FeishuApi;
+import com.aacoptics.sale.provider.JacobProvider;
 import com.aacoptics.sale.service.SendSalesDataService;
 import com.aacoptics.sale.util.BIRsaEncrypt;
 import com.alibaba.fastjson.JSONObject;
@@ -31,6 +32,9 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
 
     @Resource
     FeishuApi feishuApi;
+
+    @Resource
+    JacobProvider jacobProvider;
 
     @Resource
     SendSalesDataMapper sendSalesDataMapper;
@@ -455,6 +459,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                 Integer robotId = Integer.valueOf(robotMap.get("ID") + "");
                 String robotUrl = robotMap.get("ROBOT_URL") != null ? robotMap.get("ROBOT_URL") + "" : "";
                 String sendTimeStr = robotMap.get("SEND_TIME") != null ? robotMap.get("SEND_TIME") + "" : "";
+                String robotName = robotMap.get("REMARKS") != null ? robotMap.get("REMARKS") + "" : "";
                 //校验是否已发送
                 List<Map<String, String>> sendHistoryList = sendSalesDataMapper.getSendHistoryByBatchAndRobot(batchId, robotId);
                 if (sendHistoryList != null && sendHistoryList.size() > 0) {
@@ -483,6 +488,10 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                     }
                     if (messageJson.containsKey("StatusCode") && messageJson.getInteger("StatusCode") == 0) {
                         sendSalesDataMapper.saveSendHistory(batchId, robotId, "true", null);
+                        FeishuVoiceFileInfo feishuVoiceFileInfo = new FeishuVoiceFileInfo();
+                        feishuVoiceFileInfo.setGroupName(robotName);
+                        feishuVoiceFileInfo.setMessage(voiceStr);
+                        jacobProvider.sendFeishuVoiceMsg(feishuVoiceFileInfo);
                     } else {
                         String errorMsg = null;
                         if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getString("msg"))) {

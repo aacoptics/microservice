@@ -84,7 +84,7 @@
     </select>
 
     <select id="getRobotUrlByTabType" resultType="map">
-        SELECT A.ID, A.ROBOT_URL, A.SEND_TIME
+        SELECT A.ID, A.ROBOT_URL, A.SEND_TIME, A.REMARKS
             FROM tab_04_robot A
             WHERE A.TAB_TYPE = #{tabType}
             AND TAB_STATUS = '1'
