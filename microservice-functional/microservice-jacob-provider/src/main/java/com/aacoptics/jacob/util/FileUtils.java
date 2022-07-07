@@ -1,5 +1,9 @@
 package com.aacoptics.jacob.util;
 
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+import org.jaudiotagger.audio.mp3.MP3File;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -39,5 +43,20 @@ public class FileUtils {
             }
         }
         System.out.println("success");
+    }
+
+    public static int getMp3Duration(String filePath){
+        try{
+
+            File mp3File = new File(filePath);
+            MP3File f = (MP3File) AudioFileIO.read(mp3File);
+
+            MP3AudioHeader audioHeader = f.getMP3AudioHeader();
+            return audioHeader.getTrackLength();
+
+        }catch(Exception err){
+
+            return 0;
+        }
     }
 }
