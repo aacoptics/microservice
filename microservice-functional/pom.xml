@@ -12,6 +12,7 @@
         <module>microservice-notification</module>
         <module>microservice-sep-server</module>
         <module>microservice-jacob-provider</module>
+        <module>microservice-sale-message</module>
     </modules>
 
     <packaging>pom</packaging>
