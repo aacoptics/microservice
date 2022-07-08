@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -218,7 +219,11 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
             MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
             markdownGroupMessage.setTitle(title);
             markdownGroupMessage.addContent("日期：" + titleTime);
-            String voiceStr = "";
+
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dateParam = LocalDate.parse(titleTime, df);
+            DateTimeFormatter dfZh = DateTimeFormatter.ofPattern("M月d日");
+            String voiceStr = dateParam.format(dfZh) + "\n";
             for (ProductContent productContent : productContentList) {
                 String productType = productContent.getTabProductType();
 
