@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
                 <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
@@ -9,7 +9,7 @@
                     v-model="filters.projectName"
                     placeholder="请输入项目"
                     clearable
-                    size="small"
+                    :size="size"
                 />
               </el-form-item>
             <el-form-item label="日期 从" prop="producitonDate">
@@ -31,7 +31,7 @@
               </el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" size="small" :loading="exportLoading"
+              <el-button type="success" :size="size" :loading="exportLoading"
                          @click="exportExcelData('月度汇总报表')">导出
                 <template #icon>
                   <font-awesome-icon :icon="['fas','download']"/>
@@ -59,7 +59,7 @@ export default {
   components: {QueryAllTable},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       queryLoading: false,
       exportLoading: false,
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
@@ -9,7 +9,7 @@
                   v-model="filters.projectName"
                   placeholder="请输入项目"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
             <el-form-item label="产品" prop="product">
@@ -17,7 +17,7 @@
                   v-model="filters.product"
                   placeholder="请输入产品"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
             <el-form-item label="模具" prop="mold">
@@ -25,7 +25,7 @@
                   v-model="filters.mold"
                   placeholder="请输入模具"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
           </el-row>
@@ -35,7 +35,7 @@
                   v-model="filters.cycle"
                   placeholder="请输入周期"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
 
@@ -123,7 +123,7 @@ export default {
   components: {QueryTable},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       queryLoading: false,
       downloadTemplateLoading:false,
 

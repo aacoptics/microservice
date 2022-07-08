@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="项目" prop="projectName">
@@ -8,7 +8,7 @@
                 v-model="filters.projectName"
                 placeholder="请输入项目"
                 clearable
-                size="small"
+                :size="size"
             />
           </el-form-item>
               <el-form-item label="日期 从" prop="moldDate">
@@ -17,7 +17,6 @@
           <el-form-item label="到" prop="moldDate">
             <el-date-picker v-model="filters.moldDateEnd" type="date" value-format="YYYY-MM-DD" auto-complete="off"></el-date-picker>
           </el-form-item>
-
         </el-form>
           <el-form :inline="true" :size="size">
             <el-form-item>
@@ -96,7 +95,7 @@ export default {
   components: {QueryAllTable},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       queryLoading: false,
       downloadTemplateLoading:false,
 

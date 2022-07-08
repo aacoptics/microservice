@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container">
+    <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
                 <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
@@ -9,7 +9,7 @@
                     v-model="filters.projectName"
                     placeholder="请输入项目"
                     clearable
-                    size="small"
+                    :size="size"
                 />
               </el-form-item>
           <el-form-item label="模具" prop="mold">
@@ -17,7 +17,7 @@
                   v-model="filters.mold"
                   placeholder="请输入模具"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
             <el-form-item label="周期" prop="cycle">
@@ -25,7 +25,7 @@
                   v-model="filters.cycle"
                   placeholder="请输入周期"
                   clearable
-                  size="small"
+                  :size="size"
               />
             </el-form-item>
           </el-row>
@@ -49,7 +49,7 @@
               </el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" size="small" :loading="exportLoading"
+              <el-button type="success" :size="size" :loading="exportLoading"
                          @click="exportExcelData('单个项目报表')">导出
                 <template #icon>
                   <font-awesome-icon :icon="['fas','download']"/>
@@ -77,7 +77,7 @@ export default {
   components: {QueryAllTable},
   data() {
     return {
-      size: 'small',
+      size: 'default',
       queryLoading: false,
       exportLoading: false,
 
