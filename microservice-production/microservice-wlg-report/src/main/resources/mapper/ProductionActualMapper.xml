@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.ProductionActualMapper">
+
+    <select id="queryProductionActualByCondition" resultType="map">
+        select project_name projectName,
+            product,
+            mold,
+            cycle,
+            actual_date actualDate,
+            estimate_hole_qty estimateHoleQty,
+            mold_press_input_qty  moldPressInputQty,
+            mold_press_output_qty moldPressOutputQty,
+            after_acquisition_qty afterAcquisitionQty,
+            CONVERT(varchar(20),CONVERT(decimal(18,2), performance_yield * 100)) + '%' performanceYield,
+            after_input_qty       afterInputQty,
+            after_output_qty      afterOutputQty,
+            inventory_qty         inventoryQty,
+            CONVERT(varchar(20),CONVERT(decimal(18,2), after_yield * 100)) + '%' afterYield
+        from production_actual
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name = #{projectName}
+        </if>
+        <if test="product != '' and product != null">
+            AND product = #{product}
+        </if>
+        <if test="mold != '' and mold != null">
+            AND mold = #{mold}
+        </if>
+        <if test="cycle != '' and cycle != null">
+            AND cycle = #{cycle}
+        </if>
+        <if test="actualDateStart != null">
+            AND actual_date >= #{actualDateStart}
+        </if>
+        <if test="actualDateEnd != null">
+            AND actual_date &lt;= #{actualDateEnd}
+        </if>
+    </select>
+
+</mapper>

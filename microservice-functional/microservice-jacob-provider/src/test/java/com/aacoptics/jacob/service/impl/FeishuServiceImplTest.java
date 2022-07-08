@@ -29,21 +29,21 @@ public class FeishuServiceImplTest {
 
     @Test
     public void fetchAccessToken() throws IOException {
+//
+//        int a = FileUtils.getMp3Duration("d:\\Documents and Settings\\60054916\\Desktop\\test\\test.mp3");
+//
+//        int b = FileUtils.getMp3Duration("C:\\Soft\\VoiceServer\\voice-file\\1657165659783.mp3");
+//
+        String asd = feishuService.fetchChatIdByRobot("诚瑞高管群");
 
-        int a = FileUtils.getMp3Duration("d:\\Documents and Settings\\60054916\\Desktop\\test\\test.mp3");
+        String jsonStr = "{\n" +
+                "\t\"receive_id\": \"oc_820faa21d7ed275b53d1727a0feaa917\",\n" +
+                "\t\"content\": \"{\\\"file_key\\\":\\\"file_v2_xxx\\\"}\",\n" +
+                "\t\"msg_type\": \"file\"\n" +
+                "} ";
 
-        int b = FileUtils.getMp3Duration("C:\\Soft\\VoiceServer\\voice-file\\1657165659783.mp3");
-//
-//        String asd = feishuService.fetchChatIdByRobot("飞书消息测试-出货数据");
-//
-//        String jsonStr = "{\n" +
-//                "\t\"receive_id\": \"oc_820faa21d7ed275b53d1727a0feaa917\",\n" +
-//                "\t\"content\": \"{\\\"file_key\\\":\\\"file_v2_xxx\\\"}\",\n" +
-//                "\t\"msg_type\": \"file\"\n" +
-//                "} ";
-//
-//
-//
+
+
 //        String key = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_OPUS, "C:\\Soft\\VoiceServer\\voice-file\\1657165659783.mp3", 10);
 //
 //        feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, asd, FeishuService.MSG_TYPE_AUDIO, JSONUtil.createObj().set("file_key", key));

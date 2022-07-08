@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.CustomerRequirementMapper">
+
+    <select id="queryCustomerRequirementByCondition" resultType="map">
+        select project_name projectName, qty, requirement_date requirementDate,
+            target_yield targetYield
+        from customer_requirement
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name = #{projectName}
+        </if>
+        <if test="requirementDateStart != null">
+            AND requirement_date >= #{requirementDateStart}
+        </if>
+        <if test="requirementDateEnd != null">
+            AND requirement_date &lt;= #{requirementDateEnd}
+        </if>
+    </select>
+
+</mapper>

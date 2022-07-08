@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.ProductionPlanMapper">
+
+
+    <select id="findProductionPlanByMonth" resultType="map">
+        WITH TEMP_PRODUCTION_PLAN AS (
+            select
+                b.mold as mold,
+                b.cycle as cycle,
+                b.code as code,
+                b.name as name,
+                b.project_name    as     projectName,
+                (select
+                    case
+                    when b.code in ('JHXNLIANGLV', 'MBLIANGLV', 'JHHDLIANGLV', 'JHZHITONGLV')
+                        then
+                            sum(c.plan_value) / count(1)
+                        else
+                            sum(c.plan_value)
+                    end
+                    from production_plan c
+                    where c.code = b.code
+                    and c.mold = b.mold
+                    and c.cycle = b.cycle
+                    and c.project_name = b.project_name
+                    <if test="planDateStart != null">
+                        AND c.plan_date >= #{planDateStart}
+                    </if>
+                    <if test="planDateEnd != null">
+                        AND c.plan_date &lt;= #{planDateEnd}
+                    </if>
+                ) as sumQty,
+                (select max(c.plan_value) from production_plan c
+                where c.code = b.code
+                and c.mold = b.mold
+                and c.cycle = b.cycle
+                and c.project_name = b.project_name
+                <if test="planDateStart != null">
+                    AND c.plan_date >= #{planDateStart}
+                </if>
+                <if test="planDateEnd != null">
+                    AND c.plan_date &lt;= #{planDateEnd}
+                </if>
+                ) as maxQty,
+            ${selectColumn}
+            from (select mold, cycle, code, name, project_name, plan_value, plan_date from production_plan
+            where 1=1
+            <if test="projectName != '' and projectName != null">
+                AND project_name = #{projectName}
+            </if>
+            <if test="mold != '' and mold != null">
+                AND mold = #{mold}
+            </if>
+            <if test="cycle != '' and cycle != null">
+                AND cycle = #{cycle}
+            </if>
+            <if test="planDateStart != null">
+                AND plan_date >= #{planDateStart}
+            </if>
+            <if test="planDateEnd != null">
+                AND plan_date &lt;= #{planDateEnd}
+            </if>
+            ) as a
+            pivot(max(plan_value) for plan_date in (${pivotIn})) as b
+            group by b.project_name, b.mold, b.cycle, b.code, b.name),
+        TEMP_JHTOURU AS (
+            SELECT projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+            FROM TEMP_PRODUCTION_PLAN
+            WHERE code = 'JHTOURU'),
+        TEMP_MBLIANGLV AS (
+            SELECT projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+            FROM TEMP_PRODUCTION_PLAN
+            WHERE code = 'MBLIANGLV'),
+        TEMP_JHXUESHU AS (
+            SELECT projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+            FROM TEMP_PRODUCTION_PLAN
+            WHERE code = 'JHXUESHU'),
+        TEMP_JHXNLIANGLV AS (
+            SELECT projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+            FROM TEMP_PRODUCTION_PLAN
+            WHERE code = 'JHXNLIANGLV'),
+        TEMP_JHHDLIANGLV AS (
+            SELECT projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+            FROM TEMP_PRODUCTION_PLAN
+            WHERE code = 'JHHDLIANGLV'),
+        TEMP_JHCHANCHU AS (
+            SELECT TEMP_JHTOURU.projectName projectName,
+            TEMP_JHTOURU.mold mold,
+            TEMP_JHTOURU.cycle cycle,
+            'JHCHANCHU' code,
+            '计划模压产出片数(PCS)' name,
+            ${selectJHCHANCHUSumColumn} sumQty,
+            ${selectJHCHANCHUColumn}
+            FROM TEMP_JHTOURU
+            LEFT JOIN TEMP_MBLIANGLV ON TEMP_JHTOURU.projectName = TEMP_MBLIANGLV.projectName
+            AND TEMP_JHTOURU.mold = TEMP_MBLIANGLV.mold
+            AND TEMP_JHTOURU.cycle = TEMP_MBLIANGLV.cycle
+        ),
+        TEMP_JHLINGLIAO AS (
+            SELECT TEMP_JHCHANCHU.projectName projectName,
+                TEMP_JHCHANCHU.mold mold,
+                TEMP_JHCHANCHU.cycle cycle,
+                'JHLINGLIAO' code,
+                '计划后道领料(PCS)' name,
+                ${selectJHLINGLIAOSumColumn} sumQty,
+                ${selectJHLINGLIAOColumn}
+            FROM TEMP_JHCHANCHU
+                LEFT JOIN TEMP_JHXNLIANGLV ON TEMP_JHCHANCHU.projectName = TEMP_JHXNLIANGLV.projectName
+                AND TEMP_JHCHANCHU.mold = TEMP_JHXNLIANGLV.mold
+                AND TEMP_JHCHANCHU.cycle = TEMP_JHXNLIANGLV.cycle
+        ),
+        TEMP_JHHDCHANCHU AS (
+            SELECT TEMP_JHXUESHU.projectName projectName,
+                TEMP_JHXUESHU.mold mold,
+                TEMP_JHXUESHU.cycle cycle,
+            'JHHDCHANCHU' code,
+            '计划后道产出（颗)' name,
+            ${selectJHHDCHANCHUSumColumn} sumQty,
+            ${selectJHHDCHANCHUColumn}
+            FROM TEMP_JHXUESHU
+            LEFT JOIN TEMP_JHLINGLIAO ON TEMP_JHXUESHU.projectName = TEMP_JHLINGLIAO.projectName
+                AND TEMP_JHXUESHU.mold = TEMP_JHLINGLIAO.mold
+                AND TEMP_JHXUESHU.cycle = TEMP_JHLINGLIAO.cycle
+            LEFT JOIN TEMP_JHHDLIANGLV ON TEMP_JHXUESHU.projectName = TEMP_JHHDLIANGLV.projectName
+                AND TEMP_JHXUESHU.mold = TEMP_JHHDLIANGLV.mold
+                AND TEMP_JHXUESHU.cycle = TEMP_JHHDLIANGLV.cycle
+        ),
+        TEMP_JHZHITONGLV AS (
+            SELECT TEMP_JHXNLIANGLV.projectName projectName,
+                TEMP_JHXNLIANGLV.mold mold,
+                TEMP_JHXNLIANGLV.cycle cycle,
+                'JHZHITONGLV' code,
+                '计划后道直通率' name,
+                TEMP_JHXNLIANGLV.sumQty * TEMP_JHHDLIANGLV.sumQty sumQty,
+                ${selectJHZHITONGLVColumn}
+            FROM TEMP_JHXNLIANGLV
+            LEFT JOIN TEMP_JHHDLIANGLV ON TEMP_JHXNLIANGLV.projectName = TEMP_JHHDLIANGLV.projectName
+            AND TEMP_JHXNLIANGLV.mold = TEMP_JHHDLIANGLV.mold
+            AND TEMP_JHXNLIANGLV.cycle = TEMP_JHHDLIANGLV.cycle
+        ),
+        TEMP_PRODUCTION_PLAN_RESULT AS (
+            SELECT projectName,
+                     mold,
+                     cycle,
+                     code,
+                     name,
+                        case
+                        when code in ('JHXNLIANGLV', 'MBLIANGLV', 'JHHDLIANGLV')
+                            then cast(cast(sumQty * 100 as decimal(18, 2)) as varchar(50)) + '%'
+                        when code in ('JHXUESHU', 'JHZONGMOCI')
+                            then cast(FLOOR(ROUND(maxQty, 0)) as varchar(50))
+                        else
+                            cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) end sumQty,
+                    ${selectVarcharColumn}
+                 FROM TEMP_PRODUCTION_PLAN
+            UNION ALL
+                SELECT projectName,
+                    mold,
+                    cycle,
+                    code,
+                    name,
+                    cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) sumQty,
+                    ${selectVarcharColumn}
+                FROM TEMP_JHCHANCHU
+            UNION ALL
+                SELECT projectName,
+                mold,
+                cycle,
+                code,
+                name,
+                cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) sumQty,
+                ${selectVarcharColumn}
+                FROM TEMP_JHLINGLIAO
+            UNION ALL
+                SELECT projectName,
+                mold,
+                cycle,
+                'JHHDTOULIAO' code,
+                '后道计划投料(PCS)' name,
+                cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) sumQty,
+                ${selectVarcharColumn}
+                FROM TEMP_JHLINGLIAO
+            UNION ALL
+                SELECT projectName,
+                    mold,
+                    cycle,
+                    code,
+                    name,
+                    cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) sumQty,
+                    ${selectVarcharColumn}
+                FROM TEMP_JHHDCHANCHU
+            UNION ALL
+                SELECT
+                    projectName,
+                    mold,
+                    cycle,
+                    code,
+                    name,
+                    case
+                    when code in ('JHXNLIANGLV', 'MBLIANGLV', 'JHHDLIANGLV', 'JHZHITONGLV')
+                    then cast(cast(sumQty * 100 as decimal(18, 2)) as varchar(50)) + '%'
+                    else
+                    cast(FLOOR(ROUND(sumQty, 0)) as varchar(50)) end sumQty,
+                    ${selectVarcharColumn}
+                FROM TEMP_JHZHITONGLV
+                )
+        SELECT ROW_NUMBER() OVER ( ORDER BY projectName, mold, cycle, code ) AS seq, projectName,
+            mold,
+            cycle,
+            code,
+            name,
+            sumQty,
+            ${pivotIn}
+        FROM TEMP_PRODUCTION_PLAN_RESULT
+        ORDER BY projectName, mold, cycle, code
+    </select>
+
+
+    <select id="findPlanDateByMonth" resultType="string">
+        select distinct CONVERT(varchar(100), plan_date, 23) plan_date
+        from production_plan
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name = #{projectName}
+        </if>
+        <if test="mold != '' and mold != null">
+            AND mold = #{mold}
+        </if>
+        <if test="cycle != '' and cycle != null">
+            AND cycle = #{cycle}
+        </if>
+        <if test="planDateStart != null">
+            AND plan_date >= #{planDateStart}
+        </if>
+        <if test="planDateEnd != null">
+            AND plan_date &lt;= #{planDateEnd}
+        </if>
+        order by plan_date
+    </select>
+
+</mapper>

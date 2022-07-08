@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.DingTalkNotificationMapper">
+
+    <select id="findRobotListByType" resultType="map">
+        select ROBOT_ID, ROBOT_URL
+        from dingtalk_robot
+        WHERE status = 1
+        AND group_type = #{groupType}
+        ORDER BY updated_time
+    </select>
+
+</mapper>

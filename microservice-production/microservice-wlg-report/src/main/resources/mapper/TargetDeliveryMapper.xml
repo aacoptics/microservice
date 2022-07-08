@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.TargetDeliveryMapper">
+
+    <select id="findTargetDeliveryByMonth" resultType="map">
+        select ROW_NUMBER() OVER ( ORDER BY item_number, item_description, project_name ) AS seq,
+            item_number itemNumber, item_description itemDescription, project_name projectName,
+            (select max(c.delivery_qty) from target_delivery c
+                where c.item_number = b.item_number
+                and c.project_name = b.project_name
+                <if test="deliveryDateStart != null">
+                    AND c.delivery_date >= #{deliveryDateStart}
+                </if>
+                <if test="deliveryDateEnd != null">
+                    AND c.delivery_date &lt;= #{deliveryDateEnd}
+                </if>
+                ) maxQty,
+        ${selectColumn}
+        from (select * from target_delivery
+            where 1=1
+            <if test="projectName != '' and projectName != null">
+                AND project_name like '%' + #{projectName} + '%'
+            </if>
+            <if test="deliveryDateStart != null">
+                AND delivery_date >= #{deliveryDateStart}
+            </if>
+            <if test="deliveryDateEnd != null">
+                AND delivery_date &lt;= #{deliveryDateEnd}
+            </if>
+        ) as a
+            pivot(max(delivery_qty) for delivery_date in (${pivotIn})) as b
+        group by item_number, item_description, project_name
+        order by item_number, item_description, project_name
+    </select>
+
+
+    <select id="findDeliveryDateByMonth" resultType="string">
+        select distinct CONVERT(varchar(100), delivery_date, 23) delivery_date
+        from target_delivery
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name like '%' + #{projectName} + '%'
+        </if>
+        <if test="deliveryDateStart != null">
+            AND delivery_date >= #{deliveryDateStart}
+        </if>
+        <if test="deliveryDateEnd != null">
+            AND delivery_date &lt;= #{deliveryDateEnd}
+        </if>
+        order by delivery_date
+    </select>
+
+</mapper>

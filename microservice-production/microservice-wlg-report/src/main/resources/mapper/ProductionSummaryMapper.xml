@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.ProductionSummaryMapper">
+
+    <select id="queryProductionSummaryByCondition" resultType="map">
+        with TEMP_PRODUCTION_SUMMARY as (
+            select project_name, production_date, type, qty
+            from production_summary unpivot ( qty for type in (target_qty, actual_qty)) as t
+            where 1=1
+            <if test="projectName != '' and projectName != null">
+                AND project_name like '%' + #{projectName} + '%'
+            </if>
+            <if test="productionDateStart != null">
+                AND production_date >= #{productionDateStart}
+            </if>
+            <if test="productionDateEnd != null">
+                AND production_date &lt;= #{productionDateEnd}
+            </if>
+        )
+        select ROW_NUMBER() OVER ( ORDER BY project_name, type ) AS seq,
+            project_name projectName,
+            case when type='target_qty'
+             then '目标产出'
+             when type= 'actual_qty'
+             then '实际产出' end type,
+            (select sum(isnull(c.qty, 0)) from TEMP_PRODUCTION_SUMMARY c
+            where c.project_name = b.project_name
+            and c.type = b.type
+            ) sumQty,
+            ${selectColumn}
+        from TEMP_PRODUCTION_SUMMARY as a
+        pivot(max(qty) for production_date in (${pivotIn})) as b
+        group by project_name, type
+        order by project_name, type
+    </select>
+
+
+    <select id="findProductionDateByMonth" resultType="string">
+        select distinct CONVERT(varchar(100), production_date, 23) production_date
+        from production_summary
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name like '%' + #{projectName} + '%'
+        </if>
+        <if test="productionDateStart != null">
+            AND production_date >= #{productionDateStart}
+        </if>
+        <if test="productionDateEnd != null">
+            AND production_date &lt;= #{productionDateEnd}
+        </if>
+    </select>
+
+</mapper>

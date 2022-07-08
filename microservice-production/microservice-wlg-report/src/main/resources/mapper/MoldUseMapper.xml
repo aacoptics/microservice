@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.report.mapper.MoldUseMapper">
+
+    <select id="findMoldUseByMonth" resultType="map">
+        select ROW_NUMBER() OVER ( ORDER BY code, status, project_name ) AS seq,
+            code, status, project_name projectName,
+            (select max(c.mold_qty) from mold_use c
+                where c.code = b.code
+                and c.project_name = b.project_name
+                <if test="moldDateStart != null">
+                    AND c.mold_date >= #{moldDateStart}
+                </if>
+                <if test="moldDateEnd != null">
+                    AND c.mold_date &lt;= #{moldDateEnd}
+                </if>
+                ) maxQty,
+        ${selectColumn}
+        from (select * from mold_use
+            where 1=1
+            <if test="projectName != '' and projectName != null">
+                AND project_name like '%' + #{projectName} + '%'
+            </if>
+            <if test="moldDateStart != null">
+                AND mold_date >= #{moldDateStart}
+            </if>
+            <if test="moldDateEnd != null">
+                AND mold_date &lt;= #{moldDateEnd}
+            </if>
+        ) as a
+            pivot(max(mold_qty) for mold_date in (${pivotIn})) as b
+        group by code, status, project_name
+        order by code, status, project_name
+    </select>
+
+
+    <select id="findMoldDateByMonth" resultType="string">
+        select distinct CONVERT(varchar(100), mold_date, 23) mold_date
+        from mold_use
+        where 1=1
+        <if test="projectName != '' and projectName != null">
+            AND project_name like '%' + #{projectName} + '%'
+        </if>
+        <if test="moldDateStart != null">
+            AND mold_date >= #{moldDateStart}
+        </if>
+        <if test="moldDateEnd != null">
+            AND mold_date &lt;= #{moldDateEnd}
+        </if>
+        order by mold_date
+    </select>
+
+</mapper>
