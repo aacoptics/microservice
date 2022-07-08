@@ -1,15 +1,5 @@
 <template>
-  <div>
-    <div class="aac-container" style="margin:0; padding:0;border: 0;height:auto;width: 100%;overflow: auto">
-      <iframe id='webFrame'
-              frameborder='0'
-              hight='auto'
-              scrolling='auto'
-              src=""
-              width='100%'
-      ></iframe>
-    </div>
-  </div>
+  <div class="mainPage-container" />
 </template>
 <script>
 
@@ -27,3 +17,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.mainPage-container {
+  position: relative;
+  width: 100%;
+  height: 98%;
+  background-image: url(../../assets/img/back.png);
+  background-size: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+</style>
