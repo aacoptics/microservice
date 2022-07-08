@@ -18,15 +18,15 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.notification"))
+                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.jacob"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("系统管理API")
-                .description("系统管理，组织人员管理、角色权限管理、岗位管理")
+                .title("Jacob 服务")
+                .description("Jacob 服务，语音等")
                 .version("2.0")
                 .build();
     }
