@@ -53,14 +53,14 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         String localTimeStr = df.format(time);
         JSONObject dataJson = msgJson.getJSONObject("Data");
         String machineName = dataJson.getString("machineName");
+        String projectName = dataJson.getString("projectName");
+        String modelName = dataJson.getString("modelName");
         MarkdownMessage markdownGroupMessage = new MarkdownMessage();
         String title = null;
         switch (msgJson.getString("Message")) {
             case "DoMonitorTempAlarm":
                 title = "加热棒状态报警";
                 markdownGroupMessage.setTitle(title);
-                String projectName = dataJson.getString("projectName");
-                String modelName = dataJson.getString("modelName");
                 String param = dataJson.getString("param");
                 JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
                 int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
@@ -85,7 +85,8 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 title = "模造换料提醒";
                 markdownGroupMessage.setTitle(title);
                 markdownGroupMessage.addBlobContent(localTimeStr);
-                markdownGroupMessage.addContent(machineName + "机台需要换料，请相关人员进行处理！");
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
                 break;
         }
 
