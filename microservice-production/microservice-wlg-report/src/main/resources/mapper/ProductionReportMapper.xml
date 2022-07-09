@@ -1329,6 +1329,7 @@
             select project_name, item_name, model, MARK_NO, hole, qty_today
             from [finereport].[dbo].[z_transfer_warehouse_balance]
             where site in ('2080_1', '2210_1')
+            and item_name = 'G1'
             <if test="projectNameList!=null and projectNameList.size()!=0">
                 AND project_name IN
                 <foreach collection="projectNameList" item="item" index="index"

@@ -98,16 +98,16 @@ public class TargetDeliveryServiceImpl extends ServiceImpl<TargetDeliveryMapper,
 
                     // 目标交货只可覆盖前一天、当日和将来数值，其它日期不能修改或删除
                     TargetDelivery targetDelivery = null;
-                    if (currentLocalDate.minusDays(1).isAfter(deliveryDate)) {
-                        continue;
-                    }
-                    else
-                    {
+//                    if (currentLocalDate.minusDays(1).isAfter(deliveryDate)) {
+//                        continue;
+//                    }
+//                    else
+//                    {
                         targetDelivery = this.queryTargetDeliveryByItemNumberAndProjectAndDate(itemNumber, projectName, deliveryDate);
                         if (targetDelivery == null) {
                             targetDelivery = new TargetDelivery();
                         }
-                    }
+//                    }
 
                     targetDelivery.setItemNumber(itemNumber);
                     targetDelivery.setItemDescription(itemDescription);
