@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.mold.toollife.dao.ProgramDetailMapper">
+    <select id="getLastDayOee" resultType="com.aacoptics.mold.toollife.entity.ProgramDetail">
+        SELECT area
+             , sum(datediff(second, start_time, end_time)) as total_time
+             , count(distinct machine_no)                  as run_count
+        FROM [MDIoT].[dbo].[tb_mold_program_detail] a
+                 left join tb_mold_machine_area_config b
+                           on a.machine_no = b.machine_name
+        where start_time between #{startTime} and DATEADD(dd, 1, #{startTime})
+          and end_time is not null
+          and area is not null
+        group by area
+    </select>
+
+    <select id="getLastDayOEEByType" resultType="java.lang.String">
+        SELECT CAST(CAST (((sum(datediff(second, start_time, end_time))*1.0/(count(distinct machine_no) * 24 * 60 * 60)) * 100) as decimal(10,2)) as varchar(50)) as oee
+        FROM [MDIoT].[dbo].[tb_mold_program_detail] a
+            left join tb_mold_machine_area_config b
+            on a.machine_no = b.machine_name
+        where start_time between #{startTime} and DATEADD(dd, 1, #{startTime})
+          and end_time is not null
+          and area = #{type}
+    </select>
+
+    <select id="getAbnormalTotalTime" resultType="com.aacoptics.mold.toollife.entity.ProgramDetail">
+        select top 1 a.machine_no,
+                     c.area                                                              as program_name,
+                     (sum(datediff(minute, start_time, end_time)) over (partition by 1)) as totalTime
+        from tb_mold_program_detail a
+                 join tb_mold_machine_area_config c on a.machine_no = c.machine_name
+        where a.mat_tool_code = #{toolCode}
+        order by a.id desc
+    </select>
+
+    <select id="getToolHisList" resultType="com.aacoptics.mold.toollife.entity.ProgramDetail">
+        select a.machine_no,
+               a.monitor_no,
+               a.program_name,
+               start_time,
+               end_time,
+               DATEDIFF(SECOND, start_time, end_time) as totalTime
+        from tb_mold_program_detail a
+                 join tb_mold_program_sheet b on a.monitor_no = b.monitor_no and a.program_name = b.program_name and a.mat_tool_code = b.mat_tool_code
+        where b.mat_tool_code = #{toolCode}
+        union all
+        select a.machine_no,
+               a.monitor_no,
+               a.program_name,
+               start_time,
+               end_time,
+               DATEDIFF(SECOND, start_time, end_time) as totalTime
+        from tb_mold_program_detail a
+                 join tb_mold_program_sheet_history b on a.monitor_no = b.monitor_no and a.program_name = b.program_name and a.mat_tool_code = b.mat_tool_code
+        where b.mat_tool_code = #{toolCode}
+    </select>
+</mapper>

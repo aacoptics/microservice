@@ -12,6 +12,7 @@
         <module>microservice-gaia-api</module>
         <module>wlg-iot-dashboard</module>
         <module>microservice-wlg-report</module>
+        <module>iot-mold-toollife</module>
     </modules>
 
     <packaging>pom</packaging>

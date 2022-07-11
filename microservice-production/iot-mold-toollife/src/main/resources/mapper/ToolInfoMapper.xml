@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.mold.toollife.dao.ToolInfoMapper">
+    <select id="getToolMaintainStatus" resultType="com.aacoptics.mold.toollife.entity.ToolInfo">
+        select distinct machine_no, monitor_no
+        from tb_mold_program_sheet
+        where machine_no is not null and monitor_no in
+        <foreach item="item" index="index" collection="monitorNos" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getActualLifeByToolCode" parameterType="java.lang.String" resultType="Integer">
+        select isnull(sum(datediff(minute, start_time, end_time)),0) as actualLife from tb_mold_program_detail where end_time is not null and mat_tool_code = #{matToolCode}
+    </select>
+
+    <select id="getAbnormalToolLifeRatio" resultType="Map">
+        select top 10 mat_code, mat_name, cast((sum(cast(real_life_salvage as decimal(5,2)))/sum(cast(life_salvage as decimal(5,2))) * 100) as decimal(5,2)) as lifeRatio from tb_mold_abnormal_tool_list where real_life_salvage != '0' group by mat_code, mat_name order by lifeRatio asc
+    </select>
+
+    <select id="getAbnormalQty" resultType="Map">
+        select a.abnormal_type as abnormal_code, b.abnormal_type as abnormal_name, count(*) as abnormal_qty from tb_mold_abnormal_tool_list a, tb_mold_abnormal_type_config b
+        where a.abnormal_type = b.type_code group by a.abnormal_type, b.abnormal_type
+    </select>
+</mapper>

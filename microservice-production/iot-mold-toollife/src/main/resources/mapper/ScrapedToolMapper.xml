@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.mold.toollife.dao.ScrapedToolMapper">
+
+    <select id="getScrapedList" resultType="com.aacoptics.mold.toollife.entity.ScrapedTool">
+        SELECT ITSD12.CODE_NO, BM.MAT_CODE, BM.MAT_NAME, BM.LIFE_SALVAGE ,ITSD1.CREATE_DATE
+        FROM INV_TOOL_SCRAP_DETAIL ITSD1,
+            CJMADMIN.INV_TOOL_SPLIT_DETAIL ITSD12,
+            CJMADMIN.BASE_MATERIAL BM
+        WHERE ITSD12.id= ITSD1.SPLIT_ID
+          AND ITSD1.CREATE_DATE BETWEEN to_date(#{startTime}
+            , 'yyyy-mm-dd hh24:mi:ss')
+          and to_date(#{startTime}
+            , 'yyyy-mm-dd hh24:mi:ss') + 1
+          AND BM.MAT_TYPE ='1f9107c5e4ba44948159211a49cc1da0'
+          AND ITSD12.MAT_ID =BM.ID
+
+    </select>
+</mapper>
