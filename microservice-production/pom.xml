@@ -12,7 +12,6 @@
         <module>microservice-gaia-api</module>
         <module>wlg-iot-dashboard</module>
         <module>microservice-wlg-report</module>
-        <module>microservice-dingtalk-notification</module>
     </modules>
 
     <packaging>pom</packaging>
