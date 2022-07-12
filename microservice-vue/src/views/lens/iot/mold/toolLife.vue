@@ -11,7 +11,7 @@
               </template>
             </el-button>
           </el-row>
-          <el-row style="padding: 10px" v-if="programSheetMachineList.length > 0">
+          <el-row style="padding: 10px" v-show="programSheetMachineList.length > 0">
             <el-select v-model="programSheetMachineNo" filterable placeholder="请选择机台号" style="width: 250px" @change="onProgramMachineChange">
               <el-option
                   v-for="item in programSheetMachineList"
@@ -126,59 +126,59 @@
                 @change="getMatInfo(scope.row)"
             />
 <!--            @change="checkDiameter(scope.row, scope.row.toolDiameter)"-->
-            <span v-else :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.handleCode }}</span>
+            <span v-else :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.handleCode }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=120 fixed="left" prop="toolCode" label="刀具编码">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.toolCode }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.toolCode }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=130 fixed="left" prop="matCode" label="物料号">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.matCode }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.matCode }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=230 fixed="left" prop="matName" label="物料名称">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.matName }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.matName }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=100 fixed="left" prop="lifeSalvage" label="标准寿命">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.lifeSalvage }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.lifeSalvage }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=100 fixed="left" prop="actualLife" label="实际寿命">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.actualLife }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.actualLife }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=100 fixed="left" prop="leftLife" label="剩余寿命">
           <template v-slot="scope">
-            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo.leftLife }}</span>
+            <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.leftLife }}</span>
           </template>
         </el-table-column>
         <el-table-column :width=200 prop="createDateTime" label="创建时间"></el-table-column>
       </el-table>
+      <el-dialog v-model="addMachineDialog" title="添加机台程序单" :close-on-click-modal="false" :show-close="false" width="30%">
+        <el-select v-model="dialogMachineName" filterable placeholder="程序单机台号配置">
+          <el-option
+              v-for="item in machineNameList"
+              :key="item.fequipName"
+              :label="item.fequipName"
+              :value="item.fequipName"
+          >
+          </el-option>
+        </el-select>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button @click="resetSelection">取消</el-button>
+            <el-button type="primary" @click="submitForm" :loading="addMachineLoading">提交</el-button>
+          </slot>
+        </div>
+      </el-dialog>
     </div>
-    <el-dialog v-model="addMachineDialog" title="添加机台程序单" :close-on-click-modal="false" :show-close="false" width="30%">
-      <el-select v-model="dialogMachineName" filterable placeholder="程序单机台号配置">
-        <el-option
-            v-for="item in machineNameList"
-            :key="item.fequipName"
-            :label="item.fequipName"
-            :value="item.fequipName"
-        >
-        </el-option>
-      </el-select>
-      <div class="dialog-footer" style="padding-top: 20px;text-align: end">
-        <slot name="footer">
-          <el-button @click="resetSelection">取消</el-button>
-          <el-button type="primary" @click="submitForm" :loading="addMachineLoading">提交</el-button>
-        </slot>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -249,8 +249,7 @@ export default {
   },
   methods: {
     getMatInfo(row){
-      const result = this.matInfoList.find(function (item, index, arr) {
-        console.log(this);
+      const result = this.matInfoList.find(function (item) {
         return item.handleCode === row.matInfo.handleCode;
       }, this.matInfoList);
       row.matInfo = result
@@ -285,7 +284,7 @@ export default {
       }
     },
     cellEvent(row) {
-      row.isSelected = !row.isSelected
+      row.isSelected = !row.isSelected;
     },
     cellEventForMachineNo(row) {
       // var data = this.moldToolLifeSheetByMachine;
@@ -299,7 +298,7 @@ export default {
           this.moldToolLifeSheetByMachine[i].machineNo = this.machineName
         }
       }
-      row.isSelected = !row.isSelected
+      row.isSelected = !row.isSelected;
     },
     cellClick(row, column) {
       switch (column.label) {
