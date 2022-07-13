@@ -14,7 +14,9 @@
       <el-menu-item v-show="item.visible" :key="item.index" :index="item.index" @click="handleClick(item.index)">
         <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                            :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
-        <template #title>{{ item.title }}</template>
+        <template #title>
+          <span>{{ item.title }}</span>
+        </template>
       </el-menu-item>
     </template>
   </template>
