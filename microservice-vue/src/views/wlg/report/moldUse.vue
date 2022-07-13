@@ -6,76 +6,81 @@
           <el-form-item label="项目" prop="projectName">
             <el-input
                 v-model="filters.projectName"
-                placeholder="请输入项目"
-                clearable
                 :size="size"
+                clearable
+                placeholder="请输入项目"
             />
           </el-form-item>
-              <el-form-item label="日期 从" prop="moldDate">
-            <el-date-picker v-model="filters.moldDateStart" type="date" value-format="YYYY-MM-DD" auto-complete="off"></el-date-picker>
+          <el-form-item label="日期 从" prop="moldDate">
+            <el-date-picker v-model="filters.moldDateStart" auto-complete="off" type="date"
+                            value-format="YYYY-MM-DD"></el-date-picker>
           </el-form-item>
           <el-form-item label="到" prop="moldDate">
-            <el-date-picker v-model="filters.moldDateEnd" type="date" value-format="YYYY-MM-DD" auto-complete="off"></el-date-picker>
+            <el-date-picker v-model="filters.moldDateEnd" auto-complete="off" type="date"
+                            value-format="YYYY-MM-DD"></el-date-picker>
           </el-form-item>
         </el-form>
-          <el-form :inline="true" :size="size">
-            <el-form-item>
-              <el-button type="primary"
-                        :loading="queryLoading"
-                        @click="findPage(null)">查询
-                <template #icon>
-                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-                </template>
-              </el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="info"
-                        @click="handleOpenExcelUpload">Excel导入
-                <template #icon>
-                  <font-awesome-icon :icon="['fas','file-lines']"/>
-                </template>
-              </el-button>
-            </el-form-item>
-          </el-form>
+        <el-form :inline="true" :size="size">
+          <el-form-item>
+            <el-button :loading="queryLoading"
+                       type="primary"
+                       @click="findPage(null)">查询
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="info"
+                       @click="handleOpenExcelUpload">Excel导入
+              <template #icon>
+                <font-awesome-icon :icon="['fas','file-lines']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <QueryAllTable id="condDataTable" :height="550" :highlightCurrentRow="true" :stripe="true"
-                :data="pageResult" :columns="columns"
-                ref="queryTable"
-                @findPage="findPage" >
+      <QueryAllTable id="condDataTable" ref="queryTable" :columns="columns" :data="pageResult"
+                     :height="550" :highlightCurrentRow="true"
+                     :stripe="true"
+                     @findPage="findPage">
       </QueryAllTable>
 
-      <el-dialog :title="'模具使用情况Excel导入'" width="400px" v-model="excelUploadDialogVisible"
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'模具使用情况Excel导入'"
 
-                 :close-on-click-modal="false">
-          <el-upload
-              class="upload-demo"
-              :before-upload="beforeUpload"
-              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              :http-request="submitExcelUpload"
-              action=""
-              :multiple="false"
-              :show-file-list="false"
-              drag>
-            <font-awesome-icon class="el-icon--upload" :icon="['fas','cloud-arrow-up']"/>
-            <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
-          </el-upload>
+                 width="400px">
+        <el-upload
+            :before-upload="beforeUpload"
+            :http-request="submitExcelUpload"
+            :multiple="false"
+            :show-file-list="false"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            action=""
+            class="upload-demo"
+            drag>
+          <font-awesome-icon :icon="['fas','cloud-arrow-up']" class="el-icon--upload"/>
+          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
 
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-progress
-            style="width:350px"
-              :percentage="progressPercentage"
-              :text-inside="true"
-              :indeterminate="true"
-              :stroke-width="20"
-              :duration="pregressDuration"
-              :status="progressStatus"
+                :duration="pregressDuration"
+                :indeterminate="true"
+                :percentage="progressPercentage"
+                :status="progressStatus"
+                :stroke-width="20"
+                :text-inside="true"
+                style="width:350px"
             >
-              <span>{{progressContent}}</span>
+              <span>{{ progressContent }}</span>
             </el-progress>
             <div style="padding-top: 20px;">
-              <el-button  type="primary" :size="size"  @click="downloadTemplate" style="position: absolute;left: 20px;" :loading="downloadTemplateLoading">模板下载</el-button>
-              <el-button type="success" :size="size"  @click="cancelExcelUpload">关闭</el-button>
+              <el-button :loading="downloadTemplateLoading" :size="size" style="position: absolute;left: 20px;"
+                         type="primary"
+                         @click="downloadTemplate">模板下载
+              </el-button>
+              <el-button :size="size" type="success" @click="cancelExcelUpload">关闭</el-button>
             </div>
           </slot>
         </div>
@@ -88,7 +93,7 @@
 <script>
 
 import QueryAllTable from "@/components/QueryAllTable";
-import {uploadExcel, findMoldUsePage, queryMoldUseTitleByMonth, downloadTemplate} from "@/api/wlg/report/moldUse";
+import {downloadTemplate, findMoldUsePage, queryMoldUseTitleByMonth, uploadExcel} from "@/api/wlg/report/moldUse";
 
 export default {
   name: "moldUse",
@@ -97,17 +102,17 @@ export default {
     return {
       size: 'default',
       queryLoading: false,
-      downloadTemplateLoading:false,
+      downloadTemplateLoading: false,
 
       progressPercentage: 0,
-      progressContent:"",
+      progressContent: "",
       pregressDuration: 6,
       progressStatus: "",
 
       filters: {
         projectName: '',
-        moldDateStart:'',
-        moldDateEnd:'',
+        moldDateStart: '',
+        moldDateEnd: '',
       },
       columns: [
         // {prop: "code", label: "条件代码", minWidth: 110},
@@ -143,9 +148,7 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult.records = responseData.data
           this.$message.success(responseData.msg)
-        }
-        else
-        {
+        } else {
           this.pageResult.records = [];
           this.$message.error(responseData.msg + "," + responseData.data);
         }
@@ -153,8 +156,7 @@ export default {
       }).then(data != null ? data.callback : '')
     },
 
-    handleOpenExcelUpload:function()
-    {
+    handleOpenExcelUpload: function () {
       this.excelUploadDialogVisible = true;
 
       this.progressPercentage = 0;
@@ -196,24 +198,22 @@ export default {
         return false
       }
     },
-    downloadTemplate()
-    {
+    downloadTemplate() {
       this.downloadTemplateLoading = true;
       downloadTemplate().then(res => {
 
-          let url = window.URL.createObjectURL(new Blob([res.data],{type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
-          let link = document.createElement('a');
-          link.style.display = 'none';
-          link.href = url;
-          link.setAttribute('download', '模具使用情况模板' + "-" + new Date().getTime() + ".xlsx");
-          document.body.appendChild(link);
-          link.click();
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', '模具使用情况模板' + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
 
-          this.downloadTemplateLoading = false;
+        this.downloadTemplateLoading = false;
       });
     },
-    cancelExcelUpload()
-    {
+    cancelExcelUpload() {
       this.excelUploadDialogVisible = false;
     },
     // 时间格式化
@@ -224,27 +224,26 @@ export default {
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD')
     },
-    getCurrentMonthFirst () {
+    getCurrentMonthFirst() {
       var date = new Date()
       date.setDate(1)
       var month = parseInt(date.getMonth() + 1)
       var day = date.getDate()
-      if (month < 10)  month = '0' + month
-      if (day < 10)  day = '0' + day
+      if (month < 10) month = '0' + month
+      if (day < 10) day = '0' + day
       this.filters.moldDateStart = date.getFullYear() + '-' + month + '-' + day
     },
-    getCurrentMonthLast () {
+    getCurrentMonthLast() {
       var date = new Date()
       var month = parseInt(date.getMonth() + 1)
       var day = date.getDate()
-      if (month < 10)  month = '0' + month
-      if (day < 10)  day = '0' + day
+      if (month < 10) month = '0' + month
+      if (day < 10) day = '0' + day
       this.filters.moldDateEnd = date.getFullYear() + '-' + month + '-' + day
     },
 
   },
-  mounted()
-  {
+  mounted() {
     this.getCurrentMonthFirst();
     this.getCurrentMonthLast();
   }

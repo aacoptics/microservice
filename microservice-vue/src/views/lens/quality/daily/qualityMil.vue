@@ -501,6 +501,7 @@ export default {
         questionPresentation: [{required: true, message: '请输入问题描述', trigger: 'blur'}],
         solutionProgress: [{required: true, message: '请输入对策&处理进展', trigger: 'blur'}],
         responsibilities: [{required: true, message: '请输入负责人', trigger: 'blur'}],
+        status: [{required: true, message: '请输入状态', trigger: 'blur'}],
       },
       qualityMilTypeOptions: [],
       qualityMilTypeAddOptions: [],

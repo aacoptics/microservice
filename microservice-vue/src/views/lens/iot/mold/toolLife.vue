@@ -4,15 +4,16 @@
       <el-row>
         <el-col :span="10">
           <el-row style="padding: 10px">
-            <el-input style="width: 250px;margin-right: 10px" v-model="monitorNo" placeholder="请输入监控号"></el-input>
+            <el-input v-model="monitorNo" placeholder="请输入监控号" style="width: 250px;margin-right: 10px"></el-input>
             <el-button style="margin-left: 10px" type="primary" @click="getMachineNoByMonitorNo(null)">查询（全部）
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
           </el-row>
-          <el-row style="padding: 10px" v-show="programSheetMachineList.length > 0">
-            <el-select v-model="programSheetMachineNo" filterable placeholder="请选择机台号" style="width: 250px" @change="onProgramMachineChange">
+          <el-row v-show="programSheetMachineList.length > 0" style="padding: 10px">
+            <el-select v-model="programSheetMachineNo" filterable placeholder="请选择机台号" style="width: 250px"
+                       @change="onProgramMachineChange">
               <el-option
                   v-for="item in programSheetMachineList"
                   :key="item.value"
@@ -28,13 +29,13 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-            <el-button style="margin-right: 10px" type="success" :loading="saveBtnLoading"
+            <el-button :loading="saveBtnLoading" style="margin-right: 10px" type="success"
                        @click="saveEditInfo()">保存
               <template #icon>
                 <font-awesome-icon :icon="['fas','check']"/>
               </template>
             </el-button>
-            <el-button style="margin-right: 10px" type="warning" :loading="saveBtnLoading"
+            <el-button :loading="saveBtnLoading" style="margin-right: 10px" type="warning"
                        @click="addMachineProgramSheet()">新增程序单机台
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'plus']"/>
@@ -43,8 +44,9 @@
           </el-row>
           <el-row style="padding: 10px">
             <span style="padding-top: 5px">批量设置机台号：</span>
-<!--            <el-input style="width: 250px;margin-right: 10px" v-model="allMachineNumber" placeholder="请输入机台号" @change="changeAllMachineNumber"></el-input>-->
-            <el-select v-model="allMachineNumber" filterable placeholder="请选择机台号" style="width: 250px" @change="changeAllMachineNumber">
+            <!--            <el-input style="width: 250px;margin-right: 10px" v-model="allMachineNumber" placeholder="请输入机台号" @change="changeAllMachineNumber"></el-input>-->
+            <el-select v-model="allMachineNumber" filterable placeholder="请选择机台号" style="width: 250px"
+                       @change="changeAllMachineNumber">
               <el-option
                   v-for="item in machineNameList"
                   :key="item.fequipName"
@@ -57,111 +59,112 @@
         </el-col>
         <el-col :span="14">
           <el-upload
-              class="upload-demo"
               :before-upload="beforeUpload"
-              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               :http-request="uploadExcel"
-              action=""
               :multiple="false"
               :show-file-list="false"
+              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              action=""
+              class="upload-demo"
               drag>
-            <font-awesome-icon class="el-icon--upload" :icon="['fas','cloud-arrow-up']"/>
+            <font-awesome-icon :icon="['fas','cloud-arrow-up']" class="el-icon--upload"/>
             <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
           </el-upload>
         </el-col>
       </el-row>
       <el-table
           id="ToolLifeTable"
-          :data="moldToolLifeSheetByMachine"
-          border
-          :height="tableMaxHeight"
           :key="1"
+          v-loading="toolLifeLoading"
+          :data="moldToolLifeSheetByMachine"
+          :height="tableMaxHeight"
+          border
           header-row-class-name="tableHead"
           style="width: 100%;margin-top: 10px"
-          v-loading="toolLifeLoading"
           @cell-click="cellClick">
-        <el-table-column :width=100 prop="monitorNo" label="监控号"></el-table-column>
-        <el-table-column prop="programName" label="程序名"></el-table-column>
-        <el-table-column :width=200 prop="workpiece" label="工件名称"></el-table-column>
-        <el-table-column prop="material" label="材质"></el-table-column>
-        <el-table-column prop="route" label="工序"></el-table-column>
-        <el-table-column :width=130 prop="toolName" label="刀具名称"></el-table-column>
-        <el-table-column prop="toolDiameter" label="刀具直径"></el-table-column>
-        <el-table-column prop="toolNo" label="刀号"></el-table-column>
-        <el-table-column prop="type" label="类型"></el-table-column>
-        <el-table-column prop="margin" label="余量"></el-table-column>
-        <el-table-column :width=100 prop="toolValidLength" label="刀具有效刃长"></el-table-column>
-        <el-table-column prop="brand" label="品牌"></el-table-column>
-        <el-table-column :width=120 prop="maxDepth" label="最大深度（Z）"></el-table-column>
-        <el-table-column prop="workTime" label="加工时间"></el-table-column>
-        <el-table-column prop="cutDepth" label="切深"></el-table-column>
-        <el-table-column prop="feed" label="进给"></el-table-column>
-        <el-table-column prop="remark" label="备注"></el-table-column>
-<!--        <el-table-column prop="machineNo" :width=120 fixed="left"  label="机台号"></el-table-column>-->
+        <el-table-column :width=100 label="监控号" prop="monitorNo"></el-table-column>
+        <el-table-column label="程序名" prop="programName"></el-table-column>
+        <el-table-column :width=200 label="工件名称" prop="workpiece"></el-table-column>
+        <el-table-column label="材质" prop="material"></el-table-column>
+        <el-table-column label="工序" prop="route"></el-table-column>
+        <el-table-column :width=130 label="刀具名称" prop="toolName"></el-table-column>
+        <el-table-column label="刀具直径" prop="toolDiameter"></el-table-column>
+        <el-table-column label="刀号" prop="toolNo"></el-table-column>
+        <el-table-column label="类型" prop="type"></el-table-column>
+        <el-table-column label="余量" prop="margin"></el-table-column>
+        <el-table-column :width=100 label="刀具有效刃长" prop="toolValidLength"></el-table-column>
+        <el-table-column label="品牌" prop="brand"></el-table-column>
+        <el-table-column :width=120 label="最大深度（Z）" prop="maxDepth"></el-table-column>
+        <el-table-column label="加工时间" prop="workTime"></el-table-column>
+        <el-table-column label="切深" prop="cutDepth"></el-table-column>
+        <el-table-column label="进给" prop="feed"></el-table-column>
+        <el-table-column label="备注" prop="remark"></el-table-column>
+        <!--        <el-table-column prop="machineNo" :width=120 fixed="left"  label="机台号"></el-table-column>-->
 
-        <el-table-column prop="machineNo" :width=120 fixed="left"  label="机台号">
+        <el-table-column :width=120 fixed="left" label="机台号" prop="machineNo">
           <template v-slot="scope">
             <el-select-v2
-                size="small"
                 v-if="scope.row.isSelected"
                 v-model="machineName"
+                :options="machineOptions"
                 filterable
                 placeholder="请选择"
-                :options="machineOptions"
+                size="small"
                 @change="cellEventForMachineNo(scope.row)"/>
-<!--            <span v-else>{{ machineName }}</span>-->
-                <span v-else>{{scope.row.machineNo}}</span>
+            <!--            <span v-else>{{ machineName }}</span>-->
+            <span v-else>{{ scope.row.machineNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=120 fixed="left" prop="handleCode" label="刀柄编码">
+        <el-table-column :width=120 fixed="left" label="刀柄编码" prop="handleCode">
           <template v-slot="scope">
             <el-select-v2
-                size="small"
                 v-if="scope.row.isSelected"
                 v-model="scope.row.matInfo.handleCode"
-                placeholder="请选择"
-                filterable
                 :options="toolOptions"
+                filterable
+                placeholder="请选择"
+                size="small"
                 @blur="cellEvent(scope.row)"
                 @change="getMatInfo(scope.row)"
             />
-<!--            @change="checkDiameter(scope.row, scope.row.toolDiameter)"-->
+            <!--            @change="checkDiameter(scope.row, scope.row.toolDiameter)"-->
             <span v-else :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.handleCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=120 fixed="left" prop="toolCode" label="刀具编码">
+        <el-table-column :width=120 fixed="left" label="刀具编码" prop="toolCode">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.toolCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=130 fixed="left" prop="matCode" label="物料号">
+        <el-table-column :width=130 fixed="left" label="物料号" prop="matCode">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.matCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=230 fixed="left" prop="matName" label="物料名称">
+        <el-table-column :width=230 fixed="left" label="物料名称" prop="matName">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.matName }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=100 fixed="left" prop="lifeSalvage" label="标准寿命">
+        <el-table-column :width=100 fixed="left" label="标准寿命" prop="lifeSalvage">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.lifeSalvage }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=100 fixed="left" prop="actualLife" label="实际寿命">
+        <el-table-column :width=100 fixed="left" label="实际寿命" prop="actualLife">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.actualLife }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=100 fixed="left" prop="leftLife" label="剩余寿命">
+        <el-table-column :width=100 fixed="left" label="剩余寿命" prop="leftLife">
           <template v-slot="scope">
             <span :style="getFontColor(scope.row.isCheck)">{{ scope.row.matInfo?.leftLife }}</span>
           </template>
         </el-table-column>
-        <el-table-column :width=200 prop="createDateTime" label="创建时间"></el-table-column>
+        <el-table-column :width=200 label="创建时间" prop="createDateTime"></el-table-column>
       </el-table>
-      <el-dialog v-model="addMachineDialog" title="添加机台程序单" :close-on-click-modal="false" :show-close="false" width="30%">
+      <el-dialog v-model="addMachineDialog" :close-on-click-modal="false" :show-close="false" title="添加机台程序单"
+                 width="30%">
         <el-select v-model="dialogMachineName" filterable placeholder="程序单机台号配置">
           <el-option
               v-for="item in machineNameList"
@@ -174,7 +177,7 @@
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button @click="resetSelection">取消</el-button>
-            <el-button type="primary" @click="submitForm" :loading="addMachineLoading">提交</el-button>
+            <el-button :loading="addMachineLoading" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -184,11 +187,12 @@
 
 <script>
 import {
-  uploadExcel,
   getByMonitorNo,
-  updateToolInfo,
+  getByMonitorNoAndMachineNo,
   getMachineList,
-  getMatInfoList, getByMonitorNoAndMachineNo,
+  getMatInfoList,
+  updateToolInfo,
+  uploadExcel,
 } from "@/api/lens/iot/mold";
 import {tableFilter} from "@/utils/baseUtils";
 
@@ -221,7 +225,7 @@ export default {
     }
   },
   computed: {
-    moldToolLifeSheetByMachine(){
+    moldToolLifeSheetByMachine() {
       // if(this.programSheetMachineList.length && this.programSheetMachineList.length > 1){
       //   return this.moldToolLifeSheet.filter(item => item.machineNo === this.programSheetMachineNo)
       // }else{
@@ -239,7 +243,7 @@ export default {
       }
       return list
     },
-    machineOptions(){
+    machineOptions() {
       const list = [];
       for (let i = 0; i < this.machineNameList.length; i++) {
         list.push({label: this.machineNameList[i].fequipName, value: this.machineNameList[i].fequipName})
@@ -248,7 +252,7 @@ export default {
     }
   },
   methods: {
-    getMatInfo(row){
+    getMatInfo(row) {
       const result = this.matInfoList.find(function (item) {
         return item.handleCode === row.matInfo.handleCode;
       }, this.matInfoList);
@@ -260,13 +264,16 @@ export default {
     },
     submitForm() {
       if (this.dialogMachineName !== '' && this.dialogMachineName !== this.machineName) {
-        if(this.moldToolLifeSheetByMachine.length === 0){
+        if (this.moldToolLifeSheetByMachine.length === 0) {
           this.$message.warning('当前列表为空，请先查询对应的程序单！')
           return
         }
         this.$confirm('确认提交吗？', '提示', {}).then(() => {
           this.addMachineLoading = true
-          updateToolInfo({toolInfos: this.moldToolLifeSheetByMachine, machineNo: this.dialogMachineName}).then((response) => {
+          updateToolInfo({
+            toolInfos: this.moldToolLifeSheetByMachine,
+            machineNo: this.dialogMachineName
+          }).then((response) => {
             const responseData = response.data
             if (responseData.code === '000000') {
               this.$message.success('添加成功！')
@@ -293,8 +300,8 @@ export default {
       //     data[i].machineNo = this.machineName
       //   }
       // }
-      for(let i=0; i < this.moldToolLifeSheetByMachine.length; i++) {
-        if(row.id === this.moldToolLifeSheetByMachine[i].id) {
+      for (let i = 0; i < this.moldToolLifeSheetByMachine.length; i++) {
+        if (row.id === this.moldToolLifeSheetByMachine[i].id) {
           this.moldToolLifeSheetByMachine[i].machineNo = this.machineName
         }
       }
@@ -373,7 +380,7 @@ export default {
         this.$message.error(err)
       })
     },
-    onProgramMachineChange(){
+    onProgramMachineChange() {
       this.machineName = this.programSheetMachineNo
     },
     getTableInfoByMonitorNo(monitorNo) {
@@ -388,7 +395,7 @@ export default {
         } else {
           this.$message.error('获取失败！' + responseData.msg)
         }
-        if(this.moldToolLifeSheet.length == 0) {
+        if (this.moldToolLifeSheet.length == 0) {
           this.$message.warning('查询不到该监控号数据！')
         }
         this.toolLifeLoading = false
@@ -402,7 +409,7 @@ export default {
       if (monitorNo == null) {
         monitorNo = this.monitorNo;
       }
-      if(this.programSheetMachineList.length == 0) {
+      if (this.programSheetMachineList.length == 0) {
         this.$message.error('请先查询机台号')
         return
       }
@@ -414,7 +421,7 @@ export default {
         } else {
           this.$message.error('获取失败！' + responseData.msg)
         }
-        if(this.moldToolLifeSheet.length > 0) {
+        if (this.moldToolLifeSheet.length > 0) {
           // this.programSheetMachineList = tableFilter(this.moldToolLifeSheet).machineNo
           // console.log(this.programSheetMachineList)
           // if (this.programSheetMachineNo === '') {
@@ -423,7 +430,7 @@ export default {
           // } else {
           //   this.machineName = this.programSheetMachineNo
           // }
-        }else{
+        } else {
           this.$message.warning('查询不到该监控号数据！')
         }
         this.toolLifeLoading = false
@@ -444,10 +451,10 @@ export default {
         } else {
           this.$message.error('获取失败！' + responseData.msg)
         }
-        if(this.moldToolLifeSheet.length > 0) {
+        if (this.moldToolLifeSheet.length > 0) {
           this.programSheetMachineList = tableFilter(this.moldToolLifeSheet).machineNo //筛选出机台号
-          for(var i=0; i < this.programSheetMachineList.length; i++) {
-            if(this.programSheetMachineList[i].value === '') {
+          for (var i = 0; i < this.programSheetMachineList.length; i++) {
+            if (this.programSheetMachineList[i].value === '') {
               this.programSheetMachineList[i].text = '未绑定机台程序'
             }
           }
@@ -457,7 +464,7 @@ export default {
           } else {
             this.machineName = this.programSheetMachineNo
           }
-        }else{
+        } else {
           this.$message.warning('查询不到该监控号数据！')
         }
         this.toolLifeLoading = false
@@ -507,7 +514,7 @@ export default {
     },
     changeAllMachineNumber() {
       var data = this.moldToolLifeSheetByMachine;
-      for(var i=0; i < data.length; i++) {
+      for (var i = 0; i < data.length; i++) {
         data[i].machineNo = this.allMachineNumber
       }
     }
