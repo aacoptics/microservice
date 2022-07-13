@@ -5,7 +5,7 @@
         <template #title>
           <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                              :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
-          <span>{{ item.title }}</span>
+          <span class="font-sans ...">{{ item.title }}</span>
         </template>
         <sys-menu-item :items="item.subs"/>
       </el-sub-menu>
@@ -15,7 +15,7 @@
         <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                            :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
         <template #title>
-          <span>{{ item.title }}</span>
+          <span class="font-sans ...">{{ item.title }}</span>
         </template>
       </el-menu-item>
     </template>
@@ -24,6 +24,7 @@
 
 <script>
 import {fontAwesomeIconFormat} from "@/utils/commonUtils";
+import querystring from 'querystring'
 
 export default {
   name: 'SysMenuItem',
@@ -38,7 +39,13 @@ export default {
   },
   methods: {
     handleClick(index) {
-      this.$router.push({path: `/${index}`});
+      if (index.indexOf('?') > -1) {
+        const queryArray = index.split('?')
+        let queryInfo = querystring.parse(queryArray[1]);
+        this.$router.push({path: `/${queryArray[0]}`, query: queryInfo});
+      } else {
+        this.$router.push({path: `/${index}`});
+      }
     },
     fontAwesomeIconFormat: (icon) => fontAwesomeIconFormat(icon)
   },

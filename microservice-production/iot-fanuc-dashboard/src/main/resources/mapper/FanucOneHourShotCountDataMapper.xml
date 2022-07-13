@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.fanuc.dashboard.dao.FanucOneHourShotCountDataMapper">
+    <!-- 获取登录用户拥有的菜单权限 -->
+    <select id="getUPH" resultType="com.aacoptics.fanuc.dashboard.entity.FanucOneHourShotCountData">
+        SELECT [monit_mc_name]
+             , [start_time]
+             , [end_time]
+             , [shot_count]
+        FROM [thingworx2080].[dbo].[z_fanuc_one_hour_shotcount]
+        where start_time &gt;= #{startTime}
+          and shot_count is not null
+          and monit_mc_name like '3F%'
+        order by id
+    </select>
+
+    <select id="getTotalUph" resultType="com.aacoptics.fanuc.dashboard.entity.FanucOneHourShotCountData">
+        SELECT [start_time]
+             , [end_time]
+             , sum(shot_count) as shot_count
+        FROM [thingworx2080].[dbo].[z_fanuc_one_hour_shotcount]
+        where start_time &gt;= #{startTime}
+          and shot_count is not null
+        group by start_time, end_time
+    </select>
+
+
+</mapper>

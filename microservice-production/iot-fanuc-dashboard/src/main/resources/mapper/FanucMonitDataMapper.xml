@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.fanuc.dashboard.dao.FanucMonitDataMapper">
+    <select id="getAllCycleList" resultType="com.aacoptics.fanuc.dashboard.entity.FanucMonitData">
+        select *
+        from (
+                 SELECT ROW_NUMBER() over (PARTITION By monit_mc_name order by id desc) as inde, *
+                 FROM (
+                          SELECT id, monit_mc_name, monit_cycle, dbCreateTime
+                          FROM z_fanuc_monit_data
+                          where dbCreateTime between #{startTime} and #{endTime}
+                      ) c
+             ) t
+        where inde = 1
+        order by monit_mc_name
+    </select>
+</mapper>
