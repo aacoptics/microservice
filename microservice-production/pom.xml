@@ -13,6 +13,7 @@
         <module>wlg-iot-dashboard</module>
         <module>microservice-wlg-report</module>
         <module>iot-mold-toollife</module>
+        <module>microservice-bi-sso</module>
     </modules>
 
     <packaging>pom</packaging>
