@@ -1,17 +1,20 @@
 <template>
   <div>
     <!--表格栏-->
-    <el-table ref="queryAllTable" :data="data.records" :highlight-current-row="highlightCurrentRow"
-              @selection-change="selectionChange" 
-              v-loading="loading" :element-loading-text="action.loading"
-              :border="border" :stripe="stripe"
-              :show-overflow-tooltip="showOverflowTooltip" :max-height="maxHeight" :height="height" :size="size"
+    <el-table ref="queryAllTable" v-loading="loading" :align="align"
+              :border="border"
+              :data="data.records" :element-loading-text="action.loading"
+              :height="height" :highlight-current-row="highlightCurrentRow"
+              :max-height="maxHeight" :show-overflow-tooltip="showOverflowTooltip" :size="size"
               :span-method="objectSpanMethod"
-              :align="align" style="width:100%;">
-      <el-table-column v-for="column in columns" header-align="left" align="left"
-                       :prop="column.prop" :label="column.label" :width="column.width" :min-width="column.minWidth"
-                       :fixed="column.fixed" :key="column.prop" :type="column.type" :formatter="column.formatter"
-                       :sortable="column.sortable==null?true:column.sortable">
+              :stripe="stripe"
+              style="width:100%;" @selection-change="selectionChange">
+      <el-table-column v-for="column in columns" :key="column.prop" :fixed="column.fixed"
+                       :formatter="column.formatter" :label="column.label" :min-width="column.minWidth"
+                       :prop="column.prop"
+                       :sortable="column.sortable==null?true:column.sortable" :type="column.type" :width="column.width"
+                       align="left"
+                       header-align="left">
       </el-table-column>
       <slot name="custom-column"></slot>
     </el-table>
@@ -92,7 +95,7 @@ export default {
     handleClearSelection: function () {
       this.$refs.queryTable.setCurrentRow(null);
     },
-    
+
   },
   mounted() {
   }

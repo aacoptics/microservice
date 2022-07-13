@@ -2,8 +2,9 @@
   <div>
     <div class="aac-container" style="overflow: hidden;">
       <div style="margin-bottom: 20px">
-        <div v-for="(item, index) of statusRadio" :key="index" class="status_radio_type"
-             :style="'background-color:' + statusInfo[item].color + ';text-align:center'">
+        <div v-for="(item, index) of statusRadio" :key="index"
+             :style="'background-color:' + statusInfo[item].color + ';text-align:center'"
+             class="status_radio_type">
           {{ statusInfo[item].desc + '(' + this.statusCount[item] + ')' }}
         </div>
       </div>
@@ -15,10 +16,10 @@
         </template>
         <el-card v-for="(singleMachineInfo, index) of moldDataByArea(area)" :key="index"
                  :body-style="{ padding: '0px', height:'50px'}"
-                 shadow="hover"
-                 class="mold_card_type"
                  :style="'background-color:' +
-                 statusInfo[singleMachineInfo.CncNode.State].color + ';cursor: pointer'">
+                 statusInfo[singleMachineInfo.CncNode.State].color + ';cursor: pointer'"
+                 class="mold_card_type"
+                 shadow="hover">
           <el-tooltip placement="top">
             <template #content>
               <p>监控号：{{ singleMachineInfo.CncBaseInfo.monitorNo }}</p>
@@ -29,7 +30,7 @@
             <div
                 v-if="getMaintainStatus(singleMachineInfo.CncBaseInfo.monitorNo, singleMachineInfo.CncNode.State) && !singleMachineInfo.CncBaseInfo.isMicroProg"
                 style="height:30px;line-height:40px;text-align: center;font-weight: bold">
-              <el-badge is-dot class="item" style="height: 30px;line-height:40px">
+              <el-badge class="item" is-dot style="height: 30px;line-height:40px">
                 {{ singleMachineInfo.MachineNo }}
               </el-badge>
             </div>
@@ -125,21 +126,22 @@
         </div>
         <!-- 表格滚动区 -->
         <div>
-          <scroll style="height: 420px }" :data="abnormalList"
-                  :class-option="defaultOption" class="warp-content">
+          <scroll :class-option="defaultOption" :data="abnormalList"
+                  class="warp-content" style="height: 420px }">
             <ul class="item">
               <li v-for="(item, index) of abnormalList" :key="index"
                   :style="{backgroundColor:((index+1)%2 == 0) ? '#f0f9eb' : '#ffffff'}">
                 <span class="id" style="width: 30px;text-align: center" v-text="index + 1"></span>
-                <span class="toolNo" style="width: 80px;text-align: center;cursor: pointer" v-text="item.toolNo"
-                      @click="onGetToolHisClick(item.toolNo, item.matCode, item.matName)"></span>
+                <span class="toolNo" style="width: 80px;text-align: center;cursor: pointer"
+                      @click="onGetToolHisClick(item.toolNo, item.matCode, item.matName)"
+                      v-text="item.toolNo"></span>
                 <span class="matCode" style="width: 100px;text-align: center" v-text="item.matCode"></span>
                 <span class="matName" style="width: 280px;text-align: center" v-text="item.matName"></span>
                 <span class="lifeSalvage" style="width: 80px;text-align: center" v-text="item.lifeSalvage"></span>
                 <span class="realLifeSalvage" style="width: 80px;text-align: center"
                       v-text="item.realLifeSalvage"></span>
-<!--                <span class="lifeRate" style="width: 80px;text-align: center"-->
-<!--                      v-text="(item.realLifeSalvage * 1.0 / item.lifeSalvage * 100).toFixed(2) + '%'"></span>-->
+                <!--                <span class="lifeRate" style="width: 80px;text-align: center"-->
+                <!--                      v-text="(item.realLifeSalvage * 1.0 / item.lifeSalvage * 100).toFixed(2) + '%'"></span>-->
                 <span class="lifeRate" style="width: 80px;text-align: center" v-text="item.lifeRate"></span>
                 <span class="scrapedTime" style="width: 120px;text-align: center"
                       v-text="this.$moment(item.scrapedTime).format('YYYY/MM/DD HH:mm')"></span>
@@ -156,14 +158,14 @@
                   <el-tag type="danger">原因未填写</el-tag>
                 </span>
                 <span class="reason" style="width: 60px;text-align: center">
-                  <el-button type="primary" circle @click="onAddReasonClick(item)">
+                  <el-button circle type="primary" @click="onAddReasonClick(item)">
                     <template #icon>
                       <font-awesome-icon :icon="['fas','pencil']"/>
                     </template>
                   </el-button>
                 </span>
                 <span class="confirm" style="width: 60px;text-align: center">
-                  <el-button type="success" circle @click="onConfirmReasonClick(item)">
+                  <el-button circle type="success" @click="onConfirmReasonClick(item)">
                     <template #icon>
                       <font-awesome-icon :icon="['fas','check']"/>
                     </template>
@@ -174,7 +176,7 @@
           </scroll>
         </div>
       </div>
-      <el-dialog v-model="reasonDialog" title="刀具异常原因填写" :close-on-click-modal="false">
+      <el-dialog v-model="reasonDialog" :close-on-click-modal="false" title="刀具异常原因填写">
         <el-select v-model="addReasonDialog.abnormalTool.abnormalType" filterable placeholder="请选择原因类型">
           <el-option
               v-for="item in abnormalType"
@@ -184,48 +186,50 @@
           >
           </el-option>
         </el-select>
-        <el-input style="margin-top: 20px" v-model="addReasonDialog.abnormalTool.reason" auto-complete="off"
-                  placeholder="请填写异常原因"></el-input>
+        <el-input v-model="addReasonDialog.abnormalTool.reason" auto-complete="off" placeholder="请填写异常原因"
+                  style="margin-top: 20px"></el-input>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button @click="resetSelection">取消</el-button>
-            <el-button type="primary" @click="submitForm" :loading="editReasonLoading">提交</el-button>
+            <el-button :loading="editReasonLoading" type="primary" @click="submitForm">提交</el-button>
           </slot>
         </div>
       </el-dialog>
 
-      <el-dialog v-model="abnormalListDialog" title="刀具异常清单" :close-on-click-modal="false" width="90%">
+      <el-dialog v-model="abnormalListDialog" :close-on-click-modal="false" title="刀具异常清单" width="90%">
         <el-table
             id="AbnormalListTable"
+            :key="1"
             :data="abnormalList"
             border
             height="500px"
-            :key="1"
             style="width: 100%;margin-top: 10px">
-          <el-table-column :width=60 prop="id" label="序号"></el-table-column>
+          <el-table-column :width=60 label="序号" prop="id"></el-table-column>
           <el-table-column :width=90 label="刀具编号">
             <template v-slot="scope">
-            <span class="lifeRate" style="cursor: pointer" @click="onGetToolHisClick(scope.row.toolNo, scope.row.matCode, scope.row.matName)"
-                  v-text="scope.row.toolNo" ></span>
+            <span class="lifeRate" style="cursor: pointer"
+                  @click="onGetToolHisClick(scope.row.toolNo, scope.row.matCode, scope.row.matName)"
+                  v-text="scope.row.toolNo"></span>
             </template>
           </el-table-column>
-          <el-table-column :width=110 prop="matCode" label="刀具物料号"></el-table-column>
-          <el-table-column prop="matName" label="刀具名称"></el-table-column>
-          <el-table-column :width=100 prop="lifeSalvage" label="标准寿命"></el-table-column>
-          <el-table-column :width=100 prop="realLifeSalvage" label="实际寿命"></el-table-column>
-          <el-table-column :width=80 prop="lifeRate" label="寿命占比">
+          <el-table-column :width=110 label="刀具物料号" prop="matCode"></el-table-column>
+          <el-table-column label="刀具名称" prop="matName"></el-table-column>
+          <el-table-column :width=100 label="标准寿命" prop="lifeSalvage"></el-table-column>
+          <el-table-column :width=100 label="实际寿命" prop="realLifeSalvage"></el-table-column>
+          <el-table-column :width=80 label="寿命占比" prop="lifeRate">
             <template v-slot="scope">
             <span class="lifeRate" style="width: 80px;text-align: center"
                   v-text="(scope.row.realLifeSalvage * 1.0 / scope.row.lifeSalvage * 100).toFixed(2) + '%'"></span>
             </template>
           </el-table-column>
-          <el-table-column :width=140 prop="scrapedTime" label="报废时间">
+          <el-table-column :width=140 label="报废时间" prop="scrapedTime">
             <template v-slot="scope">
               <span v-text="this.$moment(scope.row.scrapedTime).format('YYYY/MM/DD HH:mm')"></span>
             </template>
           </el-table-column>
-          <el-table-column :width=80 prop="area" label="工序" :filters="headFilters.area" :filter-method="filterHandler"></el-table-column>
-          <el-table-column :width=80 prop="lastMachineNo" label="机床号"></el-table-column>
+          <el-table-column :filter-method="filterHandler" :filters="headFilters.area" :width=80 label="工序"
+                           prop="area"></el-table-column>
+          <el-table-column :width=80 label="机床号" prop="lastMachineNo"></el-table-column>
           <el-table-column label="原因">
             <template v-slot="scope">
               <el-tooltip v-if="scope.row.reason != null" placement="top">
@@ -242,7 +246,7 @@
           </el-table-column>
           <el-table-column :width=100 label="原因填写">
             <template v-slot="scope">
-              <el-button type="primary" circle @click="onAddReasonClick(scope.row)">
+              <el-button circle type="primary" @click="onAddReasonClick(scope.row)">
                 <template #icon>
                   <font-awesome-icon :icon="['fas','pencil']"/>
                 </template>
@@ -251,7 +255,7 @@
           </el-table-column>
           <el-table-column :width=100 label="确认">
             <template v-slot="scope">
-              <el-button type="success" circle
+              <el-button circle type="success"
                          @click="onConfirmReasonClick(scope.row)">
                 <template #icon>
                   <font-awesome-icon :icon="['fas','check']"/>
@@ -261,20 +265,20 @@
           </el-table-column>
         </el-table>
       </el-dialog>
-      <el-dialog v-model="toolHisListDialog" title="刀具运转明细" :close-on-click-modal="false" width="60%">
+      <el-dialog v-model="toolHisListDialog" :close-on-click-modal="false" title="刀具运转明细" width="60%">
         <el-table
             id="ToolHisListTable"
+            :key="1"
             :data="toolHisList"
             border
             height="500px"
-            :key="1"
             style="width: 100%;margin-top: 10px">
-          <el-table-column :width=90 prop="toolNo" label="刀具编号"></el-table-column>
-          <el-table-column :width=110 prop="matCode" label="刀具物料号"></el-table-column>
-          <el-table-column prop="matName" label="刀具名称"></el-table-column>
-          <el-table-column :width=120 prop="monitorNo" label="监控号"></el-table-column>
-          <el-table-column :width=80 prop="machineNo" label="机床号"></el-table-column>
-          <el-table-column :width=90 prop="programName" label="程序名"></el-table-column>
+          <el-table-column :width=90 label="刀具编号" prop="toolNo"></el-table-column>
+          <el-table-column :width=110 label="刀具物料号" prop="matCode"></el-table-column>
+          <el-table-column label="刀具名称" prop="matName"></el-table-column>
+          <el-table-column :width=120 label="监控号" prop="monitorNo"></el-table-column>
+          <el-table-column :width=80 label="机床号" prop="machineNo"></el-table-column>
+          <el-table-column :width=90 label="程序名" prop="programName"></el-table-column>
           <el-table-column :width=140 label="开始时间">
             <template v-slot="scope">
               <span v-text="this.$moment(scope.row.startTime).format('YYYY/MM/DD HH:mm')"></span>
@@ -302,11 +306,15 @@ import {Client} from '@stomp/stompjs';
 import scroll from 'vue-seamless-scroll/src'
 import {MQTT_PASSWORD, MQTT_SERVICE, MQTT_TOPIC_TOOL_LIFE, MQTT_USERNAME} from '@/utils/rabbitConfig'
 import {
-  addAbnormalReason, confirmAbnormalReason,
-  getAbnormalList, getAbnormalType,
-  getAreaInfo, getLastDayAbnormalCount,
+  addAbnormalReason,
+  confirmAbnormalReason,
+  getAbnormalList,
+  getAbnormalType,
+  getAreaInfo,
+  getLastDayAbnormalCount,
   getLastDayScrapCount,
-  getLastDayTotalTime, getToolHisList,
+  getLastDayTotalTime,
+  getToolHisList,
   getToolMaintainStatus
 } from "@/api/lens/iot/mold";
 import {getUsername} from "@/utils/auth";
@@ -386,7 +394,7 @@ export default {
         waitTime: 1000    // 单步运动停止的时间(默认值1000ms)
       }
     },
-    headFilters(){
+    headFilters() {
       return tableFilter(this.abnormalList)
     },
   },
@@ -665,7 +673,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .el-card ::v-deep(.el-card__header) {
   padding: 8px 20px;
   -webkit-box-sizing: border-box;

@@ -2,66 +2,68 @@
   <div>
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-                <el-form :inline="true" :size="size" label-width="100px">
+        <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
-              <el-form-item label="项目" prop="projectName">
-                <el-input
-                    v-model="filters.projectName"
-                    placeholder="请输入项目"
-                    clearable
-                    :size="size"
-                />
-              </el-form-item>
-          <el-form-item label="模具" prop="mold">
+            <el-form-item label="项目" prop="projectName">
+              <el-input
+                  v-model="filters.projectName"
+                  :size="size"
+                  clearable
+                  placeholder="请输入项目"
+              />
+            </el-form-item>
+            <el-form-item label="模具" prop="mold">
               <el-input
                   v-model="filters.mold"
-                  placeholder="请输入模具"
-                  clearable
                   :size="size"
+                  clearable
+                  placeholder="请输入模具"
               />
             </el-form-item>
             <el-form-item label="周期" prop="cycle">
               <el-input
                   v-model="filters.cycle"
-                  placeholder="请输入周期"
-                  clearable
                   :size="size"
+                  clearable
+                  placeholder="请输入周期"
               />
             </el-form-item>
           </el-row>
           <el-row>
             <el-form-item label="日期 从" prop="producitonDate">
-              <el-date-picker v-model="filters.producitonDateStart" type="date" value-format="YYYY-MM-DD" auto-complete="off"></el-date-picker>
+              <el-date-picker v-model="filters.producitonDateStart" auto-complete="off" type="date"
+                              value-format="YYYY-MM-DD"></el-date-picker>
             </el-form-item>
             <el-form-item label="到" prop="producitonDate">
-              <el-date-picker v-model="filters.producitonDateEnd" type="date" value-format="YYYY-MM-DD" auto-complete="off"></el-date-picker>
+              <el-date-picker v-model="filters.producitonDateEnd" auto-complete="off" type="date"
+                              value-format="YYYY-MM-DD"></el-date-picker>
             </el-form-item>
-            </el-row>
+          </el-row>
         </el-form>
 
-          <el-form :inline="true" :size="size">
-            <el-form-item>
-              <el-button type="primary" :loading="queryLoading"
-                        @click="findPage(null)">查询
-                <template #icon>
-                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
-                </template>
-              </el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="success" :size="size" :loading="exportLoading"
-                         @click="exportExcelData('单个项目报表')">导出
-                <template #icon>
-                  <font-awesome-icon :icon="['fas','download']"/>
-                </template>
-              </el-button>
-            </el-form-item>
-          </el-form>
+        <el-form :inline="true" :size="size">
+          <el-form-item>
+            <el-button :loading="queryLoading" type="primary"
+                       @click="findPage(null)">查询
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('单个项目报表')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <QueryAllTable id="condDataTable" :height="550" :highlightCurrentRow="true" :stripe="true"
-                :data="pageResult" :columns="columns"
-                ref="queryAllTable"
-                @findPage="findPage" >
+      <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="columns" :data="pageResult"
+                     :height="550" :highlightCurrentRow="true"
+                     :stripe="true"
+                     @findPage="findPage">
       </QueryAllTable>
     </div>
   </div>
@@ -70,7 +72,11 @@
 <script>
 
 import QueryAllTable from "@/components/QueryAllTable";
-import {findProductionReportPage, queryProductionReportTitleByMonth, exportProductionProjectExcel} from "@/api/wlg/report/productionProjectReport";
+import {
+  exportProductionProjectExcel,
+  findProductionReportPage,
+  queryProductionReportTitleByMonth
+} from "@/api/wlg/report/productionProjectReport";
 
 export default {
   name: "productionProjectReport",
@@ -85,8 +91,8 @@ export default {
         projectName: '',
         mold: '',
         cycle: '',
-        producitonDateStart:'',
-        producitonDateEnd:'',
+        producitonDateStart: '',
+        producitonDateEnd: '',
       },
       columns: [
         {prop: "projectName", label: "项目", minWidth: 120},
@@ -98,7 +104,7 @@ export default {
       ],
       pageRequest: {},
       pageResult: {
-        tableData:[]
+        tableData: []
       },
 
       excelUploadDialogVisible: false,
@@ -130,9 +136,7 @@ export default {
         if (responseData.code === '000000') {
           this.pageResult.records = responseData.data
           this.$message.success(responseData.msg)
-        }
-        else
-        {
+        } else {
           this.pageResult.records = [];
           this.$message.error(responseData.msg + "," + responseData.data);
         }
@@ -148,14 +152,14 @@ export default {
 
       this.exportLoading = true;
       exportProductionProjectExcel(this.pageRequest).then(res => {
-          this.exportLoading = false;
-          let url = window.URL.createObjectURL(new Blob([res.data],{type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
-          let link = document.createElement('a');
-          link.style.display = 'none';
-          link.href = url;
-          link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
-          document.body.appendChild(link);
-          link.click();
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
       });
     },
     // 时间格式化
@@ -166,26 +170,25 @@ export default {
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD')
     },
-    getCurrentMonthFirst () {
+    getCurrentMonthFirst() {
       var date = new Date()
       date.setDate(1)
       var month = parseInt(date.getMonth() + 1)
       var day = date.getDate()
-      if (month < 10)  month = '0' + month
-      if (day < 10)  day = '0' + day
+      if (month < 10) month = '0' + month
+      if (day < 10) day = '0' + day
       this.filters.producitonDateStart = date.getFullYear() + '-' + month + '-' + day
     },
-    getCurrentMonthLast () {
+    getCurrentMonthLast() {
       var date = new Date()
       var month = parseInt(date.getMonth() + 1)
       var day = date.getDate()
-      if (month < 10)  month = '0' + month
-      if (day < 10)  day = '0' + day
+      if (month < 10) month = '0' + month
+      if (day < 10) day = '0' + day
       this.filters.producitonDateEnd = date.getFullYear() + '-' + month + '-' + day
     },
   },
-  mounted()
-  {
+  mounted() {
     this.getCurrentMonthFirst();
     this.getCurrentMonthLast();
   }
