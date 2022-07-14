@@ -14,6 +14,8 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -213,11 +215,31 @@ public class BiSsoServiceImpl  implements BiSsoService {
             redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
         }
 
-        redirectUrl = new URI(redirectUrl,"false","UTF-8").toString();
-
+        redirectUrl = this.urlEncode(redirectUrl);
 
         log.info("完成生成BI自动登录URL，redirectUrl=" + redirectUrl);
         return redirectUrl;
     }
 
+
+    /**
+     * 将URL中的中文encode转码
+     *
+     * @param url
+     * @return
+     */
+    private String urlEncode(String url)
+    {
+        Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]+");
+        Matcher matcher = pattern.matcher(url);
+        while(matcher.find()){
+            String mStr = matcher.group();
+            try{
+                url = url.replaceFirst(mStr,URLEncoder.encode(mStr,"UTF-8"));
+            } catch(Exception e){
+
+            }
+        }
+        return url;
+    }
 }
