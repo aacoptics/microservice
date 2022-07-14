@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 @Controller
@@ -49,7 +50,7 @@ public class BiSsoController {
             String callBackUrl = "";
             if(parameterMaps.get("callBackUrl") != null && parameterMaps.get("callBackUrl").length > 0)
             {
-                callBackUrl = parameterMaps.get("callBackUrl")[0];
+                callBackUrl = URLDecoder.decode(parameterMaps.get("callBackUrl")[0], "UTF-8");
             }
             String[] code = parameterMaps.get("code");
             redirectUrl = biSsoService.getRedirectBiUrl(code[0], callBackUrl);
