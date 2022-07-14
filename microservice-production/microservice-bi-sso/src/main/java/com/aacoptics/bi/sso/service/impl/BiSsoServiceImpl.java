@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -200,11 +201,11 @@ public class BiSsoServiceImpl  implements BiSsoService {
         {
             if(callBackUrl.contains("?"))
             {
-                redirectUrl = URLEncoder.encode(callBackUrl,"UTF-8") + "&ssoToken=" + ssoToken;
+                redirectUrl = callBackUrl + "&ssoToken=" + ssoToken;
             }
             else
             {
-                redirectUrl = URLEncoder.encode(callBackUrl,"UTF-8") + "?ssoToken=" + ssoToken;
+                redirectUrl = callBackUrl + "?ssoToken=" + ssoToken;
             }
         }
         else
@@ -212,7 +213,10 @@ public class BiSsoServiceImpl  implements BiSsoService {
             redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
         }
 
-        log.info("完成生成BI自动登录URL，ssoToken=" + ssoToken);
+        redirectUrl = new URI(redirectUrl,"false","UTF-8").toString();
+
+
+        log.info("完成生成BI自动登录URL，redirectUrl=" + redirectUrl);
         return redirectUrl;
     }
 
