@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Map;
 
 @Controller
@@ -56,7 +57,7 @@ public class BiSsoController {
             String[] code = parameterMaps.get("code");
             redirectUrl = biSsoService.getRedirectBiUrl(code[0], callBackUrl);
 
-            response.sendRedirect(redirectUrl);
+            response.sendRedirect(URLEncoder.encode(redirectUrl,"UTF-8"));
         } catch (Exception e) {
             log.error("重定向登录BI失败", e);
             try {
