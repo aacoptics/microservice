@@ -115,9 +115,9 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
             markdownGroupMessage.addContent("明细如下：");
             markdownGroupMessage.addContent("![明细](" + mediaId + ")");
 
-            Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage("https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a", "两小时投入产出汇总", markdownGroupMessage.toString());
-            String result = resultMap.get("result");
-            String message = resultMap.get("message");
+//            Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage("https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a", "两小时投入产出汇总", markdownGroupMessage.toString());
+//            String result = resultMap.get("result");
+//            String message = resultMap.get("message");
         }
 
 
