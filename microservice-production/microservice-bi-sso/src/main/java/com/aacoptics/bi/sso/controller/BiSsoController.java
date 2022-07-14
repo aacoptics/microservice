@@ -51,6 +51,7 @@ public class BiSsoController {
             if(parameterMaps.get("callBackUrl") != null && parameterMaps.get("callBackUrl").length > 0)
             {
                 callBackUrl = URLDecoder.decode(parameterMaps.get("callBackUrl")[0], "UTF-8");
+                log.info("callBackUrl=" + callBackUrl);
             }
             String[] code = parameterMaps.get("code");
             redirectUrl = biSsoService.getRedirectBiUrl(code[0], callBackUrl);
