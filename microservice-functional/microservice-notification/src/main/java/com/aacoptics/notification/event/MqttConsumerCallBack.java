@@ -72,14 +72,6 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 } else {
                     markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
                 }
-                String robotUrl = "https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a";
-                try {
-                    Map<String, String> resultMap = DingTalkUtil.sendGroupRobotMessage(robotUrl, "加热棒状态报警", markdownGroupMessage.toString());
-                    JSONObject resultMapJson = (JSONObject) JSONObject.toJSON(resultMap);
-                    log.debug(JSONObject.toJSONString(resultMapJson));
-                } catch (Exception err) {
-                    log.error("发送加热棒报警通知失败！", err);
-                }
                 break;
             case "FeedAlarm":
                 title = "模造换料提醒";
