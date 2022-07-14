@@ -10,8 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -26,7 +30,7 @@ public class BiSsoServiceImpl  implements BiSsoService {
     FeiShuApi feiShuApi;
 
     @Override
-    public String getRedirectBiUrl(String code) throws Exception {
+    public String getRedirectBiUrl(String code, String callBackUrl) throws Exception {
         log.info("开始生成BI自动登录URL，code=" + code);
         //1 获取app access token
         Map<String, String> params = new HashMap<>();
@@ -193,10 +197,49 @@ public class BiSsoServiceImpl  implements BiSsoService {
 
         //4 获取BI单点登录token
         String ssoToken = BIRsaEncrypt.getSsoToken(employeeNo);
-        String redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
 
-        log.info("完成生成BI自动登录URL，ssoToken=" + ssoToken);
+        String redirectUrl = "";
+        if(StringUtils.isNotEmpty(callBackUrl))
+        {
+            if(callBackUrl.contains("?"))
+            {
+                redirectUrl = callBackUrl + "&ssoToken=" + ssoToken;
+            }
+            else
+            {
+                redirectUrl = callBackUrl + "?ssoToken=" + ssoToken;
+            }
+        }
+        else
+        {
+            redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
+        }
+
+        redirectUrl = this.urlEncode(redirectUrl);
+
+        log.info("完成生成BI自动登录URL，redirectUrl=" + redirectUrl);
         return redirectUrl;
     }
 
+
+    /**
+     * 将URL中的中文encode转码
+     *
+     * @param url
+     * @return
+     */
+    private String urlEncode(String url)
+    {
+        Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]+");
+        Matcher matcher = pattern.matcher(url);
+        while(matcher.find()){
+            String mStr = matcher.group();
+            try{
+                url = url.replaceFirst(mStr,URLEncoder.encode(mStr,"UTF-8"));
+            } catch(Exception e){
+
+            }
+        }
+        return url;
+    }
 }
