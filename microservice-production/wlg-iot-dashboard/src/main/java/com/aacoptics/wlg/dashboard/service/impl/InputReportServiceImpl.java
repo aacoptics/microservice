@@ -68,9 +68,9 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
         String fileName = "wlg-input-report-" + currentTimeMillis + ".xlsx";
         String imageFileName = "wlg-input-report-" + currentTimeMillis + ".png";
         QueryWrapper<InputReport> queryWrapper = new QueryWrapper<>();
-        queryWrapper.ge("end_time", LocalDateTime.now().minusHours(6))
+        queryWrapper.ge("end_time", LocalDateTime.now().minusHours(2))
                 .isNotNull("end_wafer_id")
-                .orderByDesc("create_time");
+                .orderByAsc("model_name", "machine_name");
 
         InputReport sumInfo = inputReportMapper.getTwoHourSum();
 

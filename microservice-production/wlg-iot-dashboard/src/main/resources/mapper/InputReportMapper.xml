@@ -18,7 +18,7 @@
     <select id="getTwoHourSum" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
         SELECT isnull(sum(input_qty),0) as input_qty, isnull(sum(output_qty),0) as output_qty
         FROM t_wlg_molding_machine_input_per_six_hour
-        where end_time &gt; Dateadd(Hour, -6, getdate())
+        where end_time &gt; Dateadd(Hour, -2, getdate())
         and end_wafer_id is not null
     </select>
 
