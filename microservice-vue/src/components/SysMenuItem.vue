@@ -5,7 +5,7 @@
         <template #title>
           <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                              :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
-          <span class="font-sans ...">{{ item.title }}</span>
+          <span class="font-sans ... text-xs whitespace-normal leading-tight">{{ item.title }}</span>
         </template>
         <sys-menu-item :items="item.subs"/>
       </el-sub-menu>
@@ -15,7 +15,7 @@
         <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                            :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
         <template #title>
-          <span class="font-sans ...">{{ item.title }}</span>
+          <span class="font-sans ... text-xs whitespace-normal leading-tight">{{ item.title }}</span>
         </template>
       </el-menu-item>
     </template>
@@ -51,3 +51,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.el-sub-menu .el-menu-item {
+  height: 40px;
+  line-height: 40px;
+  min-width: 200px;
+  padding: 0 0
+}
+</style>

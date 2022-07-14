@@ -17,4 +17,6 @@ public interface InputReportMapper extends BaseMapper<InputReport> {
     List<InputReport> getByDateAndMachineName(@Param("startTime") LocalDateTime startTime,
                                                       @Param("endTime") LocalDateTime endTime,
                                                       @Param("machineNames") List<String> machineNames);
+
+    InputReport getTwoHourSum();
 }
