@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Map;
 
 @Controller
@@ -51,14 +50,14 @@ public class BiSsoController {
             String callBackUrl = "";
             if(parameterMaps.get("callBackUrl") != null && parameterMaps.get("callBackUrl").length > 0)
             {
-                log.info("encode callBackUrl=" + parameterMaps.get("callBackUrl"));
+                log.info("encode callBackUrl=" + parameterMaps.get("callBackUrl")[0]);
                 callBackUrl = URLDecoder.decode(parameterMaps.get("callBackUrl")[0], "UTF-8");
                 log.info("decode callBackUrl=" + callBackUrl);
             }
             String[] code = parameterMaps.get("code");
             redirectUrl = biSsoService.getRedirectBiUrl(code[0], callBackUrl);
 
-            response.sendRedirect(URLEncoder.encode(redirectUrl,"UTF-8"));
+            response.sendRedirect(redirectUrl);
         } catch (Exception e) {
             log.error("重定向登录BI失败", e);
             try {
