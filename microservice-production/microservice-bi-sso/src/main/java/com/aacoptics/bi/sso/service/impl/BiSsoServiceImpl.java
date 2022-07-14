@@ -26,7 +26,7 @@ public class BiSsoServiceImpl  implements BiSsoService {
     FeiShuApi feiShuApi;
 
     @Override
-    public String getRedirectBiUrl(String code) throws Exception {
+    public String getRedirectBiUrl(String code, String callBackUrl) throws Exception {
         log.info("开始生成BI自动登录URL，code=" + code);
         //1 获取app access token
         Map<String, String> params = new HashMap<>();
@@ -193,7 +193,23 @@ public class BiSsoServiceImpl  implements BiSsoService {
 
         //4 获取BI单点登录token
         String ssoToken = BIRsaEncrypt.getSsoToken(employeeNo);
-        String redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
+
+        String redirectUrl = "";
+        if(StringUtils.isNotEmpty(callBackUrl))
+        {
+            if(callBackUrl.contains("?"))
+            {
+                redirectUrl = callBackUrl + "&ssoToken=" + ssoToken;
+            }
+            else
+            {
+                redirectUrl = callBackUrl + "?ssoToken=" + ssoToken;
+            }
+        }
+        else
+        {
+            redirectUrl = BI_URL + "?ssoToken=" + ssoToken;
+        }
 
         log.info("完成生成BI自动登录URL，ssoToken=" + ssoToken);
         return redirectUrl;

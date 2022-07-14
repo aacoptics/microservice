@@ -46,8 +46,13 @@ public class BiSsoController {
                 response.sendRedirect(BiSsoServiceImpl.BI_URL);
                 return;
             }
+            String callBackUrl = "";
+            if(parameterMaps.get("callBackUrl") != null && parameterMaps.get("callBackUrl").length > 0)
+            {
+                callBackUrl = parameterMaps.get("callBackUrl")[0];
+            }
             String[] code = parameterMaps.get("code");
-            redirectUrl = biSsoService.getRedirectBiUrl(code[0]);
+            redirectUrl = biSsoService.getRedirectBiUrl(code[0], callBackUrl);
 
             response.sendRedirect(redirectUrl);
         } catch (Exception e) {
