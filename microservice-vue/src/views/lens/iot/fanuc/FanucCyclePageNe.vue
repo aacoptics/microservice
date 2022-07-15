@@ -3,50 +3,50 @@
     <div class="aac-container">
       <el-form :inline="true" :size="size">
         <el-form-item label="业务发生日期 从" prop="factDate">
-          <el-date-picker v-model="factTime.startTime" auto-complete="off" type="datetime"
-                          placeholder="请选择开始时间"></el-date-picker>
+          <el-date-picker v-model="factTime.startTime" auto-complete="off" placeholder="请选择开始时间"
+                          type="datetime"></el-date-picker>
         </el-form-item>
         <el-form-item label="到" prop="factDate">
-          <el-date-picker v-model="factTime.endTime" auto-complete="off" type="datetime"
-                          placeholder="请选择结束时间"></el-date-picker>
+          <el-date-picker v-model="factTime.endTime" auto-complete="off" placeholder="请选择结束时间"
+                          type="datetime"></el-date-picker>
         </el-form-item>
       </el-form>
       <el-form :inline="true" :size="size">
         <el-form-item>
-          <el-button icon="el-icon-search" type="primary"
-                    @click="getCycleList" :loading="cycleListLoading">查询
+          <el-button :loading="cycleListLoading" icon="el-icon-search"
+                     type="primary" @click="getCycleList">查询
           </el-button>
         </el-form-item>
         <el-form-item>
-        <el-button type="success" icon="el-icon-download"
-                   @click="exportExcel('#cycleList', 'CycleList.xlsx')">导出
-        </el-button>
+          <el-button icon="el-icon-download" type="success"
+                     @click="exportExcel('#cycleList', 'CycleList.xlsx')">导出
+          </el-button>
         </el-form-item>
       </el-form>
 
       <el-table
-          :data="cycleList"
-          stripe
-          border
           id="cycleList"
-          style="width: 95%"
+          v-loading="cycleListLoading"
+          :data="cycleList"
+          border
           height="600"
-          v-loading="cycleListLoading">
+          stripe
+          style="width: 95%">
         <el-table-column
-            prop="monitMcName"
             label="机台名"
-            min-width="85" >
+            min-width="85"
+            prop="monitMcName">
         </el-table-column>
         <el-table-column
-            prop="monitCycle"
             label="周期"
-            min-width="85">
+            min-width="85"
+            prop="monitCycle">
         </el-table-column>
         <el-table-column
-            prop="dbCreateTime"
+            :formatter="dateFormat"
             label="创建时间"
             min-width="160"
-            :formatter="dateFormat">
+            prop="dbCreateTime">
         </el-table-column>
       </el-table>
     </div>
@@ -60,8 +60,7 @@ import XLSX from 'xlsx'
 
 export default {
   name: "FanucCyclePage",
-  computed: {
-  },
+  computed: {},
   methods: {
     exportExcel(tableId, excelFileName) {
       const wb = XLSX.utils.table_to_book(document.querySelector(tableId));
@@ -87,7 +86,7 @@ export default {
             this.cycleList = responseData.data;
           }
           this.cycleListLoading = false
-        }).catch(()=>{
+        }).catch(() => {
           this.cycleListLoading = false
         })
       }
