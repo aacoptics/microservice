@@ -11,7 +11,7 @@
       </el-sub-menu>
     </template>
     <template v-else>
-      <el-menu-item v-show="item.visible" :key="item.index" :index="item.index" @click="handleClick(item.index)">
+      <el-menu-item v-show="item.visible" :key="item.index" :index="item.index">
         <font-awesome-icon v-if="fontAwesomeIconFormat(item.icon) instanceof Array"
                            :icon="fontAwesomeIconFormat(item.icon)" class="mr-2" fixed-width/>
         <template #title>
