@@ -50,6 +50,7 @@ export default {
 .sidebar {
   display: block;
   position: absolute;
+  background-color: #324157;
   left: 0;
   top: 70px;
   bottom: 0;
@@ -64,7 +65,5 @@ export default {
   width: 200px;
 }
 
-.sidebar > ul {
-  height: 100%;
-}
+
 </style>

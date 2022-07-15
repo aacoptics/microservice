@@ -57,6 +57,18 @@ export default {
   height: 40px;
   line-height: 40px;
   min-width: 200px;
-  padding: 0 0
+  padding: 0 0;
+  background-color: #324157;
 }
+
+.el-menu-item{
+  min-width: 200px;
+  background-color: #324157;
+}
+
+.el-sub-menu{
+  min-width: 200px;
+  background-color: #324157;
+}
+
 </style>
