@@ -1091,3 +1091,34 @@ export default {
   }
 };
 </script>
+<style scoped>
+.fanuc_card_type {
+  width: 300px;
+  height: 260px;
+  border: 1px solid cornflowerblue;
+  background-color: #f0f0f0;
+  margin-right: 70px;
+  margin-bottom: 20px;
+  float: left;
+}
+
+.status_radio_type {
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 5px;
+  font-family: 'Microsoft YaHei', serif;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style>
