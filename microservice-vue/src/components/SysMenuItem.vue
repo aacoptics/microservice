@@ -61,12 +61,12 @@ export default {
   background-color: #324157;
 }
 
-.el-menu-item{
+.el-menu-item {
   min-width: 200px;
   background-color: #324157;
 }
 
-.el-sub-menu{
+.el-sub-menu {
   min-width: 200px;
   background-color: #324157;
 }
