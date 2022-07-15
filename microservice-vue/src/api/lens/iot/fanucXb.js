@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getByFloor(floor) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getByFloor',
+        url: '/lens-fanuc-xb/fanucDashboard/getByFloor',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -15,7 +15,7 @@ export function getByFloor(floor) {
 
 export function getFanucStatusCount() {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getStatusCount',
+        url: '/lens-fanuc-xb/fanucDashboard/getStatusCount',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -25,7 +25,7 @@ export function getFanucStatusCount() {
 
 export function selectEquips() {
     return request({
-        url: '/fanuc-xb/fanucDashboard/selectEquips',
+        url: '/lens-fanuc-xb/fanucDashboard/selectEquips',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export function selectEquips() {
 
 export function getDetailInfo(machineName) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getDetailInfo',
+        url: '/lens-fanuc-xb/fanucDashboard/getDetailInfo',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ export function getDetailInfo(machineName) {
 
 export function getCondData(startTime, endTime, machineName) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getCondData',
+        url: '/lens-fanuc-xb/fanucDashboard/getCondData',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ export function getCondData(startTime, endTime, machineName) {
 
 export function getMonitData(startTime, endTime, machineName) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getMonitData',
+        url: '/lens-fanuc-xb/fanucDashboard/getMonitData',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ export function getMonitData(startTime, endTime, machineName) {
 
 export function getAlarmData(startTime, endTime, machineName) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getAlarmData',
+        url: '/lens-fanuc-xb/fanucDashboard/getAlarmData',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export function getAlarmData(startTime, endTime, machineName) {
 
 export function getAllCycleList(startTime, endTime) {
     return request({
-        url: '/fanuc-xb/fanucDashboard/getAllCycleList',
+        url: '/lens-fanuc-xb/fanucDashboard/getAllCycleList',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
