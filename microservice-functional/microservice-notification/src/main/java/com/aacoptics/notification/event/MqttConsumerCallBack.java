@@ -80,6 +80,21 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
                 break;
+            case "moldTempMonitor":
+                title = "模造温度曲线报警";
+                String moldParam = dataJson.getString("param");
+                String avgValue = dataJson.getString("averageValue");
+                String currentValue = dataJson.getString("currentValue");
+                markdownGroupMessage.setTitle(title);
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                if(moldParam.indexOf("upper") == 0)
+                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+                else if(moldParam.indexOf("lower") == 0)
+                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+                else
+                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
+                break;
         }
 
         String robotUrl = "https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a";
