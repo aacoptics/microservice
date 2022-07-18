@@ -85,8 +85,10 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 String moldParam = dataJson.getString("param");
                 String avgValue = dataJson.getString("averageValue");
                 String currentValue = dataJson.getString("currentValue");
+                String recipePhase = dataJson.getString("recipePhase");
                 markdownGroupMessage.setTitle(title);
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
                 markdownGroupMessage.addBlobContent(localTimeStr);
                 if(moldParam.indexOf("upper") == 0)
                     markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
