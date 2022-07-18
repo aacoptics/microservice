@@ -82,6 +82,8 @@ public class UploadPackageInfoService implements IUploadPackageInfoService {
                 assert outerBox != null;
                 outerBox.getCartonNoLists().add(spotTicketInfo);
             }
+            if (outerBox != null)
+                qtPackageParam.getPalletNoLists().add(outerBox);
         } else {
             return null;
         }
