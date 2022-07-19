@@ -3,7 +3,8 @@
     <div class="aac-container">
       <mqtt-client ref="mqttClient" :value="fanucTopic" @messageArrived="messageArrived"/>
       <div style="margin-bottom: 20px">
-        <div v-for="(item, index) of statusRadio" :key="index" :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
+        <div v-for="(item, index) of statusRadio" :key="index"
+             :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
              class="status_radio_type"
              @click="onStatusRadioClick(item)">
           {{ this.status[item] + '(' + this.statusCount[item] + ')' }}
