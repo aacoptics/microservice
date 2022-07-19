@@ -55,13 +55,23 @@ export function listSummaryExportExcel(conditions) {
     })
 }
 
-// export function listLineChat(conditions) {
-//     return request({
-//         url: '/quality-daily/qualitySortingData/listLineChat',
-//         method: 'post',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         data: conditions
-//     })
-// }
+export function listLineChat(conditions) {
+    return request({
+        url: '/quality-daily/qualitySortingData/listLineChat',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
+export function listProject() {
+    return request({
+        url: '/quality-daily/qualitySortingData/listProject',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

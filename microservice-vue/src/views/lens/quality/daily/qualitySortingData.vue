@@ -6,7 +6,15 @@
           <el-row>
             <el-col :span="5">
               <el-form-item label="项目" prop="project">
-                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
+                <el-select v-model="filters.project" allow-create clearable filterable placeholder="项目">
+                  <el-option
+                      v-for="item in projectOptions"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
@@ -98,6 +106,8 @@ import {date2str, getResponseDataMessage, isFloat} from "@/utils/commonUtils";
 import {
   exportExcel,
   listHeaders,
+  listLineChat,
+  listProject,
   listSummary,
   listSummaryExportExcel,
   uploadExcel
@@ -114,8 +124,8 @@ export default {
     return {
       size: "default",
       filters: {
-        project: "",
-        startSortingDate: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
+        project: 'CAMMSYS 165220A01',
+        startSortingDate: date2str(new Date().setDate(1)) + "T00:00:00",
         endSortingDate: date2str(new Date()) + "T00:00:00"
       },
       columns: [],
@@ -125,8 +135,10 @@ export default {
       exportLoading: false,
       exportReportLoading: false,
       lineChartData: {},
+      avrStr: "",
       projectCount: 10,
       projectCountVisible: false,
+      projectOptions: [],
     };
   },
   mounted() {
@@ -134,12 +146,24 @@ export default {
       this.projectCount = response.data.data.length + 1
       this.projectCountVisible = true
     })
+    listProject().then(response => {
+      if (response.data.data.length > 0) {
+        this.projectOptions = response.data.data
+        this.filters.project = response.data.data[0]
+      }
+    })
   },
   methods: {
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
+        listProject().then(response => {
+          if (response.data.data.length > 0) {
+            this.projectOptions = response.data.data
+            this.filters.project = response.data.data[0]
+          }
+        })
       }
       this.pageRequest.project = this.filters.project
       this.pageRequest.startSortingDate = this.filters.startSortingDate != null ? date2str(this.filters.startSortingDate) + "T00:00:00" : null;
@@ -165,15 +189,16 @@ export default {
             }
           })
           .then(data != null ? data.callback : "");
-      // listLineChat(this.pageRequest)
-      //     .then((res) => {
-      //       const responseData = res.data;
-      //       if (responseData.code === "000000") {
-      //         this.lineChartData = responseData.data;
-      //         this.drawLineChart()
-      //       }
-      //     })
-      //     .then(data != null ? data.callback : "");
+      listLineChat(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.lineChartData = responseData.data;
+              this.avrStr = Object.keys(responseData.data).filter(s => s.includes("AVR"))[0]
+              this.drawLineChart()
+            }
+          })
+          .then(data != null ? data.callback : "");
     },
     objectSpanMethod: function ({
                                   row,
@@ -269,10 +294,10 @@ export default {
         },
         tooltip: {
           trigger: 'axis',
-          formatter: '{b0}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%'//展示百分比  五条折线
+          formatter: '{b0}<br/>{a0}: {c0}<br />{a1}: {c1}%<br />{a2}: {c2}%'//展示百分比  五条折线
         },
         legend: {
-          data: ['最终目标', '目标', '汇总']
+          data: ['Sorting QTY', 'NG RATIO(%)', this.avrStr]
         },
         grid: {
           left: '3%',
@@ -287,37 +312,50 @@ export default {
         },
         xAxis: {
           type: 'category',
-          boundaryGap: false,
-          data: this.columns.map(item => item.label).slice(1)
+          boundaryGap: ['20%', '20%'],
+          data: this.lineChartData['key'],
+          axisLine: {show: false},
+          axisTick: {show: false},
         },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            show: true,
-            interval: 'auto',
-            formatter: '{value}%',
+        yAxis: [
+          {
+            type: 'value'
+          },
+          {
+            type: 'value',
+            axisLabel: {
+              show: true,
+              interval: 'auto',
+              formatter: '{value}%',
+            }
           }
-        },
+        ],
         series: [
           {
-            name: '最终目标',
-            type: 'line',
-            data: this.lineChartData['最终目标']
+            name: 'Sorting QTY',
+            type: 'bar',
+            barWidth: 30,
+            yAxisIndex: 0,
+            data: this.lineChartData['Sorting QTY']
           },
           {
-            name: '目标',
+            name: 'NG RATIO(%)',
             type: 'line',
-            data: this.lineChartData['目标']
+            yAxisIndex: 1,
+            data: this.lineChartData['NG RATIO(%)']
           },
           {
-            name: '汇总',
+            name: this.avrStr,
             type: 'line',
-            data: this.lineChartData['汇总']
-          }
+            yAxisIndex: 1,
+            data: this.lineChartData[this.avrStr]
+          },
         ]
       };
-      option.yAxis.max = Math.ceil(Math.max(Math.max(...this.lineChartData['最终目标']), Math.max(...this.lineChartData['目标']), Math.max(...this.lineChartData['汇总'])))
-      option.yAxis.min = Math.floor(Math.min(Math.min(...this.lineChartData['最终目标']), Math.min(...this.lineChartData['目标']), Math.min(...this.lineChartData['汇总'])))
+      option.yAxis[0].max = Math.ceil(Math.max(Math.max(...this.lineChartData['Sorting QTY'])))
+      option.yAxis[0].min = 0
+      option.yAxis[1].max = Math.ceil(Math.max(Math.max(...this.lineChartData['NG RATIO(%)']), Math.max(...this.lineChartData[this.avrStr])))
+      option.yAxis[1].min = Math.floor(Math.min(Math.min(...this.lineChartData['NG RATIO(%)']), Math.min(...this.lineChartData[this.avrStr])))
       // option.yAxis.max = 100 - option.yAxis.max < 1 ? 100 : option.yAxis.max + 1;
       // option.yAxis.min = option.yAxis.min < 1 ? 0 : option.yAxis.min - 1;
       option && this.lineChart.setOption(option);
