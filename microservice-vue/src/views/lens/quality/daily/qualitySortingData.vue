@@ -129,7 +129,7 @@ export default {
         endSortingDate: date2str(new Date()) + "T00:00:00"
       },
       columns: [],
-      pageRequest: {current: 1, size: 10},
+      pageRequest: {current: 1, size: 15},
       pageResult: {},
       excelUploadDialogVisible: false,
       exportLoading: false,
@@ -144,6 +144,7 @@ export default {
   mounted() {
     getDict("quality_sorting_data").then(response => {
       this.projectCount = response.data.data.length + 1
+      this.pageRequest.size = response.data.data.length + 1
       this.projectCountVisible = true
     })
     listProject().then(response => {
