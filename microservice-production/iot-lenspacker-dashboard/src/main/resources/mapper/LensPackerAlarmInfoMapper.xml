@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.lenspacker.dashboard.dao.LensPackerAlarmInfoMapper">
+    <select id="getMachineAlarmDetail" resultType="com.aacoptics.lenspacker.dashboard.entity.LensPackerAlarmInfo">
+        select monit_mc_name,
+               alarm_code,
+               start_time,
+               end_time,
+               B.parameter_desc as description,
+               datediff(SS, start_time, end_time) as duration
+        from z_lenspacker_alarm_data A
+                 LEFT JOIN z_lenspacker_alarm_config B
+                           ON A.cavity_nums = B.Hole
+                               and A.alarm_code = B.parameter_name
+        where end_time is not null
+          and start_time &gt; CONVERT(varchar(100), #{startTime}, 21)
+          and start_time &lt; CONVERT(varchar(100), #{endTime}, 21)
+    </select>
+
+    <select id="getMachineAlarmCount" resultType="com.aacoptics.lenspacker.dashboard.entity.LensPackerAlarmInfo">
+        select monit_mc_name,
+               alarm_code,
+               B.parameter_desc as description,
+               sum(datediff(SS, start_time, end_time)) as duration,
+               count(*)                                as alarmCount
+        from z_lenspacker_alarm_data A
+                 LEFT JOIN z_lenspacker_alarm_config B
+                           ON A.cavity_nums = B.Hole
+                               and A.alarm_code = B.parameter_name
+        where end_time is not null
+          and start_time &gt; CONVERT(varchar(100), #{startTime}, 21)
+          and start_time &lt; CONVERT(varchar(100), #{endTime}, 21)
+        group by monit_mc_name, alarm_code, B.parameter_desc
+    </select>
+
+    <select id="getMachineNameList" resultType="com.aacoptics.lenspacker.dashboard.entity.LensPackerAlarmInfo">
+        select distinct monit_mc_name
+        from z_lenspacker_alarm_data
+    </select>
+
+</mapper>

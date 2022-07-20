@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.lenspacker.dashboard.dao.ValueStreamMapper">
+    <select id="getMachineAlarmDetail" resultType="com.aacoptics.lenspacker.dashboard.entity.ValueStream">
+        with cte_net as
+                 (SELECT source_id,
+                         time,
+                         property_name,
+                         property_value,
+                         LEAD(time, 1) over (partition by source_id, property_name order by time) endTime
+                  FROM thingworx2080.dbo.value_stream with (nolock)
+                  where time &gt; CONVERT(varchar(100), #{startTime}, 21)
+                    and time &lt; CONVERT(varchar(100), #{endTime}, 21)
+                    and property_type = 2
+                 ),
+             CT AS
+                 (SELECT [No]
+                       , A.[Hole]
+                       , [IP]
+                       , description
+                       , TagName
+                  FROM [thingworx2080].[dbo].[Lens_info] A
+                           LEFT JOIN [thingworx2080].[dbo].[lensDescription] B
+                                     on A.Hole = B.Hole)
+        select replace(substring(source_id, 28, 10), '_', '')                            as machineName,
+               property_name                                                             as alarmType,
+               CONVERT(varchar(100), time, 120)                                          as startTime,
+               case
+                   when CONVERT(varchar(100), endTime, 120) is not null
+                       then CONVERT(varchar(100), endTime, 120)
+                   else CONVERT(varchar(100), time, 120) end                             as endTime,
+               CT.description                                                            as alarmDesc,
+               case when endTime is not null then datediff(SS, time, endTime) else 0 end as duration
+        from cte_net
+                 LEFT JOIN CT
+                           ON CT.No = substring(source_id, 28, 10)
+                               and CT.TagName = cte_net.property_name
+        where property_value = 'true'
+          and endTime is not null
+          and datediff(SS, time, endTime) &gt; 20
+    </select>
+
+    <select id="getMachineAlarmCount" resultType="com.aacoptics.lenspacker.dashboard.entity.ValueStream">
+        with cte_net as
+                 (SELECT source_id,
+                         time,
+                         property_name,
+                         property_value,
+                         LEAD(time, 1) over (partition by source_id, property_name order by time) endTime
+                  FROM thingworx2080.dbo.value_stream with (nolock)
+                  where time &gt; CONVERT(varchar(100), #{startTime}, 21)
+                    and time &lt; CONVERT(varchar(100), #{endTime}, 21)
+                 ),
+             CT AS
+                 (SELECT [No]
+                       , A.[Hole]
+                       , [IP]
+                       , description
+                       , TagName
+                  FROM [thingworx2080].[dbo].[Lens_info] A
+                           LEFT JOIN [thingworx2080].[dbo].[lensDescription] B
+                                     on A.Hole = B.Hole)
+        select replace(substring(source_id, 28, 10), '_', '')                                 as machineName,
+               property_name                                                                  as alarmType,
+               [description]                                                                  as alarmDesc,
+               sum(case when endTime is not null then datediff(SS, time, endTime) else 0 end) as duration,
+               count(*)                                                                       as alarmCount
+        from cte_net
+                 LEFT JOIN CT
+                           ON CT.No = substring(source_id, 28, 10)
+                               and CT.TagName = cte_net.property_name
+        where property_value = 'true'
+          and endTime is not null
+          and datediff(SS, time, endTime) &gt;= 20
+        group by source_id, property_name, description
+    </select>
+
+    <select id="getMachineCapacity" resultType="com.aacoptics.lenspacker.dashboard.entity.ValueStream">
+        select replace(substring(source_id, 28, 10), '_', '')                                  as machineName,
+               (max(convert(float, [property_value])) - min(convert(float, [property_value]))) as capacity
+        from [thingworx2080].[dbo].[value_stream]
+        where [property_name] = 'Output_Qty'
+          and time &gt; CONVERT(varchar(100), #{startTime}, 21)
+          and time &lt; CONVERT(varchar(100), #{endTime}, 21)
+        group by source_id
+    </select>
+</mapper>

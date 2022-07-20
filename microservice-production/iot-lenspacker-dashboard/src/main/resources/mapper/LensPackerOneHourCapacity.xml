@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.lenspacker.dashboard.dao.LensPackerOneHourCapacityMapper">
+    <select id="getTotalUph" resultType="com.aacoptics.lenspacker.dashboard.entity.LensPackerOneHourCapacity">
+        SELECT [start_time]
+             , [end_time]
+             , sum(output) as output
+        FROM z_lenspacker_one_hour_capacity
+        where start_time >= '2021-08-18 08:00:00'
+          and output is not null
+        group by start_time, end_time
+    </select>
+    <select id="getMachineCapacity" resultType="com.aacoptics.lenspacker.dashboard.entity.LensPackerOneHourCapacity">
+        select machine_no as machineName,
+        sum(output) as capacity
+        from z_lenspacker_one_hour_capacity
+        where end_time &gt; CONVERT(varchar(100), #{startTime}, 21)
+        and end_time &lt; CONVERT(varchar(100), #{endTime}, 21)
+        group by machine_no
+    </select>
+</mapper>
