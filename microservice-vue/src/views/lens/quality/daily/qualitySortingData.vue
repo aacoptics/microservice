@@ -65,11 +65,11 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" v-if="projectCountVisible" ref="sysTable" :columns="columns" :data="pageResult"
-                :pageSizes="[projectCount, projectCount*2, projectCount*3]"
+      <SysTable v-if="projectCountVisible" id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+                :height="400"
+                :highlightCurrentRow="true"
                 :pageSize="projectCount"
-                :span-method="objectSpanMethod"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                :pageSizes="[projectCount, projectCount*2, projectCount*3]" :show-operation="false" :showBatchDelete="false" :span-method="objectSpanMethod"
                 :stripe="false" @findPage="findPage">
       </SysTable>
 
