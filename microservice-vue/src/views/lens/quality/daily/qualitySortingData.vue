@@ -69,7 +69,8 @@
                 :height="400"
                 :highlightCurrentRow="true"
                 :pageSize="projectCount"
-                :pageSizes="[projectCount, projectCount*2, projectCount*3]" :show-operation="false" :showBatchDelete="false" :span-method="objectSpanMethod"
+                :pageSizes="[projectCount, projectCount*2, projectCount*3]" :show-operation="false"
+                :showBatchDelete="false" :span-method="objectSpanMethod"
                 :stripe="false" @findPage="findPage">
       </SysTable>
 
