@@ -12,6 +12,9 @@ import {refreshToken} from "@/api/system/user";
 import {ElMessage} from "element-plus";
 import {saveRefreshTime} from "@/api";
 
+// 设置超时时间
+axios.defaults.timeout = 300000;
+
 const service = axios.create({
     baseURL: 'https://uds.aacoptics.com:8443'
 });
