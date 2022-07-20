@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.czech.mapper.FloorPlanMachineInfoMapper">
+    <select id="getMachineInfoByFloor" parameterType="int" resultType="com.aacoptics.czech.entity.FloorPlanMachineInfo">
+        WITH fgLive AS (
+            select *,row_number() over (PARTITION BY fg order by lastupdate desc) rn from live
+        ), fgInfo AS(
+            select *,row_number() over (partition by fGNumber order by lastupdate desc) r from fGLiveStatus
+        )
+        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  b.lenstype as ML from fgInfo a left join fgLive b on a.fGNumber=b.fg where a.r=1 and b.rn=1 and a.fGNumber between #{startNumber} and #{endNumber} order by a.fGNumber desc
+    </select>
+
+    <select id="getAllMachineInfo" resultType="com.aacoptics.czech.entity.FloorPlanMachineInfo">
+        WITH fgInfo AS(
+            select *,row_number() over (partition by fGNumber order by lastupdate desc) r from fGLiveStatus
+        )
+        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  a.lensDesign as ML from fgInfo a  where a.r=1  order by a.fGNumber desc
+    </select>
+
+    <select id="getTemperatureByMachineNo" parameterType="java.lang.String" resultType="float">
+        select top 1 T2 from ${machineNumber} order by DateAndTime desc
+    </select>
+
+    <select id="getMachineInfoByMachineNumber" parameterType="int" resultType="com.aacoptics.czech.entity.FloorPlanMachineInfo">
+        WITH fgLive AS (
+            select *,row_number() over (PARTITION BY fg order by lastupdate desc) rn from live
+        ), fgInfo AS(
+            select *,row_number() over (partition by fGNumber order by lastupdate desc) r from fGLiveStatus
+        )
+        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  b.lenstype as ML from fgInfo a left join fgLive b on a.fGNumber=b.fg where a.r=1 and b.rn=1 and a.fGNumber = #{machineNumber} order by a.fGNumber desc
+    </select>
+
+    <select id="getSpindleTemperature"  resultType="com.aacoptics.czech.entity.TemperaturePlotInfo">
+        select T2 as temperature, CONVERT(VARCHAR(19), DateAndTime, 120) as time from ${machineNumber} where DateAndTime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="getAirTemperature" resultType="com.aacoptics.czech.entity.TemperaturePlotInfo">
+        select Czech_Air_Plen_Value as temperature, CONVERT(VARCHAR(19), DateAndTime, 120) as time from ${machineNumber} where DateAndTime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="getBearingTemperature" resultType="com.aacoptics.czech.entity.TemperaturePlotInfo">
+        select T5 as temperature, CONVERT(VARCHAR(19), DateAndTime, 120) as time from ${machineNumber} where DateAndTime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="getMotorTemperature" resultType="com.aacoptics.czech.entity.TemperaturePlotInfo">
+        select T6 as temperature, CONVERT(VARCHAR(19), DateAndTime, 120) as time from ${machineNumber} where DateAndTime between #{startTime} and #{endTime}
+    </select>
+
+    <select id="getStatusInfoByMachineNumber" parameterType="int" resultType="com.aacoptics.czech.entity.StatusInfo">
+        select waitCat as status, CONVERT(VARCHAR(19), dateTimeCreated, 120) as time from fGLiveStatus where fGNumber = #{machineNumber} and dateTimeCreated between DATEADD(DD, -1, getdate()) and getdate()
+    </select>
+
+</mapper>

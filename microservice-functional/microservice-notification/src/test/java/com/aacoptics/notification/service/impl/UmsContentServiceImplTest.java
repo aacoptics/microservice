@@ -1,5 +1,7 @@
 package com.aacoptics.notification.service.impl;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.po.DingtalkUser;
 import com.aacoptics.notification.entity.po.XxlGroupInfo;
@@ -40,6 +42,32 @@ public class UmsContentServiceImplTest {
     @Resource
     DingtalkUserService dingtalkUserService;
 
+    @Resource
+    FeishuService feishuService;
+
+
+    @Test
+    public void Test1() {
+
+        JSONObject text = new JSONObject();
+        text.set("content", "**管理费用预算与实际费用统计（测试）** \n;时间：2022年3月;您负责部门费用如下;当月实际费用：￥14,616 K;当月预算金额：￥12,103 K;GAP节省费用：￥1,487 K;");
+        text.set("tag", "lark_md");
+        JSONArray elements = new JSONArray();
+        JSONObject element = new JSONObject();
+        element.set("tag", "div");
+        element.set("text", text);
+        elements.add(element);
+
+        JSONObject config = new JSONObject();
+        config.set("wide_screen_mode", true);
+
+        JSONObject card = new JSONObject();
+        card.set("config", config);
+        card.set("elements", elements);
+        feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, "7c84331d", FeishuService.MSG_TYPE_INTERACTIVE, card);
+
+    }
+
     @Test
     public void Test() {
 
@@ -56,13 +84,13 @@ public class UmsContentServiceImplTest {
 //        xxlJobInfo.setGlueType("09");
 //        xxlJobInfoService.add(xxlJobInfo);
 
-//        XxlJobResult test = xxlJobProvider.triggerJob(5,
-//                "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
-//        "");
+        XxlJobResult test = xxlJobProvider.triggerJob(5,
+                "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
+        "");
 //
-//        XxlJobResult test1 = xxlJobProvider.triggerJob(5,
-//                "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
-//                "");
+        XxlJobResult test1 = xxlJobProvider.triggerJob(5,
+                "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
+                "");
 //
 //        try {
 ////            sendMessageService.sendHandledMessage("https://open.feishu.cn/open-apis/bot/v2/hook/7166ba22-e911-45ba-83d2-25f1f3adff34", "Lens_01_rate", null);
