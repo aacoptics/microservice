@@ -1,4 +1,4 @@
-package com.aacoptics.notification.config;
+package com.aacoptics.czech.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +18,15 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.notification"))
+                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.czech"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("消息平台服务")
-                .description("消息平台服务")
+                .title("捷克IoT服务")
+                .description("捷克IoT服务")
                 .version("2.0")
                 .build();
     }
