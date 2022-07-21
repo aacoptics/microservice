@@ -5,6 +5,19 @@
         <el-form :inline="true" :size="size">
           <el-row>
             <el-col :span="5">
+              <el-form-item label="线体" prop="line">
+                <el-select v-model="filters.line" allow-create clearable filterable placeholder="线体">
+                  <el-option
+                      v-for="item in lineOptions"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
               <el-form-item label="开始时间" prop="startAppearanceDate">
                 <el-date-picker v-model="filters.startAppearanceDate" auto-complete="off"
                 ></el-date-picker>
@@ -52,7 +65,8 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+      <el-tag type="success">外观良率汇总</el-tag>
+      <SysTable ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>
@@ -62,6 +76,16 @@
           <div id="lineChart" class="w-full h-full" style="height: 300px"></div>
         </el-col>
       </el-row>
+
+      <el-tag class="mt-10" type="success">外观良率跟踪</el-tag>
+      <SysTable ref="detailSysTable" :cellStyle="changeCellStyle" :columns="detailColumns" :data="detailPageResult"
+                :height="400" :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]"
+                :rowClassName="tableRowClassName" :showBatchDelete="false"
+                :showOperation="false"
+                :showPagination="false"
+                :spanMethod="objectSpanMethod"
+                :stripe="false" @findPage="detailFindPage">
+      </SysTable>
 
       <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'"
                  width="25%">
@@ -89,7 +113,10 @@ import SysTable from "@/components/SysTable";
 import {date2str, getResponseDataMessage} from "@/utils/commonUtils";
 import {
   exportExcel,
+  listDetailHeaders,
+  listDetailSummary,
   listHeaders,
+  listLine,
   listLineChat,
   listSummary,
   listSummaryExportExcel,
@@ -106,25 +133,89 @@ export default {
     return {
       size: "default",
       filters: {
-        startAppearanceDate: date2str(new Date().setDate(new Date().getDate() - 6)) + "T00:00:00",
-        endAppearanceDate: date2str(new Date()) + "T00:00:00"
+        line: "",
+        startAppearanceDate: date2str(new Date().setDate(1)) + "T00:00:00",
+        endAppearanceDate: date2str(new Date().setDate(new Date().getDate() - 1)) + "T00:00:00"
       },
       columns: [],
-      pageRequest: {current: 1, size: 10},
+      detailColumns: [],
+      pageRequest: {current: 1, size: 100000000},
       pageResult: {},
+      detailPageResult: {},
       excelUploadDialogVisible: false,
       exportLoading: false,
       exportReportLoading: false,
       lineChartData: {},
+      lineOptions: [],
+      spanAll: {},
     };
   },
+  mounted() {
+    listLine().then(response => {
+      if (response.data.data.length > 0) {
+        this.lineOptions = response.data.data
+      }
+    })
+  },
   methods: {
+    getSpanNum(curName, data) {
+      const spanArray = []
+      let pos = 0
+      data.forEach((val, i) => {
+        if (i === 0) {
+          spanArray.push(1)
+          pos = 0
+        } else {
+          // 判断当前列数据与下一行的该列数据是否相同
+          if (data[i][curName] === data[i - 1][curName]) {
+            // 每一列每一行的合并数量
+            spanArray[pos] += 1
+            spanArray.push(0)
+          } else {
+            spanArray.push(1)
+            pos = i
+          }
+        }
+      })
+      // 把合并数据放入spanAll里面
+      this.spanAll[curName] = spanArray
+      console.log(this.spanAll);
+    },
+    objectSpanMethod: function ({
+                                  row,
+                                  column,
+                                  rowIndex,    // 需要合并的开始行
+                                  columnIndex, // 需要合并的列
+                                }) { // 合并单元格
+
+      if (column.label === "线体") {
+        const rowNum = this.spanAll["线体"][rowIndex];
+        // 列合并
+        const colNum = rowNum > 0 ? 1 : 0
+        return {
+          rowspan: rowNum,
+          colspan: colNum,
+        }
+      }
+    },
+    tableRowClassName(row) { // 行样式
+      return row.row['型号'] === '汇总' ? 'gray-row' : '';
+    },
+    changeCellStyle(row, column, rowIndex, columnIndex) { // 列样式
+      //列的label的名称
+      if (row.column.label === "汇总") {
+        return {'background': '#E5E8E8'} //修改的样式
+      } else {
+        return {}
+      }
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
 
+      this.pageRequest.line = this.filters.line
       this.pageRequest.startAppearanceDate = this.filters.startAppearanceDate != null ? date2str(this.filters.startAppearanceDate) + "T00:00:00" : null;
       this.pageRequest.endAppearanceDate = this.filters.endAppearanceDate != null ? date2str(this.filters.endAppearanceDate) + "T00:00:00" : null;
 
@@ -154,6 +245,38 @@ export default {
             if (responseData.code === "000000") {
               this.lineChartData = responseData.data;
               this.drawLineChart()
+            }
+          })
+          .then(data != null ? data.callback : "");
+      this.detailFindPage(null);
+    },
+    // 获取分页数据
+    detailFindPage: function (data) {
+      if (data !== null) {
+        this.pageRequest = data.pageRequest;
+      }
+      this.pageRequest.line = this.filters.line
+      this.pageRequest.startAppearanceDate = this.filters.startAppearanceDate != null ? date2str(this.filters.startAppearanceDate) + "T00:00:00" : null;
+      this.pageRequest.endAppearanceDate = this.filters.endAppearanceDate != null ? date2str(this.filters.endAppearanceDate) + "T00:00:00" : null;
+
+      listDetailHeaders(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.detailColumns = responseData.data.map(c => {
+                c.formatter = this.percentFormat
+                return c
+              });
+            } else {
+              this.$message({message: "操作失败" + getResponseDataMessage(responseData), type: "error",});
+            }
+          })
+      listDetailSummary(this.pageRequest)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              this.detailPageResult = responseData.data;
+              this.getSpanNum("线体", responseData.data.records)
             }
           })
           .then(data != null ? data.callback : "");
@@ -204,6 +327,7 @@ export default {
       })
     },
     exportReportExcelData(excelFileName) {
+      this.pageRequest.line = this.filters.line
       this.pageRequest.startAppearanceDate = this.filters.startAppearanceDate != null ? date2str(this.filters.startAppearanceDate) + "T00:00:00" : null;
       this.pageRequest.endAppearanceDate = this.filters.endAppearanceDate != null ? date2str(this.filters.endAppearanceDate) + "T00:00:00" : null;
 
