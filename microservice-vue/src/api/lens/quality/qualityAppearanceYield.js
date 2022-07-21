@@ -11,9 +11,31 @@ export function listHeaders(conditions) {
     })
 }
 
+export function listDetailHeaders(conditions) {
+    return request({
+        url: '/quality-daily/qualityAppearanceYield/listDetailHeaders',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
 export function listSummary(conditions) {
     return request({
         url: '/quality-daily/qualityAppearanceYield/listSummary',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
+export function listDetailSummary(conditions) {
+    return request({
+        url: '/quality-daily/qualityAppearanceYield/listDetailSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -63,5 +85,15 @@ export function listLineChat(conditions) {
             'Content-Type': 'application/json'
         },
         data: conditions
+    })
+}
+
+export function listLine() {
+    return request({
+        url: '/quality-daily/qualityAppearanceYield/listLine',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 }

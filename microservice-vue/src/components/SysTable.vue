@@ -45,7 +45,8 @@
                  style="float:left;" type="danger" @click="handleBatchDelete()">
         {{ action.batchDelete }}
       </el-button>
-      <el-pagination :current-page="pageRequest.current" :page-size="pageRequest.size" :page-sizes="pageSizes"
+      <el-pagination v-if="showPagination" :current-page="pageRequest.current" :page-size="pageRequest.size"
+                     :page-sizes="pageSizes"
                      :total="data.total" layout="total, sizes, prev, pager, next, jumper" style="float:right;"
                      @current-change="refreshPageRequest" @size-change="handleSizeChange">
       </el-pagination>
@@ -124,6 +125,10 @@ export default {
       default: () => [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500]
     },
     spanMethod: Function,
+    showPagination: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     computedHeight() {

@@ -151,7 +151,6 @@ export default {
     listProject().then(response => {
       if (response.data.data.length > 0) {
         this.projectOptions = response.data.data
-        this.filters.project = response.data.data[0]
       }
     })
   },
