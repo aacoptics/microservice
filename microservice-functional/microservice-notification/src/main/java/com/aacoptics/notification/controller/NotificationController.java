@@ -1,22 +1,29 @@
 package com.aacoptics.notification.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.notification.config.BusConfig;
+import com.aacoptics.notification.entity.form.EmailSendForm;
 import com.aacoptics.notification.entity.form.TriggerJobForm;
 import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
 import com.aacoptics.notification.entity.po.DingtalkUser;
+import com.aacoptics.notification.entity.po.EmailSend;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.vo.DingTalkMessage;
 import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.*;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping("/notification")
@@ -34,6 +41,26 @@ public class NotificationController {
 
     @Resource
     DingtalkUserService dingtalkUserService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @ApiOperation(value = "发送邮件", notes = "发送邮件")
+    @ApiImplicitParam(name = "emailSendForm", value = "邮件发送表单", required = true, dataType = "EmailSendForm")
+    @PostMapping(value = "/sendEmail")
+    public Result sendEmail(@Valid @RequestBody EmailSendForm emailSendForm) {
+        String messageId = String.valueOf(UUID.randomUUID());
+        String messageData = JSONObject.toJSONString(emailSendForm.toPo(EmailSend.class));
+        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Map<String, Object> emailMap = new HashMap<>();
+        emailMap.put("messageId", messageId);
+        emailMap.put("messageData", messageData);
+        emailMap.put("createTime", createTime);
+        rabbitTemplate.convertAndSend(BusConfig.EXCHANGE_NAME,
+                BusConfig.EMAIL_ROUTING,
+                emailMap);
+        return Result.success();
+    }
 
     @ApiOperation(value = "保存消息推送计划", notes = "保存消息推送计划")
     @ApiImplicitParam(name = "xxlJobInfo", value = "新增消息推送计划表单", required = true, dataType = "XxlJobInfo")

@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Map;
 
 @Component
-@FeignClient(name = "iot-provider-notification", fallback = EmailProvider.EmailProviderFallback.class)
+@FeignClient(name = "microservice-notification", fallback = EmailProvider.EmailProviderFallback.class)
 public interface EmailProvider {
 
-    @PostMapping(value = "/message/sendEmail")
+    @PostMapping(value = "/notification/sendEmail")
     Result sendEmail(@RequestBody Map<String, Object> emailSendForm);
 
 
