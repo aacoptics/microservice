@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.coating.dashboard.dao.LensCoatingMachineNoodDataMapper">
+    <select id="getMachineTotalCount" resultType="com.aacoptics.coating.dashboard.entity.LensCoatingMachineNoodData">
+        SELECT count(*) as totalNums, machine_id
+        FROM [iot].[dbo].[z_lens_coating_machine_nood_data]
+        where parameter_name = 'VentEnd'
+          and date_time between #{dateTime} and GetDate()
+        group by machine_id
+    </select>
+</mapper>
