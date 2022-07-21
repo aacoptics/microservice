@@ -78,9 +78,9 @@
       </el-row>
 
       <el-tag type="success">外观良率跟踪</el-tag>
-      <SysTable ref="detailSysTable" :columns="detailColumns" :data="detailPageResult" :show-pagination="false"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
-                :page-size="1000000" :page-sizes="[1000000]"
+      <SysTable ref="detailSysTable" :columns="detailColumns" :data="detailPageResult" :height="400"
+                :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]" :showBatchDelete="false"
+                :showOperation="false" :showPagination="false"
                 :stripe="false" @findPage="detailFindPage">
       </SysTable>
 
