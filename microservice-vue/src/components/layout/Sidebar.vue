@@ -65,5 +65,9 @@ export default {
   width: 200px;
 }
 
+.sidebar > ul {
+  height: 100%;
+}
+
 
 </style>
