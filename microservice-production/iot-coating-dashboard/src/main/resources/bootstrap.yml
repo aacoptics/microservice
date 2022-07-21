@@ -1,6 +1,6 @@
 spring:
-  application:
-    name: iot-coating-dashboard
+#  application:
+#    name: iot-coating-dashboard-xny
   cloud:
     nacos:
       discovery:
@@ -15,3 +15,21 @@ spring:
     sentinel:
       transport:
         dashboard: k8s.aacoptics.com:30844
+
+---
+spring:
+  profiles: xnyprod
+  application:
+    name: iot-coating-dashboard-xny
+
+---
+spring:
+  profiles: xbprod
+  application:
+    name: iot-coating-dashboard-xb
+
+---
+spring:
+  profiles: szprod
+  application:
+    name: iot-coating-dashboard-sz
