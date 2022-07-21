@@ -99,6 +99,10 @@ a {
     --el-table-tr-bg-color: var(--el-color-success-light-9);
 }
 
+.el-table .gray-row {
+    --el-table-tr-bg-color: #E5E8E8;
+}
+
 /*BaseForm*/
 
 .form-box {

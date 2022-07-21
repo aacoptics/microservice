@@ -77,10 +77,13 @@
         </el-col>
       </el-row>
 
-      <el-tag type="success">外观良率跟踪</el-tag>
-      <SysTable ref="detailSysTable" :columns="detailColumns" :data="detailPageResult" :height="400"
-                :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]" :showBatchDelete="false"
-                :showOperation="false" :showPagination="false"
+      <el-tag class="mt-10" type="success">外观良率跟踪</el-tag>
+      <SysTable ref="detailSysTable" :cellStyle="changeCellStyle" :columns="detailColumns" :data="detailPageResult"
+                :height="400" :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]"
+                :rowClassName="tableRowClassName" :showBatchDelete="false"
+                :showOperation="false"
+                :showPagination="false"
+                :spanMethod="objectSpanMethod"
                 :stripe="false" @findPage="detailFindPage">
       </SysTable>
 
@@ -130,13 +133,13 @@ export default {
     return {
       size: "default",
       filters: {
-        line: "新北",
+        line: "",
         startAppearanceDate: date2str(new Date().setDate(1)) + "T00:00:00",
         endAppearanceDate: date2str(new Date().setDate(new Date().getDate() - 1)) + "T00:00:00"
       },
       columns: [],
       detailColumns: [],
-      pageRequest: {current: 1, size: 10},
+      pageRequest: {current: 1, size: 100000000},
       pageResult: {},
       detailPageResult: {},
       excelUploadDialogVisible: false,
@@ -144,6 +147,7 @@ export default {
       exportReportLoading: false,
       lineChartData: {},
       lineOptions: [],
+      spanAll: {},
     };
   },
   mounted() {
@@ -154,6 +158,57 @@ export default {
     })
   },
   methods: {
+    getSpanNum(curName, data) {
+      const spanArray = []
+      let pos = 0
+      data.forEach((val, i) => {
+        if (i === 0) {
+          spanArray.push(1)
+          pos = 0
+        } else {
+          // 判断当前列数据与下一行的该列数据是否相同
+          if (data[i][curName] === data[i - 1][curName]) {
+            // 每一列每一行的合并数量
+            spanArray[pos] += 1
+            spanArray.push(0)
+          } else {
+            spanArray.push(1)
+            pos = i
+          }
+        }
+      })
+      // 把合并数据放入spanAll里面
+      this.spanAll[curName] = spanArray
+      console.log(this.spanAll);
+    },
+    objectSpanMethod: function ({
+                                  row,
+                                  column,
+                                  rowIndex,    // 需要合并的开始行
+                                  columnIndex, // 需要合并的列
+                                }) { // 合并单元格
+
+      if (column.label === "线体") {
+        const rowNum = this.spanAll["线体"][rowIndex];
+        // 列合并
+        const colNum = rowNum > 0 ? 1 : 0
+        return {
+          rowspan: rowNum,
+          colspan: colNum,
+        }
+      }
+    },
+    tableRowClassName(row) { // 行样式
+      return row.row['型号'] === '汇总' ? 'gray-row' : '';
+    },
+    changeCellStyle(row, column, rowIndex, columnIndex) { // 列样式
+      //列的label的名称
+      if (row.column.label === "汇总") {
+        return {'background': '#E5E8E8'} //修改的样式
+      } else {
+        return {}
+      }
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -221,6 +276,7 @@ export default {
             const responseData = res.data;
             if (responseData.code === "000000") {
               this.detailPageResult = responseData.data;
+              this.getSpanNum("线体", responseData.data.records)
             }
           })
           .then(data != null ? data.callback : "");

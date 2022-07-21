@@ -50,6 +50,10 @@
                      :total="data.total" layout="total, sizes, prev, pager, next, jumper" style="float:right;"
                      @current-change="refreshPageRequest" @size-change="handleSizeChange">
       </el-pagination>
+      <el-pagination v-else :current-page="pageRequest.current" :page-size="pageRequest.size"
+                     :total="data.total" layout="total" style="float:right;"
+                     @current-change="refreshPageRequest">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -115,7 +119,7 @@ export default {
     },
     rowClassName: [String, Function],
     headerCellStyle: Object,
-    cellStyle: Object,
+    cellStyle: [Object, Function],
     pageSize: {
       type: Number,
       default: 10
