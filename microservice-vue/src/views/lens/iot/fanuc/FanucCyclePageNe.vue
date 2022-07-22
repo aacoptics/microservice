@@ -13,13 +13,19 @@
       </el-form>
       <el-form :inline="true" :size="size">
         <el-form-item>
-          <el-button :loading="cycleListLoading" icon="el-icon-search"
+          <el-button :loading="cycleListLoading"
                      type="primary" @click="getCycleList">查询
+            <template #icon>
+              <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+            </template>
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button icon="el-icon-download" type="success"
+          <el-button type="success"
                      @click="exportExcel('#cycleList', 'CycleList.xlsx')">导出
+            <template #icon>
+              <font-awesome-icon :icon="['fas','download']"/>
+            </template>
           </el-button>
         </el-form-item>
       </el-form>

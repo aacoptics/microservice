@@ -1,7 +1,7 @@
-package com.aacoptics.notification.provider;
+package com.aacoptics.wlg.dashboard.provider;//package com.aacoptics.mobile.attendance.provider;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.aacoptics.notification.config.FeishuAppKeyConfig;
+import com.aacoptics.wlg.dashboard.config.FeishuAppKeyConfig;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

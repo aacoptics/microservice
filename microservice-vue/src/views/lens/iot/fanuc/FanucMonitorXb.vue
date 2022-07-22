@@ -178,11 +178,17 @@
                   start-placeholder="开始日期"
                   type="datetimerange">
               </el-date-picker>
-              <el-button icon="el-icon-search" size="small" style="margin-left: 10px" type="primary"
+              <el-button size="small" style="margin-left: 10px" type="primary"
                          @click="getDialogMachineCondData">查询
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
               </el-button>
-              <el-button icon="el-icon-download" size="small" type="success"
+              <el-button size="small" type="success"
                          @click="exportExcel('#condDataTable', 'CondData.xlsx')">导出
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','download']"/>
+                </template>
               </el-button>
               <el-table
                   id="condDataTable"
@@ -448,11 +454,17 @@
                   start-placeholder="开始日期"
                   type="datetimerange">
               </el-date-picker>
-              <el-button icon="el-icon-search" size="small" style="margin-left: 10px" type="primary"
+              <el-button size="small" style="margin-left: 10px" type="primary"
                          @click="getDialogMachineMonitData">查询
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
               </el-button>
-              <el-button icon="el-icon-download" size="small" type="success"
+              <el-button size="small" type="success"
                          @click="exportExcel('#monitDataTable', 'MonitData.xlsx')">导出
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','download']"/>
+                </template>
               </el-button>
               <el-table
                   id="monitDataTable"
@@ -524,11 +536,17 @@
                   start-placeholder="开始日期"
                   type="datetimerange">
               </el-date-picker>
-              <el-button icon="el-icon-search" size="small" style="margin-left: 10px" type="primary"
+              <el-button size="small" style="margin-left: 10px" type="primary"
                          @click="getDialogMachineAlarmData">查询
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
+                </template>
               </el-button>
-              <el-button icon="el-icon-download" size="small" type="success"
+              <el-button size="small" type="success"
                          @click="exportExcel('#alarmDataTable', 'AlarmData.xlsx')">导出
+                <template #icon>
+                  <font-awesome-icon :icon="['fas','download']"/>
+                </template>
               </el-button>
               <el-table
                   id="alarmDataTable"

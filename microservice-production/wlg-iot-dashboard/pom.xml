@@ -29,6 +29,11 @@
             <version>3.5.1</version>
         </dependency>
         <dependency>
+            <groupId>com.aacoptics</groupId>
+            <artifactId>microservice-common-feign</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>e-iceblue</groupId>
             <artifactId>spire.xls.free</artifactId>
             <version>5.1.0</version>
