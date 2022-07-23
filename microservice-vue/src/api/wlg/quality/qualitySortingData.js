@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHeaders(conditions) {
     return request({
-        url: '/quality-daily/qualitySortingData/listHeaders',
+        url: '/wlg-quality-daily/wlgQualitySortingData/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function listHeaders(conditions) {
 
 export function listSummary(conditions) {
     return request({
-        url: '/quality-daily/qualitySortingData/listSummary',
+        url: '/wlg-quality-daily/wlgQualitySortingData/listSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/quality-daily/qualitySortingData/uploadExcel',
+        url: '/wlg-quality-daily/wlgQualitySortingData/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -34,7 +34,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/quality-daily/qualitySortingData/exportExcel',
+        url: '/wlg-quality-daily/wlgQualitySortingData/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export function exportExcel() {
 
 export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/quality-daily/qualitySortingData/listSummary/exportExcel',
+        url: '/wlg-quality-daily/wlgQualitySortingData/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export function listSummaryExportExcel(conditions) {
 
 export function listLineChat(conditions) {
     return request({
-        url: '/quality-daily/qualitySortingData/listLineChat',
+        url: '/wlg-quality-daily/wlgQualitySortingData/listLineChat',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export function listLineChat(conditions) {
 
 export function listProject() {
     return request({
-        url: '/quality-daily/qualitySortingData/listProject',
+        url: '/wlg-quality-daily/wlgQualitySortingData/listProject',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

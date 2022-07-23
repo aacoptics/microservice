@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHeaders(conditions) {
     return request({
-        url: '/quality-daily/qualityOqcPpm/listHeaders',
+        url: '/wlg-quality-daily/wlgQualityOqcPpm/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function listHeaders(conditions) {
 
 export function listSummary(conditions) {
     return request({
-        url: '/quality-daily/qualityOqcPpm/listSummary',
+        url: '/wlg-quality-daily/wlgQualityOqcPpm/listSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/quality-daily/qualityOqcPpm/uploadExcel',
+        url: '/wlg-quality-daily/wlgQualityOqcPpm/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -34,7 +34,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/quality-daily/qualityOqcPpm/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityOqcPpm/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export function exportExcel() {
 
 export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/quality-daily/qualityOqcPpm/listSummary/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityOqcPpm/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

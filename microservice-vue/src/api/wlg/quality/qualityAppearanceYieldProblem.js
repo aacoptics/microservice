@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function findQualityAppearanceYieldProblemPage(conditions) {
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/list',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/list',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function findQualityAppearanceYieldProblemPage(conditions) {
 
 export function handleUpdate(updateForm) {
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/update',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/update',
         method: 'put',
         headers: {
             'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ export function handleUpdate(updateForm) {
 
 export function handleDelete(deleteForm) {
     return request({
-        url: `/quality-daily/qualityAppearanceYieldProblem/delete/${deleteForm.id}`,
+        url: `/wlg-quality-daily/wlgQualityAppearanceYieldProblem/delete/${deleteForm.id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export function handleDelete(deleteForm) {
 
 export function handleAdd(addForm) {
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/add',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/add',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/uploadExcel',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -55,7 +55,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export function exportExcel() {
 
 export function listExportExcel(conditions) {
     return request({
-        url: '/quality-daily/qualityAppearanceYieldProblem/list/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityAppearanceYieldProblem/list/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function findQualityMilPage(conditions) {
     return request({
-        url: '/quality-daily/qualityMil/listQualityMil',
+        url: '/wlg-quality-daily/wlgQualityMil/listQualityMil',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function findQualityMilPage(conditions) {
 
 export function listAllUser() {
     return request({
-        url: '/quality-daily/qualityMil/users',
+        url: '/wlg-quality-daily/wlgQualityMil/users',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ export function listAllUser() {
 
 export function handleUpdate(updateForm) {
     return request({
-        url: '/quality-daily/qualityMil/update',
+        url: '/wlg-quality-daily/wlgQualityMil/update',
         method: 'put',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export function handleUpdate(updateForm) {
 
 export function handleDelete(milType, id) {
     return request({
-        url: `/quality-daily/qualityMil/delete/${milType}/${id}`,
+        url: `/wlg-quality-daily/wlgQualityMil/delete/${milType}/${id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ export function handleDelete(milType, id) {
 
 export function handleAdd(addForm) {
     return request({
-        url: '/quality-daily/qualityMil/add',
+        url: '/wlg-quality-daily/wlgQualityMil/add',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/quality-daily/qualityMil/uploadExcel',
+        url: '/wlg-quality-daily/wlgQualityMil/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -65,7 +65,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/quality-daily/qualityMil/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityMil/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ export function exportExcel() {
 
 export function listQualityMilExportExcel(conditions) {
     return request({
-        url: '/quality-daily/qualityMil/listQualityMil/exportExcel',
+        url: '/wlg-quality-daily/wlgQualityMil/listQualityMil/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
