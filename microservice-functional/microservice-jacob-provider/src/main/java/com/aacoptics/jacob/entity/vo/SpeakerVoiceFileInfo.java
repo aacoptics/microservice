@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @EqualsAndHashCode()
@@ -21,7 +22,7 @@ public class SpeakerVoiceFileInfo extends VoiceFileInfo {
     private String speakerIp;
 
     @ApiModelProperty(value = "扬声器Port")
-    @NotBlank(message = "扬声器Port不能为空")
+    @NotNull(message = "扬声器Port不能为空")
     private Integer speakerPort;
 
 }

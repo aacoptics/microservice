@@ -61,7 +61,7 @@ public class VoiceServiceController {
     }
 
     @ApiOperation(value = "发送语音至扬声器", notes = "发送语音至扬声器")
-    @ApiImplicitParam(name = "voiceFileInfo", value = "消息", required = true, dataType = "VoiceFileInfo")
+    @ApiImplicitParam(name = "speakerVoiceFileInfo", value = "消息", required = true, dataType = "SpeakerVoiceFileInfo")
     @PostMapping(value = "/sendToSpeaker")
     public Result sendToSpeaker(@RequestBody @Valid SpeakerVoiceFileInfo speakerVoiceFileInfo) {
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
