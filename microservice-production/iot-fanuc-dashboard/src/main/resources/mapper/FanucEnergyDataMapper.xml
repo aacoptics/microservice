@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.fanuc.dashboard.dao.FanucEnergyDataMapper">
+    <select id="getLastMouthEnergy" resultType="com.aacoptics.fanuc.dashboard.entity.FanucEnergyData">
+        select CONVERT(VARCHAR(10), CONVERT(DATETIME, mold_start_time), 120) as mold_start_date,
+               sum(convert(decimal(10, 2), replace(mold_energy, 'KWh', ''))) AS energy
+        from [z_fanuc_mold_data_every_day]
+        where DateDiff(dd, mold_start_time, getdate()) &lt;= 30
+          and monit_mc_name like '3F%'
+        group by CONVERT(VARCHAR(10), CONVERT(DATETIME, mold_start_time), 120)
+        ORDER BY CONVERT(VARCHAR(10), CONVERT(DATETIME, mold_start_time), 120)
+    </select>
+
+    <select id="getCurrentEnergy" resultType="com.aacoptics.fanuc.dashboard.entity.FanucEnergyData">
+        select sum(convert(decimal(10, 2), replace(mold_energy, 'KWh', ''))) AS energy
+        from [z_fanuc_mold_data_every_day]
+        where CONVERT(DATETIME, mold_start_time) &gt;= DATEADD(MM, DATEDIFF(MM, 0, GETDATE()), 0)
+          and monit_mc_name like '3F%'
+
+    </select>
+</mapper>
