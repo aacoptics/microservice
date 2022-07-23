@@ -104,3 +104,23 @@ export function getAllCycleList(startTime, endTime) {
         }
     })
 }
+
+export function getLastMouthEnergy() {
+    return request({
+        url: '/lens-fanuc-ne/fanucDigital/getLastMouthEnergy',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function getCurrentEnergy() {
+    return request({
+        url: '/lens-fanuc-ne/fanucDigital/getCurrentEnergy',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

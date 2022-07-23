@@ -1,23 +1,22 @@
 <template>
   <div>
     <div class="aac-container">
-      <el-row style="margin-bottom: 20px">
+      <div style="margin-bottom: 10px">
         <el-date-picker
             v-model="dateTimePickerValue"
             type="datetimerange"
             :shortcuts="shortcuts"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            size="large">
+            end-placeholder="结束日期">
         </el-date-picker>
-        <el-button type="primary" size="large" style="margin-left: 10px"
+        <el-button type="primary" style="margin-left: 10px"
                    @click="getAlarmData">查询
           <template #icon>
             <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
           </template>
         </el-button>
-      </el-row>
+      </div>
       <el-row>
         <el-col :span="12">
           <div style="margin-bottom: 10px">
