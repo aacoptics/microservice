@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
-@FeignClient(name = "iot-coating-dashboard", fallback = CoatingProvider.CoatingProviderFallback.class)
+@FeignClient(name = "iot-coating-dashboard-xny", fallback = CoatingProvider.CoatingProviderFallback.class)
 public interface CoatingProvider {
 
     @GetMapping(value = "/coatingDashboard/getStatusCount")

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
-@FeignClient(name = "iot-lenspacker-dashboard", fallback = LensPackerProvider.LensPackerProviderFallback.class)
+@FeignClient(name = "iot-lenspacker-dashboard-xny", fallback = LensPackerProvider.LensPackerProviderFallback.class)
 public interface LensPackerProvider {
 
     @GetMapping(value = "/lenspackerDashboard/getStatusCount")

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
-@FeignClient(name = "iot-fanuc-dashboard", fallback = FanucProvider.FanucProviderFallback.class)
+@FeignClient(name = "iot-fanuc-dashboard-xny", fallback = FanucProvider.FanucProviderFallback.class)
 public interface FanucProvider {
 
     @GetMapping(value = "/fanucDashboard/getStatusCount")
