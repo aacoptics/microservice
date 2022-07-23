@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     onRoutes() {
-      return this.$route.path.replace("/", "");
+      return this.$route.fullPath.replace("/", "");
     },
     collapse() {
       return this.$store.state.collapse
