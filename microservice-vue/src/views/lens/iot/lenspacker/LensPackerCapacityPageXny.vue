@@ -4,13 +4,13 @@
       <div style="margin-bottom: 10px">
         <el-date-picker
             v-model="dateTimePickerValue"
-            type="datetimerange"
             :shortcuts="shortcuts"
+            end-placeholder="结束日期"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            type="datetimerange">
         </el-date-picker>
-        <el-button type="primary" style="margin-left: 10px"
+        <el-button style="margin-left: 10px" type="primary"
                    @click="getLensPackerCapacityData">查询
           <template #icon>
             <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
@@ -26,20 +26,20 @@
       <el-row>
         <el-col :span="24">
           <el-table
-              :data="lensPackerCapacity"
-              stripe
-              border
               id="capacityTable"
-              style="width: 95%"
+              v-loading="capacityLoading"
+              :data="lensPackerCapacity"
+              border
               height="600"
-              v-loading="capacityLoading">
+              stripe
+              style="width: 95%">
             <el-table-column
-                prop="machineName"
-                label="机台号">
+                label="机台号"
+                prop="machineName">
             </el-table-column>
             <el-table-column
-                prop="capacity"
-                label="产能">
+                label="产能"
+                prop="capacity">
             </el-table-column>
           </el-table>
         </el-col>

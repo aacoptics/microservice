@@ -15,7 +15,7 @@
       <!--        </el-card>-->
       <!--      </el-col>-->
       <el-col :span="24">
-        <el-card shadow="hover" style="height:280px;" id="totalStatusCount">
+        <el-card id="totalStatusCount" shadow="hover" style="height:280px;">
         </el-card>
       </el-col>
     </el-row>
@@ -522,7 +522,11 @@ export default {
     onCountClick(floor, machineType, status) {
       switch (machineType) {
         case "fanuc":
-          this.$router.push({name: 'fanucNe3B' + floor, query: {position: '3B' + floor, site: '2210'}, params: {status: status}})
+          this.$router.push({
+            name: 'fanucNe3B' + floor,
+            query: {position: '3B' + floor, site: '2210'},
+            params: {status: status}
+          })
           break;
         case "lensPacker":
           this.$router.push({name: 'lenspackerNe3B' + floor, query: {position: '3B' + floor}, params: {status: status}})
