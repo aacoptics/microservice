@@ -512,24 +512,24 @@ export default {
     },
     onCardClick(floor, machineType) {
       if (machineType === 'fanuc') {
-        this.$router.push('/fanuc' + floor + '?position=3B' + floor)
+        this.$router.push('/fanucNe3B' + floor + '?position=3B' + floor + '&site=2210')
       } else if (machineType === 'lensPacker') {
-        this.$router.push('/lensPacker' + floor + '?position=3B' + floor)
+        this.$router.push('/lenspackerNe3B' + floor + '?position=3B' + floor)
       } else if (machineType === 'coating') {
-        this.$router.push('/coating' + floor.substring(0, 1) + '?position=' + floor.substring(0, 1))
+        this.$router.push('/coatingMonitorNe' + floor.substring(0, 1) + '?position=' + floor.substring(0, 1))
       }
     },
     onCountClick(floor, machineType, status) {
       switch (machineType) {
         case "fanuc":
-          this.$router.push({name: 'Fanuc3B' + floor, query: {position: '3B' + floor}, params: {status: status}})
+          this.$router.push({name: 'fanucNe3B' + floor, query: {position: '3B' + floor, site: '2210'}, params: {status: status}})
           break;
         case "lensPacker":
-          this.$router.push({name: 'lensPacker3B' + floor, query: {position: '3B' + floor}, params: {status: status}})
+          this.$router.push({name: 'lenspackerNe3B' + floor, query: {position: '3B' + floor}, params: {status: status}})
           break;
         case "coating":
           this.$router.push({
-            name: 'coatingMonitor' + floor.substring(0, 1),
+            name: 'coatingMonitorNe' + floor.substring(0, 1),
             query: {position: floor.substring(0, 1)},
             params: {status: status}
           })

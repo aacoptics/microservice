@@ -42,14 +42,14 @@
                 style="width: 100%; margin-bottom: 20px"
                 @expand-change="refresh">
         <el-table-column label="菜单名称" prop="title" width="180"/>
-        <el-table-column label="图标" width="60">
+        <el-table-column label="图标" width="45">
           <template #default="scope">
             <font-awesome-icon v-if="fontAwesomeIconFormat(scope.row.icon) instanceof Array"
                                :icon="fontAwesomeIconFormat(scope.row.icon)" pull="left" size="lg"/>
           </template>
         </el-table-column>
         <el-table-column label="菜单编码" prop="name" width="200"/>
-        <el-table-column label="排序" prop="orderNum" width="120"/>
+        <el-table-column label="排序" prop="orderNum" width="70"/>
         <el-table-column label="菜单路径" prop="path" width="200"/>
         <el-table-column label="Vue组件" prop="component" width="280"/>
         <el-table-column label="描述" prop="description" width="180"/>
