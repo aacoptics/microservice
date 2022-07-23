@@ -29,6 +29,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.github.dadiyang</groupId>
+            <artifactId>jave</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
             <groupId>com.hynnet</groupId>
             <artifactId>jacob</artifactId>
             <version>1.20</version>
