@@ -2,7 +2,8 @@
   <div>
     <div class="aac-container">
       <div style="margin-bottom: 20px">
-        <div v-for="(item, index) of statusRadio" :key="index" :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
+        <div v-for="(item, index) of statusRadio" :key="index"
+             :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
              class="status_radio_type"
              @click="onStatusRadioClick(item)">
           {{ item + '(' + this.statusCount[item] + ')' }}
