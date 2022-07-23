@@ -88,13 +88,13 @@ public class VoiceServiceController {
                     .set("uri", outFilePath));
             paramsObject.set("urls", urlArray);
             object.set("params", paramsObject);
-            okHttpCli.doPostJson(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
+            Result result = okHttpCli.doPostJsonSpeaker(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
             file.delete();
             File outFile = new File(outFilePath);
             if (outFile.exists()) {
                 outFile.delete();
             }
-            return Result.success();
+            return result;
         } catch (Exception e) {
             return Result.fail("文件[" + fileName + "]发送至扬声器失败");
         }

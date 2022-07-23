@@ -1,5 +1,7 @@
 package com.aacoptics.jacob.provider;
 
+import cn.hutool.core.util.StrUtil;
+import com.aacoptics.common.core.vo.Result;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
@@ -17,9 +19,10 @@ public class OkHttpCli {
 
     private OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
-				.connectTimeout(60, TimeUnit.SECONDS)
-				.writeTimeout(120, TimeUnit.SECONDS)
-				.build();;
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
+            .build();
+    ;
 
     /**
      * get 请求
@@ -129,6 +132,18 @@ public class OkHttpCli {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public <T> Result doPostJsonSpeaker(String url, T jsonObject) {
+        try {
+            String result = executePost(url, new ObjectMapper().writeValueAsString(jsonObject), JSON);
+            if (StrUtil.isBlank(result))
+                return Result.fail("扬声器接口异常，请检查！");
+            else
+                return Result.success(result);
+        } catch (Exception e) {
+            return Result.fail(e);
+        }
     }
 
     /**
