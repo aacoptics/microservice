@@ -2,16 +2,17 @@
   <div>
     <div class="aac-container">
       <div style="margin-bottom: 20px">
-        <div v-for="(item, index) of statusRadio" :key="index" class="status_radio_type"
+        <div v-for="(item, index) of statusRadio" :key="index"
              :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
+             class="status_radio_type"
              @click="onStatusRadioClick(item)">
           {{ item + '(' + this.statusCount[item] + ')' }}
         </div>
       </div>
       <el-card v-for="(singleMachineInfo, index) of coatingStatusInfo" :key="index"
                :body-style="{ padding: '0px', height:'60px'}"
-               shadow="hover"
                class="coating_card_type"
+               shadow="hover"
                style="cursor: pointer">
 
         <el-row>
@@ -206,12 +207,12 @@ export default {
 </script>
 
 <style scoped>
-.status_radio_type{
+.status_radio_type {
   width: 100px;
   height: 30px;
   line-height: 30px;
   border-radius: 5px;
-  font-family: 'Microsoft YaHei',serif;
+  font-family: 'Microsoft YaHei', serif;
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;

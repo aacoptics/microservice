@@ -2,16 +2,17 @@
   <div>
     <div class="aac-container">
       <div style="margin-bottom: 20px">
-        <div v-for="(item, index) of statusRadio" :key="index" class="status_radio_type"
+        <div v-for="(item, index) of statusRadio" :key="index"
              :style="'background-color:' + getStatusRadioColor(item) + ';text-align:center'"
+             class="status_radio_type"
              @click="onStatusRadioClick(item)">
           {{ item + '(' + this.statusCount[item] + ')' }}
         </div>
       </div>
       <el-card v-for="(singleMachineInfo, index) of LensPackerMachineInfo" :key="index"
                :body-style="{ padding: '0px', height:'120px'}"
-               shadow="hover"
                class="lenspacker_card_type"
+               shadow="hover"
                style="cursor: pointer">
 
         <el-row>
@@ -50,10 +51,10 @@
                 <el-col :span="12">节拍：{{ singleMachineInfo.machineCT.toFixed(2) }}</el-col>
               </el-row>
               <el-row style="height: 30px;line-height: 30px">
-                <el-col :span="12" v-if="singleMachineInfo.status !== 0">
+                <el-col v-if="singleMachineInfo.status !== 0" :span="12">
                   类型：{{ singleMachineInfo.cavityNums === 24 ? 24 : 16 }}穴
                 </el-col>
-                <el-col :span="12" v-else>类型：</el-col>
+                <el-col v-else :span="12">类型：</el-col>
                 <el-col :span="12">握手信号：{{ singleMachineInfo.isComplete }}</el-col>
               </el-row>
             </div>
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import {getMachineStatus, getMachineAlarms} from "@/api/lens/iot/lenspackerXb";
+import {getMachineAlarms, getMachineStatus} from "@/api/lens/iot/lenspackerXb";
 
 export default {
   name: "CoatingMachineMonitor",

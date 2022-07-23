@@ -4,13 +4,13 @@
       <div style="margin-bottom: 10px">
         <el-date-picker
             v-model="dateTimePickerValue"
-            type="datetimerange"
             :shortcuts="shortcuts"
+            end-placeholder="结束日期"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            type="datetimerange">
         </el-date-picker>
-        <el-button type="primary" style="margin-left: 10px"
+        <el-button style="margin-left: 10px" type="primary"
                    @click="getAlarmData">查询
           <template #icon>
             <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
@@ -20,7 +20,7 @@
       <el-row>
         <el-col :span="12">
           <div style="margin-bottom: 10px">
-            <el-button type="success" size="small"
+            <el-button size="small" type="success"
                        @click="exportExcel('#alarmDetails', 'AlarmDetailsData.xlsx')">导出
               <template #icon>
                 <font-awesome-icon :icon="['fas','download']"/>
@@ -28,48 +28,48 @@
             </el-button>
           </div>
           <el-table
-              :data="lensPackerAlarmDetails"
-              stripe
-              border
               id="alarmDetails"
-              style="width: 95%"
+              v-loading="alarmDetailLoading"
+              :data="lensPackerAlarmDetails"
+              border
               height="600"
-              v-loading="alarmDetailLoading">
+              stripe
+              style="width: 95%">
             <el-table-column
-                prop="monitMcName"
                 label="机台名"
+                prop="monitMcName"
                 width="85">
             </el-table-column>
             <el-table-column
-                prop="alarmCode"
                 label="报警种类"
+                prop="alarmCode"
                 width="80">
             </el-table-column>
             <el-table-column
-                prop="startTime"
+                :formatter="dateFormat"
                 label="开始时间"
-                width="160"
-                :formatter="dateFormat">
+                prop="startTime"
+                width="160">
             </el-table-column>
             <el-table-column
-                prop="endTime"
+                :formatter="dateFormat"
                 label="结束时间"
-                width="160"
-                :formatter="dateFormat">
+                prop="endTime"
+                width="160">
             </el-table-column>
             <el-table-column
-                prop="description"
-                label="报警描述">
+                label="报警描述"
+                prop="description">
             </el-table-column>
             <el-table-column
-                prop="duration"
-                label="单次报警处理时间">
+                label="单次报警处理时间"
+                prop="duration">
             </el-table-column>
           </el-table>
         </el-col>
         <el-col :span="12">
           <div style="margin-bottom: 10px">
-            <el-button type="success" size="small"
+            <el-button size="small" type="success"
                        @click="exportExcel('#alarmCount', 'AlarmCountData.xlsx')">导出
               <template #icon>
                 <font-awesome-icon :icon="['fas','download']"/>
@@ -77,34 +77,34 @@
             </el-button>
           </div>
           <el-table
-              :data="lensPackerAlarmCount"
-              stripe
-              border
               id="alarmCount"
-              style="width: 95%"
+              v-loading="alarmCountLoading"
+              :data="lensPackerAlarmCount"
+              border
               height="600"
-              v-loading="alarmCountLoading">
+              stripe
+              style="width: 95%">
             <el-table-column
-                prop="monitMcName"
                 label="机台名"
+                prop="monitMcName"
                 width="85">
             </el-table-column>
             <el-table-column
-                prop="alarmCode"
                 label="报警种类"
+                prop="alarmCode"
                 width="80">
             </el-table-column>
             <el-table-column
-                prop="description"
-                label="报警描述">
+                label="报警描述"
+                prop="description">
             </el-table-column>
             <el-table-column
-                prop="duration"
-                label="处理时间S">
+                label="处理时间S"
+                prop="duration">
             </el-table-column>
             <el-table-column
-                prop="alarmCount"
-                label="报警次数">
+                label="报警次数"
+                prop="alarmCount">
             </el-table-column>
           </el-table>
         </el-col>
@@ -116,7 +116,7 @@
 <script>
 import XLSX from "xlsx";
 import FileSaver from 'file-saver'
-import {getAlarmDetail, getAlarmCount} from "@/api/lens/iot/lenspackerXb";
+import {getAlarmCount, getAlarmDetail} from "@/api/lens/iot/lenspackerXb";
 
 export default {
   name: "LensPackerAlarmPage",
