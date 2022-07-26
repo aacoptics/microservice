@@ -4,6 +4,7 @@ import com.aacoptics.bi.sso.http.service.OkHttpCli;
 import com.aacoptics.bi.sso.provider.FeiShuApi;
 import com.aacoptics.bi.sso.service.BiSsoService;
 import com.aacoptics.bi.sso.util.BIRsaEncrypt;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -164,7 +165,6 @@ public class BiSsoServiceImpl  implements BiSsoService {
          *     "msg": "success"
          * }
          */
-        log.info("用户信息：" + userInfoResponse);
         if(StringUtils.isEmpty(userInfoResponse))
         {
             log.error("生成BI自动登录URL失败，获取当前登录用户工号信息失败，工号相关信息为空");
@@ -188,16 +188,35 @@ public class BiSsoServiceImpl  implements BiSsoService {
             log.error("生成BI自动登录URL失败，获取当前登录用户工号信息失败，工号相关信息为空");
             return BI_URL;
         }
-        String employeeNo = userJsonObject.getString("employee_no");
-        if(StringUtils.isEmpty(employeeNo))
-        {
-            log.error("生成BI自动登录URL失败，获取当前登录用户工号信息失败，工号为空");
-            return BI_URL;
+
+        String adAccount = "";
+        JSONArray userCustomAttrs = userJsonObject.getJSONArray("custom_attrs");
+        if(userCustomAttrs != null && userCustomAttrs.size() > 0) {
+            for (int i = 0; i < userCustomAttrs.size(); i++) {
+                JSONObject userCustomAttr = userCustomAttrs.getJSONObject(i);
+                //获取域账号
+                if ("C-7076750908058566660".equals(userCustomAttr.getString("id"))) {
+                    JSONObject customAttrValue = userCustomAttr.getJSONObject("value");
+                    adAccount = customAttrValue.getString("text");
+                    break;
+                }
+            }
         }
-        log.info("登录工号为：" + employeeNo);
+
+        if(StringUtils.isEmpty(adAccount))
+        {
+            adAccount = userJsonObject.getString("employee_no");
+            if(StringUtils.isEmpty(adAccount))
+            {
+                log.error("生成BI自动登录URL失败，获取当前登录用户工号信息失败，工号为空");
+                return BI_URL;
+            }
+        }
+
+        log.info("登录工号为：" + adAccount);
 
         //4 获取BI单点登录token
-        String ssoToken = BIRsaEncrypt.getSsoToken(employeeNo);
+        String ssoToken = BIRsaEncrypt.getSsoToken(adAccount);
 
         String redirectUrl = "";
         if(StringUtils.isNotEmpty(callBackUrl))
