@@ -164,6 +164,7 @@ public class BiSsoServiceImpl  implements BiSsoService {
          *     "msg": "success"
          * }
          */
+        log.info("用户信息：" + userInfoResponse);
         if(StringUtils.isEmpty(userInfoResponse))
         {
             log.error("生成BI自动登录URL失败，获取当前登录用户工号信息失败，工号相关信息为空");
