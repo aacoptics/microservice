@@ -1,16 +1,24 @@
 package com.aacoptics.notification.event;
 
 import cn.hutool.core.util.StrUtil;
+import com.aacoptics.notification.entity.form.SpeakerVoiceFileInfo;
 import com.aacoptics.notification.entity.vo.MarkdownMessage;
+import com.aacoptics.notification.provider.JacobProvider;
 import com.aacoptics.notification.utils.DingTalkUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
+import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
+import org.springframework.scheduling.annotation.Async;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -22,6 +30,9 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
     private MqttConnectOptions options;
 
     private String subTopics;
+
+    @Resource
+    JacobProvider jacobProvider;
 
     public MqttConsumerCallBack(MqttClient client, MqttConnectOptions options, String subTopics) {
         this.client = client;
@@ -79,6 +90,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addBlobContent(localTimeStr);
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+                sendToAllSpeaker(machineName);
                 break;
             case "moldTempMonitor":
                 title = "模造温度曲线报警";
@@ -138,5 +150,31 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         } else {
             log.error("mqtt连接失败");
         }
+    }
+
+
+    static final List<SpeakerVoiceFileInfo> speakerInfos = Arrays.asList(
+            new SpeakerVoiceFileInfo().setSpeakerIp("10.7.55.125").setSpeakerSn("ls20://02008669A7B1").setSpeakerPort(8888),
+            new SpeakerVoiceFileInfo().setSpeakerIp("10.7.55.126").setSpeakerSn("ls20://02026DFB7B6D").setSpeakerPort(8888),
+            new SpeakerVoiceFileInfo().setSpeakerIp("10.7.55.127").setSpeakerSn("ls20://020FF3BC43E6").setSpeakerPort(8888),
+            new SpeakerVoiceFileInfo().setSpeakerIp("10.7.55.128").setSpeakerSn("ls20://0202C68F8D6B").setSpeakerPort(8888)
+    );
+
+
+    @Async
+    public void sendToAllSpeaker(String machineName){
+        for (SpeakerVoiceFileInfo speakerInfo : speakerInfos) {
+            sendVoiceToSpeaker(machineName, speakerInfo.getSpeakerSn(), speakerInfo.getSpeakerIp(), speakerInfo.getSpeakerPort());
+        }
+    }
+
+    @Async
+    public void sendVoiceToSpeaker(String machineName, String speakerSn, String speakerIp, Integer speakerPort){
+        SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
+        speakerVoiceFileInfo.setMessage(machineName + "机台需要换料，请注意\n"
+                + machineName + "机台需要换料，请注意\n"
+                + machineName + "机台需要换料，请注意\n");
+        speakerVoiceFileInfo.setSpeakerIp(speakerIp).setSpeakerSn(speakerSn).setSpeakerPort(speakerPort);
+        jacobProvider.sendToSpeaker(speakerVoiceFileInfo);
     }
 }
