@@ -31,13 +31,13 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 
     private String subTopics;
 
-    @Resource
-    JacobProvider jacobProvider;
+    private JacobProvider jacobProvider;
 
-    public MqttConsumerCallBack(MqttClient client, MqttConnectOptions options, String subTopics) {
+    public MqttConsumerCallBack(MqttClient client, MqttConnectOptions options, String subTopics, JacobProvider jacobProvider) {
         this.client = client;
         this.options = options;
         this.subTopics = subTopics;
+        this.jacobProvider = jacobProvider;
     }
 
     /**
