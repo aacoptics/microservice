@@ -32,6 +32,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -495,11 +496,52 @@ public class DingTalkNotificationServiceImpl implements DingTalkNotificationServ
         for (String key : projectNameItemNumberMap.keySet()) {
             projectNameList.add(key);
         }
-        //获取结存数据
-        List<Map<String, Object>> warehouseBalanceDataList = null;
+
+        //获取商务项目和内部项目映射
+        Map<String, String> projectMap = null;
         if(projectNameList != null && projectNameList.size() > 0)
         {
-            warehouseBalanceDataList = productionReportService.findWarehouseBalanceDataByDate(shiftStart, shiftEnd, projectNameList);
+            projectMap = productionReportService.findProjectMapList(projectNameList);
+        }
+        //获取内部项目
+        List<String> internalProjectList = new ArrayList<>();
+        if(projectMap != null && projectMap.size() > 0)
+        {
+            for (Map.Entry<String, String> entry : projectMap.entrySet()) {
+                String businessProject = entry.getKey();
+                String internalProject = entry.getValue();
+
+                internalProjectList.add(internalProject);
+            }
+        }
+
+
+        //获取结存数据
+        List<Map<String, Object>> warehouseBalanceDataList = new ArrayList<>();
+        if(projectNameList != null && projectNameList.size() > 0)
+        {
+            List<Map<String, Object>> internalProjectWarehouseBalanceDataList = productionReportService.findWarehouseBalanceDataByDate(shiftStart, shiftEnd, internalProjectList);
+            //按商务项目组装数据
+            if(internalProjectWarehouseBalanceDataList != null && internalProjectWarehouseBalanceDataList.size()>0)
+            {
+                for(String businessProject : projectNameList) {
+                    Map<String, Object> warehouseBalanceDataMap = new HashMap<>();
+                    warehouseBalanceDataMap.put("project_name", businessProject);
+
+                    int sumQty = 0;
+                    for (Map<String, Object> internalProjectWarehouseBalanceData : internalProjectWarehouseBalanceDataList) {
+                        String tempInternalProject = internalProjectWarehouseBalanceData.get("project_name")+"";
+                        String tempBusinessProject = projectMap.get(tempInternalProject);
+
+                        if(businessProject.equals(tempBusinessProject)) {
+                            int tempSumQty = Integer.valueOf(internalProjectWarehouseBalanceData.get("sumQty") + "");
+                            sumQty += tempSumQty;
+                        }
+                    }
+                    warehouseBalanceDataMap.put("sumQty", sumQty);
+                    warehouseBalanceDataList.add(warehouseBalanceDataMap);
+                }
+            }
         }
 
         //2 获取机器人
@@ -648,8 +690,8 @@ public class DingTalkNotificationServiceImpl implements DingTalkNotificationServ
             {
                 for(int i=0; i<targetDeliverySize; i++)
                 {
-                    Map<String, Object> productionDayMap = targetDeliveryDataList.get(i);
-                    String projectName = productionDayMap.get("project_name") != null ? productionDayMap.get("project_name") + "" : "";
+                    Map<String, Object> targetDeliveryMap = targetDeliveryDataList.get(i);
+                    String projectName = targetDeliveryMap.get("project_name") != null ? targetDeliveryMap.get("project_name") + "" : "";
                     for(int j=0; j<warehouseBalanceDataList.size(); j++)
                     {
                         Map<String, Object> warehouseBalanceDataMap = warehouseBalanceDataList.get(j);
