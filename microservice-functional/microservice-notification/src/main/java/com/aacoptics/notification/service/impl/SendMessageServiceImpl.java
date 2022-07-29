@@ -87,8 +87,8 @@ public class SendMessageServiceImpl implements SendMessageService {
                         try {
                             String tempDir = System.getProperty("java.io.tmpdir");
                             long currentTimeMillis = System.currentTimeMillis();
-                            String excelFileName = "Notification-" + currentTimeMillis + ".xlsx";
-                            String pngFileName = "Notification" + currentTimeMillis + ".png";
+                            String excelFileName = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".xlsx";
+                            String pngFileName = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".png";
                             URL url = new URL(messageBatch.getSendFilePath());
                             FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName));
 
