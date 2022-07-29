@@ -3,7 +3,7 @@ import request from '@/utils/request'
 
 export function findProjectMapPage(conditions) {
     return request({
-        url: '/wlg/projectMap/conditions',
+        url: '/wlg-report/projectMap/conditions',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ export function findProjectMapPage(conditions) {
 
 export function findProjectMapById(projectMapId) {
     return request({
-        url: '/wlg/projectMap/' + projectMapId,
+        url: '/wlg-report/projectMap/' + projectMapId,
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ export function findProjectMapById(projectMapId) {
 
 export function deleteProjectMap(deleteForm) {
     return request({
-        url: '/wlg/projectMap/' + deleteForm.id,
+        url: '/wlg-report/projectMap/' + deleteForm.id,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export function deleteProjectMap(deleteForm) {
 
 export function handleAdd(addForm) {
     return request({
-        url: '/wlg/projectMap',
+        url: '/wlg-report/projectMap',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export function handleAdd(addForm) {
 
 export function handleUpdate(updateForm) {
     return request({
-        url: '/wlg/projectMap/' + updateForm.id,
+        url: '/wlg-report/projectMap/' + updateForm.id,
         method: 'put',
         headers: {
             'Content-Type': 'application/json'

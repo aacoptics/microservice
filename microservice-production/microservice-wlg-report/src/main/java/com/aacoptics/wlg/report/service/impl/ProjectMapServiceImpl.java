@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Objects;
 @Slf4j
 public class ProjectMapServiceImpl extends ServiceImpl<ProjectMapMapper, ProjectMap> implements ProjectMapService {
 
-
+    @Autowired
     private ProjectMapMapper projectMapMapper;
 
 
@@ -84,15 +85,14 @@ public class ProjectMapServiceImpl extends ServiceImpl<ProjectMapMapper, Project
         String businessProject = projectMap.getBusinessProject();
         String internalProject = projectMap.getInternalProject();
 
-
         QueryWrapper<ProjectMap> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("business_project", businessProject);
         queryWrapper.eq("internal_project", internalProject);
 
         List<ProjectMap> projectMapList = projectMapMapper.selectList(queryWrapper);
         if (projectMapList != null && projectMapList.size() > 0) {
-            if(projectMap.getId() != null) {
-                if(projectMapList.get(0).getId() != projectMap.getId())
+            if(projectMap.getId() != null && projectMap.getId() != 0) {
+                if(!projectMapList.get(0).getId().equals(projectMap.getId()))
                 {
                     throw new BusinessException("已存在相同记录，请确认！");
                 }
