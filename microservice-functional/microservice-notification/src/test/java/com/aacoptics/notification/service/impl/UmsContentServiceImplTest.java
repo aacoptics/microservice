@@ -1,5 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.aacoptics.common.core.vo.Result;
@@ -12,12 +13,18 @@ import com.aacoptics.notification.service.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -115,5 +122,19 @@ public class UmsContentServiceImplTest {
 //                keyMap.put(attrArr[0], attrArr[1]);
 //            }
 //        }
+    }
+
+    @Test
+    public void test1() {
+        try {
+            if (FileUtil.exist("C:\\Users\\xkz19\\Desktop\\test.xlsx"))
+                FileUtil.del("C:\\Users\\xkz19\\Desktop\\test.xlsx");
+            URL url = new URL("http://10.69.76.50:8082/webroot/decision/view/report?viewlet=oa%252Foa_008_ali_travel_detail.cpt&ref_t=design&op=write&date1=2022-07-01&date2=2022-07-01&obj1=%E8%B4%A8%E9%87%8F%E9%83%A8&format=excel&extype=simple");
+            FileUtils.copyURLToFile(url, new File("C:\\Users\\xkz19\\Desktop\\test.xlsx"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
