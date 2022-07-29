@@ -1,29 +1,31 @@
 package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.UmsContentSub;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
-import com.aacoptics.notification.entity.vo.MessageTypeInfo;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.provider.DingTalkApi;
 import com.aacoptics.notification.provider.FeishuApi;
-import com.aacoptics.notification.service.RobotService;
-import com.aacoptics.notification.service.SendMessageService;
-import com.aacoptics.notification.service.UmsContentService;
-import com.aacoptics.notification.service.UmsContentSubService;
+import com.aacoptics.notification.service.*;
 import com.aacoptics.notification.utils.DingTalkUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
+import com.spire.xls.Worksheet;
 import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +47,9 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Resource
     DingTalkApi dingTalkApi;
+
+    @Resource
+    FeishuService feishuService;
 
     @Override
     public void sendHandledMessage(NotificationEntity notificationEntity) throws Exception {
@@ -76,7 +81,42 @@ public class SendMessageServiceImpl implements SendMessageService {
             List<Robot> robotList = robotService.findByName(robotNames);
             for (Robot messageTypeInfo : robotList) {
                 if (messageTypeInfo.getRobotType().equals("FeiShu")) {
-                    String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage);
+                    boolean fileResult = true;
+                    String imageKey = null;
+                    if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                        try {
+                            String tempDir = System.getProperty("java.io.tmpdir");
+                            long currentTimeMillis = System.currentTimeMillis();
+                            String excelFileName = "Notification-" + currentTimeMillis + ".xlsx";
+                            String pngFileName = "Notification" + currentTimeMillis + ".png";
+                            URL url = new URL(messageBatch.getSendFilePath());
+                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName));
+
+                            if (StrUtil.isEmpty(messageBatch.getSendPicturePath())) {
+                                com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
+                                spireXlsWorkbook.loadFromFile(tempDir + "/" + excelFileName);
+                                Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
+                                worksheet.saveToImage(tempDir + "/" + pngFileName);
+                            } else {
+                                url = new URL(messageBatch.getSendPicturePath());
+                                FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngFileName));
+                            }
+
+                            imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
+                            String fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName, 0);
+
+                            final String chatId = feishuService.fetchChatIdByRobot("每日毛利率飞书测试");
+                            fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                                    chatId,
+                                    FeishuService.MSG_TYPE_FILE,
+                                    JSONUtil.createObj().set("file_key", fileKey));
+                        } catch (IOException err) {
+                            String msg = "解析http文件异常！{" + err.getMessage() + "}";
+                            log.error(msg);
+                            throw new Exception(msg);
+                        }
+                    }
+                    String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), markdownGroupMessage, imageKey);
                     new JSONObject();
                     JSONObject messageJson;
                     try {
@@ -86,7 +126,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         log.error(msg);
                         throw new Exception(msg);
                     }
-                    if (messageJson.containsKey("StatusCode") && messageJson.getInteger("StatusCode") == 0) {
+                    if (messageJson.containsKey("StatusCode") && messageJson.getInteger("StatusCode") == 0 && fileResult) {
                         messageBatch.setIsStatus("1");
                         umsContentService.updateById(messageBatch);
                     } else {
