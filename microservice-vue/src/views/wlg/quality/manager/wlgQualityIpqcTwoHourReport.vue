@@ -75,14 +75,14 @@ export default {
       }
       this.pageRequest.projectName = this.filters.projectName;
       this.pageRequest.moldName = this.filters.moldName;
-      this.pageRequest.currentDate = this.filters.endOqcTime != null ? date2str(this.filters.endOqcTime) : null;
+      this.pageRequest.currentDate = this.filters.currentDate != null ? date2str(this.filters.currentDate) : null;
 
       qualityIpqcTwoHourReport(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
-              this.columns = responseData.data.sysTableColumnDTOs;
-              this.pageResult = responseData.data.dataRecords;
+              this.columns = responseData.data['sysTableColumnDTOs'];
+              this.pageResult = responseData.data['dataRecords'];
             }
           })
           .then(data != null ? data.callback : "");
