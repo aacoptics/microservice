@@ -81,8 +81,8 @@ export default {
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
-              this.columns = responseData.data;
-              this.pageResult = responseData.data;
+              this.columns = responseData.data.sysTableColumnDTOs;
+              this.pageResult = responseData.data.dataRecords;
             }
           })
           .then(data != null ? data.callback : "");
