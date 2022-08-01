@@ -24,7 +24,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)" :loading="findPageLoading">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -35,6 +35,8 @@
 
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                :pageSize="100000000" :pageSizes="[100000000]"
+                :showPagination="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>
     </div>
@@ -60,9 +62,7 @@ export default {
       columns: [],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
-      excelUploadDialogVisible: false,
-      exportLoading: false,
-      exportReportLoading: false
+      findPageLoading: false,
     };
   },
   methods: {
@@ -71,6 +71,7 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
+      this.findPageLoading = true;
       this.pageRequest.projectName = this.filters.projectName;
       this.pageRequest.moldName = this.filters.moldName;
       this.pageRequest.currentDate = this.filters.currentDate != null ? date2str(this.filters.currentDate) : null;
@@ -82,6 +83,7 @@ export default {
               this.columns = responseData.data['sysTableColumnDTOs'];
               this.pageResult = responseData.data['dataRecords'];
             }
+            this.findPageLoading = false;
           })
           .then(data != null ? data.callback : "");
     },
