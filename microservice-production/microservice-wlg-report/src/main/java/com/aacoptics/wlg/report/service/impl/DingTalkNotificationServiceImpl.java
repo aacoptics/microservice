@@ -508,8 +508,8 @@ public class DingTalkNotificationServiceImpl implements DingTalkNotificationServ
         if(projectMap != null && projectMap.size() > 0)
         {
             for (Map.Entry<String, String> entry : projectMap.entrySet()) {
-                String businessProject = entry.getKey();
-                String internalProject = entry.getValue();
+                String internalProject = entry.getKey();
+                String businessProject = entry.getValue();
 
                 internalProjectList.add(internalProject);
             }
