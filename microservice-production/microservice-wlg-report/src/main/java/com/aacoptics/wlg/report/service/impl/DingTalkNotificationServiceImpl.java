@@ -773,41 +773,41 @@ public class DingTalkNotificationServiceImpl implements DingTalkNotificationServ
         worksheet.saveToImage(tempDir + "/" + imageFileName);
 
         //5 推送图片到群
-//        DingTalkMessageHistory dingTalkMessageHistory = new DingTalkMessageHistory();
-//        dingTalkMessageHistory.setProductionDate(currentTime.toLocalDate());
-//
-//        //获取token
-//        OapiGettokenResponse oapiGettokenResponse = dingTalkApi.getAccessToken();
-//        String accessToken = oapiGettokenResponse.getAccessToken();
-//
-//        //上传图片
-//        String mediaId = dingTalkApi.uploadMedia(accessToken, "image", tempDir + "/" + imageFileName);
-//        if(StringUtils.isEmpty(mediaId))
-//        {
-//            log.error("上传图片到钉钉异常" + tempDir + "/" + imageFileName);
-//            return;
-//        }
-//
-//        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
-//        markdownGroupMessage.setTitle("G+P项目汇总产出数据（" + currentDate + "）");
-//        markdownGroupMessage.addContent("![G+P项目汇总产出数据](" + mediaId + ")");
-//
-//        for(Map<String, String> robotMap : robotList) {
-//            String robotId = robotMap.get("ROBOT_ID");
-//            String robotUrl = robotMap.get("ROBOT_URL");
-//
-//            Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage(robotUrl, "G+P项目汇总产出数据", markdownGroupMessage.toString());
-//            String result = resultMap.get("result");
-//            String message = resultMap.get("message");
-//            //5 保存推送历史
-//            if (!StringUtils.isEmpty(message) && message.length() > 1024) {
-//                message = message.substring(1024);
-//            }
-//            dingTalkMessageHistory.setRobotId(robotId);
-//            dingTalkMessageHistory.setResult(result);
-//            dingTalkMessageHistory.setMessage(message);
-//
-//            dingTalkNotificationMapper.insert(dingTalkMessageHistory);
-//        }
+        DingTalkMessageHistory dingTalkMessageHistory = new DingTalkMessageHistory();
+        dingTalkMessageHistory.setProductionDate(currentTime.toLocalDate());
+
+        //获取token
+        OapiGettokenResponse oapiGettokenResponse = dingTalkApi.getAccessToken();
+        String accessToken = oapiGettokenResponse.getAccessToken();
+
+        //上传图片
+        String mediaId = dingTalkApi.uploadMedia(accessToken, "image", tempDir + "/" + imageFileName);
+        if(StringUtils.isEmpty(mediaId))
+        {
+            log.error("上传图片到钉钉异常" + tempDir + "/" + imageFileName);
+            return;
+        }
+
+        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+        markdownGroupMessage.setTitle("G+P项目汇总产出数据（" + currentDate + "）");
+        markdownGroupMessage.addContent("![G+P项目汇总产出数据](" + mediaId + ")");
+
+        for(Map<String, String> robotMap : robotList) {
+            String robotId = robotMap.get("ROBOT_ID");
+            String robotUrl = robotMap.get("ROBOT_URL");
+
+            Map<String, String> resultMap = dingTalkApi.sendGroupRobotMessage(robotUrl, "G+P项目汇总产出数据", markdownGroupMessage.toString());
+            String result = resultMap.get("result");
+            String message = resultMap.get("message");
+            //5 保存推送历史
+            if (!StringUtils.isEmpty(message) && message.length() > 1024) {
+                message = message.substring(1024);
+            }
+            dingTalkMessageHistory.setRobotId(robotId);
+            dingTalkMessageHistory.setResult(result);
+            dingTalkMessageHistory.setMessage(message);
+
+            dingTalkNotificationMapper.insert(dingTalkMessageHistory);
+        }
     }
 }
