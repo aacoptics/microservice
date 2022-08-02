@@ -46,6 +46,7 @@
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]"
                 :show-operation="false" :showBatchDelete="false"
+                :cellStyle="changeCellStyle"
                 :showPagination="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>
@@ -75,11 +76,20 @@ export default {
       columns: [],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
+      errorResults: [],
       findPageLoading: false,
       exportReportLoading: false,
     };
   },
   methods: {
+    changeCellStyle(row) { // 单元格样式
+      //列的label的名称
+      if (this.errorResults.filter(e => e["t1"] === row.row["id"] && e["t2"] === row.column.label).length > 0) {
+        return {'background': 'red'} //修改的样式
+      } else {
+        return {}
+      }
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -96,6 +106,7 @@ export default {
             if (responseData.code === "000000") {
               this.columns = responseData.data['sysTableColumnDTOs'];
               this.pageResult = responseData.data['dataRecords'];
+              this.errorResults = responseData.data['errorResults'];
             }
             this.findPageLoading = false;
           })
