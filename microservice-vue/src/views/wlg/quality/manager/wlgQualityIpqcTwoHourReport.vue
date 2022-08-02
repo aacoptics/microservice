@@ -24,7 +24,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="findPageLoading">查询
+            <el-button :loading="findPageLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -44,8 +44,8 @@
       </div>
 
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
-                :pageSize="100000000" :pageSizes="[100000000]"
+                :height="400" :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]"
+                :show-operation="false" :showBatchDelete="false"
                 :showPagination="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>
