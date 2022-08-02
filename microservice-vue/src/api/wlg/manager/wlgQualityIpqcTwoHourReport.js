@@ -12,3 +12,15 @@ export function qualityIpqcTwoHourReport(conditions) {
     })
 }
 
+export function qualityIpqcTwoHourReportExportExcel(conditions) {
+    return request({
+        url: '/wlg-quality-daily/wlgQualityIpqcTwoHourReport/qualityIpqcTwoHourReport/exportExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}
+

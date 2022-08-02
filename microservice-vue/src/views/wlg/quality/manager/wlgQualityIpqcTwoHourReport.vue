@@ -30,6 +30,16 @@
               </template>
             </el-button>
           </el-form-item>
+          <el-row align="middle" class="float-right" justify="center">
+            <el-form-item>
+              <el-button :loading="exportReportLoading" type="success"
+                         @click="exportReportExcelData('WLG-IPQC-2H-报表')">导出报表
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'download']"/>
+                </template>
+              </el-button>
+            </el-form-item>
+          </el-row>
         </el-form>
       </div>
 
@@ -46,7 +56,10 @@
 <script>
 import SysTable from "@/components/SysTable";
 import {date2str} from "@/utils/commonUtils";
-import {qualityIpqcTwoHourReport} from "@/api/wlg/manager/wlgQualityIpqcTwoHourReport";
+import {
+  qualityIpqcTwoHourReport,
+  qualityIpqcTwoHourReportExportExcel
+} from "@/api/wlg/manager/wlgQualityIpqcTwoHourReport";
 
 export default {
   name: "wlgQualityIpqcTwoHourReport",
@@ -63,6 +76,7 @@ export default {
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       findPageLoading: false,
+      exportReportLoading: false,
     };
   },
   methods: {
@@ -86,6 +100,23 @@ export default {
             this.findPageLoading = false;
           })
           .then(data != null ? data.callback : "");
+    },
+    exportReportExcelData(excelFileName) {
+      this.pageRequest.projectName = this.filters.projectName;
+      this.pageRequest.moldName = this.filters.moldName;
+      this.pageRequest.currentDate = this.filters.currentDate != null ? date2str(this.filters.currentDate) : null;
+
+      this.exportReportLoading = true;
+      qualityIpqcTwoHourReportExportExcel(this.pageRequest).then(res => {
+        this.exportReportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
     },
   },
 };
