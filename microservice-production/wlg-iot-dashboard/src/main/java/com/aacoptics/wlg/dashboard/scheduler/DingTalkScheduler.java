@@ -1,21 +1,10 @@
 package com.aacoptics.wlg.dashboard.scheduler;
 
-import com.aacoptics.wlg.dashboard.service.InputReportService;
-import com.taobao.api.ApiException;
-import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.time.LocalDateTime;
-
-@Slf4j
-@Component
+/*@Slf4j
+@Component*/
 public class DingTalkScheduler {
 
-    @Resource
+    /*@Resource
     InputReportService inputReportService;
 
     @Scheduled(cron = "${dingtalk.cronStr.sendWlgMoldingTwoHourReportCron}")
@@ -28,5 +17,5 @@ public class DingTalkScheduler {
             log.error("推送两小时报表异常", e);
         }
         log.info(LocalDateTime.now() + "完成推送两小时报表");
-    }
+    }*/
 }
