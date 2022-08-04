@@ -123,6 +123,15 @@ public interface ProductionReportService {
     public Map<String, String> findProjectNameItemNumberMap(LocalDate monthStart, LocalDate productionDate);
 
     /**
+     * 查询商务项目，内部项目映射关系
+     *
+     * @param businessProjectList 商务项目列表
+     *
+     * @return
+     */
+    public Map<String, String> findProjectMapList(List<String> businessProjectList);
+
+    /**
      * 查询生产汇总数据，包括目标生产数量，实际生产数量，实际出货率
      *
      * @param monthStart 需求月份开始日期

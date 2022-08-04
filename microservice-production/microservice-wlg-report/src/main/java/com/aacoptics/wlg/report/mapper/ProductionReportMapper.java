@@ -107,6 +107,9 @@ public interface ProductionReportMapper extends BaseMapper<ProductionPlan> {
             @Param("monthStart") LocalDate monthStart,
             @Param("productionDate") LocalDate productionDate);
 
+    List<Map<String, Object>> findProjectMapList(
+            @Param("businessProjectList") List<String> businessProjectList);
+
     @DS("FINEREPORT")
     List<Map<String, Object>> findWarehouseBalanceDataByDate(
             @Param("shiftStart") LocalDateTime shiftStart,

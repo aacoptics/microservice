@@ -449,6 +449,21 @@ public class ProductionReportServiceImpl implements ProductionReportService {
         return  projectNameItemNumberMap;
     }
 
+    @Override
+    public Map<String, String> findProjectMapList(List<String> businessProjectList) {
+        List<Map<String, Object>> projectMapList = productionReportMapper.findProjectMapList(businessProjectList);
+        Map<String, String> projectMap = new HashMap<>();
+        if(projectMapList != null && projectMapList.size() > 0)
+        {
+            for(Map<String, Object> map : projectMapList)
+            {
+                projectMap.put(map.get("internal_project")+"", map.get("business_project")+"");
+            }
+        }
+
+        return  projectMap;
+    }
+
 
     @Override
     public List<Map<String, Object>> findProductionSummaryDataByDate(LocalDate monthStart, LocalDate productionDate) {

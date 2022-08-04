@@ -40,6 +40,10 @@ public class UmsContent implements Serializable {
 
     private String linkUrl;
 
+    private String sendFilePath;
+
+    private String sendPicturePath;
+
     private String createdBy;
 
     private LocalDateTime createdTime;

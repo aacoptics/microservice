@@ -1252,8 +1252,30 @@
         and delivery_date &lt;= #{productionDate}
     </select>
 
+
+    <select id="findProjectMapList" resultType="map">
+        select business_project, internal_project
+        from project_map
+        where 1=1
+        <if test="businessProjectList!=null and businessProjectList.size()!=0">
+            AND business_project IN
+            <foreach collection="businessProjectList" item="item" index="index"
+                     open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
     <select id="findProductionSummaryDataByDate" resultType="map">
-        WITH TEMP_PRODUCTION_SUMMARY AS (
+        WITH TEMP_PS AS (
+            select
+                    case when pm.business_project is not null then pm.business_project else ps.project_name end project_name,
+                         production_date, target_qty, actual_qty
+                    from production_summary ps
+                    left join project_map pm on ps.project_name = pm.internal_project
+        ),
+        TEMP_PRODUCTION_SUMMARY AS (
         select project_name,
            FLOOR(sum(isnull(target_qty,0))) target_qty,
            FLOOR(sum(isnull(actual_qty,0))) actual_qty,
@@ -1261,14 +1283,14 @@
                when sum(isnull(target_qty,0)) != 0 then CAST(CAST(sum(isnull(actual_qty,0)) / sum(isnull(target_qty,0)) * 100 AS DECIMAL(18, 2)) AS VARCHAR(50)) + '%'
                else '0.00%' end actual_rate,
               (select floor(target_qty)
-                from production_summary a
-                where a.project_name = production_summary.project_name
+                from TEMP_PS a
+                where a.project_name = ps.project_name
                   and a.production_date = #{productionDate}) day_target_qty,
                (select floor(actual_qty)
-                from production_summary a
-                where a.project_name = production_summary.project_name
+                from TEMP_PS a
+                where a.project_name = ps.project_name
                   and a.production_date = #{productionDate}) day_actual_qty
-            from production_summary
+            from TEMP_PS ps
             where production_date >= #{monthStart}
             and production_date &lt;= #{productionDate}
             group by project_name

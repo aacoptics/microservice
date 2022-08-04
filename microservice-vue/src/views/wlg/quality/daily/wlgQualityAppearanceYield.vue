@@ -55,7 +55,8 @@
               </el-button>
             </el-form-item>
             <el-form-item>
-              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('外观良率报表')">导出报表
+              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('外观良率报表')">
+                导出报表
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'download']"/>
                 </template>
@@ -201,7 +202,7 @@ export default {
     tableRowClassName(row) { // 行样式
       return row.row['型号'] === '汇总' ? 'gray-row' : '';
     },
-    changeCellStyle(row, column, rowIndex, columnIndex) { // 列样式
+    changeCellStyle(row) { // 单元格样式
       //列的label的名称
       if (row.column.label === "汇总") {
         return {'background': '#E5E8E8'} //修改的样式
