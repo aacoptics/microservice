@@ -74,7 +74,8 @@ public class VoiceServiceController {
                 return Result.fail("文件不存在");
             }
             String outFileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-            String outFilePath = voiceService.formatVoiceFile(file, filePath.replace(fileName, outFileName));
+            String outFilePath = filePath.replace(fileName, outFileName);
+            String outFileUrl = voiceService.formatVoiceFile(file, outFilePath);
             JSONObject object = JSONUtil.createObj()
                     .set("type", "req")
                     .set("name", "songs_queue_append")
@@ -85,15 +86,11 @@ public class VoiceServiceController {
             JSONArray urlArray = JSONUtil.createArray();
             urlArray.add(JSONUtil.createObj()
                     .set("name", outFileName + ".mp3")
-                    .set("uri", outFilePath));
+                    .set("uri", outFileUrl));
             paramsObject.set("urls", urlArray);
             object.set("params", paramsObject);
             Result result = okHttpCli.doPostJsonSpeaker(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
             file.delete();
-            File outFile = new File(outFilePath);
-            if (outFile.exists()) {
-                outFile.delete();
-            }
             return result;
         } catch (Exception e) {
             return Result.fail("文件[" + fileName + "]发送至扬声器失败");
