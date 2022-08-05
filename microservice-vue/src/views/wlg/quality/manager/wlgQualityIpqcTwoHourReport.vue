@@ -86,6 +86,9 @@ export default {
       //列的label的名称
       if (this.errorResults.filter(e => e["t1"] === row.row["id"] && e["t2"] === row.column.label).length > 0) {
         return {'background': 'red'} //修改的样式
+      } else if (this.errorResults.filter(e => e["t1"] === row.row['id'] && e["t2"] === "两小时内未送测同一模次面型和芯厚").length > 0
+          && ["项目号", "模具", "周期", "班序"].includes(row.column.label)) {
+        return {'background': 'yellow'} //修改的样式
       } else {
         return {}
       }
