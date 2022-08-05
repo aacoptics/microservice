@@ -87,23 +87,23 @@ public class SendMessageServiceImpl implements SendMessageService {
                         try {
                             String tempDir = System.getProperty("java.io.tmpdir");
                             long currentTimeMillis = System.currentTimeMillis();
-                            String excelFileName = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".xlsx";
+                            String excelFileName1 = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".xlsx";
+                            String pngExcelFileName = messageBatch.getConTypeDesc() + "-PNG-" + currentTimeMillis + ".xlsx";
                             String pngFileName = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".png";
                             URL url = new URL(messageBatch.getSendFilePath());
-                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName));
+                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
 
-                            if (StrUtil.isEmpty(messageBatch.getSendPicturePath())) {
+                            if (StrUtil.isNotEmpty(messageBatch.getSendPicturePath())) {
+                                url = new URL(messageBatch.getSendPicturePath());
+                                FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
                                 com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
-                                spireXlsWorkbook.loadFromFile(tempDir + "/" + excelFileName);
+                                spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
                                 Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
                                 worksheet.saveToImage(tempDir + "/" + pngFileName);
-                            } else {
-                                url = new URL(messageBatch.getSendPicturePath());
-                                FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngFileName));
+                                imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
                             }
-
-                            imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
-                            String fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName, 0);
+                            
+                            String fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
                             String chatName = "每日毛利率飞书测试";
                             switch (messageBatch.getConType()) {
                                 case "sop_lens_ri_costchaijie_TestGroup":
