@@ -536,8 +536,10 @@ public class DingTalkNotificationServiceImpl implements DingTalkNotificationServ
                         String tempBusinessProject = projectMap.get(tempInternalProject) != null ? projectMap.get(tempInternalProject) : tempInternalProject;
 
                         if(businessProject.equals(tempBusinessProject)) {
-                            int tempSumQty = Integer.valueOf(internalProjectWarehouseBalanceData.get("sumQty") + "");
-                            sumQty += tempSumQty;
+                            if(internalProjectWarehouseBalanceData.get("sumQty") != null) {
+                                int tempSumQty = Integer.valueOf(internalProjectWarehouseBalanceData.get("sumQty") + "");
+                                sumQty += tempSumQty;
+                            }
                         }
                     }
                     warehouseBalanceDataMap.put("sumQty", sumQty);
