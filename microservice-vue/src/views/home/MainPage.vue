@@ -13,7 +13,7 @@ export default {
   position: relative;
   width: 100%;
   height: 98%;
-  background-image: url(../../assets/img/back.png);
+  background-image: url(../../assets/img/back.jpg);
   background-size: 100%;
   border: 1px solid #ddd;
   border-radius: 5px;
