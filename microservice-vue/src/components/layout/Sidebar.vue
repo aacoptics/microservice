@@ -3,11 +3,9 @@
     <el-menu
         :collapse="collapse"
         :default-active="onRoutes"
-        active-text-color="#20a0ff"
-        background-color="#324157"
+        background-color="#ecf5ff"
         class="sidebar-el-menu"
         router
-        text-color="#bfcbd9"
         unique-opened>
       <sys-menu-item :items="items"></sys-menu-item>
     </el-menu>
@@ -50,7 +48,7 @@ export default {
 .sidebar {
   display: block;
   position: absolute;
-  background-color: #324157;
+  background-color: #ecf5ff;
   left: 0;
   top: 70px;
   bottom: 0;
