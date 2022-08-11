@@ -1,4 +1,4 @@
-package com.aacoptics.mobile.attendance.entity;
+package com.aacoptics.mobile.attendance.entity.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

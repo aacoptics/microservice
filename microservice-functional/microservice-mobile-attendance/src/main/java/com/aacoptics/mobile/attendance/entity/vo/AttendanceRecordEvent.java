@@ -1,4 +1,4 @@
-package com.aacoptics.mobile.attendance.entity;
+package com.aacoptics.mobile.attendance.entity.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class AttendanceRecordEvent implements Serializable {
 
     private String location_name;
 
-    private String check_time;
+    private Long check_time;
 
     private String comment;
 

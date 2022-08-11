@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/feishuAttendance")
-@Api("feishuAttendance")
+@Api("飞书移动考勤")
 @Slf4j
 public class AttendanceController {
 
@@ -19,9 +19,10 @@ public class AttendanceController {
     AttendanceService attendanceService;
 
     @ApiOperation(value = "接收飞书打卡信息", notes = "接收飞书打卡信息")
-    @ApiImplicitParam(name = "jsonObject", value = "消息JSON", required = true, dataType = "JSONObject")
+    @ApiImplicitParam(name = "jsonObject", value = "消息JSON", required = true)
     @PostMapping(value = "/receiveAttendanceRecord")
     public Result receiveAttendanceRecord(@RequestBody JSONObject jsonObject) {
+        log.error(JSONObject.toJSONString(jsonObject));
         try{
             attendanceService.uploadAttendanceInfo(jsonObject.getString("encrypt"));
         }

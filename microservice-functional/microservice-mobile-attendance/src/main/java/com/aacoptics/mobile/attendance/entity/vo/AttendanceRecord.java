@@ -1,4 +1,4 @@
-package com.aacoptics.mobile.attendance.entity;
+package com.aacoptics.mobile.attendance.entity.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class AttendanceRecord  implements Serializable {
+public class AttendanceRecord implements Serializable {
     private String schema;
 
     private AttendanceRecordHeader header;
