@@ -37,7 +37,7 @@ public class AttendanceSourceServiceImpl extends ServiceImpl<AttendanceSourceMap
                 attendanceSourceFeishu.setParentId(attendanceSource.getId());
                 attendanceSourceFeishu.setLocationName(locationName);
                 boolean res = attendanceSourceFeishuService.saveAttendanceRecord(attendanceSourceFeishu);
-                log.debug(StrUtil.format("工号：{}，打卡时间：{}，同步卡机平台是否成功：{}"
+                log.info(StrUtil.format("工号：{}，打卡时间：{}，同步卡机平台是否成功：{}"
                         , attendanceSource.getCardNo()
                         , attendanceSource.getFDateTime().toString()
                         , res));
