@@ -30,23 +30,21 @@ public class AttendanceServiceImpl implements AttendanceService {
     private AttendanceSourceService attendanceSourceService;
 
     @Override
-    public void uploadAttendanceInfo(String encrypt) throws Exception {
+    public boolean uploadAttendanceInfo(String encrypt) throws Exception {
         Decrypt d = new Decrypt(feishuAppKeyConfig.getEncryptKey());
         AttendanceRecord attendanceRecord = JSONObject.parseObject(d.decrypt(encrypt), AttendanceRecord.class);
         String jobNumber = attendanceRecord.getEvent().getEmployee_no();
-        if(!StrUtil.isBlank(jobNumber)){
+        if (!StrUtil.isBlank(jobNumber)) {
             boolean isOpticsEmployee = employeeService.checkEmployeeExist(jobNumber);
-            log.info(Boolean.toString(isOpticsEmployee));
-            if(isOpticsEmployee){
+            if (isOpticsEmployee) {
                 LocalDateTime fDateTime = LocalDateTime.ofEpochSecond(attendanceRecord.getEvent().getCheck_time(), 0, ZoneOffset.ofHours(8));
-                log.info(fDateTime.toString());
                 AttendanceSource attendanceSource = new AttendanceSource();
                 attendanceSource.setCardNo(jobNumber);
                 attendanceSource.setMachId(9999);
                 attendanceSource.setFDateTime(fDateTime);
-                attendanceSourceService.saveAttendanceRecord(attendanceSource, attendanceRecord.getEvent().getLocation_name());
-            }
+                return attendanceSourceService.saveAttendanceRecord(attendanceSource, attendanceRecord.getEvent().getLocation_name());
+            } else return true;
         }
-        log.error(JSONObject.toJSONString(attendanceRecord));
+        return false;
     }
 }
