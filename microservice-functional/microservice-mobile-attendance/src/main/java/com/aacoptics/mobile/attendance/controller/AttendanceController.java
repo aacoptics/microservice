@@ -31,11 +31,10 @@ public class AttendanceController {
                                           @RequestHeader("X-Lark-Request-Timestamp") String timeStamp,
                                           @RequestHeader("X-Lark-Request-Nonce") String nonce,
                                           @RequestHeader("X-Lark-Signature") String sign) {
-        log.info("标头：" +timeStamp + " " + nonce + " " + sign);
         Decrypt d = new Decrypt(feishuAppKeyConfig.getEncryptKey());
         try {
             String signature = d.calculateSignature(timeStamp, nonce, feishuAppKeyConfig.getEncryptKey(), bodyString);
-            if(!signature.equals(sign))
+            if (!signature.equals(sign))
                 return Result.fail("签名不一致！");
             JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
             AttendanceRecord attendanceRecord = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), AttendanceRecord.class);
