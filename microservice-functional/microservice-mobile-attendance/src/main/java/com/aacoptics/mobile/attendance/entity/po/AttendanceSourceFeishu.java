@@ -16,30 +16,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("T_Source_Feishu_test")
-public class AttendanceSource implements Serializable {
+@TableName("T_Source_Feishu")
+public class AttendanceSourceFeishu implements Serializable {
 
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "Code")
-    private String code;
+    @TableField(value = "ParentId")
+    private Long parentId;
 
-    @TableField(value = "CardNo")
-    private String cardNo;
-
-    @TableField(value = "MachID")
-    private Integer machId;
-
-    @TableField(value = "FDateTime")
-    private LocalDateTime fDateTime;
+    @TableField(value = "LocationName")
+    private String locationName;
 
     @TableField(value = "CreateTime")
     private LocalDateTime createTime;
-
-    @TableField(value = "UpdateTime")
-    private LocalDateTime updateTime;
-
-    @TableField(value = "IsDeal")
-    private boolean isDeal;
 }

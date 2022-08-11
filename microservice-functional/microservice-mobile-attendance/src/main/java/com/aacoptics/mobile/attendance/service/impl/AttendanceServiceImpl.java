@@ -44,7 +44,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 attendanceSource.setCardNo(jobNumber);
                 attendanceSource.setMachId(9999);
                 attendanceSource.setFDateTime(fDateTime);
-                attendanceSourceService.saveAttendanceRecord(attendanceSource);
+                attendanceSourceService.saveAttendanceRecord(attendanceSource, attendanceRecord.getEvent().getLocation_name());
             }
         }
         log.error(JSONObject.toJSONString(attendanceRecord));
