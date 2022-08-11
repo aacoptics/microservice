@@ -1282,11 +1282,11 @@
            case
                when sum(isnull(target_qty,0)) != 0 then CAST(CAST(sum(isnull(actual_qty,0)) / sum(isnull(target_qty,0)) * 100 AS DECIMAL(18, 2)) AS VARCHAR(50)) + '%'
                else '0.00%' end actual_rate,
-              (select floor(target_qty)
+              (select floor(sum(target_qty))
                 from TEMP_PS a
                 where a.project_name = ps.project_name
                   and a.production_date = #{productionDate}) day_target_qty,
-               (select floor(actual_qty)
+               (select floor(sum(actual_qty))
                 from TEMP_PS a
                 where a.project_name = ps.project_name
                   and a.production_date = #{productionDate}) day_actual_qty
