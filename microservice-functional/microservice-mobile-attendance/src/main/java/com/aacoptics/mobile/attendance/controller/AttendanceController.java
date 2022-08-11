@@ -22,13 +22,12 @@ public class AttendanceController {
     @ApiImplicitParam(name = "jsonObject", value = "消息JSON", required = true)
     @PostMapping(value = "/receiveAttendanceRecord")
     public Result receiveAttendanceRecord(@RequestBody JSONObject jsonObject) {
-        log.error(JSONObject.toJSONString(jsonObject));
-        try{
-            attendanceService.uploadAttendanceInfo(jsonObject.getString("encrypt"));
-        }
-        catch (Exception err){
+        try {
+            if (attendanceService.uploadAttendanceInfo(jsonObject.getString("encrypt"))) {
+                return Result.success();
+            } else return Result.fail();
+        } catch (Exception err) {
             return Result.fail(err);
         }
-        return Result.success();
     }
 }
