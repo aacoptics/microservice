@@ -4,6 +4,6 @@ import com.aacoptics.mobile.attendance.entity.po.AttendanceSource;
 
 public interface AttendanceSourceService {
 
-    boolean saveAttendanceRecord(AttendanceSource attendanceSource);
+    boolean saveAttendanceRecord(AttendanceSource attendanceSource, String locationName);
 
 }
