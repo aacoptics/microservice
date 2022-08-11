@@ -43,7 +43,6 @@ public class AttendanceSourceServiceImpl extends ServiceImpl<AttendanceSourceMap
                         , res));
                 return res;
             } else return false;
-
         }
     }
 }
