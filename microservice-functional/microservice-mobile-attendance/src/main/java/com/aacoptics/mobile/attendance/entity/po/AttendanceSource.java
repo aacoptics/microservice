@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("T_Source_Feishu_test")
+@TableName("T_Source")
 public class AttendanceSource implements Serializable {
 
     @TableId(value = "ID", type = IdType.AUTO)
