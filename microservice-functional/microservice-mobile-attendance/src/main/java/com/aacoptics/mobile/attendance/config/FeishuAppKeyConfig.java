@@ -15,9 +15,9 @@ import java.io.Serializable;
 @ConfigurationProperties(prefix = "feishu")
 public class FeishuAppKeyConfig implements Serializable {
 
-    @JsonProperty("app_id")
     private String appId;
 
-    @JsonProperty("app_secret")
     private String appSecret;
+
+    private String encryptKey;
 }

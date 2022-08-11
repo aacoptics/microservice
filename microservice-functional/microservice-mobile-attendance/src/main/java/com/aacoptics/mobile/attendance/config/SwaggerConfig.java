@@ -18,15 +18,15 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.organization"))
+                .apis(RequestHandlerSelectors.basePackage("com.aacoptics.mobile.attendance"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("系统管理API")
-                .description("系统管理，组织人员管理、角色权限管理、岗位管理")
+                .title("移动考勤API")
+                .description("移动考勤API")
                 .version("2.0")
                 .build();
     }
