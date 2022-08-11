@@ -1,4 +1,6 @@
 package com.aacoptics.mobile.attendance.util;
+import org.apache.commons.codec.binary.Hex;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,5 +40,10 @@ public class Decrypt {
             }
         }
         return new String(r, StandardCharsets.UTF_8);
+    }
+
+    public String calculateSignature(String timestamp, String nonce, String encryptKey, String bodyString) throws NoSuchAlgorithmException {
+        MessageDigest alg = MessageDigest.getInstance("SHA-256");
+        return Hex.encodeHexString(alg.digest((timestamp + nonce + encryptKey + bodyString).getBytes()));
     }
 }
