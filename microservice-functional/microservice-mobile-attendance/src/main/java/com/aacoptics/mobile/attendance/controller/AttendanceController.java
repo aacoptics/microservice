@@ -42,7 +42,7 @@ public class AttendanceController {
         if (attendanceService.uploadAttendanceInfo(attendanceRecord)) {
             String msg = StrUtil.format("工号：{}，打卡记录同步卡机平台成功"
                     , attendanceRecord.getEvent().getEmployee_no());
-                    log.info(msg);
+                    log.debug(msg + "\n" + JSONObject.toJSONString(attendanceRecord));
             return Result.success(msg);
         } else {
             String msg = StrUtil.format("工号：{}，打卡记录同步卡机平台失败"
