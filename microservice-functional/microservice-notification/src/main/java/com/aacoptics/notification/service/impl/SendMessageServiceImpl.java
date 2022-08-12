@@ -106,10 +106,12 @@ public class SendMessageServiceImpl implements SendMessageService {
                             String fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
                             String chatName = "每日毛利率飞书测试";
                             switch (messageBatch.getConType()) {
-                                case "sop_lens_ri_costchaijie_TestGroup":
+                                case "ums_sop_ri_cost_gp_qas":
+                                case "ums_sop_ri_cost_lens_qas":
                                     chatName = "每日毛利率飞书测试";
                                     break;
-                                case "sop_lens_ri_costchaijie_prd":
+                                case "ums_sop_ri_cost_lens_prd":
+                                case "ums_sop_ri_cost_gp_prd":
                                     chatName = "Lens每日运营指标达成汇报";
                                     break;
                             }
