@@ -34,21 +34,20 @@ public class AttendanceController {
                                           @RequestHeader("X-Lark-Request-Nonce") String nonce,
                                           @RequestHeader("X-Lark-Signature") String sign) throws Exception {
         Decrypt d = new Decrypt(feishuAppKeyConfig.getEncryptKey());
-
-            String signature = d.calculateSignature(timeStamp, nonce, feishuAppKeyConfig.getEncryptKey(), bodyString);
-            if (!signature.equals(sign))
-                throw new Exception("签名不一致！");
-            JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
-            AttendanceRecord attendanceRecord = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), AttendanceRecord.class);
-            if (attendanceService.uploadAttendanceInfo(attendanceRecord)) {
-                log.info(StrUtil.format("工号：{}，打卡记录同步卡机平台成功"
-                        , attendanceRecord.getEvent().getEmployee_no()));
-                return Result.success();
-            } else {
-                log.error(StrUtil.format("工号：{}，打卡记录同步卡机平台失败"
-                        , attendanceRecord.getEvent().getEmployee_no()));
-                throw new Exception("上传打卡信息失败！");
-            }
-
+        String signature = d.calculateSignature(timeStamp, nonce, feishuAppKeyConfig.getEncryptKey(), bodyString);
+        if (!signature.equals(sign))
+            throw new RuntimeException("签名不一致！");
+        JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
+        AttendanceRecord attendanceRecord = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), AttendanceRecord.class);
+        if (attendanceService.uploadAttendanceInfo(attendanceRecord)) {
+            String msg = StrUtil.format("工号：{}，打卡记录同步卡机平台成功"
+                    , attendanceRecord.getEvent().getEmployee_no());
+                    log.info(msg);
+            return Result.success(msg);
+        } else {
+            String msg = StrUtil.format("工号：{}，打卡记录同步卡机平台失败"
+                    , attendanceRecord.getEvent().getEmployee_no());
+            throw new RuntimeException(msg);
+        }
     }
 }
