@@ -84,7 +84,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                     markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
                 }
                 break;
-取消//            case "FeedAlarm":
+//            case "FeedAlarm":
 //                title = "模造换料提醒";
 //                markdownGroupMessage.setTitle(title);
 //                markdownGroupMessage.addBlobContent(localTimeStr);
