@@ -136,7 +136,16 @@
             </el-col>
             <el-col v-if="dataForm.scheduleType!=='NONE'" :span="12">
               <el-form-item v-if="dataForm.scheduleType==='CRON'" label="CRON" prop="scheduleConf">
-                <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入CRON"></el-input>
+                <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入CRON">
+                  <template #append>
+                    <el-button type="primary" @click="handleShowCron">
+                      <template #icon>
+                        <font-awesome-icon :icon="['far','clock']"/>
+                      </template>
+                      生成表达式
+                    </el-button>
+                  </template>
+                </el-input>
               </el-form-item>
               <el-form-item v-if="dataForm.scheduleType==='FIX_RATE'" label="固定速度" prop="scheduleConf">
                 <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入（秒）"></el-input>
@@ -266,6 +275,9 @@
           </slot>
         </div>
       </el-dialog>
+      <el-dialog v-model="openCron" title="Cron表达式生成器" append-to-body destroy-on-close class="scrollbar">
+        <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -282,13 +294,15 @@ import {
 } from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
 import {findByNames, getAllRobotInfo} from "@/api/notification/robot";
+import Crontab from '@/components/Crontab'
 
 export default {
   name: "user",
-  components: {SysTable},
+  components: {SysTable, Crontab},
   data() {
     return {
       size: 'default',
+      expression: "",
       filters: {
         planKey: ''
       },
@@ -302,6 +316,7 @@ export default {
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       operation: false, // true:新增, false:编辑
+      openCron: false,
       dialogVisible: false, // 新增编辑界面是否显示
       triggerDialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
@@ -310,6 +325,7 @@ export default {
         jobDesc: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
         planKey: [{required: true, message: '请输入任务Key', trigger: 'blur'}],
         scheduleType: [{required: true, message: '请选择调度类型', trigger: 'change'}],
+        scheduleConf: [{required: true, message: '请输入任务调度时间', trigger: 'blur'}],
         executorRouteStrategy: [{required: true, message: '请选择路由策略', trigger: 'change'}],
         executorBlockStrategy: [{required: true, message: '请选择阻塞处理策略', trigger: 'change'}],
         author: [{required: true, message: '请输入负责人', trigger: 'blur'}],
@@ -350,6 +366,13 @@ export default {
     }
   },
   methods: {
+    handleShowCron() {
+      this.expression = this.dataForm.scheduleConf;
+      this.openCron = true;
+    },
+    crontabFill(value) {
+      this.dataForm.scheduleConf = value;
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {

@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.aacoptics.jacob.entity.vo.VoiceFileInfo;
 import com.aacoptics.jacob.service.VoiceService;
 import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import it.sauronsoftware.jave.AudioAttributes;
@@ -28,13 +29,18 @@ public class VoiceServiceImpl implements VoiceService {
 
     @Override
     public String generateVoiceFile(String fileName, VoiceFileInfo voiceFileInfo) {
+        ActiveXComponent ax = null;
+        Dispatch spVoice = null;
+        Dispatch spFileStream = null;
+        Dispatch spAudioFormat = null;
         try {
-            ActiveXComponent ax = new ActiveXComponent("Sapi.SpVoice");
-            Dispatch spVoice = ax.getObject();
+            ComThread.InitMTA();
+            ax = new ActiveXComponent("Sapi.SpVoice");
+            spVoice = ax.getObject();
             ax = new ActiveXComponent("Sapi.SpFileStream");
-            Dispatch spFileStream = ax.getObject();
+            spFileStream = ax.getObject();
             ax = new ActiveXComponent("Sapi.SpAudioFormat");
-            Dispatch spAudioFormat = ax.getObject();
+            spAudioFormat = ax.getObject();
             //设置音频流格式
             Dispatch.put(spAudioFormat, "Type", new Variant(22));
             //设置文件输出流格式
@@ -51,15 +57,23 @@ public class VoiceServiceImpl implements VoiceService {
             //关闭输出文件
             Dispatch.call(spFileStream, "Close");
             Dispatch.putRef(spVoice, "AudioOutputStream", null);
-
-            spAudioFormat.safeRelease();
-            spFileStream.safeRelease();
-            spVoice.safeRelease();
-            ax.safeRelease();
             return folderPath + fileName;
         } catch (Exception err) {
             log.error("生成文件失败！", err);
             return null;
+        } finally{
+            try{
+                assert spAudioFormat != null;
+                spAudioFormat.safeRelease();
+                assert spFileStream != null;
+                spFileStream.safeRelease();
+                assert spVoice != null;
+                spVoice.safeRelease();
+                ax.safeRelease();
+                ComThread.Release();
+            }catch (Exception err2){
+                log.error("释放失败！", err2);
+            }
         }
     }
 
