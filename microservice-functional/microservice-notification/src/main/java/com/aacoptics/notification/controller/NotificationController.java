@@ -66,14 +66,14 @@ public class NotificationController {
     @ApiImplicitParam(name = "xxlJobInfo", value = "新增消息推送计划表单", required = true, dataType = "XxlJobInfo")
     @PostMapping
     public Result addNotificationTask(@RequestBody XxlJobInfo xxlJobInfo) {
-        return Result.success(xxlJobInfoService.add(xxlJobInfo));
+        return xxlJobInfoService.add(xxlJobInfo);
     }
 
     @ApiOperation(value = "删除消息推送计划", notes = "根据url的id来指定删除对象")
     @ApiImplicitParam(paramType = "path", name = "id", value = "消息推送计划ID", required = true, dataType = "Integer")
     @DeleteMapping(value = "/{id}")
     public Result delete(@PathVariable Integer id) {
-        return Result.success(xxlJobInfoService.delete(id));
+        return xxlJobInfoService.delete(id);
     }
 
     @ApiOperation(value = "修改消息推送计划", notes = "修改指定消息推送计划信息")
@@ -84,7 +84,7 @@ public class NotificationController {
     @PutMapping(value = "/{id}")
     public Result update(@PathVariable Integer id, @Valid @RequestBody XxlJobInfo xxlJobInfo) {
         xxlJobInfo.setId(id);
-        return Result.success(xxlJobInfoService.update(xxlJobInfo));
+        return xxlJobInfoService.update(xxlJobInfo);
     }
 
     @ApiOperation(value = "搜索消息推送计划", notes = "根据条件搜索消息推送计划信息")
@@ -136,5 +136,25 @@ public class NotificationController {
     @PostMapping(value = "/triggerNotificationJob")
     public Result triggerNotificationJob(@Valid @RequestBody TriggerJobForm triggerJobForm) {
         return xxlJobInfoService.triggerJob(triggerJobForm);
+    }
+
+    @ApiOperation(value = "启动Task", notes = "启动Task")
+    @ApiImplicitParam(name = "id", value = "消息推送计划ID", required = true, dataType = "Integer")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/startNotificationJob/{id}")
+    public Result startNotificationJob(@PathVariable Integer id) {
+        return xxlJobInfoService.start(id);
+    }
+
+    @ApiOperation(value = "停止Task", notes = "停止Task")
+    @ApiImplicitParam(name = "id", value = "消息推送计划ID", required = true, dataType = "Integer")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/stopNotificationJob/{id}")
+    public Result stopNotificationJob(@PathVariable Integer id) {
+        return xxlJobInfoService.stop(id);
     }
 }
