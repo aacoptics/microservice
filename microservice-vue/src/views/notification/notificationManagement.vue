@@ -28,16 +28,31 @@
                 @findPage="findPage"
                 @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
+          <!--          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"-->
+          <!--                           width="80">-->
+          <!--            <template v-slot="scope">-->
+          <!--              <el-button v-if="scope.row.triggerStatus === 1"-->
+          <!--                         round size="small" type="success">-->
+          <!--                启动中-->
+          <!--              </el-button>-->
+          <!--              <el-button v-else round size="small" type="danger">-->
+          <!--                停止-->
+          <!--              </el-button>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
             <template v-slot="scope">
-              <el-button v-if="scope.row.triggerStatus === 1"
-                         round size="small" type="success">
-                启动中
-              </el-button>
-              <el-button v-else round size="small" type="danger">
-                停止
-              </el-button>
+              <el-switch
+                  v-model="scope.row.triggerStatus"
+                  :active-value="1"
+                  :inactive-value="0"
+                  width="60px"
+                  active-text="启用"
+                  inactive-text="停用"
+                  inline-prompt
+                  @change="handleStatusChange(scope.row)"
+              ></el-switch>
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="执行"
@@ -210,20 +225,20 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="是否启用" prop="executorTimeout">
-                <el-switch
-                    v-model="dataForm.triggerStatus"
-                    :active-value="1"
-                    :inactive-value="0"
-                    active-text="是"
-                    inactive-text="否"
-                    inline-prompt
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <!--          <el-row>-->
+          <!--            <el-col :span="12">-->
+          <!--              <el-form-item label="是否启用" prop="executorTimeout">-->
+          <!--                <el-switch-->
+          <!--                    v-model="dataForm.triggerStatus"-->
+          <!--                    :active-value="1"-->
+          <!--                    :inactive-value="0"-->
+          <!--                    active-text="是"-->
+          <!--                    inactive-text="否"-->
+          <!--                    inline-prompt-->
+          <!--                />-->
+          <!--              </el-form-item>-->
+          <!--            </el-col>-->
+          <!--          </el-row>-->
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -289,7 +304,7 @@ import {
   findTaskInfoPage,
   getGroupInfo,
   handleAdd,
-  handleUpdate,
+  handleUpdate, startTask, stopTask,
   triggerNotificationJob
 } from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
@@ -366,6 +381,35 @@ export default {
     }
   },
   methods: {
+    // 任务状态修改
+    handleStatusChange(row) {
+      let text = row.triggerStatus === 1 ? "启用" : "停用";
+      this.$confirm('确认要' + text + '""' + row.planKey + '"任务吗?').then(() =>  {
+        if(row.triggerStatus === 1){
+          startTask(row).then((res) => {
+            const responseData = res.data
+            if (responseData.code === '000000') {
+              this.$message({message: text + '成功', type: 'success'})
+            }else{
+              this.$message({message: responseData.data.msg, type: 'error'})
+              row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+            }
+          })
+        }else if(row.triggerStatus === 0)        {
+          stopTask(row).then((res) => {
+            const responseData = res.data
+            if (responseData.code === '000000') {
+              this.$message({message: text + '成功', type: 'success'})
+            }else{
+              this.$message({message: responseData.data.msg, type: 'error'})
+              row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+            }
+          })
+        }
+      }).catch(function () {
+        row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+      });
+    },
     handleShowCron() {
       this.expression = this.dataForm.scheduleConf;
       this.openCron = true;

@@ -43,6 +43,26 @@ export function handleUpdate(updateForm) {
     })
 }
 
+export function startTask(Form) {
+    return request({
+        url: '/notification-server/notification/startNotificationJob/' + Form.id,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function stopTask(Form) {
+    return request({
+        url: '/notification-server/notification/stopNotificationJob/' + Form.id,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 export function getGroupInfo() {
     return request({
         url: '/notification-server/notification/listGroup',
