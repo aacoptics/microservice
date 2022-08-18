@@ -20,13 +20,17 @@ public class NotificationHandle {
     @XxlJob("RobotHandle")
     public void RobotHandle() {
         String param = XxlJobHelper.getJobParam(); //执行参数
+        XxlJobHelper.log(param);
         NotificationEntity jobParam = JSONObject.parseObject(param, NotificationEntity.class);
         try {
             sendMessageService.sendHandledMessage(jobParam);
             XxlJobHelper.handleSuccess();
         } catch (Exception e) {
-            XxlJobHelper.log(e);
-            XxlJobHelper.handleFail(e.getMessage());
+            if (e.getMessage().equals("当前没有需要推送的批次号！"))
+                XxlJobHelper.handleSuccess("当前没有需要推送的批次号！");
+            else{
+                XxlJobHelper.handleFail(e.getMessage());
+            }
         }
     }
 }
