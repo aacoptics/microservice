@@ -38,7 +38,7 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
     public IPage<Robot> query(Page page, RobotQueryParam robotQueryParam) {
         QueryWrapper<Robot> queryWrapper = robotQueryParam.build();
         queryWrapper.eq(StringUtils.isNotBlank(robotQueryParam.getRobotType()), "robot_type", robotQueryParam.getRobotType());
-        queryWrapper.like(StringUtils.isNotBlank(robotQueryParam.getRobotName()), "robot_name", robotQueryParam.getRobotName());
+        queryWrapper.like(StringUtils.isNotBlank(robotQueryParam.getRobotName()), "chat_name", robotQueryParam.getRobotName());
         queryWrapper.eq("status", true);
         return this.page(page, queryWrapper);
     }
@@ -53,7 +53,7 @@ public class RobotServiceImpl extends ServiceImpl<RobotMapper, Robot> implements
     @Override
     public List<Robot> findByName(List<String> robotNames) {
         QueryWrapper<Robot> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("robot_name", robotNames);
+        queryWrapper.in("chat_name", robotNames);
         queryWrapper.eq("status", true);
         return this.list(queryWrapper);
     }

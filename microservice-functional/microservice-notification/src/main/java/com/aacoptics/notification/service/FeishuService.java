@@ -1,6 +1,7 @@
 package com.aacoptics.notification.service;
 
 import cn.hutool.json.JSONObject;
+import com.aacoptics.notification.entity.po.FeishuUser;
 import reactor.util.function.Tuple2;
 
 import java.io.IOException;
@@ -42,6 +43,8 @@ public interface FeishuService {
     String FILE_TYPE_XLS = "xls";
     String FILE_TYPE_PPT = "ppt";
     String FILE_TYPE_STREAM = "stream";
+
+    FeishuUser getFeishuUser(String employeeNo);
 
     String fetchAccessToken();
 

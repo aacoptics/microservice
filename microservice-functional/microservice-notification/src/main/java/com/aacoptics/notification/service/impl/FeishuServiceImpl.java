@@ -6,9 +6,12 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
 import com.aacoptics.notification.config.FeishuAppKeyConfig;
+import com.aacoptics.notification.entity.po.FeishuUser;
 import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.mapper.FeishuUserMapper;
 import com.aacoptics.notification.provider.FeishuApiProvider;
 import com.aacoptics.notification.service.FeishuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
@@ -40,6 +43,14 @@ public class FeishuServiceImpl implements FeishuService {
 
     @Resource
     private FeishuAppKeyConfig feishuAppKeyConfig;
+
+    @Resource
+    private FeishuUserMapper feishuUserMapper;
+
+    @Override
+    public FeishuUser getFeishuUser(String employeeNo) {
+        return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getEmployeeNo, employeeNo));
+    }
 
     @Override
     public String fetchAccessToken() {

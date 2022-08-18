@@ -302,7 +302,6 @@ import SysTable from "@/components/SysTable";
 import {
   deleteTask,
   findTaskInfoPage,
-  getGroupInfo,
   handleAdd,
   handleUpdate, startTask, stopTask,
   triggerNotificationJob
@@ -350,7 +349,7 @@ export default {
       // 新增编辑界面数据
       dataForm: {
         id: 0,
-        jobGroup: '',
+        jobGroup: 4,
         executorParam: '',
         planKey: '',
         jobDesc: '',
@@ -364,13 +363,13 @@ export default {
         executorBlockStrategy: '',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: '',
+        executorHandler: 'RobotHandle',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
         triggerStatus: 0
       },
-      executorInfo: [],
+      executorInfo: [{"id":4,"appName":"notification-center","title":"统一消息中心"}],
       robotOptions: [],
       executorHandlerOptions: [],
       currentRobotsInfo: [],
@@ -432,12 +431,12 @@ export default {
     },
 
     handleDialogOpen() {
-      getGroupInfo().then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.executorInfo = responseData.data
-        }
-      })
+      // getGroupInfo().then((res) => {
+      //   const responseData = res.data
+      //   if (responseData.code === '000000') {
+      //     this.executorInfo = responseData.data
+      //   }
+      // })
 
       getAllRobotInfo().then((res) => {
         const responseData = res.data
@@ -488,7 +487,7 @@ export default {
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
         id: 0,
-        jobGroup: '',
+        jobGroup: 4,
         executorParam: '',
         planKey: '',
         jobDesc: '',
@@ -501,7 +500,7 @@ export default {
         executorBlockStrategy: 'SERIAL_EXECUTION',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: '',
+        executorHandler: 'RobotHandle',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',

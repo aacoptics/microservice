@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface RobotService {
 
+    String GROUP_ROBOT = "group_robot";
+    String APPLICATION_ROBOT = "app_robot";
+
     boolean add(Robot robot);
 
     boolean delete(Long id);
