@@ -122,10 +122,10 @@ public class SendMessageServiceImpl implements SendMessageService {
                     log.error(msg);
                     throw new BusinessException(msg);
                 }
-                List<String> chatNames = notificationEntity.getMsgTypeInfo().stream().map(Robot::getChatName).collect(Collectors.toList());
+                List<String> chatNames = notificationEntity.getMsgTypeInfo().stream().map(Robot::getRobotName).collect(Collectors.toList());
                 List<Robot> robotList = robotService.findByName(chatNames);
                 for (Robot messageTypeInfo : robotList) {
-                    String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getChatName());
+                    String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getRobotName());
                     boolean fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
                             chatId,
                             FeishuService.MSG_TYPE_FILE,

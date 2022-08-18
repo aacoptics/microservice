@@ -2,8 +2,8 @@
   <div class="aac-container">
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :size="size">
-        <el-form-item label="机器人名称" prop="robotName">
-          <el-input v-model="filters.robotName" clearable placeholder="机器人名称"></el-input>
+        <el-form-item label="群名称" prop="robotName">
+          <el-input v-model="filters.robotName" clearable placeholder="群名称"></el-input>
         </el-form-item>
         <el-form-item label="机器人类型" prop="robotType">
           <el-select v-model="filters.robotType" clearable placeholder="机器人类型">
@@ -48,7 +48,7 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="机器人名称" prop="code">
+            <el-form-item label="群名称" prop="robotName">
               <el-input v-model="dataForm.robotName" :disabled="!operation" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
@@ -101,7 +101,7 @@ export default {
         robotType: ""
       },
       columns: [
-        {prop: "robotName", label: "机器人名称", minWidth: 110},
+        {prop: "robotName", label: "群名称", minWidth: 110},
         {prop: "robotType", label: "机器人类型", minWidth: 80},
         {prop: "robotUrl", label: "机器人url", minWidth: 350},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
@@ -115,9 +115,9 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
-        robotName: [{required: true, message: "请输入接口编码", trigger: "blur"}],
-        robotType: [{required: true, message: "请选择权限类型", trigger: "change"},],
-        robotUrl: [{required: true, message: "请输入接口名称", trigger: "blur"},]
+        robotName: [{required: true, message: "请输入群名称", trigger: "blur"}],
+        robotType: [{required: true, message: "请选择机器人类型", trigger: "change"},],
+        robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
       },
       robotOptions: [],
       // 新增编辑界面数据
