@@ -122,7 +122,7 @@
                   <el-option
                       v-for="item in robotOptions"
                       :key="item.id"
-                      :label="item.chatName"
+                      :label="item.robotName"
                       :value="item">
                   </el-option>
                 </el-select>
@@ -275,7 +275,7 @@
                   <el-option
                       v-for="item in robotOptions"
                       :key="item.id"
-                      :label="item.chatName"
+                      :label="item.robotName"
                       :value="item">
                   </el-option>
                 </el-select>
@@ -530,7 +530,7 @@ export default {
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName': item.chatName
+                    'robotName': item.robotName
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
@@ -578,7 +578,7 @@ export default {
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName': item.chatName
+                    'robotName': item.robotName
                   })
             })
             params.executorParam = JSON.stringify(executorParams)

@@ -18,7 +18,7 @@ import java.util.Set;
 @TableName("notification_robot_details")
 public class Robot extends BasePo {
     private String robotUrl;
-    private String chatName;
+    private String robotName;
     private String robotType;
     private Boolean status;
 }
