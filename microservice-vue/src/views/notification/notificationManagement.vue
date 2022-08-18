@@ -116,7 +116,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="消息机器人" prop="currentRobotsInfo">
+              <el-form-item label="消息飞书群" prop="currentRobotsInfo">
                 <el-select v-model="currentRobotsInfo" multiple placeholder="请选择"
                            value-key="id">
                   <el-option
