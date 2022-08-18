@@ -49,7 +49,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="群名称" prop="robotName">
-              <el-input v-model="dataForm.robotName" :disabled="!operation" auto-complete="off" clearable></el-input>
+              <el-input v-model="dataForm.robotName" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -68,7 +68,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="机器人链接" prop="robotUrl">
+            <el-form-item label="机器人链接" prop="robotUrl" v-if="dataForm.robotType === 'group_robot'">
               <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>

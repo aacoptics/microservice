@@ -15,7 +15,6 @@ import java.util.Set;
 public class RobotForm extends BaseForm<Robot> {
 
     @ApiModelProperty(value = "机器人Url")
-    @NotBlank(message = "机器人Url不能为空")
     private String robotUrl;
 
     @ApiModelProperty(value = "机器人名称")
