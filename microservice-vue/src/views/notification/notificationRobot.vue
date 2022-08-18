@@ -102,7 +102,7 @@ export default {
       },
       columns: [
         {prop: "robotName", label: "群名称", minWidth: 110},
-        {prop: "robotType", label: "机器人类型", minWidth: 80},
+        {prop: "robotType", label: "机器人类型", minWidth: 80, formatter: this.robotTypeFormat},
         {prop: "robotUrl", label: "机器人url", minWidth: 350},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -231,6 +231,12 @@ export default {
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
+    },
+    robotTypeFormat: function (row, column) {
+      const typeInfo = this.robotOptions.find(item => {
+        return item.dictValue === row[column.property];
+      });
+      return typeInfo.dictLabel
     }
   },
 };
