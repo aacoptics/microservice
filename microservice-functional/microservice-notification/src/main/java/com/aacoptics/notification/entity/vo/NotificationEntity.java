@@ -8,14 +8,6 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author Shao Xiang
- * @since 2022-03-16
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
