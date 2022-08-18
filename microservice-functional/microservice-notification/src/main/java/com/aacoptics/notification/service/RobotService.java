@@ -22,4 +22,6 @@ public interface RobotService {
 
     List<Robot> findByName(List<String> robotNames);
 
+    List<Robot> findByIds(List<Long> ids);
+
 }
