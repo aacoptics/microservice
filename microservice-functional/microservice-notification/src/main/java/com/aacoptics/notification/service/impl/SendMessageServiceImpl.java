@@ -144,7 +144,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                             log.error(msg);
                             throw new BusinessException(msg);
                         }
-                        if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0 && fileResult) {
+                        if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
                             messageBatch.setIsStatus("1");
                             umsContentService.updateById(messageBatch);
                         } else {
