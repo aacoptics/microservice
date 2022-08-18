@@ -307,7 +307,7 @@ import {
   triggerNotificationJob
 } from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
-import {findByIds, findByNames, getAllRobotInfo} from "@/api/notification/robot";
+import {findByIds, getAllRobotInfo} from "@/api/notification/robot";
 import Crontab from '@/components/Crontab'
 
 export default {
@@ -610,19 +610,19 @@ export default {
         return
       }
 
-      const robotNameList = []
+      const robotIdList = []
       if (val.val.executorParam) {
         const executorParamJson = JSON.parse(val.val.executorParam)
         if (executorParamJson.msgTypeInfo) {
           const robotList = executorParamJson.msgTypeInfo
           robotList.forEach((item) => {
-            if (item.robotName)
-              robotNameList.push(item.robotName)
+            if (item.id)
+              robotIdList.push(item.id)
           })
         }
       }
-      if (robotNameList.length > 0) {
-        findByIds(robotNameList).then((res) => {
+      if (robotIdList.length > 0) {
+        findByIds(robotIdList).then((res) => {
           const responseData = res.data
           if (responseData.code === '000000') {
             this.currentRobotsInfo = responseData.data
