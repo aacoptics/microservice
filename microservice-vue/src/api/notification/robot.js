@@ -63,3 +63,14 @@ export function findByNames(robotNames) {
         data: robotNames
     })
 }
+
+export function findByIds(robotids) {
+    return request({
+        url: '/notification-server/robot/findByIds',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: robotids
+    })
+}
