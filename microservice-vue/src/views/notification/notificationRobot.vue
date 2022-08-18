@@ -124,7 +124,7 @@ export default {
       dataForm: {
         id: 0,
         robotName: "",
-        robotType: "",
+        robotType: "app_robot",
         robotUrl: ""
       },
     };
@@ -165,7 +165,7 @@ export default {
       this.dataForm = {
         id: 0,
         robotName: "",
-        robotType: "",
+        robotType: "app_robot",
         robotUrl: ""
       };
     },

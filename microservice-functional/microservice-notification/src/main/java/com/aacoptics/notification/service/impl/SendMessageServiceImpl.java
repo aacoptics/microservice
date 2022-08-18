@@ -60,7 +60,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         if (StrUtil.isBlank(notificationEntity.getBatchId())) {
             messageBatches = umsContentService.getUmsContent(notificationEntity.getPlanKey());
         } else {
-            messageBatches = umsContentService.getUmsContentByBatchId(notificationEntity.getBatchId());
+            messageBatches = umsContentService.getUmsContentByBatchId(notificationEntity.getPlanKey(), notificationEntity.getBatchId());
         }
         if (messageBatches.size() <= 0) {
             String msg = "当前没有需要推送的批次号！";

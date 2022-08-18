@@ -247,7 +247,7 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次"
+      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次" destroy-on-close
                  width="40%" @open="handleTriggerDialogOpen">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="110px">
           <el-form-item v-if="false" label="Id" prop="id">

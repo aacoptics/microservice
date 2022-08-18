@@ -75,7 +75,7 @@ public class UmsContentServiceImplTest {
 //        feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, "7c84331d", FeishuService.MSG_TYPE_INTERACTIVE, card);
 
         List<UmsContent> messageBatches;
-        messageBatches = umsContentService.getUmsContentByBatchId("22081214105");
+        messageBatches = umsContentService.getUmsContentByBatchId("ums_sop_ri_cost_gp_qas", "22081214105");
         for (UmsContent messageBatch : messageBatches) {
             boolean fileResult = true;
             String imageKey = null;
@@ -206,7 +206,7 @@ public class UmsContentServiceImplTest {
         notificationEntity.setBatchId("22081214105");
         notificationEntity.setPlanKey("ums_sop_ri_cost_gp_qas");
         Robot robot = new Robot();
-        robot.setChatName("我的测试群");
+        robot.setRobotName("我的测试群");
         List<Robot> robots = new ArrayList<>();
         robots.add(robot);
         notificationEntity.setMsgTypeInfo(robots);
