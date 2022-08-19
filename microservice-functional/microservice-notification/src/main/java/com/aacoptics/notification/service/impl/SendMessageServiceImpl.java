@@ -173,12 +173,14 @@ public class SendMessageServiceImpl implements SendMessageService {
                 if (ObjectUtil.isNull(feishuUser))
                     throw new BusinessException("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
 
-                boolean resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
-                        feishuUser.getUserId(),
-                        FeishuService.MSG_TYPE_FILE,
-                        JSONUtil.createObj().set("file_key", fileKey));
-                if (!resultByFile)
-                    throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                    boolean resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
+                            feishuUser.getUserId(),
+                            FeishuService.MSG_TYPE_FILE,
+                            JSONUtil.createObj().set("file_key", fileKey));
+                    if (!resultByFile)
+                        throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                }
 
                 boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
                         feishuUser.getUserId(),
