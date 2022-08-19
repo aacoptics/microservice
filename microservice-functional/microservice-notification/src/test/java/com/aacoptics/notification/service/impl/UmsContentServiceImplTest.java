@@ -198,10 +198,10 @@ public class UmsContentServiceImplTest {
     @Test
     public void test2() {
         NotificationEntity notificationEntity = new NotificationEntity();
-        notificationEntity.setBatchId("22081214105");
+        notificationEntity.setBatchId("22081914480");
         notificationEntity.setPlanKey("ums_sop_ri_cost_gp_qas");
         Robot robot = new Robot();
-        robot.setRobotName("我的测试群");
+        robot.setId(1560167307305877506L);
         List<Robot> robots = new ArrayList<>();
         robots.add(robot);
         notificationEntity.setMsgTypeInfo(robots);
