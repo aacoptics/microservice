@@ -118,7 +118,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 break;
         }
 
-        String chatName = "我的测试群";
+        String chatName = "模造车间异常&换料自动提醒群";
         try {
             if (StrUtil.isBlank(title)) {
                 log.error("title为空");
