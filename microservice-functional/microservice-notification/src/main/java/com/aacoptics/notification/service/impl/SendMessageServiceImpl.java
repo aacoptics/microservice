@@ -126,13 +126,16 @@ public class SendMessageServiceImpl implements SendMessageService {
                 List<Robot> robotList = robotService.findByIds(robotIds);
                 for (Robot messageTypeInfo : robotList) {
                     String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getRobotName());
-                    boolean fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-                            chatId,
-                            FeishuService.MSG_TYPE_FILE,
-                            JSONUtil.createObj().set("file_key", fileKey));
 
-                    if (!fileResult)
-                        throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                    if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                        boolean fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                                chatId,
+                                FeishuService.MSG_TYPE_FILE,
+                                JSONUtil.createObj().set("file_key", fileKey));
+
+                        if (!fileResult)
+                            throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                    }
 
                     if (messageTypeInfo.getRobotType().equals(RobotService.GROUP_ROBOT)) {
                         String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), cardJson);
