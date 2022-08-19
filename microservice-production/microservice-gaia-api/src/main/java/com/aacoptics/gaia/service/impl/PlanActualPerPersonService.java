@@ -118,7 +118,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
         if(messageInfos.size() > 0){
             for (MessageInfo messageInfo : messageInfos) {
                 FeishuMessage feishuMessage = new FeishuMessage();
-                feishuMessage.setJobNumber("60054916");
+                feishuMessage.setJobNumber(messageInfo.getJobNumber());
                 feishuMessage.setContent(messageInfo.getMessage());
                 Result res = notificationProvider.sendFeishuNotification(feishuMessage);
                 if(res.isSuccess()){

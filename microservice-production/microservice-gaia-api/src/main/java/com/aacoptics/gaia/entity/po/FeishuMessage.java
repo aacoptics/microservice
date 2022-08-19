@@ -19,8 +19,6 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class FeishuMessage implements Serializable {
 
-    private String title;
-
     private String content;
 
     private String jobNumber;
