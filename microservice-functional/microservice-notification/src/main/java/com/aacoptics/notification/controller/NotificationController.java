@@ -1,29 +1,18 @@
 package com.aacoptics.notification.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.notification.config.BusConfig;
 import com.aacoptics.notification.entity.form.EmailSendForm;
 import com.aacoptics.notification.entity.form.TriggerJobForm;
 import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
-import com.aacoptics.notification.entity.po.DingtalkUser;
-import com.aacoptics.notification.entity.po.EmailSend;
-import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
-import com.aacoptics.notification.entity.vo.DingTalkMessage;
-import com.aacoptics.notification.provider.XxlJobProvider;
+import com.aacoptics.notification.entity.vo.FeishuMessage;
 import com.aacoptics.notification.service.*;
-import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 @RestController
 @RequestMapping("/notification")
@@ -32,34 +21,22 @@ import java.util.*;
 public class NotificationController {
     @Resource
     XxlJobInfoService xxlJobInfoService;
-
     @Resource
     XxlGroupInfoService xxlGroupInfoService;
-
     @Resource
     SendMessageService sendMessageService;
 
     @Resource
-    DingtalkUserService dingtalkUserService;
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    MailService mailService;
 
     @ApiOperation(value = "发送邮件", notes = "发送邮件")
     @ApiImplicitParam(name = "emailSendForm", value = "邮件发送表单", required = true, dataType = "EmailSendForm")
     @PostMapping(value = "/sendEmail")
     public Result sendEmail(@Valid @RequestBody EmailSendForm emailSendForm) {
-        String messageId = String.valueOf(UUID.randomUUID());
-        String messageData = JSONObject.toJSONString(emailSendForm.toPo(EmailSend.class));
-        String createTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Map<String, Object> emailMap = new HashMap<>();
-        emailMap.put("messageId", messageId);
-        emailMap.put("messageData", messageData);
-        emailMap.put("createTime", createTime);
-        rabbitTemplate.convertAndSend(BusConfig.EXCHANGE_NAME,
-                BusConfig.EMAIL_ROUTING,
-                emailMap);
-        return Result.success();
+        if (mailService.send(emailSendForm))
+            return Result.success();
+        else
+            return Result.fail();
     }
 
     @ApiOperation(value = "保存消息推送计划", notes = "保存消息推送计划")
@@ -106,26 +83,14 @@ public class NotificationController {
         return Result.success(xxlGroupInfoService.list());
     }
 
-    @ApiOperation(value = "推送钉钉工作通知", notes = "推送钉钉工作通知")
+    @ApiOperation(value = "推送飞书工作通知", notes = "推送飞书工作通知")
     @ApiImplicitParam(name = "dingTalkMessage", value = "钉钉工作通知参数", required = true, dataType = "DingTalkMessage")
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
-    @PostMapping(value = "/sendDingTalkNotification")
-    public Result sendDingTalkNotification(@Valid @RequestBody DingTalkMessage dingTalkMessage) {
-        String[] userNoArray =  dingTalkMessage.getUserIdList().split(",");
-        List<String> dingTalkUserIdList = new ArrayList<>();
-        if(userNoArray.length > 0){
-            for (String userNoInfo : userNoArray) {
-                List<DingtalkUser> dingtalkUser = dingtalkUserService.GetUsersInfoFromDingtalk(userNoInfo);
-                if(dingtalkUser.size() > 0)
-                    dingTalkUserIdList.add(dingtalkUser.get(0).getUserid());
-            }
-        }
-        String userIds = String.join(",", dingTalkUserIdList);
-        return sendMessageService.sendDingTalkNotification(userIds,
-                dingTalkMessage.getTitle(),
-                dingTalkMessage.getContent());
+    @PostMapping(value = "/sendFeishuNotification")
+    public Result sendFeishuNotification(@Valid @RequestBody FeishuMessage feishuMessage) {
+        return sendMessageService.sendFeishuNotification(feishuMessage);
     }
 
     @ApiOperation(value = "手动触发Task", notes = "手动触发Task")

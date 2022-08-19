@@ -48,9 +48,6 @@ public class UmsContentServiceImplTest {
     XxlGroupInfoService xxlGroupInfoService;
 
     @Resource
-    DingtalkUserService dingtalkUserService;
-
-    @Resource
     FeishuService feishuService;
 
 
@@ -139,8 +136,6 @@ public class UmsContentServiceImplTest {
 
     @Test
     public void Test() {
-
-        List<DingtalkUser> dingtalkUsers = dingtalkUserService.GetUsersInfoFromDingtalk("60054916");
         List<XxlGroupInfo> xxlGroupInfoList = xxlGroupInfoService.list();
 
 //        XxlJobInfo xxlJobInfo = new XxlJobInfo();
