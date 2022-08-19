@@ -26,6 +26,7 @@ public class UmsContentServiceImpl extends ServiceImpl<UmsContentMapper, UmsCont
     @Override
     public List<UmsContent> getUmsContentByBatchId(String conType, String batchId) {
         QueryWrapper<UmsContent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("con_type", conType);
         queryWrapper.eq("batch_id", batchId);
         return this.list(queryWrapper);
     }
