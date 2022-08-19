@@ -9,17 +9,13 @@ import com.aacoptics.notification.entity.po.FeishuUser;
 import com.aacoptics.notification.entity.po.Robot;
 import com.aacoptics.notification.entity.po.UmsContent;
 import com.aacoptics.notification.entity.po.UmsContentSub;
+import com.aacoptics.notification.entity.vo.FeishuMessage;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.exception.BusinessException;
-import com.aacoptics.notification.provider.DingTalkApi;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.service.*;
-import com.aacoptics.notification.utils.DingTalkUtil;
-import com.dingtalk.api.response.OapiGettokenResponse;
-import com.dingtalk.api.response.OapiMessageCorpconversationAsyncsendV2Response;
 import com.spire.xls.Worksheet;
-import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,9 +43,6 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Resource
     RobotService robotService;
-
-    @Resource
-    DingTalkApi dingTalkApi;
 
     @Resource
     FeishuService feishuService;
@@ -242,24 +235,19 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
 
     @Override
-    public Result sendDingTalkNotification(String jobNumber, String title, String content) {
-        //获取token
-        OapiGettokenResponse oapiGettokenResponse = null;
-        try {
-            oapiGettokenResponse = dingTalkApi.getAccessToken();
-        } catch (ApiException e) {
-            return Result.fail(e);
-        }
-        String accessToken = oapiGettokenResponse.getAccessToken();
-        try {
-            OapiMessageCorpconversationAsyncsendV2Response res = DingTalkUtil.sendCardCorpConversation(accessToken, 1186196480L
-                    , jobNumber, title, content);
-            if (res.isSuccess())
-                return Result.success();
-            else
-                return Result.fail(res);
-        } catch (ApiException e) {
-            return Result.fail(e);
-        }
+    public Result sendFeishuNotification(FeishuMessage feishuMessage) {
+        FeishuUser feishuUser = feishuService.getFeishuUser(feishuMessage.getJobNumber());
+        if (ObjectUtil.isNull(feishuUser))
+            return Result.fail("推送消息失败！飞书用户不存在");
+
+        JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
+
+        boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
+                feishuUser.getUserId(),
+                FeishuService.MSG_TYPE_INTERACTIVE,
+                cardJson);
+
+        if(resultBySendMsg) return Result.success();
+        else return Result.fail("推送消息失败！");
     }
 }
