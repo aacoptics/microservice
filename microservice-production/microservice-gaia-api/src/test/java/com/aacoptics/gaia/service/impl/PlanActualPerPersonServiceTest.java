@@ -22,7 +22,7 @@ public class PlanActualPerPersonServiceTest {
 
     @Test
     public void sendPersonPlanMsg() {
-        gaiaClassService.GetClassInfoFromGaia();
-        //planActualPerPersonService.sendDingTalkMessage();
+        //gaiaClassService.GetClassInfoFromGaia();
+        planActualPerPersonService.sendFeishuMessage();
     }
 }

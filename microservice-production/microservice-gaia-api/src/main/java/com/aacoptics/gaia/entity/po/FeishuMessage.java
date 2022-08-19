@@ -17,11 +17,11 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode()
 @Accessors(chain = true)
-public class DingTalkMessage implements Serializable {
+public class FeishuMessage implements Serializable {
 
     private String title;
 
     private String content;
 
-    private String userIdList;
+    private String jobNumber;
 }

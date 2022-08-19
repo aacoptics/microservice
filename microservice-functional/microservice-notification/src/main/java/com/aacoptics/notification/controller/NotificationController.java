@@ -84,12 +84,12 @@ public class NotificationController {
     }
 
     @ApiOperation(value = "推送飞书工作通知", notes = "推送飞书工作通知")
-    @ApiImplicitParam(name = "dingTalkMessage", value = "钉钉工作通知参数", required = true, dataType = "DingTalkMessage")
+    @ApiImplicitParam(name = "feishuMessage", value = "飞书工作通知参数", required = true, dataType = "FeishuMessage")
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @PostMapping(value = "/sendFeishuNotification")
-    public Result sendFeishuNotification(@Valid @RequestBody FeishuMessage feishuMessage) {
+    public Result sendFeishuNotification(@RequestBody FeishuMessage feishuMessage) {
         return sendMessageService.sendFeishuNotification(feishuMessage);
     }
 

@@ -20,5 +20,5 @@ public interface IPlanActualPerPersonService extends IService<PlanActualPerPerso
 
     List<PlanActualPerPerson> getWorkDate();
 
-    void sendDingTalkMessage();
+    void sendFeishuMessage();
 }
