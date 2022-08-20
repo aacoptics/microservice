@@ -1,4 +1,4 @@
-package com.aacoptics.notification.schedule;
+package com.aacoptics.notification.scheduler;
 
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.service.SendMessageService;
@@ -20,7 +20,6 @@ public class NotificationHandle {
     @XxlJob("RobotHandle")
     public void RobotHandle() {
         String param = XxlJobHelper.getJobParam(); //执行参数
-        XxlJobHelper.log(param);
         NotificationEntity jobParam = JSONObject.parseObject(param, NotificationEntity.class);
         try {
             sendMessageService.sendHandledMessage(jobParam);
