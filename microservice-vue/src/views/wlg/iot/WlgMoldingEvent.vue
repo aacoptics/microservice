@@ -9,8 +9,7 @@
 
                 <el-select v-model="formParam.machineName"
                            :size="size"
-                           placeholder="请选择机台号"
-                           @change="getWaferIdArray">
+                           placeholder="请选择机台号">
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item.machineName"
@@ -27,8 +26,7 @@
                     end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
-                    type="datetimerange"
-                    @change="getWaferIdArray">
+                    type="datetimerange">
                 </el-date-picker>
               </el-form-item>
               <el-form-item>
@@ -59,7 +57,7 @@ import {getMachineEvents, getMachineName} from "@/api/wlg/iot/moldingMachinePara
 import SysTable from "@/components/SysTable";
 
 export default {
-  name: "productionPlan",
+  name: "WlgMoldingEvent",
   components: {SysTable},
   data() {
     return {
