@@ -3,12 +3,15 @@ package com.aacoptics.wlg.dashboard.service;
 import com.aacoptics.wlg.dashboard.entity.MoldingEventData;
 import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MoldingEventDataService {
-    List<MoldingEventData> getMachineEvents(String machineName,
-                                            LocalDateTime startTime,
-                                            LocalDateTime endTime);
+    IPage<MoldingEventData> getMachineEvents(String machineName,
+                                             LocalDateTime startTime,
+                                             LocalDateTime endTime,
+                                             Page page);
 }
