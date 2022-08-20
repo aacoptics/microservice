@@ -14,6 +14,7 @@
         from t_wlg_molding_machine_event_data
         where machine_name = #{machineName}
           and start_time between #{startTime} and #{endTime}
+        and end_time is not null
         order by start_time
     </select>
 
