@@ -16,6 +16,17 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="群类型" prop="chatType">
+          <el-select v-model="filters.chatType" clearable placeholder="群类型">
+            <el-option
+                v-for="item in chatTypeOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <el-form :inline="true" :size="size">
         <el-form-item>
@@ -67,6 +78,21 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="群类型" prop="chatType">
+              <el-select v-model="dataForm.chatType" clearable placeholder="群类型" style="width:100%">
+                <el-option
+                    v-for="item in chatTypeOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
             <el-form-item label="机器人链接" prop="robotUrl" v-if="dataForm.robotType === 'group_robot'">
               <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
@@ -98,11 +124,13 @@ export default {
       size: "default",
       filters: {
         robotName: "",
-        robotType: ""
+        robotType: "",
+        chatType: ""
       },
       columns: [
         {prop: "robotName", label: "群名称", minWidth: 110},
         {prop: "robotType", label: "机器人类型", minWidth: 80, formatter: this.robotTypeFormat},
+        {prop: "chatType", label: "群类型", minWidth: 80, formatter: this.chatTypeFormat},
         {prop: "robotUrl", label: "机器人url", minWidth: 350},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -120,11 +148,13 @@ export default {
         robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
       },
       robotOptions: [],
+      chatTypeOptions: [],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
         robotName: "",
         robotType: "app_robot",
+        chatType: "",
         robotUrl: ""
       },
     };
@@ -133,6 +163,10 @@ export default {
     getDict("notification_robot_type").then(response => {
       this.robotOptions = response.data.data
     })
+    getDict("notification_chat_type").then(response => {
+      this.chatTypeOptions = response.data.data
+    })
+
   },
   methods: {
     // 获取分页数据
@@ -142,6 +176,7 @@ export default {
       }
       this.pageRequest.robotName = this.filters.robotName;
       this.pageRequest.robotType = this.filters.robotType;
+      this.pageRequest.chatType = this.filters.chatType;
       findRobotInfoPage(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
@@ -166,6 +201,7 @@ export default {
         id: 0,
         robotName: "",
         robotType: "app_robot",
+        chatType: "",
         robotUrl: ""
       };
     },
@@ -234,6 +270,12 @@ export default {
     },
     robotTypeFormat: function (row, column) {
       const typeInfo = this.robotOptions.find(item => {
+        return item.dictValue === row[column.property];
+      });
+      return typeInfo.dictLabel
+    },
+    chatTypeFormat: function (row, column) {
+      const typeInfo = this.chatTypeOptions.find(item => {
         return item.dictValue === row[column.property];
       });
       return typeInfo.dictLabel
