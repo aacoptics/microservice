@@ -145,6 +145,7 @@ export default {
       dataFormRules: {
         robotName: [{required: true, message: "请输入群名称", trigger: "blur"}],
         robotType: [{required: true, message: "请选择机器人类型", trigger: "change"},],
+        chatType: [{required: true, message: "请选择群类型", trigger: "change"},],
         robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
       },
       robotOptions: [],
