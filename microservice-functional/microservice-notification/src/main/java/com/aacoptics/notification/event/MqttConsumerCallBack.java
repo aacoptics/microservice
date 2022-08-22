@@ -61,78 +61,78 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
-        if (StrUtil.isBlank(msgJson.getString("Message")))
-            return;
-
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        //当前时间转换String
-        LocalDateTime time = LocalDateTime.now();
-        String localTimeStr = df.format(time);
-        JSONObject dataJson = msgJson.getJSONObject("Data");
-        String machineName = dataJson.getString("machineName");
-        String projectName = dataJson.getString("projectName");
-        String modelName = dataJson.getString("modelName");
-        MarkdownMessage markdownGroupMessage = new MarkdownMessage();
-        String title = null;
-        switch (msgJson.getString("Message")) {
-            case "DoMonitorTempAlarm":
-                title = "加热棒状态报警";
-                markdownGroupMessage.setTitle(title);
-                String param = dataJson.getString("param");
-                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
-                int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
-                String abnormalStr = Ints.join(",", abnormalIdx);
-                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-                markdownGroupMessage.addBlobContent(localTimeStr);
-                if (param.equals("lower")) {
-                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-                } else {
-                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-                }
-                break;
-//            case "FeedAlarm":
-//                title = "模造换料提醒";
+//        JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
+//        if (StrUtil.isBlank(msgJson.getString("Message")))
+//            return;
+//
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//        //当前时间转换String
+//        LocalDateTime time = LocalDateTime.now();
+//        String localTimeStr = df.format(time);
+//        JSONObject dataJson = msgJson.getJSONObject("Data");
+//        String machineName = dataJson.getString("machineName");
+//        String projectName = dataJson.getString("projectName");
+//        String modelName = dataJson.getString("modelName");
+//        MarkdownMessage markdownGroupMessage = new MarkdownMessage();
+//        String title = null;
+//        switch (msgJson.getString("Message")) {
+//            case "DoMonitorTempAlarm":
+//                title = "加热棒状态报警";
 //                markdownGroupMessage.setTitle(title);
-//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                String param = dataJson.getString("param");
+//                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
+//                int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
+//                String abnormalStr = Ints.join(",", abnormalIdx);
 //                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-//                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-//                sendToAllSpeaker(machineName);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                if (param.equals("lower")) {
+//                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+//                } else {
+//                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+//                }
 //                break;
-            case "moldTempMonitor":
-                title = "模造温度曲线报警";
-                String moldParam = dataJson.getString("param");
-                String avgValue = dataJson.getString("averageValue");
-                String currentValue = dataJson.getString("currentValue");
-                String recipePhase = dataJson.getString("recipePhase");
-                markdownGroupMessage.setTitle(title);
-                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
-                markdownGroupMessage.addBlobContent(localTimeStr);
-                if (moldParam.indexOf("upper") == 0)
-                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-                else if (moldParam.indexOf("lower") == 0)
-                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-                else
-                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
-                break;
-        }
-
-        String chatName = "模造车间异常&换料自动提醒群";
-        try {
-            if (StrUtil.isBlank(title)) {
-                log.error("title为空");
-                return;
-            }
-            String chatId = feishuService.fetchChatIdByRobot(chatName);
-            cn.hutool.json.JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage.toString(), null);
-            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-                    chatId,
-                    FeishuService.MSG_TYPE_INTERACTIVE,
-                    cardJson);
-        } catch (Exception err) {
-            log.error("发送" + title + "失败！", err);
-        }
+////            case "FeedAlarm":
+////                title = "模造换料提醒";
+////                markdownGroupMessage.setTitle(title);
+////                markdownGroupMessage.addBlobContent(localTimeStr);
+////                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+////                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+////                sendToAllSpeaker(machineName);
+////                break;
+//            case "moldTempMonitor":
+//                title = "模造温度曲线报警";
+//                String moldParam = dataJson.getString("param");
+//                String avgValue = dataJson.getString("averageValue");
+//                String currentValue = dataJson.getString("currentValue");
+//                String recipePhase = dataJson.getString("recipePhase");
+//                markdownGroupMessage.setTitle(title);
+//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+//                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                if (moldParam.indexOf("upper") == 0)
+//                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+//                else if (moldParam.indexOf("lower") == 0)
+//                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+//                else
+//                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
+//                break;
+//        }
+//
+//        String chatName = "模造车间异常&换料自动提醒群";
+//        try {
+//            if (StrUtil.isBlank(title)) {
+//                log.error("title为空");
+//                return;
+//            }
+//            String chatId = feishuService.fetchChatIdByRobot(chatName);
+//            cn.hutool.json.JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage.toString(), null);
+//            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+//                    chatId,
+//                    FeishuService.MSG_TYPE_INTERACTIVE,
+//                    cardJson);
+//        } catch (Exception err) {
+//            log.error("发送" + title + "失败！", err);
+//        }
     }
 
     /**
