@@ -21,5 +21,7 @@ public class FeishuMessage implements Serializable {
 
     private String content;
 
-    private String jobNumber;
+    private String sendId;
+
+    private String sendType;
 }

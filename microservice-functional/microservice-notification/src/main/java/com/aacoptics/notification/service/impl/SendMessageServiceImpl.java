@@ -241,18 +241,35 @@ public class SendMessageServiceImpl implements SendMessageService {
 
     @Override
     public Result sendFeishuNotification(FeishuMessage feishuMessage) {
-        FeishuUser feishuUser = feishuService.getFeishuUser(feishuMessage.getJobNumber());
-        if (ObjectUtil.isNull(feishuUser))
-            return Result.fail("推送消息失败！飞书用户不存在");
+        if(feishuMessage.getSendType().equals(FeishuService.RECEIVE_ID_TYPE_USER_ID)){
+            FeishuUser feishuUser = feishuService.getFeishuUser(feishuMessage.getSendId());
+            if (ObjectUtil.isNull(feishuUser))
+                return Result.fail("推送消息失败！飞书用户不存在");
 
-        JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
+            JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
 
-        boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
-                feishuUser.getUserId(),
-                FeishuService.MSG_TYPE_INTERACTIVE,
-                cardJson);
+            boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID,
+                    feishuUser.getUserId(),
+                    FeishuService.MSG_TYPE_INTERACTIVE,
+                    cardJson);
 
-        if(resultBySendMsg) return Result.success();
-        else return Result.fail("推送消息失败！");
+            if(resultBySendMsg) return Result.success();
+            else return Result.fail("推送消息失败！");
+        }
+        else if(feishuMessage.getSendType().equals(FeishuService.RECEIVE_ID_TYPE_CHAT_ID)){
+            JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
+            String chatId = feishuService.fetchChatIdByRobot(feishuMessage.getSendId());
+            if(StrUtil.isBlank(chatId))
+                return Result.fail("推送消息失败，群不存在或者未将机器人拉进群聊！");
+            boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                    chatId,
+                    FeishuService.MSG_TYPE_INTERACTIVE,
+                    cardJson);
+            if(resultBySendMsg) return Result.success();
+            else return Result.fail("推送消息失败！");
+        }
+        else{
+            return Result.fail("未知推送类型，请检查！");
+        }
     }
 }

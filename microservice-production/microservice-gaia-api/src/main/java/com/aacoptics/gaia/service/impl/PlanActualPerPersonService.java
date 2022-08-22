@@ -32,6 +32,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
     @Resource
     NotificationProvider notificationProvider;
 
+
     @Override
     public List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate) {
         return planActualPerPersonMapper.getPlanInfoByTime(startDate, endDate);
@@ -118,8 +119,9 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
         if(messageInfos.size() > 0){
             for (MessageInfo messageInfo : messageInfos) {
                 FeishuMessage feishuMessage = new FeishuMessage();
-                feishuMessage.setJobNumber(messageInfo.getJobNumber());
+                feishuMessage.setSendId(messageInfo.getJobNumber());
                 feishuMessage.setContent(messageInfo.getMessage());
+                feishuMessage.setSendType(IPlanActualPerPersonService.RECEIVE_ID_TYPE_USER_ID);
                 Result res = notificationProvider.sendFeishuNotification(feishuMessage);
                 if(res.isSuccess()){
                     UpdateWrapper<PlanActualPerPerson> updateWrapper = new UpdateWrapper<>();
