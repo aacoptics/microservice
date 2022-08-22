@@ -21,6 +21,9 @@ public class RobotQueryForm extends BaseQueryForm<RobotQueryParam> {
     @ApiModelProperty(value = "机器人类型")
     private String robotType;
 
+    @ApiModelProperty(value = "群类型")
+    private String chatType;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Past(message = "查询开始时间必须小于当前日期")
     @ApiModelProperty(value = "查询开始时间")

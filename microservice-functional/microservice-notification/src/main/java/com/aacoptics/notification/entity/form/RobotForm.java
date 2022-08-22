@@ -25,6 +25,10 @@ public class RobotForm extends BaseForm<Robot> {
     @NotBlank(message = "机器人类型不能为空")
     private String robotType;
 
+    @ApiModelProperty(value = "群类型")
+    @NotBlank(message = "群类型不能为空")
+    private String chatType;
+
     @ApiModelProperty(value = "机器人状态，1为可用")
     private Boolean status = true;
 }
