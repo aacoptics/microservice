@@ -1,6 +1,7 @@
 package com.aacoptics.mobile.attendance.config;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +16,12 @@ import java.io.Serializable;
 @ConfigurationProperties(prefix = "feishu")
 public class FeishuAppKeyConfig implements Serializable {
 
+    @JsonProperty("app_id")
     private String appId;
 
+    @JsonProperty("app_secret")
     private String appSecret;
 
+    @JsonIgnore
     private String encryptKey;
 }

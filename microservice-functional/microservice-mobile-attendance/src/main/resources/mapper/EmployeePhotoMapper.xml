@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.mobile.attendance.mapper.EmployeePhotoMapper">
+
+    <select id="listPhotoNeedToUpload" resultType="com.aacoptics.mobile.attendance.entity.po.EmployeePhoto">
+        select a.ID, a.Code, a.Photo, a.CreateTime, a.IsUpload
+        from T_Photo a
+                 join T_Zlemployee b
+                      on a.Code = b.Code
+                 left join T_Photo_Feishu c
+                           on a.ID = c.ParentId
+        where b.EmpStatus = 1
+          and c.ID is null
+    </select>
+</mapper>
