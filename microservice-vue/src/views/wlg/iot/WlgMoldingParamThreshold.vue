@@ -62,9 +62,7 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {handleRoleData} from "@/api/system/role";
-import {deleteUser, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
-import {deleteParamThreshold, getParamThreshold} from "@/api/wlg/iot/moldingMachineParamData";
+import {deleteParamThreshold, getParamThreshold, handleAdd, handleUpdate} from "@/api/wlg/iot/moldingMachineParamData";
 
 export default {
   name: "paramThreshold",
@@ -326,6 +324,7 @@ export default {
             let params = Object.assign({}, this.dataForm)
             params.paramId = this.paramDesc.param_info.param_id
             params.arrayId = this.paramDesc.param_info.array_id
+            params.machineId = this.machineId
             if (this.operation) {
               handleAdd(params).then((res) => {
                 const responseData = res.data
@@ -357,54 +356,8 @@ export default {
         }
       })
     },
-    uuid(size) {
-      const seed = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'p', 'Q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        '2', '3', '4', '5', '6', '7', '8', '9'];//数组
-      const seedLength = seed.length;//数组长度
-      let createPassword = '';
-      for (let i = 0; i < size; i++) {
-        const j = Math.floor(Math.random() * seedLength);
-        createPassword += seed[j];
-      }
-      return createPassword;
-    },
-    // 获取数据
-
-    findRoleData: function () {
-      handleRoleData().then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.roleData = responseData.data
-        }
-      })
-    },
-    // 角色选择改变监听
-    handleUserSelectChange(val) {
-      if (val == null || val.val == null) {
-        this.currentUserRoles = []
-        this.dataForm.roleIds = []
-        return
-      }
-      this.selectUser = val.val
-      findUserRolesById(val.val.id).then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.currentUserRoles = responseData.data
-          this.getCurrentUserRoleIds()
-        }
-      })
-    },
-    getCurrentUserRoleIds() {
-      let roles = []
-      for (let i = 0, len = this.currentUserRoles.length; i < len; i++) {
-        roles.push(this.currentUserRoles[i].id)
-      }
-      this.dataForm.roleIds = roles
-    },
     // 重置选择
     resetSelection() {
-      this.getCurrentUserRoleIds()
       this.dialogVisible = false
     },
     paramFormat: function (row, column) {

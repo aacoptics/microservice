@@ -21,6 +21,7 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
     public IPage<MoldingMachine> query(Page page, String machineName) {
         QueryWrapper<MoldingMachine> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotBlank(machineName), "machine_name", machineName);
+        queryWrapper.orderByAsc("machine_name");
         return this.page(page, queryWrapper);
     }
 }

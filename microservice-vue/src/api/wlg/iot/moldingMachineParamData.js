@@ -119,7 +119,7 @@ export function getParamThreshold(machineId, current, size) {
 
 export function deleteParamThreshold(deleteForm) {
     return request({
-        url: '/wlg-iot-dashboard/MoldingParamThreshold/' + deleteForm.id,
+        url: '/wlg-iot-dashboard/moldingMachine/MoldingParamThreshold/' + deleteForm.id,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -129,7 +129,7 @@ export function deleteParamThreshold(deleteForm) {
 
 export function handleAdd(addForm) {
     return request({
-        url: '/wlg-iot-dashboard/MoldingParamThreshold',
+        url: '/wlg-iot-dashboard/moldingMachine/MoldingParamThreshold',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ export function handleAdd(addForm) {
 
 export function handleUpdate(updateForm) {
     return request({
-        url: '/wlg-iot-dashboard/MoldingParamThreshold/' + updateForm.id,
+        url: '/wlg-iot-dashboard/moldingMachine/MoldingParamThreshold/' + updateForm.id,
         method: 'put',
         headers: {
             'Content-Type': 'application/json'
