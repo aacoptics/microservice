@@ -86,3 +86,18 @@ export function getByDateAndMachineName(params) {
         data: params
     })
 }
+
+export function getMoldingInfo(machineName, current, size) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachine/getMachineInfo',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            machineName: machineName,
+            current: current,
+            size: size
+        }
+    })
+}

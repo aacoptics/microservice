@@ -28,7 +28,7 @@ public class MoldingMachineController {
 
     @ApiOperation(value = "获取机台信息", notes = "获取机台信息")
     @GetMapping(value = "/getMachineInfo")
-    public Result getMachineEvents(@RequestParam(required = false) String machineName,
+    public Result getMachineInfo(@RequestParam(required = false) String machineName,
                                    @RequestParam Long current,
                                    @RequestParam Long size) {
         return Result.success(moldingMachineService.query(new Page(current, size), machineName));
@@ -55,5 +55,13 @@ public class MoldingMachineController {
     public Result update(@PathVariable Integer id, @RequestBody MoldingParamThreshold moldingParamThreshold) {
         moldingParamThreshold.setId(id);
         return Result.success(moldingParamThresholdService.update(moldingParamThreshold));
+    }
+
+    @ApiOperation(value = "获取阈值信息", notes = "获取阈值信息")
+    @GetMapping(value = "/getParamThreshold")
+    public Result getParamThreshold(@RequestParam Integer machineId,
+                                   @RequestParam Long current,
+                                   @RequestParam Long size) {
+        return Result.success(moldingParamThresholdService.query(new Page(current, size), machineId));
     }
 }
