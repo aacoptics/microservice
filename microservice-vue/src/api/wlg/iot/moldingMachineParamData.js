@@ -116,3 +116,35 @@ export function getParamThreshold(machineId, current, size) {
         }
     })
 }
+
+export function deleteParamThreshold(deleteForm) {
+    return request({
+        url: '/wlg-iot-dashboard/MoldingParamThreshold/' + deleteForm.id,
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function handleAdd(addForm) {
+    return request({
+        url: '/wlg-iot-dashboard/MoldingParamThreshold',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: addForm
+    })
+}
+
+export function handleUpdate(updateForm) {
+    return request({
+        url: '/wlg-iot-dashboard/MoldingParamThreshold/' + updateForm.id,
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: updateForm
+    })
+}

@@ -1,5 +1,6 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.aacoptics.wlg.dashboard.entity.MoldingMachine;
 import com.aacoptics.wlg.dashboard.entity.MoldingParamThreshold;
 import com.aacoptics.wlg.dashboard.mapper.MoldingMachineMapper;
@@ -15,6 +16,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 
 @Service
 @Slf4j
@@ -29,6 +32,8 @@ public class MoldingParamThresholdServiceImpl extends ServiceImpl<MoldingParamTh
 
     @Override
     public boolean add(MoldingParamThreshold moldingParamThreshold) {
+        moldingParamThreshold.setUpdatedBy(UserContextHolder.getInstance().getUsername());
+        moldingParamThreshold.setCreatedBy(UserContextHolder.getInstance().getUsername());
         return this.save(moldingParamThreshold);
     }
 
@@ -39,6 +44,8 @@ public class MoldingParamThresholdServiceImpl extends ServiceImpl<MoldingParamTh
 
     @Override
     public boolean update(MoldingParamThreshold moldingParamThreshold) {
+        moldingParamThreshold.setUpdatedBy(UserContextHolder.getInstance().getUsername());
+        moldingParamThreshold.setUpdatedTime(LocalDateTime.now());
         return this.updateById(moldingParamThreshold);
     }
 }
