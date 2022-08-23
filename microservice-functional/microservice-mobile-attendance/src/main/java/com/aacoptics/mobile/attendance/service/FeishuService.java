@@ -1,5 +1,7 @@
 package com.aacoptics.mobile.attendance.service;
 
+import com.aacoptics.mobile.attendance.entity.po.FeishuUser;
+
 import java.io.IOException;
 
 /**
@@ -8,7 +10,15 @@ import java.io.IOException;
  */
 public interface FeishuService {
 
+    String EMPLOYEE_TYPE_USER_ID = "employee_id";
+
+    String EMPLOYEE_TYPE_EMPLOYEE_NO = "employee_no";
+
+    FeishuUser getFeishuUser(String employeeNo);
+
     String fetchAccessToken();
 
-    String fetchUploadFileKey(String fileType, byte[] fileContent, Integer duration) throws IOException;
+    String fetchUploadFileKey(String accessToken, String fileName, byte[] fileContent) throws IOException;
+
+    boolean updateUserPhoto(String employeeNo, byte[] fileContent) throws IOException;
 }

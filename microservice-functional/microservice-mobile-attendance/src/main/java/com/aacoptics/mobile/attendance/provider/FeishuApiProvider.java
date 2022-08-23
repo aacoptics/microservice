@@ -19,9 +19,11 @@ public interface FeishuApiProvider {
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"},
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     JSONObject fetchUploadFileKey(@RequestHeader("Authorization") String authorization,
-                                  @RequestPart("file_name") String fileName,
+                                  @RequestParam("file_name") String fileName,
                                   @RequestPart("file") MultipartFile file);
 
-
-
+    @PostMapping(value = "/attendance/v1/user_settings/modify", headers = {"Content-Type=application/json;charset=UTF-8"})
+    JSONObject updateUserPhoto(@RequestHeader("Authorization") String authorization,
+                               @RequestParam("employee_type") String employeeType,
+                               @RequestBody JSONObject jsonBody);
 }

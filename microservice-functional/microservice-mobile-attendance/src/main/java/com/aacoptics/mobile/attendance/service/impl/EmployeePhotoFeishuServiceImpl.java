@@ -10,5 +10,4 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class EmployeePhotoFeishuServiceImpl extends ServiceImpl<EmployeePhotoFeishuMapper, EmployeePhotoFeishu> implements EmployeePhotoFeishuService {
-
 }
