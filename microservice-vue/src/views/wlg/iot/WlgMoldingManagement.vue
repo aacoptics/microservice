@@ -20,10 +20,14 @@
                 :stripe="false"
                 @findPage="findPage"
                 :show-operation-del="false"
+                @handleCurrentChange="handleSelectChange"
                 @handleEdit="handleEdit">
       </SysTable>
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'阈值维护'"
                  width="40%">
+      </el-dialog>
+      <el-dialog v-model="dialogVisible" destroy-on-close :title="operation?'新增':'阈值维护'" width="90%">
+        <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id" :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
       </el-dialog>
     </div>
   </div>
@@ -32,10 +36,12 @@
 <script>
 import SysTable from "@/components/SysTable";
 import {getMoldingInfo} from "@/api/wlg/iot/moldingMachineParamData";
+import WlgMoldingParamThreshold from "./WlgMoldingParamThreshold"
+import {findUserRolesById} from "@/api/system/user";
 
 export default {
   name: "WlgMoldingManagement",
-  components: {SysTable},
+  components: {SysTable, WlgMoldingParamThreshold},
   data() {
     return {
       size: 'default',
@@ -54,6 +60,7 @@ export default {
       pageResult: {},
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
+      currentMachineInfo: {}
     }
   },
   methods: {
@@ -62,7 +69,6 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      this.pageRequest.username = this.filters.username
       getMoldingInfo(this.filters.machineName, this.pageRequest.current, this.pageRequest.size).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
@@ -74,6 +80,13 @@ export default {
     resetSelection() {
       this.dialogVisible = false
     },
+    handleSelectChange(val) {
+      if (val == null || val.val == null) {
+        this.currentMachineInfo = {}
+        return
+      }
+      this.currentMachineInfo = val.val
+    },
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
@@ -83,6 +96,9 @@ export default {
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
     }
+  },
+  mounted() {
+    this.findPage(null)
   }
 }
 </script>

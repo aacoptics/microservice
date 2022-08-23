@@ -101,3 +101,18 @@ export function getMoldingInfo(machineName, current, size) {
         }
     })
 }
+
+export function getParamThreshold(machineId, current, size) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachine/getParamThreshold',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            machineId: machineId,
+            current: current,
+            size: size
+        }
+    })
+}

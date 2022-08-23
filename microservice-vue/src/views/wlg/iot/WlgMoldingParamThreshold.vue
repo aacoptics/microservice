@@ -23,7 +23,8 @@
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
-                @handleCurrentChange="handleUserSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
+                @handleDelete="handleDelete"
+                @handleEdit="handleEdit">
       </SysTable>
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
                  width="40%">
@@ -69,20 +70,25 @@
 import SysTable from "@/components/SysTable";
 import {handleRoleData} from "@/api/system/role";
 import {deleteUser, findUserInfoPage, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
+import {getParamThreshold} from "@/api/wlg/iot/moldingMachineParamData";
+import {findDictTypeById} from "@/api/system/dictType";
 
 export default {
-  name: "userManagement",
+  name: "paramThreshold",
   components: {SysTable},
+  props: {
+    machineId: Number, // 表格分页数据},
+    machineName: String
+  },
   data() {
     return {
       size: 'default',
       filters: {
       },
       columns: [
-        {prop: "username", label: "用户名", minWidth: 110},
-        {prop: "name", label: "姓名", minWidth: 100},
-        {prop: "mobile", label: "电话", minWidth: 120},
-        {prop: "description", label: "描述", minWidth: 120},
+        {prop: "paramId", label: "参数名", minWidth: 100},
+        {prop: "arrayId", label: "电话", minWidth: 120},
+        {prop: "threshold", label: "阈值", minWidth: 120},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
@@ -276,20 +282,23 @@ export default {
           },
           "param_name":"press_force_actual_0"
         }
-      ]
+      ],
     }
   },
   methods: {
+    refreshData(){
+      this.machineNameStr = this.machineName
+      this.findPage(null)
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      findUserInfoPage(this.pageRequest).then((res) => {
+      getParamThreshold(this.machineId, this.pageRequest.current, this.pageRequest.size).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
-          this.findRoleData()
         }
       }).then(data != null ? data.callback : '')
     },
