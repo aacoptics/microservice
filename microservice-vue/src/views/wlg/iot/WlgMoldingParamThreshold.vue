@@ -32,27 +32,21 @@
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="域账号" prop="username">
-            <el-input v-model="dataForm.username" auto-complete="off"></el-input>
+          <el-form-item v-if="false" label="机台Id" prop="machineId">
+            <el-input v-model="dataForm.machineId" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="dataForm.name" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="描述" prop="description">
-            <el-input v-model="dataForm.description" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="手机号" prop="mobile">
-            <el-input v-model="dataForm.mobile" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="角色" prop="roleIds">
-            <el-select v-model="dataForm.roleIds" multiple placeholder="请选择">
+          <el-form-item label="参数" prop="paramName">
+            <el-select v-model="paramDesc" value-key="param_name" placeholder="请选择">
               <el-option
-                  v-for="item in roleData"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id">
+                  v-for="item in paramInfo"
+                  :key="item.param_name"
+                  :label="item.param_name"
+                  :value="item">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="阈值" prop="threshold">
+            <el-input-number :precision="2" :step="0.1" v-model="dataForm.threshold" auto-complete="off"></el-input-number>
           </el-form-item>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
@@ -69,9 +63,8 @@
 <script>
 import SysTable from "@/components/SysTable";
 import {handleRoleData} from "@/api/system/role";
-import {deleteUser, findUserInfoPage, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
-import {getParamThreshold} from "@/api/wlg/iot/moldingMachineParamData";
-import {findDictTypeById} from "@/api/system/dictType";
+import {deleteUser, findUserRolesById, handleAdd, handleUpdate} from "@/api/system/user";
+import {deleteParamThreshold, getParamThreshold} from "@/api/wlg/iot/moldingMachineParamData";
 
 export default {
   name: "paramThreshold",
@@ -86,14 +79,12 @@ export default {
       filters: {
       },
       columns: [
-        {prop: "paramId", label: "参数名", minWidth: 100},
-        {prop: "arrayId", label: "电话", minWidth: 120},
+        {prop: "paramId", label: "参数名", minWidth: 200, formatter: this.paramFormat},
         {prop: "threshold", label: "阈值", minWidth: 120},
-        {prop: "updatedBy", label: "更新人", minWidth: 100},
-        {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateFormat},
       ],
+      paramDesc:{},
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       operation: false, // true:新增, false:编辑
@@ -111,176 +102,175 @@ export default {
       // 新增编辑界面数据
       dataForm: {
         id: 0,
-        username: '',
-        name: '',
-        description: '',
-        mobile: '',
-        roleIds: []
+        machineId: 0,
+        paramId: 0,
+        arrayId: 0,
+        threshold: 0
       },
       selectUser: {},
       roleData: [],
       currentUserRoles: [],
       paramInfo: [
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":1
+          param_info:{
+            param_id:27,
+            array_id:1
           },
-          "param_name":"lower_moldcore_section_temp_actual_1"
+          param_name:"lower_moldcore_section_temp_actual_1"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":2
+          param_info:{
+            param_id:27,
+            array_id:2
           },
-          "param_name":"lower_moldcore_section_temp_actual_2"
+          param_name:"lower_moldcore_section_temp_actual_2"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":3
+          param_info:{
+            param_id:27,
+            array_id:3
           },
-          "param_name":"lower_moldcore_section_temp_actual_3"
+          param_name:"lower_moldcore_section_temp_actual_3"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":4
+          param_info:{
+            param_id:27,
+            array_id:4
           },
-          "param_name":"lower_moldcore_section_temp_actual_4"
+          param_name:"lower_moldcore_section_temp_actual_4"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":5
+          param_info:{
+            param_id:27,
+            array_id:5
           },
-          "param_name":"lower_moldcore_section_temp_actual_5"
+          param_name:"lower_moldcore_section_temp_actual_5"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":6
+          param_info:{
+            param_id:27,
+            array_id:6
           },
-          "param_name":"lower_moldcore_section_temp_actual_6"
+          param_name:"lower_moldcore_section_temp_actual_6"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":7
+          param_info:{
+            param_id:27,
+            array_id:7
           },
-          "param_name":"lower_moldcore_section_temp_actual_7"
+          param_name:"lower_moldcore_section_temp_actual_7"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":8
+          param_info:{
+            param_id:27,
+            array_id:8
           },
-          "param_name":"lower_moldcore_section_temp_actual_8"
+          param_name:"lower_moldcore_section_temp_actual_8"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":9
+          param_info:{
+            param_id:27,
+            array_id:9
           },
-          "param_name":"lower_moldcore_section_temp_actual_9"
+          param_name:"lower_moldcore_section_temp_actual_9"
         },
         {
-          "param_info":{
-            "param_id":27,
-            "array_id":10
+          param_info:{
+            param_id:27,
+            array_id:10
           },
-          "param_name":"lower_moldcore_section_temp_actual_10"
+          param_name:"lower_moldcore_section_temp_actual_10"
         },
         {
-          "param_info":{
-            "param_id":25,
-            "array_id":0
+          param_info:{
+            param_id:25,
+            array_id:0
           },
-          "param_name":"lower_mold_temp_actual_0"
+          param_name:"lower_mold_temp_actual_0"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":1
+          param_info:{
+            param_id:55,
+            array_id:1
           },
-          "param_name":"upper_moldcore_section_temp_actual_1"
+          param_name:"upper_moldcore_section_temp_actual_1"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":2
+          param_info:{
+            param_id:55,
+            array_id:2
           },
-          "param_name":"upper_moldcore_section_temp_actual_2"
+          param_name:"upper_moldcore_section_temp_actual_2"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":3
+          param_info:{
+            param_id:55,
+            array_id:3
           },
-          "param_name":"upper_moldcore_section_temp_actual_3"
+          param_name:"upper_moldcore_section_temp_actual_3"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":4
+          param_info:{
+            param_id:55,
+            array_id:4
           },
-          "param_name":"upper_moldcore_section_temp_actual_4"
+          param_name:"upper_moldcore_section_temp_actual_4"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":5
+          param_info:{
+            param_id:55,
+            array_id:5
           },
-          "param_name":"upper_moldcore_section_temp_actual_5"
+          param_name:"upper_moldcore_section_temp_actual_5"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":6
+          param_info:{
+            param_id:55,
+            array_id:6
           },
-          "param_name":"upper_moldcore_section_temp_actual_6"
+          param_name:"upper_moldcore_section_temp_actual_6"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":7
+          param_info:{
+            param_id:55,
+            array_id:7
           },
-          "param_name":"upper_moldcore_section_temp_actual_7"
+          param_name:"upper_moldcore_section_temp_actual_7"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":8
+          param_info:{
+            param_id:55,
+            array_id:8
           },
-          "param_name":"upper_moldcore_section_temp_actual_8"
+          param_name:"upper_moldcore_section_temp_actual_8"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":9
+          param_info:{
+            param_id:55,
+            array_id:9
           },
-          "param_name":"upper_moldcore_section_temp_actual_9"
+          param_name:"upper_moldcore_section_temp_actual_9"
         },
         {
-          "param_info":{
-            "param_id":55,
-            "array_id":10
+          param_info:{
+            param_id:55,
+            array_id:10
           },
-          "param_name":"upper_moldcore_section_temp_actual_10"
+          param_name:"upper_moldcore_section_temp_actual_10"
         },
         {
-          "param_info":{
-            "param_id":53,
-            "array_id":0
+          param_info:{
+            param_id:53,
+            array_id:0
           },
-          "param_name":"upper_mold_temp_actual_0"
+          param_name:"upper_mold_temp_actual_0"
         },
         {
-          "param_info":{
-            "param_id":38,
-            "array_id":0
+          param_info:{
+            param_id:38,
+            array_id:0
           },
-          "param_name":"press_force_actual_0"
+          param_name:"press_force_actual_0"
         }
       ],
     }
@@ -306,7 +296,7 @@ export default {
     // 批量删除
     handleDelete: function (data) {
       if (data.params.length > 0)
-        deleteUser(data.params[0]).then(data.callback)
+        deleteParamThreshold(data.params[0]).then(data.callback)
     },
     // 显示新增界面
     handleAdd: function () {
@@ -315,15 +305,10 @@ export default {
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
         id: 0,
-        username: '',
-        name: '',
-        description: '',
-        mobile: '',
-        roleIds: [],
-        accountNonExpired: true,
-        accountNonLocked: true,
-        credentialsNonExpired: true,
-        enabled: true
+        machineId: 0,
+        paramId: 0,
+        arrayId: 0,
+        threshold: 0
       }
     },
     // 显示编辑界面
@@ -331,7 +316,6 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
-      this.getCurrentUserRoleIds()
     },
     // 编辑
     submitForm: function () {
@@ -340,8 +324,9 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
+            params.paramId = this.paramDesc.param_info.param_id
+            params.arrayId = this.paramDesc.param_info.array_id
             if (this.operation) {
-              params.password = this.uuid(20)
               handleAdd(params).then((res) => {
                 const responseData = res.data
                 this.editLoading = false
@@ -422,10 +407,21 @@ export default {
       this.getCurrentUserRoleIds()
       this.dialogVisible = false
     },
+    paramFormat: function (row, column) {
+      const item = this.paramInfo.find(item => {
+        return item.param_info.param_id === row.paramId && item.param_info.array_id === row.arrayId
+      })
+      return item.param_name
+    },
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.findPage(null)
+    }, 100)
   }
 }
 </script>
