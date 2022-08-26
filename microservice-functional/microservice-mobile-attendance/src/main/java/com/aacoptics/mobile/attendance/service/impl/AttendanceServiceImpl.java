@@ -32,7 +32,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 LocalDateTime fDateTime = LocalDateTime.ofEpochSecond(attendanceRecord.getEvent().getCheck_time(), 0, ZoneOffset.ofHours(8));
                 AttendanceSource attendanceSource = new AttendanceSource();
                 attendanceSource.setCardNo(jobNumber);
-                attendanceSource.setMachId(9999);
+                attendanceSource.setMachId(999);
                 attendanceSource.setFDateTime(fDateTime);
                 return attendanceSourceService.saveAttendanceRecord(attendanceSource, attendanceRecord.getEvent().getLocation_name());
             } else return true;
