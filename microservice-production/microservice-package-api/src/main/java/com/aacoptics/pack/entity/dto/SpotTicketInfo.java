@@ -26,6 +26,9 @@ public class SpotTicketInfo implements Serializable {
     @JSONField(name = "TrayNoLists")
     public List<Object> TrayNoLists;
 
+    @JSONField(serialize = false)
+    public Long id;
+
     public SpotTicketInfo(){
         TrayNoLists = new ArrayList<>();
         String jsonStr = "{\n" +
@@ -40,4 +43,5 @@ public class SpotTicketInfo implements Serializable {
         JSONObject json = JSONObject.parseObject(jsonStr);
         TrayNoLists.add(json);
     }
+
 }
