@@ -89,4 +89,8 @@ public class ProductContent implements Serializable {
     private String modifyBy;
 
     private LocalDateTime modifyTime;
+
+    private BigDecimal subMtdShipGpQty;
+
+    private BigDecimal subDayShipGpQty;
 }
