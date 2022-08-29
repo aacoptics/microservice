@@ -277,7 +277,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         }
 
                         if (!"-".equals(subDayShipGpQty)) {
-                            markdownGroupMessage.addBlobContent("其中G+P出货数量：" + subDayShipGpQty + " K");
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subDayShipGpQty + " K");
                         }
 
                         markdownGroupMessage.addBlobContent(dayTabProductType + "出货数量达成：" + dayShipRate);
@@ -310,8 +310,8 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                             markdownGroupMessage.addBlobContent(mtdTabProductType + "实际出货数量：" + mtdShipQty + " K");
                         }
 
-                        if (!"-".equals(subDayShipGpQty)) {
-                            markdownGroupMessage.addBlobContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
+                        if (!"-".equals(subMtdShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
                         }
 
 
@@ -379,7 +379,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         }
 
                         if (!"-".equals(subDayShipGpQty)) {
-                            markdownGroupMessage.addBlobContent("其中G+P出货数量：" + subDayShipGpQty + " K");
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subDayShipGpQty + " K");
                         }
 
 
@@ -413,8 +413,8 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                             markdownGroupMessage.addContent(mtdTabProductType + "实际出货数量：" + mtdShipQty + " K");
                             voiceStr += mtdTabProductType + "实际出货数量：" + mtdShipQty + " K\n";
                         }
-                        if (!"-".equals(subDayShipGpQty)) {
-                            markdownGroupMessage.addBlobContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
+                        if (!"-".equals(subMtdShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
                         }
                     }
 
