@@ -3,54 +3,78 @@
 <mapper namespace="com.aacoptics.pack.mapper.ShipmentBatchInfoMapper">
     <select id="getShipmentBatchInfoPage" resultType="com.aacoptics.pack.entity.po.ShipmentBatchInfo">
         select
+            a.id,
             a.customer,
-            d.customer_material_no,
+            isnull(c.customer_material_no, d.customer_material_no) as customer_material_no,
             b.batch_name,
-            d.supplier,
-            d.secrity_code as outer_box,
-            d.qty as outer_box_qty,
-            d.print_time as outer_box_time,
-            b.secrity_code as spot_ticket,
+            isnull(c.supplier, d.supplier) as supplier,
+            case when isnull(a.large_ticket,'') = '' then
+                     middle_ticket
+                 else large_ticket end as outer_box,
+            case when isnull(d.qty,'') = '' then
+                     c.qty
+                 else d.qty end as outer_box_qty,
+            isnull(c.print_time, d.print_time) as outer_box_time,
+            a.spot_ticket,
             b.qty as spot_qty,
             b.print_datetime as spot_time
         FROM [LabelPrint_NE].[dbo].[t_package_bound_info] a
                  join t_spot_ticket_print_information b
                       on (a.customer = b.customer or b.customer='CR')
                           and a.spot_ticket = b.product_batch
+                 left join t_middle_large_ticket_print_information c
+                           on a.customer = c.customer
+                               and a.middle_ticket = c.shipment_batch
+                               and c.label_type = 2
                  left  join t_middle_large_ticket_print_information d
                             on a.customer = d.customer
                                 and a.large_ticket = d.shipment_batch
                                 and d.label_type = 3
         where a.status > 0
-          and isnull(a.large_ticket,'') != ''
-          and d.order_no = #{orderNo}
+          and c.order_no = #{orderNo}
           AND a.customer= #{customer}
+          and a.id not in (select e.pbi_id from t_customer_shipment_record e
+                            where e.order_no=#{orderNo}
+                            and e.customer=#{customer})
     </select>
 
     <select id="getShipmentBatchInfo" resultType="com.aacoptics.pack.entity.po.ShipmentBatchInfo">
         select
+            a.id,
             a.customer,
-            d.customer_material_no customer_material_no,
+            isnull(c.customer_material_no, d.customer_material_no) as customer_material_no,
             b.batch_name,
-            d.supplier as supplier,
-            d.secrity_code as outer_box,
-            d.qty as outer_box_qty,
-            d.print_time as outer_box_time,
-            b.secrity_code as spot_ticket,
+            isnull(c.supplier, d.supplier) as supplier,
+            case when isnull(a.large_ticket,'') = '' then
+                     middle_ticket
+                 else large_ticket end as outer_box,
+            case when isnull(d.qty,'') = '' then
+                     c.qty
+                 else d.qty end as outer_box_qty,
+            isnull(c.print_time, d.print_time) as outer_box_time,
+            a.spot_ticket,
             b.qty as spot_qty,
             b.print_datetime as spot_time
         FROM [LabelPrint_NE].[dbo].[t_package_bound_info] a
                  join t_spot_ticket_print_information b
                       on (a.customer = b.customer or b.customer='CR')
                           and a.spot_ticket = b.product_batch
+                 left join t_middle_large_ticket_print_information c
+                           on a.customer = c.customer
+                               and a.middle_ticket = c.shipment_batch
+                               and c.label_type = 2
                  left  join t_middle_large_ticket_print_information d
                             on a.customer = d.customer
                                 and a.large_ticket = d.shipment_batch
                                 and d.label_type = 3
         WHERE a.status > 0
-          and isnull(a.large_ticket,'') != ''
+          AND c.order_no = #{orderNo}
           AND d.order_no = #{orderNo}
           AND a.customer= #{customer}
+          and a.id not in (select e.pbi_id from t_customer_shipment_record e
+                            where e.order_no=#{orderNo}
+                            and e.customer=#{customer})
         order by outer_box
     </select>
+
 </mapper>

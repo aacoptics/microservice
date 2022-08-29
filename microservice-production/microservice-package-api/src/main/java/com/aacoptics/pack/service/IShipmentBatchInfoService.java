@@ -1,10 +1,8 @@
 package com.aacoptics.pack.service;
 
-import com.aacoptics.pack.entity.po.CustomerShipmentInfo;
 import com.aacoptics.pack.entity.po.ShipmentBatchInfo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,5 +12,5 @@ public interface IShipmentBatchInfoService extends IService<ShipmentBatchInfo> {
 
     Page<ShipmentBatchInfo> getShipmentBatchInfo(Page<ShipmentBatchInfo> iPage,
                                                String customer,
-                                               String orderNo);
+                                                 String orderNo);
 }
