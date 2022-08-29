@@ -10,4 +10,5 @@ public interface MoldingMachineService {
 
     IPage<MoldingMachine> query(Page page, String machineName);
 
+    boolean update(MoldingMachine moldingMachine);
 }
