@@ -25,6 +25,10 @@ public class MoldingParamThreshold implements Serializable {
     private Integer paramId;
     private Integer arrayId;
     private Double threshold;
+
+    private Double maxValue;
+
+    private Double minValue;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
     private String createdBy;

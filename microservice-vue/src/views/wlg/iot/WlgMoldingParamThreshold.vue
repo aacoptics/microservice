@@ -45,8 +45,24 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="阈值" prop="threshold">
+          <el-form-item prop="switchValue">
+            <el-switch
+                v-model="switchValue"
+                active-text="阈值"
+                inactive-text="上下限"
+                :active-value="1"
+                :inactive-value="0"
+                @change="onSwitchChange"
+            />
+          </el-form-item>
+          <el-form-item label="阈值" prop="threshold" v-if="switchValue === 1">
             <el-input-number :precision="2" :step="0.1" v-model="dataForm.threshold" auto-complete="off"></el-input-number>
+          </el-form-item>
+          <el-form-item label="最大值" prop="maxValue" v-if="switchValue === 0">
+            <el-input-number :precision="2" :step="0.1" v-model="dataForm.maxValue" auto-complete="off"></el-input-number>
+          </el-form-item>
+          <el-form-item label="最小值" prop="minValue" v-if="switchValue === 0">
+            <el-input-number :precision="2" :step="0.1" v-model="dataForm.minValue" auto-complete="off"></el-input-number>
           </el-form-item>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
@@ -79,6 +95,8 @@ export default {
       columns: [
         {prop: "paramId", label: "参数名", minWidth: 200, formatter: this.paramFormat},
         {prop: "threshold", label: "阈值", minWidth: 120},
+        {prop: "maxValue", label: "最大值", minWidth: 120},
+        {prop: "minValue", label: "最小值", minWidth: 120},
         {prop: "createdBy", label: "创建人", minWidth: 120},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateFormat},
       ],
@@ -89,13 +107,7 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
-        username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-        name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
-        mobile: [{
-          required: true, trigger: 'blur', validator: (r, v, b) => {
-            (!v ? b('请输入手机号') : (!(/^(?:(?:\+|00)86)?1\d{10}$/.test(v))) ? b('手机号格式不正确') : b())
-          }
-        }]
+
       },
       // 新增编辑界面数据
       dataForm: {
@@ -103,7 +115,9 @@ export default {
         machineId: 0,
         paramId: 0,
         arrayId: 0,
-        threshold: 0
+        threshold: 0,
+        maxValue: 0,
+        minValue: 0
       },
       selectUser: {},
       roleData: [],
@@ -271,9 +285,19 @@ export default {
           param_name:"press_force_actual_0"
         }
       ],
+      switchValue: 1
     }
   },
   methods: {
+    onSwitchChange(){
+      if(this.switchValue === 1)
+      {
+        this.dataForm.maxValue = 0
+        this.dataForm.minValue = 0
+      }else if(this.switchValue === 0){
+        this.dataForm.threshold = 0
+      }
+    },
     refreshData(){
       this.machineNameStr = this.machineName
       this.findPage(null)
@@ -306,7 +330,9 @@ export default {
         machineId: 0,
         paramId: 0,
         arrayId: 0,
-        threshold: 0
+        threshold: 0,
+        maxValue: 0,
+        minValue: 0
       }
     },
     // 显示编辑界面
