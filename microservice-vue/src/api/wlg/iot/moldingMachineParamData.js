@@ -148,3 +148,14 @@ export function handleUpdate(updateForm) {
         data: updateForm
     })
 }
+
+export function handleUpdateFeedingAlarm(updateForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachine/' + updateForm.id,
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: updateForm
+    })
+}

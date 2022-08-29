@@ -22,12 +22,29 @@
                 :show-operation-del="false"
                 @handleCurrentChange="handleSelectChange"
                 @handleEdit="handleEdit">
+        <template v-slot:custom-column>
+          <el-table-column align="center" fixed="right" header-align="center" label="换料提醒"
+                           width="80">
+            <template v-slot="scope">
+              <el-switch
+                  v-model="scope.row.feedingAlarm"
+                  active-text="是"
+                  inactive-text="否"
+                  inline-prompt
+                  :active-value="true"
+                  :inactive-value="false"
+                  @change="handleStatusChange(scope)"
+              />
+            </template>
+          </el-table-column>
+        </template>
       </SysTable>
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'阈值维护'"
                  width="40%">
       </el-dialog>
       <el-dialog v-model="dialogVisible" destroy-on-close :title="operation?'新增':'阈值维护'" width="90%">
-        <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id" :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
+        <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id"
+                                     :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
       </el-dialog>
     </div>
   </div>
@@ -35,9 +52,10 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {getMoldingInfo} from "@/api/wlg/iot/moldingMachineParamData";
+import {getMoldingInfo, handleUpdateFeedingAlarm} from "@/api/wlg/iot/moldingMachineParamData";
 import WlgMoldingParamThreshold from "./WlgMoldingParamThreshold"
 import {findUserRolesById} from "@/api/system/user";
+import {startTask, stopTask} from "@/api/notification/notificationTask";
 
 export default {
   name: "WlgMoldingManagement",
@@ -60,7 +78,11 @@ export default {
       pageResult: {},
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
-      currentMachineInfo: {}
+      currentMachineInfo: {},
+      dataForm: {
+        id: 0,
+        feedingAlarm: false
+      },
     }
   },
   methods: {
@@ -95,7 +117,24 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
-    }
+    },
+    handleStatusChange(params) {
+      let text = params.row.feedingAlarm === true ? "启用" : "停用";
+      this.$confirm('确认要' + text + '""' + params.row.machineName + '"换料提醒吗?').then(() => {
+        handleUpdateFeedingAlarm(params.row).then((res) => {
+          const responseData = res.data
+          if (responseData.code === '000000') {
+            this.$message({message: text + '成功', type: 'success'})
+          } else {
+            this.$message({message: responseData.data.msg, type: 'error'})
+            params.row.feedingAlarm = params.row.feedingAlarm === false;
+          }
+        }).catch(function () {
+          params.row.feedingAlarm = params.row.feedingAlarm === false;
+        });
+
+      })
+    },
   },
   mounted() {
     this.findPage(null)
