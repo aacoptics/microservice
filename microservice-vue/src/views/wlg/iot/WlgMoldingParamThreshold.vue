@@ -332,8 +332,6 @@ export default {
       this.dataForm = Object.assign({}, params.row)
 
       this.paramDesc = this.paramInfo.find(item => item.param_info.array_id === this.dataForm.arrayId && item.param_info.param_id === this.dataForm.paramId)
-
-      console.log(this.paramDesc)
       if(this.dataForm.threshold > 0){
         this.switchValue = 1
       }else{
