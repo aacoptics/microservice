@@ -22,13 +22,10 @@ public class MoldingParamThreshold implements Serializable {
     private Integer machineId;
     private Integer paramId;
     private Integer arrayId;
-
     @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double threshold;
-
     @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double maxValue;
-
     @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double minValue;
     private LocalDateTime createdTime;
