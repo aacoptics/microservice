@@ -1,8 +1,6 @@
 package com.aacoptics.wlg.dashboard.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,10 +22,14 @@ public class MoldingParamThreshold implements Serializable {
     private Integer machineId;
     private Integer paramId;
     private Integer arrayId;
+
+    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double threshold;
 
+    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double maxValue;
 
+    @TableField(updateStrategy= FieldStrategy.IGNORED)
     private Double minValue;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;

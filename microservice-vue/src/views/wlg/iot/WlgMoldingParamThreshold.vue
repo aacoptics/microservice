@@ -52,7 +52,6 @@
                 inactive-text="上下限"
                 :active-value="1"
                 :inactive-value="0"
-                @change="onSwitchChange"
             />
           </el-form-item>
           <el-form-item label="阈值" prop="threshold" v-if="switchValue === 1">
@@ -289,15 +288,6 @@ export default {
     }
   },
   methods: {
-    onSwitchChange(){
-      if(this.switchValue === 1)
-      {
-        this.dataForm.maxValue = 0
-        this.dataForm.minValue = 0
-      }else if(this.switchValue === 0){
-        this.dataForm.threshold = 0
-      }
-    },
     refreshData(){
       this.machineNameStr = this.machineName
       this.findPage(null)
@@ -340,6 +330,15 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
+
+      this.paramDesc = this.paramInfo.find(item => item.param_info.array_id === this.dataForm.arrayId && item.param_info.param_id === this.dataForm.paramId)
+
+      console.log(this.paramDesc)
+      if(this.dataForm.threshold > 0){
+        this.switchValue = 1
+      }else{
+        this.switchValue = 0
+      }
     },
     // 编辑
     submitForm: function () {
@@ -351,6 +350,12 @@ export default {
             params.paramId = this.paramDesc.param_info.param_id
             params.arrayId = this.paramDesc.param_info.array_id
             params.machineId = this.machineId
+            if(this.switchValue === 1){
+              params.maxValue = null
+              params.minValue = null
+            }else if(this.switchValue === 0){
+              params.threshold = null
+            }
             if (this.operation) {
               handleAdd(params).then((res) => {
                 const responseData = res.data
