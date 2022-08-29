@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.dashboard.entity.MoldingMachine;
 import com.aacoptics.wlg.dashboard.entity.MoldingParamThreshold;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineService;
 import com.aacoptics.wlg.dashboard.service.MoldingParamThresholdService;
@@ -32,6 +33,15 @@ public class MoldingMachineController {
                                    @RequestParam Long current,
                                    @RequestParam Long size) {
         return Result.success(moldingMachineService.query(new Page(current, size), machineName));
+    }
+
+    @ApiOperation(value = "修改上料机状态", notes = "修改上料机状态")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "阈值ID", required = true, dataType = "Integer"),
+            @ApiImplicitParam(name = "moldingParamThreshold", value = "阈值实体", required = true, dataType = "MoldingParamThreshold")})
+    @PutMapping(value = "/MoldingMachine/{id}")
+    public Result updateFeedingStatus(@PathVariable Integer id, @RequestBody MoldingMachine moldingMachine) {
+        moldingMachine.setId(id);
+        return Result.success(moldingMachineService.update(moldingMachine));
     }
 
     @ApiOperation(value = "新增阈值", notes = "新增阈值")

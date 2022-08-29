@@ -29,4 +29,5 @@ public class MoldingMachine implements Serializable {
     private String createdBy;
     private String updatedBy;
     private Integer namespaceIndex;
+    private boolean feedingAlarm;
 }
