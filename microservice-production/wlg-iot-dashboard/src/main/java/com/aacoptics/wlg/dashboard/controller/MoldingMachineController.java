@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @Slf4j
 public class MoldingMachineController {
 
-    @Resource()
+    @Resource
     MoldingMachineService moldingMachineService;
 
     @Resource

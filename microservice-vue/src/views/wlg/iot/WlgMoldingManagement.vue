@@ -129,11 +129,10 @@ export default {
             this.$message({message: responseData.data.msg, type: 'error'})
             params.row.feedingAlarm = params.row.feedingAlarm === false;
           }
-        }).catch(function () {
-          params.row.feedingAlarm = params.row.feedingAlarm === false;
-        });
-
-      })
+        })
+      }).catch(function () {
+        params.row.feedingAlarm = params.row.feedingAlarm === false;
+      });
     },
   },
   mounted() {
