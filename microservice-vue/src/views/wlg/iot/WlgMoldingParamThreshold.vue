@@ -56,7 +56,7 @@
             />
           </el-form-item>
           <el-form-item label="阈值" prop="threshold" v-if="switchValue === 1">
-            <el-input-number :precision="2" :step="0.1" v-model="dataForm.threshold" auto-complete="off"></el-input-number>
+            <el-input-number :precision="2" :step="0.1" :min="0" v-model="dataForm.threshold" auto-complete="off"></el-input-number>
           </el-form-item>
           <el-form-item label="最大值" prop="maxValue" v-if="switchValue === 0">
             <el-input-number :precision="2" :step="0.1" v-model="dataForm.maxValue" auto-complete="off"></el-input-number>
