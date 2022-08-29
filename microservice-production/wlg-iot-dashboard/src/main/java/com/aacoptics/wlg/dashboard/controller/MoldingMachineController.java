@@ -38,7 +38,7 @@ public class MoldingMachineController {
     @ApiOperation(value = "修改上料机状态", notes = "修改上料机状态")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "阈值ID", required = true, dataType = "Integer"),
             @ApiImplicitParam(name = "moldingParamThreshold", value = "阈值实体", required = true, dataType = "MoldingParamThreshold")})
-    @PutMapping(value = "/MoldingMachine/{id}")
+    @PutMapping(value = "/{id}")
     public Result updateFeedingStatus(@PathVariable Integer id, @RequestBody MoldingMachine moldingMachine) {
         moldingMachine.setId(id);
         return Result.success(moldingMachineService.update(moldingMachine));
