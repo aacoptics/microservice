@@ -60,7 +60,7 @@ export default {
 }
 
 .sidebar-el-menu:not(.el-menu--collapse) {
-  width: 200px;
+  width: 210px;
 }
 
 .sidebar > ul {
