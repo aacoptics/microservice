@@ -18,6 +18,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import reactor.util.function.Tuple2;
@@ -167,6 +170,20 @@ public class FeishuServiceImpl implements FeishuService {
                         .set("title", title)
                         .set("content", content));
     }
+
+    @Override
+    public boolean createTake(String userIdType,
+                              JSONObject jsonObject) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken)) return false;
+        final JSONObject result = feishuApiProvider.fetchCreateTask(accessToken, userIdType, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+
+        return result.get("code", Integer.class) == 0;
+    }
+
 
     @Override
     public JSONObject getStringPostMessage(String title, List<String> messages, List<String> atList) {

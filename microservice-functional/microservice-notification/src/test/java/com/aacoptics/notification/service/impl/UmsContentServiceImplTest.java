@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.entity.po.*;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.mapper.FeishuUserMapper;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.*;
@@ -49,6 +50,22 @@ public class UmsContentServiceImplTest {
 
     @Resource
     FeishuService feishuService;
+
+    @Resource
+    FeishuUserMapper feishuUserMapper;
+
+    @Test
+    public void Test123(){
+        FeishuUser feishuUser = feishuService.getFeishuUser("60054916");
+
+        List<String> ids = new ArrayList<>();
+        ids.add("60054916");
+        ids.add("80000219");
+
+        List<String> test = feishuUserMapper.getFeishuUserIds(ids);
+
+        String asd = "";
+    }
 
 
     @Test
@@ -198,8 +215,8 @@ public class UmsContentServiceImplTest {
     @Test
     public void test2() {
         NotificationEntity notificationEntity = new NotificationEntity();
-        notificationEntity.setBatchId("22081914488");
-        notificationEntity.setPlanKey("ums_fi_fee_sale_qas");
+        notificationEntity.setBatchId("22090616321");
+        notificationEntity.setPlanKey("ums_sop_ri_cost_cpx_qas");
         Robot robot = new Robot();
         robot.setId(1560167307305877506L);
         List<Robot> robots = new ArrayList<>();

@@ -58,6 +58,9 @@ public interface FeishuService {
 
     boolean sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
+    boolean createTake(String userIdType,
+                       JSONObject jsonObject);
+
     JSONObject getImagePostMessage(String title, List<Tuple2<String, String>> imageTileAndKeys, List<String> atList);
 
     JSONObject getStringPostMessage(String title, List<String> messages, List<String> atList);
