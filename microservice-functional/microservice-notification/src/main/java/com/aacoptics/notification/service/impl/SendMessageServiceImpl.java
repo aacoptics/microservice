@@ -208,8 +208,13 @@ public class SendMessageServiceImpl implements SendMessageService {
         for (UmsContentSubDaiban taskBatch : taskBatches) {
             JSONObject taskJson = umsContentSubDaibanService.getTaskJson(taskBatch);
             boolean resultByCreateTask = feishuService.createTake(FeishuService.RECEIVE_ID_TYPE_USER_ID, taskJson);
-            if (!resultByCreateTask)
+            if (!resultByCreateTask){
+                taskBatch.setIsStatus("2");
                 throw new BusinessException("创建任务失败！批次号：{" + batchId + "}");
+            }
+
+            taskBatch.setIsStatus("1");
+            umsContentSubDaibanService.updateById(taskBatch);
         }
     }
 
