@@ -11,6 +11,8 @@ public interface SendMessageService {
     String GROUP_MESSAGE = "101";
     String PERSONAL_MESSAGE = "102";
 
+    String TASK_MESSAGE = "103";
+
     void sendHandledMessage(NotificationEntity notificationEntity) throws BusinessException;
 
     String getMarkDownMessage(UmsContent messageBatch);

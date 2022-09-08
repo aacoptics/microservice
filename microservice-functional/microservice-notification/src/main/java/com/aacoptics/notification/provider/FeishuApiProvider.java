@@ -43,4 +43,10 @@ public interface FeishuApiProvider {
                           @RequestParam("page_token") String pageToken,
                           @RequestParam("page_size") int pageSize);
 
+    @PostMapping(value = "/task/v1/tasks",
+            headers = {"Content-Type=application/json;charset=UTF-8"})
+    JSONObject fetchCreateTask(@RequestHeader("Authorization") String authorization,
+                               @RequestParam("user_id_type") String userIdType,
+                               @RequestBody JSONObject jsonObject);
+
 }
