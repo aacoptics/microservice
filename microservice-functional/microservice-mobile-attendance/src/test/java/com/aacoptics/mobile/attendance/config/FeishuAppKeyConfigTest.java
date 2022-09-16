@@ -47,6 +47,8 @@ class FeishuAppKeyConfigTest {
     void test1() {
         List<EmployeePhoto> test = employeePhotoService.listPhotoNeedToUpload();
         for (EmployeePhoto employeePhoto : test) {
+            if(!employeePhoto.getCode().equals("80000354"))
+                continue;
             try {
                 byte[] res = employeePhoto.getPhoto();
                 boolean res1 = feishuService.updateUserPhoto(employeePhoto.getCode(), employeePhoto.getPhoto());
