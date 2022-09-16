@@ -61,7 +61,7 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public String fetchUploadFileKey(String accessToken, String fileName, byte[] fileContent) throws IOException {
         String tempDir = System.getProperty("java.io.tmpdir");
-        String photoPath = tempDir + "/" + fileName + ".jpg";
+        String photoPath = tempDir + "/" + fileName;
         OutputStream sos = Files.newOutputStream(Paths.get(photoPath));
         sos.write(fileContent, 0, fileContent.length);
         sos.flush();
@@ -86,21 +86,21 @@ public class FeishuServiceImpl implements FeishuService {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken)) throw new BusinessException("获取AccessToken失败，请检查！");
 
-//        FeishuUser feishuUser = getFeishuUser(employeeNo);
-//        if (ObjectUtil.isNull(feishuUser))
-//            throw new BusinessException("飞书用户不存在，请检查！");
+        FeishuUser feishuUser = getFeishuUser(employeeNo);
+        if (ObjectUtil.isNull(feishuUser))
+            throw new BusinessException("飞书用户不存在，请检查！");
 
         final String faceKey = fetchUploadFileKey(accessToken, employeeNo + ".jpg", fileContent);
         if(StrUtil.isBlank(faceKey))
             throw new BusinessException("上传照片失败，请检查！");
 
         JSONObject jsonObject = JSONUtil.createObj()
-                .set("user_id", employeeNo)
+                .set("user_id", feishuUser.getUserId())
                 .set("face_key", faceKey);
 
         JSONObject jsonBody = JSONUtil.createObj().set("user_setting", jsonObject);
 
-        final JSONObject result = feishuApiProvider.updateUserPhoto(accessToken, FeishuService.EMPLOYEE_TYPE_EMPLOYEE_NO, jsonBody);
+        final JSONObject result = feishuApiProvider.updateUserPhoto(accessToken, FeishuService.EMPLOYEE_TYPE_USER_ID, jsonBody);
         final String throwable = result.get("Throwable", String.class);
         if (StrUtil.isNotEmpty(throwable))
             throw new BusinessException(throwable);

@@ -65,7 +65,13 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
         for (UmsContent messageBatch : messageBatches) {
             if (messageBatch.getSendType().equals(SendMessageService.TASK_MESSAGE)) {
-                createTask(messageBatch.getBatchId());
+                try {
+                    createTask(messageBatch.getBatchId());
+                    messageBatch.setIsStatus("1");
+                    umsContentService.updateById(messageBatch);
+                } catch (Exception err) {
+                    throw new BusinessException("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
+                }
             } else {
                 String markdownGroupMessage = getMarkDownMessage(messageBatch);
                 if (markdownGroupMessage == null) {
@@ -196,7 +202,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
     }
 
-    private void createTask(String batchId){
+    private void createTask(String batchId) {
         List<UmsContentSubDaiban> taskBatches = umsContentSubDaibanService.getUmsContentSubDaiban(batchId);
 
         if (taskBatches.size() == 0) {
@@ -208,7 +214,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         for (UmsContentSubDaiban taskBatch : taskBatches) {
             JSONObject taskJson = umsContentSubDaibanService.getTaskJson(taskBatch);
             boolean resultByCreateTask = feishuService.createTake(FeishuService.RECEIVE_ID_TYPE_USER_ID, taskJson);
-            if (!resultByCreateTask){
+            if (!resultByCreateTask) {
                 taskBatch.setIsStatus("2");
                 throw new BusinessException("创建任务失败！批次号：{" + batchId + "}");
             }
