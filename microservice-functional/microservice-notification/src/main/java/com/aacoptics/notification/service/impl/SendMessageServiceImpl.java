@@ -65,9 +65,13 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
         for (UmsContent messageBatch : messageBatches) {
             if (messageBatch.getSendType().equals(SendMessageService.TASK_MESSAGE)) {
-                createTask(messageBatch.getBatchId());
-                messageBatch.setIsStatus("1");
-                umsContentService.updateById(messageBatch);
+                try {
+                    createTask(messageBatch.getBatchId());
+                    messageBatch.setIsStatus("1");
+                    umsContentService.updateById(messageBatch);
+                } catch (Exception err) {
+                    throw new BusinessException("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
+                }
             } else {
                 String markdownGroupMessage = getMarkDownMessage(messageBatch);
                 if (markdownGroupMessage == null) {
