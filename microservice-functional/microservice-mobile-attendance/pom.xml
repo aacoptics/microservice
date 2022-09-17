@@ -38,6 +38,14 @@
             <artifactId>ojdbc8</artifactId>
             <version>21.5.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.sapjco</groupId>
+            <artifactId>sapjco3</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/lib/sapjco3.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
