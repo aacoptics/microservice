@@ -68,6 +68,7 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
         updateWrapper.set("broken_ng", inputReport.getBrokenNg());
         updateWrapper.set("output_qty", inputReport.getOutputQty());
         updateWrapper.set("update_time", LocalDateTime.now());
+        updateWrapper.set("abnormal_reason", inputReport.getAbnormalReason());
         updateWrapper.set("update_user", UserContextHolder.getInstance().getUsername());
         updateWrapper.eq("id", inputReport.getId());
         this.update(updateWrapper);

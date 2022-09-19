@@ -83,6 +83,9 @@ public class InputReport implements Serializable {
     @ExcelIgnore
     private String updateUser;
 
+    @ExcelIgnore
+    private String abnormalReason;
+
     @TableField(exist = false)
     private List<String> machineNames;
 }
