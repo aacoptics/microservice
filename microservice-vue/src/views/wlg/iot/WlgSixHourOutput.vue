@@ -18,6 +18,7 @@
               />
             </el-select>
           </el-form-item>
+
           <el-form-item label="时间" prop="dateTimePicker">
             <el-date-picker
                 v-model="dateTimePickerValue"
@@ -26,7 +27,8 @@
                 end-placeholder="结束日期"
                 range-separator="至"
                 start-placeholder="开始日期"
-                type="daterange">
+                type="datetimerange"
+                format="YYYY-MM-DD HH:00">
             </el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -68,7 +70,9 @@
         <el-table-column label="机台号" prop="machineName" width="70"/>
         <el-table-column label="材料号" prop="materialName" width="60"/>
         <el-table-column label="项目" prop="projectName" width="80"/>
-        <el-table-column label="模具" prop="modelName" width="45"/>
+        <el-table-column label="模具" :filters="moldName"
+                         :filter-method="filterModelName"
+                         filter-placement="bottom-end" prop="modelName" width="55"/>
         <el-table-column label="周期" prop="cycleName" width="45"/>
         <el-table-column label="阶段" prop="periodName" width="45"/>
         <el-table-column label="平均周期" prop="avgCycle" width="65"/>
@@ -104,16 +108,35 @@
             <el-tag style="width: 30px" type="success">{{ scope.row.inputQty - scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="80">
+        <el-table-column label="更新人" :filters="operatorName"
+                         :filter-method="filterOperatorName"
+                         filter-placement="bottom-end" prop="updateUser" width="80"/>
+        <el-table-column label="更新时间" prop="updateTime" width="100">
+          <template v-slot="scope">
+            <span>{{ this.$moment(scope.row.updateTime).format('YY/MM/DD HH:mm') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="140">
           <template v-slot="scope">
             <span v-if="scope.row.inputQty > 0">
             <el-button v-if="!scope.row.iseditor" :size="size" type="warning"
                        @click="edit(scope.row, scope)">编辑</el-button>
             <el-button v-else :size="size" type="success" @click="updateOutPutInfo(scope.row)">确认</el-button>
             </span>
+            <el-button style="margin-left: 2px" :size="size" type="danger"
+                       @click="onAddReasonClick(scope.row)">异常说明</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <el-dialog v-model="reasonDialog" :close-on-click-modal="false" title="异常原因填写">
+        <el-input v-model="currentRow.abnormalReason" auto-complete="off" placeholder="请填写异常原因"
+                  style="margin-top: 20px"></el-input>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button type="primary" @click="updateOutPutInfo(this.currentRow)">提交</el-button>
+          </slot>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -128,6 +151,9 @@ export default {
   name: "WlgSixHourOutput",
   data() {
     return {
+      reasonDialog: false,
+      currentRow:{},
+      modelName:'',
       tableData: [],
       machineNames: [],
       okAllChecked: false,
@@ -164,7 +190,41 @@ export default {
         }],
     }
   },
+  computed: {
+    moldName() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if(resArray.indexOf(item.modelName) === -1){
+          resArray.push(item.modelName)
+          res.push({ text: item.modelName, value: item.modelName})
+        }
+      })
+      return res
+    },
+    operatorName() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if(resArray.indexOf(item.updateUser) === -1){
+          resArray.push(item.updateUser)
+          res.push({ text: item.updateUser, value: item.updateUser})
+        }
+      })
+      return res
+    }
+  },
   methods: {
+    onAddReasonClick(item) {
+      this.currentRow = Object.assign({}, item)
+      this.reasonDialog = true
+    },
+    filterModelName(value, row){
+      return row.modelName === value
+    },
+    filterOperatorName(value, row){
+      return row.updateUser === value
+    },
     exportExcel(tableId, excelFileName) {
       const wb = XLSX.utils.table_to_book(document.querySelector(tableId));
       const wbOut = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
@@ -206,8 +266,8 @@ export default {
     },
     getByDateAndMachineNames() {
       this.selectLoading = true
-      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD 00:00:00');
-      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD 00:00:00');
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:00:00');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:00:00');
       getByDateAndMachineName({
         startTime: startTime,
         endTime: endTime,
@@ -230,6 +290,7 @@ export default {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.$message.success('更新成功')
+          this.getByDateAndMachineNames()
           row.iseditor = false;
         } else {
           this.$message.error('更新失败，请联系IT')
