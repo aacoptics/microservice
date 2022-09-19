@@ -3,6 +3,7 @@ package com.aacoptics.wlg.dashboard.service.impl;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.hutool.json.JSONUtil;
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.aacoptics.wlg.dashboard.entity.InputReport;
 import com.aacoptics.wlg.dashboard.entity.MarkdownGroupMessage;
 import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
@@ -66,6 +67,8 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
         updateWrapper.set("broken_ok", inputReport.getBrokenOk());
         updateWrapper.set("broken_ng", inputReport.getBrokenNg());
         updateWrapper.set("output_qty", inputReport.getOutputQty());
+        updateWrapper.set("update_time", LocalDateTime.now());
+        updateWrapper.set("update_user", UserContextHolder.getInstance().getUsername());
         updateWrapper.eq("id", inputReport.getId());
         this.update(updateWrapper);
     }
