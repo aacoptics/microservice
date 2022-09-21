@@ -58,8 +58,8 @@ public interface FeishuService {
 
     boolean sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
-    boolean createTask(String userIdType,
-                       JSONObject jsonObject);
+    JSONObject createTask(String userIdType,
+                          JSONObject jsonObject);
 
     JSONObject getTaskInfo(String taskId);
 

@@ -51,6 +51,8 @@ public class UmsContentSubDaiban implements Serializable {
 
     private String isStatus;
 
+    private String feishuTaskId;
+
     private String createdBy;
 
     private LocalDateTime createdTime;
