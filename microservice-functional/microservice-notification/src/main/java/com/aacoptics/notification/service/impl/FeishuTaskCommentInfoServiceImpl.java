@@ -39,6 +39,7 @@ public class FeishuTaskCommentInfoServiceImpl extends ServiceImpl<FeishuTaskComm
            FeishuTaskCommentInfo feishuTaskCommentInfo = new FeishuTaskCommentInfo();
             feishuTaskCommentInfo.setTaskId(feishuTaskEvent.getEvent().getTask_id());
             feishuTaskCommentInfo.setCommentId(feishuTaskEvent.getEvent().getComment_id());
+            feishuTaskCommentInfo.setParentId(feishuTaskEvent.getEvent().getParent_id());
             feishuTaskCommentInfo.setContentType(feishuTaskEvent.getEvent().getObj_type());
             feishuTaskCommentInfo.setCreatedTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(feishuTaskEvent.getHeader().getCreate_time()), ZoneOffset.ofHours(8)));
             feishuTaskCommentInfo.setCreatedBy("FeishuEventHandle");
