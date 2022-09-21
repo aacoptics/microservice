@@ -51,7 +51,9 @@ public class FeishuTaskInfoServiceImpl extends ServiceImpl<FeishuTaskInfoMapper,
             // 更新情况：先更新一把，如果能更新成功，就说明是更新情况，否则就是新增情况
             boolean flag = new LambdaUpdateChainWrapper<>(feishuTaskInfoMapper)
                     .eq(FeishuTaskInfo::getTaskId, feishuTaskEvent.getEvent().getTask_id())
-                    .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type()).update();
+                    .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type())
+                    .set(FeishuTaskInfo::getCreatedTime, LocalDateTime.now())
+                    .set(FeishuTaskInfo::getCreatedBy, "FeishuEventHandle").update();
             log.info("flag is " + flag);
             // 新增情况：如果不能更新成功
             if (!flag) {
