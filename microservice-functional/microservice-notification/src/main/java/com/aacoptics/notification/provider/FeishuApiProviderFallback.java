@@ -1,10 +1,12 @@
 package com.aacoptics.notification.provider;
+
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.config.FeishuAppKeyConfig;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,8 +54,23 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
 
             @Override
             public JSONObject fetchCreateTask(String authorization,
-                                       String userIdType,
-                                       JSONObject jsonObject){
+                                              String userIdType,
+                                              JSONObject jsonObject) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
+            public JSONObject fetchTasks(String authorization,
+                                         String taskId) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
+            public JSONObject fetchTaskComments(String authorization,
+                                                String taskId,
+                                                String commentId) {
                 throwable.printStackTrace();
                 return JSONUtil.createObj().set("Throwable", throwable.toString());
             }

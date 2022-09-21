@@ -172,7 +172,7 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    public boolean createTake(String userIdType,
+    public boolean createTask(String userIdType,
                               JSONObject jsonObject) {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken)) return false;
@@ -182,6 +182,31 @@ public class FeishuServiceImpl implements FeishuService {
             throw new BusinessException(throwable);
 
         return result.get("code", Integer.class) == 0;
+    }
+
+    @Override
+    public JSONObject getTaskInfo(String taskId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token报错");
+        final JSONObject result = feishuApiProvider.fetchTasks(accessToken, taskId);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
+    @Override
+    public JSONObject getTaskCommentsInfo(String taskId,
+                                       String CommentId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token报错");
+        final JSONObject result = feishuApiProvider.fetchTaskComments(accessToken, taskId, CommentId);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
     }
 
 
