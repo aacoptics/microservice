@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandlerAdvice extends DefaultGlobalExceptionHandlerAdvice {
+public class GlobalExceptionHandlerAdvice {
     @ExceptionHandler
     public Result handler(HttpServletRequest req, HttpServletResponse res, Exception e) {
         log.info("Restful Http请求发生异常...");
