@@ -14,15 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandlerAdvice extends DefaultGlobalExceptionHandlerAdvice {
-
-    @SuppressWarnings("unchecked")
-    @ExceptionHandler(value = {BusinessException.class})
-    public Result<String> businessException(BusinessException ex) {
-        log.error("业务异常", ex);
-
-        return Result.fail(CommonErrorType.BUSINESS_EXCEPTION, ex.getLocalizedMessage());
-    }
-
     @ExceptionHandler
     public Result handler(HttpServletRequest req, HttpServletResponse res, Exception e) {
         log.info("Restful Http请求发生异常...");
@@ -37,6 +28,9 @@ public class GlobalExceptionHandlerAdvice extends DefaultGlobalExceptionHandlerA
             log.error("缺少对应的标头：" + e.getMessage(), e);
             res.setStatus(HttpStatus.BAD_REQUEST.value());
             return Result.fail("缺少对应的标头，详细信息：" + e.getMessage());
+        } else if (e instanceof BusinessException) {
+            log.error(e.getMessage(), e);
+            return Result.fail(CommonErrorType.BUSINESS_EXCEPTION, e.getLocalizedMessage());
         } else {
             log.error(e.getMessage(), e);
             return Result.fail(e.getMessage());
