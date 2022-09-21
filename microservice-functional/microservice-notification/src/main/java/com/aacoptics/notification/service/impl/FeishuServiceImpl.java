@@ -172,16 +172,16 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    public boolean createTask(String userIdType,
+    public JSONObject createTask(String userIdType,
                               JSONObject jsonObject) {
         final String accessToken = fetchAccessToken();
-        if (StrUtil.isEmpty(accessToken)) return false;
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token失败！");
         final JSONObject result = feishuApiProvider.fetchCreateTask(accessToken, userIdType, jsonObject);
         final String throwable = result.get("Throwable", String.class);
         if (StrUtil.isNotEmpty(throwable))
             throw new BusinessException(throwable);
-
-        return result.get("code", Integer.class) == 0;
+        return result;
     }
 
     @Override
