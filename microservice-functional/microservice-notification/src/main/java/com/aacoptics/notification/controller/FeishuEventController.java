@@ -40,7 +40,7 @@ public class FeishuEventController {
     @ApiOperation(value = "接收飞书任务信息", notes = "接收飞书任务信息")
     @ApiImplicitParam(name = "jsonObject", value = "消息JSON", required = true)
     @PostMapping(value = "/receiveTaskInfo")
-    public Result receiveAttendanceRecord(@RequestBody String bodyString,
+    public Result receiveTaskInfo(@RequestBody String bodyString,
                                           @RequestHeader("X-Lark-Request-Timestamp") String timeStamp,
                                           @RequestHeader("X-Lark-Request-Nonce") String nonce,
                                           @RequestHeader("X-Lark-Signature") String sign) throws Exception {
