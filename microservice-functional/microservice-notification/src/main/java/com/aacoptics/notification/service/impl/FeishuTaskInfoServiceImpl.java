@@ -1,5 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.entity.po.FeishuTaskCommentInfo;
@@ -82,14 +83,18 @@ public class FeishuTaskInfoServiceImpl extends ServiceImpl<FeishuTaskInfoMapper,
     public FeishuTaskInfo ConvertVo(FeishuTaskVo feishuTaskVo) {
         FeishuTaskInfo feishuTaskInfo = new FeishuTaskInfo();
         feishuTaskInfo.setTaskId(feishuTaskVo.getId());
-        feishuTaskInfo.setLinkTitle(feishuTaskVo.getOrigin().getHref().getTitle());
-        feishuTaskInfo.setLinkUrl(feishuTaskVo.getOrigin().getHref().getUrl());
+        if (feishuTaskVo.getOrigin() != null && feishuTaskVo.getOrigin().getHref() != null && !StrUtil.isBlank(feishuTaskVo.getOrigin().getHref().getTitle()))
+            feishuTaskInfo.setLinkTitle(feishuTaskVo.getOrigin().getHref().getTitle());
+        if (feishuTaskVo.getOrigin() != null && feishuTaskVo.getOrigin().getHref() != null && !StrUtil.isBlank(feishuTaskVo.getOrigin().getHref().getUrl()))
+            feishuTaskInfo.setLinkUrl(feishuTaskVo.getOrigin().getHref().getUrl());
         feishuTaskInfo.setTaskSummary(feishuTaskVo.getSummary());
         feishuTaskInfo.setTaskDescription(feishuTaskVo.getDescription());
-        feishuTaskInfo.setDue(LocalDateTime.ofEpochSecond(feishuTaskVo.getDue().getTime(), 0, ZoneOffset.ofHours(8)));
-        feishuTaskInfo.setCollaborators(feishuTaskVo.getCollaborators().stream().map(FeishuTaskVo.UserId::getId).collect(Collectors.joining(";")));
-        feishuTaskInfo.setFollowers(feishuTaskVo.getFollowers().stream().map(FeishuTaskVo.UserId::getId).collect(Collectors.joining(";")));
-
+        if (feishuTaskVo.getDue() != null && feishuTaskVo.getDue().getTime() > 0)
+            feishuTaskInfo.setDue(LocalDateTime.ofEpochSecond(feishuTaskVo.getDue().getTime(), 0, ZoneOffset.ofHours(8)));
+        if (feishuTaskVo.getCollaborators() != null && feishuTaskVo.getCollaborators().size() > 0)
+            feishuTaskInfo.setCollaborators(feishuTaskVo.getCollaborators().stream().map(FeishuTaskVo.UserId::getId).collect(Collectors.joining(";")));
+        if (feishuTaskVo.getFollowers() != null && feishuTaskVo.getFollowers().size() > 0)
+            feishuTaskInfo.setFollowers(feishuTaskVo.getFollowers().stream().map(FeishuTaskVo.UserId::getId).collect(Collectors.joining(";")));
         return feishuTaskInfo;
     }
 }
