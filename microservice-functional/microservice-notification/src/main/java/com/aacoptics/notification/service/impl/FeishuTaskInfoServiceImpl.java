@@ -48,16 +48,15 @@ public class FeishuTaskInfoServiceImpl extends ServiceImpl<FeishuTaskInfoMapper,
     @Override
     public boolean updateOrInsert(FeishuTaskEvent feishuTaskEvent) {
         try {
-            int count = this.count(new QueryWrapper<FeishuTaskInfo>()
-                    .eq("task_id", feishuTaskEvent.getEvent().getTask_id())
-            );
-            if (count > 0) {
-                new LambdaUpdateChainWrapper<>(feishuTaskInfoMapper)
-                        .eq(FeishuTaskInfo::getTaskId, feishuTaskEvent.getEvent().getTask_id())
-                        .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type())
-                        .set(FeishuTaskInfo::getUpdatedTime, LocalDateTime.now())
-                        .set(FeishuTaskInfo::getUpdatedBy, "FeishuEventHandle").update();
-            } else {
+            // 更新情况：先更新一把，如果能更新成功，就说明是更新情况，否则就是新增情况
+            boolean flag = new LambdaUpdateChainWrapper<>(feishuTaskInfoMapper)
+                    .eq(FeishuTaskInfo::getTaskId, feishuTaskEvent.getEvent().getTask_id())
+                    .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type())
+                    .set(FeishuTaskInfo::getUpdatedTime, LocalDateTime.now())
+                    .set(FeishuTaskInfo::getUpdatedBy, "FeishuEventHandle").update();
+            log.info("flag is " + flag);
+            // 新增情况：如果不能更新成功
+            if (!flag) {
                 JSONObject taskInfoRes = feishuService.getTaskInfo(feishuTaskEvent.getEvent().getTask_id());
                 if (taskInfoRes.getInt("code") == 0) {
                     JSONObject taskJson = taskInfoRes.getJSONObject("data").getJSONObject("task");
