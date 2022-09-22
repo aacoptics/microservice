@@ -189,7 +189,7 @@ public class FeishuServiceImpl implements FeishuService {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken))
             throw new BusinessException("获取access token报错");
-        final JSONObject result = feishuApiProvider.fetchTasks(accessToken, taskId);
+        final JSONObject result = feishuApiProvider.fetchTasks(accessToken, FeishuService.RECEIVE_ID_TYPE_USER_ID, taskId);
         final String throwable = result.get("Throwable", String.class);
         if (StrUtil.isNotEmpty(throwable))
             throw new BusinessException(throwable);

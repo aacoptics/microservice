@@ -62,6 +62,7 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
 
             @Override
             public JSONObject fetchTasks(String authorization,
+                                         String userIdType,
                                          String taskId) {
                 throwable.printStackTrace();
                 return JSONUtil.createObj().set("Throwable", throwable.toString());
