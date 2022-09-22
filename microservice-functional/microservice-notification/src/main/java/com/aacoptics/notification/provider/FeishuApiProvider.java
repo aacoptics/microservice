@@ -52,6 +52,7 @@ public interface FeishuApiProvider {
     @GetMapping(value = "/task/v1/tasks/{taskId}",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
     JSONObject fetchTasks(@RequestHeader("Authorization") String authorization,
+                          @RequestParam("user_id_type") String userIdType,
                           @PathVariable("taskId") String taskId);
 
     @GetMapping(value = "/task/v1/tasks/{taskId}/comments/{commentId}",

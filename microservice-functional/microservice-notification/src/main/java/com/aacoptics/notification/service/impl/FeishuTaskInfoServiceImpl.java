@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,24 +51,31 @@ public class FeishuTaskInfoServiceImpl extends ServiceImpl<FeishuTaskInfoMapper,
     @Override
     public boolean updateOrInsert(FeishuTaskEvent feishuTaskEvent) {
         try {
-            JSONObject taskInfoRes = feishuService.getTaskInfo(feishuTaskEvent.getEvent().getTask_id());
-            if (taskInfoRes.getInt("code") == 0) {
-                JSONObject taskJson = taskInfoRes.getJSONObject("data").getJSONObject("task");
-                FeishuTaskVo feishuTaskVo = JSONUtil.toBean(taskJson, FeishuTaskVo.class);
-                List<FeishuTaskInfo> list = this.list(new QueryWrapper<FeishuTaskInfo>().lambda()
-                        .eq(FeishuTaskInfo::getTaskId, feishuTaskEvent.getEvent().getTask_id()));
-                if (list.size() > 0) {
-                    new LambdaUpdateChainWrapper<>(feishuTaskInfoMapper)
-                            .eq(FeishuTaskInfo::getTaskId, feishuTaskVo.getId())
-                            .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type())
-                            .set(FeishuTaskInfo::getUpdatedTime, LocalDateTime.now())
-                            .set(FeishuTaskInfo::getUpdatedBy, "FeishuEventHandle").update();
-                } else {
+            LambdaUpdateChainWrapper wrapper = new LambdaUpdateChainWrapper<>(feishuTaskInfoMapper)
+                    .eq(FeishuTaskInfo::getTaskId, feishuTaskEvent.getEvent().getTask_id())
+                    .set(FeishuTaskInfo::getTaskStatus, feishuTaskEvent.getEvent().getObj_type())
+                    .set(FeishuTaskInfo::getUpdatedTime, LocalDateTime.now())
+                    .set(FeishuTaskInfo::getUpdatedBy, "FeishuEventHandle");
+
+            // 更新情况：先更新一把，如果能更新成功，就说明是更新情况，否则就是新增情况
+            boolean flag = wrapper.update();
+            // 新增情况：如果不能更新成功
+            if (!flag) {
+                JSONObject taskInfoRes = feishuService.getTaskInfo(feishuTaskEvent.getEvent().getTask_id());
+                if (taskInfoRes.getInt("code") == 0) {
+                    JSONObject taskJson = taskInfoRes.getJSONObject("data").getJSONObject("task");
+                    FeishuTaskVo feishuTaskVo = JSONUtil.toBean(taskJson, FeishuTaskVo.class);
                     FeishuTaskInfo feishuTaskInfo = ConvertVo(feishuTaskVo);
                     feishuTaskInfo.setTaskStatus(feishuTaskEvent.getEvent().getObj_type());
-                    feishuTaskInfoMapper.insert(feishuTaskInfo);
+                    try {
+                        feishuTaskInfoMapper.insert(feishuTaskInfo);
+                    } catch (DataIntegrityViolationException e) {
+                        log.info("重复插入！" + e.getMessage());
+                        wrapper.update();
+                    }
                 }
             }
+
             FeishuTaskInfoHistory feishuTaskInfoHistory = new FeishuTaskInfoHistory();
             feishuTaskInfoHistory.setTaskId(feishuTaskEvent.getEvent().getTask_id());
             feishuTaskInfoHistory.setTaskStatus(feishuTaskEvent.getEvent().getObj_type());
