@@ -1,4 +1,4 @@
-package com.aacoptics.mobile.attendance.provider;
+package com.aacoptics.feishu.photo.provider;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;

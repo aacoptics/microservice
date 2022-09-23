@@ -13,6 +13,7 @@
         <module>microservice-sep-server</module>
         <module>microservice-jacob-provider</module>
         <module>microservice-sale-message</module>
+        <module>microservice-feishu-photo</module>
     </modules>
 
     <packaging>pom</packaging>

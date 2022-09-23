@@ -1,6 +1,7 @@
-package com.aacoptics.mobile.attendance.service;
+package com.aacoptics.feishu.photo.service;
 
-import com.aacoptics.mobile.attendance.entity.po.FeishuUser;
+
+import com.aacoptics.feishu.photo.entity.po.FeishuUser;
 
 import java.io.IOException;
 
@@ -21,4 +22,7 @@ public interface FeishuService {
     String fetchUploadFileKey(String accessToken, String fileName, byte[] fileContent) throws IOException;
 
     boolean updateUserPhoto(String employeeNo, byte[] fileContent) throws IOException;
+
+
+    void uploadUserPhotoFromSAP(int idFlag);
 }

@@ -2,7 +2,7 @@ package com.aacoptics.mobile.attendance.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
+import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;
 import com.aacoptics.mobile.attendance.entity.vo.AttendanceRecord;
 import com.aacoptics.mobile.attendance.service.AttendanceService;
 import com.aacoptics.mobile.attendance.util.Decrypt;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/feishuAttendance")

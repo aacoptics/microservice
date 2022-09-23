@@ -1,0 +1,12 @@
+#ABAP_AS_WITHOUT_POOL
+#Fri Sep 23 10:26:30 CST 2022
+jco.destination.pool_capacity=0
+jco.client.lang=zh
+jco.client.ashost=10.233.74.41
+jco.client.user=HCM_HRBPM
+jco.client.sysnr=0
+jco.destination.peak_limit=100
+jco.destination.expiration_time=1000
+jco.destination.expiration_check_period=1000
+jco.client.passwd=Sap\#1234
+jco.client.client=801
