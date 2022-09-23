@@ -97,6 +97,8 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 String phase = dataJson.getString("recipePhase");
                 Integer phaseTime = dataJson.getInteger("sequence");
                 Integer avgPhaseTime = dataJson.getInteger("averageCt");
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent(localTimeStr);
                 if(!phase.trim().equals("Recipe Ready")){
                     markdownGroupMessage.addContent("当前阶段CT异常，已持续" + phaseTime + "秒，平均" + avgPhaseTime + "请检查。");
                 }
