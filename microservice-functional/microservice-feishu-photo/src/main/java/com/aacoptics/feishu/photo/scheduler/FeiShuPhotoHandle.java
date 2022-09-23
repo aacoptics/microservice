@@ -16,8 +16,8 @@ public class FeiShuPhotoHandle {
     @Resource
     FeishuService feishuService;
 
-    @XxlJob("RobotHandle")
-    public void RobotHandle() {
+    @XxlJob("feishuPhotoHandle")
+    public void feishuPhotoHandle() {
       /*  1：全量：取所有人员信息
         2：增量：有变更的人员数据
         3：增量：单个同步
