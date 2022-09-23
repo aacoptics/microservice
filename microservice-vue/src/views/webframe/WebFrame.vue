@@ -11,6 +11,8 @@
 </template>
 <script>
 
+import {getUsername} from "@/utils/auth";
+
 export default {
   name: "WebFrame",
   mounted() {
@@ -18,7 +20,10 @@ export default {
   },
   computed: {
     urlAddress() {
-      return this.$route.meta.webUrl
+      const webUrl = this.$route.meta.webUrl
+      if (webUrl.indexOf("{#username}"))
+        webUrl.replace("{#username}", getUsername())
+      return webUrl
     }
   },
   methods: {

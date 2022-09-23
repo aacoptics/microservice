@@ -193,7 +193,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                     }
                 }
 
-                if (messageBatch.getIsDaiban().equals("Y")) {
+                if (!StrUtil.isBlank(messageBatch.getIsDaiban()) && messageBatch.getIsDaiban().equals("Y")) {
                     createTask(messageBatch.getBatchId());
                 }
             }
