@@ -61,21 +61,21 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-//        JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
-//        if (StrUtil.isBlank(msgJson.getString("Message")))
-//            return;
-//
-//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//        //当前时间转换String
-//        LocalDateTime time = LocalDateTime.now();
-//        String localTimeStr = df.format(time);
-//        JSONObject dataJson = msgJson.getJSONObject("Data");
-//        String machineName = dataJson.getString("machineName");
-//        String projectName = dataJson.getString("projectName");
-//        String modelName = dataJson.getString("modelName");
-//        MarkdownMessage markdownGroupMessage = new MarkdownMessage();
-//        String title = null;
-//        switch (msgJson.getString("Message")) {
+        JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
+        if (StrUtil.isBlank(msgJson.getString("Message")))
+            return;
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        //当前时间转换String
+        LocalDateTime time = LocalDateTime.now();
+        String localTimeStr = df.format(time);
+        JSONObject dataJson = msgJson.getJSONObject("Data");
+        String machineName = dataJson.getString("machineName");
+        String projectName = dataJson.getString("projectName");
+        String modelName = dataJson.getString("modelName");
+        MarkdownMessage markdownGroupMessage = new MarkdownMessage();
+        String title = null;
+        switch (msgJson.getString("Message")) {
 //            case "DoMonitorTempAlarm":
 //                title = "加热棒状态报警";
 //                markdownGroupMessage.setTitle(title);
@@ -91,14 +91,24 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 //                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
 //                }
 //                break;
-////            case "FeedAlarm":
-////                title = "模造换料提醒";
-////                markdownGroupMessage.setTitle(title);
-////                markdownGroupMessage.addBlobContent(localTimeStr);
-////                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-////                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-////                sendToAllSpeaker(machineName);
-////                break;
+            case "moldCtMonitor":
+                title = "阶段时长报警";
+                markdownGroupMessage.setTitle(title);
+                String phase = dataJson.getString("recipePhase");
+                Integer phaseTime = dataJson.getInteger("sequence");
+                Integer avgPhaseTime = dataJson.getInteger("averageCt");
+                if(!phase.trim().equals("Recipe Ready")){
+                    markdownGroupMessage.addContent("当前阶段CT异常，已持续" + phaseTime + "秒，平均" + avgPhaseTime + "请检查。");
+                }
+                break;
+//            case "FeedAlarm":
+//                title = "模造换料提醒";
+//                markdownGroupMessage.setTitle(title);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+//                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+//                sendToAllSpeaker(machineName);
+//                break;
 //            case "moldTempMonitor":
 //                title = "模造温度曲线报警";
 //                String moldParam = dataJson.getString("param");
@@ -116,23 +126,23 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 //                else
 //                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
 //                break;
-//        }
-//
-//        String chatName = "模造车间异常&换料自动提醒群";
-//        try {
-//            if (StrUtil.isBlank(title)) {
-//                log.error("title为空");
-//                return;
-//            }
-//            String chatId = feishuService.fetchChatIdByRobot(chatName);
-//            cn.hutool.json.JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage.toString(), null);
-//            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-//                    chatId,
-//                    FeishuService.MSG_TYPE_INTERACTIVE,
-//                    cardJson);
-//        } catch (Exception err) {
-//            log.error("发送" + title + "失败！", err);
-//        }
+        }
+
+        String chatName = "模造车间异常&换料自动提醒群";
+        try {
+            if (StrUtil.isBlank(title)) {
+                log.error("title为空");
+                return;
+            }
+            String chatId = feishuService.fetchChatIdByRobot(chatName);
+            cn.hutool.json.JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage.toString(), null);
+            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                    chatId,
+                    FeishuService.MSG_TYPE_INTERACTIVE,
+                    cardJson);
+        } catch (Exception err) {
+            log.error("发送" + title + "失败！", err);
+        }
     }
 
     /**
