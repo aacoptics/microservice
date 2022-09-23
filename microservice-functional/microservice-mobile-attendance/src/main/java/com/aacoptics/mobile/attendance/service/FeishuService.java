@@ -21,4 +21,7 @@ public interface FeishuService {
     String fetchUploadFileKey(String accessToken, String fileName, byte[] fileContent) throws IOException;
 
     boolean updateUserPhoto(String employeeNo, byte[] fileContent) throws IOException;
+
+
+    void uploadUserPhotoFromSAP(int idFlag);
 }

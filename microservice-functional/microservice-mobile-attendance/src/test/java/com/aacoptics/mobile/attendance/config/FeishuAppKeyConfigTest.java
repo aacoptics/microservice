@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -79,19 +80,25 @@ class FeishuAppKeyConfigTest {
     @Test
     void test2() {
         try {
-            JSONArray employeeInfoList = sapJcoProvider.getEmployeeInfoList();
+            JSONArray employeeInfoList = sapJcoProvider.getEmployeeInfoList(4);
+
+            List<String> failEmployeeNo = new ArrayList<>();
+            List<String> nullPhotoEmployeeNo = new ArrayList<>();
+            List<String> successEmployeeNo = new ArrayList<>();
 
             for (int i = 0; i < employeeInfoList.size(); i++) {
                 JSONObject employeeJsonObject = employeeInfoList.getJSONObject(i);
                 String employeeNo = employeeJsonObject.getString("PERNR");
-                if (!employeeNo.equals("80000061")) {
-                    continue;
-                }
+//                if (!employeeNo.equals("80000061")) {
+//                    continue;
+//                }
 
                 String base64Photo = employeeJsonObject.getString("PHOTO");
                 if(StringUtils.isEmpty(base64Photo))
                 {
-                    System.out.println("工号" + employeeNo + "照片不存在");
+                    nullPhotoEmployeeNo.add(employeeNo);
+                    System.out.println(i + " 工号" + employeeNo + "照片不存在");
+                    continue;
                 }
                 // 对字节数组字符串进行Base64解码并生成图片
                 BASE64Decoder decoder = new BASE64Decoder();
@@ -102,10 +109,35 @@ class FeishuAppKeyConfigTest {
                         employeePhoto[j] += 256;
                     }
                 }
-                boolean result = feishuService.updateUserPhoto(employeeNo, employeePhoto);
-                System.out.println("employeeNo " + employeeNo + ", result" + result);
+                Boolean result = null;
+                try {
+                     result = feishuService.updateUserPhoto(employeeNo, employeePhoto);
+                } catch (Exception e)
+                {
+                    failEmployeeNo.add(employeeNo);
+                    log.error(i + " employeeNo:" + employeePhoto + ", exception:", e);
+                    continue;
+                }
+                if(result == true)
+                {
+                    successEmployeeNo.add(employeeNo);
+                    log.info(i + "employeeNo:" + employeeNo + ", result:" + result);
+                }
 
             }
+            log.info("上传成功的员工，共" + successEmployeeNo.size());
+            for(int l=0; l<successEmployeeNo.size(); l++) {
+                log.info(successEmployeeNo.get(l));
+            }
+            log.info("照片为空的员工，共" + nullPhotoEmployeeNo.size());
+            for(int j=0; j<nullPhotoEmployeeNo.size(); j++) {
+                log.info(nullPhotoEmployeeNo.get(j));
+            }
+            log.info("上传异常的员工，共" + failEmployeeNo.size());
+            for(int k=0; k<failEmployeeNo.size(); k++) {
+                log.info(failEmployeeNo.get(k));
+            }
+
         } catch (Exception err) {
             err.printStackTrace();
         }

@@ -94,7 +94,7 @@ public class SapJcoProvider {
      * @return
      * @throws Exception
      */
-    public JSONArray getEmployeeInfoList() throws Exception {
+    public JSONArray getEmployeeInfoList(int idFlag) throws Exception {
 
         JCoDestination destination = this.getDestination();
         JCoFunction function = destination.getRepository().getFunction("ZHRPAFM069");
@@ -104,7 +104,7 @@ public class SapJcoProvider {
         3：增量：单个同步
         4：全量zhrdc026-中间表获取
         5：全量-无照片*/
-        param.setValue("ID_FLAG", 4);
+        param.setValue("ID_FLAG", idFlag);
         // param.setValue("ID_DATE", "20220902");//    日期
         function.execute(destination);
 
