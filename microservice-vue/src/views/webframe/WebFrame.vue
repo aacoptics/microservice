@@ -20,9 +20,9 @@ export default {
   },
   computed: {
     urlAddress() {
-      const webUrl = this.$route.meta.webUrl
+      let webUrl = this.$route.meta.webUrl
       if (webUrl.indexOf("{#username}") > -1)
-        webUrl.replace("{#username}", getUsername())
+        webUrl = webUrl.replace("{#username}", getUsername())
       return webUrl
     }
   },
