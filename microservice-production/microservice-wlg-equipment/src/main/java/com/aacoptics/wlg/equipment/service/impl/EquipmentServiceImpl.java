@@ -1,7 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import com.aacoptics.wlg.equipment.constant.EquipmentStatus;
+import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.EquipmentQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.Equipment;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
@@ -79,7 +79,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         LocalDateTime currentDateTime = LocalDateTime.now();
         equipment.setLastInspectionDatetime(currentDateTime);
         equipment.setLastMaintenanceDatetime(currentDateTime);
-        equipment.setStatus(EquipmentStatus.NORMAL); //设备初始状态为正常
+        equipment.setStatus(EquipmentStatusConstants.NORMAL); //设备初始状态为正常
         this.save(equipment);
     }
 

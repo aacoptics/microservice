@@ -40,12 +40,6 @@ public class MaintenanceItem extends BasePo {
     private String maintenanceItemStandard;
 
     /**
-     * 保养周期（月）
-     */
-    @TableField(value = "maintenance_period")
-    private Long maintenancePeriod;
-
-    /**
      * 最小值
      */
     @TableField(value = "min_value")

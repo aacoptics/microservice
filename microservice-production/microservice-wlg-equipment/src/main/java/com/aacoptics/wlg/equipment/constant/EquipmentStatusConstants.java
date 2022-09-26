@@ -1,6 +1,6 @@
 package com.aacoptics.wlg.equipment.constant;
 
-public class EquipmentStatus {
+public class EquipmentStatusConstants {
 
     public static final String NORMAL = "0"; //正常
 }

@@ -1,6 +1,6 @@
 package com.aacoptics.wlg.equipment.constant;
 
-public class InspectionOrderStatus {
+public class InspectionOrderStatusConstants {
 
     public static final String CREATED = "0"; //已创建
 

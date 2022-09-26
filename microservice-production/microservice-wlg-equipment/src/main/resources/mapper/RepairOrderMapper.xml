@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.RepairOrderMapper">
+
+    <select id="findRepairList" resultType="com.aacoptics.wlg.equipment.entity.po.RepairMain">
+        SELECT A.*
+            FROM EM_MAINTENANCE_MAIN A
+            WHERE EXISTS(SELECT 1 FROM EM_MAINTENANCE_ITEM B WHERE A.ID = B.MAINTENANCE_MAIN_ID)
+           ORDER BY A.ID, A.MCH_NAME, A.SPEC, A.TYPE_VERSION
+    </select>
+
+    <select id="findRepairOrderList" resultType="com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO">
+            SELECT A.ID,
+                   A.ORDER_NUMBER,
+                   A.MCH_CODE,
+                   A.MAINTENANCE_DATE,
+                   A.MAINTENANCE_PERIOD,
+                   A.PERIOD_UNIT,
+                   A.DUTY_PERSON_ID,
+                   A.STATUS,
+                   A.CREATED_TIME,
+                   A.CREATED_BY,
+                   A.UPDATED_TIME,
+                   A.UPDATED_BY,
+                   B.MCH_NAME,
+                   B.SPEC,
+                   B.TYPE_VERSION,
+                   B.FACTORY_NO
+            FROM EM_MAINTENANCE_ORDER A
+                     LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+    </select>
+
+</mapper>

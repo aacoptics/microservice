@@ -1,7 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import com.aacoptics.wlg.equipment.constant.InspectionOrderStatus;
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
@@ -170,7 +170,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
                     inspectionOrder.setShiftStartTime(shiftStartTime);
                     inspectionOrder.setShiftEndTime(shiftEndTime);
-                    inspectionOrder.setStatus(InspectionOrderStatus.CREATED);
+                    inspectionOrder.setStatus(InspectionOrderStatusConstants.CREATED);
 
                     //创建工单点检项
                     List<InspectionOrderItem> inspectionOrderItemList = new ArrayList<>();

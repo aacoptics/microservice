@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.wlg.equipment.constant.PeriodUnitConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
@@ -58,6 +59,7 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             throw new BusinessException("相同记录已存在，请确认！");
         }
 
+        maintenanceMain.setPeriodUnit(PeriodUnitConstants.MONTH);
         boolean isSuccess = this.save(maintenanceMain);
         return isSuccess;
     }

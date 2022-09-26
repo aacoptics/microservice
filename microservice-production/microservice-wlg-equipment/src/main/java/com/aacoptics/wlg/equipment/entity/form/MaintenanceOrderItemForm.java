@@ -1,7 +1,8 @@
 package com.aacoptics.wlg.equipment.entity.form;
 
 import com.aacoptics.common.web.entity.form.BaseForm;
-import com.aacoptics.wlg.equipment.entity.po.MaintenanceItem;
+import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 
 @ApiModel
 @Data
-public class MaintenanceItemForm extends BaseForm<MaintenanceItem> {
+public class MaintenanceOrderItemForm extends BaseForm<MaintenanceOrderItem> {
 
     @NotNull(message = "保养设备表ID不能为空")
     @ApiModelProperty(value = "保养设备表ID")
