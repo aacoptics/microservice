@@ -1,4 +1,4 @@
-package com.aacoptics.feishu.photo.config;
+package com.aacoptics.mobile.attendance.config;
 
 import com.aacoptics.common.web.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Bean;

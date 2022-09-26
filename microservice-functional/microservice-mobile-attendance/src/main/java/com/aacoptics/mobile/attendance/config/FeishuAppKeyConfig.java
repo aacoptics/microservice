@@ -1,4 +1,4 @@
-package com.aacoptics.feishu.photo.config;
+package com.aacoptics.mobile.attendance.config;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;

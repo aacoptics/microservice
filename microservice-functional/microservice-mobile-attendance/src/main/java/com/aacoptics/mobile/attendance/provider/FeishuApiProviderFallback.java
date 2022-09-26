@@ -1,7 +1,7 @@
 package com.aacoptics.mobile.attendance.provider;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;
+import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

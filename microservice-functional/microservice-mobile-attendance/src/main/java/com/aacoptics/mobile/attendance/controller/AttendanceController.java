@@ -2,7 +2,7 @@ package com.aacoptics.mobile.attendance.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;
+import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
 import com.aacoptics.mobile.attendance.entity.vo.AttendanceRecord;
 import com.aacoptics.mobile.attendance.service.AttendanceService;
 import com.aacoptics.mobile.attendance.util.Decrypt;

@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;
+import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
 import com.aacoptics.mobile.attendance.entity.po.FeishuUser;
 import com.aacoptics.mobile.attendance.exception.BusinessException;
 import com.aacoptics.mobile.attendance.mapper.FeishuUserMapper;

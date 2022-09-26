@@ -1,7 +1,7 @@
 package com.aacoptics.mobile.attendance.provider;
 
 import cn.hutool.json.JSONObject;
-import com.aacoptics.feishu.photo.config.FeishuAppKeyConfig;
+import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

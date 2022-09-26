@@ -1,4 +1,4 @@
-package com.aacoptics.feishu.photo.config;
+package com.aacoptics.mobile.attendance.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
