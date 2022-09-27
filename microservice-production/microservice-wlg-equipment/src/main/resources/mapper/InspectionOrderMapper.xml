@@ -30,6 +30,7 @@
                    B.FACTORY_NO
             FROM EM_INSPECTION_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            ORDER BY A.ORDER_NUMBER
     </select>
 
 </mapper>

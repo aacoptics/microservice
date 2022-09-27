@@ -69,14 +69,13 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
             throw new BusinessException("ID为" + id + "的记录已不存在");
         }
 
-
         return repairOrder;
     }
 
 
     @Transactional
     @Override
-    public void generateRepairOrder() {
+    public void generateRepairOrder(RepairOrder repairOrder) {
         log.info("开始生成设备维修工单");
         log.info("完成生成设备维修工单");
     }

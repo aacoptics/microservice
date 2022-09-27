@@ -56,4 +56,22 @@ public interface MaintenanceOrderService {
      *
      */
     void generateMaintenanceOrder();
+
+
+    /**
+     * 获取保养工单下一个流水号
+     *
+     * @param sequenceName
+     * @return
+     */
+    Long getOrCreateSequenceNumber(String sequenceName);
+
+    /**
+     * 获取下一个工单号
+     *
+     * @param sequenceName
+     * @return
+     */
+    String getNextOrderNumber(String sequenceName);
+
 }

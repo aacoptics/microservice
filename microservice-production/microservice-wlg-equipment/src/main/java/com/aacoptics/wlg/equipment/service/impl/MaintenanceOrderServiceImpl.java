@@ -8,10 +8,7 @@ import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceOrderItemMapper;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceOrderMapper;
-import com.aacoptics.wlg.equipment.service.EquipmentService;
-import com.aacoptics.wlg.equipment.service.MaintenanceMainService;
-import com.aacoptics.wlg.equipment.service.MaintenanceOrderItemService;
-import com.aacoptics.wlg.equipment.service.MaintenanceOrderService;
+import com.aacoptics.wlg.equipment.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,6 +43,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
     @Resource
     MaintenanceOrderItemService maintenanceOrderItemService;
+
+    @Resource
+    SequenceService sequenceService;
 
 
     @Override
@@ -126,11 +126,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         }
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter orderNumberPrefixDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-        String currentDateStr = currentDate.format(dateFormatter);
-        String orderNumberPrefix = orderNumberPrefixDateFormatter.format(currentDate);
+        String currentDateStr = orderNumberDateFormatter.format(currentDate);
 
         for(int i=0; i<maintenanceMainList.size(); i++)
         {
@@ -156,7 +154,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
             for(Equipment equipment : equipmentList)
             {
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
-                maintenanceOrder.setOrderNumber(orderNumberPrefix + "0001"); //TODO,未确定规则
+                maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
                 maintenanceOrder.setMchCode(equipment.getMchCode());
                 maintenanceOrder.setDutyPersonId(equipment.getDutyPersonId());
                 maintenanceOrder.setMaintenanceDate(currentDate);
@@ -183,5 +181,26 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
             }
         }
         log.info("完成生成设备保养工单");
+    }
+
+    @Override
+    public Long getOrCreateSequenceNumber(String sequenceName) {
+        Long nextSequenceNumber =  sequenceService.getNextNumberByName(sequenceName);
+        if(nextSequenceNumber == null) {
+            Sequence sequence = sequenceService.createSequence(sequenceName, "保养工单流水号", 1l, 1l, 999999l);
+            nextSequenceNumber = sequence.getSequenceNumber();
+        }
+        return nextSequenceNumber;
+    }
+
+    @Override
+    public String getNextOrderNumber(String currentDate) {
+        String sequenceName = "MAINTENANCE_ORDER_" + currentDate;
+
+        Long nextSequenceNumber = this.getOrCreateSequenceNumber(sequenceName);
+
+        String nextSequenceNumberStr =  currentDate + String.format("%04d", nextSequenceNumber);
+
+        return nextSequenceNumberStr;
     }
 }

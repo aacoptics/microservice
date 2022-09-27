@@ -8,10 +8,7 @@ import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionOrderItemMapper;
 import com.aacoptics.wlg.equipment.mapper.InspectionOrderMapper;
-import com.aacoptics.wlg.equipment.service.EquipmentService;
-import com.aacoptics.wlg.equipment.service.InspectionMainService;
-import com.aacoptics.wlg.equipment.service.InspectionOrderItemService;
-import com.aacoptics.wlg.equipment.service.InspectionOrderService;
+import com.aacoptics.wlg.equipment.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,6 +43,9 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
     @Resource
     InspectionOrderItemService inspectionOrderItemService;
+
+    @Resource
+    SequenceService sequenceService;
 
 
     @Override
@@ -126,11 +126,11 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         }
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter orderNumberPrefixDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String currentDateStr = currentDate.format(dateFormatter);
-        String orderNumberPrefix = orderNumberPrefixDateFormatter.format(currentDate);
+        String orderNumberDateStr = orderNumberDateFormatter.format(currentDate);
 
         for(int i=0; i<inspectionMainList.size(); i++)
         {
@@ -159,7 +159,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                 for(Equipment equipment : equipmentList)
                 {
                     InspectionOrder inspectionOrder = new InspectionOrder();
-                    inspectionOrder.setOrderNumber(orderNumberPrefix + "0001"); //TODO,未确定规则
+                    inspectionOrder.setOrderNumber(this.getNextOrderNumber(orderNumberDateStr));
                     inspectionOrder.setMchCode(equipment.getMchCode());
                     inspectionOrder.setDutyPersonId(equipment.getDutyPersonId());
                     inspectionOrder.setInspectionDate(currentDate);
@@ -191,5 +191,27 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
             }
         }
         log.info("完成生成设备点检工单");
+    }
+
+
+    @Override
+    public Long getOrCreateSequenceNumber(String sequenceName) {
+        Long nextSequenceNumber =  sequenceService.getNextNumberByName(sequenceName);
+        if(nextSequenceNumber == null) {
+            Sequence sequence = sequenceService.createSequence(sequenceName, "点检工单流水号", 1l, 1l, 999999l);
+            nextSequenceNumber = sequence.getSequenceNumber();
+        }
+        return nextSequenceNumber;
+    }
+
+    @Override
+    public String getNextOrderNumber(String currentDate) {
+        String sequenceName = "INSPECTION_ORDER_" + currentDate;
+
+        Long nextSequenceNumber = this.getOrCreateSequenceNumber(sequenceName);
+
+        String nextSequenceNumberStr =  currentDate + String.format("%04d", nextSequenceNumber);
+
+        return nextSequenceNumberStr;
     }
 }

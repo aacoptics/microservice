@@ -55,5 +55,5 @@ public interface RepairOrderService {
      * 根据维修配置生成维修工单
      *
      */
-    void generateRepairOrder();
+    void generateRepairOrder(RepairOrder repairOrder);
 }

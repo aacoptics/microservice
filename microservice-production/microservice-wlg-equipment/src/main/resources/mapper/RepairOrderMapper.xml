@@ -2,13 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.wlg.equipment.mapper.RepairOrderMapper">
 
-    <select id="findRepairList" resultType="com.aacoptics.wlg.equipment.entity.po.RepairMain">
-        SELECT A.*
-            FROM EM_MAINTENANCE_MAIN A
-            WHERE EXISTS(SELECT 1 FROM EM_MAINTENANCE_ITEM B WHERE A.ID = B.MAINTENANCE_MAIN_ID)
-           ORDER BY A.ID, A.MCH_NAME, A.SPEC, A.TYPE_VERSION
-    </select>
-
     <select id="findRepairOrderList" resultType="com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO">
             SELECT A.ID,
                    A.ORDER_NUMBER,
