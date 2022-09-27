@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class RobotQueryParam extends BaseParam<Robot> {
     private String robotName;
     private String robotType;
+    private String chatType;
 }

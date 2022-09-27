@@ -4,8 +4,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import com.aacoptics.notification.event.MqttConsumerCallBack;
-import com.aacoptics.notification.provider.DingTalkApi;
+import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.provider.JacobProvider;
+import com.aacoptics.notification.service.FeishuService;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -45,7 +46,10 @@ public class MqttConsumerConfig {
     private MqttClient client;
 
     @Resource
-    private DingTalkApi dingTalkApi;
+    private FeishuApi feishuApi;
+
+    @Resource
+    private FeishuService feishuService;
 
     /**
      * 在bean初始化后连接到服务器
@@ -81,7 +85,7 @@ public class MqttConsumerConfig {
             //设置遗嘱消息的话题，若客户端和服务器之间的连接意外断开，服务器将发布客户端的遗嘱信息
             options.setWill("willTopic",(clientIdUnique + "与服务器断开连接").getBytes(),0,false);
             //设置回调
-            client.setCallback(new MqttConsumerCallBack(client, options, subTopics, jacobProvider));
+            client.setCallback(new MqttConsumerCallBack(client, options, subTopics, jacobProvider, feishuApi, feishuService));
             client.connect(options);
         } catch (MqttException e) {
             log.error("MQTT连接失败！",e);

@@ -1,6 +1,7 @@
 package com.aacoptics.mobile.attendance.config;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,7 @@ public class FeishuAppKeyConfig implements Serializable {
 
     @JsonProperty("app_secret")
     private String appSecret;
+
+    @JsonIgnore
+    private String encryptKey;
 }

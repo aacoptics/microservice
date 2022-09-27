@@ -56,7 +56,7 @@ export default {
 .el-sub-menu .el-menu-item {
   height: 40px;
   line-height: 40px;
-  min-width: 200px;
+  min-width: 210px;
   padding: 0 0;
 }
 

@@ -1,17 +1,17 @@
 package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.json.JSONArray;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.notification.entity.po.DingtalkUser;
-import com.aacoptics.notification.entity.po.XxlGroupInfo;
-import com.aacoptics.notification.entity.po.XxlJobInfo;
-import com.aacoptics.notification.entity.po.XxlJobResult;
+import cn.hutool.json.JSONUtil;
+import com.aacoptics.notification.entity.po.*;
+import com.aacoptics.notification.entity.vo.NotificationEntity;
+import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.mapper.FeishuUserMapper;
+import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.*;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.spire.xls.Worksheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -20,11 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -41,44 +40,119 @@ public class UmsContentServiceImplTest {
     XxlJobProvider xxlJobProvider;
 
     @Resource
+    FeishuApi feishuApi;
+
+    @Resource
     XxlJobInfoService xxlJobInfoService;
 
     @Resource
     XxlGroupInfoService xxlGroupInfoService;
 
     @Resource
-    DingtalkUserService dingtalkUserService;
+    FeishuService feishuService;
 
     @Resource
-    FeishuService feishuService;
+    FeishuUserMapper feishuUserMapper;
+
+    @Test
+    public void Test123(){
+        FeishuUser feishuUser = feishuService.getFeishuUser("60054916");
+
+        List<String> ids = new ArrayList<>();
+        ids.add("60054916");
+        ids.add("80000219");
+
+        List<String> test = feishuUserMapper.getFeishuUserIds(ids);
+
+        String asd = "";
+    }
 
 
     @Test
     public void Test1() {
+//
+//        JSONObject text = new JSONObject();
+//        text.set("content", "**管理费用预算与实际费用统计（测试）** \n;时间：2022年3月;您负责部门费用如下;当月实际费用：￥14,616 K;当月预算金额：￥12,103 K;GAP节省费用：￥1,487 K;");
+//        text.set("tag", "lark_md");
+//        JSONArray elements = new JSONArray();
+//        JSONObject element = new JSONObject();
+//        element.set("tag", "div");
+//        element.set("text", text);
+//        elements.add(element);
+//
+//        JSONObject config = new JSONObject();
+//        config.set("wide_screen_mode", true);
+//
+//        JSONObject card = new JSONObject();
+//        card.set("config", config);
+//        card.set("elements", elements);
+//        feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, "7c84331d", FeishuService.MSG_TYPE_INTERACTIVE, card);
 
-        JSONObject text = new JSONObject();
-        text.set("content", "**管理费用预算与实际费用统计（测试）** \n;时间：2022年3月;您负责部门费用如下;当月实际费用：￥14,616 K;当月预算金额：￥12,103 K;GAP节省费用：￥1,487 K;");
-        text.set("tag", "lark_md");
-        JSONArray elements = new JSONArray();
-        JSONObject element = new JSONObject();
-        element.set("tag", "div");
-        element.set("text", text);
-        elements.add(element);
+        List<UmsContent> messageBatches;
+        messageBatches = umsContentService.getUmsContentByBatchId("ums_sop_ri_cost_gp_qas", "22081214105");
+        for (UmsContent messageBatch : messageBatches) {
+            boolean fileResult = true;
+            String imageKey = null;
+            JSONObject cardJson = null;
+            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                try {
+                    String tempDir = System.getProperty("java.io.tmpdir");
+                    long currentTimeMillis = System.currentTimeMillis();
+                    String excelFileName1 = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".xlsx";
+                    String pngExcelFileName = messageBatch.getConTypeDesc() + "-PNG-" + currentTimeMillis + ".xlsx";
+                    String pngFileName = messageBatch.getConTypeDesc() + "-" + currentTimeMillis + ".png";
+                    URL url = new URL(messageBatch.getSendFilePath());
+                    FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
 
-        JSONObject config = new JSONObject();
-        config.set("wide_screen_mode", true);
+                    if (StrUtil.isNotEmpty(messageBatch.getSendPicturePath())) {
+                        url = new URL(messageBatch.getSendPicturePath());
+                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
+                        com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
+                        spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
+                        Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
+                        worksheet.saveToImage(tempDir + "/" + pngFileName);
+                        imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
+                    }
 
-        JSONObject card = new JSONObject();
-        card.set("config", config);
-        card.set("elements", elements);
-        feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, "7c84331d", FeishuService.MSG_TYPE_INTERACTIVE, card);
+                    String fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
+                    String chatName = "每日毛利率飞书测试";
+                    switch (messageBatch.getConType()) {
+                        case "ums_sop_ri_cost_gp_qas":
+                        case "ums_sop_ri_cost_lens_qas":
+                            chatName = "每日毛利率飞书测试";
+                            break;
+                        case "ums_sop_ri_cost_lens_prd":
+                        case "ums_sop_ri_cost_gp_prd":
+                            chatName = "Lens每日运营指标达成汇报";
+                            break;
+                    }
+
+                    cardJson = feishuApi.getMarkdownMessage("**管理费用预算与实际费用统计（测试）** \n;时间：2022年3月;您负责部门费用如下;当月实际费用：￥14,616 K;当月预算金额：￥12,103 K;GAP节省费用：￥1,487 K;", imageKey);
+
+                    final String chatId = feishuService.fetchChatIdByRobot("我的测试群");
+                    fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                            chatId,
+                            FeishuService.MSG_TYPE_FILE,
+                            JSONUtil.createObj().set("file_key", fileKey));
+                } catch (IOException err) {
+                    String msg = "解析http文件异常！{" + err.getMessage() + "}";
+                    log.error(msg);
+                    throw new BusinessException(msg);
+                }
+            }
+            final String chatId = feishuService.fetchChatIdByRobot("我的测试群");
+            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                    chatId,
+                    FeishuService.MSG_TYPE_INTERACTIVE,
+                    cardJson);
+        }
+
+
 
     }
 
     @Test
     public void Test() {
-
-        List<DingtalkUser> dingtalkUsers = dingtalkUserService.GetUsersInfoFromDingtalk("60054916");
         List<XxlGroupInfo> xxlGroupInfoList = xxlGroupInfoService.list();
 
 //        XxlJobInfo xxlJobInfo = new XxlJobInfo();
@@ -93,7 +167,7 @@ public class UmsContentServiceImplTest {
 
         XxlJobResult test = xxlJobProvider.triggerJob(5,
                 "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
-        "");
+                "");
 //
         XxlJobResult test1 = xxlJobProvider.triggerJob(5,
                 "{\"planKey\" : \"Lens_01_rate\",  \"batchId\" : \"\", \"msgTypeInfo\" : [{\"msgType\": \"FeiShu\", \"robotUrl\": \"https://open.feishu.cn/open-apis/bot/v2/hook/5260a48e-c8ba-4cd1-8dc6-93157054264a\"}]}",
@@ -135,6 +209,21 @@ public class UmsContentServiceImplTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Test
+    public void test2() {
+        NotificationEntity notificationEntity = new NotificationEntity();
+        notificationEntity.setBatchId("22090616321");
+        notificationEntity.setPlanKey("ums_sop_ri_cost_cpx_qas");
+        Robot robot = new Robot();
+        robot.setId(1560167307305877506L);
+        List<Robot> robots = new ArrayList<>();
+        robots.add(robot);
+        notificationEntity.setMsgTypeInfo(robots);
+        sendMessageService.sendHandledMessage(notificationEntity);
+
 
     }
 }

@@ -2,7 +2,9 @@ package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.dashboard.entity.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class MoldingParamController {
     @Resource()
     MoldingMachineParamDataService moldingMachineParamDataService;
 
+    @Resource()
+    MoldingEventDataService moldingEventDataService;
+
 
     @ApiOperation(value = "获取所有机台号", notes = "获取所有机台号")
     @GetMapping("/getMoldingMachineName")
@@ -38,6 +43,19 @@ public class MoldingParamController {
         return Result.success(moldingMachineParamDataService.getWaferIds(machineName,
                 LocalDateTime.parse(startTime, df),
                 LocalDateTime.parse(endTime, df)));
+    }
+
+    @ApiOperation(value = "获取这段时间的报警事件", notes = "获取这段时间的报警事件")
+    @GetMapping(value = "/getMachineEvents")
+    public Result getMachineEvents(@RequestParam String machineName,
+                                   @RequestParam String startTime,
+                                   @RequestParam String endTime,
+                                   @RequestParam Long current,
+                                   @RequestParam Long size) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return Result.success(moldingEventDataService.getMachineEvents(machineName,
+                LocalDateTime.parse(startTime, df),
+                LocalDateTime.parse(endTime, df), new Page(current, size)));
     }
 
     @ApiOperation(value = "获取模造机参数", notes = "获取模造机参数")

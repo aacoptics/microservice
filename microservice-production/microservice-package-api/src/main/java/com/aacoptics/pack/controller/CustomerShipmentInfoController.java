@@ -6,6 +6,7 @@ import com.aacoptics.pack.entity.po.CustomerShipmentInfo;
 import com.aacoptics.pack.entity.po.ShipmentBatchInfo;
 import com.aacoptics.pack.exception.UploadErrorType;
 import com.aacoptics.pack.service.ICustomerShipmentInfoService;
+import com.aacoptics.pack.service.ICustomerShipmentRecordService;
 import com.aacoptics.pack.service.IShipmentBatchInfoService;
 import com.aacoptics.pack.service.IUploadPackageInfoService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -51,11 +52,12 @@ public class CustomerShipmentInfoController {
     @ApiOperation(value = "根据客户，订单获取关联数据", notes = "根据客户，订单获取关联数据")
     @PostMapping("/uploadShipmentInfos")
     public Result uploadShipmentInfos(@RequestBody CustomerShipmentInfoForm customerShipmentInfoForm) {
+        /*
         CustomerShipmentInfo customerShipmentInfo = customerShipmentInfoService.getByOrderNo(customerShipmentInfoForm.getCustomer(),
                 customerShipmentInfoForm.getOrderNo());
         if(customerShipmentInfo != null && customerShipmentInfo.getUploadFlg() == 1)
             return Result.fail(new UploadErrorType("005001", "该订单号已上传！"));
-
+        */
         return uploadPackageInfoService.uploadPackageInfo(customerShipmentInfoForm);
     }
 }

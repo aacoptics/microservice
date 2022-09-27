@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 @TableName("t_package_bound_info")
 public class ShipmentBatchInfo implements Serializable {
 
+    private Long id;
+
     private String customer;
 
     private String customerMaterialNo;
@@ -37,4 +39,5 @@ public class ShipmentBatchInfo implements Serializable {
     private Double spotQty;
 
     private LocalDateTime spotTime;
+
 }

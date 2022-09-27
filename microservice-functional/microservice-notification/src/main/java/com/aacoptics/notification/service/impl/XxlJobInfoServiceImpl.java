@@ -32,23 +32,58 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     XxlJobProvider xxlJobProvider;
 
     @Override
-    public boolean add(XxlJobInfo xxlJobInfo) {
+    public Result add(XxlJobInfo xxlJobInfo) {
         xxlJobInfo.setId(xxlJobInfoMapper.maxId() + 1);
         xxlJobInfo.setAddTime(new Date());
         xxlJobInfo.setUpdateTime(new Date());
         xxlJobInfo.setGlueUpdatetime(new Date());
-        return this.save(xxlJobInfo);
+        //return this.save(xxlJobInfo);
+        XxlJobResult xxlJobResult = xxlJobProvider.add(xxlJobInfo);
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("添加成功");
+        else
+            return Result.fail(xxlJobResult);
     }
 
     @Override
-    public boolean update(XxlJobInfo xxlJobInfo) {
+    public Result update(XxlJobInfo xxlJobInfo) {
         xxlJobInfo.setUpdateTime(new Date());
-        return this.updateById(xxlJobInfo);
+        XxlJobResult xxlJobResult = xxlJobProvider.update(xxlJobInfo);
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("更新成功");
+        else
+            return Result.fail(xxlJobResult);
+        //return this.updateById(xxlJobInfo);
     }
 
     @Override
-    public boolean delete(Integer id) {
-        return this.removeById(id);
+    public Result delete(Integer id) {
+        //return this.removeById(id);
+        XxlJobResult xxlJobResult = xxlJobProvider.remove(id);
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("删除成功");
+        else
+            return Result.fail(xxlJobResult);
+    }
+
+    @Override
+    public Result start(Integer id) {
+        //return this.removeById(id);
+        XxlJobResult xxlJobResult = xxlJobProvider.start(id);
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("启动成功");
+        else
+            return Result.fail(xxlJobResult);
+    }
+
+    @Override
+    public Result stop(Integer id) {
+        //return this.removeById(id);
+        XxlJobResult xxlJobResult = xxlJobProvider.stop(id);
+        if(xxlJobResult.getCode() == 200)
+            return Result.success("停止成功");
+        else
+            return Result.fail(xxlJobResult);
     }
 
     @Override

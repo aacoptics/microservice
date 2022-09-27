@@ -1,33 +1,20 @@
 package com.aacoptics.gaia.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.gaia.entity.po.DingTalkMessage;
 import com.aacoptics.gaia.entity.po.GaiaClass;
-import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
-import com.aacoptics.gaia.entity.vo.MessageInfo;
 import com.aacoptics.gaia.mapper.GaiaClassMapper;
-import com.aacoptics.gaia.mapper.PlanActualPerPersonMapper;
 import com.aacoptics.gaia.provider.GaiaApiProvider;
-import com.aacoptics.gaia.provider.NotificationProvider;
 import com.aacoptics.gaia.service.IGaiaClassService;
-import com.aacoptics.gaia.service.IPlanActualPerPersonService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j

@@ -3,7 +3,7 @@ package com.aacoptics.gaia.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.gaia.entity.form.PlanActualPerPersonForm;
-import com.aacoptics.gaia.entity.po.DingTalkMessage;
+import com.aacoptics.gaia.entity.po.FeishuMessage;
 import com.aacoptics.gaia.entity.po.PlanActualPerPerson;
 import com.aacoptics.gaia.entity.vo.MessageInfo;
 import com.aacoptics.gaia.mapper.PlanActualPerPersonMapper;
@@ -13,9 +13,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
@@ -33,6 +31,7 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
 
     @Resource
     NotificationProvider notificationProvider;
+
 
     @Override
     public List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate) {
@@ -115,15 +114,15 @@ public class PlanActualPerPersonService extends ServiceImpl<PlanActualPerPersonM
     }
 
     @Override
-    public void sendDingTalkMessage(){
+    public void sendFeishuMessage(){
         List<MessageInfo> messageInfos = getPersonPlanMsg();
         if(messageInfos.size() > 0){
             for (MessageInfo messageInfo : messageInfos) {
-                DingTalkMessage dingTalkMessage = new DingTalkMessage();
-                dingTalkMessage.setUserIdList("60054916");
-                dingTalkMessage.setTitle("测试消息");
-                dingTalkMessage.setContent(messageInfo.getMessage());
-                Result res = notificationProvider.sendDingTalkNotification(dingTalkMessage);
+                FeishuMessage feishuMessage = new FeishuMessage();
+                feishuMessage.setSendId(messageInfo.getJobNumber());
+                feishuMessage.setContent(messageInfo.getMessage());
+                feishuMessage.setSendType(IPlanActualPerPersonService.RECEIVE_ID_TYPE_USER_ID);
+                Result res = notificationProvider.sendFeishuNotification(feishuMessage);
                 if(res.isSuccess()){
                     UpdateWrapper<PlanActualPerPerson> updateWrapper = new UpdateWrapper<>();
                     updateWrapper.set("dd_transfer_flg", 1)

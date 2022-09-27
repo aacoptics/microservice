@@ -10,6 +10,11 @@ import java.util.List;
 
 public interface IPlanActualPerPersonService extends IService<PlanActualPerPerson> {
 
+    String RECEIVE_ID_TYPE_OPEN_ID = "open_id";
+    String RECEIVE_ID_TYPE_USER_ID = "user_id";
+    String RECEIVE_ID_TYPE_EMAIL = "email";
+    String RECEIVE_ID_TYPE_CHAT_ID = "chat_id";
+
     List<PlanActualPerPerson> getPlanInfoByTime(LocalDateTime startDate, LocalDateTime endDate);
 
     void updatePlanResult(List<PlanActualPerPersonForm> planActualPerPersons);
@@ -20,5 +25,5 @@ public interface IPlanActualPerPersonService extends IService<PlanActualPerPerso
 
     List<PlanActualPerPerson> getWorkDate();
 
-    void sendDingTalkMessage();
+    void sendFeishuMessage();
 }

@@ -77,6 +77,15 @@ public class InputReport implements Serializable {
     @Excel(name = "日期", orderNum = "0", format = "yyyy/MM/dd", width = 12)
     private LocalDateTime createTime;
 
+    @ExcelIgnore
+    private LocalDateTime updateTime;
+
+    @ExcelIgnore
+    private String updateUser;
+
+    @ExcelIgnore
+    private String abnormalReason;
+
     @TableField(exist = false)
     private List<String> machineNames;
 }

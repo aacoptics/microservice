@@ -258,6 +258,8 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                 String fcstMonAmount = productContent.getFcstMonAmount() != null ? decimalFormat.format(productContent.getFcstMonAmount()) : "-";
                 String fcstMonAmountRate = productContent.getFcstMonAmountRate() != null ? percentDecimalFormat.format(productContent.getFcstMonAmountRate()) : "-";
 
+                String subDayShipGpQty = productContent.getSubDayShipGpQty() != null ? decimalFormat.format(productContent.getSubDayShipGpQty()) : "-";
+                String subMtdShipGpQty = productContent.getSubMtdShipGpQty() != null ? decimalFormat.format(productContent.getSubMtdShipGpQty()) : "-";
 
                 if ("汇总".equals(productType)) {
                     markdownGroupMessage.addBlobContent(productType);
@@ -274,6 +276,9 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                             markdownGroupMessage.addBlobContent(dayTabProductType + "实际出货数量：" + dayShipQty + " K");
                         }
 
+                        if (!"-".equals(subDayShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subDayShipGpQty + " K");
+                        }
 
                         markdownGroupMessage.addBlobContent(dayTabProductType + "出货数量达成：" + dayShipRate);
                         markdownGroupMessage.addBlankLine();
@@ -303,6 +308,10 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         else
                         {
                             markdownGroupMessage.addBlobContent(mtdTabProductType + "实际出货数量：" + mtdShipQty + " K");
+                        }
+
+                        if (!"-".equals(subMtdShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
                         }
 
 
@@ -369,6 +378,10 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                             voiceStr += dayTabProductType + "实际出货数量：" + dayShipQty + " K\n";
                         }
 
+                        if (!"-".equals(subDayShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subDayShipGpQty + " K");
+                        }
+
 
                         markdownGroupMessage.addBlobContent(dayTabProductType + "出货数量达成：" + dayShipRate);
                         voiceStr += dayTabProductType + "出货数量达成：" + dayShipRate + "\n";
@@ -399,6 +412,9 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         {
                             markdownGroupMessage.addContent(mtdTabProductType + "实际出货数量：" + mtdShipQty + " K");
                             voiceStr += mtdTabProductType + "实际出货数量：" + mtdShipQty + " K\n";
+                        }
+                        if (!"-".equals(subMtdShipGpQty)) {
+                            markdownGroupMessage.addContent("其中G+P出货数量：" + subMtdShipGpQty + " K");
                         }
                     }
 

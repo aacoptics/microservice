@@ -71,7 +71,14 @@ public class RobotController {
     @ApiOperation(value = "根据名称搜索机器人", notes = "根据名称搜索机器人")
     @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
     @PostMapping(value = "/findByNames")
-    public Result findByNames(@Valid @RequestBody List<String> robotNames) {
+    public Result findByNames(@RequestBody List<String> robotNames) {
         return Result.success(robotService.findByName(robotNames));
+    }
+
+    @ApiOperation(value = "根据id搜索机器人", notes = "根据id搜索机器人")
+    @ApiResponses(@ApiResponse(code = 200, message = "处理成功", response = Result.class))
+    @PostMapping(value = "/findByIds")
+    public Result findByIds(@RequestBody List<Long> ids) {
+        return Result.success(robotService.findByIds(ids));
     }
 }

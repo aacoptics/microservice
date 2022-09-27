@@ -13,11 +13,11 @@
         SELECT *,
                JSON_VALUE(executor_param, '$.planKey') as 'plan_key'
         from (
-                 SELECT a.id
+                 SELECT id
                       , job_group
                       , job_desc
                       , add_time
-                      , a.update_time
+                      , update_time
                       , author
                       , alarm_email
                       , schedule_type
@@ -37,10 +37,8 @@
                       , trigger_status
                       , trigger_last_time
                       , trigger_next_time
-                 FROM xxl_job_info a
-                          join xxl_job_group b
-                               on a.job_group = b.id
-                 where b.app_name = 'notification-center') t
+                 FROM xxl_job_info
+                 where executor_handler = 'RobotHandle') t
         where #{planKey} is null
            or #{planKey} = ''
            or JSON_VALUE(executor_param, '$.planKey') = #{planKey}

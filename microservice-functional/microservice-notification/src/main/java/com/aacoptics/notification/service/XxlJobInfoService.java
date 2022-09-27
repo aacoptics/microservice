@@ -11,11 +11,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface XxlJobInfoService extends IService<XxlJobInfo> {
 
-    boolean add(XxlJobInfo xxlJobInfo);
+    Result add(XxlJobInfo xxlJobInfo);
 
-    boolean update(XxlJobInfo xxlJobInfo);
+    Result update(XxlJobInfo xxlJobInfo);
 
-    boolean delete(Integer id);
+    Result delete(Integer id);
+
+    Result start(Integer id);
+
+    Result stop(Integer id);
 
     IPage<XxlJobInfo> query(Page page, XxlJobInfo xxlJobInfo);
 

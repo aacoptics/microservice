@@ -3,23 +3,19 @@ package com.aacoptics.notification.event;
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.notification.entity.form.SpeakerVoiceFileInfo;
 import com.aacoptics.notification.entity.vo.MarkdownMessage;
+import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.provider.JacobProvider;
-import com.aacoptics.notification.utils.DingTalkUtil;
+import com.aacoptics.notification.service.FeishuService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.primitives.Ints;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
-import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.scheduling.annotation.Async;
-
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 
@@ -33,11 +29,22 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 
     private JacobProvider jacobProvider;
 
-    public MqttConsumerCallBack(MqttClient client, MqttConnectOptions options, String subTopics, JacobProvider jacobProvider) {
+    private FeishuApi feishuApi;
+
+    private FeishuService feishuService;
+
+    public MqttConsumerCallBack(MqttClient client,
+                                MqttConnectOptions options,
+                                String subTopics,
+                                JacobProvider jacobProvider,
+                                FeishuApi feishuApi,
+                                FeishuService feishuService) {
         this.client = client;
         this.options = options;
         this.subTopics = subTopics;
         this.jacobProvider = jacobProvider;
+        this.feishuApi = feishuApi;
+        this.feishuService = feishuService;
     }
 
     /**
@@ -69,57 +76,72 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         MarkdownMessage markdownGroupMessage = new MarkdownMessage();
         String title = null;
         switch (msgJson.getString("Message")) {
-            case "DoMonitorTempAlarm":
-                title = "加热棒状态报警";
+//            case "DoMonitorTempAlarm":
+//                title = "加热棒状态报警";
+//                markdownGroupMessage.setTitle(title);
+//                String param = dataJson.getString("param");
+//                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
+//                int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
+//                String abnormalStr = Ints.join(",", abnormalIdx);
+//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                if (param.equals("lower")) {
+//                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+//                } else {
+//                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+//                }
+//                break;
+            case "moldCtMonitor":
+                title = "阶段时长报警";
                 markdownGroupMessage.setTitle(title);
-                String param = dataJson.getString("param");
-                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
-                int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
-                String abnormalStr = Ints.join(",", abnormalIdx);
+                String phase = dataJson.getString("recipePhase");
+                Integer phaseTime = dataJson.getInteger("sequence");
+                Integer avgPhaseTime = dataJson.getInteger("averageCt");
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addBlobContent(localTimeStr);
-                if (param.equals("lower")) {
-                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-                } else {
-                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                if(!phase.trim().equals("Recipe Ready")){
+                    markdownGroupMessage.addContent("当前阶段CT异常，阶段：" + phase + "，已持续" + phaseTime + "秒，平均" + avgPhaseTime + "秒，请检查。");
                 }
                 break;
-            case "FeedAlarm":
-                title = "模造换料提醒";
-                markdownGroupMessage.setTitle(title);
-                markdownGroupMessage.addBlobContent(localTimeStr);
-                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-                sendToAllSpeaker(machineName);
-                break;
-            case "moldTempMonitor":
-                title = "模造温度曲线报警";
-                String moldParam = dataJson.getString("param");
-                String avgValue = dataJson.getString("averageValue");
-                String currentValue = dataJson.getString("currentValue");
-                String recipePhase = dataJson.getString("recipePhase");
-                markdownGroupMessage.setTitle(title);
-                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
-                markdownGroupMessage.addBlobContent(localTimeStr);
-                if(moldParam.indexOf("upper") == 0)
-                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-                else if(moldParam.indexOf("lower") == 0)
-                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-                else
-                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
-                break;
+//            case "FeedAlarm":
+//                title = "模造换料提醒";
+//                markdownGroupMessage.setTitle(title);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+//                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+//                sendToAllSpeaker(machineName);
+//                break;
+//            case "moldTempMonitor":
+//                title = "模造温度曲线报警";
+//                String moldParam = dataJson.getString("param");
+//                String avgValue = dataJson.getString("averageValue");
+//                String currentValue = dataJson.getString("currentValue");
+//                String recipePhase = dataJson.getString("recipePhase");
+//                markdownGroupMessage.setTitle(title);
+//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+//                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
+//                markdownGroupMessage.addBlobContent(localTimeStr);
+//                if (moldParam.indexOf("upper") == 0)
+//                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+//                else if (moldParam.indexOf("lower") == 0)
+//                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+//                else
+//                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
+//                break;
         }
 
-        String robotUrl = "https://oapi.dingtalk.com/robot/send?access_token=bcf308c4ee97a16d9265365d27001de7f42794d9018702fd253c2d1b28bc442a";
+        String chatName = "模造车间异常&换料自动提醒群";
         try {
-            if(StrUtil.isBlank(title)){
+            if (StrUtil.isBlank(title)) {
                 log.error("title为空");
                 return;
             }
-            Map<String, String> resultMap = DingTalkUtil.sendGroupRobotMessage(robotUrl, title, markdownGroupMessage.toString());
-            JSONObject resultMapJson = (JSONObject) JSONObject.toJSON(resultMap);
-            log.debug(JSONObject.toJSONString(resultMapJson));
+            String chatId = feishuService.fetchChatIdByRobot(chatName);
+            cn.hutool.json.JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage.toString(), null);
+            feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                    chatId,
+                    FeishuService.MSG_TYPE_INTERACTIVE,
+                    cardJson);
         } catch (Exception err) {
             log.error("发送" + title + "失败！", err);
         }
@@ -162,14 +184,14 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 
 
     @Async
-    public void sendToAllSpeaker(String machineName){
+    public void sendToAllSpeaker(String machineName) {
         for (SpeakerVoiceFileInfo speakerInfo : speakerInfos) {
             sendVoiceToSpeaker(machineName, speakerInfo.getSpeakerSn(), speakerInfo.getSpeakerIp(), speakerInfo.getSpeakerPort());
         }
     }
 
     @Async
-    public void sendVoiceToSpeaker(String machineName, String speakerSn, String speakerIp, Integer speakerPort){
+    public void sendVoiceToSpeaker(String machineName, String speakerSn, String speakerIp, Integer speakerPort) {
         SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
         speakerVoiceFileInfo.setMessage(machineName + "机台需要换料，请注意\n"
                 + machineName + "机台需要换料，请注意\n"

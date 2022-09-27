@@ -40,6 +40,12 @@ public class UmsContent implements Serializable {
 
     private String linkUrl;
 
+    private String sendType;
+
+    private String userNum;
+
+    private String isDaiban;
+
     private String sendFilePath;
 
     private String sendPicturePath;

@@ -1,6 +1,7 @@
 package com.aacoptics.notification.service;
 
 import cn.hutool.json.JSONObject;
+import com.aacoptics.notification.entity.po.FeishuUser;
 import reactor.util.function.Tuple2;
 
 import java.io.IOException;
@@ -43,6 +44,8 @@ public interface FeishuService {
     String FILE_TYPE_PPT = "ppt";
     String FILE_TYPE_STREAM = "stream";
 
+    FeishuUser getFeishuUser(String employeeNo);
+
     String fetchAccessToken();
 
     String fetchUploadAvatarImageKey(String filePath) throws IOException;
@@ -54,6 +57,14 @@ public interface FeishuService {
     String fetchChatIdByRobot(String chatName);
 
     boolean sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
+
+    JSONObject createTask(String userIdType,
+                          JSONObject jsonObject);
+
+    JSONObject getTaskInfo(String taskId);
+
+    JSONObject getTaskCommentsInfo(String taskId,
+                                   String CommentId);
 
     JSONObject getImagePostMessage(String title, List<Tuple2<String, String>> imageTileAndKeys, List<String> atList);
 

@@ -6,15 +6,21 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
 import com.aacoptics.notification.config.FeishuAppKeyConfig;
+import com.aacoptics.notification.entity.po.FeishuUser;
 import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.mapper.FeishuUserMapper;
 import com.aacoptics.notification.provider.FeishuApiProvider;
 import com.aacoptics.notification.service.FeishuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import reactor.util.function.Tuple2;
@@ -40,6 +46,14 @@ public class FeishuServiceImpl implements FeishuService {
 
     @Resource
     private FeishuAppKeyConfig feishuAppKeyConfig;
+
+    @Resource
+    private FeishuUserMapper feishuUserMapper;
+
+    @Override
+    public FeishuUser getFeishuUser(String employeeNo) {
+        return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getEmployeeNo, employeeNo));
+    }
 
     @Override
     public String fetchAccessToken() {
@@ -156,6 +170,45 @@ public class FeishuServiceImpl implements FeishuService {
                         .set("title", title)
                         .set("content", content));
     }
+
+    @Override
+    public JSONObject createTask(String userIdType,
+                              JSONObject jsonObject) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token失败！");
+        final JSONObject result = feishuApiProvider.fetchCreateTask(accessToken, userIdType, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
+    @Override
+    public JSONObject getTaskInfo(String taskId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token报错");
+        final JSONObject result = feishuApiProvider.fetchTasks(accessToken, FeishuService.RECEIVE_ID_TYPE_USER_ID, taskId);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
+    @Override
+    public JSONObject getTaskCommentsInfo(String taskId,
+                                       String CommentId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token报错");
+        final JSONObject result = feishuApiProvider.fetchTaskComments(accessToken, taskId, CommentId);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
 
     @Override
     public JSONObject getStringPostMessage(String title, List<String> messages, List<String> atList) {

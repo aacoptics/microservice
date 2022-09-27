@@ -28,16 +28,31 @@
                 @findPage="findPage"
                 @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
+          <!--          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"-->
+          <!--                           width="80">-->
+          <!--            <template v-slot="scope">-->
+          <!--              <el-button v-if="scope.row.triggerStatus === 1"-->
+          <!--                         round size="small" type="success">-->
+          <!--                启动中-->
+          <!--              </el-button>-->
+          <!--              <el-button v-else round size="small" type="danger">-->
+          <!--                停止-->
+          <!--              </el-button>-->
+          <!--            </template>-->
+          <!--          </el-table-column>-->
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
             <template v-slot="scope">
-              <el-button v-if="scope.row.triggerStatus === 1"
-                         round size="small" type="success">
-                启动中
-              </el-button>
-              <el-button v-else round size="small" type="danger">
-                停止
-              </el-button>
+              <el-switch
+                  v-model="scope.row.triggerStatus"
+                  :active-value="1"
+                  :inactive-value="0"
+                  width="60px"
+                  active-text="启用"
+                  inactive-text="停用"
+                  inline-prompt
+                  @change="handleStatusChange(scope.row)"
+              ></el-switch>
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="执行"
@@ -101,7 +116,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="消息机器人" prop="currentRobotsInfo">
+              <el-form-item label="消息飞书群" prop="currentRobotsInfo">
                 <el-select v-model="currentRobotsInfo" multiple placeholder="请选择"
                            value-key="id">
                   <el-option
@@ -136,7 +151,16 @@
             </el-col>
             <el-col v-if="dataForm.scheduleType!=='NONE'" :span="12">
               <el-form-item v-if="dataForm.scheduleType==='CRON'" label="CRON" prop="scheduleConf">
-                <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入CRON"></el-input>
+                <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入CRON">
+                  <template #append>
+                    <el-button type="primary" @click="handleShowCron">
+                      <template #icon>
+                        <font-awesome-icon :icon="['far','clock']"/>
+                      </template>
+                      生成表达式
+                    </el-button>
+                  </template>
+                </el-input>
               </el-form-item>
               <el-form-item v-if="dataForm.scheduleType==='FIX_RATE'" label="固定速度" prop="scheduleConf">
                 <el-input v-model="dataForm.scheduleConf" auto-complete="off" placeholder="请输入（秒）"></el-input>
@@ -201,20 +225,20 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="是否启用" prop="executorTimeout">
-                <el-switch
-                    v-model="dataForm.triggerStatus"
-                    :active-value="1"
-                    :inactive-value="0"
-                    active-text="是"
-                    inactive-text="否"
-                    inline-prompt
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <!--          <el-row>-->
+          <!--            <el-col :span="12">-->
+          <!--              <el-form-item label="是否启用" prop="executorTimeout">-->
+          <!--                <el-switch-->
+          <!--                    v-model="dataForm.triggerStatus"-->
+          <!--                    :active-value="1"-->
+          <!--                    :inactive-value="0"-->
+          <!--                    active-text="是"-->
+          <!--                    inactive-text="否"-->
+          <!--                    inline-prompt-->
+          <!--                />-->
+          <!--              </el-form-item>-->
+          <!--            </el-col>-->
+          <!--          </el-row>-->
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -223,7 +247,7 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次"
+      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次" destroy-on-close
                  width="40%" @open="handleTriggerDialogOpen">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="110px">
           <el-form-item v-if="false" label="Id" prop="id">
@@ -266,6 +290,9 @@
           </slot>
         </div>
       </el-dialog>
+      <el-dialog v-model="openCron" title="Cron表达式生成器" append-to-body destroy-on-close class="scrollbar">
+        <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -275,20 +302,21 @@ import SysTable from "@/components/SysTable";
 import {
   deleteTask,
   findTaskInfoPage,
-  getGroupInfo,
   handleAdd,
-  handleUpdate,
+  handleUpdate, startTask, stopTask,
   triggerNotificationJob
 } from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
-import {findByNames, getAllRobotInfo} from "@/api/notification/robot";
+import {findByIds, getAllRobotInfo} from "@/api/notification/robot";
+import Crontab from '@/components/Crontab'
 
 export default {
   name: "user",
-  components: {SysTable},
+  components: {SysTable, Crontab},
   data() {
     return {
       size: 'default',
+      expression: "",
       filters: {
         planKey: ''
       },
@@ -302,6 +330,7 @@ export default {
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       operation: false, // true:新增, false:编辑
+      openCron: false,
       dialogVisible: false, // 新增编辑界面是否显示
       triggerDialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
@@ -310,6 +339,7 @@ export default {
         jobDesc: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
         planKey: [{required: true, message: '请输入任务Key', trigger: 'blur'}],
         scheduleType: [{required: true, message: '请选择调度类型', trigger: 'change'}],
+        scheduleConf: [{required: true, message: '请输入任务调度时间', trigger: 'blur'}],
         executorRouteStrategy: [{required: true, message: '请选择路由策略', trigger: 'change'}],
         executorBlockStrategy: [{required: true, message: '请选择阻塞处理策略', trigger: 'change'}],
         author: [{required: true, message: '请输入负责人', trigger: 'blur'}],
@@ -319,7 +349,7 @@ export default {
       // 新增编辑界面数据
       dataForm: {
         id: 0,
-        jobGroup: '',
+        jobGroup: 4,
         executorParam: '',
         planKey: '',
         jobDesc: '',
@@ -333,13 +363,13 @@ export default {
         executorBlockStrategy: '',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: '',
+        executorHandler: 'RobotHandle',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
         triggerStatus: 0
       },
-      executorInfo: [],
+      executorInfo: [{"id":4,"appName":"notification-center","title":"统一消息中心"}],
       robotOptions: [],
       executorHandlerOptions: [],
       currentRobotsInfo: [],
@@ -350,6 +380,42 @@ export default {
     }
   },
   methods: {
+    // 任务状态修改
+    handleStatusChange(row) {
+      let text = row.triggerStatus === 1 ? "启用" : "停用";
+      this.$confirm('确认要' + text + '""' + row.planKey + '"任务吗?').then(() =>  {
+        if(row.triggerStatus === 1){
+          startTask(row).then((res) => {
+            const responseData = res.data
+            if (responseData.code === '000000') {
+              this.$message({message: text + '成功', type: 'success'})
+            }else{
+              this.$message({message: responseData.data.msg, type: 'error'})
+              row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+            }
+          })
+        }else if(row.triggerStatus === 0)        {
+          stopTask(row).then((res) => {
+            const responseData = res.data
+            if (responseData.code === '000000') {
+              this.$message({message: text + '成功', type: 'success'})
+            }else{
+              this.$message({message: responseData.data.msg, type: 'error'})
+              row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+            }
+          })
+        }
+      }).catch(function () {
+        row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
+      });
+    },
+    handleShowCron() {
+      this.expression = this.dataForm.scheduleConf;
+      this.openCron = true;
+    },
+    crontabFill(value) {
+      this.dataForm.scheduleConf = value;
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -365,12 +431,12 @@ export default {
     },
 
     handleDialogOpen() {
-      getGroupInfo().then((res) => {
-        const responseData = res.data
-        if (responseData.code === '000000') {
-          this.executorInfo = responseData.data
-        }
-      })
+      // getGroupInfo().then((res) => {
+      //   const responseData = res.data
+      //   if (responseData.code === '000000') {
+      //     this.executorInfo = responseData.data
+      //   }
+      // })
 
       getAllRobotInfo().then((res) => {
         const responseData = res.data
@@ -421,7 +487,7 @@ export default {
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
         id: 0,
-        jobGroup: '',
+        jobGroup: 4,
         executorParam: '',
         planKey: '',
         jobDesc: '',
@@ -434,7 +500,7 @@ export default {
         executorBlockStrategy: 'SERIAL_EXECUTION',
         executorTimeout: 0,
         executorFailRetryCount: 0,
-        executorHandler: '',
+        executorHandler: 'RobotHandle',
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
@@ -464,7 +530,7 @@ export default {
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName': item.robotName
+                    'id': item.id
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
@@ -512,7 +578,7 @@ export default {
             executorParams.msgTypeInfo = this.currentRobotsInfo.map((item) => {
               return Object.assign({},
                   {
-                    'robotName': item.robotName
+                    'id': item.id
                   })
             })
             params.executorParam = JSON.stringify(executorParams)
@@ -544,19 +610,19 @@ export default {
         return
       }
 
-      const robotNameList = []
+      const robotIdList = []
       if (val.val.executorParam) {
         const executorParamJson = JSON.parse(val.val.executorParam)
         if (executorParamJson.msgTypeInfo) {
           const robotList = executorParamJson.msgTypeInfo
           robotList.forEach((item) => {
-            if (item.robotName)
-              robotNameList.push(item.robotName)
+            if (item.id)
+              robotIdList.push(item.id)
           })
         }
       }
-      if (robotNameList.length > 0) {
-        findByNames(robotNameList).then((res) => {
+      if (robotIdList.length > 0) {
+        findByIds(robotIdList).then((res) => {
           const responseData = res.data
           if (responseData.code === '000000') {
             this.currentRobotsInfo = responseData.data

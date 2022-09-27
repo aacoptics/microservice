@@ -1,10 +1,15 @@
 package com.aacoptics.notification.provider;
+
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.config.FeishuAppKeyConfig;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -43,6 +48,30 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
 
             @Override
             public JSONObject fetchChats(String authorization, String userIdType, String pageToken, int pageSize) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
+            public JSONObject fetchCreateTask(String authorization,
+                                              String userIdType,
+                                              JSONObject jsonObject) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
+            public JSONObject fetchTasks(String authorization,
+                                         String userIdType,
+                                         String taskId) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
+            public JSONObject fetchTaskComments(String authorization,
+                                                String taskId,
+                                                String commentId) {
                 throwable.printStackTrace();
                 return JSONUtil.createObj().set("Throwable", throwable.toString());
             }
