@@ -119,3 +119,14 @@ export function deleteMaintenanceOrderShift(deleteForm) {
         }
     })
 }
+
+export function handleBatchConfirm(params) {
+    return request({
+        url: '/wlg-equipment/maintenanceOrder/batchConfirm',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: params
+    })
+}

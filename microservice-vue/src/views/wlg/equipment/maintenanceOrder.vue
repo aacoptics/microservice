@@ -3,18 +3,33 @@
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
+          <el-row>
+          <el-form-item label="设备编码" prop="mchCode">
+            <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
+          </el-form-item>
           <el-form-item label="设备名称" prop="mchName">
             <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
           </el-form-item>
           <el-form-item label="规格" prop="spec">
             <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
           </el-form-item>
+        </el-row>
+          <el-row>
           <el-form-item label="型号" prop="typeVersion">
             <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="保养项" prop="checkItem">
-            <el-input v-model="filters.checkItem" clearable placeholder="保养项"></el-input>
-          </el-form-item> -->
+          <el-form-item label="工单状态" prop="status">
+          <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
+            <el-option
+                v-for="item in orderStatusOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+          </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
@@ -23,15 +38,20 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
+            <el-button type="info" :loading="comfirmLoading" @click="handleBatchConfirm">批量确认
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'check']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+      <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border
+                :stripe="true"  :header-cell-style="{'text-align':'center'}" border @selection-change="handleSelectionChange"
             :cell-style="{'text-align':'left'}" :show-operation="false"
                 @findPage="findPage" @handleCurrentChange="handleCurrentChange">
-      </SysTable>
+      </orderTable>
       <el-tabs type="border-card" style="margin-top: 50px;">
         <el-tab-pane label="保养项">
           <el-table size="small" :data="maintenanceOrderItemTableData" border :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'left'}" v-loading="findDetailLoading">
@@ -160,23 +180,24 @@
 </template>
 
 <script>
-import SysTable from "@/components/SysTable";
-import {findMaintenanceOrderPage, handleAdd, handleUpdate,  
-   findMaintenanceOrderById, } from "@/api/wlg/equipment/maintenanceOrder";
+import orderTable from "./orderTable";
+import {findMaintenanceOrderPage, handleAdd, handleUpdate,  findMaintenanceOrderById, handleBatchConfirm} from "@/api/wlg/equipment/maintenanceOrder";
 import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
+import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
   name: "maintenanceOrder",
-  components: {SysTable},
+  components: {orderTable},
   data() {
     return {
       size: "default",
       filters: {
+        mchCode:'',
         mchName: "",
         spec: "",
         typeVersion: "",
-        checkItem: "",
+        status: "",
       },
       columns: [
         {prop: "orderNumber", label: "工单号", minWidth: 110},
@@ -184,9 +205,9 @@ export default {
         {prop: "mchName", label: "设备名称", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 100},
         {prop: "typeVersion", label: "型号", minWidth: 120},
-        {prop: "factoryNo", label: "出厂编码", minWidth: 120},
+        {prop: "factoryNo", label: "出厂编码", minWidth: 130},
         {prop: "dutyPersonId", label: "责任人", minWidth: 100},
-        {prop: "status", label: "状态", minWidth: 100},
+        {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "maintenanceDate", label: "保养日期", minWidth: 100},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -207,6 +228,8 @@ export default {
       editLoading: false,
       findLoading: false,
       findDetailLoading: false,
+      comfirmLoading: false,
+
       dataFormRules: {
         mchName: [{required: true, message: "请输入设备名称", trigger: "blur"}],
         spec: [{required: true, message: "请输入规格", trigger: "blur"}],
@@ -238,6 +261,8 @@ export default {
         maxValue: null,
       },
       currentSelectMaintenanceOrderMainRowId: null,
+      multipleSelection: [],
+      orderStatusOptions:[]
     };
   },
   mounted() {
@@ -245,6 +270,9 @@ export default {
       if (response.data.data.length > 0) {
         this.mchNameOptions = response.data.data
       }
+    }),
+    getDict("wlg_em_maintenance_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
     })
   },
   methods: {
@@ -253,10 +281,11 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
+      this.pageRequest.mchCode = this.filters.mchCode;
       this.pageRequest.mchName = this.filters.mchName;
       this.pageRequest.spec = this.filters.spec;
       this.pageRequest.typeVersion = this.filters.typeVersion;
-      this.pageRequest.checkItem = this.filters.checkItem;
+      this.pageRequest.status = this.filters.status;
       this.findLoading = true;
       findMaintenanceOrderPage(this.pageRequest)
           .then((res) => {
@@ -293,7 +322,47 @@ export default {
       this.currentSelectMaintenanceOrderMainRowId = val.val.id;
       this.findMaintenanceOrderDetail(this.currentSelectMaintenanceOrderMainRowId);
     },
-    
+    //获取多选的数据
+    handleSelectionChange(val) {
+      this.multipleSelection = val;//存储选中的数据
+    },
+      //处理批量确认
+      handleBatchConfirm: function()
+    {
+      if(this.multipleSelection == null || this.multipleSelection.length==0)
+      {
+        this.$message({
+            message:
+                "请至少选择一个工单",
+            type: "error",
+          });
+          return;
+      }
+
+      this.$confirm("确定批量确认吗？", "提示", {}).then(() => {
+        let ids = this.multipleSelection.selections.map(item => item.id).toString()
+        let params = []
+        let idArray = (ids + '').split(',')
+        for (let i = 0; i < idArray.length; i++) {
+          params.push(idArray[i])
+        }
+        this.comfirmLoading = true;
+        handleBatchConfirm(params).then((res) => {
+          const responseData = res.data;
+          this.comfirmLoading = false;
+          if (responseData.code === "000000") {
+            this.$message({message: "操作成功", type: "success"});
+          } else {
+            this.$message({
+              message:
+                  "操作失败 " + getResponseDataMessage(responseData),
+              type: "error",
+            });
+          }
+          this.findPage(null);
+        }); 
+      });
+    },
    
     // 显示新增界面
     handleAdd: function () {
@@ -410,7 +479,9 @@ export default {
     {
       this.maintenanceOrderItemDialogVisible = false;
     },
-
+    statusFormat: function (row) {
+      return selectDictLabel(this.orderStatusOptions, row.status);
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");

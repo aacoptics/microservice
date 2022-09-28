@@ -119,3 +119,15 @@ export function deleteInspectionOrderShift(deleteForm) {
         }
     })
 }
+
+
+export function handleBatchConfirm(params) {
+    return request({
+        url: '/wlg-equipment/inspectionOrder/batchConfirm',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: params
+    })
+}

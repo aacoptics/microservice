@@ -33,8 +33,7 @@
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border
-            :cell-style="{'text-align':'left'}"
+                :stripe="true"  :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
                 @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit" @handleCurrentChange="handleCurrentChange">
       </SysTable>
       <el-tabs type="border-card" style="margin-top: 50px;">
