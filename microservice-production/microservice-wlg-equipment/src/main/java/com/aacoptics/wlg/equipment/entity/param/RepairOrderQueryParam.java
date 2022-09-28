@@ -19,6 +19,11 @@ public class RepairOrderQueryParam extends BaseParam<RepairOrder> {
 
 
     /**
+     * 资产编码
+     */
+    private String mchCode;
+
+    /**
      * 资产名称
      */
     private String mchName;
@@ -37,4 +42,8 @@ public class RepairOrderQueryParam extends BaseParam<RepairOrder> {
     private String typeVersion;
 
 
+    /**
+     * 工单状态
+     */
+    private String status;
 }

@@ -1,10 +1,13 @@
 package com.aacoptics.wlg.equipment.service;
 
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
+import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import java.util.List;
 
 public interface MaintenanceOrderService {
 
@@ -74,4 +77,20 @@ public interface MaintenanceOrderService {
      */
     String getNextOrderNumber(String sequenceName);
 
+
+
+    /**
+     * 批量确认工单
+     *
+     */
+    void batchConfirm(List<String> repairOrderIds);
+
+
+    /**
+     * 通过设备编码查询保养工单
+     *
+     * @param mchCode 设备编码
+     * @return
+     */
+    MaintenanceOrder findOrderByMchCode(String mchCode);
 }

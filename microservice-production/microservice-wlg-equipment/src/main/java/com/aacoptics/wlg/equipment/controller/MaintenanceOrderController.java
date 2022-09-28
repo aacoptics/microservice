@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/maintenanceOrder")
@@ -73,4 +74,25 @@ public class MaintenanceOrderController {
         return Result.success(maintenanceOrderService.get(id));
     }
 
+    @ApiOperation(value = "确认保养工单结果", notes = "确认保养工单结果")
+    @ApiImplicitParam(name = "maintenanceOrderIds", value = "工单IDS", required = true, dataType = "List")
+    @PostMapping("/batchConfirm")
+    public Result batchConfirm(@Valid @RequestBody List<String> maintenanceOrderIds) {
+        log.debug("name:{}", maintenanceOrderIds);
+
+        maintenanceOrderService.batchConfirm(maintenanceOrderIds);
+        return Result.success();
+    }
+
+
+    @ApiOperation(value = "根据设备编码查询保养工单", notes = "根据设备编码查询保养工单")
+    @ApiImplicitParam(name = "mchCode", value = "设备编码", required = true, dataType = "String")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/findOrderByMchCode")
+    public Result findOrderByMchCode(String mchCode) {
+        log.debug("query with name:{}", mchCode);
+        return Result.success(maintenanceOrderService.findOrderByMchCode(mchCode));
+    }
 }

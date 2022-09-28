@@ -12,20 +12,16 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class RepairOrderForm extends BaseForm<RepairOrder> {
 
-    @NotBlank(message = "资产名称不能为空")
-    @ApiModelProperty(value = "资产名称")
-    private String mchName;
+    @NotBlank(message = "设备编码不能为空")
+    @ApiModelProperty(value = "设备编码")
+    private String mchCode;
 
-    @NotBlank(message = "规格不能为空")
-    @ApiModelProperty(value = "规格")
-    private String spec;
+    @NotBlank(message = "故障描述不能为空")
+    @ApiModelProperty(value = "故障描述")
+    private String faultDesc;
 
-    @NotBlank(message = "型号不能为空")
-    @ApiModelProperty(value = "型号")
-    private String typeVersion;
-
-    @NotBlank(message = "保养周期不能为空")
-    @ApiModelProperty(value = "保养周期")
-    private Long repairPeriod;
+    @NotBlank(message = "故障照片不能为空")
+    @ApiModelProperty(value = "故障照片")
+    private String faultPhoto;
 
 }

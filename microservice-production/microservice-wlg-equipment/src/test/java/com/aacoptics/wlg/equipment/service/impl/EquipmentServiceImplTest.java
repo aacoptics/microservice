@@ -26,7 +26,7 @@ class EquipmentServiceImplTest {
     }
 
     @Test
-    void saveWlgEquipmentFormEAM() {
-        equipmentService.saveWlgEquipmentFormEAM();
+    void syncWlgEquipmentFromEAM() {
+        equipmentService.syncWlgEquipmentFromEAM();
     }
 }

@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.entity.form.EquipmentForm;
 import com.aacoptics.wlg.equipment.entity.form.EquipmentQueryForm;
 import com.aacoptics.wlg.equipment.entity.param.EquipmentQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.Equipment;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.EquipmentService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -105,5 +106,16 @@ public class EquipmentController {
     public Result get(@PathVariable Long id) {
         log.debug("get with id:{}", id);
         return Result.success(equipmentService.get(id));
+    }
+
+
+    @ApiOperation(value = "获取设备", notes = "获取指定设备信息")
+    @ApiImplicitParam(paramType = "path", name = "mchCode", value = "设备编码", example = "0", required = true, dataType = "String")
+    @GetMapping(value = "findEquipmentByMchCode/{mchCode}")
+    public Result findEquipmentByMchCode(@PathVariable String mchCode) {
+        log.debug("get with id:{}", mchCode);
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+
+        return Result.success(equipment);
     }
 }

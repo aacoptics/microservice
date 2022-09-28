@@ -17,6 +17,10 @@ public class InspectionOrderQueryParam extends BaseParam<InspectionOrder> {
      */
     private Long id;
 
+    /**
+     * 资产编码
+     */
+    private String mchCode;
 
     /**
      * 资产名称
@@ -36,5 +40,10 @@ public class InspectionOrderQueryParam extends BaseParam<InspectionOrder> {
      */
     private String typeVersion;
 
+
+    /**
+     * 工单状态
+     */
+    private String status;
 
 }

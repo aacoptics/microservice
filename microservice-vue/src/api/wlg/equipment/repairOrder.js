@@ -52,3 +52,14 @@ export function handleUpdate(updateForm) {
         data: updateForm
     })
 }
+
+export function handleBatchConfirm(params) {
+    return request({
+        url: '/wlg-equipment/repairOrder/batchConfirm',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: params
+    })
+}

@@ -1,7 +1,9 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
@@ -137,6 +139,8 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
             String mchName = maintenanceMain.getMchName();
             String spec = maintenanceMain.getSpec();
             String typeVersion = maintenanceMain.getTypeVersion();
+            Long maintenancePeriod = maintenanceMain.getMaintenancePeriod();
+//            String periodUnit = maintenanceMain.getPeriodUnit();
             //获取设备
             List<Equipment> equipmentList = equipmentService.findEquipmentList(mchName, spec, typeVersion);
             if(equipmentList == null || equipmentList.size() ==0)
@@ -153,11 +157,18 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
             for(Equipment equipment : equipmentList)
             {
+                LocalDateTime lastMaintenanceDatetime = equipment.getLastMaintenanceDatetime();
+                if(lastMaintenanceDatetime != null && lastMaintenanceDatetime.toLocalDate().isAfter(currentDate))
+                {
+                    continue;
+                }
+                LocalDate maintenanceDate = lastMaintenanceDatetime.toLocalDate().plusMonths(maintenancePeriod);
+
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
                 maintenanceOrder.setMchCode(equipment.getMchCode());
                 maintenanceOrder.setDutyPersonId(equipment.getDutyPersonId());
-                maintenanceOrder.setMaintenanceDate(currentDate);
+                maintenanceOrder.setMaintenanceDate(maintenanceDate); //计划保养日期
                 maintenanceOrder.setMaintenancePeriod(maintenanceMain.getMaintenancePeriod());
                 maintenanceOrder.setPeriodUnit(maintenanceMain.getPeriodUnit());
 
@@ -178,6 +189,10 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 maintenanceOrder.setMaintenanceOrderItemList(maintenanceOrderItemList);
 
                 this.add(maintenanceOrder);
+
+                //更新设备最后保养日期
+                equipment.setLastMaintenanceDatetime(maintenanceDate.atTime(0, 0, 0));
+                equipmentService.update(equipment);
             }
         }
         log.info("完成生成设备保养工单");
@@ -202,5 +217,48 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         String nextSequenceNumberStr =  currentDate + String.format("%04d", nextSequenceNumber);
 
         return nextSequenceNumberStr;
+    }
+
+    @Override
+    @Transactional
+    public void batchConfirm(List<String> maintenanceOrderIds) {
+        if(maintenanceOrderIds == null || maintenanceOrderIds.size() == 0)
+        {
+            throw new BusinessException("请至少选择一个维修工单");
+        }
+        for(int i=0; i<maintenanceOrderIds.size(); i++)
+        {
+            String idStr = maintenanceOrderIds.get(i);
+            MaintenanceOrder maintenanceOrder = this.getById(Long.valueOf(idStr));
+            if(!MaintenanceOrderStatusConstants.COMMITTED.equals(maintenanceOrder.getStatus()))
+            {
+                throw new BusinessException("工单【" + maintenanceOrder.getOrderNumber() + "】不是已提交状态，不能确认");
+            }
+            maintenanceOrder.setStatus(MaintenanceOrderStatusConstants.CONFIRMED);
+            this.update(maintenanceOrder);
+        }
+    }
+
+
+    @Override
+    public MaintenanceOrder findOrderByMchCode(String mchCode) {
+        QueryWrapper<MaintenanceOrder> maintenanceOrderQueryWrapper = new QueryWrapper<>();
+        maintenanceOrderQueryWrapper.eq("mch_code", mchCode);
+        maintenanceOrderQueryWrapper.in("status", InspectionOrderStatusConstants.CREATED, InspectionOrderStatusConstants.STAGED);
+
+        maintenanceOrderQueryWrapper.orderByAsc("maintenance_date");
+
+        MaintenanceOrder maintenanceOrder = maintenanceOrderMapper.selectOne(maintenanceOrderQueryWrapper);
+
+        //查询保养项
+        QueryWrapper<MaintenanceOrderItem> maintenanceOrderItemQueryWrapper = new QueryWrapper<MaintenanceOrderItem>();
+        maintenanceOrderItemQueryWrapper.eq( "maintenance_order_id", maintenanceOrder.getId());
+
+        maintenanceOrderItemQueryWrapper.orderByAsc("maintenance_item");
+        List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrderItemMapper.selectList(maintenanceOrderItemQueryWrapper);
+
+        maintenanceOrder.setMaintenanceOrderItemList(maintenanceOrderItemList);
+
+        return maintenanceOrder;
     }
 }

@@ -13,6 +13,9 @@ public class MaintenanceOrderQueryForm extends BaseQueryForm<MaintenanceOrderQue
     @ApiModelProperty(value = "ID")
     private Long id;
 
+    @ApiModelProperty(value = "资产编码")
+    private String mchCode;
+
     @ApiModelProperty(value = "资产名称")
     private String mchName;
 
@@ -21,4 +24,7 @@ public class MaintenanceOrderQueryForm extends BaseQueryForm<MaintenanceOrderQue
 
     @ApiModelProperty(value = "型号")
     private String typeVersion;
+
+    @ApiModelProperty(value = "工单状态")
+    private String status;
 }

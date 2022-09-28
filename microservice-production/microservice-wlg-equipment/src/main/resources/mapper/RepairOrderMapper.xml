@@ -6,11 +6,15 @@
             SELECT A.ID,
                    A.ORDER_NUMBER,
                    A.MCH_CODE,
-                   A.MAINTENANCE_DATE,
-                   A.MAINTENANCE_PERIOD,
-                   A.PERIOD_UNIT,
+                   A.FAULT_DESC,
+                   A.FAULT_PHOTO,
                    A.DUTY_PERSON_ID,
                    A.STATUS,
+                   A.SOURCE_TYPE,
+                   A.SOURCE_ORDER_ID,
+                   A.SOURCE_ORDER_ITEM_ID,
+                   A.REPAIR_DESC,
+                   A.REPAIR_DATETIME,
                    A.CREATED_TIME,
                    A.CREATED_BY,
                    A.UPDATED_TIME,
@@ -19,8 +23,25 @@
                    B.SPEC,
                    B.TYPE_VERSION,
                    B.FACTORY_NO
-            FROM EM_MAINTENANCE_ORDER A
+            FROM EM_REPAIR_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            WHERE 1=1
+            <if test="repairOrderQueryParam.mchCode != null and repairOrderQueryParam.mchCode!=''">
+                AND A.MCH_CODE = #{repairOrderQueryParam.mchCode}
+            </if>
+            <if test="repairOrderQueryParam.status != null and repairOrderQueryParam.status!=''">
+                AND A.STATUS = #{repairOrderQueryParam.status}
+            </if>
+            <if test="repairOrderQueryParam.mchName != null and repairOrderQueryParam.mchName!=''">
+                AND B.MCH_NAME = #{repairOrderQueryParam.mchName}
+            </if>
+            <if test="repairOrderQueryParam.spec != null and repairOrderQueryParam.spec!=''">
+                AND B.SPEC = #{repairOrderQueryParam.spec}
+            </if>
+            <if test="repairOrderQueryParam.typeVersion != null and repairOrderQueryParam.typeVersion!=''">
+                AND B.TYPE_VERSION = #{repairOrderQueryParam.typeVersion}
+            </if>
+            ORDER BY A.ORDER_NUMBER
     </select>
 
 </mapper>

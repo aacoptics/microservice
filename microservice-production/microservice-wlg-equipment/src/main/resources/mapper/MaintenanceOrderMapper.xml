@@ -28,7 +28,23 @@
                    B.FACTORY_NO
             FROM EM_MAINTENANCE_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
-                     ORDER BY A.ORDER_NUMBER
+            WHERE 1=1
+            <if test="maintenanceOrderQueryParam.mchCode != null and maintenanceOrderQueryParam.mchCode!=''">
+                AND A.MCH_CODE = #{maintenanceOrderQueryParam.mchCode}
+            </if>
+            <if test="maintenanceOrderQueryParam.status != null and maintenanceOrderQueryParam.status!=''">
+                AND A.STATUS = #{maintenanceOrderQueryParam.status}
+            </if>
+            <if test="maintenanceOrderQueryParam.mchName != null and maintenanceOrderQueryParam.mchName!=''">
+                AND B.MCH_NAME = #{maintenanceOrderQueryParam.mchName}
+            </if>
+            <if test="maintenanceOrderQueryParam.spec != null and maintenanceOrderQueryParam.spec!=''">
+                AND B.SPEC = #{maintenanceOrderQueryParam.spec}
+            </if>
+            <if test="maintenanceOrderQueryParam.typeVersion != null and maintenanceOrderQueryParam.typeVersion!=''">
+                AND B.TYPE_VERSION = #{maintenanceOrderQueryParam.typeVersion}
+            </if>
+             ORDER BY A.ORDER_NUMBER
     </select>
 
 </mapper>

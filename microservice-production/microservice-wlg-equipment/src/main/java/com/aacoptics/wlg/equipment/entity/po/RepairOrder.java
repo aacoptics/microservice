@@ -55,7 +55,7 @@ public class RepairOrder extends BasePo {
      * 故障描述
      */
     @TableField(value = "fault_desc")
-    private String faulDesc;
+    private String faultDesc;
 
     /**
      * 故障照片

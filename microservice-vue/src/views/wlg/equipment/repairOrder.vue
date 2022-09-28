@@ -3,18 +3,33 @@
     <div class="aac-container">
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
+          <el-row>
+          <el-form-item label="设备编码" prop="mchCode">
+            <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
+          </el-form-item>
           <el-form-item label="设备名称" prop="mchName">
             <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
           </el-form-item>
           <el-form-item label="规格" prop="spec">
             <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
           </el-form-item>
+        </el-row>
+          <el-row>
           <el-form-item label="型号" prop="typeVersion">
             <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="维修项" prop="checkItem">
-            <el-input v-model="filters.checkItem" clearable placeholder="维修项"></el-input>
-          </el-form-item> -->
+          <el-form-item label="工单状态" prop="status">
+          <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
+            <el-option
+                v-for="item in orderStatusOptions"
+                :key="item.dictValue"
+                :label="item.dictLabel"
+                :value="item.dictValue"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+          </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
@@ -23,60 +38,65 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-            <el-button type="success" @click="handleAdd">新增
+            <el-button type="success" @click="handleAdd" :loading="editLoading">新增
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'plus']"/>
+              </template>
+            </el-button>
+            <el-button type="info" :loading="comfirmLoading" @click="handleBatchConfirm">批量确认
+              <template #icon>
+                <font-awesome-icon :icon="['fas', 'check']"/>
               </template>
             </el-button>
           </el-form-item>
         </el-form>
       </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+      <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border
-            :cell-style="{'text-align':'left'}" :show-operation="false"
-                @findPage="findPage" @handleCurrentChange="handleCurrentChange">
-      </SysTable>
+                :stripe="true"  :header-cell-style="{'text-align':'center'}" border :show-batch-operation="true"
+            :cell-style="{'text-align':'left'}" :show-operation="false" @selection-change="handleSelectionChange"
+                @findPage="findPage">
+      </orderTable>
 
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isRepairOrderAddOperation?'新增':'编辑'"
-                 width="25%" destroy-on-close>
+                 width="40%" destroy-on-close>
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
-            <el-col :span="20">
+            <el-col :span="12">
               <el-form-item label="设备编码" prop="mchCode">
-                <el-input v-model="dataForm.mchCode" :disabled="!isRepairOrderAddOperation" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.mchCode"  @blur="findEquipmentByMchCode" :disabled="!isRepairOrderAddOperation" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="12">
               <el-form-item label="设备名称" prop="mchName">
                 <el-input v-model="dataForm.mchName" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="12">
               <el-form-item label="规格" prop="spec">
                 <el-input v-model="dataForm.spec" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+              <el-col :span="12">
               <el-form-item label="型号" prop="typeVersion">
                 <el-input v-model="dataForm.typeVersion" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="12">
               <el-form-item label="出厂编码" prop="factoryNo">
                 <el-input v-model="dataForm.factoryNo" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
-              <el-form-item label="责任人" prop="dutyPersionId">
-                <el-input v-model="dataForm.dutyPersionId" :disabled="true" auto-complete="off" clearable></el-input>
+            <el-col :span="12">
+              <el-form-item label="责任人" prop="dutyPersonId">
+                <el-input v-model="dataForm.dutyPersonId" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="24">
               <el-form-item label="故障描述" prop="faultDesc">
                 <el-input v-model="dataForm.faultDesc"  auto-complete="off" clearable></el-input>
               </el-form-item>
@@ -104,23 +124,24 @@
 </template>
 
 <script>
-import SysTable from "@/components/SysTable";
-import {findRepairOrderPage, handleAdd, handleUpdate,  
-   findRepairOrderById, } from "@/api/wlg/equipment/repairOrder";
-import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
+import orderTable from "./orderTable";
+import {findRepairOrderPage, handleAdd, handleUpdate,  findRepairOrderById, handleBatchConfirm } from "@/api/wlg/equipment/repairOrder";
+import {findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
+import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
   name: "repairOrder",
-  components: {SysTable},
+  components: {orderTable},
   data() {
     return {
       size: "default",
       filters: {
+        mchCode: "",
         mchName: "",
         spec: "",
         typeVersion: "",
-        checkItem: "",
+        status: "",
       },
       columns: [
         {prop: "orderNumber", label: "工单号", minWidth: 110},
@@ -128,14 +149,14 @@ export default {
         {prop: "mchName", label: "设备名称", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 100},
         {prop: "typeVersion", label: "型号", minWidth: 120},
-        {prop: "factoryNo", label: "出厂编码", minWidth: 120},
+        {prop: "factoryNo", label: "出厂编码", minWidth: 130},
         {prop: "dutyPersonId", label: "责任人", minWidth: 100},
-        {prop: "status", label: "状态", minWidth: 100},
-        {prop: "falutDesc", label: "故障描述", minWidth: 100},
-        {prop: "falutPhoto", label: "故障照片", minWidth: 100},
-        {prop: "repairDesc", label: "维修说明", minWidth: 100},
-        {prop: "repairDate", label: "维修时间", minWidth: 100},
-        {prop: "sourceType", label: "工单来源", minWidth: 100},
+        {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
+        {prop: "faultDesc", label: "故障描述", minWidth: 150},
+        {prop: "faultPhoto", label: "故障照片", minWidth: 100},
+        {prop: "repairDesc", label: "维修说明", minWidth: 150},
+        {prop: "repairDatetime", label: "维修时间", minWidth: 100},
+        {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
@@ -154,16 +175,13 @@ export default {
 
       editLoading: false,
       findLoading: false,
-      findDetailLoading: false,
+      comfirmLoading: false,
+
       dataFormRules: {
-        mchCode: [{required: true, message: "请输入设备名称", trigger: "blur"}],
-        faultDesc: [{required: true, message: "请输入型号", trigger: "blur"}],
-        faultPhoto: [{required: true, message: "请输入型号", trigger: "blur"}],
+        mchCode: [{required: true, message: "请输入设备编码", trigger: "blur"}],
+        faultDesc: [{required: true, message: "请输入故障描述", trigger: "blur"}],
       },
 
-      mchNameOptions:[],
-      specOptions:[],
-      typeVersionOptions:[],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -172,27 +190,23 @@ export default {
         spec: "",
         typeVersion: "",
         factoryNo:'',
-        dutyPersionId:'',
+        dutyPersonId:'',
         faultDesc:'',
         faultPhoto:null
       },
-      repairOrderItemDataForm: {
-        repairOrderMainId: null,
-        id: 0,
-        checkItem: '',
-        checkItemStandard: '',
-        minValue:null,
-        maxValue: null,
-      },
-      currentSelectRepairOrderMainRowId: null,
+      multipleSelection: [],
+      orderStatusOptions:[],
+      orderSourceOptions:[],
     };
   },
   mounted() {
-    findMchNameList().then(response => {
-      if (response.data.data.length > 0) {
-        this.mchNameOptions = response.data.data
-      }
-    })
+    getDict("wlg_em_repair_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
+    });
+    getDict("wlg_em_repair_order_source").then(response => {
+      this.orderSourceOptions = response.data.data
+    });
+    
   },
   methods: {
     // 获取分页数据
@@ -200,15 +214,15 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
+      this.pageRequest.mchCode = this.filters.mchCode;
       this.pageRequest.mchName = this.filters.mchName;
       this.pageRequest.spec = this.filters.spec;
       this.pageRequest.typeVersion = this.filters.typeVersion;
-      this.pageRequest.checkItem = this.filters.checkItem;
+      this.pageRequest.status = this.filters.status;
       this.findLoading = true;
       findRepairOrderPage(this.pageRequest)
           .then((res) => {
             this.findLoading = false;
-            this.currentSelectRepairOrderMainRowId = null;
             const responseData = res.data;
             if (responseData.code === "000000") {
               this.pageResult = responseData.data;
@@ -216,8 +230,10 @@ export default {
           })
           .then(data != null ? data.callback : "");
     },
-
-
+    //获取多选的数据
+    handleSelectionChange(val) {
+      this.multipleSelection = val;//存储选中的数据
+    },
    
     // 显示新增界面
     handleAdd: function () {
@@ -226,20 +242,79 @@ export default {
       this.$refs.sysTable.handleClearSelection();
       this.dataForm = {
         id: 0,
-        mchName: "",
-        spec:"",
+        mchCode: '',
+        mchName: '',
+        spec: "",
         typeVersion: "",
+        factoryNo:'',
+        dutyPersonId:'',
+        faultDesc:'',
+        faultPhoto:null
       };
     },
-
-    
+    findEquipmentByMchCode: function ()
+    {
+      var mchCode = this.dataForm.mchCode;
+      findEquipmentByMchCode(mchCode).then(response => {
+        const responseData = response.data;
+        if (responseData.code === "000000") {
+          this.dataForm.mchName = responseData.data.mchName;
+          this.dataForm.spec = responseData.data.spec;
+          this.dataForm.typeVersion = responseData.data.typeVersion;
+          this.dataForm.factoryNo = responseData.data.factoryNo;
+          this.dataForm.dutyPersonId = responseData.data.dutyPersonId;
+        }else {
+          this.$message({
+            message:
+                "操作失败 " + getResponseDataMessage(responseData),
+            type: "error",
+          });
+        }
+    })
+    },    
     // 显示编辑界面
     handleEdit: function (params) {
       this.dialogVisible = true;
       this.isRepairOrderAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
     },
+    //处理批量确认
+    handleBatchConfirm: function()
+    {
+      if(this.multipleSelection == null || this.multipleSelection.length==0)
+      {
+        this.$message({
+            message:
+                "请至少选择一个工单",
+            type: "error",
+          });
+          return;
+      }
 
+      this.$confirm("确定批量确认吗？", "提示", {}).then(() => {
+        let ids = this.multipleSelection.selections.map(item => item.id).toString()
+        let params = []
+        let idArray = (ids + '').split(',')
+        for (let i = 0; i < idArray.length; i++) {
+          params.push(idArray[i])
+        }
+        this.comfirmLoading = true;
+        handleBatchConfirm(params).then((res) => {
+          const responseData = res.data;
+          this.comfirmLoading = false;
+          if (responseData.code === "000000") {
+            this.$message({message: "操作成功", type: "success"});
+          } else {
+            this.$message({
+              message:
+                  "操作失败 " + getResponseDataMessage(responseData),
+              type: "error",
+            });
+          }
+          this.findPage(null);
+        }); 
+      });
+    },
 
      // 编辑
      submitRepairOrderMain: function () {
@@ -288,53 +363,16 @@ export default {
       });
     },
  
-    selectMchName()
-    {
-      this.dataForm.spec = "";
-      this.dataForm.typeVersion = "";
-
-      let params = {};
-      params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
-        return;
-      }
-      findSpecListByMchName(params).then(response => {
-        if (response.data.data.length > 0) {
-          this.specOptions = response.data.data
-        }
-      })
-    },
-    selectSpec()
-    {
-      this.dataForm.typeVersion = "";
-
-      let params = {};
-      params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
-        return;
-      }
-      params.spec = this.dataForm.spec;
-      if(params.spec == null || params.spec == "")
-      {
-        return;
-      }
-      findTypeVersionListByMchNameAndSpec(params).then(response => {
-        if (response.data.data.length > 0) {
-          this.typeVersionOptions = response.data.data
-        }
-      })
-    },
     // 取消
     cancel() {
       this.dialogVisible = false;
     },
-    cancelRepairOrderItem()
-    {
-      this.repairOrderItemDialogVisible = false;
+    statusFormat: function (row) {
+      return selectDictLabel(this.orderStatusOptions, row.status);
     },
-
+    orderSourceFormat: function (row) {
+      return selectDictLabel(this.orderSourceOptions, row.sourceType);
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");

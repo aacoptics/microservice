@@ -3,6 +3,7 @@ package com.aacoptics.wlg.equipment.service.impl;
 
 import com.aacoptics.wlg.equipment.constant.PeriodUnitConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
+import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
@@ -66,6 +67,15 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
     @Override
     public boolean delete(Long id) {
+        MaintenanceMain maintenanceMain = this.getById(id);
+        if(maintenanceMain != null) {
+            List<MaintenanceItem> maintenanceItemList = maintenanceMain.getMaintenanceItemList();
+            if (maintenanceItemList != null && maintenanceItemList.size() > 0) {
+                for (MaintenanceItem maintenanceItem : maintenanceItemList) {
+                    maintenanceItemMapper.deleteById(maintenanceItem.getId());
+                }
+            }
+        }
         return this.removeById(id);
     }
 

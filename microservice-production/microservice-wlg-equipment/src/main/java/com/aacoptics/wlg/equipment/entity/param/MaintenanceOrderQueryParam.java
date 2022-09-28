@@ -17,6 +17,10 @@ public class MaintenanceOrderQueryParam extends BaseParam<MaintenanceOrder> {
      */
     private Long id;
 
+    /**
+     * 资产编码
+     */
+    private String mchCode;
 
     /**
      * 资产名称
@@ -36,5 +40,10 @@ public class MaintenanceOrderQueryParam extends BaseParam<MaintenanceOrder> {
      */
     private String typeVersion;
 
+
+    /**
+     * 工单状态
+     */
+    private String status;
 
 }

@@ -63,6 +63,28 @@ public class RepairOrderVO extends BasePo {
     private String status;
 
 
+    /**
+     * 故障描述
+     */
+    private String faultDesc;
 
+
+    /**
+     * 故障照片
+     */
+    private String faultPhoto;
+
+
+    /**
+     * 维修描述
+     */
+    private String repairDesc;
+
+
+
+    /**
+     * 工单来源
+     */
+    private String sourceType;
 
 }

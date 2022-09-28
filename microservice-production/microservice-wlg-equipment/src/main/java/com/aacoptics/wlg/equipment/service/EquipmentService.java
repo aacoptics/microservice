@@ -29,7 +29,7 @@ public interface EquipmentService {
     /**
      * 从EAM系统获取设备并保存到WLGIOT数据库
      */
-    void saveWlgEquipmentFormEAM();
+    void syncWlgEquipmentFromEAM();
 
 
 
@@ -109,4 +109,13 @@ public interface EquipmentService {
      * @return
      */
     List<Equipment> findEquipmentList(String mchName, String spec, String typeVersion);
+
+
+    /**
+     * 根据设备编码查询设备
+     *
+     * @param mchCode 设备编码
+     * @return
+     */
+    Equipment findEquipmentByMchCode(String mchCode);
 }

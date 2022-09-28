@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.wlg.equipment.entity.form.InspectionShiftForm;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
@@ -17,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -68,7 +70,28 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
     }
 
     @Override
+    @Transactional
     public boolean delete(Long id) {
+        InspectionMain inspectionMain = this.get(id);
+        if(inspectionMain != null)
+        {
+            List<InspectionItem> inspectionItemList = inspectionMain.getInspectionItemList();
+            if(inspectionItemList != null && inspectionItemList.size() > 0)
+            {
+                for(InspectionItem inspectionItem : inspectionItemList)
+                {
+                    inspectionItemMapper.deleteById(inspectionItem.getId());
+                }
+            }
+            List<InspectionShift> inspectionShiftList = inspectionMain.getInspectionShiftList();
+            if(inspectionShiftList != null && inspectionShiftList.size()>0)
+            {
+                for(InspectionShift inspectionShift : inspectionShiftList)
+                {
+                    inspectionShiftMapper.deleteById(inspectionShift.getId());
+                }
+            }
+        }
         return this.removeById(id);
     }
 

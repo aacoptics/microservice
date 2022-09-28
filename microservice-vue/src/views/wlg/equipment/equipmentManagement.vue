@@ -46,7 +46,7 @@
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" 
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" border
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
                 :stripe="true" :show-operation="false"
                 @findPage="findPage">
       </SysTable>
@@ -101,8 +101,8 @@ export default {
         {prop: "buildingName", label: "楼栋名称", minWidth: 100},
         {prop: "floorCode", label: "楼层编码", minWidth: 100},
         {prop: "floorName", label: "楼层名称", minWidth: 100},
-        {prop: "assetManagerId", label: "资产管理员", minWidth: 100},
-        {prop: "mchManagerId", label: "设备管理员", minWidth: 100},
+        {prop: "assetManagerId", label: "资产管理员", minWidth: 110},
+        {prop: "mchManagerId", label: "设备管理员", minWidth: 110},
         {prop: "dutyPersonId", label: "责任人", minWidth: 100},
         {prop: "deptManagerId", label: "部门经理", minWidth: 100},
         {prop: "deptDirectorId", label: "部门总监", minWidth: 100},

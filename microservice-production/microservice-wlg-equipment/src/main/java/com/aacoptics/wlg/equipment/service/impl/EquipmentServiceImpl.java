@@ -45,7 +45,18 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
             log.warn("equipmentMap为空，不能保存");
             return;
         }
-        Equipment equipment = new Equipment();
+        String mchCode = equipmentMap.get("MCH_CODE") != null ? equipmentMap.get("MCH_CODE")+"" : null;
+        if(StringUtils.isEmpty(mchCode))
+        {
+            log.error("设备编码不能为空");
+            return;
+        }
+        Equipment equipment = this.findEquipmentByMchCode(mchCode);
+        if(equipment == null)
+        {
+            equipment = new Equipment();
+        }
+
         equipment.setMchCode(equipmentMap.get("MCH_CODE") != null ? equipmentMap.get("MCH_CODE")+"" : null);
         equipment.setMchName(equipmentMap.get("MCH_NAME") != null ? equipmentMap.get("MCH_NAME")+"" : null);
         equipment.setSpec(equipmentMap.get("SPEC") != null ? equipmentMap.get("SPEC")+"" : null);
@@ -75,16 +86,22 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         equipment.setDeptManagerId(equipmentMap.get("DEPT_MANAGER_ID") != null ? equipmentMap.get("DEPT_MANAGER_ID")+"" : null);
         equipment.setDeptDirectorId(equipmentMap.get("DEPT_DIRECTOR_ID") != null ? equipmentMap.get("DEPT_DIRECTOR_ID")+"" : null);
 
-
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        equipment.setLastInspectionDatetime(currentDateTime);
-        equipment.setLastMaintenanceDatetime(currentDateTime);
-        equipment.setStatus(EquipmentStatusConstants.NORMAL); //设备初始状态为正常
-        this.save(equipment);
+        if(equipment.getId() != null && equipment.getId() > 0)
+        {
+            this.update(equipment);
+        }
+        else
+        {
+            equipment.setStatus(EquipmentStatusConstants.NORMAL); //设备初始状态为正常
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            equipment.setLastInspectionDatetime(currentDateTime);
+            equipment.setLastMaintenanceDatetime(currentDateTime);
+            this.save(equipment);
+        }
     }
 
     @Override
-    public void saveWlgEquipmentFormEAM() {
+    public void syncWlgEquipmentFromEAM() {
         log.info("开始从EAM获取WLG设备，并保存到WLGIOT数据库");
         List<Map<String, Object>> wlgEquipmentList = this.findWlgEquipmentByEAM();
         if(wlgEquipmentList == null || wlgEquipmentList.size() == 0)
@@ -174,5 +191,17 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.orderByAsc("mch_code");
 
        return equipmentMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Equipment findEquipmentByMchCode(String mchCode) {
+        QueryWrapper<Equipment> equipmentQueryWrapper = new QueryWrapper<>();
+        equipmentQueryWrapper.eq("mch_code", mchCode);
+        Equipment equipment = equipmentMapper.selectOne(equipmentQueryWrapper);
+        if(equipment == null)
+        {
+            throw new BusinessException("设备编码【" + mchCode + "】不存在，请确认！");
+        }
+        return equipment;
     }
 }

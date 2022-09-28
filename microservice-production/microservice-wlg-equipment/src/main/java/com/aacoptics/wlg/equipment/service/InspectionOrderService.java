@@ -7,6 +7,8 @@ import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 public interface InspectionOrderService {
 
     /**
@@ -75,4 +77,21 @@ public interface InspectionOrderService {
      * @return
      */
     String getNextOrderNumber(String sequenceName);
+
+
+
+    /**
+     * 批量确认工单
+     *
+     */
+    void batchConfirm(List<String> repairOrderIds);
+
+
+    /**
+     * 通过设备编码查询点检工单
+     *
+     * @param mchCode 设备编码
+     * @return
+     */
+    InspectionOrder findOrderByMchCode(String mchCode);
 }

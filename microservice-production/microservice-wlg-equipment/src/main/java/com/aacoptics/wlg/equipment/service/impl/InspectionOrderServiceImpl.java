@@ -2,6 +2,7 @@ package com.aacoptics.wlg.equipment.service.impl;
 
 
 import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
@@ -213,5 +214,48 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         String nextSequenceNumberStr =  currentDate + String.format("%04d", nextSequenceNumber);
 
         return nextSequenceNumberStr;
+    }
+
+
+    @Override
+    @Transactional
+    public void batchConfirm(List<String> inspectionOrderIds) {
+        if(inspectionOrderIds == null || inspectionOrderIds.size() == 0)
+        {
+            throw new BusinessException("请至少选择一个点检工单");
+        }
+        for(int i=0; i<inspectionOrderIds.size(); i++)
+        {
+            String idStr = inspectionOrderIds.get(i);
+            InspectionOrder inspectionOrder = this.getById(Long.valueOf(idStr));
+            if(!InspectionOrderStatusConstants.COMMITTED.equals(inspectionOrder.getStatus()))
+            {
+                throw new BusinessException("工单【" + inspectionOrder.getOrderNumber() + "】不是已提交状态，不能确认");
+            }
+            inspectionOrder.setStatus(InspectionOrderStatusConstants.CONFIRMED);
+            this.update(inspectionOrder);
+        }
+    }
+
+    @Override
+    public InspectionOrder findOrderByMchCode(String mchCode) {
+        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
+        inspectionOrderQueryWrapper.eq("mch_code", mchCode);
+        inspectionOrderQueryWrapper.in("status", InspectionOrderStatusConstants.CREATED, InspectionOrderStatusConstants.STAGED);
+
+        inspectionOrderQueryWrapper.orderByAsc("inspection_date");
+        inspectionOrderQueryWrapper.orderByAsc("shift_start_time");
+
+        InspectionOrder inspectionOrder = inspectionOrderMapper.selectOne(inspectionOrderQueryWrapper);
+
+        //查询点检项
+        QueryWrapper<InspectionOrderItem> inspectionOrderItemQueryWrapper = new QueryWrapper<InspectionOrderItem>();
+        inspectionOrderItemQueryWrapper.eq( "inspection_order_id", inspectionOrder.getId());
+
+        inspectionOrderItemQueryWrapper.orderByAsc("check_item");
+        List<InspectionOrderItem> inspectionOrderItemList = inspectionOrderItemMapper.selectList(inspectionOrderItemQueryWrapper);
+
+        inspectionOrder.setInspectionOrderItemList(inspectionOrderItemList);
+        return inspectionOrder;
     }
 }
