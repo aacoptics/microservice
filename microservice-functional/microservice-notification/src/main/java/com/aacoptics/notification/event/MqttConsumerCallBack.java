@@ -101,6 +101,8 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addBlobContent(localTimeStr);
                 if(!phase.trim().equals("Recipe Ready")){
                     markdownGroupMessage.addContent("当前阶段CT异常，阶段：" + phase + "，已持续" + phaseTime + "秒，平均" + avgPhaseTime + "秒，请检查。");
+                }else{
+                    markdownGroupMessage = new MarkdownMessage();
                 }
                 break;
 //            case "FeedAlarm":
@@ -130,6 +132,8 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 //                break;
         }
 
+        if(StrUtil.isBlank(markdownGroupMessage.toString()))
+            return;
         String chatName = "模造车间异常&换料自动提醒群";
         try {
             if (StrUtil.isBlank(title)) {
