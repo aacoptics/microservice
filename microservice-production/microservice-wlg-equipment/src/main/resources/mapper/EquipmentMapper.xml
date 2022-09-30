@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.EquipmentMapper">
+
+
+    <select id="findEquipmentByEAM" resultType="map">
+        SELECT MCH_CODE,
+               MCH_NAME,
+               SPEC,
+               TYPE_VERSION,
+               ASSET_GENERAL_CODE,
+               ASSET_GENERAL_DESC,
+               ASSET_CLASSIFY_CODE,
+               ASSET_CLASSIFY_DESC,
+               MAJOR_BIG_CODE,
+               MAJOR_BIG_DESC,
+               MAJOR_SMALL_CODE,
+               MAJOR_SMALL_DESC,
+               FACTORY_NO,
+               LOCATION_NO,
+               AREA_CODE,
+               AREA_NAME,
+               FACTORY_ID,
+               FACTORY_NAME,
+               BUILDING_ID,
+               BUILDING_NAME,
+               FLOOR_CODE,
+               FLOOR_NAME,
+               ASSET_MANAGER_ID,
+               MCH_MANAGER_ID,
+               DUTY_PERSON_ID,
+               DUTY_PERSON_CONNECT,
+               DEPT_MANAGER_ID,
+               DEPT_DIRECTOR_ID
+        FROM ASSET_OBJECT
+        WHERE 1=1
+        <if test="assetGeneralCode != null and assetGeneralCode!=''">
+            AND ASSET_GENERAL_CODE = #{assetGeneralCode}
+        </if>
+        <if test="areaCode != null and areaCode!=''">
+            AND AREA_CODE = #{areaCode}
+        </if>
+        ORDER BY MCH_CODE
+    </select>
+
+
+    <select id="findMchNameList" resultType="string">
+        SELECT
+        distinct MCH_NAME
+        FROM EM_EQUIPMENT
+        ORDER BY MCH_NAME
+    </select>
+
+    <select id="findSpecListByMchName" resultType="string">
+        SELECT
+        distinct SPEC
+        FROM EM_EQUIPMENT
+        WHERE 1=1
+        <if test="mchName != null and mchName!=''">
+            AND MCH_NAME = #{mchName}
+        </if>
+        ORDER BY SPEC
+    </select>
+
+
+    <select id="findTypeVersionListByMchNameAndSpec" resultType="string">
+        SELECT
+        distinct TYPE_VERSION
+        FROM EM_EQUIPMENT
+        WHERE 1=1
+        <if test="mchName != null and mchName!=''">
+            AND MCH_NAME = #{mchName}
+        </if>
+        <if test="spec != null and spec!=''">
+            AND SPEC = #{spec}
+        </if>
+        ORDER BY TYPE_VERSION
+    </select>
+
+
+
+</mapper>
