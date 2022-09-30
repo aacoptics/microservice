@@ -10,7 +10,7 @@ spring:
       config:
         server-addr: 10.233.76.32:8848,10.69.73.32:8848,10.89.148.32:8848
         namespace: microservice-prod
-        group: microservice-functional
+        group: microservice-production
         file-extension: yaml
     sentinel:
       transport:
