@@ -54,10 +54,16 @@
       <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="true"  :header-cell-style="{'text-align':'center'}" border :show-batch-operation="true"
-            :cell-style="{'text-align':'left'}" :show-operation="false" @selection-change="handleSelectionChange"
+            :cell-style="{'text-align':'left'}" :show-operation="false" @selection-change="handleSelectionChange" @handlePreview="handlePreview"
                 @findPage="findPage">
       </orderTable>
 
+      <el-dialog v-model="previewDialogVisible" title="图片预览" 
+                 width="850px" destroy-on-close> 
+                 <div class="block">
+                 <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
+                 </div>
+      </el-dialog>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isRepairOrderAddOperation?'新增':'编辑'"
                  width="40%" destroy-on-close>
@@ -101,9 +107,17 @@
                 <el-input v-model="dataForm.faultDesc"  auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="24">
               <el-form-item label="故障照片" prop="faultPhoto">
-                <el-input v-model="dataForm.faultPhoto"  auto-complete="off" clearable></el-input>
+                <el-upload
+                  class="avatar-uploader"
+                  :show-file-list="false"
+                  :before-upload="beforeAvatarUpload"
+                  :http-request="submitUpload"
+                >
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
               </el-form-item>
             </el-col>
             </el-row>
@@ -129,6 +143,7 @@ import {findRepairOrderPage, handleAdd, handleUpdate,  findRepairOrderById, hand
 import {findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
+import {addImage, findImageById} from "@/api/wlg/equipment/image";
 
 export default {
   name: "repairOrder",
@@ -136,6 +151,10 @@ export default {
   data() {
     return {
       size: "default",
+
+      imageUrl: '',
+
+      imagePreviewSrc: '',
       filters: {
         mchCode: "",
         mchName: "",
@@ -153,7 +172,7 @@ export default {
         {prop: "dutyPersonId", label: "责任人", minWidth: 100},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "faultDesc", label: "故障描述", minWidth: 150},
-        {prop: "faultPhoto", label: "故障照片", minWidth: 100},
+        // {prop: "faultPhoto", label: "故障照片", minWidth: 100},
         {prop: "repairDesc", label: "维修说明", minWidth: 150},
         {prop: "repairDatetime", label: "维修时间", minWidth: 100},
         {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
@@ -172,10 +191,12 @@ export default {
 
       dialogVisible: false, // 新增编辑界面是否显示
       repairOrderItemDialogVisible: false,
+      previewDialogVisible:false,
 
       editLoading: false,
       findLoading: false,
       comfirmLoading: false,
+      previewLoading: false,
 
       dataFormRules: {
         mchCode: [{required: true, message: "请输入设备编码", trigger: "blur"}],
@@ -192,7 +213,7 @@ export default {
         factoryNo:'',
         dutyPersonId:'',
         faultDesc:'',
-        faultPhoto:null
+        faultImageId:null
       },
       multipleSelection: [],
       orderStatusOptions:[],
@@ -234,7 +255,31 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;//存储选中的数据
     },
-   
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      return isJPG
+    },
+    submitUpload(params) {
+      addImage(params).then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.imageUrl = URL.createObjectURL(params.file);
+          this.dataForm.faultImageId = responseData.data.id;
+          this.$message.success('上传成功')
+        } else {
+          this.$message.error('上传失败！' + responseData.msg + "," + responseData.data);
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
     // 显示新增界面
     handleAdd: function () {
       this.dialogVisible = true;
@@ -251,9 +296,14 @@ export default {
         faultDesc:'',
         faultPhoto:null
       };
+      this.imageUrl = '';
     },
     findEquipmentByMchCode: function ()
     {
+      if(this.dataForm.mchCode == null || this.dataForm.mchCode == "")
+      {
+        return;
+      }
       var mchCode = this.dataForm.mchCode;
       findEquipmentByMchCode(mchCode).then(response => {
         const responseData = response.data;
@@ -277,6 +327,31 @@ export default {
       this.dialogVisible = true;
       this.isRepairOrderAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
+    },
+    handlePreview: function (params)
+    {
+      let id = params.row.faultImageId;
+      if(id == null)
+      {
+        this.$message.error('无故障图片！');
+        return;
+      }
+      this.previewLoading = true;
+      findImageById(id).then((response) => {
+        this.previewLoading = false;
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          // const blob = new Blob([responseData.data.image], {type: 'image/jpeg'});
+          // const imageUrl = window.URL.createObjectURL(blob);
+          this.imagePreviewSrc = "data:image/jpeg;base64," + responseData.data.image;
+          this.previewDialogVisible = true;
+          this.$message.success('预览成功')
+        } else {
+          this.$message.error('预览失败！' + responseData.msg + "," + responseData.data);
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
     },
     //处理批量确认
     handleBatchConfirm: function()
@@ -387,3 +462,28 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

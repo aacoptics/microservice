@@ -92,8 +92,9 @@ public class MaintenanceOrderItem extends BasePo {
     /**
      * 故障照片
      */
-    @TableField(value = "fault_photo")
-    private byte[] faultPhoto;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableField(value = "fault_image_id")
+    private Long faultImageId;
 
     /**
      * 是否返修

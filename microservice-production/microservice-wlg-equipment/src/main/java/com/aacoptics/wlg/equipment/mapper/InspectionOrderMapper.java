@@ -3,6 +3,7 @@ package com.aacoptics.wlg.equipment.mapper;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -25,4 +26,8 @@ public interface InspectionOrderMapper extends BaseMapper<InspectionOrder> {
     IPage<InspectionOrderVO> findInspectionOrderList(@Param("page")  Page page,
                                                      @Param("inspectionOrderQueryParam")  InspectionOrderQueryParam inspectionOrderQueryParam);
 
+
+
+    @DS("WLGIOT")
+    InspectionOrderAndItemVO findOrderByMchCode(@Param("mchCode")  String mchCode);
 }

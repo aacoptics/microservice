@@ -84,7 +84,6 @@ public class MaintenanceOrderController {
         return Result.success();
     }
 
-
     @ApiOperation(value = "根据设备编码查询保养工单", notes = "根据设备编码查询保养工单")
     @ApiImplicitParam(name = "mchCode", value = "设备编码", required = true, dataType = "String")
     @ApiResponses(
@@ -94,5 +93,16 @@ public class MaintenanceOrderController {
     public Result findOrderByMchCode(String mchCode) {
         log.debug("query with name:{}", mchCode);
         return Result.success(maintenanceOrderService.findOrderByMchCode(mchCode));
+    }
+
+    @ApiOperation(value = "修改保养工单", notes = "修改指定保养工单信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "保养工单ID", required = true, example = "0", dataType = "Long"),
+            @ApiImplicitParam(name = "MaintenanceForm", value = "保养工单实体", required = true, dataType = "MaintenanceOrderForm")
+    })
+    @PutMapping(value = "/submitOrder/{id}")
+    public Result submitOrder(@PathVariable Long id, @Valid @RequestBody MaintenanceOrderForm maintenanceOrderForm) {
+        MaintenanceOrder maintenanceOrder = maintenanceOrderForm.toPo(id, MaintenanceOrder.class);
+        return Result.success(maintenanceOrderService.submitOrder(maintenanceOrder));
     }
 }

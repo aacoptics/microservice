@@ -5,10 +5,7 @@ import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.RepairOrderSourceConstants;
 import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.RepairOrderQueryParam;
-import com.aacoptics.wlg.equipment.entity.po.Equipment;
-import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
-import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
-import com.aacoptics.wlg.equipment.entity.po.Sequence;
+import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.RepairOrderMapper;
@@ -25,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -57,8 +55,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         String mchCode = repairOrder.getMchCode();
         //校验设备编码是否存在
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
-        if(equipment == null)
-        {
+        if (equipment == null) {
             throw new BusinessException("设备编码【" + mchCode + "】不存在，请确认");
         }
         repairOrder.setDutyPersonId(equipment.getDutyPersonId());
@@ -74,8 +71,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         repairOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
 
         boolean isSuccess = this.save(repairOrder);
-        if(isSuccess == false)
-        {
+        if (isSuccess == false) {
             throw new BusinessException("新增维修工单失败");
         }
 
@@ -106,19 +102,10 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
     }
 
 
-    @Transactional
-    @Override
-    public void generateRepairOrder(RepairOrder repairOrder) {
-        log.info("开始生成设备维修工单");
-        log.info("完成生成设备维修工单");
-    }
-
-
-
     @Override
     public Long getOrCreateSequenceNumber(String sequenceName) {
-        Long nextSequenceNumber =  sequenceService.getNextNumberByName(sequenceName);
-        if(nextSequenceNumber == null) {
+        Long nextSequenceNumber = sequenceService.getNextNumberByName(sequenceName);
+        if (nextSequenceNumber == null) {
             Sequence sequence = sequenceService.createSequence(sequenceName, "维修工单流水号", 1l, 1l, 999999l);
             nextSequenceNumber = sequence.getSequenceNumber();
         }
@@ -131,7 +118,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
         Long nextSequenceNumber = this.getOrCreateSequenceNumber(sequenceName);
 
-        String nextSequenceNumberStr =  currentDate + String.format("%04d", nextSequenceNumber);
+        String nextSequenceNumberStr = currentDate + String.format("%04d", nextSequenceNumber);
 
         return nextSequenceNumberStr;
     }
@@ -139,16 +126,13 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
     @Override
     public void batchConfirm(List<String> repairOrderIds) {
-        if(repairOrderIds == null || repairOrderIds.size() == 0)
-        {
+        if (repairOrderIds == null || repairOrderIds.size() == 0) {
             throw new BusinessException("请至少选择一个维修工单");
         }
-        for(int i=0; i<repairOrderIds.size(); i++)
-        {
+        for (int i = 0; i < repairOrderIds.size(); i++) {
             String idStr = repairOrderIds.get(i);
             RepairOrder repairOrder = this.getById(Long.valueOf(idStr));
-            if(!RepairOrderStatusConstants.REPAIRED.equals(repairOrder.getStatus()))
-            {
+            if (!RepairOrderStatusConstants.REPAIRED.equals(repairOrder.getStatus())) {
                 throw new BusinessException("工单【" + repairOrder.getOrderNumber() + "】不是已维修状态，不能确认");
             }
             repairOrder.setStatus(RepairOrderStatusConstants.CONFIRMED);
@@ -158,14 +142,62 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
 
     @Override
-    public RepairOrder findOrderByMchCode(String mchCode) {
-        QueryWrapper<RepairOrder> repairOrderQueryWrapper = new QueryWrapper<>();
-        repairOrderQueryWrapper.eq("mch_code", mchCode);
-        repairOrderQueryWrapper.in("status", InspectionOrderStatusConstants.CREATED, InspectionOrderStatusConstants.STAGED);
+    public RepairOrderVO findOrderByMchCode(String mchCode) {
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        if (equipment == null) {
+            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+        }
 
-        repairOrderQueryWrapper.orderByAsc("created_time");
+        RepairOrderVO repairOrderVO = repairOrderMapper.findOrderByMchCode(mchCode);
+        if (repairOrderVO == null) {
+            throw new BusinessException("设备【" + mchCode + "】不存在需要维修的工单，请确认！");
+        }
 
-        RepairOrder repairOrder = repairOrderMapper.selectOne(repairOrderQueryWrapper);
+        return repairOrderVO;
+    }
+
+    @Override
+    public boolean submitOrder(RepairOrder repairOrder) {
+
+        repairOrder.setRepairDatetime(LocalDateTime.now());
+        boolean isSuccess = this.updateById(repairOrder);
+        return isSuccess;
+    }
+
+    @Override
+    public RepairOrder createRepairOrderByInspection(InspectionOrder inspectionOrder, InspectionOrderItem inspectionOrderItem) {
+
+        RepairOrder repairOrder = new RepairOrder();
+        repairOrder.setMchCode(inspectionOrder.getMchCode());
+        repairOrder.setSourceType(RepairOrderSourceConstants.ORDER_SOURCE_TYPE_INSPECTION);
+        repairOrder.setStatus(RepairOrderStatusConstants.CREATED);
+
+        repairOrder.setSourceOrderId(inspectionOrder.getId());
+        repairOrder.setSourceOrderItemId(inspectionOrderItem.getId());
+        repairOrder.setFaultDesc(inspectionOrderItem.getFaultDesc());
+        repairOrder.setFaultImageId(inspectionOrderItem.getFaultImageId());
+        repairOrder.setDutyPersonId(inspectionOrder.getDutyPersonId());
+
+        this.save(repairOrder);
+
+        return repairOrder;
+    }
+
+    @Override
+    public RepairOrder createRepairOrderByMaintenance(MaintenanceOrder maintenanceOrder, MaintenanceOrderItem maintenanceOrderItem) {
+        RepairOrder repairOrder = new RepairOrder();
+        repairOrder.setMchCode(maintenanceOrder.getMchCode());
+        repairOrder.setDutyPersonId(maintenanceOrder.getDutyPersonId());
+
+        repairOrder.setSourceType(RepairOrderSourceConstants.ORDER_SOURCE_TYPE_MAINTENANCE);
+        repairOrder.setStatus(RepairOrderStatusConstants.CREATED);
+
+        repairOrder.setSourceOrderId(maintenanceOrder.getId());
+        repairOrder.setSourceOrderItemId(maintenanceOrderItem.getId());
+        repairOrder.setFaultDesc(maintenanceOrderItem.getFaultDesc());
+        repairOrder.setFaultImageId(maintenanceOrderItem.getFaultImageId());
+
+        this.save(repairOrder);
 
         return repairOrder;
     }

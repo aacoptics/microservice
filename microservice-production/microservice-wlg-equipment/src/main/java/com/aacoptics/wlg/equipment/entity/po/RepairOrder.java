@@ -3,6 +3,8 @@ package com.aacoptics.wlg.equipment.entity.po;
 import com.aacoptics.common.web.entity.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.awt.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -36,7 +39,7 @@ public class RepairOrder extends BasePo {
      * 维修时间
      */
     @TableField(value = "repair_datetime")
-    private LocalDate repairDatetime;
+    private LocalDateTime repairDatetime;
 
 
     /**
@@ -60,8 +63,9 @@ public class RepairOrder extends BasePo {
     /**
      * 故障照片
      */
-    @TableField(value = "fault_photo")
-    private byte[] faultPhoto;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableField(value = "fault_image_id")
+    private Long faultImageId;
 
     /**
      * 维修描述
@@ -80,12 +84,12 @@ public class RepairOrder extends BasePo {
      * 来源工单ID
      */
     @TableField(value = "source_order_id")
-    private String sourceOrderId;
+    private Long sourceOrderId;
 
 
     /**
      * 来源工单项ID
      */
     @TableField(value = "source_order_item_id")
-    private String sourceOrderItemId;
+    private Long sourceOrderItemId;
 }

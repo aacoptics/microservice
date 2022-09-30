@@ -1,10 +1,13 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
 import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.RepairOrderSourceConstants;
 import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionOrderItemMapper;
@@ -15,6 +18,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +52,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
     @Resource
     SequenceService sequenceService;
 
+    @Resource
+    RepairOrderService repairOrderService;
 
     @Override
     public IPage<InspectionOrderVO> query(Page page, InspectionOrderQueryParam inspectionOrderQueryParam) {
@@ -238,24 +244,60 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
     }
 
     @Override
-    public InspectionOrder findOrderByMchCode(String mchCode) {
-        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
-        inspectionOrderQueryWrapper.eq("mch_code", mchCode);
-        inspectionOrderQueryWrapper.in("status", InspectionOrderStatusConstants.CREATED, InspectionOrderStatusConstants.STAGED);
+    public InspectionOrderAndItemVO findOrderByMchCode(String mchCode) {
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        if(equipment == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+        }
 
-        inspectionOrderQueryWrapper.orderByAsc("inspection_date");
-        inspectionOrderQueryWrapper.orderByAsc("shift_start_time");
-
-        InspectionOrder inspectionOrder = inspectionOrderMapper.selectOne(inspectionOrderQueryWrapper);
-
+        InspectionOrderAndItemVO inspectionOrderAndItemVO = inspectionOrderMapper.findOrderByMchCode(mchCode);
+        if(inspectionOrderAndItemVO == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在需要点检的工单，请确认！");
+        }
         //查询点检项
         QueryWrapper<InspectionOrderItem> inspectionOrderItemQueryWrapper = new QueryWrapper<InspectionOrderItem>();
-        inspectionOrderItemQueryWrapper.eq( "inspection_order_id", inspectionOrder.getId());
+        inspectionOrderItemQueryWrapper.eq( "inspection_order_id", inspectionOrderAndItemVO.getId());
 
         inspectionOrderItemQueryWrapper.orderByAsc("check_item");
         List<InspectionOrderItem> inspectionOrderItemList = inspectionOrderItemMapper.selectList(inspectionOrderItemQueryWrapper);
 
-        inspectionOrder.setInspectionOrderItemList(inspectionOrderItemList);
-        return inspectionOrder;
+        inspectionOrderAndItemVO.setInspectionOrderItemList(inspectionOrderItemList);
+        return inspectionOrderAndItemVO;
+    }
+
+
+    @Transactional
+    @Override
+    public boolean submitOrder(InspectionOrder inspectionOrder) {
+        String mchCode = inspectionOrder.getMchCode();
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        if(equipment == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+        }
+        List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
+        boolean isRepairBoolean = false;
+        for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
+        {
+            //判断是否需要维修
+            Integer isRepair = inspectionOrderItem.getIsRepair();
+            if(isRepair == 1)
+            {
+                isRepairBoolean = true;
+                repairOrderService.createRepairOrderByInspection(inspectionOrder, inspectionOrderItem);
+            }
+        }
+        //更新设备状态
+        if(isRepairBoolean) {
+            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+        }
+        equipment.setLastInspectionDatetime(LocalDateTime.now());
+        equipmentService.update(equipment);
+
+
+        boolean isSuccess = this.updateById(inspectionOrder);
+        return isSuccess;
     }
 }

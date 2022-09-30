@@ -92,4 +92,15 @@ public class RepairOrderController {
         log.debug("query with name:{}", mchCode);
         return Result.success(repairOrderService.findOrderByMchCode(mchCode));
     }
+
+    @ApiOperation(value = "修改维修工单", notes = "修改指定维修工单信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "维修工单ID", required = true, example = "0", dataType = "Long"),
+            @ApiImplicitParam(name = "RepairForm", value = "维修工单实体", required = true, dataType = "RepairOrderForm")
+    })
+    @PutMapping(value = "/submitOrder/{id}")
+    public Result submitOrder(@PathVariable Long id, @Valid @RequestBody RepairOrderForm repairOrderForm) {
+        RepairOrder repairOrder = repairOrderForm.toPo(id, RepairOrder.class);
+        return Result.success(repairOrderService.submitOrder(repairOrder));
+    }
 }

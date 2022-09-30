@@ -1,11 +1,11 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
-import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceOrderItemMapper;
@@ -48,6 +48,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
     @Resource
     SequenceService sequenceService;
+
+    @Resource
+    RepairOrderService repairOrderService;
 
 
     @Override
@@ -190,9 +193,6 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
                 this.add(maintenanceOrder);
 
-                //更新设备最后保养日期
-                equipment.setLastMaintenanceDatetime(maintenanceDate.atTime(0, 0, 0));
-                equipmentService.update(equipment);
             }
         }
         log.info("完成生成设备保养工单");
@@ -241,24 +241,63 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
 
     @Override
-    public MaintenanceOrder findOrderByMchCode(String mchCode) {
-        QueryWrapper<MaintenanceOrder> maintenanceOrderQueryWrapper = new QueryWrapper<>();
-        maintenanceOrderQueryWrapper.eq("mch_code", mchCode);
-        maintenanceOrderQueryWrapper.in("status", InspectionOrderStatusConstants.CREATED, InspectionOrderStatusConstants.STAGED);
+    public MaintenanceOrderAndItemVO findOrderByMchCode(String mchCode) {
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        if(equipment == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+        }
 
-        maintenanceOrderQueryWrapper.orderByAsc("maintenance_date");
-
-        MaintenanceOrder maintenanceOrder = maintenanceOrderMapper.selectOne(maintenanceOrderQueryWrapper);
-
+        MaintenanceOrderAndItemVO maintenanceOrderAndItemVO = maintenanceOrderMapper.findOrderByMchCode(mchCode);
+        if(maintenanceOrderAndItemVO == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在需要保养的工单，请确认！");
+        }
         //查询保养项
         QueryWrapper<MaintenanceOrderItem> maintenanceOrderItemQueryWrapper = new QueryWrapper<MaintenanceOrderItem>();
-        maintenanceOrderItemQueryWrapper.eq( "maintenance_order_id", maintenanceOrder.getId());
+        maintenanceOrderItemQueryWrapper.eq( "maintenance_order_id", maintenanceOrderAndItemVO.getId());
 
         maintenanceOrderItemQueryWrapper.orderByAsc("maintenance_item");
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrderItemMapper.selectList(maintenanceOrderItemQueryWrapper);
 
-        maintenanceOrder.setMaintenanceOrderItemList(maintenanceOrderItemList);
+        maintenanceOrderAndItemVO.setMaintenanceOrderItemList(maintenanceOrderItemList);
 
-        return maintenanceOrder;
+        return maintenanceOrderAndItemVO;
+    }
+
+
+
+    @Transactional
+    @Override
+    public boolean submitOrder(MaintenanceOrder maintenanceOrder) {
+        String mchCode = maintenanceOrder.getMchCode();
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        if(equipment == null)
+        {
+            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+        }
+
+        boolean isRepairBoolean = false;
+        List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
+        for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
+        {
+            //判断是否需要维修
+            Integer isRepair = maintenanceOrderItem.getIsRepair();
+            if(isRepair == 1)
+            {
+                isRepairBoolean = true;
+                repairOrderService.createRepairOrderByMaintenance(maintenanceOrder, maintenanceOrderItem);
+            }
+        }
+
+        //更新设备状态
+        if(isRepairBoolean) {
+            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+        }
+        equipment.setLastMaintenanceDatetime(LocalDateTime.now());
+        equipmentService.update(equipment);
+
+        boolean isSuccess = this.updateById(maintenanceOrder);
+        return isSuccess;
     }
 }

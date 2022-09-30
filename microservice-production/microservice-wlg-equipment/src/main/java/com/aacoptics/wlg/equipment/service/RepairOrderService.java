@@ -1,8 +1,7 @@
 package com.aacoptics.wlg.equipment.service;
 
 import com.aacoptics.wlg.equipment.entity.param.RepairOrderQueryParam;
-import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
-import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
+import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -54,12 +53,6 @@ public interface RepairOrderService {
 
 
 
-    /**
-     * 根据维修配置生成维修工单
-     *
-     */
-    void generateRepairOrder(RepairOrder repairOrder);
-
 
     /**
      * 获取保养工单下一个流水号
@@ -91,5 +84,26 @@ public interface RepairOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    RepairOrder findOrderByMchCode(String mchCode);
+    RepairOrderVO findOrderByMchCode(String mchCode);
+
+
+    /**
+     * 提交维修工单信息
+     *
+     * @param repairOrder
+     */
+    boolean submitOrder(RepairOrder repairOrder);
+
+    /**
+     * 通过点检创建维修工单
+     *
+     */
+    RepairOrder createRepairOrderByInspection(InspectionOrder inspectionOrder, InspectionOrderItem inspectionOrderItem);
+
+    /**
+     * 通过保养创建维修工单
+     *
+     */
+    RepairOrder createRepairOrderByMaintenance(MaintenanceOrder maintenanceOrder, MaintenanceOrderItem maintenanceOrderItem);
+
 }

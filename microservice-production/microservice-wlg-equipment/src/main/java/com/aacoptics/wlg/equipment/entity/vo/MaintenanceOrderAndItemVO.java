@@ -1,18 +1,20 @@
 package com.aacoptics.wlg.equipment.entity.vo;
 
 import com.aacoptics.common.web.entity.po.BasePo;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RepairOrderVO extends BasePo {
+public class MaintenanceOrderAndItemVO extends BasePo {
 
 
     private String orderNumber;
@@ -48,8 +50,18 @@ public class RepairOrderVO extends BasePo {
     /**
      * 保养日期
      */
-    private LocalDate repairDatetime;
+    private LocalDate maintenanceDate;
 
+    /**
+     * 保养周期
+     */
+    private String maintenancePeriod;
+
+
+    /**
+     * 保养周期单位
+     */
+    private String periodUnit;
 
 
     /**
@@ -63,28 +75,7 @@ public class RepairOrderVO extends BasePo {
     private String status;
 
 
-    /**
-     * 故障描述
-     */
-    private String faultDesc;
+    private List<MaintenanceOrderItem> maintenanceOrderItemList;
 
-
-    /**
-     * 故障照片
-     */
-    private String faultImageId;
-
-
-    /**
-     * 维修描述
-     */
-    private String repairDesc;
-
-
-
-    /**
-     * 工单来源
-     */
-    private String sourceType;
 
 }

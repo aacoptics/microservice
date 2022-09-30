@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel
 @Data
@@ -20,8 +21,11 @@ public class RepairOrderForm extends BaseForm<RepairOrder> {
     @ApiModelProperty(value = "故障描述")
     private String faultDesc;
 
-    @NotBlank(message = "故障照片不能为空")
+    @NotNull(message = "故障照片不能为空")
     @ApiModelProperty(value = "故障照片")
-    private String faultPhoto;
+    private Long faultImageId;
+
+    @ApiModelProperty(value = "维修说明")
+    private String repairDesc;
 
 }

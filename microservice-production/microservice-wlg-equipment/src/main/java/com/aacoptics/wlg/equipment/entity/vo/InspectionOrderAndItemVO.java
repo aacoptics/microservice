@@ -1,18 +1,21 @@
 package com.aacoptics.wlg.equipment.entity.vo;
 
 import com.aacoptics.common.web.entity.po.BasePo;
+import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RepairOrderVO extends BasePo {
+public class InspectionOrderAndItemVO extends BasePo {
 
 
     private String orderNumber;
@@ -46,11 +49,24 @@ public class RepairOrderVO extends BasePo {
 
 
     /**
-     * 保养日期
+     * 点检日期
      */
-    private LocalDate repairDatetime;
+    private LocalDate inspectionDate;
 
+    /**
+     * 点检班次
+     */
+    private String inspectionShift;
 
+    /**
+     * 班次开始时间
+     */
+    private LocalDateTime shiftStartTime;
+
+    /**
+     * 班次结束时间
+     */
+    private LocalDateTime shiftEndTime;
 
     /**
      * 责任人
@@ -63,28 +79,7 @@ public class RepairOrderVO extends BasePo {
     private String status;
 
 
-    /**
-     * 故障描述
-     */
-    private String faultDesc;
+    private List<InspectionOrderItem> inspectionOrderItemList;
 
-
-    /**
-     * 故障照片
-     */
-    private String faultImageId;
-
-
-    /**
-     * 维修描述
-     */
-    private String repairDesc;
-
-
-
-    /**
-     * 工单来源
-     */
-    private String sourceType;
 
 }

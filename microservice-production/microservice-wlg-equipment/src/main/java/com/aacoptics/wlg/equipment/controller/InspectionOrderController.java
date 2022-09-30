@@ -98,4 +98,16 @@ public class InspectionOrderController {
         log.debug("query with name:{}", mchCode);
         return Result.success(inspectionOrderService.findOrderByMchCode(mchCode));
     }
+
+    @ApiOperation(value = "修改点检工单", notes = "修改指定点检工单信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "点检工单ID", required = true, example = "0", dataType = "Long"),
+            @ApiImplicitParam(name = "InspectionForm", value = "点检工单实体", required = true, dataType = "InspectionOrderForm")
+    })
+    @PutMapping(value = "/submitOrder/{id}")
+    public Result submitOrder(@PathVariable Long id, @Valid @RequestBody InspectionOrderForm inspectionOrderForm) {
+        InspectionOrder inspectionOrder = inspectionOrderForm.toPo(id, InspectionOrder.class);
+        return Result.success(inspectionOrderService.submitOrder(inspectionOrder));
+    }
+
 }

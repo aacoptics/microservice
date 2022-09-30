@@ -16,6 +16,13 @@
                        align="center"
                        header-align="center">
       </el-table-column>
+      <el-table-column label="故障照片" prop="faultImageId" fixed="right" v-if="showPreview">
+        <template #default="scope">
+          <el-button :size="size" type="primary" @click="handlePreview(scope.$index, scope.row)"
+            >预览</el-button
+          >
+        </template>
+      </el-table-column>
       <slot name="custom-column"></slot>
       <el-table-column v-if="showOperation" :label="action.operation" align="center" fixed="right" header-align="center"
                        width="120">
@@ -117,6 +124,11 @@ export default {
       type: Boolean,
       default: true
     },
+    showPreview:
+    {
+      type: Boolean,
+      default: true
+    },
     rowClassName: [String, Function],
     headerCellStyle: Object,
     cellStyle: [Object, Function],
@@ -210,6 +222,9 @@ export default {
     // 编辑
     handleEdit: function (index, row) {
       this.$emit('handleEdit', {index: index, row: row})
+    },
+    handlePreview: function (index, row) {
+      this.$emit('handlePreview', {index: index, row: row})
     },
     // 删除
     handleDelete: function (index, row) {

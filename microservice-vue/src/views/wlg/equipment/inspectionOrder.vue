@@ -47,7 +47,7 @@
         </el-form>
       </div>
       <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showPreview="false"
                 :stripe="true"  :header-cell-style="{'text-align':'center'}" border @selection-change="handleSelectionChange"
             :cell-style="{'text-align':'left'}" :show-operation="false"
                 @findPage="findPage" @handleCurrentChange="handleCurrentChange">
@@ -66,11 +66,18 @@
                 <el-table-column prop="isFault" label="是否存在故障" width="130"/>
                 <el-table-column prop="isRepair" label="是否需要维修" width="130"/>
                 <el-table-column prop="faultDesc" label="故障描述" />
-                <el-table-column prop="faultPhoto" label="故障照片" />
+                <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
                 <el-table-column prop="updatedBy" label="更新人" width="120"/>
                 <el-table-column prop="updatedTime" label="更新时间" :formatter="dateTimeFormat" width="120"/>
                 <el-table-column prop="createdBy" label="创建人" width="120"/>
                 <el-table-column prop="createdTime" label="创建时间" :formatter="dateTimeFormat" width="120"/>
+                <el-table-column label="故障照片" prop="faultImageId" fixed="right">
+                  <template #default="scope">
+                    <el-button size="small" type="primary" @click="handlePreview(scope.$index, scope.row)"
+                      >预览</el-button
+                    >
+                  </template>
+                </el-table-column>
               </el-table>
         </el-tab-pane>
       
@@ -174,7 +181,12 @@
           </slot>
         </div>
       </el-dialog>
-
+      <el-dialog v-model="previewDialogVisible" title="图片预览" 
+                 width="850px" destroy-on-close> 
+                 <div class="block">
+                 <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
+                 </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -185,6 +197,7 @@ import {findInspectionOrderPage, handleAdd, handleUpdate,  findInspectionOrderBy
 import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
+import {findImageById} from "@/api/wlg/equipment/image";
 
 export default {
   name: "inspectionOrder",
@@ -199,6 +212,8 @@ export default {
         typeVersion: "",
         status: "",
       },
+      imagePreviewSrc: '',
+
       columns: [
         {prop: "orderNumber", label: "工单号", minWidth: 110},
         {prop: "mchCode", label: "设备编码", minWidth: 110},
@@ -230,6 +245,7 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       inspectionOrderItemDialogVisible: false,
       inspectionOrderShiftDialogVisible: false,
+      previewDialogVisible:false,
 
       editLoading: false,
       findLoading: false,
@@ -335,6 +351,31 @@ export default {
     //获取多选的数据
     handleSelectionChange(val) {
       this.multipleSelection = val;//存储选中的数据
+    },
+    handlePreview: function (index, row)
+    {
+      let id = row.faultImageId;
+      if(id == null)
+      {
+        this.$message.error('无故障图片！');
+        return;
+      }
+      this.previewLoading = true;
+      findImageById(id).then((response) => {
+        this.previewLoading = false;
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          // const blob = new Blob([responseData.data.image], {type: 'image/jpeg'});
+          // const imageUrl = window.URL.createObjectURL(blob);
+          this.imagePreviewSrc = "data:image/jpeg;base64," + responseData.data.image;
+          this.previewDialogVisible = true;
+          this.$message.success('预览成功')
+        } else {
+          this.$message.error('预览失败！' + responseData.msg + "," + responseData.data);
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
     },
      //处理批量确认
      handleBatchConfirm: function()

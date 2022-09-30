@@ -3,6 +3,8 @@ package com.aacoptics.wlg.equipment.service;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -84,7 +86,7 @@ public interface InspectionOrderService {
      * 批量确认工单
      *
      */
-    void batchConfirm(List<String> repairOrderIds);
+    void batchConfirm(List<String> inspectionOrderIds);
 
 
     /**
@@ -93,5 +95,14 @@ public interface InspectionOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    InspectionOrder findOrderByMchCode(String mchCode);
+    InspectionOrderAndItemVO findOrderByMchCode(String mchCode);
+
+
+    /**
+     * 提交保养结果
+     *
+     * @param inspectionOrder
+     * @return
+     */
+    public boolean submitOrder(InspectionOrder inspectionOrder);
 }
