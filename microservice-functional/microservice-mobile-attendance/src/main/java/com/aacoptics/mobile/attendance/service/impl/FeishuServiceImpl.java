@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.mobile.attendance.config.FeishuAppKeyConfig;
 import com.aacoptics.mobile.attendance.entity.po.FeishuUser;
 import com.aacoptics.mobile.attendance.exception.BusinessException;
@@ -15,16 +14,16 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.entity.ContentType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
-import java.io.*;
-import java.net.URL;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -40,6 +39,7 @@ public class FeishuServiceImpl implements FeishuService {
 
     @Resource
     private FeishuUserMapper feishuUserMapper;
+
 
     @Override
     public FeishuUser getFeishuUser(String employeeNo) {

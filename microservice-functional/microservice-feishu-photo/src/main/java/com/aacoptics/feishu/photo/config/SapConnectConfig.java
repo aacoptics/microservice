@@ -1,4 +1,4 @@
-package com.aacoptics.mobile.attendance.config;
+package com.aacoptics.feishu.photo.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

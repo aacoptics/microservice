@@ -2,7 +2,6 @@ package com.aacoptics.notification.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.common.core.vo.Result;
@@ -23,7 +22,6 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -195,7 +193,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                     }
                 }
 
-                if (messageBatch.getIsDaiban().equals("Y")) {
+                if (!StrUtil.isBlank(messageBatch.getIsDaiban()) && messageBatch.getIsDaiban().equals("Y")) {
                     createTask(messageBatch.getBatchId());
                 }
             }
@@ -213,13 +211,15 @@ public class SendMessageServiceImpl implements SendMessageService {
 
         for (UmsContentSubDaiban taskBatch : taskBatches) {
             JSONObject taskJson = umsContentSubDaibanService.getTaskJson(taskBatch);
-            boolean resultByCreateTask = feishuService.createTake(FeishuService.RECEIVE_ID_TYPE_USER_ID, taskJson);
-            if (!resultByCreateTask) {
+            JSONObject resultByCreateTask = feishuService.createTask(FeishuService.RECEIVE_ID_TYPE_USER_ID, taskJson);
+            if (resultByCreateTask.getInt("code") != 0) {
                 taskBatch.setIsStatus("2");
                 throw new BusinessException("创建任务失败！批次号：{" + batchId + "}");
             }
 
+            String taskId = resultByCreateTask.getJSONObject("data").getJSONObject("task").getStr("id");
             taskBatch.setIsStatus("1");
+            taskBatch.setFeishuTaskId(taskId);
             umsContentSubDaibanService.updateById(taskBatch);
         }
     }

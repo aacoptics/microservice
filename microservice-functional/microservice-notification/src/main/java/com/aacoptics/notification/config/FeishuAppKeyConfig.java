@@ -1,5 +1,6 @@
 package com.aacoptics.notification.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,7 @@ public class FeishuAppKeyConfig implements Serializable {
 
     @JsonProperty("app_secret")
     private String appSecret;
+
+    @JsonIgnore
+    private String encryptKey;
 }

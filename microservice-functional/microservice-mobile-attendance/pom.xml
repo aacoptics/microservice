@@ -40,11 +40,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sapjco</groupId>
-            <artifactId>sapjco3</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/sapjco3.jar</systemPath>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>2.3.0</version>
         </dependency>
     </dependencies>
 
