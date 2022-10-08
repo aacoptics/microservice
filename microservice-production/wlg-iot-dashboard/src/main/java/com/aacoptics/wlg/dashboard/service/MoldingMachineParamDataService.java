@@ -27,7 +27,7 @@ public interface MoldingMachineParamDataService {
                                                       List<String> waferIds);
 
     List<MoldingParamAnalysisData> getAnalysisData(String machineName,
-                                                   String paramName,
+                                                   List<String> paramNames,
                                                    LocalDateTime startTime,
                                                    LocalDateTime endTime);
 }

@@ -166,6 +166,20 @@
                style="margin-top: 10px;height: 600px; width: 100%"></div>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-table :data="analysisData" style="width: 100%">
+            <el-table-column prop="machineName" label="机台号" width="180" />
+            <el-table-column prop="waferId" label="wafer id" width="180" />
+            <el-table-column prop="recipePhase" label="阶段" width="180" />
+            <el-table-column prop="recipeName" label="配方" width="180" />
+            <el-table-column prop="paramName" label="参数" width="180" />
+            <el-table-column prop="avgValue" label="平均值" width="180" />
+            <el-table-column prop="stdValue" label="标准差" width="180" />
+            <el-table-column prop="createTime" label="创建时间" width="180" />
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -237,6 +251,7 @@ export default {
       ngWaferIds: [],
       waferIdArray: [],
       paramValue: {},
+      analysisData:[],
       paramNameArray: [
          "Customer_Input1"
         ,"customer_temperature_0"

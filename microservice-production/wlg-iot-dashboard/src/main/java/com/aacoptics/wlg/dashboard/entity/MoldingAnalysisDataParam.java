@@ -10,7 +10,7 @@ import java.util.List;
 public class MoldingAnalysisDataParam implements Serializable {
 
     private String machineName;
-    private String paramName;
+    private List<String> paramNames;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }

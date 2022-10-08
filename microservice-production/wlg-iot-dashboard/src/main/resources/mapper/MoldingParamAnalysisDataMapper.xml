@@ -13,9 +13,12 @@
         join t_molding_machine_opc_ua_node c
         on a.param_id = c.id
         where machine_name = #{machineName}
-        and param_name + '_' + convert(varchar, array_id) = #{paramName}
+        and param_name + '_' + convert(varchar, array_id) in
+        <foreach item='paramName' index='index' collection='paramNames' open='(' separator=',' close=')'>
+            #{paramName}
+        </foreach>
         and a.create_time &gt;= #{startTime} and a.create_time &lt; #{endTime}
-        order by a.id
+        order by param_name + '_' + convert(varchar, array_id), a.id
     </select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.aacoptics.wlg.dashboard.service.impl;
 
 import com.aacoptics.wlg.dashboard.entity.InputReport;
 import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
+import com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData;
 import com.aacoptics.wlg.dashboard.service.InputReportService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
 import com.taobao.api.ApiException;
@@ -33,6 +34,8 @@ public class InputReportServiceImplTest {
     @Test
     public void getBydateAndMachineName() {
 
+        List<MoldingParamAnalysisData> test1 = moldingMachineParamDataService.getAnalysisData("HPM-026",
+                Arrays.asList("lower_moldcore_section_temp_actual_1"), LocalDateTime.now().minusYears(1), LocalDateTime.now());
         List<MoldingMachineParamData> test = moldingMachineParamDataService.getMoldingParamData("HPM-013", "lower_moldcore_section_dutycycle_actual_0", Arrays.asList(
                 "3968"));
 

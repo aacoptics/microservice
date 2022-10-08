@@ -113,9 +113,9 @@ public class MoldingMachineParamDataServiceImpl extends ServiceImpl<MoldingMachi
 
     @Override
     public List<MoldingParamAnalysisData> getAnalysisData(String machineName,
-                                                          String paramName,
+                                                          List<String> paramNames,
                                                           LocalDateTime startTime,
                                                           LocalDateTime endTime) {
-        return moldingParamAnalysisDataMapper.getAnalysisData(startTime, endTime, machineName, paramName);
+        return moldingParamAnalysisDataMapper.getAnalysisData(startTime, endTime, machineName, paramNames);
     }
 }

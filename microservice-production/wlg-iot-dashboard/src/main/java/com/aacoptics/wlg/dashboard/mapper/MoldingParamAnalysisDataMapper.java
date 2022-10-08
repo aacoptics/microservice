@@ -17,6 +17,6 @@ public interface MoldingParamAnalysisDataMapper extends BaseMapper<MoldingParamA
     List<MoldingParamAnalysisData> getAnalysisData(@Param("startTime") LocalDateTime startTime,
                                               @Param("endTime") LocalDateTime endTime,
                                               @Param("machineName") String machineName,
-                                              @Param("paramName")  String paramName);
+                                              @Param("paramNames")  List<String> paramNames);
 
 }

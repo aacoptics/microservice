@@ -81,7 +81,7 @@ public class MoldingParamController {
     @PostMapping(value = "/getAnalysisData")
     public Result getAnalysisData(@RequestBody MoldingAnalysisDataParam moldingAnalysisDataParam) {
         return Result.success(moldingMachineParamDataService.getAnalysisData(moldingAnalysisDataParam.getMachineName(),
-                moldingAnalysisDataParam.getParamName(),
+                moldingAnalysisDataParam.getParamNames(),
                 moldingAnalysisDataParam.getStartTime(),
                 moldingAnalysisDataParam.getEndTime()));
     }
