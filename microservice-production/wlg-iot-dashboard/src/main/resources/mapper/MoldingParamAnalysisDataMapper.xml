@@ -5,7 +5,9 @@
 
     <select id="getAnalysisData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData">
         SELECT a.id,machine_name, wafer_id, recipe_phase, recipe_name,
-               param_name + '_' + convert(varchar, array_id) as param_name,
+        case when a.array_id > 0
+        then  param_name + '_'+ convert(varchar, (array_id - 1))
+        else param_name end as param_name,
                avg_value, std_value, a.create_time
         FROM [t_wlg_molding_machine_param_analysis_data] a
         join [t_wlg_molding_machine_param_data_base] b
@@ -13,7 +15,9 @@
         join t_molding_machine_opc_ua_node c
         on a.param_id = c.id
         where machine_name = #{machineName}
-        and param_name + '_' + convert(varchar, array_id) in
+        and case when a.array_id > 0
+        then  param_name + '_'+ convert(varchar, (array_id - 1))
+        else param_name end in
         <foreach item='paramName' index='index' collection='paramNames' open='(' separator=',' close=')'>
             #{paramName}
         </foreach>
