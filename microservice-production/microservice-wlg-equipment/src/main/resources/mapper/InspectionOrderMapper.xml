@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.InspectionOrderMapper">
+
+    <select id="findInspectionList" resultType="com.aacoptics.wlg.equipment.entity.po.InspectionMain">
+        SELECT A.*
+            FROM EM_INSPECTION_MAIN A
+            WHERE EXISTS(SELECT 1 FROM EM_INSPECTION_ITEM B WHERE A.ID = B.INSPECTION_MAIN_ID)
+              AND EXISTS(SELECT 1 FROM EM_INSPECTION_SHIFT C WHERE A.ID = C.INSPECTION_MAIN_ID)
+           ORDER BY A.ID, A.MCH_NAME, A.SPEC, A.TYPE_VERSION
+    </select>
+
+    <select id="findInspectionOrderList" resultType="com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO">
+            SELECT A.ID,
+                   A.ORDER_NUMBER,
+                   A.MCH_CODE,
+                   A.INSPECTION_DATE,
+                   A.INSPECTION_SHIFT,
+                   A.SHIFT_START_TIME,
+                   A.SHIFT_END_TIME,
+                   A.DUTY_PERSON_ID,
+                   A.STATUS,
+                   A.CREATED_TIME,
+                   A.CREATED_BY,
+                   A.UPDATED_TIME,
+                   A.UPDATED_BY,
+                   B.MCH_NAME,
+                   B.SPEC,
+                   B.TYPE_VERSION,
+                   B.FACTORY_NO
+            FROM EM_INSPECTION_ORDER A
+                     LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            WHERE 1=1
+            <if test="inspectionOrderQueryParam.mchCode != null and inspectionOrderQueryParam.mchCode!=''">
+                AND A.MCH_CODE = #{inspectionOrderQueryParam.mchCode}
+            </if>
+            <if test="inspectionOrderQueryParam.status != null and inspectionOrderQueryParam.status!=''">
+                AND A.STATUS = #{inspectionOrderQueryParam.status}
+            </if>
+            <if test="inspectionOrderQueryParam.mchName != null and inspectionOrderQueryParam.mchName!=''">
+                AND B.MCH_NAME = #{inspectionOrderQueryParam.mchName}
+            </if>
+            <if test="inspectionOrderQueryParam.spec != null and inspectionOrderQueryParam.spec!=''">
+                AND B.SPEC = #{inspectionOrderQueryParam.spec}
+            </if>
+            <if test="inspectionOrderQueryParam.typeVersion != null and inspectionOrderQueryParam.typeVersion!=''">
+                AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
+            </if>
+            ORDER BY A.ORDER_NUMBER
+    </select>
+
+    <select id="findOrderByMchCode" resultType="com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO">
+        SELECT TOP 1 A.ID,
+        A.ORDER_NUMBER,
+        A.MCH_CODE,
+        A.INSPECTION_DATE,
+        A.INSPECTION_SHIFT,
+        A.SHIFT_START_TIME,
+        A.SHIFT_END_TIME,
+        A.DUTY_PERSON_ID,
+        A.STATUS,
+        A.CREATED_TIME,
+        A.CREATED_BY,
+        A.UPDATED_TIME,
+        A.UPDATED_BY,
+        B.MCH_NAME,
+        B.SPEC,
+        B.TYPE_VERSION,
+        B.FACTORY_NO
+        FROM EM_INSPECTION_ORDER A
+        LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        WHERE 1=1
+        AND A.MCH_CODE = #{mchCode}
+        AND A.STATUS IN ('0', '1')
+        ORDER BY A.INSPECTION_DATE, A.SHIFT_START_TIME
+    </select>
+</mapper>
