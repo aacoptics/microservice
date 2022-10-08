@@ -186,7 +186,7 @@
 
 <script>
 
-import {getMachineName, getMoldParamValue, getWaferIds} from "@/api/wlg/iot/moldingMachineParamData";
+import {getAnalysisData, getMachineName, getMoldParamValue, getWaferIds} from "@/api/wlg/iot/moldingMachineParamData";
 import * as echarts from 'echarts';
 
 export default {
@@ -412,6 +412,17 @@ export default {
       })
     },
 
+    getMoldingAnalysisData() {
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      getAnalysisData({machineName: this.formParam.machineName, paramNames: this.paramNames, startTime: startTime, endTime: endTime}).then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.analysisData = responseData.data
+        }
+      })
+    },
+
     getWaferIdArray() {
       this.selectLoading = true
       if (!this.formParam.machineName || this.formParam.machineName === "") {
@@ -475,7 +486,7 @@ export default {
       this.paramNames.forEach(item => {
         this.getParamValue(item)
       })
-
+      this.getMoldingAnalysisData()
     },
 
     alainAllChart() {

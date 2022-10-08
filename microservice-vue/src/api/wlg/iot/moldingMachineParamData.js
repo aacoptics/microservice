@@ -138,6 +138,17 @@ export function handleAdd(addForm) {
     })
 }
 
+export function getAnalysisData(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getAnalysisData',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm
+    })
+}
+
 export function handleUpdate(updateForm) {
     return request({
         url: '/wlg-iot-dashboard/moldingMachine/MoldingParamThreshold/' + updateForm.id,
