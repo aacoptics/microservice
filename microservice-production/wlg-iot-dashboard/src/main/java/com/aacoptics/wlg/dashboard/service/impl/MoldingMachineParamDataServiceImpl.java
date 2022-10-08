@@ -1,7 +1,9 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
 import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
+import com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData;
 import com.aacoptics.wlg.dashboard.mapper.MoldingMachineParamDataMapper;
+import com.aacoptics.wlg.dashboard.mapper.MoldingParamAnalysisDataMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,6 +19,9 @@ import java.util.List;
 public class MoldingMachineParamDataServiceImpl extends ServiceImpl<MoldingMachineParamDataMapper, MoldingMachineParamData> implements MoldingMachineParamDataService {
     @Resource
     private MoldingMachineParamDataMapper moldingMachineParamDataMapper;
+
+    @Resource
+    private MoldingParamAnalysisDataMapper moldingParamAnalysisDataMapper;
 
     @Override
     public List<MoldingMachineParamData> getMoldingParamData(String machineName,
@@ -104,5 +109,13 @@ public class MoldingMachineParamDataServiceImpl extends ServiceImpl<MoldingMachi
                                                              List<String> waferIds) {
         List<MoldingMachineParamData> moldingMachineParamData = moldingMachineParamDataMapper.getMoldingParamName(machineName, waferIds);
         return moldingMachineParamData;
+    }
+
+    @Override
+    public List<MoldingParamAnalysisData> getAnalysisData(String machineName,
+                                                          String paramName,
+                                                          LocalDateTime startTime,
+                                                          LocalDateTime endTime) {
+        return moldingParamAnalysisDataMapper.getAnalysisData(startTime, endTime, machineName, paramName);
     }
 }
