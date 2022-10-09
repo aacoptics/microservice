@@ -101,6 +101,8 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addBlobContent(localTimeStr);
                 if(!phase.trim().equals("Recipe Ready")){
                     markdownGroupMessage.addContent("当前阶段CT异常，阶段：" + phase + "，已持续" + phaseTime + "秒，平均" + avgPhaseTime + "秒，请检查。");
+                }else{
+                    markdownGroupMessage = null;
                 }
                 break;
 //            case "FeedAlarm":
@@ -111,25 +113,27 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
 //                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
 //                sendToAllSpeaker(machineName);
 //                break;
-//            case "moldTempMonitor":
-//                title = "模造温度曲线报警";
-//                String moldParam = dataJson.getString("param");
-//                String avgValue = dataJson.getString("averageValue");
-//                String currentValue = dataJson.getString("currentValue");
-//                String recipePhase = dataJson.getString("recipePhase");
-//                markdownGroupMessage.setTitle(title);
-//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-//                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
-//                markdownGroupMessage.addBlobContent(localTimeStr);
-//                if (moldParam.indexOf("upper") == 0)
-//                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-//                else if (moldParam.indexOf("lower") == 0)
-//                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
-//                else
-//                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
-//                break;
+            case "moldTempMonitor":
+                title = "模造温度曲线报警";
+                String moldParam = dataJson.getString("param");
+                String avgValue = dataJson.getString("averageValue");
+                String currentValue = dataJson.getString("currentValue");
+                String recipePhase = dataJson.getString("recipePhase");
+                markdownGroupMessage.setTitle(title);
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent("阶段：" + recipePhase);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                if (moldParam.indexOf("upper") == 0)
+                    markdownGroupMessage.addContent("机台上模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+                else if (moldParam.indexOf("lower") == 0)
+                    markdownGroupMessage.addContent("机台下模具温度异常，平均值为" + avgValue + "，当前值为" + currentValue + "，请相关人员检查!");
+                else
+                    markdownGroupMessage.addContent("机台模具温度异常，请相关人员检查!");
+                break;
         }
 
+        if(markdownGroupMessage == null || StrUtil.isBlank(markdownGroupMessage.toString()))
+            return;
         String chatName = "模造车间异常&换料自动提醒群";
         try {
             if (StrUtil.isBlank(title)) {

@@ -166,13 +166,27 @@
                style="margin-top: 10px;height: 600px; width: 100%"></div>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-table :data="analysisData" style="width: 100%">
+            <el-table-column prop="machineName" label="机台号" width="180" />
+            <el-table-column prop="waferId" label="wafer id" width="180" />
+            <el-table-column prop="recipePhase" label="阶段" width="180" />
+            <el-table-column prop="recipeName" label="配方" width="180" />
+            <el-table-column prop="paramName" label="参数" width="180" />
+            <el-table-column prop="avgValue" label="平均值" width="180" />
+            <el-table-column prop="stdValue" label="标准差" width="180" />
+            <el-table-column prop="createTime" label="创建时间" width="180" />
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
 
-import {getMachineName, getMoldParamValue, getWaferIds} from "@/api/wlg/iot/moldingMachineParamData";
+import {getAnalysisData, getMachineName, getMoldParamValue, getWaferIds} from "@/api/wlg/iot/moldingMachineParamData";
 import * as echarts from 'echarts';
 
 export default {
@@ -237,6 +251,7 @@ export default {
       ngWaferIds: [],
       waferIdArray: [],
       paramValue: {},
+      analysisData:[],
       paramNameArray: [
          "Customer_Input1"
         ,"customer_temperature_0"
@@ -397,6 +412,17 @@ export default {
       })
     },
 
+    getMoldingAnalysisData() {
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      getAnalysisData({machineName: this.formParam.machineName, paramNames: this.paramNames, startTime: startTime, endTime: endTime}).then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.analysisData = responseData.data
+        }
+      })
+    },
+
     getWaferIdArray() {
       this.selectLoading = true
       if (!this.formParam.machineName || this.formParam.machineName === "") {
@@ -460,7 +486,7 @@ export default {
       this.paramNames.forEach(item => {
         this.getParamValue(item)
       })
-
+      this.getMoldingAnalysisData()
     },
 
     alainAllChart() {
