@@ -9,6 +9,7 @@ import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionOrderItemMapper;
 import com.aacoptics.wlg.equipment.mapper.InspectionOrderMapper;
@@ -63,6 +64,13 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         return inspectionOrderVOIPage;
     }
 
+    @Override
+    public List<InspectionOrderAndItemVO> queryInspectionOrderByCondition(InspectionOrderQueryParam inspectionOrderQueryParam)
+    {
+        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findInspectionOrderAndItemList(inspectionOrderQueryParam);
+
+        return inspectionOrderAndItemVOList;
+    }
 
     @Override
     public boolean add(InspectionOrder inspectionOrder) {

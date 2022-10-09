@@ -43,6 +43,12 @@
                 <font-awesome-icon :icon="['fas', 'check']"/>
               </template>
             </el-button>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('保养工单')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -193,7 +199,7 @@
 
 <script>
 import orderTable from "./orderTable";
-import {findMaintenanceOrderPage, handleAdd, handleUpdate,  findMaintenanceOrderById, handleBatchConfirm} from "@/api/wlg/equipment/maintenanceOrder";
+import {findMaintenanceOrderPage, handleAdd, handleUpdate,  findMaintenanceOrderById, handleBatchConfirm, exportMaintenanceOrderExcel} from "@/api/wlg/equipment/maintenanceOrder";
 import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
@@ -245,6 +251,7 @@ export default {
       findLoading: false,
       findDetailLoading: false,
       comfirmLoading: false,
+      exportLoading: false,
 
       dataFormRules: {
         mchName: [{required: true, message: "请输入设备名称", trigger: "blur"}],
@@ -368,7 +375,7 @@ export default {
       this.multipleSelection = val;//存储选中的数据
     },
       //处理批量确认
-      handleBatchConfirm: function()
+    handleBatchConfirm: function()
     {
       if(this.multipleSelection == null || this.multipleSelection.length==0)
       {
@@ -511,6 +518,26 @@ export default {
           this.typeVersionOptions = response.data.data
         }
       })
+    },
+    exportExcelData(excelFileName) {
+      let pageRequest  = {};
+      pageRequest.mchCode = this.filters.mchCode;
+      pageRequest.mchName = this.filters.mchName;
+      pageRequest.spec = this.filters.spec;
+      pageRequest.typeVersion = this.filters.typeVersion;
+      pageRequest.status = this.filters.status;
+
+      this.exportLoading = true;
+      exportMaintenanceOrderExcel(pageRequest).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
     },
     // 取消
     cancel() {

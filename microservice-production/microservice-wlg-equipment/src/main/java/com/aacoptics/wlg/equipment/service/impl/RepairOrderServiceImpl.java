@@ -50,6 +50,15 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
 
     @Override
+    public List<RepairOrderVO> queryRepairOrderByCondition(RepairOrderQueryParam repairOrderQueryParam) {
+
+        List<RepairOrderVO> repairOrderVOIPage = repairOrderMapper.findRepairOrderList(repairOrderQueryParam);
+
+        return repairOrderVOIPage;
+    }
+
+
+    @Override
     @Transactional
     public boolean add(RepairOrder repairOrder) {
         String mchCode = repairOrder.getMchCode();

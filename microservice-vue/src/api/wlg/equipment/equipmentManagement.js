@@ -99,3 +99,15 @@ export function findEquipmentByMchCode(mchCode) {
         },
     })
 }
+
+export function exportEquipmentExcel(conditions) {
+    return request({
+        url: '/wlg-equipment/equipmentManagement/exportEquipmentExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

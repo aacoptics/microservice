@@ -29,5 +29,8 @@ public interface MaintenanceOrderMapper extends BaseMapper<MaintenanceOrder> {
 
 
     @DS("WLGIOT")
+    List<MaintenanceOrderAndItemVO> findMaintenanceOrderAndItemList(@Param("maintenanceOrderQueryParam")  MaintenanceOrderQueryParam maintenanceOrderQueryParam);
+
+    @DS("WLGIOT")
     MaintenanceOrderAndItemVO findOrderByMchCode(@Param("mchCode")  String mchCode);
 }

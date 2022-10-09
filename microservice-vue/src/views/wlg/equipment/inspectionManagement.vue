@@ -123,7 +123,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-select v-model="dataForm.mchName" allow-create clearable filterable placeholder="请选择设备名称" @change="selectMchName" style="width:100%">
+                <el-select v-model="dataForm.mchName" clearable filterable placeholder="请选择设备名称" @change="selectMchName" style="width:100%">
                   <el-option
                       v-for="item in mchNameOptions"
                       :key="item"
@@ -136,7 +136,7 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-select v-model="dataForm.spec" allow-create clearable filterable placeholder="请选择规格" @change="selectSpec" style="width:100%">
+                <el-select v-model="dataForm.spec" clearable filterable placeholder="请选择规格" @change="selectSpec" style="width:100%">
                   <el-option
                       v-for="item in specOptions"
                       :key="item"
@@ -149,7 +149,7 @@
             </el-col>
               <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-select v-model="dataForm.typeVersion" allow-create clearable filterable placeholder="请选择型号" style="width:100%">
+                <el-select v-model="dataForm.typeVersion" clearable filterable placeholder="请选择型号" style="width:100%">
                   <el-option
                       v-for="item in typeVersionOptions"
                       :key="item"

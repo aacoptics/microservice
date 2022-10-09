@@ -192,6 +192,26 @@ public class Equipment extends BasePo {
     private String deptDirectorId;
 
     /**
+     * 副总裁
+     */
+    @TableField(value = "vice_president_id")
+    private String vicePresidentId;
+
+
+    /**
+     * 资产状态
+     */
+    @TableField(value = "equip_state")
+    private String equipState;
+
+
+    /**
+     * 资产状态
+     */
+    @TableField(value = "equip_state_db")
+    private String equipStateDb;
+
+    /**
      * 最后点检时间
      */
     @TableField(value = "last_inspection_datetime")

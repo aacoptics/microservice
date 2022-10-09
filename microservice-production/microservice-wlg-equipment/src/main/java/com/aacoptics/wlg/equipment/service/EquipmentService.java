@@ -118,4 +118,11 @@ public interface EquipmentService {
      * @return
      */
     Equipment findEquipmentByMchCode(String mchCode);
+
+    /**
+     * 查询设备清单
+     * @param equipmentQueryParam
+     * @return
+     */
+    public List<Equipment> queryEquipmentByCondition(EquipmentQueryParam equipmentQueryParam);
 }
