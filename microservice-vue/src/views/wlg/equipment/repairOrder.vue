@@ -311,7 +311,8 @@ export default {
       {
         return;
       }
-      var mchCode = this.dataForm.mchCode;
+      let params = {};
+      params.mchCode = this.dataForm.mchCode;
       findEquipmentByMchCode(mchCode).then(response => {
         const responseData = response.data;
         if (responseData.code === "000000") {

@@ -90,13 +90,14 @@ export function findTypeVersionListByMchNameAndSpec(conditions) {
     })
 }
 
-export function findEquipmentByMchCode(mchCode) {
+export function findEquipmentByMchCode(params) {
     return request({
-        url: '/wlg-equipment/equipmentManagement/findEquipmentByMchCode/' + mchCode,
-        method: 'get',
+        url: '/wlg-equipment/equipmentManagement/findEquipmentByMchCode',
+        method: 'post',
         headers: {
             'Content-Type': 'application/json'
         },
+        data: params
     })
 }
 
