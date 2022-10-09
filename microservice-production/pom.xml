@@ -19,7 +19,8 @@
         <module>iot-lenspacker-dashboard</module>
         <module>iot-coating-dashboard</module>
         <module>iot-general-dashboard</module>
-        <module>microservice-wlg-equipment</module>
+ 		<module>microservice-wlg-equipment</module>
+        <module>microservice-data-analysis-api</module>
     </modules>
 
     <packaging>pom</packaging>
