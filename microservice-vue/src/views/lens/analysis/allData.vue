@@ -55,7 +55,7 @@
   </template>
 
 <script>
-    import {getResponseDataMessage} from "../utils/commonUtils";
+    import {getResponseDataMessage} from "@/utils/commonUtils";
     import SysTable from "@/components/SysTable";
     import{
         getDataByConditions,
