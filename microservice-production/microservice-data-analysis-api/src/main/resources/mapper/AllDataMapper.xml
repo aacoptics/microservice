@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.data.analysis.mapper.AllDataMapper">
+    <select id="getAllDataByConditionsWithPage" resultType="com.aacoptics.data.analysis.entity.po.AllData">
+        select pcd.category,
+            pcd.project,
+            pcd.part_name,
+            pcd.material,
+            pcd.mold_no,
+            pcd.mold_temp,
+            pcd.material_temp,
+            pcd.jet_velocity,
+            pcd.vp_switch,
+            pcd.hold_pressure1,
+            pcd.hold_pressure2,
+            pcd.hold_pressure3,
+            pcd.hold_pressure4,
+            pcd.hold_pressure5,
+            pcd.hold_pressure6,
+            pcd.hold_time1,
+            pcd.hold_time2,
+            pcd.hold_time3,
+            pcd.hold_time4,
+            pcd.hold_time5,
+            pcd.hold_time6,
+            pcd.hold_pressure_velocity,
+            pcd.platen_position,
+            pcd.opening_speed,
+            pcd.ejection_speed,
+            pcd.cooling_time,
+            pcd.clamping_force,
+            pcd.passivation,
+            srd.core_thickness,
+            srd.core_thickness_range,
+            srd.r1_vector_height,
+            srd.r1_vector_height_range,
+            srd.r2_vector_height,
+            srd.r2_vector_height_range,
+            srd.outer_diameter_ecc,
+            srd.kanhe_ecc,
+            srd.face_ecc,
+            srd.annealing_process,
+            srd.kanhe_roundness,
+            srd.outer_diameter_average,
+            srd.outer_diameter_range,
+            srd.outer_diameter_roundness,
+            srd.outer_diameter_shrinkage,
+            srd.outer_diameter_roughness,
+            srd.r1_flatness,
+            srd.r2_flatness,
+            srd.r1_split_average,
+            srd.r2_split_average,
+            srd.wft_stability,
+            srd.wft_consistency,
+            srd.wft_max_as,
+            srd.wft_outer_diameter_shrinkage,
+            srd.cft_r1,
+            srd.cft_r2,
+            srd.cft_consistency,
+            srd.cft_max_as,
+            srd.coating_trend,
+            srd.cfsr_r1,
+            srd.cfsr_r2,
+            srd.cfsr_r1_r2,
+            srd.burr,
+            srd.weldline,
+            srd.appearance_problem,
+            srd.appearance_img,
+            srd.remarks,
+            sd.core_thickness_lens,
+            sd.max_wall_thickness,
+            sd.min_wall_thickness,
+            sd.max_core_ratio,
+            sd.max_min_ratio,
+            sd.outer_diameter,
+            sd.edge_thickness,
+            sd.whole_min_wall_thickness,
+            sd.whole_max_wall_thickness,
+            sd.whole_max_min_ratio,
+            sd.whole_diameter_thickness_ratio,
+            sd.max_angle_r1,
+            sd.max_angle_r2,
+            sd.r1_r2_distance,
+            sd.middle_part_thickness,
+            sd.bottom_diameter_distance,
+            sd.mechanism_diameter_thickness_ratio,
+            sd.r1_kanhe_angle,
+            sd.r1_kanhe_height,
+            sd.r2_kanhe_angle,
+            sd.r2_kanhe_height,
+            sd.r1_srtm,
+            sd.r2_srtm,
+            sd.outer_diameter_srtm,
+            sd.assembly_drawing
+        from t_process_condition_data pcd
+            inner join t_shaping_result_data srd on pcd.category = srd.category
+        and pcd.project = srd.project
+        and pcd.part_name = srd.part_name
+        and pcd.material = srd.material
+            inner join t_structure_data sd on pcd.category = sd.category
+        and pcd.project = sd.project
+        and pcd.part_name = sd.part_name
+        and pcd.material = sd.material
+        where 1=1
+        <if test="category != '' and category != null">
+            AND pcd.category like CONCAT('%',#{category},'%')
+        </if>
+        <if test="project != '' and project != null">
+            AND pcd.project like CONCAT('%',#{project},'%')
+        </if>
+        <if test="partName != '' and partName != null">
+            AND pcd.part_name like CONCAT('%',#{partName},'%')
+        </if>
+        <if test="material != '' and material != null">
+            AND pcd.material like CONCAT('%',#{material},'%')
+        </if>
+    </select>
+
+    <select id="getAllDataByConditions" resultType="com.aacoptics.data.analysis.entity.po.AllData">
+        select pcd.category,
+            pcd.project,
+            pcd.part_name,
+            pcd.material,
+            pcd.mold_no,
+            pcd.mold_temp,
+            pcd.material_temp,
+            pcd.jet_velocity,
+            pcd.vp_switch,
+            pcd.hold_pressure1,
+            pcd.hold_pressure2,
+            pcd.hold_pressure3,
+            pcd.hold_pressure4,
+            pcd.hold_pressure5,
+            pcd.hold_pressure6,
+            pcd.hold_time1,
+            pcd.hold_time2,
+            pcd.hold_time3,
+            pcd.hold_time4,
+            pcd.hold_time5,
+            pcd.hold_time6,
+            pcd.hold_pressure_velocity,
+            pcd.platen_position,
+            pcd.opening_speed,
+            pcd.ejection_speed,
+            pcd.cooling_time,
+            pcd.clamping_force,
+            pcd.passivation,
+            srd.core_thickness,
+            srd.core_thickness_range,
+            srd.r1_vector_height,
+            srd.r1_vector_height_range,
+            srd.r2_vector_height,
+            srd.r2_vector_height_range,
+            srd.outer_diameter_ecc,
+            srd.kanhe_ecc,
+            srd.face_ecc,
+            srd.annealing_process,
+            srd.kanhe_roundness,
+            srd.outer_diameter_average,
+            srd.outer_diameter_range,
+            srd.outer_diameter_roundness,
+            srd.outer_diameter_shrinkage,
+            srd.outer_diameter_roughness,
+            srd.r1_flatness,
+            srd.r2_flatness,
+            srd.r1_split_average,
+            srd.r2_split_average,
+            srd.wft_stability,
+            srd.wft_consistency,
+            srd.wft_max_as,
+            srd.wft_outer_diameter_shrinkage,
+            srd.cft_r1,
+            srd.cft_r2,
+            srd.cft_consistency,
+            srd.cft_max_as,
+            srd.coating_trend,
+            srd.cfsr_r1,
+            srd.cfsr_r2,
+            srd.cfsr_r1_r2,
+            srd.burr,
+            srd.weldline,
+            srd.appearance_problem,
+            srd.appearance_img,
+            srd.remarks,
+            sd.core_thickness_lens,
+            sd.max_wall_thickness,
+            sd.min_wall_thickness,
+            sd.max_core_ratio,
+            sd.max_min_ratio,
+            sd.outer_diameter,
+            sd.edge_thickness,
+            sd.whole_min_wall_thickness,
+            sd.whole_max_wall_thickness,
+            sd.whole_max_min_ratio,
+            sd.whole_diameter_thickness_ratio,
+            sd.max_angle_r1,
+            sd.max_angle_r2,
+            sd.r1_r2_distance,
+            sd.middle_part_thickness,
+            sd.bottom_diameter_distance,
+            sd.mechanism_diameter_thickness_ratio,
+            sd.r1_kanhe_angle,
+            sd.r1_kanhe_height,
+            sd.r2_kanhe_angle,
+            sd.r2_kanhe_height,
+            sd.r1_srtm,
+            sd.r2_srtm,
+            sd.outer_diameter_srtm,
+            sd.assembly_drawing
+        from t_process_condition_data pcd
+            inner join t_shaping_result_data srd on pcd.category = srd.category
+        and pcd.project = srd.project
+        and pcd.part_name = srd.part_name
+        and pcd.material = srd.material
+            inner join t_structure_data sd on pcd.category = sd.category
+        and pcd.project = sd.project
+        and pcd.part_name = sd.part_name
+        and pcd.material = sd.material
+        where 1=1
+        <if test="category != '' and category != null">
+            AND pcd.category like CONCAT('%',#{category},'%')
+        </if>
+        <if test="project != '' and project != null">
+            AND pcd.project like CONCAT('%',#{project},'%')
+        </if>
+        <if test="partName != '' and partName != null">
+            AND pcd.part_name like CONCAT('%',#{partName},'%')
+        </if>
+        <if test="material != '' and material != null">
+            AND pcd.material like CONCAT('%',#{material},'%')
+        </if>
+    </select>
+
+
+</mapper>
