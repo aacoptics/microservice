@@ -36,6 +36,7 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
         updateWrapper.set("updated_time", LocalDateTime.now())
                 .set("updated_by", UserContextHolder.getInstance().getUsername())
                 .set("feeding_alarm", moldingMachine.isFeedingAlarm())
+                .set("standard_ct", moldingMachine.getStandardCt())
                 .eq("id", moldingMachine.getId());
 
         return this.update(updateWrapper);
