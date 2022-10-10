@@ -131,3 +131,15 @@ export function handleBatchConfirm(params) {
         data: params
     })
 }
+
+export function exportInspectionOrderExcel(conditions) {
+    return request({
+        url: '/wlg-equipment/inspectionOrder/exportInspectionOrderExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

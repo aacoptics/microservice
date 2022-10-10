@@ -105,4 +105,12 @@ public interface InspectionOrderService {
      * @return
      */
     public boolean submitOrder(InspectionOrder inspectionOrder);
+
+
+    /**
+     * 根据条件查询点检工单信息
+     *
+     * @return
+     */
+    List<InspectionOrderAndItemVO> queryInspectionOrderByCondition(InspectionOrderQueryParam inspectionOrderQueryParam);
 }

@@ -31,7 +31,10 @@
                DUTY_PERSON_ID,
                DUTY_PERSON_CONNECT,
                DEPT_MANAGER_ID,
-               DEPT_DIRECTOR_ID
+               DEPT_DIRECTOR_ID,
+               VICE_PRESIDENT_ID,
+               EQUIP_STATE,
+               EQUIP_STATE_DB
         FROM ASSET_OBJECT
         WHERE 1=1
         <if test="assetGeneralCode != null and assetGeneralCode!=''">

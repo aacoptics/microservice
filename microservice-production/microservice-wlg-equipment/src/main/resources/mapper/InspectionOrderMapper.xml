@@ -2,6 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.wlg.equipment.mapper.InspectionOrderMapper">
 
+    <resultMap id="InspectionOrderAndItemVO" type="com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="orderNumber" column="ORDER_NUMBER" />
+        <result property="mchCode" column="MCH_CODE" />
+        <result property="mchName" column="MCH_NAME" />
+        <result property="spec" column="SPEC" />
+        <result property="typeVersion" column="TYPE_VERSION" />
+        <result property="factoryNo" column="FACTORY_NO" />
+        <result property="inspectionDate" column="INSPECTION_DATE" />
+        <result property="inspectionShift" column="INSPECTION_SHIFT" />
+        <result property="shiftStartTime" column="SHIFT_START_TIME" />
+        <result property="shiftEndTime" column="SHIFT_END_TIME" />
+        <result property="dutyPersonId" column="DUTY_PERSON_ID" />
+        <result property="status" column="STATUS" />
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <collection property="inspectionOrderItemList" ofType="com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem">
+            <id property="id" column="ITEM_ID" jdbcType="BIGINT"/>
+            <result property="checkItem" column="CHECK_ITEM"/>
+            <result property="checkItemStandard"  column="CHECK_ITEM_STANDARD"/>
+            <result property="minValue" column="MIN_VALUE"/>
+            <result property="maxValue" column="MAX_VALUE"/>
+            <result property="actualValue" column="ACTUAL_VALUE"/>
+            <result property="checkResult" column="CHECK_RESULT"/>
+            <result property="isException" column="IS_EXCEPTION"/>
+            <result property="isFinish" column="IS_FINISH"/>
+            <result property="isFault" column="IS_FAULT"/>
+            <result property="faultDesc" column="FAULT_DESC"/>
+            <result property="isRepair" column="IS_REPAIR"/>
+            <result property="createdTime" column="ITEM_CREATED_TIME"/>
+            <result property="createdBy" column="ITEM_CREATED_BY"/>
+            <result property="updatedTime" column="ITEM_UPDATED_TIME"/>
+            <result property="updatedBy" column="ITEM_UPDATED_BY"/>
+        </collection>
+    </resultMap>
+
+
     <select id="findInspectionList" resultType="com.aacoptics.wlg.equipment.entity.po.InspectionMain">
         SELECT A.*
             FROM EM_INSPECTION_MAIN A
@@ -47,6 +86,63 @@
                 AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
             </if>
             ORDER BY A.ORDER_NUMBER
+    </select>
+
+
+    <select id="findInspectionOrderAndItemList" resultMap="InspectionOrderAndItemVO">
+        SELECT A.ID,
+        A.ORDER_NUMBER,
+        A.MCH_CODE,
+        A.INSPECTION_DATE,
+        A.INSPECTION_SHIFT,
+        A.SHIFT_START_TIME,
+        A.SHIFT_END_TIME,
+        A.DUTY_PERSON_ID,
+        A.STATUS,
+        A.CREATED_TIME,
+        A.CREATED_BY,
+        A.UPDATED_TIME,
+        A.UPDATED_BY,
+        B.MCH_NAME,
+        B.SPEC,
+        B.TYPE_VERSION,
+        B.FACTORY_NO,
+        C.ID ITEM_ID,
+        C.CHECK_ITEM,
+        C.CHECK_ITEM_STANDARD,
+        C.MIN_VALUE,
+        C.MAX_VALUE,
+        C.ACTUAL_VALUE,
+        C.CHECK_RESULT,
+        C.IS_EXCEPTION,
+        C.IS_FINISH,
+        C.IS_FAULT,
+        C.FAULT_DESC,
+        C.IS_REPAIR,
+        C.CREATED_TIME ITEM_CREATED_TIME,
+        C.CREATED_BY ITEM_CREATED_BY,
+        C.UPDATED_TIME ITEM_UPDATED_TIME,
+        C.UPDATED_BY ITEM_UPDATED_BY
+        FROM EM_INSPECTION_ORDER A
+        LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        LEFT JOIN EM_INSPECTION_ORDER_ITEM C ON A.ID = C.INSPECTION_ORDER_ID
+        WHERE 1=1
+        <if test="inspectionOrderQueryParam.mchCode != null and inspectionOrderQueryParam.mchCode!=''">
+            AND A.MCH_CODE = #{inspectionOrderQueryParam.mchCode}
+        </if>
+        <if test="inspectionOrderQueryParam.status != null and inspectionOrderQueryParam.status!=''">
+            AND A.STATUS = #{inspectionOrderQueryParam.status}
+        </if>
+        <if test="inspectionOrderQueryParam.mchName != null and inspectionOrderQueryParam.mchName!=''">
+            AND B.MCH_NAME = #{inspectionOrderQueryParam.mchName}
+        </if>
+        <if test="inspectionOrderQueryParam.spec != null and inspectionOrderQueryParam.spec!=''">
+            AND B.SPEC = #{inspectionOrderQueryParam.spec}
+        </if>
+        <if test="inspectionOrderQueryParam.typeVersion != null and inspectionOrderQueryParam.typeVersion!=''">
+            AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
+        </if>
+        ORDER BY A.ORDER_NUMBER
     </select>
 
     <select id="findOrderByMchCode" resultType="com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO">

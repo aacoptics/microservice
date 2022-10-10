@@ -63,3 +63,15 @@ export function handleBatchConfirm(params) {
         data: params
     })
 }
+
+export function exportRepairOrderExcel(conditions) {
+    return request({
+        url: '/wlg-equipment/repairOrder/exportRepairOrderExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

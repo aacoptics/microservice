@@ -42,6 +42,12 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('设备清单')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -58,7 +64,8 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {findEquipmentManagementPage} from "@/api/wlg/equipment/equipmentManagement";
+import {findEquipmentManagementPage, exportEquipmentExcel} from "@/api/wlg/equipment/equipmentManagement";
+import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
   name: "equipmentManagement",
@@ -66,6 +73,9 @@ export default {
   data() {
     return {
       size: "default",
+
+      exportLoading: false,
+
       filters: {
         mchCode: "",
         mchName: "",
@@ -77,12 +87,15 @@ export default {
         mchManagerId: "",
         dutyPersonId: "",
       },
+      equipmentStatusOptions:[],
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
         {prop: "mchName", label: "资产名称", minWidth: 100},
         {prop: "spec", label: "规格", minWidth: 100},
         {prop: "typeVersion", label: "型号", minWidth: 100},
-        {prop: "status", label: "设备状态", minWidth: 100},
+        {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
+        {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
+        {prop: "equipState", label: "资产状态", minWidth: 100},
         {prop: "assetGeneralCode", label: "资产使用性质编码", minWidth: 140},
         {prop: "assetGeneralDesc", label: "资产使用性质名称", minWidth: 140},
         {prop: "assetClassifyCode", label: "资产分类别编码", minWidth: 140},
@@ -106,6 +119,7 @@ export default {
         {prop: "dutyPersonId", label: "责任人", minWidth: 100},
         {prop: "deptManagerId", label: "部门经理", minWidth: 100},
         {prop: "deptDirectorId", label: "部门总监", minWidth: 100},
+        {prop: "vicePresidentId", label: "部门VP", minWidth: 100},
         {prop: "lastInspectionDatetime", label: "最后点检日期", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "lastMaintenanceDatetime", label: "最后保养日期", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
@@ -119,6 +133,9 @@ export default {
     };
   },
   mounted() {
+    getDict("wlg_em_equipment_status").then(response => {
+      this.equipmentStatusOptions = response.data.data
+    })
   },
   methods: {
     // 获取分页数据
@@ -146,7 +163,34 @@ export default {
           .then(data != null ? data.callback : "");
     },
 
+    exportExcelData(excelFileName) {
+      let pageRequest  = {};
+      pageRequest.mchCode = this.filters.mchCode;
+      pageRequest.mchName = this.filters.mchName;
+      pageRequest.spec = this.filters.spec;
+      pageRequest.typeVersion = this.filters.typeVersion;
+      pageRequest.factoryNo = this.filters.factoryNo;
+      pageRequest.locationNo = this.filters.locationNo;
+      pageRequest.assetManagerId = this.filters.assetManagerId;
+      pageRequest.mchManagerId = this.filters.mchManagerId;
+      pageRequest.dutyPersonId = this.filters.dutyPersonId;
 
+      this.exportLoading = true;
+      exportEquipmentExcel(pageRequest).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
+
+    statusFormat: function (row) {
+      return selectDictLabel(this.equipmentStatusOptions, row.status);
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");

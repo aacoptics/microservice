@@ -74,7 +74,7 @@ public class InputReport implements Serializable {
     @Excel(name = "产出数", orderNum = "14")
     private Integer outputQty;
 
-    @Excel(name = "日期", orderNum = "0", format = "yyyy/MM/dd", width = 12)
+    @Excel(name = "日期", orderNum = "15", format = "yyyy/MM/dd", width = 12)
     private LocalDateTime createTime;
 
     @ExcelIgnore
@@ -88,4 +88,8 @@ public class InputReport implements Serializable {
 
     @TableField(exist = false)
     private List<String> machineNames;
+
+    @TableField(exist = false)
+    @ExcelIgnore
+    private float standardCt;
 }

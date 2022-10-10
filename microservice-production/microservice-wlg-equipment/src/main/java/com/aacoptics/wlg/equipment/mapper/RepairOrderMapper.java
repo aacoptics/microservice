@@ -22,6 +22,8 @@ public interface RepairOrderMapper extends BaseMapper<RepairOrder> {
     IPage<RepairOrderVO> findRepairOrderList(@Param("page")  Page page,
                                                      @Param("repairOrderQueryParam")  RepairOrderQueryParam repairOrderQueryParam);
 
+    @DS("WLGIOT")
+    List<RepairOrderVO> findRepairOrderList(@Param("repairOrderQueryParam")  RepairOrderQueryParam repairOrderQueryParam);
 
     @DS("WLGIOT")
     RepairOrderVO findOrderByMchCode(@Param("mchCode")  String mchCode);

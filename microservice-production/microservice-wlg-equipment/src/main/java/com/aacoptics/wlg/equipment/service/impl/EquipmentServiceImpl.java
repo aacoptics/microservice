@@ -85,10 +85,17 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         equipment.setDutyPersonConnect(equipmentMap.get("DUTY_PERSON_CONNECT") != null ? equipmentMap.get("DUTY_PERSON_CONNECT")+"" : null);
         equipment.setDeptManagerId(equipmentMap.get("DEPT_MANAGER_ID") != null ? equipmentMap.get("DEPT_MANAGER_ID")+"" : null);
         equipment.setDeptDirectorId(equipmentMap.get("DEPT_DIRECTOR_ID") != null ? equipmentMap.get("DEPT_DIRECTOR_ID")+"" : null);
+        equipment.setVicePresidentId(equipmentMap.get("VICE_PRESIDENT_ID") != null ? equipmentMap.get("VICE_PRESIDENT_ID")+"" : null);
+        equipment.setEquipState(equipmentMap.get("EQUIP_STATE") != null ? equipmentMap.get("EQUIP_STATE")+"" : null);
+        equipment.setEquipStateDb(equipmentMap.get("EQUIP_STATE_DB") != null ? equipmentMap.get("EQUIP_STATE_DB")+"" : null);
 
         if(equipment.getId() != null && equipment.getId() > 0)
         {
-            this.update(equipment);
+           boolean result = this.update(equipment);
+           if(result == false)
+           {
+               throw new BusinessException(mchCode  + "更新设备信息失败");
+           }
         }
         else
         {
@@ -96,7 +103,11 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
             LocalDateTime currentDateTime = LocalDateTime.now();
             equipment.setLastInspectionDatetime(currentDateTime);
             equipment.setLastMaintenanceDatetime(currentDateTime);
-            this.save(equipment);
+            boolean result = this.save(equipment);
+            if(result == false)
+            {
+                throw new BusinessException(mchCode  + "新增设备信息失败");
+            }
         }
     }
 
@@ -109,6 +120,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
             log.info("获取WLG设备为空");
             return;
         }
+
         for(int i=0; i<wlgEquipmentList.size(); i++)
         {
             Map<String, Object> equipmentMap = wlgEquipmentList.get(i);
@@ -128,11 +140,31 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getLocationNo()), "location_no", equipmentQueryParam.getLocationNo());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getAssetManagerId()), "asset_manager_id", equipmentQueryParam.getAssetManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getMchManagerId()), "mch_manager_id", equipmentQueryParam.getMchManagerId());
-        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_connect", equipmentQueryParam.getDutyPersonId());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
 
         queryWrapper.orderByAsc("mch_code");
         return this.page(page, queryWrapper);
     }
+
+
+    @Override
+    public List<Equipment> queryEquipmentByCondition(EquipmentQueryParam equipmentQueryParam) {
+        QueryWrapper<Equipment> queryWrapper = equipmentQueryParam.build();
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getMchCode()), "mch_code", equipmentQueryParam.getMchCode());
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getMchName()), "mch_name", equipmentQueryParam.getMchName());
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getSpec()), "spec", equipmentQueryParam.getSpec());
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getTypeVersion()), "type_version", equipmentQueryParam.getTypeVersion());
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getFactoryNo()), "factory_no", equipmentQueryParam.getFactoryNo());
+        queryWrapper.like(StringUtils.isNotBlank(equipmentQueryParam.getLocationNo()), "location_no", equipmentQueryParam.getLocationNo());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getAssetManagerId()), "asset_manager_id", equipmentQueryParam.getAssetManagerId());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getMchManagerId()), "mch_manager_id", equipmentQueryParam.getMchManagerId());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
+
+        queryWrapper.orderByAsc("mch_code");
+        return this.baseMapper.selectList(queryWrapper);
+    }
+
+
 
     @Override
     public boolean add(Equipment equipment) {
@@ -198,10 +230,6 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         QueryWrapper<Equipment> equipmentQueryWrapper = new QueryWrapper<>();
         equipmentQueryWrapper.eq("mch_code", mchCode);
         Equipment equipment = equipmentMapper.selectOne(equipmentQueryWrapper);
-        if(equipment == null)
-        {
-            throw new BusinessException("设备编码【" + mchCode + "】不存在，请确认！");
-        }
         return equipment;
     }
 }

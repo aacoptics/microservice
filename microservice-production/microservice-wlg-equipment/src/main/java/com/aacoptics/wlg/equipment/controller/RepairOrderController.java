@@ -1,17 +1,33 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderQueryForm;
+import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.RepairOrderQueryParam;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.RepairOrderService;
+import com.aacoptics.wlg.equipment.util.ExcelUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -88,8 +104,18 @@ public class RepairOrderController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @PostMapping(value = "/findOrderByMchCode")
-    public Result findOrderByMchCode(String mchCode) {
-        log.debug("query with name:{}", mchCode);
+    public Result findOrderByMchCode(@RequestBody String requestBody) {
+        log.debug("query with name:{}", requestBody);
+        if(StringUtils.isEmpty(requestBody))
+        {
+            throw new BusinessException("参数不能为空");
+        }
+        JSONObject jsonObject = JSON.parseObject(requestBody);
+        String mchCode = jsonObject.getString("mchCode");
+        if(StringUtils.isEmpty(mchCode))
+        {
+            throw new BusinessException("设备编码不能为空");
+        }
         return Result.success(repairOrderService.findOrderByMchCode(mchCode));
     }
 
@@ -102,5 +128,78 @@ public class RepairOrderController {
     public Result submitOrder(@PathVariable Long id, @Valid @RequestBody RepairOrderForm repairOrderForm) {
         RepairOrder repairOrder = repairOrderForm.toPo(id, RepairOrder.class);
         return Result.success(repairOrderService.submitOrder(repairOrder));
+    }
+
+
+
+    @ApiOperation(value = "导出维修工单Excel", notes = "导出维修工单Excel")
+    @PostMapping(value = "/exportRepairOrderExcel")
+    public void exportRepairOrderExcel(@Valid @RequestBody RepairOrderQueryForm repairOrderQueryForm, HttpServletResponse response) throws Exception {
+        log.debug("query with name:{}", repairOrderQueryForm);
+        List<RepairOrderVO> repairOrderVOList = repairOrderService.queryRepairOrderByCondition(repairOrderQueryForm.toParam(RepairOrderQueryParam.class));
+
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("维修工单");
+
+        XSSFRow titleRow = wbSheet.createRow(0);
+        titleRow.createCell(0).setCellValue("序号");
+        titleRow.createCell(1).setCellValue("工单号");
+        titleRow.createCell(2).setCellValue("设备编码");
+        titleRow.createCell(3).setCellValue("设备名称");
+        titleRow.createCell(4).setCellValue("规格");
+        titleRow.createCell(5).setCellValue("型号");
+        titleRow.createCell(6).setCellValue("出厂编码");
+        titleRow.createCell(7).setCellValue("责任人");
+        titleRow.createCell(8).setCellValue("状态");
+        titleRow.createCell(9).setCellValue("故障描述");
+        titleRow.createCell(10).setCellValue("维修说明");
+        titleRow.createCell(11).setCellValue("维修时间");
+        titleRow.createCell(12).setCellValue("工单来源");
+        titleRow.createCell(13).setCellValue("更新人");
+        titleRow.createCell(14).setCellValue("更新时间");
+        titleRow.createCell(15).setCellValue("创建人");
+        titleRow.createCell(16).setCellValue("创建时间");
+
+        try {
+            if (repairOrderVOList != null && repairOrderVOList.size() > 0) {
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+                int rowNumber = 1;
+                for (int i = 0; i < repairOrderVOList.size(); i++) {
+                    RepairOrderVO repairOrderVO = repairOrderVOList.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(rowNumber++);
+                    dataRow.createCell(0).setCellValue(rowNumber - 1);
+                    dataRow.createCell(1).setCellValue(repairOrderVO.getOrderNumber() != null ? repairOrderVO.getOrderNumber() + "" : "");
+                    dataRow.createCell(2).setCellValue(repairOrderVO.getMchCode() != null ? repairOrderVO.getMchCode() + "" : "");
+                    dataRow.createCell(3).setCellValue(repairOrderVO.getMchName() != null ? repairOrderVO.getMchName() + "" : "");
+                    dataRow.createCell(4).setCellValue(repairOrderVO.getSpec() != null ? repairOrderVO.getSpec() + "" : "");
+                    dataRow.createCell(5).setCellValue(repairOrderVO.getTypeVersion() != null ? repairOrderVO.getTypeVersion() + "" : "");
+                    dataRow.createCell(6).setCellValue(repairOrderVO.getFactoryNo() != null ? repairOrderVO.getFactoryNo() + "" : "");
+                    dataRow.createCell(7).setCellValue(repairOrderVO.getDutyPersonId() != null ? repairOrderVO.getDutyPersonId() + "" : "");
+                    dataRow.createCell(8).setCellValue(repairOrderVO.getStatus() != null ? repairOrderVO.getStatus() + "" : "");
+                    dataRow.createCell(9).setCellValue(repairOrderVO.getFaultDesc() != null ? repairOrderVO.getFaultDesc() + "" : "");
+                    dataRow.createCell(10).setCellValue(repairOrderVO.getRepairDesc() != null ? repairOrderVO.getRepairDesc() + "" : "");
+                    dataRow.createCell(11).setCellValue(repairOrderVO.getRepairDatetime() != null ? repairOrderVO.getRepairDatetime().format(dateTimeFormatter) : "");
+                    dataRow.createCell(12).setCellValue(repairOrderVO.getSourceType() != null ? repairOrderVO.getSourceType() + "" : "");
+                    dataRow.createCell(13).setCellValue(repairOrderVO.getUpdatedBy() != null ? repairOrderVO.getUpdatedBy() + "" : "");
+                    dataRow.createCell(14).setCellValue(repairOrderVO.getUpdatedTime() != null ? repairOrderVO.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                    dataRow.createCell(15).setCellValue(repairOrderVO.getCreatedBy() != null ? repairOrderVO.getCreatedBy() + "" : "");
+                    dataRow.createCell(16).setCellValue(repairOrderVO.getCreatedTime() != null ? repairOrderVO.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                }
+            }
+
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*10, 256*15,
+                    256*15, 256*20, 256*15, 256*15, 256*20, 256*15, 256*20});
+
+        } catch (Exception exception)
+        {
+            log.error("导出维修工单异常", exception);
+            throw exception;
+        }
+
+        ExcelUtil.exportXlsx(response, workbook, "维修工单.xlsx");
     }
 }

@@ -17,6 +17,13 @@ public interface RepairOrderService {
      */
     IPage<RepairOrderVO> query(Page page, RepairOrderQueryParam repairOrderQueryParam);
 
+    /**
+     * 根据条件查询维修工单信息
+     *
+     * @return
+     */
+    List<RepairOrderVO> queryRepairOrderByCondition(RepairOrderQueryParam repairOrderQueryParam);
+
 
 
     /**

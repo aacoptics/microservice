@@ -21,7 +21,7 @@ public class RepairOrderForm extends BaseForm<RepairOrder> {
     @ApiModelProperty(value = "故障描述")
     private String faultDesc;
 
-    @NotNull(message = "故障照片不能为空")
+//    @NotNull(message = "故障照片不能为空")
     @ApiModelProperty(value = "故障照片")
     private Long faultImageId;
 

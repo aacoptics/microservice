@@ -6,7 +6,7 @@ export function findImageById(imageId) {
         url: '/wlg-equipment/image/' + imageId,
         method: 'get',
         headers: {
-            responseType: 'blob'
+            'Content-Type': 'application/json'
         }
     })
 }
