@@ -1,6 +1,6 @@
 spring:
   application:
-    name: microservice-data-analysis
+    name: microservice-data-analysis-api
   cloud:
     nacos:
       discovery:
