@@ -80,10 +80,10 @@ public class InputReport implements Serializable {
     @ExcelIgnore
     private LocalDateTime updateTime;
 
-    @ExcelIgnore
+    @Excel(name = "更新人", orderNum = "16")
     private String updateUser;
 
-    @ExcelIgnore
+    @Excel(name = "异常说明", orderNum = "17")
     private String abnormalReason;
 
     @TableField(exist = false)
