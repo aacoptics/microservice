@@ -28,13 +28,13 @@
         FROM t_wlg_molding_machine_input_per_six_hour a
         join t_opc_ua_connections b
         on a.machine_name = b.machine_name
-        where start_time &gt;= #{startTime} and start_time &lt; #{endTime}
-        and end_wafer_id is not null
-        and machine_name in
+        where a.start_time &gt;= #{startTime} and a.start_time &lt; #{endTime}
+        and a.end_wafer_id is not null
+        and a.machine_name in
         <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
             #{machineName}
         </foreach>
-        order by start_time, machine_name
+        order by a.start_time, a.machine_name
     </select>
 
     <select id="getTwoHourSum" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
