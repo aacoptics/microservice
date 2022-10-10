@@ -4,8 +4,30 @@
 
 
     <select id="getByDateAndMachineName" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
-        SELECT *
-        FROM t_wlg_molding_machine_input_per_six_hour
+        SELECT a.[id]
+        ,a.[machine_name]
+        ,a.[material_name]
+        ,a.[project_name]
+        ,a.[model_name]
+        ,a.[cycle_name]
+        ,a.[period_name]
+        ,a.[start_time]
+        ,a.[end_time]
+        ,b.standard_ct
+        ,a.[avg_cycle]
+        ,a.[input_qty]
+        ,a.[start_wafer_id]
+        ,a.[end_wafer_id]
+        ,a.[broken_ok]
+        ,a.[broken_ng]
+        ,a.[output_qty]
+        ,a.[create_time]
+        ,a.[update_user]
+        ,a.[update_time]
+        ,a.[abnormal_reason]
+        FROM t_wlg_molding_machine_input_per_six_hour a
+        join t_opc_ua_connections b
+        on a.machine_name = b.machine_name
         where start_time &gt;= #{startTime} and start_time &lt; #{endTime}
         and end_wafer_id is not null
         and machine_name in

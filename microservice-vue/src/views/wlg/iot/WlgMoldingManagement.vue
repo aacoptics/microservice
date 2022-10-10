@@ -39,7 +39,7 @@
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="CT维护">
             <template v-slot="scope">
-              <el-input-number size="small" v-model="scope.row.standardCt" :precision="2" :step="0.1" :min="0" />
+              <el-input-number size="small" v-model="scope.row.standardCt" controls-position="right" :precision="2" :step="0.1" :min="0" />
               <el-button type="success" circle @click="handleCtButtonClick(scope)">
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'check']"/>
@@ -147,7 +147,7 @@ export default {
         handleUpdateFeedingAlarm(params.row).then((res) => {
           const responseData = res.data
           if (responseData.code === '000000') {
-            this.$message({message: text + '成功', type: 'success'})
+            this.$message({message: '修改成功', type: 'success'})
           } else {
             this.$message({message: responseData.data.msg, type: 'error'})
           }
