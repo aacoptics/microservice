@@ -119,6 +119,7 @@
             <span>{{ this.$moment(scope.row.updateTime).format('YY/MM/DD HH:mm') }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="异常说明" prop="abnormalReason" width="180"/>
         <el-table-column fixed="right" label="操作" width="140">
           <template v-slot="scope">
             <span v-if="scope.row.inputQty > 0">
