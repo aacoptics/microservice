@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 条件查询
 export function getDataByConditions(conditions) {
     return request({
-        url: '/allData/getDataByConditions',
+        url: '/moldflow-data-analysis/allData/getDataByConditions',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ export function getDataByConditions(conditions) {
 // 导出条件查询后的excel数据
 export function exportExcel(conditions) {
     return request({
-        url: '/allData/exportExcel',
+        url: '/moldflow-data-analysis/allData/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

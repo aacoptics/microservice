@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 导出excel模板
 export function exportExcelTemplate() {
     return request({
-        url: '/shapingResultData/exportTemplate',
+        url: '/moldflow-data-analysis/shapingResultData/exportTemplate',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -17,7 +17,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/shapingResultData/uploadExcel',
+        url: '/moldflow-data-analysis/shapingResultData/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -26,7 +26,7 @@ export function uploadExcel(param) {
 // 条件查询
 export function getDataByConditions(conditions) {
     return request({
-        url: '/shapingResultData/getDataByConditions',
+        url: '/moldflow-data-analysis/shapingResultData/getDataByConditions',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ export function getDataByConditions(conditions) {
 // 导出条件查询后的excel数据
 export function exportExcel(conditions) {
     return request({
-        url: '/shapingResultData/exportExcel',
+        url: '/moldflow-data-analysis/shapingResultData/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ export function exportExcel(conditions) {
 // 单条删除数据
 export function handleDelete(updateForm) {
     return request({
-        url: `/shapingResultData/delete/${updateForm.id}`,
+        url: `/moldflow-data-analysis/shapingResultData/delete/${updateForm.id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ export function handleDelete(updateForm) {
 // 修改数据
 export function handleUpdate(updateForm) {
     return request({
-        url: 'shapingResultData/update',
+        url: '/moldflow-data-analysis/shapingResultData/update',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
