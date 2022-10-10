@@ -6,6 +6,8 @@ import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 public interface MaintenanceMainService {
 
     /**
@@ -16,6 +18,12 @@ public interface MaintenanceMainService {
     IPage<MaintenanceMain> query(Page page, MaintenanceQueryParam maintenanceQueryParam);
 
 
+    /**
+     * 根据条件查询保养信息
+     * @param maintenanceQueryParam
+     * @return
+     */
+    List<MaintenanceMain> queryMaintenanceDataByCondition(MaintenanceQueryParam maintenanceQueryParam);
 
     /**
      * 更新保养设备信息

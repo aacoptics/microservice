@@ -313,7 +313,7 @@ export default {
       }
       let params = {};
       params.mchCode = this.dataForm.mchCode;
-      findEquipmentByMchCode(mchCode).then(response => {
+      findEquipmentByMchCode(params).then(response => {
         const responseData = response.data;
         if (responseData.code === "000000") {
           this.dataForm.mchName = responseData.data.mchName;

@@ -3,9 +3,11 @@ package com.aacoptics.wlg.equipment.service.impl;
 
 import com.aacoptics.wlg.equipment.entity.form.InspectionShiftForm;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
+import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
 import com.aacoptics.wlg.equipment.entity.po.InspectionShift;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionItemMapper;
 import com.aacoptics.wlg.equipment.mapper.InspectionMainMapper;
@@ -50,6 +52,14 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
         return this.page(page, queryWrapper);
     }
 
+
+    @Override
+    public List<InspectionMain> queryInspectionDataByCondition(InspectionQueryParam inspectionQueryParam) {
+
+        List<InspectionMain> inspectionMainAndItemList = inspectionMainMapper.findInspectionMainAndItemList(inspectionQueryParam);
+
+        return inspectionMainAndItemList;
+    }
 
     @Override
     public boolean add(InspectionMain inspectionMain) {

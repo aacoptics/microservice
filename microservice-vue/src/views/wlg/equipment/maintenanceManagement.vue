@@ -28,6 +28,12 @@
                 <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('保养维护')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -189,7 +195,7 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteMaintenance, findMaintenancePage, handleAdd, handleUpdate, addMaintenanceItem, 
+import {deleteMaintenance, findMaintenancePage, handleAdd, handleUpdate, addMaintenanceItem, exportMaintenanceExcel,
   updateMaintenanceItem, findMaintenanceById, deleteMaintenanceItem} from "@/api/wlg/equipment/maintenanceManagement";
 import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
@@ -233,6 +239,8 @@ export default {
       editLoading: false,
       findLoading: false,
       findDetailLoading: false,
+      exportLoading: false,
+
       dataFormRules: {
         mchName: [{required: true, message: "请输入设备名称", trigger: "blur"}],
         spec: [{required: true, message: "请输入规格", trigger: "blur"}],
@@ -494,6 +502,24 @@ export default {
             }
           });
         }
+      });
+    },
+    exportExcelData(excelFileName) {
+      let pageRequest  = {};
+      pageRequest.mchName = this.filters.mchName;
+      pageRequest.spec = this.filters.spec;
+      pageRequest.typeVersion = this.filters.typeVersion;
+
+      this.exportLoading = true;
+      exportMaintenanceExcel(pageRequest).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
       });
     },
     selectMchName()

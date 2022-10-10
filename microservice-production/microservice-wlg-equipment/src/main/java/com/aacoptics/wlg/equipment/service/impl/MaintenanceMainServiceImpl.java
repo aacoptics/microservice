@@ -45,6 +45,14 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
         return this.page(page, queryWrapper);
     }
 
+    @Override
+    public List<MaintenanceMain> queryMaintenanceDataByCondition(MaintenanceQueryParam maintenanceQueryParam) {
+
+        List<MaintenanceMain> maintenanceMainAndItemList = maintenanceMainMapper.findMaintenanceMainAndItemList(maintenanceQueryParam);
+
+        return maintenanceMainAndItemList;
+    }
+
 
     @Override
     public boolean add(MaintenanceMain maintenanceMain) {

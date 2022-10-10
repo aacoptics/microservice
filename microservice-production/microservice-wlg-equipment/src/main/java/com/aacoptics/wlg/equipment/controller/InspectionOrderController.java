@@ -245,6 +245,10 @@ public class InspectionOrderController {
 
                     //合并主表单元格
                     for(int k=1; k<=12; k++) {
+                        if(inspectionOrderItemList.size() <= 1)
+                        {
+                            continue;
+                        }
                         ExcelUtil.mergeRegion(wbSheet, rowNumber-inspectionOrderItemList.size(), rowNumber-1, k, k);
                     }
                 }

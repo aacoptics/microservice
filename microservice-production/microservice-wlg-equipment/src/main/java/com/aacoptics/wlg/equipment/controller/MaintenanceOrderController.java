@@ -1,15 +1,11 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.equipment.entity.form.InspectionOrderQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
-import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
-import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
-import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
@@ -235,6 +231,10 @@ public class MaintenanceOrderController {
 
                     //合并主表单元格
                     for(int k=1; k<=9; k++) {
+                        if(maintenanceOrderItemList.size() <= 1)
+                        {
+                            continue;
+                        }
                         ExcelUtil.mergeRegion(wbSheet, rowNumber-maintenanceOrderItemList.size(), rowNumber-1, k, k);
                     }
                 }
