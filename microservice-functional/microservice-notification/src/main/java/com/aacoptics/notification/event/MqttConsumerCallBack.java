@@ -105,14 +105,14 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                     markdownGroupMessage = null;
                 }
                 break;
-//            case "FeedAlarm":
-//                title = "模造换料提醒";
-//                markdownGroupMessage.setTitle(title);
-//                markdownGroupMessage.addBlobContent(localTimeStr);
-//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-//                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-//                sendToAllSpeaker(machineName);
-//                break;
+            case "FeedAlarm":
+                title = "模造换料提醒";
+                markdownGroupMessage.setTitle(title);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+                //sendToAllSpeaker(machineName);
+                break;
             case "moldTempMonitor":
                 title = "模造温度曲线报警";
                 String moldParam = dataJson.getString("param");
