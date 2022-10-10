@@ -51,7 +51,7 @@
         </el-form>
 
       </div>
-      <el-table id="inputReportTable" :data="tableData" :size="size" stripe style="width: 100%">
+      <el-table id="inputReportTable" show-summary :summary-method="getSummaries" :data="tableData" :size="size" stripe style="width: 100%">
         <el-table-column fixed="left" label="日期" prop="dateStr" width="70">
           <template v-slot="scope">
             <span style="font-weight: bold;color: black">{{
@@ -69,12 +69,15 @@
         </el-table-column>
         <el-table-column label="机台号" prop="machineName" width="70"/>
         <el-table-column label="材料号" prop="materialName" width="60"/>
-        <el-table-column label="项目" prop="projectName" width="80"/>
+        <el-table-column label="项目" :filters="projectName"
+                         :filter-method="filterProjectName"
+                         prop="projectName" width="80"/>
         <el-table-column label="模具" :filters="moldName"
                          :filter-method="filterModelName"
                          filter-placement="bottom-end" prop="modelName" width="55"/>
         <el-table-column label="周期" prop="cycleName" width="45"/>
         <el-table-column label="阶段" prop="periodName" width="45"/>
+        <el-table-column label="标准周期" prop="standardCt" width="65"/>
         <el-table-column label="平均周期" prop="avgCycle" width="65"/>
 
         <el-table-column label="起始模次" prop="startWaferId" width="65"/>
@@ -124,7 +127,8 @@
             <el-button v-else :size="size" type="success" @click="updateOutPutInfo(scope.row)">确认</el-button>
             </span>
             <el-button style="margin-left: 2px" :size="size" type="danger"
-                       @click="onAddReasonClick(scope.row)">异常说明</el-button>
+                       @click="onAddReasonClick(scope.row)">异常说明
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -146,14 +150,15 @@
 import {getByDateAndMachineName, getMachineName, updateOutPutInfo} from "@/api/wlg/iot/moldingMachineParamData";
 import XLSX from "xlsx";
 import FileSaver from 'file-saver'
+import {getUserDetail, getUsername} from "@/utils/auth";
 
 export default {
   name: "WlgSixHourOutput",
   data() {
     return {
       reasonDialog: false,
-      currentRow:{},
-      modelName:'',
+      currentRow: {},
+      modelName: '',
       tableData: [],
       machineNames: [],
       okAllChecked: false,
@@ -191,13 +196,30 @@ export default {
     }
   },
   computed: {
+    userRealName() {
+      let userName = getUsername()
+      let userDetail = getUserDetail()
+      let realName = userDetail && userDetail.name ? userDetail.name : userName;
+      return realName ? realName : this.name;
+    },
     moldName() {
       const resArray = []
       const res = []
       this.tableData.forEach(item => {
-        if(resArray.indexOf(item.modelName) === -1){
+        if (resArray.indexOf(item.modelName) === -1) {
           resArray.push(item.modelName)
-          res.push({ text: item.modelName, value: item.modelName})
+          res.push({text: item.modelName, value: item.modelName})
+        }
+      })
+      return res
+    },
+    projectName() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if (resArray.indexOf(item.projectName) === -1) {
+          resArray.push(item.projectName)
+          res.push({text: item.projectName, value: item.projectName})
         }
       })
       return res
@@ -206,23 +228,51 @@ export default {
       const resArray = []
       const res = []
       this.tableData.forEach(item => {
-        if(resArray.indexOf(item.updateUser) === -1){
+        if (resArray.indexOf(item.updateUser) === -1) {
           resArray.push(item.updateUser)
-          res.push({ text: item.updateUser, value: item.updateUser})
+          res.push({text: item.updateUser, value: item.updateUser})
         }
       })
       return res
     }
   },
   methods: {
+    getSummaries(param) {
+      const {columns, data} = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计'
+          return
+        }
+        const values = data.map((item) => Number(item[column.property]))
+        if (column.property === 'inputQty' || column.property === 'outputQty' || column.property === 'brokenNg'|| column.property === 'brokenOk') {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!Number.isNaN(value)) {
+              return prev + curr
+            } else {
+              return prev
+            }
+          }, 0)
+        } else {
+          sums[index] = ''
+        }
+      })
+      return sums
+    },
     onAddReasonClick(item) {
       this.currentRow = Object.assign({}, item)
       this.reasonDialog = true
     },
-    filterModelName(value, row){
+    filterModelName(value, row) {
       return row.modelName === value
     },
-    filterOperatorName(value, row){
+
+    filterProjectName(value, row) {
+      return row.projectName === value
+    },
+    filterOperatorName(value, row) {
       return row.updateUser === value
     },
     exportExcel(tableId, excelFileName) {
@@ -286,6 +336,7 @@ export default {
 
     updateOutPutInfo(row) {
       this.selectLoading = true
+      row.updateUser = this.userRealName;
       updateOutPutInfo(row).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
