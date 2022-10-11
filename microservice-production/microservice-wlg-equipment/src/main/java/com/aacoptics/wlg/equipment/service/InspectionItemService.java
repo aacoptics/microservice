@@ -5,8 +5,9 @@ import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface InspectionItemService {
+public interface InspectionItemService extends IService<InspectionItem> {
 
 
     /**

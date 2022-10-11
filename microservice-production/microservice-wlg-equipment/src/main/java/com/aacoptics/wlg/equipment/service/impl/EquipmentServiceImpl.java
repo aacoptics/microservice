@@ -226,6 +226,16 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
     }
 
     @Override
+    public Integer findEquipmentCountList(String mchName, String spec, String typeVersion) {
+        QueryWrapper<Equipment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mch_name", mchName);
+        queryWrapper.eq("spec",spec);
+        queryWrapper.eq("type_version", typeVersion);
+
+        return equipmentMapper.selectCount(queryWrapper);
+    }
+
+    @Override
     public Equipment findEquipmentByMchCode(String mchCode) {
         QueryWrapper<Equipment> equipmentQueryWrapper = new QueryWrapper<>();
         equipmentQueryWrapper.eq("mch_code", mchCode);

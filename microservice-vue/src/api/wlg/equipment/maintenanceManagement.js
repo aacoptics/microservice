@@ -87,3 +87,36 @@ export function deleteMaintenanceItem(deleteForm) {
     })
 }
 
+
+export function exportMaintenanceExcel(conditions) {
+    return request({
+        url: '/wlg-equipment/maintenanceManagement/exportMaintenanceExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}
+
+export function uploadExcel(param) {
+    const formData = new FormData()
+    formData.append('file', param.file)
+    return request({
+        url: '/wlg-equipment/maintenanceManagement/uploadExcel',
+        method: 'post',
+        data: formData
+    })
+}
+
+export function downloadTemplate() {
+    return request({
+        url: '/wlg-equipment/maintenanceManagement/downloadTemplate',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+    })
+}

@@ -11,6 +11,7 @@ import com.aacoptics.wlg.equipment.entity.po.MaintenanceItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
 import com.aacoptics.wlg.equipment.service.MaintenanceMainService;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
@@ -22,9 +23,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -207,6 +213,52 @@ public class MaintenanceController {
         }
 
         ExcelUtil.exportXlsx(response, workbook, "保养维护数据.xlsx");
+    }
+
+
+
+    /**
+     * Excel模板下载
+     * @param response
+     */
+    @GetMapping("/downloadTemplate")
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        try {
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/maintenance.xlsx");
+            if(inputStream == null)
+            {
+                throw new BusinessException("模板不存在");
+            }
+            //强制下载不打开
+            response.setContentType("application/force-download");
+            OutputStream out = response.getOutputStream();
+            //使用URLEncoder来防止文件名乱码或者读取错误
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("设备保养导入模板", "UTF-8"));
+            int b = 0;
+            byte[] buffer = new byte[1000000];
+            while (b != -1) {
+                b = inputStream.read(buffer);
+                if (b != -1) {
+                    out.write(buffer, 0, b);
+                }
+            }
+            inputStream.close();
+            out.close();
+            out.flush();
+        } catch (IOException e) {
+            log.error("模板下载异常", e);
+            throw e;
+        }
+    }
+
+
+    @ApiOperation(value = "保养数据Excel上传", notes = "保养数据Excel上传")
+    @ApiImplicitParam(name = "file", value = "Excel文件", required = true, dataType = "MultipartFile")
+    @PostMapping("/uploadExcel")
+    public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
+
+        maintenanceMainService.importMaintenanceExcel(file.getInputStream());
+        return Result.success();
     }
 
 }

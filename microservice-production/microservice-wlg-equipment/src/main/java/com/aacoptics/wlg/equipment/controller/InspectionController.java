@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.entity.form.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.aacoptics.wlg.equipment.service.InspectionMainService;
 import com.aacoptics.wlg.equipment.service.InspectionShiftService;
@@ -17,9 +18,14 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -287,5 +293,52 @@ public class InspectionController {
         }
 
         ExcelUtil.exportXlsx(response, workbook, "点检维护数据.xlsx");
+    }
+
+
+
+    /**
+     * Excel模板下载
+     * @param response
+     */
+    @GetMapping("/downloadTemplate")
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        try {
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/inspection.xlsx");
+            if(inputStream == null)
+            {
+                throw new BusinessException("模板不存在");
+            }
+            //强制下载不打开
+            response.setContentType("application/force-download");
+            OutputStream out = response.getOutputStream();
+            //使用URLEncoder来防止文件名乱码或者读取错误
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("设备点检导入模板", "UTF-8"));
+            int b = 0;
+            byte[] buffer = new byte[1000000];
+            while (b != -1) {
+                b = inputStream.read(buffer);
+                if (b != -1) {
+                    out.write(buffer, 0, b);
+                }
+            }
+            inputStream.close();
+            out.close();
+            out.flush();
+        } catch (IOException e) {
+            log.error("模板下载异常", e);
+            throw e;
+        }
+    }
+
+
+
+    @ApiOperation(value = "点检数据Excel上传", notes = "点检数据Excel上传")
+    @ApiImplicitParam(name = "file", value = "Excel文件", required = true, dataType = "MultipartFile")
+    @PostMapping("/uploadExcel")
+    public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
+
+        inspectionMainService.importInspectionExcel(file.getInputStream());
+        return Result.success();
     }
 }
