@@ -74,18 +74,22 @@ public class InputReport implements Serializable {
     @Excel(name = "产出数", orderNum = "14")
     private Integer outputQty;
 
-    @Excel(name = "日期", orderNum = "0", format = "yyyy/MM/dd", width = 12)
+    @Excel(name = "日期", orderNum = "15", format = "yyyy/MM/dd", width = 12)
     private LocalDateTime createTime;
 
     @ExcelIgnore
     private LocalDateTime updateTime;
 
-    @ExcelIgnore
+    @Excel(name = "更新人", orderNum = "16")
     private String updateUser;
 
-    @ExcelIgnore
+    @Excel(name = "异常说明", orderNum = "17")
     private String abnormalReason;
 
     @TableField(exist = false)
     private List<String> machineNames;
+
+    @TableField(exist = false)
+    @ExcelIgnore
+    private float standardCt;
 }

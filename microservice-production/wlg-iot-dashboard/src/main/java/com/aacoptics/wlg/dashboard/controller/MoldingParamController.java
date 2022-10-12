@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.dashboard.entity.MoldingAnalysisDataParam;
 import com.aacoptics.wlg.dashboard.entity.MoldingDataParam;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
@@ -74,5 +75,14 @@ public class MoldingParamController {
     @PostMapping(value = "/getMoldParamName")
     public Result getMoldParamName(@RequestBody MoldingDataParam moldingDataParam) {
         return Result.success(moldingMachineParamDataService.getMoldingParamName(moldingDataParam.getMachineName(), moldingDataParam.getWaferIds()));
+    }
+
+    @ApiOperation(value = "获取模造机统计数据", notes = "获取模造机统计数据")
+    @PostMapping(value = "/getAnalysisData")
+    public Result getAnalysisData(@RequestBody MoldingAnalysisDataParam moldingAnalysisDataParam) {
+        return Result.success(moldingMachineParamDataService.getAnalysisData(moldingAnalysisDataParam.getMachineName(),
+                moldingAnalysisDataParam.getParamNames(),
+                moldingAnalysisDataParam.getStartTime(),
+                moldingAnalysisDataParam.getEndTime()));
     }
 }

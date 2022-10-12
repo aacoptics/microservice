@@ -374,7 +374,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="备注" prop="remark">
+              <el-form-item label="批次" prop="remark">
                 <el-input v-model="dataForm.remark" auto-complete="off" autosize clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -461,6 +461,7 @@ export default {
         {prop: "riskType", label: "风险类别", minWidth: 100},
         {prop: "severityLevel", label: "严重等级", minWidth: 100},
         {prop: "eventHappenDate", label: "发生时间", minWidth: 100, formatter: this.dateFormat},
+        {prop: "remark", label: "批次", minWidth: 150},
         {prop: "customer", label: "客户", minWidth: 100},
         {prop: "site", label: "厂区", minWidth: 100},
         {prop: "workshop", label: "工段", minWidth: 100},
@@ -478,7 +479,6 @@ export default {
         {prop: "punishmentMeasures", label: "处罚措施", minWidth: 150},
         {prop: "happenTimes", label: "是否再次发生", minWidth: 150},
         {prop: "badAgainRate", label: "再次不良比例", minWidth: 150},
-        {prop: "remark", label: "备注", minWidth: 150},
         {prop: "statusSync", label: "每日状态更新", minWidth: 150},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},

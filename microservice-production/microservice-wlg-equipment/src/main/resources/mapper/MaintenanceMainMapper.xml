@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.MaintenanceMainMapper">
+
+    <resultMap id="MaintenanceMainAndItemVO" type="com.aacoptics.wlg.equipment.entity.po.MaintenanceMain">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="mchName" column="MCH_NAME" />
+        <result property="spec" column="SPEC" />
+        <result property="typeVersion" column="TYPE_VERSION" />
+        <result property="maintenancePeriod" column="MAINTENANCE_PERIOD" />
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <collection property="maintenanceItemList" ofType="com.aacoptics.wlg.equipment.entity.po.MaintenanceItem">
+            <id property="id" column="ITEM_ID" jdbcType="BIGINT"/>
+            <result property="maintenanceItem" column="MAINTENANCE_ITEM"/>
+            <result property="maintenanceItemStandard"  column="MAINTENANCE_ITEM_STANDARD"/>
+            <result property="minValue" column="MIN_VALUE"/>
+            <result property="maxValue" column="MAX_VALUE"/>
+            <result property="createdTime" column="ITEM_CREATED_TIME"/>
+            <result property="createdBy" column="ITEM_CREATED_BY"/>
+            <result property="updatedTime" column="ITEM_UPDATED_TIME"/>
+            <result property="updatedBy" column="ITEM_UPDATED_BY"/>
+        </collection>
+    </resultMap>
+
+
+
+    <select id="findMaintenanceMainAndItemList" resultMap="MaintenanceMainAndItemVO">
+        SELECT A.ID,
+        A.MCH_NAME,
+        A.SPEC,
+        A.TYPE_VERSION,
+        A.MAINTENANCE_PERIOD,
+        A.CREATED_TIME,
+        A.CREATED_BY,
+        A.UPDATED_TIME,
+        A.UPDATED_BY,
+        B.ID ITEM_ID,
+        B.MAINTENANCE_ITEM,
+        B.MAINTENANCE_ITEM_STANDARD,
+        B.MIN_VALUE,
+        B.MAX_VALUE,
+        B.CREATED_TIME ITEM_CREATED_TIME,
+        B.CREATED_BY ITEM_CREATED_BY,
+        B.UPDATED_TIME ITEM_UPDATED_TIME,
+        B.UPDATED_BY ITEM_UPDATED_BY
+        FROM EM_MAINTENANCE_MAIN A
+        LEFT JOIN EM_MAINTENANCE_ITEM B ON A.ID = B.MAINTENANCE_MAIN_ID
+        WHERE 1=1
+        <if test="maintenanceQueryParam.mchName != null and maintenanceQueryParam.mchName!=''">
+            AND A.MCH_NAME = #{maintenanceQueryParam.mchName}
+        </if>
+        <if test="maintenanceQueryParam.spec != null and maintenanceQueryParam.spec!=''">
+            AND A.SPEC = #{maintenanceQueryParam.spec}
+        </if>
+        <if test="maintenanceQueryParam.typeVersion != null and maintenanceQueryParam.typeVersion!=''">
+            AND A.TYPE_VERSION = #{maintenanceQueryParam.typeVersion}
+        </if>
+        ORDER BY A.MCH_NAME, A.SPEC, A.TYPE_VERSION, B.MAINTENANCE_ITEM
+    </select>
+</mapper>

@@ -3,20 +3,17 @@
 <mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingMachineParamDataMapper">
     <select id="getMoldingParamData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
         select * from (
-        SELECT machine_name, wafer_id, recipe_name, recipe_phase, param_name, param_value, plc_time, a.create_time,
+        SELECT machine_name, wafer_id, recipe_name, recipe_phase, #{paramName} as param_name, ${paramName} as param_value, plc_time, a.create_time,
         ROW_NUMBER() over (partition by wafer_id order by a.id) as plc_time_stamp
---         datediff(second, min(plc_time) over (partition by wafer_id), plc_time) as plc_time_stamp
-        FROM t_wlg_molding_machine_param_data a
+        --         datediff(second, min(plc_time) over (partition by wafer_id), plc_time) as plc_time_stamp
+        FROM t_wlg_molding_machine_param_detail_data a
         join t_wlg_molding_machine_param_data_base b
         on a.serial_id = b.serial_id
-        join t_molding_machine_opc_ua_node c
-        on a.param_id = c.id
         where machine_name = #{machineName}
         and wafer_id in
         <foreach item='waferId' index='index' collection='waferIds' open='(' separator=',' close=')'>
             #{waferId}
         </foreach>
-        and description + '_' + convert(varchar, array_id) = #{paramName}
         )t
         order by plc_time_stamp, wafer_id
     </select>
