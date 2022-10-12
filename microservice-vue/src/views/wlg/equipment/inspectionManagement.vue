@@ -28,6 +28,18 @@
                 <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
+            <el-button type="info"
+                       @click="handleOpenExcelUpload">Excel导入
+              <template #icon>
+                <font-awesome-icon :icon="['fas','file-lines']"/>
+              </template>
+            </el-button>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('点检维护')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -249,13 +261,54 @@
           </slot>
         </div>
       </el-dialog>
+
+      
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'设备保养Excel导入'"
+
+                 width="400px">
+        <el-upload
+            :before-upload="beforeUpload"
+            :http-request="submitExcelUpload"
+            :multiple="false"
+            :show-file-list="false"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            action=""
+            class="upload-demo"
+            drag>
+          <font-awesome-icon :icon="['fas','cloud-arrow-up']" class="el-icon--upload"/>
+          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-progress
+                :duration="pregressDuration"
+                :indeterminate="true"
+                :percentage="progressPercentage"
+                :status="progressStatus"
+                :stroke-width="20"
+                :text-inside="true"
+                style="width:350px"
+            >
+              <span>{{ progressContent }}</span>
+            </el-progress>
+            <div style="padding-top: 20px;">
+              <el-button :loading="downloadTemplateLoading" :size="size" style="position: absolute;left: 20px;"
+                         type="primary"
+                         @click="downloadTemplate">模板下载
+              </el-button>
+              <el-button :size="size" type="success" @click="cancelExcelUpload">关闭</el-button>
+            </div>
+          </slot>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteInspection, findInspectionPage, handleAdd, handleUpdate, addInspectionItem, 
+import {deleteInspection, findInspectionPage, handleAdd, handleUpdate, addInspectionItem, exportInspectionExcel, uploadExcel, downloadTemplate,
   updateInspectionItem, addInspectionShift, updateInspectionShift, findInspectionById, deleteInspectionItem, deleteInspectionShift} from "@/api/wlg/equipment/inspectionManagement";
 import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
@@ -287,6 +340,11 @@ export default {
       inspectionItemTableData: [],
       inspectionShiftTableData: [],
 
+      progressPercentage: 0,
+      progressContent: "",
+      pregressDuration: 6,
+      progressStatus: "",
+
       isInspectionAddOperation: false, // true:新增, false:编辑
       isInspectionItemAddOperation: false,
       isInspectionShiftAddOperation: false,
@@ -295,9 +353,14 @@ export default {
       inspectionItemDialogVisible: false,
       inspectionShiftDialogVisible: false,
 
+      excelUploadDialogVisible: false,
+
       editLoading: false,
       findLoading: false,
       findDetailLoading: false,
+      exportLoading: false,
+      downloadTemplateLoading: false,
+
       dataFormRules: {
         mchName: [{required: true, message: "请输入设备名称", trigger: "blur"}],
         spec: [{required: true, message: "请输入规格", trigger: "blur"}],
@@ -673,6 +736,25 @@ export default {
         }
       });
     },
+    
+    exportExcelData(excelFileName) {
+      let pageRequest  = {};
+      pageRequest.mchName = this.filters.mchName;
+      pageRequest.spec = this.filters.spec;
+      pageRequest.typeVersion = this.filters.typeVersion;
+
+      this.exportLoading = true;
+      exportInspectionExcel(pageRequest).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     selectMchName()
     {
       this.dataForm.spec = "";
@@ -710,6 +792,66 @@ export default {
           this.typeVersionOptions = response.data.data
         }
       })
+    },
+    handleOpenExcelUpload: function () {
+      this.excelUploadDialogVisible = true;
+
+      this.progressPercentage = 0;
+      this.progressContent = "";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+    },
+    
+    submitExcelUpload(params) {
+      this.progressPercentage = 50;
+      this.progressContent = "Excel导入中，请稍等...";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+
+      uploadExcel(params).then((response) => {
+        const responseData = response.data
+
+        this.progressPercentage = 100;
+        this.pregressDuration = 0;
+        if (responseData.code === '000000') {
+          this.$message.success('上传成功！')
+
+          this.progressContent = "导入成功";
+          this.progressStatus = "success"
+        } else {
+          this.$message.error('上传失败！' + responseData.msg + "," + responseData.data)
+
+          this.progressContent = "导入失败";
+          this.progressStatus = "exception";
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
+    beforeUpload(file) {
+      const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel'
+      if (!isExcel) {
+        this.$message.error('只能上传xlsx, xls格式的文件！')
+        return false
+      }
+    },
+    downloadTemplate() {
+      this.downloadTemplateLoading = true;
+      downloadTemplate().then(res => {
+
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', '设备保养导入模板' + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+
+        this.downloadTemplateLoading = false;
+      });
+    },
+    cancelExcelUpload() {
+      this.excelUploadDialogVisible = false;
     },
     // 取消
     cancel() {

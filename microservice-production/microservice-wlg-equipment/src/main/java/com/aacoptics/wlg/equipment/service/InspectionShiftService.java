@@ -1,8 +1,9 @@
 package com.aacoptics.wlg.equipment.service;
 
 import com.aacoptics.wlg.equipment.entity.po.InspectionShift;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface InspectionShiftService {
+public interface InspectionShiftService extends IService<InspectionShift> {
 
 
     /**

@@ -119,3 +119,37 @@ export function deleteInspectionShift(deleteForm) {
         }
     })
 }
+
+export function exportInspectionExcel(conditions) {
+    return request({
+        url: '/wlg-equipment/inspectionManagement/exportInspectionExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}
+
+
+export function uploadExcel(param) {
+    const formData = new FormData()
+    formData.append('file', param.file)
+    return request({
+        url: '/wlg-equipment/inspectionManagement/uploadExcel',
+        method: 'post',
+        data: formData
+    })
+}
+
+export function downloadTemplate() {
+    return request({
+        url: '/wlg-equipment/inspectionManagement/downloadTemplate',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+    })
+}

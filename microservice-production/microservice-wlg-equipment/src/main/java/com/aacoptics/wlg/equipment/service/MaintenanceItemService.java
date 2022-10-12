@@ -1,8 +1,9 @@
 package com.aacoptics.wlg.equipment.service;
 
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceItem;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface MaintenanceItemService {
+public interface MaintenanceItemService extends IService<MaintenanceItem> {
 
 
     /**

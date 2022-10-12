@@ -1,19 +1,18 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.equipment.entity.form.InspectionOrderQueryForm;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
-import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
-import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
-import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
 import com.aacoptics.wlg.equipment.service.MaintenanceOrderService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -43,6 +43,9 @@ public class MaintenanceOrderController {
 
     @Autowired
     MaintenanceItemService maintenanceItemService;
+
+    @Autowired
+    DataDictProvider dataDictProvider;
 
 
     @ApiOperation(value = "搜索保养工单", notes = "根据条件搜索保养工单信息")
@@ -142,6 +145,19 @@ public class MaintenanceOrderController {
         log.debug("query with name:{}", maintenanceOrderQueryForm);
         List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderService.queryMaintenanceOrderByCondition(maintenanceOrderQueryForm.toParam(MaintenanceOrderQueryParam.class));
 
+        //获取数据字典值
+        //工单状态
+        Result orderStatusResult = dataDictProvider.getDataDictList(DataDictConstants.MAINTENANCE_ORDER_STATUS);
+        HashMap<String, String> orderStatusMap = new HashMap<String, String>();
+        if(orderStatusResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)orderStatusResult.getData();
+            orderStatusMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.MAINTENANCE_ORDER_STATUS + "数据字典失败，" + orderStatusResult.getMsg());
+        }
+
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建工作表
@@ -191,7 +207,17 @@ public class MaintenanceOrderController {
                     dataRow.createCell(5).setCellValue(maintenanceOrderAndItemVO.getTypeVersion() != null ? maintenanceOrderAndItemVO.getTypeVersion() + "" : "");
                     dataRow.createCell(6).setCellValue(maintenanceOrderAndItemVO.getFactoryNo() != null ? maintenanceOrderAndItemVO.getFactoryNo() + "" : "");
                     dataRow.createCell(7).setCellValue(maintenanceOrderAndItemVO.getDutyPersonId() != null ? maintenanceOrderAndItemVO.getDutyPersonId() + "" : "");
-                    dataRow.createCell(8).setCellValue(maintenanceOrderAndItemVO.getStatus() != null ? maintenanceOrderAndItemVO.getStatus() + "" : "");
+
+                    //状态通过数据字典翻译
+                    String orderStatus = maintenanceOrderAndItemVO.getStatus() != null ? maintenanceOrderAndItemVO.getStatus() + "" : "";
+                    if(StringUtils.isNotEmpty(orderStatus))
+                    {
+                        if(orderStatusMap.containsKey(orderStatus))
+                        {
+                            orderStatus = orderStatusMap.get(orderStatus);
+                        }
+                    }
+                    dataRow.createCell(8).setCellValue(orderStatus);
                     dataRow.createCell(9).setCellValue(maintenanceOrderAndItemVO.getMaintenanceDate() != null ? maintenanceOrderAndItemVO.getMaintenanceDate().format(dateFormatter) + "" : "");
 
                     List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrderAndItemVO.getMaintenanceOrderItemList();
@@ -235,6 +261,10 @@ public class MaintenanceOrderController {
 
                     //合并主表单元格
                     for(int k=1; k<=9; k++) {
+                        if(maintenanceOrderItemList.size() <= 1)
+                        {
+                            continue;
+                        }
                         ExcelUtil.mergeRegion(wbSheet, rowNumber-maintenanceOrderItemList.size(), rowNumber-1, k, k);
                     }
                 }
