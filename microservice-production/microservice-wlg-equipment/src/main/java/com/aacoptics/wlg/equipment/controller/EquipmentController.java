@@ -1,12 +1,15 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.EquipmentForm;
 import com.aacoptics.wlg.equipment.entity.form.EquipmentQueryForm;
 import com.aacoptics.wlg.equipment.entity.param.EquipmentQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.Equipment;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.EquipmentService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -24,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +40,8 @@ public class EquipmentController {
     @Autowired
     EquipmentService equipmentService;
 
-
+    @Autowired
+    DataDictProvider dataDictProvider;
 
     @ApiOperation(value = "搜索设备", notes = "根据条件搜索设备信息")
     @ApiImplicitParam(name = "projectMapQueryForm", value = "设备查询参数", required = true, dataType = "ProjectMapQueryForm")
@@ -153,6 +158,19 @@ public class EquipmentController {
         log.debug("query with name:{}", equipmentQueryForm);
         List<Equipment> equipmentList = equipmentService.queryEquipmentByCondition(equipmentQueryForm.toParam(EquipmentQueryParam.class));
 
+        //获取数据字典值
+        //设备状态
+        Result equipmentStatusResult = dataDictProvider.getDataDictList(DataDictConstants.EQUIPMENT_STATUS);
+        HashMap<String, String> equipmentStatusMap = new HashMap<String, String>();
+        if(equipmentStatusResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)equipmentStatusResult.getData();
+            equipmentStatusMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.EQUIPMENT_STATUS + "数据字典失败，" + equipmentStatusResult.getMsg());
+        }
+
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建工作表
@@ -205,7 +223,16 @@ public class EquipmentController {
                     dataRow.createCell(2).setCellValue(equipment.getMchName() != null ? equipment.getMchName() + "" : "");
                     dataRow.createCell(3).setCellValue(equipment.getSpec() != null ? equipment.getSpec() + "" : "");
                     dataRow.createCell(4).setCellValue(equipment.getTypeVersion() != null ? equipment.getTypeVersion() + "" : "");
-                    dataRow.createCell(5).setCellValue(equipment.getStatus() != null ? equipment.getStatus() + "" : "");
+                    //状态通过数据字典翻译
+                    String equipmentStatus = equipment.getStatus() != null ? equipment.getStatus() + "" : "";
+                    if(StringUtils.isNotEmpty(equipmentStatus))
+                    {
+                        if(equipmentStatusMap.containsKey(equipmentStatus))
+                        {
+                            equipmentStatus = equipmentStatusMap.get(equipmentStatus);
+                        }
+                    }
+                    dataRow.createCell(5).setCellValue(equipmentStatus);
                     dataRow.createCell(6).setCellValue(equipment.getEquipStateDb() != null ? equipment.getEquipStateDb() + "" : "");
                     dataRow.createCell(7).setCellValue(equipment.getEquipState() != null ? equipment.getEquipState() + "" : "");
                     dataRow.createCell(8).setCellValue(equipment.getAssetGeneralCode() != null ? equipment.getAssetGeneralCode() + "" : "");

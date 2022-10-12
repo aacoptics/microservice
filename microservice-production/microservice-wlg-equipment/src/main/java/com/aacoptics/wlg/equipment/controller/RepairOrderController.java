@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderQueryForm;
@@ -11,7 +12,9 @@ import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.RepairOrderService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -28,7 +31,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/repairOrder")
@@ -38,6 +43,9 @@ public class RepairOrderController {
 
     @Autowired
     RepairOrderService repairOrderService;
+
+    @Autowired
+    DataDictProvider dataDictProvider;
 
 
     @ApiOperation(value = "搜索维修工单", notes = "根据条件搜索维修工单信息")
@@ -138,6 +146,29 @@ public class RepairOrderController {
         log.debug("query with name:{}", repairOrderQueryForm);
         List<RepairOrderVO> repairOrderVOList = repairOrderService.queryRepairOrderByCondition(repairOrderQueryForm.toParam(RepairOrderQueryParam.class));
 
+        //获取数据字典值
+        //工单状态
+        Result orderStatusResult = dataDictProvider.getDataDictList(DataDictConstants.REPAIR_ORDER_STATUS);
+        HashMap<String, String> orderStatusMap = new HashMap<String, String>();
+        if(orderStatusResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)orderStatusResult.getData();
+            orderStatusMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.REPAIR_ORDER_STATUS + "数据字典失败，" + orderStatusResult.getMsg());
+        }
+        //工单来源
+        Result orderSourceResult = dataDictProvider.getDataDictList(DataDictConstants.REPAIR_ORDER_SOURCE);
+        HashMap<String, String> orderSourceMap = new HashMap<String, String>();
+        if(orderSourceResult.isSuccess())
+        {
+            List<HashMap<String, Object>> orderSourceDataDictList =  (List<HashMap<String, Object>>)orderSourceResult.getData();
+            orderSourceMap = DataDictUtil.convertDataDictListToMap(orderSourceDataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.REPAIR_ORDER_SOURCE + "数据字典失败，" + orderStatusResult.getMsg());
+        }
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建工作表
@@ -179,11 +210,29 @@ public class RepairOrderController {
                     dataRow.createCell(5).setCellValue(repairOrderVO.getTypeVersion() != null ? repairOrderVO.getTypeVersion() + "" : "");
                     dataRow.createCell(6).setCellValue(repairOrderVO.getFactoryNo() != null ? repairOrderVO.getFactoryNo() + "" : "");
                     dataRow.createCell(7).setCellValue(repairOrderVO.getDutyPersonId() != null ? repairOrderVO.getDutyPersonId() + "" : "");
-                    dataRow.createCell(8).setCellValue(repairOrderVO.getStatus() != null ? repairOrderVO.getStatus() + "" : "");
+                    //状态通过数据字典翻译
+                    String orderStatus = repairOrderVO.getStatus() != null ? repairOrderVO.getStatus() + "" : "";
+                    if(StringUtils.isNotEmpty(orderStatus))
+                    {
+                        if(orderStatusMap.containsKey(orderStatus))
+                        {
+                            orderStatus = orderStatusMap.get(orderStatus);
+                        }
+                    }
+                    dataRow.createCell(8).setCellValue(orderStatus);
                     dataRow.createCell(9).setCellValue(repairOrderVO.getFaultDesc() != null ? repairOrderVO.getFaultDesc() + "" : "");
                     dataRow.createCell(10).setCellValue(repairOrderVO.getRepairDesc() != null ? repairOrderVO.getRepairDesc() + "" : "");
                     dataRow.createCell(11).setCellValue(repairOrderVO.getRepairDatetime() != null ? repairOrderVO.getRepairDatetime().format(dateTimeFormatter) : "");
-                    dataRow.createCell(12).setCellValue(repairOrderVO.getSourceType() != null ? repairOrderVO.getSourceType() + "" : "");
+                    //来源通过数据字典翻译
+                    String sourceType = repairOrderVO.getSourceType() != null ? repairOrderVO.getSourceType() + "" : "";
+                    if(StringUtils.isNotEmpty(sourceType))
+                    {
+                        if(orderSourceMap.containsKey(sourceType))
+                        {
+                            sourceType = orderSourceMap.get(sourceType);
+                        }
+                    }
+                    dataRow.createCell(12).setCellValue(sourceType);
                     dataRow.createCell(13).setCellValue(repairOrderVO.getUpdatedBy() != null ? repairOrderVO.getUpdatedBy() + "" : "");
                     dataRow.createCell(14).setCellValue(repairOrderVO.getUpdatedTime() != null ? repairOrderVO.getUpdatedTime().format(dateTimeFormatter) + "" : "");
                     dataRow.createCell(15).setCellValue(repairOrderVO.getCreatedBy() != null ? repairOrderVO.getCreatedBy() + "" : "");

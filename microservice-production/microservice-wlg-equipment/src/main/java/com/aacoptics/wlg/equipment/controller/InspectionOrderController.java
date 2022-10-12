@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.EquipmentQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.InspectionOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.InspectionOrderQueryForm;
@@ -11,9 +12,11 @@ import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.aacoptics.wlg.equipment.service.InspectionOrderService;
 import com.aacoptics.wlg.equipment.service.InspectionShiftService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -47,6 +51,9 @@ public class InspectionOrderController {
 
     @Autowired
     InspectionShiftService inspectionShiftService;
+
+    @Autowired
+    DataDictProvider dataDictProvider;
 
     @ApiOperation(value = "搜索点检工单", notes = "根据条件搜索点检工单信息")
     @ApiImplicitParam(name = "projectMapQueryForm", value = "点检工单查询参数", required = true, dataType = "ProjectMapQueryForm")
@@ -146,6 +153,20 @@ public class InspectionOrderController {
         log.debug("query with name:{}", inspectionOrderQueryForm);
         List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderService.queryInspectionOrderByCondition(inspectionOrderQueryForm.toParam(InspectionOrderQueryParam.class));
 
+
+        //获取数据字典值
+        //工单状态
+        Result orderStatusResult = dataDictProvider.getDataDictList(DataDictConstants.INSPECTION_ORDER_STATUS);
+        HashMap<String, String> orderStatusMap = new HashMap<String, String>();
+        if(orderStatusResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)orderStatusResult.getData();
+            orderStatusMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.INSPECTION_ORDER_STATUS + "数据字典失败，" + orderStatusResult.getMsg());
+        }
+
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建工作表
@@ -198,7 +219,16 @@ public class InspectionOrderController {
                     dataRow.createCell(5).setCellValue(inspectionOrderAndItemVO.getTypeVersion() != null ? inspectionOrderAndItemVO.getTypeVersion() + "" : "");
                     dataRow.createCell(6).setCellValue(inspectionOrderAndItemVO.getFactoryNo() != null ? inspectionOrderAndItemVO.getFactoryNo() + "" : "");
                     dataRow.createCell(7).setCellValue(inspectionOrderAndItemVO.getDutyPersonId() != null ? inspectionOrderAndItemVO.getDutyPersonId() + "" : "");
-                    dataRow.createCell(8).setCellValue(inspectionOrderAndItemVO.getStatus() != null ? inspectionOrderAndItemVO.getStatus() + "" : "");
+                    //状态通过数据字典翻译
+                    String orderStatus = inspectionOrderAndItemVO.getStatus() != null ? inspectionOrderAndItemVO.getStatus() + "" : "";
+                    if(StringUtils.isNotEmpty(orderStatus))
+                    {
+                        if(orderStatusMap.containsKey(orderStatus))
+                        {
+                            orderStatus = orderStatusMap.get(orderStatus);
+                        }
+                    }
+                    dataRow.createCell(8).setCellValue(orderStatus);
                     dataRow.createCell(9).setCellValue(inspectionOrderAndItemVO.getInspectionDate() != null ? inspectionOrderAndItemVO.getInspectionDate().format(dateFormatter) + "" : "");
                     dataRow.createCell(10).setCellValue(inspectionOrderAndItemVO.getInspectionShift() != null ? inspectionOrderAndItemVO.getInspectionShift() + "" : "");
                     dataRow.createCell(11).setCellValue(inspectionOrderAndItemVO.getShiftStartTime() != null ? inspectionOrderAndItemVO.getShiftStartTime().format(dateTimeFormatter) + "" : "");
