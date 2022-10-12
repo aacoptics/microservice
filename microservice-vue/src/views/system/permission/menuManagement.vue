@@ -111,7 +111,8 @@
                       菜单名称
                     </span>
                 </template>
-                <el-input v-model="dataForm.title" auto-complete="off" clearable placeholder="请输入菜单名称"></el-input>
+                <el-input v-model="dataForm.title" auto-complete="off" clearable
+                          placeholder="请输入菜单名称"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -342,7 +343,7 @@ export default {
           this.$confirm('确认提交吗？', '提示', {}).then(() => {
             this.editLoading = true
             let params = Object.assign({}, this.dataForm)
-            if (params.menuType === '2') params.component = 'views/webframe/WebFrame.vue'
+            if (params.menuType === '2') params.component = 'components/Iframe/InnerLink'
             if (this.operation) {
               handleAdd(params).then((res) => {
                 const responseData = res.data
