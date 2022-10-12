@@ -7,10 +7,10 @@
 
       <div class="content">
         <v-breadcrumb/>
-        <router-view v-if="!$route.meta.webUrl" v-slot="{ Component }">
+        <router-view v-slot="{ Component }">
           <transition mode="out-in" name="move">
             <keep-alive :include="tagsList">
-              <component :is="Component"/>
+              <component :is="Component" v-if="!$route.meta.webUrl" :key="key"/>
             </keep-alive>
           </transition>
         </router-view>
@@ -40,6 +40,9 @@ export default {
     },
     collapse() {
       return this.$store.state.collapse;
+    },
+    key() {
+      return this.$route.path
     }
   }
 };
