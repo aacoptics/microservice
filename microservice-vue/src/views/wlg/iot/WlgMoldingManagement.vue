@@ -37,11 +37,18 @@
               />
             </template>
           </el-table-column>
+          <el-table-column align="center" fixed="right" header-align="center" label="CT维护">
+            <template v-slot="scope">
+              <el-input-number size="small" v-model="scope.row.standardCt" controls-position="right" :precision="2" :step="0.1" :min="0" />
+              <el-button type="success" circle @click="handleCtButtonClick(scope)">
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'check']"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
         </template>
       </SysTable>
-      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'阈值维护'"
-                 width="40%">
-      </el-dialog>
       <el-dialog v-model="dialogVisible" destroy-on-close :title="operation?'新增':'阈值维护'" width="90%">
         <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id"
                                      :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
@@ -67,11 +74,11 @@ export default {
         machineName: ''
       },
       columns: [
-        {prop: "machineName", label: "机台号", minWidth: 110},
-        {prop: "ipAddress", label: "ip地址", minWidth: 100},
-        {prop: "port", label: "端口号", minWidth: 120},
-        {prop: "namespaceIndex", label: "命名空间", minWidth: 120},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
+        {prop: "machineName", label: "机台号", minWidth: 80},
+        {prop: "ipAddress", label: "ip地址", minWidth: 80},
+        {prop: "port", label: "端口号", minWidth: 80},
+        {prop: "namespaceIndex", label: "命名空间", minWidth: 40},
+        {prop: "createdBy", label: "创建人", minWidth: 80},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateFormat},
       ],
       pageRequest: {current: 1, size: 10},
@@ -81,7 +88,8 @@ export default {
       currentMachineInfo: {},
       dataForm: {
         id: 0,
-        feedingAlarm: false
+        feedingAlarm: false,
+        standardCt: 0
       },
     }
   },
@@ -132,6 +140,20 @@ export default {
         })
       }).catch(function () {
         params.row.feedingAlarm = params.row.feedingAlarm === false;
+      });
+    },
+    handleCtButtonClick(params) {
+      this.$confirm('确认要保存标准CT吗?').then(() => {
+        handleUpdateFeedingAlarm(params.row).then((res) => {
+          const responseData = res.data
+          if (responseData.code === '000000') {
+            this.$message({message: '修改成功', type: 'success'})
+          } else {
+            this.$message({message: responseData.data.msg, type: 'error'})
+          }
+        })
+      }).catch(function () {
+        this.$message({message: '保存失败！', type: 'error'})
       });
     },
   },

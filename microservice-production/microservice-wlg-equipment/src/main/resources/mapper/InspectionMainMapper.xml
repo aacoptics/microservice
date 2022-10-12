@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.InspectionMainMapper">
+
+
+    <resultMap id="InspectionMainAndItemVO" type="com.aacoptics.wlg.equipment.entity.po.InspectionMain">
+        <id property="id" column="ID" jdbcType="BIGINT"/>
+        <result property="mchName" column="MCH_NAME" />
+        <result property="spec" column="SPEC" />
+        <result property="typeVersion" column="TYPE_VERSION" />
+        <result property="createdTime" column="CREATED_TIME"/>
+        <result property="createdBy" column="CREATED_BY"/>
+        <result property="updatedTime" column="UPDATED_TIME"/>
+        <result property="updatedBy" column="UPDATED_BY"/>
+        <collection property="inspectionItemList" ofType="com.aacoptics.wlg.equipment.entity.po.InspectionItem">
+            <id property="id" column="ITEM_ID" jdbcType="BIGINT"/>
+            <result property="checkItem" column="CHECK_ITEM"/>
+            <result property="checkItemStandard"  column="CHECK_ITEM_STANDARD"/>
+            <result property="minValue" column="MIN_VALUE"/>
+            <result property="maxValue" column="MAX_VALUE"/>
+            <result property="createdTime" column="ITEM_CREATED_TIME"/>
+            <result property="createdBy" column="ITEM_CREATED_BY"/>
+            <result property="updatedTime" column="ITEM_UPDATED_TIME"/>
+            <result property="updatedBy" column="ITEM_UPDATED_BY"/>
+        </collection>
+        <collection property="inspectionShiftList" ofType="com.aacoptics.wlg.equipment.entity.po.InspectionShift">
+            <id property="id" column="SHIFT_ID" jdbcType="BIGINT"/>
+            <result property="shift" column="SHIFT"/>
+            <result property="startTime"  column="START_TIME"/>
+            <result property="endTime" column="END_TIME"/>
+            <result property="createdTime" column="SHIFT_CREATED_TIME"/>
+            <result property="createdBy" column="SHIFT_CREATED_BY"/>
+            <result property="updatedTime" column="SHIFT_UPDATED_TIME"/>
+            <result property="updatedBy" column="SHIFT_UPDATED_BY"/>
+        </collection>
+    </resultMap>
+
+
+    <select id="findInspectionMainAndItemList" resultMap="InspectionMainAndItemVO">
+        SELECT A.ID,
+        A.MCH_NAME,
+        A.SPEC,
+        A.TYPE_VERSION,
+        A.CREATED_TIME,
+        A.CREATED_BY,
+        A.UPDATED_TIME,
+        A.UPDATED_BY,
+        B.ID ITEM_ID,
+        B.CHECK_ITEM,
+        B.CHECK_ITEM_STANDARD,
+        B.MIN_VALUE,
+        B.MAX_VALUE,
+        B.CREATED_TIME ITEM_CREATED_TIME,
+        B.CREATED_BY ITEM_CREATED_BY,
+        B.UPDATED_TIME ITEM_UPDATED_TIME,
+        B.UPDATED_BY ITEM_UPDATED_BY,
+        C.ID SHIFT_ID,
+        C.SHIFT,
+        C.START_TIME,
+        C.END_TIME,
+        C.CREATED_TIME SHIFT_CREATED_TIME,
+        C.CREATED_BY SHIFT_CREATED_BY,
+        C.UPDATED_TIME SHIFT_UPDATED_TIME,
+        C.UPDATED_BY SHIFT_UPDATED_BY
+        FROM EM_INSPECTION_MAIN A
+        LEFT JOIN EM_INSPECTION_ITEM B ON A.ID = B.INSPECTION_MAIN_ID
+        LEFT JOIN EM_INSPECTION_SHIFT C ON A.ID = C.INSPECTION_MAIN_ID
+        WHERE 1=1
+        <if test="inspectionQueryParam.mchName != null and inspectionQueryParam.mchName!=''">
+            AND A.MCH_NAME = #{inspectionQueryParam.mchName}
+        </if>
+        <if test="inspectionQueryParam.spec != null and inspectionQueryParam.spec!=''">
+            AND A.SPEC = #{inspectionQueryParam.spec}
+        </if>
+        <if test="inspectionQueryParam.typeVersion != null and inspectionQueryParam.typeVersion!=''">
+            AND A.TYPE_VERSION = #{inspectionQueryParam.typeVersion}
+        </if>
+        ORDER BY A.MCH_NAME, A.SPEC, A.TYPE_VERSION, B.CHECK_ITEM
+    </select>
+
+</mapper>
