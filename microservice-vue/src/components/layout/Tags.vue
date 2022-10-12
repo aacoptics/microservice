@@ -94,6 +94,7 @@ export default {
     // 关闭单个标签
     closeTags(index) {
       const delItem = this.tagsList[index];
+      this.$store.commit('delIframeView', delItem)
       this.$store.commit("delTagsItem", {index});
       const item = this.tagsList[index]
           ? this.tagsList[index]
@@ -103,9 +104,6 @@ export default {
         this.$router.push(item.path);
       } else {
         this.$router.push("/");
-      }
-      if (this.$route.meta.webUrl) {
-        this.$store.commit('delIframeView', this.$route)
       }
     },
     // 关闭全部标签
@@ -127,8 +125,8 @@ export default {
       });
       if (!isExist) {
         if (this.tagsList.length >= 8) {
-          this.$store.commit("delTagsItem", {index: 0});
           this.$store.commit('delIframeView', this.tagsList[0])
+          this.$store.commit("delTagsItem", {index: 0});
         }
         let title = ''
         if (route.meta['title'] instanceof Array) {

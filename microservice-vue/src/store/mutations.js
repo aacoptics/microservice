@@ -15,7 +15,7 @@ export default {
     },
     closeTagsOther(state, data) {
         state.tagsList = data;
-        state.iframeViews = state.iframeViews.filter(item => item.path === data.path)
+        state.iframeViews = state.iframeViews.filter(item => item.path === data[0].path)
     },
     closeCurrentTag(state, data) {
         for (let i = 0, len = state.tagsList.length; i < len; i++) {
