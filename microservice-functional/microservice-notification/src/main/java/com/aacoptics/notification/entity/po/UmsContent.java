@@ -46,6 +46,8 @@ public class UmsContent implements Serializable {
 
     private String isDaiban;
 
+    private String sendFileName;
+
     private String sendFilePath;
 
     private String sendPicturePath;
