@@ -66,4 +66,29 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>public</id>
+            <name>aacoptics nexus</name>
+            <url>https://nexus.aacoptics.com/repository/maven-all/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>public</id>
+            <name>aacoptics nexus</name>
+            <url>https://nexus.aacoptics.com/repository/maven-all/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>
