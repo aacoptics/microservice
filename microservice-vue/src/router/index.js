@@ -93,7 +93,7 @@ const formatRoutes = function (routes, routeData) {
                 routeData.children.push({
                     path: route.path.indexOf('?') > -1 ? route.path.split('?')[0] : route.path,
                     name: route.name,
-                    component: () => import('../' + route.component),
+                    component: route.webUrl ? routeMap['InnerLink'] : () => import('../' + route.component),
                     meta: {
                         title: route.title,
                         webUrl: route.webUrl ? route.webUrl : null
