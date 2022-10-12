@@ -104,6 +104,9 @@ export default {
       } else {
         this.$router.push("/");
       }
+      if (this.$route.meta.webUrl) {
+        this.$store.commit('delIframeView', this.$route)
+      }
     },
     // 关闭全部标签
     closeAll() {
@@ -125,6 +128,7 @@ export default {
       if (!isExist) {
         if (this.tagsList.length >= 8) {
           this.$store.commit("delTagsItem", {index: 0});
+          this.$store.commit('delIframeView', this.tagsList[0])
         }
         let title = ''
         if (route.meta['title'] instanceof Array) {
@@ -137,6 +141,9 @@ export default {
           title: title,
           path: route.fullPath
         });
+        if (this.$route.meta.webUrl) {
+          this.$store.commit('addIframeView', this.$route)
+        }
       }
     },
     handleTags(command) {

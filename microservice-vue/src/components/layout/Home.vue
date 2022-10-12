@@ -3,16 +3,18 @@
     <v-header/>
     <v-sidebar/>
     <div :class="{ 'content-collapse': collapse }" class="content-box">
-      <v-tags/>
+      <v-tags></v-tags>
+
       <div class="content">
         <v-breadcrumb/>
-        <router-view v-slot="{ Component }">
+        <router-view v-if="!$route.meta.webUrl" v-slot="{ Component }">
           <transition mode="out-in" name="move">
             <keep-alive :include="tagsList">
               <component :is="Component"/>
             </keep-alive>
           </transition>
         </router-view>
+        <iframe-toggle/>
       </div>
     </div>
   </div>
@@ -22,13 +24,15 @@ import vHeader from "@/components/layout/Header";
 import vSidebar from "@/components/layout/Sidebar";
 import vTags from "@/components/layout/Tags.vue";
 import vBreadcrumb from "@/components/layout/Breadcrumb";
+import IframeToggle from "@/components/Iframe/IframeToggle";
 
 export default {
   components: {
     vHeader,
     vSidebar,
     vTags,
-    vBreadcrumb
+    vBreadcrumb,
+    IframeToggle
   },
   computed: {
     tagsList() {
