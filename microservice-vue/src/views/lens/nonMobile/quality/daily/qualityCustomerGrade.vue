@@ -94,7 +94,7 @@ import {
   listSummary,
   listSummaryExportExcel,
   uploadExcel
-} from "@/api/lens/quality/qualityCustomerGrade";
+} from "@/api/lens/nonMobile/quality/qualityCustomerGrade";
 import {ElMessageBox} from "element-plus";
 
 export default {

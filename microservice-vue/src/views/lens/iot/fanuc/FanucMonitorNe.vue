@@ -209,37 +209,59 @@
                 <el-table-column :width="20 * '保压4'.length" label="保压4" prop="condPackPres4"></el-table-column>
                 <el-table-column :width="20 * '保压5'.length" label="保压5" prop="condPackPres5"></el-table-column>
                 <el-table-column :width="20 * '保压6'.length" label="保压6" prop="condPackPres6"></el-table-column>
-                <el-table-column :width="20 * '计量前压力'.length" label="计量前压力" prop="condBefExtPres"></el-table-column>
-                <el-table-column :width="20 * '保压时间1'.length" label="保压时间1" prop="condPackTime1"></el-table-column>
-                <el-table-column :width="20 * '保压时间2'.length" label="保压时间2" prop="condPackTime2"></el-table-column>
-                <el-table-column :width="20 * '保压时间3'.length" label="保压时间3" prop="condPackTime3"></el-table-column>
-                <el-table-column :width="20 * '保压时间4'.length" label="保压时间4" prop="condPackTime4"></el-table-column>
-                <el-table-column :width="20 * '保压时间5'.length" label="保压时间5" prop="condPackTime5"></el-table-column>
-                <el-table-column :width="20 * '保压时间6'.length" label="保压时间6" prop="condPackTime6"></el-table-column>
-                <el-table-column :width="20 * '计量前保压时间'.length" label="计量前保压时间" prop="condBefExtTime"></el-table-column>
-                <el-table-column :width="20 * '最大射出压力'.length" label="最大射出压力" prop="condMaxInjPres"></el-table-column>
-                <el-table-column :width="20 * '最大射出时间'.length" label="最大射出时间" prop="condMaxInjTime"></el-table-column>
-                <el-table-column :width="20 * '最大保压速度'.length" label="最大保压速度" prop="condMaxPackVel"></el-table-column>
-                <el-table-column :width="20 * '加速度时间'.length" label="加速度时间" prop="condAccelTime"></el-table-column>
+                <el-table-column :width="20 * '计量前压力'.length" label="计量前压力"
+                                 prop="condBefExtPres"></el-table-column>
+                <el-table-column :width="20 * '保压时间1'.length" label="保压时间1"
+                                 prop="condPackTime1"></el-table-column>
+                <el-table-column :width="20 * '保压时间2'.length" label="保压时间2"
+                                 prop="condPackTime2"></el-table-column>
+                <el-table-column :width="20 * '保压时间3'.length" label="保压时间3"
+                                 prop="condPackTime3"></el-table-column>
+                <el-table-column :width="20 * '保压时间4'.length" label="保压时间4"
+                                 prop="condPackTime4"></el-table-column>
+                <el-table-column :width="20 * '保压时间5'.length" label="保压时间5"
+                                 prop="condPackTime5"></el-table-column>
+                <el-table-column :width="20 * '保压时间6'.length" label="保压时间6"
+                                 prop="condPackTime6"></el-table-column>
+                <el-table-column :width="20 * '计量前保压时间'.length" label="计量前保压时间"
+                                 prop="condBefExtTime"></el-table-column>
+                <el-table-column :width="20 * '最大射出压力'.length" label="最大射出压力"
+                                 prop="condMaxInjPres"></el-table-column>
+                <el-table-column :width="20 * '最大射出时间'.length" label="最大射出时间"
+                                 prop="condMaxInjTime"></el-table-column>
+                <el-table-column :width="20 * '最大保压速度'.length" label="最大保压速度"
+                                 prop="condMaxPackVel"></el-table-column>
+                <el-table-column :width="20 * '加速度时间'.length" label="加速度时间"
+                                 prop="condAccelTime"></el-table-column>
                 <el-table-column :width="20 * '加速度'.length" label="加速度" prop="condAcceleration"></el-table-column>
                 <el-table-column :width="20 * '计量位置'.length" label="计量位置" prop="condShotSize"></el-table-column>
                 <el-table-column :width="20 * '射出段数'.length" label="射出段数" prop="condInjStep"></el-table-column>
-                <el-table-column :width="20 * '射出速度1'.length" label="射出速度1" prop="condInjSpeed1"></el-table-column>
-                <el-table-column :width="20 * '射出速度2'.length" label="射出速度2" prop="condInjSpeed2"></el-table-column>
-                <el-table-column :width="20 * '射出速度3'.length" label="射出速度3" prop="condInjSpeed3"></el-table-column>
-                <el-table-column :width="20 * '射出速度4'.length" label="射出速度4" prop="condInjSpeed4"></el-table-column>
-                <el-table-column :width="20 * '射出速度5'.length" label="射出速度5" prop="condInjSpeed5"></el-table-column>
-                <el-table-column :width="20 * '射出速度6'.length" label="射出速度6" prop="condInjSpeed6"></el-table-column>
+                <el-table-column :width="20 * '射出速度1'.length" label="射出速度1"
+                                 prop="condInjSpeed1"></el-table-column>
+                <el-table-column :width="20 * '射出速度2'.length" label="射出速度2"
+                                 prop="condInjSpeed2"></el-table-column>
+                <el-table-column :width="20 * '射出速度3'.length" label="射出速度3"
+                                 prop="condInjSpeed3"></el-table-column>
+                <el-table-column :width="20 * '射出速度4'.length" label="射出速度4"
+                                 prop="condInjSpeed4"></el-table-column>
+                <el-table-column :width="20 * '射出速度5'.length" label="射出速度5"
+                                 prop="condInjSpeed5"></el-table-column>
+                <el-table-column :width="20 * '射出速度6'.length" label="射出速度6"
+                                 prop="condInjSpeed6"></el-table-column>
                 <el-table-column :width="20 * '通常清料背压'.length" label="通常清料背压"
                                  prop="condPurgePressure"></el-table-column>
                 <el-table-column :width="20 * '通常清料转速'.length" label="通常清料转速"
                                  prop="condPurgeRotation"></el-table-column>
                 <el-table-column :width="20 * '自动模厚锁模力'.length" label="自动模厚锁模力"
                                  prop="condAutoDieHForce"></el-table-column>
-                <el-table-column :width="20 * '射出速度7'.length" label="射出速度7" prop="condInjSpeed7"></el-table-column>
-                <el-table-column :width="20 * '射出速度8'.length" label="射出速度8" prop="condInjSpeed8"></el-table-column>
-                <el-table-column :width="20 * '射出速度9'.length" label="射出速度9" prop="condInjSpeed9"></el-table-column>
-                <el-table-column :width="20 * '射出速度10'.length" label="射出速度10" prop="condInjSpeed10"></el-table-column>
+                <el-table-column :width="20 * '射出速度7'.length" label="射出速度7"
+                                 prop="condInjSpeed7"></el-table-column>
+                <el-table-column :width="20 * '射出速度8'.length" label="射出速度8"
+                                 prop="condInjSpeed8"></el-table-column>
+                <el-table-column :width="20 * '射出速度9'.length" label="射出速度9"
+                                 prop="condInjSpeed9"></el-table-column>
+                <el-table-column :width="20 * '射出速度10'.length" label="射出速度10"
+                                 prop="condInjSpeed10"></el-table-column>
                 <el-table-column :width="20 * '最大射出压1'.length" label="最大射出压1"
                                  prop="condMaxInjectPress1"></el-table-column>
                 <el-table-column :width="20 * '最大射出压2'.length" label="最大射出压2"
@@ -278,9 +300,12 @@
                                  prop="condInjSwitchPos8"></el-table-column>
                 <el-table-column :width="20 * '射出切换位置9'.length" label="射出切换位置9"
                                  prop="condInjSwitchPos9"></el-table-column>
-                <el-table-column :width="20 * '射出控制模式'.length" label="射出控制模式" prop="condInjectMode"></el-table-column>
-                <el-table-column :width="20 * '切换位置'.length" label="切换位置" prop="condTransPosition"></el-table-column>
-                <el-table-column :width="20 * '切换压力'.length" label="切换压力" prop="condTransPressure"></el-table-column>
+                <el-table-column :width="20 * '射出控制模式'.length" label="射出控制模式"
+                                 prop="condInjectMode"></el-table-column>
+                <el-table-column :width="20 * '切换位置'.length" label="切换位置"
+                                 prop="condTransPosition"></el-table-column>
+                <el-table-column :width="20 * '切换压力'.length" label="切换压力"
+                                 prop="condTransPressure"></el-table-column>
                 <el-table-column :width="20 * '切换压力段数'.length" label="切换压力段数"
                                  prop="condTransPressStep"></el-table-column>
                 <el-table-column :width="20 * '切换模内/喷嘴压力'.length" label="切换模内/喷嘴压力"
@@ -293,20 +318,28 @@
                                  prop="condTransNozzleStep"></el-table-column>
                 <el-table-column :width="20 * '信号切换段数'.length" label="信号切换段数"
                                  prop="condSgnlTransfStep"></el-table-column>
-                <el-table-column :width="20 * '计量段数'.length" label="计量段数" prop="condExtrdStep"></el-table-column>
+                <el-table-column :width="20 * '计量段数'.length" label="计量段数"
+                                 prop="condExtrdStep"></el-table-column>
                 <el-table-column :width="20 * '背压1'.length" label="背压1" prop="condBackPres1"></el-table-column>
                 <el-table-column :width="20 * '背压2'.length" label="背压2" prop="condBackPres2"></el-table-column>
                 <el-table-column :width="20 * '背压3'.length" label="背压3" prop="condBackPres3"></el-table-column>
                 <el-table-column :width="20 * '背压4'.length" label="背压4" prop="condBackPres4"></el-table-column>
                 <el-table-column :width="20 * '背压5'.length" label="背压5" prop="condBackPres5"></el-table-column>
                 <el-table-column :width="20 * '背压6'.length" label="背压6" prop="condBackPres6"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速1'.length" label="螺杆转速1" prop="condScrewRotate1"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速2'.length" label="螺杆转速2" prop="condScrewRotate2"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速3'.length" label="螺杆转速3" prop="condScrewRotate3"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速4'.length" label="螺杆转速4" prop="condScrewRotate4"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速5'.length" label="螺杆转速5" prop="condScrewRotate5"></el-table-column>
-                <el-table-column :width="20 * '螺杆转速6'.length" label="螺杆转速6" prop="condScrewRotate6"></el-table-column>
-                <el-table-column :width="20 * '料筒保持温度'.length" label="料筒保持温度" prop="condNzl1HoldTemp"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速1'.length" label="螺杆转速1"
+                                 prop="condScrewRotate1"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速2'.length" label="螺杆转速2"
+                                 prop="condScrewRotate2"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速3'.length" label="螺杆转速3"
+                                 prop="condScrewRotate3"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速4'.length" label="螺杆转速4"
+                                 prop="condScrewRotate4"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速5'.length" label="螺杆转速5"
+                                 prop="condScrewRotate5"></el-table-column>
+                <el-table-column :width="20 * '螺杆转速6'.length" label="螺杆转速6"
+                                 prop="condScrewRotate6"></el-table-column>
+                <el-table-column :width="20 * '料筒保持温度'.length" label="料筒保持温度"
+                                 prop="condNzl1HoldTemp"></el-table-column>
                 <el-table-column :width="20 * '喷嘴2保持温度'.length" label="喷嘴2保持温度"
                                  prop="condNzl2HoldTemp"></el-table-column>
                 <el-table-column :width="20 * '喷嘴连接器保持温度'.length" label="喷嘴连接器保持温度"
@@ -323,20 +356,30 @@
                                  prop="condBrl5HoldTemp"></el-table-column>
                 <el-table-column :width="20 * '料筒6保持温度'.length" label="料筒6保持温度"
                                  prop="condBrl6HoldTemp"></el-table-column>
-                <el-table-column :width="20 * '喷嘴1设定温度'.length" label="喷嘴1设定温度" prop="condNozzle1Set"></el-table-column>
-                <el-table-column :width="20 * '料筒1设定温度'.length" label="料筒1设定温度" prop="condBarrel1Set"></el-table-column>
-                <el-table-column :width="20 * '料筒2设定温度'.length" label="料筒2设定温度" prop="condBarrel2Set"></el-table-column>
-                <el-table-column :width="20 * '料筒3设定温度'.length" label="料筒3设定温度" prop="condBarrel3Set"></el-table-column>
-                <el-table-column :width="20 * '料筒4设定温度'.length" label="料筒4设定温度" prop="condBarrel4Set"></el-table-column>
-                <el-table-column :width="20 * '料筒5设定温度'.length" label="料筒5设定温度" prop="condBarrel5Set"></el-table-column>
-                <el-table-column :width="20 * '料筒6设定温度'.length" label="料筒6设定温度" prop="condBarrel6Set"></el-table-column>
-                <el-table-column :width="20 * '模具1设定温度'.length" label="模具1设定温度" prop="condMold1Set"></el-table-column>
-                <el-table-column :width="20 * '模具2设定温度'.length" label="模具2设定温度" prop="condMold2Set"></el-table-column>
+                <el-table-column :width="20 * '喷嘴1设定温度'.length" label="喷嘴1设定温度"
+                                 prop="condNozzle1Set"></el-table-column>
+                <el-table-column :width="20 * '料筒1设定温度'.length" label="料筒1设定温度"
+                                 prop="condBarrel1Set"></el-table-column>
+                <el-table-column :width="20 * '料筒2设定温度'.length" label="料筒2设定温度"
+                                 prop="condBarrel2Set"></el-table-column>
+                <el-table-column :width="20 * '料筒3设定温度'.length" label="料筒3设定温度"
+                                 prop="condBarrel3Set"></el-table-column>
+                <el-table-column :width="20 * '料筒4设定温度'.length" label="料筒4设定温度"
+                                 prop="condBarrel4Set"></el-table-column>
+                <el-table-column :width="20 * '料筒5设定温度'.length" label="料筒5设定温度"
+                                 prop="condBarrel5Set"></el-table-column>
+                <el-table-column :width="20 * '料筒6设定温度'.length" label="料筒6设定温度"
+                                 prop="condBarrel6Set"></el-table-column>
+                <el-table-column :width="20 * '模具1设定温度'.length" label="模具1设定温度"
+                                 prop="condMold1Set"></el-table-column>
+                <el-table-column :width="20 * '模具2设定温度'.length" label="模具2设定温度"
+                                 prop="condMold2Set"></el-table-column>
                 <el-table-column :width="20 * '顶出开始模式:模具'.length" label="顶出开始模式:模具"
                                  prop="condEjectStartModeMold"></el-table-column>
                 <el-table-column :width="20 * '顶出开始位置:模具'.length" label="顶出开始位置:模具"
                                  prop="condEjectStartPosMold"></el-table-column>
-                <el-table-column :width="20 * '加速度模式'.length" label="加速度模式" prop="condAccelMode"></el-table-column>
+                <el-table-column :width="20 * '加速度模式'.length" label="加速度模式"
+                                 prop="condAccelMode"></el-table-column>
                 <el-table-column :width="20 * '计量模式'.length" label="计量模式" prop="condExtrdSw"></el-table-column>
                 <el-table-column :width="20 * '计量切换位置1'.length" label="计量切换位置1"
                                  prop="condExtrdSwPos1"></el-table-column>
@@ -350,8 +393,10 @@
                                  prop="condExtrdSwPos5"></el-table-column>
                 <el-table-column :width="20 * '减压距离'.length" label="减压距离" prop="condDcmpDist"></el-table-column>
                 <el-table-column :width="20 * '减压速度'.length" label="减压速度" prop="condDcmpVel"></el-table-column>
-                <el-table-column :width="20 * '冷却时间'.length" label="冷却时间" prop="condCoolTime1"></el-table-column>
-                <el-table-column :width="20 * '冷却时间'.length" label="冷却时间" prop="condCoolTime2"></el-table-column>
+                <el-table-column :width="20 * '冷却时间'.length" label="冷却时间"
+                                 prop="condCoolTime1"></el-table-column>
+                <el-table-column :width="20 * '冷却时间'.length" label="冷却时间"
+                                 prop="condCoolTime2"></el-table-column>
                 <el-table-column :width="20 * '喷嘴1上限温度'.length" label="喷嘴1上限温度"
                                  prop="condNozzle1High"></el-table-column>
                 <el-table-column :width="20 * '料筒1上限温度'.length" label="料筒1上限温度"
@@ -362,56 +407,91 @@
                                  prop="condBarrel3High"></el-table-column>
                 <el-table-column :width="20 * '料斗下上限温度'.length" label="料斗下上限温度"
                                  prop="condFeedThroatHigh"></el-table-column>
-                <el-table-column :width="20 * '模具1上限温度'.length" label="模具1上限温度" prop="condMold1High"></el-table-column>
-                <el-table-column :width="20 * '模具2上限温度'.length" label="模具2上限温度" prop="condMold2High"></el-table-column>
-                <el-table-column :width="20 * '模具3上限温度'.length" label="模具3上限温度" prop="condMold3High"></el-table-column>
-                <el-table-column :width="20 * '模具4上限温度'.length" label="模具4上限温度" prop="condMold4High"></el-table-column>
+                <el-table-column :width="20 * '模具1上限温度'.length" label="模具1上限温度"
+                                 prop="condMold1High"></el-table-column>
+                <el-table-column :width="20 * '模具2上限温度'.length" label="模具2上限温度"
+                                 prop="condMold2High"></el-table-column>
+                <el-table-column :width="20 * '模具3上限温度'.length" label="模具3上限温度"
+                                 prop="condMold3High"></el-table-column>
+                <el-table-column :width="20 * '模具4上限温度'.length" label="模具4上限温度"
+                                 prop="condMold4High"></el-table-column>
                 <el-table-column :width="20 * '料斗下设定温度'.length" label="料斗下设定温度"
                                  prop="condFeedThroatSet"></el-table-column>
-                <el-table-column :width="20 * '模具3设定温度'.length" label="模具3设定温度" prop="condMold3Set"></el-table-column>
-                <el-table-column :width="20 * '模具4设定温度'.length" label="模具4设定温度" prop="condMold4Set"></el-table-column>
-                <el-table-column :width="20 * '喷嘴1下限温度'.length" label="喷嘴1下限温度" prop="condNozzle1Low"></el-table-column>
-                <el-table-column :width="20 * '料筒1下限温度'.length" label="料筒1下限温度" prop="condBarrel1Low"></el-table-column>
-                <el-table-column :width="20 * '料筒2下限温度'.length" label="料筒2下限温度" prop="condBarrel2Low"></el-table-column>
-                <el-table-column :width="20 * '料筒3下限温度'.length" label="料筒3下限温度" prop="condBarrel3Low"></el-table-column>
+                <el-table-column :width="20 * '模具3设定温度'.length" label="模具3设定温度"
+                                 prop="condMold3Set"></el-table-column>
+                <el-table-column :width="20 * '模具4设定温度'.length" label="模具4设定温度"
+                                 prop="condMold4Set"></el-table-column>
+                <el-table-column :width="20 * '喷嘴1下限温度'.length" label="喷嘴1下限温度"
+                                 prop="condNozzle1Low"></el-table-column>
+                <el-table-column :width="20 * '料筒1下限温度'.length" label="料筒1下限温度"
+                                 prop="condBarrel1Low"></el-table-column>
+                <el-table-column :width="20 * '料筒2下限温度'.length" label="料筒2下限温度"
+                                 prop="condBarrel2Low"></el-table-column>
+                <el-table-column :width="20 * '料筒3下限温度'.length" label="料筒3下限温度"
+                                 prop="condBarrel3Low"></el-table-column>
                 <el-table-column :width="20 * '料斗下下限温度'.length" label="料斗下下限温度"
                                  prop="condFeedThroatLow"></el-table-column>
-                <el-table-column :width="20 * '模具1下限温度'.length" label="模具1下限温度" prop="condMold1Low"></el-table-column>
-                <el-table-column :width="20 * '模具2下限温度'.length" label="模具2下限温度" prop="condMold2Low"></el-table-column>
-                <el-table-column :width="20 * '模具3下限温度'.length" label="模具3下限温度" prop="condMold3Low"></el-table-column>
-                <el-table-column :width="20 * '模具4下限温度'.length" label="模具4下限温度" prop="condMold4Low"></el-table-column>
-                <el-table-column :width="20 * '闭模限'.length" label="闭模限" prop="condCloseLimitPos"></el-table-column>
+                <el-table-column :width="20 * '模具1下限温度'.length" label="模具1下限温度"
+                                 prop="condMold1Low"></el-table-column>
+                <el-table-column :width="20 * '模具2下限温度'.length" label="模具2下限温度"
+                                 prop="condMold2Low"></el-table-column>
+                <el-table-column :width="20 * '模具3下限温度'.length" label="模具3下限温度"
+                                 prop="condMold3Low"></el-table-column>
+                <el-table-column :width="20 * '模具4下限温度'.length" label="模具4下限温度"
+                                 prop="condMold4Low"></el-table-column>
+                <el-table-column :width="20 * '闭模限'.length" label="闭模限"
+                                 prop="condCloseLimitPos"></el-table-column>
                 <el-table-column :width="20 * '闭模变速位置1'.length" label="闭模变速位置1"
                                  prop="condCloseSwPos1"></el-table-column>
                 <el-table-column :width="20 * '闭模变速位置2'.length" label="闭模变速位置2"
                                  prop="condCloseSwPos2"></el-table-column>
                 <el-table-column :width="20 * '闭模变速位置3'.length" label="闭模变速位置3"
                                  prop="condCloseSwPos3"></el-table-column>
-                <el-table-column :width="20 * '模具保护位置'.length" label="模具保护位置" prop="condMoldProtect"></el-table-column>
-                <el-table-column :width="20 * '模具接触位置'.length" label="模具接触位置" prop="condMoldTouchPos"></el-table-column>
-                <el-table-column :width="20 * '开模变速位置1'.length" label="开模变速位置1" prop="condOpenSwPos1"></el-table-column>
-                <el-table-column :width="20 * '开模变速位置2'.length" label="开模变速位置2" prop="condOpenSwPos2"></el-table-column>
-                <el-table-column :width="20 * '开模变速位置3'.length" label="开模变速位置3" prop="condOpenSwPos3"></el-table-column>
-                <el-table-column :width="20 * '开模变速位置4'.length" label="开模变速位置4" prop="condOpenSwPos4"></el-table-column>
-                <el-table-column :width="20 * '开模结束位置'.length" label="开模结束位置" prop="condFullyOpenPos"></el-table-column>
+                <el-table-column :width="20 * '模具保护位置'.length" label="模具保护位置"
+                                 prop="condMoldProtect"></el-table-column>
+                <el-table-column :width="20 * '模具接触位置'.length" label="模具接触位置"
+                                 prop="condMoldTouchPos"></el-table-column>
+                <el-table-column :width="20 * '开模变速位置1'.length" label="开模变速位置1"
+                                 prop="condOpenSwPos1"></el-table-column>
+                <el-table-column :width="20 * '开模变速位置2'.length" label="开模变速位置2"
+                                 prop="condOpenSwPos2"></el-table-column>
+                <el-table-column :width="20 * '开模变速位置3'.length" label="开模变速位置3"
+                                 prop="condOpenSwPos3"></el-table-column>
+                <el-table-column :width="20 * '开模变速位置4'.length" label="开模变速位置4"
+                                 prop="condOpenSwPos4"></el-table-column>
+                <el-table-column :width="20 * '开模结束位置'.length" label="开模结束位置"
+                                 prop="condFullyOpenPos"></el-table-column>
                 <el-table-column :width="20 * '顶出开始位置'.length" label="顶出开始位置"
                                  prop="condEjectStartPos"></el-table-column>
-                <el-table-column :width="20 * '闭模速度1'.length" label="闭模速度1" prop="condCloseVel1"></el-table-column>
-                <el-table-column :width="20 * '闭模速度2'.length" label="闭模速度2" prop="condCloseVel2"></el-table-column>
-                <el-table-column :width="20 * '闭模速度3'.length" label="闭模速度3" prop="condCloseVel3"></el-table-column>
-                <el-table-column :width="20 * '闭模速度4'.length" label="闭模速度4" prop="condCloseVel4"></el-table-column>
-                <el-table-column :width="20 * '模具接触速度'.length" label="模具接触速度" prop="condMoldTouchVel"></el-table-column>
-                <el-table-column :width="20 * '开模速度1'.length" label="开模速度1" prop="condOpenVel1"></el-table-column>
-                <el-table-column :width="20 * '开模速度2'.length" label="开模速度2" prop="condOpenVel2"></el-table-column>
-                <el-table-column :width="20 * '开模速度3'.length" label="开模速度3" prop="condOpenVel3"></el-table-column>
-                <el-table-column :width="20 * '开模速度4'.length" label="开模速度4" prop="condOpenVel4"></el-table-column>
-                <el-table-column :width="20 * '开模结束速度'.length" label="开模结束速度" prop="condFullyOpenVel"></el-table-column>
-                <el-table-column :width="20 * '闭模段数'.length" label="闭模段数" prop="condCloseStep"></el-table-column>
+                <el-table-column :width="20 * '闭模速度1'.length" label="闭模速度1"
+                                 prop="condCloseVel1"></el-table-column>
+                <el-table-column :width="20 * '闭模速度2'.length" label="闭模速度2"
+                                 prop="condCloseVel2"></el-table-column>
+                <el-table-column :width="20 * '闭模速度3'.length" label="闭模速度3"
+                                 prop="condCloseVel3"></el-table-column>
+                <el-table-column :width="20 * '闭模速度4'.length" label="闭模速度4"
+                                 prop="condCloseVel4"></el-table-column>
+                <el-table-column :width="20 * '模具接触速度'.length" label="模具接触速度"
+                                 prop="condMoldTouchVel"></el-table-column>
+                <el-table-column :width="20 * '开模速度1'.length" label="开模速度1"
+                                 prop="condOpenVel1"></el-table-column>
+                <el-table-column :width="20 * '开模速度2'.length" label="开模速度2"
+                                 prop="condOpenVel2"></el-table-column>
+                <el-table-column :width="20 * '开模速度3'.length" label="开模速度3"
+                                 prop="condOpenVel3"></el-table-column>
+                <el-table-column :width="20 * '开模速度4'.length" label="开模速度4"
+                                 prop="condOpenVel4"></el-table-column>
+                <el-table-column :width="20 * '开模结束速度'.length" label="开模结束速度"
+                                 prop="condFullyOpenVel"></el-table-column>
+                <el-table-column :width="20 * '闭模段数'.length" label="闭模段数"
+                                 prop="condCloseStep"></el-table-column>
                 <el-table-column :width="20 * '开模段数'.length" label="开模段数" prop="condOpenStep"></el-table-column>
-                <el-table-column :width="20 * '模具保护力1'.length" label="模具保护力1" prop="condMoldProtect1"></el-table-column>
+                <el-table-column :width="20 * '模具保护力1'.length" label="模具保护力1"
+                                 prop="condMoldProtect1"></el-table-column>
                 <el-table-column :width="20 * '模具保护力1(减)'.length" label="模具保护力1(减)"
                                  prop="condMoldProtect1Minus"></el-table-column>
-                <el-table-column :width="20 * '模具保护力2'.length" label="模具保护力2" prop="condMoldProtect2"></el-table-column>
+                <el-table-column :width="20 * '模具保护力2'.length" label="模具保护力2"
+                                 prop="condMoldProtect2"></el-table-column>
                 <el-table-column :width="20 * '模具保护力2(减)'.length" label="模具保护力2(减)"
                                  prop="condMoldProtect2Minus"></el-table-column>
                 <el-table-column :width="20 * '模具保护时间1'.length" label="模具保护时间1"
@@ -420,7 +500,8 @@
                                  prop="condProtectTime2"></el-table-column>
                 <el-table-column :width="20 * '顶杆动作类型'.length" label="顶杆动作类型"
                                  prop="condEjectPattern1"></el-table-column>
-                <el-table-column :width="20 * '顶出次数'.length" label="顶出次数" prop="condEjectPulse"></el-table-column>
+                <el-table-column :width="20 * '顶出次数'.length" label="顶出次数"
+                                 prop="condEjectPulse"></el-table-column>
                 <el-table-column :width="20 * '顶出开始模式'.length" label="顶出开始模式"
                                  prop="condEjectStartMode"></el-table-column>
                 <el-table-column :width="20 * '顶杆后退位置'.length" label="顶杆后退位置"
@@ -438,7 +519,8 @@
                 <el-table-column :width="20 * '顶杆前进停止'.length" label="顶杆前进停止"
                                  prop="condEjectDwellInAdv"></el-table-column>
                 <el-table-column :width="20 * 'HR模式'.length" label="HR模式" prop="condHrMode"></el-table-column>
-                <el-table-column :width="20 * '切换模式'.length" label="切换模式" prop="condTransMode"></el-table-column>
+                <el-table-column :width="20 * '切换模式'.length" label="切换模式"
+                                 prop="condTransMode"></el-table-column>
                 <el-table-column :width="20 * '工序监视项目05'.length" label="工序监视项目05"
                                  prop="condProcMoniItem5"></el-table-column>
                 <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>
@@ -483,9 +565,12 @@
                 <el-table-column :width="65" label="射出数" prop="monitShotcount"></el-table-column>
                 <el-table-column :width="65" label="正品数" prop="monitGoodcount"></el-table-column>
                 <el-table-column :width="20 * '射出时间'.length" label="射出时间" prop="monitInjTime"></el-table-column>
-                <el-table-column :width="20 * '计量时间'.length" label="计量时间" prop="monitRecovTime"></el-table-column>
-                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲" prop="monitMCushion"></el-table-column>
-                <el-table-column :width="20 * '计量位置'.length" label="计量位置" prop="monitExtrdPos"></el-table-column>
+                <el-table-column :width="20 * '计量时间'.length" label="计量时间"
+                                 prop="monitRecovTime"></el-table-column>
+                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲"
+                                 prop="monitMCushion"></el-table-column>
+                <el-table-column :width="20 * '计量位置'.length" label="计量位置"
+                                 prop="monitExtrdPos"></el-table-column>
                 <el-table-column :width="20 * '峰值压'.length" label="峰值压" prop="monitPeakPrs"></el-table-column>
                 <el-table-column :width="20 * 'V_P位置'.length" label="V_P位置" prop="monitVPPos"></el-table-column>
                 <el-table-column :width="20 * '模具1'.length" label="模具1" prop="monitMold1"></el-table-column>
@@ -496,31 +581,40 @@
                 <el-table-column :width="20 * '料筒2'.length" label="料筒2" prop="monitBarrel2"></el-table-column>
                 <el-table-column :width="20 * '料筒3'.length" label="料筒3" prop="monitBarrel3"></el-table-column>
                 <el-table-column :width="20 * '料筒4'.length" label="料筒4" prop="monitBarrel4"></el-table-column>
-                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度" prop="monitFeedTh"></el-table-column>
-                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置" prop="monitExtrdStart"></el-table-column>
-                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩" prop="monitExtrdTorq"></el-table-column>
+                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度"
+                                 prop="monitFeedTh"></el-table-column>
+                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置"
+                                 prop="monitExtrdStart"></el-table-column>
+                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩"
+                                 prop="monitExtrdTorq"></el-table-column>
                 <el-table-column :width="20 * '模具3'.length" label="模具3" prop="monitMold3"></el-table-column>
                 <el-table-column :width="20 * '模具4'.length" label="模具4" prop="monitMold4"></el-table-column>
                 <el-table-column :width="20 * '峰值时间'.length" label="峰值时间" prop="monitPeakT"></el-table-column>
                 <el-table-column :width="20 * '峰值位置'.length" label="峰值位置" prop="monitPeakPos"></el-table-column>
                 <el-table-column :width="20 * '推顶固定偏差扭矩'.length" label="推顶固定偏差扭矩"
                                  prop="monitEjeDevStTrq"></el-table-column>
-                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间" prop="monitCloseTime"></el-table-column>
+                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间"
+                                 prop="monitCloseTime"></el-table-column>
                 <el-table-column :width="20 * 'V-P压力'.length" label="V-P压力" prop="monitVPPrs"></el-table-column>
                 <el-table-column :width="20 * '模具5'.length" label="模具5" prop="monitMold5"></el-table-column>
                 <el-table-column :width="20 * '模具6'.length" label="模具6" prop="monitMold6"></el-table-column>
-                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压" prop="monitInjPres"></el-table-column>
+                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压"
+                                 prop="monitInjPres"></el-table-column>
                 <el-table-column :width="20 * 'V-P补偿'.length" label="V-P补偿" prop="monitVPAdj"></el-table-column>
                 <el-table-column :width="20 * '逆流峰值'.length" label="逆流峰值" prop="monitFlwPeak"></el-table-column>
                 <el-table-column :width="20 * '逆流量'.length" label="逆流量" prop="monitBackflw"></el-table-column>
-                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间" prop="monitLockupTim"></el-table-column>
-                <el-table-column :width="20 * '取出时间'.length" label="取出时间" prop="monitPickupTim"></el-table-column>
-                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间" prop="monitResidenceT"></el-table-column>
+                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间"
+                                 prop="monitLockupTim"></el-table-column>
+                <el-table-column :width="20 * '取出时间'.length" label="取出时间"
+                                 prop="monitPickupTim"></el-table-column>
+                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间"
+                                 prop="monitResidenceT"></el-table-column>
                 <el-table-column :width="20 * '顶杆平均偏差扭矩'.length" label="顶杆平均偏差扭矩"
                                  prop="monitEjeDevAvTrq"></el-table-column>
                 <el-table-column :width="20 * '模具7'.length" label="模具7" prop="monitMold7"></el-table-column>
                 <el-table-column :width="20 * '模具8'.length" label="模具8" prop="monitMold8"></el-table-column>
-                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置" prop="monitInjStartPos"></el-table-column>
+                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置"
+                                 prop="monitInjStartPos"></el-table-column>
                 <el-table-column :width="20 * '螺杆旋转量'.length" label="螺杆旋转量"
                                  prop="monitScrewRevolution"></el-table-column>
                 <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>

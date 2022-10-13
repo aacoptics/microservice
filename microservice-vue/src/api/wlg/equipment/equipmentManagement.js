@@ -55,7 +55,6 @@ export function handleUpdate(updateForm) {
 }
 
 
-
 export function findMchNameList() {
     return request({
         url: '/wlg-equipment/equipmentManagement/findMchNameList',

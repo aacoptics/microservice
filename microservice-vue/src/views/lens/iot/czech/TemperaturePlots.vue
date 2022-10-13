@@ -1,21 +1,22 @@
 <template>
   <div>
     <div class="aac-container">
-<!--      <el-tabs v-model="temperaturePlots" @tab-click="handleClick">-->
-<!--        <el-tab-pane label="Spindle Temperature" name="spindle">-->
-<!--          <div id="spindle" style="border:1px solid blue;height:600px;width:100%"></div>-->
-<!--        </el-tab-pane>-->
-<!--        <el-tab-pane label="Air Shower Temperature" name="airShower">-->
-<!--          <div id="airShower" style="border:1px solid blue;height:600px;width:100%"></div>-->
-<!--        </el-tab-pane>-->
-<!--        <el-tab-pane label="Bearing Temperature" name="bearing">-->
-<!--          <div id="bearing" style="border:1px solid blue;height:600px;width:100%"></div>-->
-<!--        </el-tab-pane>-->
-<!--        <el-tab-pane label="Motor Temperature" name="motor">-->
-<!--          <div id="motor" style="border:1px solid blue;height:600px;width:100%"></div>-->
-<!--        </el-tab-pane>-->
-<!--      </el-tabs>-->
-      <el-button type="primary" icon="el-icon-refresh" style="margin-bottom:20px" @click="refreshData">Refresh</el-button>
+      <!--      <el-tabs v-model="temperaturePlots" @tab-click="handleClick">-->
+      <!--        <el-tab-pane label="Spindle Temperature" name="spindle">-->
+      <!--          <div id="spindle" style="border:1px solid blue;height:600px;width:100%"></div>-->
+      <!--        </el-tab-pane>-->
+      <!--        <el-tab-pane label="Air Shower Temperature" name="airShower">-->
+      <!--          <div id="airShower" style="border:1px solid blue;height:600px;width:100%"></div>-->
+      <!--        </el-tab-pane>-->
+      <!--        <el-tab-pane label="Bearing Temperature" name="bearing">-->
+      <!--          <div id="bearing" style="border:1px solid blue;height:600px;width:100%"></div>-->
+      <!--        </el-tab-pane>-->
+      <!--        <el-tab-pane label="Motor Temperature" name="motor">-->
+      <!--          <div id="motor" style="border:1px solid blue;height:600px;width:100%"></div>-->
+      <!--        </el-tab-pane>-->
+      <!--      </el-tabs>-->
+      <el-button icon="el-icon-refresh" style="margin-bottom:20px" type="primary" @click="refreshData">Refresh
+      </el-button>
       <div id="spindle" style="border:1px solid blue;height:600px;width:100%"></div>
       <div id="airShower" style="border:1px solid blue;height:600px;width:100%"></div>
       <div id="bearing" style="border:1px solid blue;height:600px;width:100%"></div>
@@ -28,9 +29,12 @@
 <script>
 import * as echarts from 'echarts';
 import {
-  getSpindleTemperature, getAirTemperature,
-  getBearingTemperature,getMotorTemperature
+  getAirTemperature,
+  getBearingTemperature,
+  getMotorTemperature,
+  getSpindleTemperature
 } from "@/api/lens/iot/czech";
+
 export default {
   name: "temperaturePlots",
   props: {
@@ -77,20 +81,20 @@ export default {
       var strDate = date.getDate();
       var hour = date.getHours();
       var minutes = date.getMinutes();
-      if(month >= 1 && month <= 9) {
+      if (month >= 1 && month <= 9) {
         month = "0" + month;
       }
-      if(strDate >= 0 && strDate <= 9) {
+      if (strDate >= 0 && strDate <= 9) {
         strDate = "0" + strDate;
       }
-      if(hour >= 0 && hour <= 9) {
+      if (hour >= 0 && hour <= 9) {
         hour = "0" + hour;
       }
-      if(minutes >= 0 && minutes <= 9) {
+      if (minutes >= 0 && minutes <= 9) {
         minutes = "0" + hour;
       }
       var formatDate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-      + " " + hour + seperator2 + minutes + seperator2 + date.getSeconds();
+          + " " + hour + seperator2 + minutes + seperator2 + date.getSeconds();
       return formatDate
     },
 
@@ -121,26 +125,26 @@ export default {
       var endTime = this.getFormatDate(new Date(new Date().getTime() - 6 * 60 * 60 * 1000));
       var startTime = this.getFormatDate(new Date(new Date().getTime() - 18 * 60 * 60 * 1000));
       getSpindleTemperature(startTime, endTime, this.machineName).then((response) => {
-            const responseData = response.data
-            if (responseData.code === '000000') {
-              responseData.data.forEach(item => {
-                this.spindleDate.push(item.time);
-                this.spindleTemperature.push(item.temperature);
-                this.spindleTopTemperature.push(21.015);
-                this.spindleBottomTemperature.push(20.985);
-              })
-              var arr = this.spindleTemperature.slice(0);
-              console.log(arr);
-              arr.sort(function (a, b) {
-                return a - b;
-              });
-              const min = arr[0];
-              console.log("min=" + min);
-              const max = arr[arr.length - 1];
-              console.log("max=" + max);
-              //console.log(arr);
-              this.drawSpindlePlot(this.machineName, min, max)
-            }
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          responseData.data.forEach(item => {
+            this.spindleDate.push(item.time);
+            this.spindleTemperature.push(item.temperature);
+            this.spindleTopTemperature.push(21.015);
+            this.spindleBottomTemperature.push(20.985);
+          })
+          var arr = this.spindleTemperature.slice(0);
+          console.log(arr);
+          arr.sort(function (a, b) {
+            return a - b;
+          });
+          const min = arr[0];
+          console.log("min=" + min);
+          const max = arr[arr.length - 1];
+          console.log("max=" + max);
+          //console.log(arr);
+          this.drawSpindlePlot(this.machineName, min, max)
+        }
       })
 
     },
@@ -209,15 +213,15 @@ export default {
       var chartDom = document.getElementById('airShower');
       var airShowerPlot = echarts.init(chartDom);
       var reg = new RegExp(/^\d+(?:\.\d{0,4})?/);
-      var minValue = Number((min - (max-min)/10).toString().match(reg));
-      var maxValue = Number((max + (max-min)/10).toString().match(reg));
-      if(minValue > 21.375) {
-        minValue = 21.375 - (21.425-21.375)/20
+      var minValue = Number((min - (max - min) / 10).toString().match(reg));
+      var maxValue = Number((max + (max - min) / 10).toString().match(reg));
+      if (minValue > 21.375) {
+        minValue = 21.375 - (21.425 - 21.375) / 20
       }
-      if(maxValue < 21.425) {
-        maxValue = 21.425 + (21.425-21.375)/20
+      if (maxValue < 21.425) {
+        maxValue = 21.425 + (21.425 - 21.375) / 20
       }
-      var intervalValue = Number(((maxValue-minValue)/20).toString().match(reg));
+      var intervalValue = Number(((maxValue - minValue) / 20).toString().match(reg));
       var option;
 
       option = {
@@ -296,15 +300,15 @@ export default {
       var chartDom = document.getElementById('spindle');
       var spindlePlot = echarts.init(chartDom);
       var reg = new RegExp(/^\d+(?:\.\d{0,4})?/);
-      var minValue = Number((min - (max-min)/10).toString().match(reg));
-      var maxValue = Number((max + (max-min)/10).toString().match(reg));
-      if(minValue > 20.985) {
-        minValue = 20.985 - (21.015-20.985)/20
+      var minValue = Number((min - (max - min) / 10).toString().match(reg));
+      var maxValue = Number((max + (max - min) / 10).toString().match(reg));
+      if (minValue > 20.985) {
+        minValue = 20.985 - (21.015 - 20.985) / 20
       }
-      if(maxValue < 21.015) {
-        maxValue = 21.015 + (21.015-20.985)/20
+      if (maxValue < 21.015) {
+        maxValue = 21.015 + (21.015 - 20.985) / 20
       }
-      var intervalValue = Number(((maxValue-minValue)/20).toString().match(reg));
+      var intervalValue = Number(((maxValue - minValue) / 20).toString().match(reg));
 
       var option;
       option = {

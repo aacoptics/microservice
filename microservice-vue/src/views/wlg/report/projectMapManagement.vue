@@ -43,18 +43,19 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="商务项目号" prop="businessProject">
-                <el-input v-model="dataForm.businessProject" :disabled="!operation" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.businessProject" :disabled="!operation" auto-complete="off"
+                          clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-            <el-row>
+          <el-row>
             <el-col :span="20">
               <el-form-item label="内部项目号" prop="internalProject">
                 <el-input v-model="dataForm.internalProject" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">

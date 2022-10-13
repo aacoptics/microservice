@@ -42,8 +42,8 @@
 
       </el-row>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="false" :show-operation="false"
+                :height="400" :highlightCurrentRow="true" :show-operation="false"
+                :showBatchDelete="false" :stripe="false"
                 @findPage="findPage">
       </SysTable>
 

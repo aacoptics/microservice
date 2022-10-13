@@ -254,8 +254,8 @@ import {
   handleUpdate,
   listExportExcel,
   uploadExcel
-} from "@/api/lens/quality/qualityAppearanceYieldProblem";
-import {listAllUser} from "@/api/lens/quality/qualityMil";
+} from "@/api/lens/nonMobile/quality/qualityAppearanceYieldProblem";
+import {listAllUser} from "@/api/lens/nonMobile/quality/qualityMil";
 import {ElMessageBox} from "element-plus";
 
 export default {

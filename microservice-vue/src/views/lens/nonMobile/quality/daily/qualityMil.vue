@@ -431,7 +431,7 @@ import {
   listAllUser,
   listQualityMilExportExcel,
   uploadExcel
-} from "@/api/lens/quality/qualityMil";
+} from "@/api/lens/nonMobile/quality/qualityMil";
 import {ElMessageBox} from "element-plus";
 
 export default {
