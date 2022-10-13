@@ -200,7 +200,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'" label="分类" prop="type">
+              <el-form-item v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'" label="分类"
+                            prop="type">
                 <el-input v-model="dataForm.type" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
