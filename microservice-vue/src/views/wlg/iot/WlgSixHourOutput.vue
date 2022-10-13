@@ -25,10 +25,10 @@
                 :shortcuts="shortcuts"
                 :size="size"
                 end-placeholder="结束日期"
+                format="YYYY-MM-DD HH:00"
                 range-separator="至"
                 start-placeholder="开始日期"
-                type="datetimerange"
-                format="YYYY-MM-DD HH:00">
+                type="datetimerange">
             </el-date-picker>
           </el-form-item>
           <el-form-item>
@@ -51,7 +51,8 @@
         </el-form>
 
       </div>
-      <el-table id="inputReportTable" show-summary :summary-method="getSummaries" :data="tableData" :size="size" stripe style="width: 100%">
+      <el-table id="inputReportTable" :data="tableData" :size="size" :summary-method="getSummaries" show-summary stripe
+                style="width: 100%">
         <el-table-column fixed="left" label="日期" prop="dateStr" width="70">
           <template v-slot="scope">
             <span style="font-weight: bold;color: black">{{
@@ -69,12 +70,12 @@
         </el-table-column>
         <el-table-column label="机台号" prop="machineName" width="70"/>
         <el-table-column label="材料号" prop="materialName" width="60"/>
-        <el-table-column label="项目" :filters="projectName"
-                         :filter-method="filterProjectName"
+        <el-table-column :filter-method="filterProjectName" :filters="projectName"
+                         label="项目"
                          prop="projectName" width="80"/>
-        <el-table-column label="模具" :filters="moldName"
-                         :filter-method="filterModelName"
-                         filter-placement="bottom-end" prop="modelName" width="55"/>
+        <el-table-column :filter-method="filterModelName" :filters="moldName"
+                         filter-placement="bottom-end"
+                         label="模具" prop="modelName" width="55"/>
         <el-table-column label="周期" prop="cycleName" width="45"/>
         <el-table-column label="阶段" prop="periodName" width="45"/>
         <el-table-column label="标准周期" prop="standardCt" width="65"/>
@@ -111,9 +112,9 @@
             <el-tag style="width: 30px" type="success">{{ scope.row.inputQty - scope.row.brokenNg }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="更新人" :filters="operatorName"
-                         :filter-method="filterOperatorName"
-                         filter-placement="bottom-end" prop="updateUser" width="80"/>
+        <el-table-column :filter-method="filterOperatorName" :filters="operatorName"
+                         filter-placement="bottom-end"
+                         label="更新人" prop="updateUser" width="80"/>
         <el-table-column label="更新时间" prop="updateTime" width="100">
           <template v-slot="scope">
             <span>{{ this.$moment(scope.row.updateTime).format('YY/MM/DD HH:mm') }}</span>
@@ -127,7 +128,7 @@
                        @click="edit(scope.row, scope)">编辑</el-button>
             <el-button v-else :size="size" type="success" @click="updateOutPutInfo(scope.row)">确认</el-button>
             </span>
-            <el-button style="margin-left: 2px" :size="size" type="danger"
+            <el-button :size="size" style="margin-left: 2px" type="danger"
                        @click="onAddReasonClick(scope.row)">异常说明
             </el-button>
           </template>
@@ -247,7 +248,7 @@ export default {
           return
         }
         const values = data.map((item) => Number(item[column.property]))
-        if (column.property === 'inputQty' || column.property === 'outputQty' || column.property === 'brokenNg'|| column.property === 'brokenOk') {
+        if (column.property === 'inputQty' || column.property === 'outputQty' || column.property === 'brokenNg' || column.property === 'brokenOk') {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
             if (!Number.isNaN(value)) {

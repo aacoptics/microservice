@@ -47,10 +47,10 @@
                   v-model="scope.row.triggerStatus"
                   :active-value="1"
                   :inactive-value="0"
-                  width="60px"
                   active-text="启用"
                   inactive-text="停用"
                   inline-prompt
+                  width="60px"
                   @change="handleStatusChange(scope.row)"
               ></el-switch>
             </template>
@@ -247,7 +247,7 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" title="触发一次" destroy-on-close
+      <el-dialog v-model="triggerDialogVisible" :close-on-click-modal="false" destroy-on-close title="触发一次"
                  width="40%" @open="handleTriggerDialogOpen">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="110px">
           <el-form-item v-if="false" label="Id" prop="id">
@@ -290,8 +290,8 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="openCron" title="Cron表达式生成器" append-to-body destroy-on-close class="scrollbar">
-        <crontab @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
+      <el-dialog v-model="openCron" append-to-body class="scrollbar" destroy-on-close title="Cron表达式生成器">
+        <crontab :expression="expression" @fill="crontabFill" @hide="openCron=false"></crontab>
       </el-dialog>
     </div>
   </div>
@@ -303,7 +303,9 @@ import {
   deleteTask,
   findTaskInfoPage,
   handleAdd,
-  handleUpdate, startTask, stopTask,
+  handleUpdate,
+  startTask,
+  stopTask,
   triggerNotificationJob
 } from "@/api/notification/notificationTask";
 import {getDict} from "@/api/system/dictData";
@@ -369,7 +371,7 @@ export default {
         glueRemark: 'GLUE代码初始化',
         triggerStatus: 0
       },
-      executorInfo: [{"id":4,"appName":"notification-center","title":"统一消息中心"}],
+      executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
       robotOptions: [],
       executorHandlerOptions: [],
       currentRobotsInfo: [],
@@ -383,23 +385,23 @@ export default {
     // 任务状态修改
     handleStatusChange(row) {
       let text = row.triggerStatus === 1 ? "启用" : "停用";
-      this.$confirm('确认要' + text + '""' + row.planKey + '"任务吗?').then(() =>  {
-        if(row.triggerStatus === 1){
+      this.$confirm('确认要' + text + '""' + row.planKey + '"任务吗?').then(() => {
+        if (row.triggerStatus === 1) {
           startTask(row).then((res) => {
             const responseData = res.data
             if (responseData.code === '000000') {
               this.$message({message: text + '成功', type: 'success'})
-            }else{
+            } else {
               this.$message({message: responseData.data.msg, type: 'error'})
               row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
             }
           })
-        }else if(row.triggerStatus === 0)        {
+        } else if (row.triggerStatus === 0) {
           stopTask(row).then((res) => {
             const responseData = res.data
             if (responseData.code === '000000') {
               this.$message({message: text + '成功', type: 'success'})
-            }else{
+            } else {
               this.$message({message: responseData.data.msg, type: 'error'})
               row.triggerStatus = row.triggerStatus === 0 ? 1 : 0;
             }

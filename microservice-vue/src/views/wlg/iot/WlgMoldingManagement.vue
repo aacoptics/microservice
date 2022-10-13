@@ -16,10 +16,10 @@
         </el-form>
       </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
+                :height="400" :highlightCurrentRow="true" :show-operation-del="false"
+                :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
-                :show-operation-del="false"
                 @handleCurrentChange="handleSelectChange"
                 @handleEdit="handleEdit">
         <template v-slot:custom-column>
@@ -28,19 +28,20 @@
             <template v-slot="scope">
               <el-switch
                   v-model="scope.row.feedingAlarm"
+                  :active-value="true"
+                  :inactive-value="false"
                   active-text="是"
                   inactive-text="否"
                   inline-prompt
-                  :active-value="true"
-                  :inactive-value="false"
                   @change="handleStatusChange(scope)"
               />
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="CT维护">
             <template v-slot="scope">
-              <el-input-number size="small" v-model="scope.row.standardCt" controls-position="right" :precision="2" :step="0.1" :min="0" />
-              <el-button type="success" circle @click="handleCtButtonClick(scope)">
+              <el-input-number v-model="scope.row.standardCt" :min="0" :precision="2" :step="0.1"
+                               controls-position="right" size="small"/>
+              <el-button circle type="success" @click="handleCtButtonClick(scope)">
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'check']"/>
                 </template>
@@ -49,7 +50,7 @@
           </el-table-column>
         </template>
       </SysTable>
-      <el-dialog v-model="dialogVisible" destroy-on-close :title="operation?'新增':'阈值维护'" width="90%">
+      <el-dialog v-model="dialogVisible" :title="operation?'新增':'阈值维护'" destroy-on-close width="90%">
         <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id"
                                      :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
       </el-dialog>
@@ -61,8 +62,6 @@
 import SysTable from "@/components/SysTable";
 import {getMoldingInfo, handleUpdateFeedingAlarm} from "@/api/wlg/iot/moldingMachineParamData";
 import WlgMoldingParamThreshold from "./WlgMoldingParamThreshold"
-import {findUserRolesById} from "@/api/system/user";
-import {startTask, stopTask} from "@/api/notification/notificationTask";
 
 export default {
   name: "WlgMoldingManagement",

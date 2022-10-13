@@ -51,9 +51,10 @@
           </el-form-item>
         </el-form>
       </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" 
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
-                :stripe="true" :show-operation="false"
+      <SysTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
+                :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
+                :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                :stripe="true" border
                 @findPage="findPage">
       </SysTable>
 
@@ -64,7 +65,7 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {findEquipmentManagementPage, exportEquipmentExcel} from "@/api/wlg/equipment/equipmentManagement";
+import {exportEquipmentExcel, findEquipmentManagementPage} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
@@ -87,13 +88,13 @@ export default {
         mchManagerId: "",
         dutyPersonId: "",
       },
-      equipmentStatusOptions:[],
+      equipmentStatusOptions: [],
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
         {prop: "mchName", label: "资产名称", minWidth: 100},
         {prop: "spec", label: "规格", minWidth: 100},
         {prop: "typeVersion", label: "型号", minWidth: 100},
-        {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
+        {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
         {prop: "equipState", label: "资产状态", minWidth: 100},
         {prop: "assetGeneralCode", label: "资产使用性质编码", minWidth: 140},
@@ -164,7 +165,7 @@ export default {
     },
 
     exportExcelData(excelFileName) {
-      let pageRequest  = {};
+      let pageRequest = {};
       pageRequest.mchCode = this.filters.mchCode;
       pageRequest.mchName = this.filters.mchName;
       pageRequest.spec = this.filters.spec;

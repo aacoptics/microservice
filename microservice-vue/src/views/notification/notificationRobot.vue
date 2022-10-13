@@ -94,7 +94,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="机器人链接" prop="robotUrl" v-if="dataForm.robotType === 'group_robot'">
+            <el-form-item v-if="dataForm.robotType === 'group_robot'" label="机器人链接" prop="robotUrl">
               <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
