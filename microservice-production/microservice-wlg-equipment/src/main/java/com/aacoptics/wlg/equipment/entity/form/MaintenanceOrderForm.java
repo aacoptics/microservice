@@ -3,11 +3,13 @@ package com.aacoptics.wlg.equipment.entity.form;
 import com.aacoptics.common.web.entity.form.BaseForm;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
+import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @ApiModel
 @Data
@@ -29,4 +31,9 @@ public class MaintenanceOrderForm extends BaseForm<MaintenanceOrder> {
     @ApiModelProperty(value = "保养周期")
     private Long maintenancePeriod;
 
+    @ApiModelProperty(value = "状态")
+    private String status;
+
+
+    private List<MaintenanceOrderItem> maintenanceOrderItemList;
 }
