@@ -130,10 +130,10 @@ public class UmsContentServiceImplTest {
                     cardJson = feishuApi.getMarkdownMessage("**管理费用预算与实际费用统计（测试）** \n;时间：2022年3月;您负责部门费用如下;当月实际费用：￥14,616 K;当月预算金额：￥12,103 K;GAP节省费用：￥1,487 K;", imageKey);
 
                     final String chatId = feishuService.fetchChatIdByRobot("我的测试群");
-                    fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-                            chatId,
-                            FeishuService.MSG_TYPE_FILE,
-                            JSONUtil.createObj().set("file_key", fileKey));
+//                    fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+//                            chatId,
+//                            FeishuService.MSG_TYPE_FILE,
+//                            JSONUtil.createObj().set("file_key", fileKey));
                 } catch (IOException err) {
                     String msg = "解析http文件异常！{" + err.getMessage() + "}";
                     log.error(msg);
@@ -215,7 +215,7 @@ public class UmsContentServiceImplTest {
     @Test
     public void test2() {
         NotificationEntity notificationEntity = new NotificationEntity();
-        notificationEntity.setBatchId("22090616321");
+        notificationEntity.setBatchId("22090616346");
         notificationEntity.setPlanKey("ums_sop_ri_cost_cpx_qas");
         Robot robot = new Robot();
         robot.setId(1560167307305877506L);

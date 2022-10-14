@@ -56,7 +56,7 @@ public interface FeishuService {
 
     String fetchChatIdByRobot(String chatName);
 
-    boolean sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
+    JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
     JSONObject createTask(String userIdType,
                           JSONObject jsonObject);
