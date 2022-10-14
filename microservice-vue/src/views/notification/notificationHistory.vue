@@ -24,6 +24,12 @@
               :stripe="false" :show-operation="false"
               @findPage="findPage">
       <template v-slot:custom-column>
+        <el-table-column align="center" fixed="right" header-align="center" label="消息状态">
+          <template v-slot="scope">
+            <el-tag v-if="scope.row.msgStatus" type="success">已发送</el-tag>
+            <el-tag v-else type="danger">已撤回</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column align="center" fixed="right" header-align="center" label="操作">
           <template v-slot="scope">
             <el-button v-if="scope.row.msgStatus" type="warning" @click="handleDelete(scope)">撤回消息
@@ -31,7 +37,7 @@
                 <font-awesome-icon :icon="['fas', 'arrow-rotate-left']"/>
               </template>
             </el-button>
-            <el-button v-else disabled type="warning" @click="handleDelete(scope)">撤回消息
+            <el-button v-else disabled @click="handleDelete(scope)">撤回消息
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'arrow-rotate-left']"/>
               </template>
@@ -67,7 +73,6 @@ export default {
         {prop: "conTypeDesc", label: "消息类型描述", minWidth: 120},
         {prop: "messageId", label: "消息Id", minWidth: 80},
         {prop: "msgType", label: "消息类型", minWidth: 80},
-        {prop: "msgStatus", label: "消息状态", minWidth: 60, formatter: this.statusFormat},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
       ],
@@ -109,14 +114,7 @@ export default {
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
-    },
-
-    statusFormat: function (row, column) {
-      if(row[column.property])
-        return '已发送'
-      else
-        return '已撤回'
-    },
+    }
   },
 };
 </script>
