@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
 @TableName("ums_01_content_feishu_msg_history")
 public class UmsContentFeishuMsgHistory extends BasePo {
     private String batchId;
+    private String conType;
+    private String conTypeDesc;
     private String chatId;
     private String messageId;
     private String msgType;
+    private boolean msgStatus;
 }

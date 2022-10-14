@@ -152,6 +152,12 @@ public class UmsContentServiceImplTest {
     }
 
     @Test
+    public void TestDeleteMessage(){
+        boolean a = feishuService.deleteMessage("om_e76c721573686f69687cce3dd61c666a");
+        boolean b = feishuService.deleteMessage("om_92add780f075adf3c96c8dccd68fe416");
+    }
+
+    @Test
     public void Test() {
         List<XxlGroupInfo> xxlGroupInfoList = xxlGroupInfoService.list();
 

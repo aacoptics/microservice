@@ -134,6 +134,19 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
+    public boolean deleteMessage(String messageId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken)) return false;
+
+        final JSONObject result = feishuApiProvider.fetchDeleteMessage(accessToken, messageId);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+
+        return result.get("code", Integer.class) == 0;
+    }
+
+    @Override
     public JSONObject getImagePostMessage(String title, List<Tuple2<String, String>> imageTileAndKeys, List<String> atList) {
         final List<List<JSONObject>> content = new ArrayList<>();
 
