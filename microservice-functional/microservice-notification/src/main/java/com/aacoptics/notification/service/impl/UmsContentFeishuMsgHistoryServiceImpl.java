@@ -36,6 +36,7 @@ public class UmsContentFeishuMsgHistoryServiceImpl extends ServiceImpl<UmsConten
         QueryWrapper<UmsContentFeishuMsgHistory> queryWrapper = umsContentFeishuMsgHistoryQueryParam.build();
         queryWrapper.eq(StringUtils.isNotBlank(umsContentFeishuMsgHistoryQueryParam.getBatchId()), "batch_id", umsContentFeishuMsgHistoryQueryParam.getBatchId());
         queryWrapper.eq(StringUtils.isNotBlank(umsContentFeishuMsgHistoryQueryParam.getConType()), "con_type", umsContentFeishuMsgHistoryQueryParam.getConType());
+        queryWrapper.orderByDesc("id");
         return this.page(page, queryWrapper);
     }
 
