@@ -15,4 +15,6 @@ public interface UmsContentFeishuMsgHistoryService extends IService<UmsContentFe
     IPage<UmsContentFeishuMsgHistory> query(Page page, UmsContentFeishuMsgHistoryQueryParam umsContentFeishuMsgHistoryQueryParam);
 
     void deleteMessageByBatchId(String batchId);
+
+    boolean deleteMessageByBatchId(UmsContentFeishuMsgHistory umsContentFeishuMsgHistory);
 }

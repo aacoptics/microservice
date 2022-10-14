@@ -40,17 +40,28 @@ public class UmsContentFeishuMsgHistoryServiceImpl extends ServiceImpl<UmsConten
     }
 
     @Override
-    public void deleteMessageByBatchId(String batchId){
+    public void deleteMessageByBatchId(String batchId) {
         QueryWrapper<UmsContentFeishuMsgHistory> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("batch_id", batchId);
         queryWrapper.eq("msg_status", true);
         List<UmsContentFeishuMsgHistory> umsContentFeishuMsgHistories = this.list(queryWrapper);
-        if(umsContentFeishuMsgHistories.size() > 0){
+        if (umsContentFeishuMsgHistories.size() > 0) {
             for (UmsContentFeishuMsgHistory umsContentFeishuMsgHistory : umsContentFeishuMsgHistories) {
                 feishuService.deleteMessage(umsContentFeishuMsgHistory.getMessageId());
                 umsContentFeishuMsgHistory.setMsgStatus(false);
                 this.updateById(umsContentFeishuMsgHistory);
             }
         }
+    }
+
+    @Override
+    public boolean deleteMessageByBatchId(UmsContentFeishuMsgHistory umsContentFeishuMsgHistory) {
+        boolean res = feishuService.deleteMessage(umsContentFeishuMsgHistory.getMessageId());
+        if(res){
+            umsContentFeishuMsgHistory.setMsgStatus(false);
+            this.updateById(umsContentFeishuMsgHistory);
+            return true;
+        }
+        else return false;
     }
 }
