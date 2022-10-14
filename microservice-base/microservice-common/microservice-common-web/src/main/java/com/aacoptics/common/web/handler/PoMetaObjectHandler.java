@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 @Slf4j
 public class PoMetaObjectHandler implements MetaObjectHandler {
     /**
-     * 获取当前Token的用户，为空返回默认IoT
+     * 获取当前Token的用户，为空返回默认UDS
      *
      * @return
      */
