@@ -253,6 +253,8 @@ public class SendMessageServiceImpl implements SendMessageService {
         umsContentFeishuMsgHistory.setMessageId(messageId);
         umsContentFeishuMsgHistory.setMsgType(msgType);
         umsContentFeishuMsgHistory.setBatchId(umsContent.getBatchId());
+        umsContentFeishuMsgHistory.setConType(umsContent.getConType());
+        umsContentFeishuMsgHistory.setConTypeDesc(umsContent.getConTypeDesc());
         umsContentFeishuMsgHistory.setMsgStatus(true);
         umsContentFeishuMsgHistoryService.add(umsContentFeishuMsgHistory);
     }
