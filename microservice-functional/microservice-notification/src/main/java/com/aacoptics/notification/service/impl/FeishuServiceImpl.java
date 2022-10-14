@@ -116,14 +116,29 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    public boolean sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message) {
+    public JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message) {
         final String accessToken = fetchAccessToken();
-        if (StrUtil.isEmpty(accessToken)) return false;
+        if (StrUtil.isEmpty(accessToken)) return null;
         JSONObject jsonObject = JSONUtil.createObj()
                 .set("receive_id", receiveId)
                 .set("content", JSONUtil.toJsonStr(message))
                 .set("msg_type", messageType);
         final JSONObject result = feishuApiProvider.fetchSendMessageKey(accessToken, receiveIdType, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+
+        return result;
+//
+//        return result.get("code", Integer.class) == 0;
+    }
+
+    @Override
+    public boolean deleteMessage(String messageId) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken)) return false;
+
+        final JSONObject result = feishuApiProvider.fetchDeleteMessage(accessToken, messageId);
         final String throwable = result.get("Throwable", String.class);
         if (StrUtil.isNotEmpty(throwable))
             throw new BusinessException(throwable);

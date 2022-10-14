@@ -38,6 +38,9 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Resource
     UmsContentSubDaibanService umsContentSubDaibanService;
 
+    @Resource
+    UmsContentFeishuMsgHistoryService umsContentFeishuMsgHistoryService;
+
 
     @Resource
     FeishuApi feishuApi;
@@ -140,10 +143,12 @@ public class SendMessageServiceImpl implements SendMessageService {
                         String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getRobotName());
 
                         if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-                            boolean fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+                            JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
 
-                            if (!fileResult)
+                            if (fileResult.get("code", Integer.class) != 0)
                                 throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                            logFeishuMsg(fileResult, messageBatch);
                         }
 
                         if (messageTypeInfo.getRobotType().equals(RobotService.GROUP_ROBOT)) {
@@ -169,11 +174,12 @@ public class SendMessageServiceImpl implements SendMessageService {
                             }
                         } else if (messageTypeInfo.getRobotType().equals(RobotService.APPLICATION_ROBOT)) {
 
-                            boolean sendMsgResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+                            JSONObject sendMsgResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
 
-                            if (sendMsgResult) {
+                            if (sendMsgResult.get("code", Integer.class) == 0) {
                                 messageBatch.setIsStatus("1");
                                 umsContentService.updateById(messageBatch);
+                                logFeishuMsg(sendMsgResult, messageBatch);
                             } else {
                                 throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
@@ -187,16 +193,19 @@ public class SendMessageServiceImpl implements SendMessageService {
                         throw new BusinessException("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
 
                     if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-                        boolean resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
-                        if (!resultByFile)
+                        JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+                        if (resultByFile.get("code", Integer.class) != 0)
                             throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                        logFeishuMsg(resultByFile, messageBatch);
                     }
 
-                    boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+                    JSONObject resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
 
-                    if (resultBySendMsg) {
+                    if (resultBySendMsg.get("code", Integer.class) == 0) {
                         messageBatch.setIsStatus("1");
                         umsContentService.updateById(messageBatch);
+                        logFeishuMsg(resultBySendMsg, messageBatch);
                     } else {
                         throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                     }
@@ -231,6 +240,21 @@ public class SendMessageServiceImpl implements SendMessageService {
             taskBatch.setFeishuTaskId(taskId);
             umsContentSubDaibanService.updateById(taskBatch);
         }
+    }
+
+
+    private void logFeishuMsg(JSONObject result, UmsContent umsContent){
+        JSONObject data = result.getJSONObject("data");
+        String chatId = data.getStr("chat_id");
+        String messageId = data.getStr("message_id");
+        String msgType = data.getStr("msg_type");
+        UmsContentFeishuMsgHistory umsContentFeishuMsgHistory = new UmsContentFeishuMsgHistory();
+        umsContentFeishuMsgHistory.setChatId(chatId);
+        umsContentFeishuMsgHistory.setMessageId(messageId);
+        umsContentFeishuMsgHistory.setMsgType(msgType);
+        umsContentFeishuMsgHistory.setBatchId(umsContent.getBatchId());
+        umsContentFeishuMsgHistory.setMsgStatus(true);
+        umsContentFeishuMsgHistoryService.add(umsContentFeishuMsgHistory);
     }
 
     @Override
@@ -283,16 +307,16 @@ public class SendMessageServiceImpl implements SendMessageService {
 
             JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
 
-            boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+            JSONObject resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
 
-            if (resultBySendMsg) return Result.success();
+            if (resultBySendMsg.get("code", Integer.class) == 0) return Result.success();
             else return Result.fail("推送消息失败！");
         } else if (feishuMessage.getSendType().equals(FeishuService.RECEIVE_ID_TYPE_CHAT_ID)) {
             JSONObject cardJson = feishuApi.getMarkdownMessage(feishuMessage.getContent(), null);
             String chatId = feishuService.fetchChatIdByRobot(feishuMessage.getSendId());
             if (StrUtil.isBlank(chatId)) return Result.fail("推送消息失败，群不存在或者未将机器人拉进群聊！");
-            boolean resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
-            if (resultBySendMsg) return Result.success();
+            JSONObject resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+            if (resultBySendMsg.get("code", Integer.class) == 0) return Result.success();
             else return Result.fail("推送消息失败！");
         } else {
             return Result.fail("未知推送类型，请检查！");
