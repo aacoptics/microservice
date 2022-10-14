@@ -28,6 +28,9 @@ public class NotificationController {
     SendMessageService sendMessageService;
 
     @Resource
+    FeishuService feishuService;
+
+    @Resource
     UmsContentFeishuMsgHistoryService umsContentFeishuMsgHistoryService;
 
     @Resource
@@ -141,9 +144,12 @@ public class NotificationController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "batchId", value = "消息批次ID", required = true, dataType = "String"),
     })
-    @DeleteMapping(value = "/deleteMessage/{batchId}")
-    public Result deleteMessage(@PathVariable String batchId) {
-        umsContentFeishuMsgHistoryService.deleteMessageByBatchId(batchId);
-        return Result.success();
+    @DeleteMapping(value = "/deleteMessage/{id}")
+    public Result deleteMessage(@PathVariable Long id, @RequestBody UmsContentFeishuMsgHistory umsContentFeishuMsgHistory) {
+        umsContentFeishuMsgHistory.setId(id);
+        if (umsContentFeishuMsgHistoryService.deleteMessageByBatchId(umsContentFeishuMsgHistory))
+            return Result.success();
+        else
+            return Result.fail("撤回失败！");
     }
 }
