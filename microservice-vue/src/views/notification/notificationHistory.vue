@@ -68,13 +68,16 @@ export default {
         conType: ""
       },
       columns: [
-        {prop: "batchId", label: "消息批次号", minWidth: 110},
+        {prop: "batchId", label: "消息批次号", minWidth: 80},
         {prop: "conType", label: "消息类型", minWidth: 120},
         {prop: "conTypeDesc", label: "消息类型描述", minWidth: 120},
         {prop: "messageId", label: "消息Id", minWidth: 80},
-        {prop: "msgType", label: "消息类型", minWidth: 80},
-        {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
+        {prop: "msgType", label: "消息类型", minWidth: 60},
+        {prop: "updatedTime", label: "更新时间", minWidth: 80, formatter: this.dateTimeFormat},
+        {prop: "updatedBy", label: "更新人", minWidth: 80},
+        {prop: "createdTime", label: "创建时间", minWidth: 80, formatter: this.dateTimeFormat},
+        {prop: "createdBy", label: "创建人", minWidth: 80},
+
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
