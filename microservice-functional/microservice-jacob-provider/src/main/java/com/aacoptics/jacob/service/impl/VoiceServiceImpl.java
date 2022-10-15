@@ -14,9 +14,10 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -28,7 +29,7 @@ public class VoiceServiceImpl implements VoiceService {
     private String folderPath;
 
     @Override
-    public String generateVoiceFile(String fileName, VoiceFileInfo voiceFileInfo) {
+    public String generateVoiceFileBak(String fileName, VoiceFileInfo voiceFileInfo) {
         ActiveXComponent ax = null;
         Dispatch spVoice = null;
         Dispatch spFileStream = null;
@@ -76,6 +77,48 @@ public class VoiceServiceImpl implements VoiceService {
             }
         }
     }
+
+    @Override
+    public String generateVoiceFile(String fileName, VoiceFileInfo voiceFileInfo){
+        BufferedReader br = null;
+        try {
+            File file = new File(folderPath + "\\daemonTmp");
+            File tmpFile = new File(folderPath + "\\daemonTmp\\temp.tmp");//新建一个用来存储结果的缓存文件
+            if (!file.exists()){
+                file.mkdirs();
+            }
+            if(!tmpFile.exists()) {
+                tmpFile.createNewFile();
+            }
+            String cmdCode = folderPath + "SystemSpeechTest.exe " + folderPath + fileName + " " + voiceFileInfo.getMessage();
+            ProcessBuilder pb = new ProcessBuilder().command("cmd.exe", "/c", cmdCode).inheritIO();
+            pb.redirectErrorStream(true);//这里是把控制台中的红字变成了黑字，用通常的方法其实获取不到，控制台的结果是pb.start()方法内部输出的。
+            pb.redirectOutput(tmpFile);//把执行结果输出。
+            pb.start().waitFor();//等待语句执行完成，否则可能会读不到结果。
+            InputStream in = new FileInputStream(tmpFile);
+            br= new BufferedReader(new InputStreamReader(in));
+            String line = null;
+            while((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+            br.close();
+            br = null;
+            tmpFile.delete();//卸磨杀驴。
+            return folderPath + fileName + ".mp3";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if(br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     @Override
     public String formatVoiceFile(File inputFile, String outputFilePath) throws EncoderException, UnknownHostException {
