@@ -175,8 +175,15 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
     @Override
     public RepairOrder createRepairOrderByInspection(InspectionOrder inspectionOrder, InspectionOrderItem inspectionOrderItem) {
-
         RepairOrder repairOrder = new RepairOrder();
+
+        //生成工单号
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDateStr = orderNumberDateFormatter.format(currentDate);
+
+        repairOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
+
         repairOrder.setMchCode(inspectionOrder.getMchCode());
         repairOrder.setSourceType(RepairOrderSourceConstants.ORDER_SOURCE_TYPE_INSPECTION);
         repairOrder.setStatus(RepairOrderStatusConstants.CREATED);
@@ -195,6 +202,13 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
     @Override
     public RepairOrder createRepairOrderByMaintenance(MaintenanceOrder maintenanceOrder, MaintenanceOrderItem maintenanceOrderItem) {
         RepairOrder repairOrder = new RepairOrder();
+        //生成工单号
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDateStr = orderNumberDateFormatter.format(currentDate);
+
+        repairOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
+
         repairOrder.setMchCode(maintenanceOrder.getMchCode());
         repairOrder.setDutyPersonId(maintenanceOrder.getDutyPersonId());
 
