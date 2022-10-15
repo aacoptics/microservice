@@ -2,6 +2,7 @@ package com.aacoptics.wlg.equipment.service.impl;
 
 
 import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
@@ -313,7 +314,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         {
             //判断是否需要维修
             Integer isRepair = maintenanceOrderItem.getIsRepair();
-            if(isRepair == 1)
+            if(isRepair == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
             {
                 isRepairBoolean = true;
                 repairOrderService.createRepairOrderByMaintenance(targetMaintenanceOrder, maintenanceOrderItem);

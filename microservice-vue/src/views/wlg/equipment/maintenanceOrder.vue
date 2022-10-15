@@ -71,11 +71,11 @@
             <el-table-column label="起始范围值" prop="minValue"/>
             <el-table-column label="截至范围值" prop="maxValue"/>
             <el-table-column label="实际值" prop="actualValue"/>
-            <el-table-column label="是否完成" prop="isFinish"/>
+            <el-table-column label="是否完成" prop="isFinish" :formatter="yesNoFormat"/>
             <el-table-column label="保养结果" prop="maintenanceResult"/>
-            <el-table-column label="是否存在异常" prop="isException" width="130"/>
-            <el-table-column label="是否存在故障" prop="isFault" width="130"/>
-            <el-table-column label="是否需要维修" prop="isRepair" width="130"/>
+            <el-table-column label="是否存在异常" prop="isException" width="130" :formatter="yesNoFormat"/>
+            <el-table-column label="是否存在故障" prop="isFault" width="130" :formatter="yesNoFormat"/>
+            <el-table-column label="是否需要维修" prop="isRepair" width="130" :formatter="yesNoFormat"/>
             <el-table-column label="故障描述" prop="faultDesc"/>
             <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
             <el-table-column label="更新人" prop="updatedBy" width="120"/>
@@ -314,7 +314,8 @@ export default {
       },
       currentSelectMaintenanceOrderMainRowId: null,
       multipleSelection: [],
-      orderStatusOptions: []
+      orderStatusOptions: [],
+      yesNoOptions: [],
     };
   },
   mounted() {
@@ -325,6 +326,9 @@ export default {
     }),
         getDict("wlg_em_maintenance_order_status").then(response => {
           this.orderStatusOptions = response.data.data
+        })
+        getDict("wlg_em_yes_no").then(response => {
+          this.yesNoOptions = response.data.data
         })
   },
   methods: {
@@ -565,6 +569,9 @@ export default {
     },
     statusFormat: function (row) {
       return selectDictLabel(this.orderStatusOptions, row.status);
+    },
+    yesNoFormat: function (row, column,cellValue) {
+      return selectDictLabel(this.yesNoOptions, cellValue);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {
