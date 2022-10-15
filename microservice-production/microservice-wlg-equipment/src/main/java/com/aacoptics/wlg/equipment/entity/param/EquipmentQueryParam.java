@@ -57,5 +57,9 @@ public class EquipmentQueryParam extends BaseParam<Equipment> {
      */
     private String dutyPersonId;
 
+    /**
+     * 设备编号
+     */
+    private String equipNumber;
 
 }

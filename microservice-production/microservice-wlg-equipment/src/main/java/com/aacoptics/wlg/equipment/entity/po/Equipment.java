@@ -212,6 +212,12 @@ public class Equipment extends BasePo {
     private String equipStateDb;
 
     /**
+     * 设备编号
+     */
+    @TableField(value = "equip_number")
+    private String equipNumber;
+
+    /**
      * 最后点检时间
      */
     @TableField(value = "last_inspection_datetime")
