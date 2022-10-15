@@ -27,7 +27,7 @@ public class MaintenanceOrderForm extends BaseForm<MaintenanceOrder> {
     @ApiModelProperty(value = "型号")
     private String typeVersion;
 
-    @NotBlank(message = "保养周期不能为空")
+    @NotNull(message = "保养周期不能为空")
     @ApiModelProperty(value = "保养周期")
     private Long maintenancePeriod;
 
