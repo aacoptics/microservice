@@ -44,7 +44,7 @@ public class VoiceServiceController {
     @PostMapping(value = "/download")
     public Result downloadVoiceFile(@RequestBody @Valid VoiceFileInfo voiceFileInfo, HttpServletResponse resp) {
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        String filePath = voiceService.generateVoiceFile(fileName + ".mp3", voiceFileInfo);
+        String filePath = voiceService.generateVoiceFile(fileName, voiceFileInfo);
         if (filePath == null)
             return Result.fail("文字转语音失败！");
         try {
@@ -65,7 +65,7 @@ public class VoiceServiceController {
     @PostMapping(value = "/sendToSpeaker")
     public Result sendToSpeaker(@RequestBody @Valid SpeakerVoiceFileInfo speakerVoiceFileInfo) {
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        String filePath = voiceService.generateVoiceFile(fileName + ".mp3", speakerVoiceFileInfo);
+        String filePath = voiceService.generateVoiceFile(fileName, speakerVoiceFileInfo);
         if (filePath == null)
             return Result.fail("文字转语音失败！");
         try {
@@ -104,7 +104,7 @@ public class VoiceServiceController {
         VoiceFileInfo voiceFileInfo = new FeishuVoiceFileInfo();
         BeanUtils.copyProperties(feishuVoiceFileInfo, voiceFileInfo);
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        String filePath = voiceService.generateVoiceFile(fileName + ".mp3", voiceFileInfo);
+        String filePath = voiceService.generateVoiceFile(fileName, voiceFileInfo);
         if (filePath == null)
             return Result.fail("文字转语音失败！");
         String chatId = feishuService.fetchChatIdByRobot(feishuVoiceFileInfo.getGroupName());
