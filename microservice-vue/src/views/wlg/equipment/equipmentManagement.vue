@@ -212,6 +212,7 @@ export default {
       this.pageRequest.assetManagerId = this.filters.assetManagerId;
       this.pageRequest.mchManagerId = this.filters.mchManagerId;
       this.pageRequest.dutyPersonId = this.filters.dutyPersonId;
+      this.pageRequest.equipNumber = this.filters.equipNumber;
 
       findEquipmentManagementPage(this.pageRequest)
           .then((res) => {
@@ -234,6 +235,7 @@ export default {
       pageRequest.assetManagerId = this.filters.assetManagerId;
       pageRequest.mchManagerId = this.filters.mchManagerId;
       pageRequest.dutyPersonId = this.filters.dutyPersonId;
+      pageRequest.equipNumber = this.filters.equipNumber;
 
       this.exportLoading = true;
       exportEquipmentExcel(pageRequest).then(res => {
