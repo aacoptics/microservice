@@ -1,10 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
-import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
-import com.aacoptics.wlg.equipment.constant.RepairOrderSourceConstants;
-import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
@@ -102,10 +99,24 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         return this.removeById(id);
     }
 
+    @Transactional
     @Override
     public boolean update(InspectionOrder inspectionOrder) {
 
         boolean isSuccess = this.updateById(inspectionOrder);
+        if(isSuccess == false)
+        {
+            throw new BusinessException("更新工单异常");
+        }
+        List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
+        for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
+        {
+            isSuccess = inspectionOrderItemService.update(inspectionOrderItem);
+            if(isSuccess == false)
+            {
+                throw new BusinessException("更新工单项异常");
+            }
+        }
         return isSuccess;
     }
 
@@ -279,12 +290,17 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
     @Transactional
     @Override
     public boolean submitOrder(InspectionOrder inspectionOrder) {
-        String mchCode = inspectionOrder.getMchCode();
+        String orderStatus = inspectionOrder.getStatus();
+
+        InspectionOrder targetInspectionOrder = this.get(inspectionOrder.getId());
+
+        String mchCode = targetInspectionOrder.getMchCode();
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
-        if(equipment == null)
+        if(!InspectionOrderStatusConstants.STAGED.equals(orderStatus) && !InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))
         {
-            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+            throw new BusinessException("状态只能为1(已暂存)或2(已提交)，请确认");
         }
+
         List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
         boolean isRepairBoolean = false;
         for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
@@ -294,9 +310,14 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
             if(isRepair == 1)
             {
                 isRepairBoolean = true;
-                repairOrderService.createRepairOrderByInspection(inspectionOrder, inspectionOrderItem);
+                repairOrderService.createRepairOrderByInspection(targetInspectionOrder, inspectionOrderItem);
             }
         }
+
+        targetInspectionOrder.setStatus(orderStatus);
+        targetInspectionOrder.setInspectionOrderItemList(inspectionOrderItemList);
+
+
         //更新设备状态
         if(isRepairBoolean) {
             equipment.setStatus(EquipmentStatusConstants.REPAIR);
@@ -305,7 +326,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         equipmentService.update(equipment);
 
 
-        boolean isSuccess = this.updateById(inspectionOrder);
+        boolean isSuccess = this.updateById(targetInspectionOrder);
         return isSuccess;
     }
 }
