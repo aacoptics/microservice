@@ -188,6 +188,12 @@ public class EquipmentForm extends BaseForm<Equipment> {
     private String deptDirectorId;
 
     /**
+     * 设备编号
+     */
+    @ApiModelProperty(value = "设备编号")
+    private String equipNumber;
+
+    /**
      * 最后点检时间
      */
     @ApiModelProperty(value = "最后点检时间")
