@@ -81,8 +81,8 @@
         <el-table-column label="标准周期" prop="standardCt" width="65"/>
         <el-table-column label="平均周期" prop="avgCycle" width="65"/>
 
-        <el-table-column label="起始模次" prop="startWaferId" width="65"/>
-        <el-table-column label="截止模次" prop="endWaferId" width="65"/>
+        <el-table-column label="起始batch ID" prop="startWaferId" width="65"/>
+        <el-table-column label="终止batch ID" prop="endWaferId" width="65"/>
 
         <el-table-column label="投入数" prop="inputQty" width="55">
           <template v-slot="scope">
