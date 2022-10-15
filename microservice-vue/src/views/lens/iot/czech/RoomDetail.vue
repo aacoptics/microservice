@@ -7,64 +7,147 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col v-for="(machineInfo, index) of this.floorMachineInfo" :span="3" :key="index">
-          <el-card style="border:1px solid blue;margin:5px;" class="cz_room_card" :body-style="{ padding: '0px', height:'255px'}">
-            <p style="text-align: center;font-weight: bold;font-size: 24px;cursor: pointer" @click="onClick(machineInfo.machineNo)">FG{{machineInfo.machineNo}}</p>
-            <el-row v-if="machineInfo.showStatus === 'Maintenance'" style="text-align: center;height:30px; font-weight: bold;font-size: 16px;">
+        <!--        <el-col v-for="(machineInfo, index) of this.floorMachineInfo" :span="3" :key="index">-->
+        <!--          <el-card style="border:1px solid blue;margin:5px;" class="cz_room_card" :body-style="{ padding: '0px', height:'265px'}">-->
+        <!--            <p style="text-align: center;font-weight: bold;font-size: 24px;cursor: pointer" @click="onClick(machineInfo.machineNo)">FG{{machineInfo.machineNo}}</p>-->
+        <!--            <el-row v-if="machineInfo.showStatus === 'Maintenance'" style="text-align: center;height:30px; font-weight: bold;font-size: 16px;">-->
+        <!--              <el-col :span="24">-->
+        <!--                <div :style="'background-color:grey;height:30px;line-height:30px'">{{machineInfo.showStatus}}</div>-->
+
+        <!--              </el-col>-->
+        <!--            </el-row>-->
+        <!--            <el-row v-else style="text-align: center;height:30px; font-weight: bold;font-size: 16px;background-color: grey">-->
+        <!--              <el-col :span="12">-->
+        <!--                <div :style="'background-color:rgba(250,200,88,1);height:30px;line-height:30px;cursor:pointer'" @click="onTemperatureClick(machineInfo.machineNo)">-->
+        <!--                  {{machineInfo.temperature}}℃-->
+        <!--                </div>-->
+        <!--              </el-col>-->
+        <!--              <el-col :span="12">-->
+        <!--                <div  v-if="machineInfo.showStatus === 'Running'" :style="'background-color:rgba(59,162,114,1);height:30px;line-height:30px'">-->
+        <!--                  {{machineInfo.showStatus}}-->
+        <!--                </div>-->
+        <!--                <div  v-else-if="machineInfo.showStatus === 'Idle'" :style="'background-color:rgba(252,132,82,1);height:30px;line-height:30px'">-->
+        <!--                  {{machineInfo.showStatus}}-->
+        <!--                </div>-->
+        <!--                <div v-else-if="machineInfo.showStatus === 'Failure'" :style="'background-color:rgba(255,0,0,1);height:30px;line-height:30px'">-->
+        <!--                  {{machineInfo.showStatus}}-->
+        <!--                </div>-->
+        <!--              </el-col>-->
+        <!--            </el-row>-->
+        <!--            <el-row style="margin-top: 15px">-->
+        <!--                <div style="font-weight: bold">-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">Project: {{machineInfo.project}}</p>-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">Mold: {{machineInfo.mold}}</p>-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">Side: {{machineInfo.side}}</p>-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">Process: {{machineInfo.process}}</p>-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">ML: {{machineInfo.ml}}</p>-->
+        <!--                  <p style="margin-top: 5px;margin-left: 5px">OP id: {{}}</p>-->
+        <!--                </div>-->
+        <!--            </el-row>-->
+        <!--          </el-card>-->
+        <!--        </el-col>-->
+        <el-col v-for="(machineInfo, index) of this.floorMachineInfoEven" :key="index" :span="3">
+          <el-card :body-style="{ padding: '0px', height:'265px'}" class="cz_room_card"
+                   style="border:1px solid blue;margin:5px;">
+            <p style="text-align: center;font-weight: bold;font-size: 24px;cursor: pointer"
+               @click="onClick(machineInfo.machineNo)">FG{{ machineInfo.machineNo }}</p>
+            <el-row v-if="machineInfo.showStatus === 'Maintenance'"
+                    style="text-align: center;height:30px; font-weight: bold;font-size: 16px;">
               <el-col :span="24">
-                <div :style="'background-color:grey;height:30px;line-height:30px'">{{machineInfo.showStatus}}</div>
+                <div :style="'background-color:grey;height:30px;line-height:30px'">{{ machineInfo.showStatus }}</div>
 
               </el-col>
             </el-row>
-            <el-row v-else style="text-align: center;height:30px; font-weight: bold;font-size: 16px;background-color: grey">
+            <el-row v-else
+                    style="text-align: center;height:30px; font-weight: bold;font-size: 16px;background-color: grey">
               <el-col :span="12">
-                <div :style="'background-color:rgba(250,200,88,1);height:30px;line-height:30px;cursor:pointer'" @click="onTemperatureClick(machineInfo.machineNo)">
-                  {{machineInfo.temperature}}℃
+                <div :style="'background-color:rgba(250,200,88,1);height:30px;line-height:30px;cursor:pointer'"
+                     @click="onTemperatureClick(machineInfo.machineNo)">
+                  {{ machineInfo.temperature }}℃
                 </div>
               </el-col>
               <el-col :span="12">
-                <div  v-if="machineInfo.showStatus === 'Running'" :style="'background-color:rgba(59,162,114,1);height:30px;line-height:30px'">
-                  {{machineInfo.showStatus}}
+                <div v-if="machineInfo.showStatus === 'Running'"
+                     :style="'background-color:rgba(59,162,114,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
                 </div>
-                <div  v-else-if="machineInfo.showStatus === 'Idle'" :style="'background-color:rgba(252,132,82,1);height:30px;line-height:30px'">
-                  {{machineInfo.showStatus}}
+                <div v-else-if="machineInfo.showStatus === 'Idle'"
+                     :style="'background-color:rgba(252,132,82,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
                 </div>
-                <div v-else-if="machineInfo.showStatus === 'Failure'" :style="'background-color:rgba(255,0,0,1);height:30px;line-height:30px'">
-                  {{machineInfo.showStatus}}
+                <div v-else-if="machineInfo.showStatus === 'Failure'"
+                     :style="'background-color:rgba(255,0,0,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
                 </div>
               </el-col>
-<!--              <el-col :span="4">-->
-<!--                <div :style="'background-color:yellow;height:30px;line-height:30px'">-->
-<!--                  {{}}-->
-<!--                </div>-->
-<!--              </el-col>-->
             </el-row>
             <el-row style="margin-top: 15px">
-                <div style="font-weight: bold">
-                  <p style="margin-top: 5px;margin-left: 5px">Project: {{machineInfo.project}}</p>
-                  <p style="margin-top: 5px;margin-left: 5px">Mold: {{machineInfo.mold}}</p>
-                  <p style="margin-top: 5px;margin-left: 5px">Side: {{machineInfo.side}}</p>
-                  <p style="margin-top: 5px;margin-left: 5px">Process: {{machineInfo.process}}</p>
-                  <p style="margin-top: 5px;margin-left: 5px">ML: {{machineInfo.ml}}</p>
-                  <p style="margin-top: 5px;margin-left: 5px">OP id: {{}}</p>
-<!--                  <p style="margin-top: 5px;margin-left: 5px">-->
-<!--                    <el-button type="primary" @click="addNote(machineInfo.name)">Notes</el-button>-->
-<!--                  </p>-->
+              <div style="font-weight: bold">
+                <p style="margin-top: 5px;margin-left: 5px">Project: {{ machineInfo.project }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Mold: {{ machineInfo.mold }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Side: {{ machineInfo.side }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Process: {{ machineInfo.process }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">ML: {{ machineInfo.ml }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">HMI version: {{ machineInfo.hmiVersion }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">OP id: {{}}</p>
+              </div>
+            </el-row>
+          </el-card>
+        </el-col>
+        <el-col v-for="(machineInfo, index) of this.floorMachineInfoOdd" :key="index" :span="3">
+          <el-card :body-style="{ padding: '0px', height:'265px'}" class="cz_room_card"
+                   style="border:1px solid blue;margin:5px;">
+            <p style="text-align: center;font-weight: bold;font-size: 24px;cursor: pointer"
+               @click="onClick(machineInfo.machineNo)">FG{{ machineInfo.machineNo }}</p>
+            <el-row v-if="machineInfo.showStatus === 'Maintenance'"
+                    style="text-align: center;height:30px; font-weight: bold;font-size: 16px;">
+              <el-col :span="24">
+                <div :style="'background-color:grey;height:30px;line-height:30px'">{{ machineInfo.showStatus }}</div>
+
+              </el-col>
+            </el-row>
+            <el-row v-else
+                    style="text-align: center;height:30px; font-weight: bold;font-size: 16px;background-color: grey">
+              <el-col :span="12">
+                <div :style="'background-color:rgba(250,200,88,1);height:30px;line-height:30px;cursor:pointer'"
+                     @click="onTemperatureClick(machineInfo.machineNo)">
+                  {{ machineInfo.temperature }}℃
                 </div>
+              </el-col>
+              <el-col :span="12">
+                <div v-if="machineInfo.showStatus === 'Running'"
+                     :style="'background-color:rgba(59,162,114,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
+                </div>
+                <div v-else-if="machineInfo.showStatus === 'Idle'"
+                     :style="'background-color:rgba(252,132,82,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
+                </div>
+                <div v-else-if="machineInfo.showStatus === 'Failure'"
+                     :style="'background-color:rgba(255,0,0,1);height:30px;line-height:30px'">
+                  {{ machineInfo.showStatus }}
+                </div>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top: 15px">
+              <div style="font-weight: bold">
+                <p style="margin-top: 5px;margin-left: 5px">Project: {{ machineInfo.project }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Mold: {{ machineInfo.mold }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Side: {{ machineInfo.side }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Process: {{ machineInfo.process }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">ML: {{ machineInfo.ml }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">HMI version: {{ machineInfo.hmiVersion }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">OP id: {{}}</p>
+              </div>
             </el-row>
           </el-card>
         </el-col>
       </el-row>
-<!--      <el-row>-->
-<!--        <el-col :span="24">-->
-<!--          <div id="machineChart" style="border:1px solid blue;height:600px"></div>-->
-<!--        </el-col>-->
-<!--      </el-row>-->
-      <el-dialog v-model="temperatureDialogVisible" width="80%"  destroy-on-close title="Temperature Plots">
+      <el-dialog v-model="temperatureDialogVisible" destroy-on-close title="Temperature Plots" width="80%">
         <temperature-plots ref="temperaturePlots" :machine-no="machineNo"></temperature-plots>
       </el-dialog>
 
-      <el-dialog v-model="machineDetailDialogVisible" width="80%"  destroy-on-close title="Machine Detail">
+      <el-dialog v-model="machineDetailDialogVisible" destroy-on-close title="Machine Detail" width="80%">
         <machine-detail ref="machineDetail" :machine-no="machineNo"></machine-detail>
       </el-dialog>
     </div>
@@ -73,14 +156,13 @@
 
 <script>
 // import * as echarts from 'echarts';
-import {
-  getMachineInfoByFloorNumber
-} from "@/api/lens/iot/czech";
+import {getMachineInfoByFloorNumber} from "@/api/lens/iot/czech";
 import temperaturePlots from "./TemperaturePlots"
 import machineDetail from "./MachineDetail"
+
 export default {
   name: "RoomDetail",
-  components: { temperaturePlots,  machineDetail},
+  components: {temperaturePlots, machineDetail},
   props: {
     floorNumber: Number
   },
@@ -96,6 +178,8 @@ export default {
       //   {name: 'GRF', color: '#72b362'}
       // ],
       floorMachineInfo: [],
+      floorMachineInfoEven: [],
+      floorMachineInfoOdd: [],
       showContent: false,
       temperatureDialogVisible: false,
       machineDetailDialogVisible: false,
@@ -107,16 +191,20 @@ export default {
     this.getFloorMachineInfo();
   },
   methods: {
-    getFloorMachineInfo(){
+    getFloorMachineInfo() {
       const floorNumber = this.floorNumber;
       getMachineInfoByFloorNumber(floorNumber).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.floorMachineInfo = responseData.data
-          // responseData.data.forEach(item => {
-          //   this.floorMachineInfo.push(item)
-          // })
-          // this.showContent = true
+          responseData.data.forEach(item => {
+            if (Number(item.machineNo) % 2 === 0) {
+              this.floorMachineInfoEven.push(item)
+            } else {
+              this.floorMachineInfoOdd.push(item)
+            }
+
+          })
         }
       });
     },

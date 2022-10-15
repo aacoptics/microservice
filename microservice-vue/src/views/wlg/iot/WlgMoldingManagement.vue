@@ -16,10 +16,10 @@
         </el-form>
       </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
+                :height="400" :highlightCurrentRow="true" :show-operation-del="false"
+                :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
-                :show-operation-del="false"
                 @handleCurrentChange="handleSelectChange"
                 @handleEdit="handleEdit">
         <template v-slot:custom-column>
@@ -28,21 +28,29 @@
             <template v-slot="scope">
               <el-switch
                   v-model="scope.row.feedingAlarm"
+                  :active-value="true"
+                  :inactive-value="false"
                   active-text="是"
                   inactive-text="否"
                   inline-prompt
-                  :active-value="true"
-                  :inactive-value="false"
                   @change="handleStatusChange(scope)"
               />
             </template>
           </el-table-column>
+          <el-table-column align="center" fixed="right" header-align="center" label="CT维护">
+            <template v-slot="scope">
+              <el-input-number v-model="scope.row.standardCt" :min="0" :precision="2" :step="0.1"
+                               controls-position="right" size="small"/>
+              <el-button circle type="success" @click="handleCtButtonClick(scope)">
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'check']"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
         </template>
       </SysTable>
-      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'阈值维护'"
-                 width="40%">
-      </el-dialog>
-      <el-dialog v-model="dialogVisible" destroy-on-close :title="operation?'新增':'阈值维护'" width="90%">
+      <el-dialog v-model="dialogVisible" :title="operation?'新增':'阈值维护'" destroy-on-close width="90%">
         <wlg-molding-param-threshold ref="paramThreshold" :machine-id="currentMachineInfo.id"
                                      :machine-name="currentMachineInfo.machineName"></wlg-molding-param-threshold>
       </el-dialog>
@@ -54,8 +62,6 @@
 import SysTable from "@/components/SysTable";
 import {getMoldingInfo, handleUpdateFeedingAlarm} from "@/api/wlg/iot/moldingMachineParamData";
 import WlgMoldingParamThreshold from "./WlgMoldingParamThreshold"
-import {findUserRolesById} from "@/api/system/user";
-import {startTask, stopTask} from "@/api/notification/notificationTask";
 
 export default {
   name: "WlgMoldingManagement",
@@ -67,11 +73,11 @@ export default {
         machineName: ''
       },
       columns: [
-        {prop: "machineName", label: "机台号", minWidth: 110},
-        {prop: "ipAddress", label: "ip地址", minWidth: 100},
-        {prop: "port", label: "端口号", minWidth: 120},
-        {prop: "namespaceIndex", label: "命名空间", minWidth: 120},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
+        {prop: "machineName", label: "机台号", minWidth: 80},
+        {prop: "ipAddress", label: "ip地址", minWidth: 80},
+        {prop: "port", label: "端口号", minWidth: 80},
+        {prop: "namespaceIndex", label: "命名空间", minWidth: 40},
+        {prop: "createdBy", label: "创建人", minWidth: 80},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateFormat},
       ],
       pageRequest: {current: 1, size: 10},
@@ -81,7 +87,8 @@ export default {
       currentMachineInfo: {},
       dataForm: {
         id: 0,
-        feedingAlarm: false
+        feedingAlarm: false,
+        standardCt: 0
       },
     }
   },
@@ -132,6 +139,20 @@ export default {
         })
       }).catch(function () {
         params.row.feedingAlarm = params.row.feedingAlarm === false;
+      });
+    },
+    handleCtButtonClick(params) {
+      this.$confirm('确认要保存标准CT吗?').then(() => {
+        handleUpdateFeedingAlarm(params.row).then((res) => {
+          const responseData = res.data
+          if (responseData.code === '000000') {
+            this.$message({message: '修改成功', type: 'success'})
+          } else {
+            this.$message({message: responseData.data.msg, type: 'error'})
+          }
+        })
+      }).catch(function () {
+        this.$message({message: '保存失败！', type: 'error'})
       });
     },
   },

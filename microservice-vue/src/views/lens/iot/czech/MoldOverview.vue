@@ -26,7 +26,8 @@
           <div style="text-align: center;line-height: 210px">G3 S1</div>
         </el-col>
         <el-col :span="4">
-          <el-card style="border:1px solid orange;margin:15px;" class="cz_room_card" :body-style="{ padding: '0px', height:'210px'}">
+          <el-card :body-style="{ padding: '0px', height:'210px'}" class="cz_room_card"
+                   style="border:1px solid orange;margin:15px;">
             <el-row>
               <el-col>
                 <div style="text-align: center">

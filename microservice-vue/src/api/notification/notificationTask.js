@@ -83,3 +83,25 @@ export function triggerNotificationJob(triggerJobForm) {
         data: triggerJobForm
     })
 }
+
+export function queryMessageHistory(conditions) {
+    return request({
+        url: '/notification-server/notification/queryMessageHistory',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
+export function deleteMessage(deleteForm) {
+    return request({
+        url: '/notification-server/notification/deleteMessage/' + deleteForm.id,
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: deleteForm
+    })
+}

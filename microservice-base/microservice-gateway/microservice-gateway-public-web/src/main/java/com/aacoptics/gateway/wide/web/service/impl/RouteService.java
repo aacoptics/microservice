@@ -31,7 +31,7 @@ public class RouteService implements IRouteService {
     private final Map<String, RouteDefinition> routeDefinitionMaps = new HashMap<>();
 
     @Value("${swagger.ignore.gatewayRoute}")
-    private String ignoreSwaggerRoutes = "iot-auth-server";
+    private String ignoreSwaggerRoutes = "microservice-oauth";
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

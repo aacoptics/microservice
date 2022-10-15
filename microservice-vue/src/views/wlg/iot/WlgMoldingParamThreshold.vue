@@ -36,7 +36,7 @@
             <el-input v-model="dataForm.machineId" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="参数" prop="paramName">
-            <el-select v-model="paramDesc" value-key="param_name" placeholder="请选择">
+            <el-select v-model="paramDesc" placeholder="请选择" value-key="param_name">
               <el-option
                   v-for="item in paramInfo"
                   :key="item.param_name"
@@ -48,20 +48,23 @@
           <el-form-item prop="switchValue">
             <el-switch
                 v-model="switchValue"
-                active-text="阈值"
-                inactive-text="上下限"
                 :active-value="1"
                 :inactive-value="0"
+                active-text="阈值"
+                inactive-text="上下限"
             />
           </el-form-item>
-          <el-form-item label="阈值" prop="threshold" v-if="switchValue === 1">
-            <el-input-number :precision="2" :step="0.1" :min="0" v-model="dataForm.threshold" auto-complete="off"></el-input-number>
+          <el-form-item v-if="switchValue === 1" label="阈值" prop="threshold">
+            <el-input-number v-model="dataForm.threshold" :min="0" :precision="2" :step="0.1"
+                             auto-complete="off"></el-input-number>
           </el-form-item>
-          <el-form-item label="最大值" prop="maxValue" v-if="switchValue === 0">
-            <el-input-number :precision="2" :step="0.1" v-model="dataForm.maxValue" auto-complete="off"></el-input-number>
+          <el-form-item v-if="switchValue === 0" label="最大值" prop="maxValue">
+            <el-input-number v-model="dataForm.maxValue" :precision="2" :step="0.1"
+                             auto-complete="off"></el-input-number>
           </el-form-item>
-          <el-form-item label="最小值" prop="minValue" v-if="switchValue === 0">
-            <el-input-number :precision="2" :step="0.1" v-model="dataForm.minValue" auto-complete="off"></el-input-number>
+          <el-form-item v-if="switchValue === 0" label="最小值" prop="minValue">
+            <el-input-number v-model="dataForm.minValue" :precision="2" :step="0.1"
+                             auto-complete="off"></el-input-number>
           </el-form-item>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
@@ -89,8 +92,7 @@ export default {
   data() {
     return {
       size: 'default',
-      filters: {
-      },
+      filters: {},
       columns: [
         {prop: "paramId", label: "参数名", minWidth: 200, formatter: this.paramFormat},
         {prop: "threshold", label: "阈值", minWidth: 120},
@@ -99,15 +101,13 @@ export default {
         {prop: "createdBy", label: "创建人", minWidth: 120},
         {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateFormat},
       ],
-      paramDesc:{},
+      paramDesc: {},
       pageRequest: {current: 1, size: 10},
       pageResult: {},
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
-      dataFormRules: {
-
-      },
+      dataFormRules: {},
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -123,172 +123,172 @@ export default {
       currentUserRoles: [],
       paramInfo: [
         {
-          param_info:{
-            param_id:27,
-            array_id:1
+          param_info: {
+            param_id: 27,
+            array_id: 1
           },
-          param_name:"lower_moldcore_section_temp_actual_1"
+          param_name: "lower_moldcore_section_temp_actual_1"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:2
+          param_info: {
+            param_id: 27,
+            array_id: 2
           },
-          param_name:"lower_moldcore_section_temp_actual_2"
+          param_name: "lower_moldcore_section_temp_actual_2"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:3
+          param_info: {
+            param_id: 27,
+            array_id: 3
           },
-          param_name:"lower_moldcore_section_temp_actual_3"
+          param_name: "lower_moldcore_section_temp_actual_3"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:4
+          param_info: {
+            param_id: 27,
+            array_id: 4
           },
-          param_name:"lower_moldcore_section_temp_actual_4"
+          param_name: "lower_moldcore_section_temp_actual_4"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:5
+          param_info: {
+            param_id: 27,
+            array_id: 5
           },
-          param_name:"lower_moldcore_section_temp_actual_5"
+          param_name: "lower_moldcore_section_temp_actual_5"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:6
+          param_info: {
+            param_id: 27,
+            array_id: 6
           },
-          param_name:"lower_moldcore_section_temp_actual_6"
+          param_name: "lower_moldcore_section_temp_actual_6"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:7
+          param_info: {
+            param_id: 27,
+            array_id: 7
           },
-          param_name:"lower_moldcore_section_temp_actual_7"
+          param_name: "lower_moldcore_section_temp_actual_7"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:8
+          param_info: {
+            param_id: 27,
+            array_id: 8
           },
-          param_name:"lower_moldcore_section_temp_actual_8"
+          param_name: "lower_moldcore_section_temp_actual_8"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:9
+          param_info: {
+            param_id: 27,
+            array_id: 9
           },
-          param_name:"lower_moldcore_section_temp_actual_9"
+          param_name: "lower_moldcore_section_temp_actual_9"
         },
         {
-          param_info:{
-            param_id:27,
-            array_id:10
+          param_info: {
+            param_id: 27,
+            array_id: 10
           },
-          param_name:"lower_moldcore_section_temp_actual_10"
+          param_name: "lower_moldcore_section_temp_actual_10"
         },
         {
-          param_info:{
-            param_id:25,
-            array_id:0
+          param_info: {
+            param_id: 25,
+            array_id: 0
           },
-          param_name:"lower_mold_temp_actual_0"
+          param_name: "lower_mold_temp_actual_0"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:1
+          param_info: {
+            param_id: 55,
+            array_id: 1
           },
-          param_name:"upper_moldcore_section_temp_actual_1"
+          param_name: "upper_moldcore_section_temp_actual_1"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:2
+          param_info: {
+            param_id: 55,
+            array_id: 2
           },
-          param_name:"upper_moldcore_section_temp_actual_2"
+          param_name: "upper_moldcore_section_temp_actual_2"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:3
+          param_info: {
+            param_id: 55,
+            array_id: 3
           },
-          param_name:"upper_moldcore_section_temp_actual_3"
+          param_name: "upper_moldcore_section_temp_actual_3"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:4
+          param_info: {
+            param_id: 55,
+            array_id: 4
           },
-          param_name:"upper_moldcore_section_temp_actual_4"
+          param_name: "upper_moldcore_section_temp_actual_4"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:5
+          param_info: {
+            param_id: 55,
+            array_id: 5
           },
-          param_name:"upper_moldcore_section_temp_actual_5"
+          param_name: "upper_moldcore_section_temp_actual_5"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:6
+          param_info: {
+            param_id: 55,
+            array_id: 6
           },
-          param_name:"upper_moldcore_section_temp_actual_6"
+          param_name: "upper_moldcore_section_temp_actual_6"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:7
+          param_info: {
+            param_id: 55,
+            array_id: 7
           },
-          param_name:"upper_moldcore_section_temp_actual_7"
+          param_name: "upper_moldcore_section_temp_actual_7"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:8
+          param_info: {
+            param_id: 55,
+            array_id: 8
           },
-          param_name:"upper_moldcore_section_temp_actual_8"
+          param_name: "upper_moldcore_section_temp_actual_8"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:9
+          param_info: {
+            param_id: 55,
+            array_id: 9
           },
-          param_name:"upper_moldcore_section_temp_actual_9"
+          param_name: "upper_moldcore_section_temp_actual_9"
         },
         {
-          param_info:{
-            param_id:55,
-            array_id:10
+          param_info: {
+            param_id: 55,
+            array_id: 10
           },
-          param_name:"upper_moldcore_section_temp_actual_10"
+          param_name: "upper_moldcore_section_temp_actual_10"
         },
         {
-          param_info:{
-            param_id:53,
-            array_id:0
+          param_info: {
+            param_id: 53,
+            array_id: 0
           },
-          param_name:"upper_mold_temp_actual_0"
+          param_name: "upper_mold_temp_actual_0"
         },
         {
-          param_info:{
-            param_id:38,
-            array_id:0
+          param_info: {
+            param_id: 38,
+            array_id: 0
           },
-          param_name:"press_force_actual_0"
+          param_name: "press_force_actual_0"
         }
       ],
       switchValue: 1
     }
   },
   methods: {
-    refreshData(){
+    refreshData() {
       this.machineNameStr = this.machineName
       this.findPage(null)
     },
@@ -332,9 +332,9 @@ export default {
       this.dataForm = Object.assign({}, params.row)
 
       this.paramDesc = this.paramInfo.find(item => item.param_info.array_id === this.dataForm.arrayId && item.param_info.param_id === this.dataForm.paramId)
-      if(this.dataForm.threshold > 0){
+      if (this.dataForm.threshold > 0) {
         this.switchValue = 1
-      }else{
+      } else {
         this.switchValue = 0
       }
     },
@@ -348,10 +348,10 @@ export default {
             params.paramId = this.paramDesc.param_info.param_id
             params.arrayId = this.paramDesc.param_info.array_id
             params.machineId = this.machineId
-            if(this.switchValue === 1){
+            if (this.switchValue === 1) {
               params.maxValue = null
               params.minValue = null
-            }else if(this.switchValue === 0){
+            } else if (this.switchValue === 0) {
               params.threshold = null
             }
             if (this.operation) {

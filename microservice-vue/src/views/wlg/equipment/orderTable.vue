@@ -16,10 +16,11 @@
                        align="center"
                        header-align="center">
       </el-table-column>
-      <el-table-column label="故障照片" prop="faultImageId" fixed="right" v-if="showPreview">
+      <el-table-column v-if="showPreview" fixed="right" label="故障照片" prop="faultImageId">
         <template #default="scope">
           <el-button :size="size" type="primary" @click="handlePreview(scope.$index, scope.row)"
-            >预览</el-button
+          >预览
+          </el-button
           >
         </template>
       </el-table-column>
@@ -125,10 +126,10 @@ export default {
       default: true
     },
     showPreview:
-    {
-      type: Boolean,
-      default: true
-    },
+        {
+          type: Boolean,
+          default: true
+        },
     rowClassName: [String, Function],
     headerCellStyle: Object,
     cellStyle: [Object, Function],

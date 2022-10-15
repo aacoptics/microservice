@@ -5,6 +5,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.jacob.entity.vo.FeishuVoiceFileInfo;
 import com.aacoptics.jacob.entity.vo.SpeakerVoiceFileInfo;
 import com.aacoptics.jacob.entity.vo.VoiceFileInfo;
 import com.aacoptics.jacob.provider.FeishuApi;
@@ -19,7 +20,9 @@ import it.sauronsoftware.jave.EncodingAttributes;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -52,10 +55,10 @@ public class FeishuServiceImplTest {
     @Test
     public void fetchAccessToken() throws EncoderException, UnknownHostException {
         SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
-        speakerVoiceFileInfo.setSpeakerIp("10.7.36.103").setSpeakerSn("ls20://020FF3BC43E6").setSpeakerPort(8888).setMessage("换料提醒！");
+        speakerVoiceFileInfo.setSpeakerIp("10.7.55.125").setSpeakerSn("ls20://02008669A7B1").setSpeakerPort(8888).setMessage("换料提醒！");
 
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        String filePath = voiceService.generateVoiceFile(fileName + ".mp3", speakerVoiceFileInfo);
+        String filePath = voiceService.generateVoiceFile(fileName, speakerVoiceFileInfo);
         File file = new File(filePath);
         if (!file.exists()) {
         }
@@ -76,7 +79,7 @@ public class FeishuServiceImplTest {
         paramsObject.set("urls", urlArray);
         object.set("params", paramsObject);
 
-        okHttpCli.doPostJson(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
+        String test = okHttpCli.doPostJson(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
 
 //
 //        int a = FileUtils.getMp3Duration("d:\\Documents and Settings\\60054916\\Desktop\\test\\test.mp3");
@@ -100,6 +103,40 @@ public class FeishuServiceImplTest {
 //        //oc_0b61d548c8df1228c9ce8885f847a3c0
 //        String asd1 = asd;
     }
+    @Test
+    public void testGen(){
+//        SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
+//        speakerVoiceFileInfo.setSpeakerIp("10.7.36.103").setSpeakerSn("ls20://020FF3BC43E6").setSpeakerPort(8888).setMessage("12345");
+//        voiceService.generateVoiceFile("test", speakerVoiceFileInfo);
+
+        FeishuVoiceFileInfo feishuVoiceFileInfo = new FeishuVoiceFileInfo();
+        feishuVoiceFileInfo.setMessage("测试");
+        feishuVoiceFileInfo.setGroupName("我的测试群");
+
+        VoiceFileInfo voiceFileInfo = new FeishuVoiceFileInfo();
+        BeanUtils.copyProperties(feishuVoiceFileInfo, voiceFileInfo);
+        String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
+        String filePath = voiceService.generateVoiceFile(fileName, voiceFileInfo);
+        if (filePath == null)
+            return;
+        String chatId = feishuService.fetchChatIdByRobot(feishuVoiceFileInfo.getGroupName());
+        if (StrUtil.isBlank(chatId))
+            return;
+        try {
+            String key = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_OPUS, filePath, 0);
+            if (feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_AUDIO, JSONUtil.createObj().set("file_key", key))) {
+                File file = new File(filePath);
+                if (file.exists())
+                    file.delete();
+                return;
+            } else
+                return;
+        } catch (IOException err) {
+            return;
+        }
+    }
+
+
 
     @Test
     public void getUrl() {

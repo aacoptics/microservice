@@ -4,46 +4,46 @@
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
-          <el-form-item label="设备编码" prop="mchCode">
-            <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
-          </el-form-item>
-          <el-form-item label="设备名称" prop="mchName">
-            <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
-          </el-form-item>
-          <el-form-item label="规格" prop="spec">
-            <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
-          </el-form-item>
-        </el-row>
+            <el-form-item label="设备编码" prop="mchCode">
+              <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
+            </el-form-item>
+            <el-form-item label="设备名称" prop="mchName">
+              <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
+            </el-form-item>
+            <el-form-item label="规格" prop="spec">
+              <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
+            </el-form-item>
+          </el-row>
           <el-row>
-          <el-form-item label="型号" prop="typeVersion">
-            <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
-          </el-form-item>
-          <el-form-item label="工单状态" prop="status">
-          <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
-            <el-option
-                v-for="item in orderStatusOptions"
-                :key="item.dictValue"
-                :label="item.dictLabel"
-                :value="item.dictValue"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="型号" prop="typeVersion">
+              <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
+            </el-form-item>
+            <el-form-item label="工单状态" prop="status">
+              <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
+                <el-option
+                    v-for="item in orderStatusOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="findLoading">查询
+            <el-button :loading="findLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-            <el-button type="success" @click="handleAdd" :loading="editLoading">新增
+            <el-button :loading="editLoading" type="success" @click="handleAdd">新增
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
-            <el-button type="info" :loading="comfirmLoading" @click="handleBatchConfirm">批量确认
+            <el-button :loading="comfirmLoading" type="info" @click="handleBatchConfirm">批量确认
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'check']"/>
               </template>
@@ -57,22 +57,24 @@
           </el-form-item>
         </el-form>
       </div>
-      <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border :show-batch-operation="true"
-            :cell-style="{'text-align':'left'}" :show-operation="false" @selection-change="handleSelectionChange" @handlePreview="handlePreview"
-                @findPage="findPage">
+      <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
+                  :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
+                  :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="false"
+                  :showBatchDelete="false"
+                  :stripe="true" border @findPage="findPage"
+                  @handlePreview="handlePreview"
+                  @selection-change="handleSelectionChange">
       </orderTable>
 
-      <el-dialog v-model="previewDialogVisible" title="图片预览" 
-                 width="850px" destroy-on-close> 
-                 <div class="block">
-                 <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
-                 </div>
+      <el-dialog v-model="previewDialogVisible" destroy-on-close
+                 title="图片预览" width="850px">
+        <div class="block">
+          <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
+        </div>
       </el-dialog>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isRepairOrderAddOperation?'新增':'编辑'"
-                 width="40%" destroy-on-close>
+                 destroy-on-close width="40%">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
@@ -80,7 +82,8 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="设备编码" prop="mchCode">
-                <el-input v-model="dataForm.mchCode"  @blur="findEquipmentByMchCode" :disabled="!isRepairOrderAddOperation" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.mchCode" :disabled="!isRepairOrderAddOperation"
+                          auto-complete="off" clearable @blur="findEquipmentByMchCode"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -93,7 +96,7 @@
                 <el-input v-model="dataForm.spec" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-              <el-col :span="12">
+            <el-col :span="12">
               <el-form-item label="型号" prop="typeVersion">
                 <el-input v-model="dataForm.typeVersion" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
@@ -110,34 +113,35 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="故障描述" prop="faultDesc">
-                <el-input v-model="dataForm.faultDesc"  auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.faultDesc" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="故障照片" prop="faultPhoto">
                 <el-upload
-                  class="avatar-uploader"
-                  :show-file-list="false"
-                  :before-upload="beforeAvatarUpload"
-                  :http-request="submitUpload"
+                    :before-upload="beforeAvatarUpload"
+                    :http-request="submitUpload"
+                    :show-file-list="false"
+                    class="avatar-uploader"
                 >
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
               </el-form-item>
             </el-col>
-            </el-row>
-          
-           </el-form>
+          </el-row>
+
+        </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
-            <el-button :size="size" type="info" @click="cancel" style="margin-right: 0px;">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitRepairOrderMain" style="margin-right: 20px;">提交</el-button>
+            <el-button :size="size" style="margin-right: 0px;" type="info" @click="cancel">取消</el-button>
+            <el-button :loading="editLoading" :size="size" style="margin-right: 20px;" type="primary"
+                       @click="submitRepairOrderMain">提交
+            </el-button>
           </slot>
         </div>
       </el-dialog>
 
-      
 
     </div>
   </div>
@@ -145,7 +149,13 @@
 
 <script>
 import orderTable from "./orderTable";
-import {findRepairOrderPage, handleAdd, handleUpdate,  findRepairOrderById, handleBatchConfirm, exportRepairOrderExcel } from "@/api/wlg/equipment/repairOrder";
+import {
+  exportRepairOrderExcel,
+  findRepairOrderPage,
+  handleAdd,
+  handleBatchConfirm,
+  handleUpdate
+} from "@/api/wlg/equipment/repairOrder";
 import {findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
@@ -197,7 +207,7 @@ export default {
 
       dialogVisible: false, // 新增编辑界面是否显示
       repairOrderItemDialogVisible: false,
-      previewDialogVisible:false,
+      previewDialogVisible: false,
 
       editLoading: false,
       findLoading: false,
@@ -217,14 +227,14 @@ export default {
         mchName: '',
         spec: "",
         typeVersion: "",
-        factoryNo:'',
-        dutyPersonId:'',
-        faultDesc:'',
-        faultImageId:null
+        factoryNo: '',
+        dutyPersonId: '',
+        faultDesc: '',
+        faultImageId: null
       },
       multipleSelection: [],
-      orderStatusOptions:[],
-      orderSourceOptions:[],
+      orderStatusOptions: [],
+      orderSourceOptions: [],
     };
   },
   mounted() {
@@ -234,7 +244,7 @@ export default {
     getDict("wlg_em_repair_order_source").then(response => {
       this.orderSourceOptions = response.data.data
     });
-    
+
   },
   methods: {
     // 获取分页数据
@@ -298,17 +308,15 @@ export default {
         mchName: '',
         spec: "",
         typeVersion: "",
-        factoryNo:'',
-        dutyPersonId:'',
-        faultDesc:'',
-        faultPhoto:null
+        factoryNo: '',
+        dutyPersonId: '',
+        faultDesc: '',
+        faultPhoto: null
       };
       this.imageUrl = '';
     },
-    findEquipmentByMchCode: function ()
-    {
-      if(this.dataForm.mchCode == null || this.dataForm.mchCode == "")
-      {
+    findEquipmentByMchCode: function () {
+      if (this.dataForm.mchCode == null || this.dataForm.mchCode == "") {
         return;
       }
       let params = {};
@@ -321,26 +329,24 @@ export default {
           this.dataForm.typeVersion = responseData.data.typeVersion;
           this.dataForm.factoryNo = responseData.data.factoryNo;
           this.dataForm.dutyPersonId = responseData.data.dutyPersonId;
-        }else {
+        } else {
           this.$message({
             message:
                 "操作失败 " + getResponseDataMessage(responseData),
             type: "error",
           });
         }
-    })
-    },    
+      })
+    },
     // 显示编辑界面
     handleEdit: function (params) {
       this.dialogVisible = true;
       this.isRepairOrderAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
     },
-    handlePreview: function (params)
-    {
+    handlePreview: function (params) {
       let id = params.row.faultImageId;
-      if(id == null)
-      {
+      if (id == null) {
         this.$message.error('无故障图片！');
         return;
       }
@@ -362,16 +368,14 @@ export default {
       })
     },
     //处理批量确认
-    handleBatchConfirm: function()
-    {
-      if(this.multipleSelection == null || this.multipleSelection.length==0)
-      {
+    handleBatchConfirm: function () {
+      if (this.multipleSelection == null || this.multipleSelection.length == 0) {
         this.$message({
-            message:
-                "请至少选择一个工单",
-            type: "error",
-          });
-          return;
+          message:
+              "请至少选择一个工单",
+          type: "error",
+        });
+        return;
       }
 
       this.$confirm("确定批量确认吗？", "提示", {}).then(() => {
@@ -395,12 +399,12 @@ export default {
             });
           }
           this.findPage(null);
-        }); 
+        });
       });
     },
 
-     // 编辑
-     submitRepairOrderMain: function () {
+    // 编辑
+    submitRepairOrderMain: function () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -446,7 +450,7 @@ export default {
       });
     },
     exportExcelData(excelFileName) {
-      let pageRequest  = {};
+      let pageRequest = {};
       pageRequest.mchCode = this.filters.mchCode;
       pageRequest.mchName = this.filters.mchName;
       pageRequest.spec = this.filters.spec;
@@ -482,35 +486,37 @@ export default {
     dateFormat: function (dateValue) {
       return this.$moment(dateValue).format('YYYY-MM-DD')
     },
-    timeFormat: function(dateValue)
-    {
+    timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
     },
   },
 };
 </script>
 <style scoped>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

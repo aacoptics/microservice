@@ -94,6 +94,7 @@ export default {
     // 关闭单个标签
     closeTags(index) {
       const delItem = this.tagsList[index];
+      this.$store.commit('delIframeView', delItem)
       this.$store.commit("delTagsItem", {index});
       const item = this.tagsList[index]
           ? this.tagsList[index]
@@ -124,6 +125,7 @@ export default {
       });
       if (!isExist) {
         if (this.tagsList.length >= 8) {
+          this.$store.commit('delIframeView', this.tagsList[0])
           this.$store.commit("delTagsItem", {index: 0});
         }
         let title = ''
@@ -137,6 +139,9 @@ export default {
           title: title,
           path: route.fullPath
         });
+        if (this.$route.meta.webUrl) {
+          this.$store.commit('addIframeView', this.$route)
+        }
       }
     },
     handleTags(command) {

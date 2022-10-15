@@ -17,6 +17,6 @@ export default {
   background-size: 100% 100%;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
 }
 </style>

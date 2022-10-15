@@ -30,4 +30,5 @@ public class MoldingMachine implements Serializable {
     private String updatedBy;
     private Integer namespaceIndex;
     private boolean feedingAlarm;
+    private float standardCt;
 }

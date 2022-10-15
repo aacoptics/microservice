@@ -76,21 +76,21 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         MarkdownMessage markdownGroupMessage = new MarkdownMessage();
         String title = null;
         switch (msgJson.getString("Message")) {
-//            case "DoMonitorTempAlarm":
-//                title = "加热棒状态报警";
-//                markdownGroupMessage.setTitle(title);
-//                String param = dataJson.getString("param");
-//                JSONArray abnormalIdxJson = dataJson.getJSONArray("abnormalIdx");
-//                int[] abnormalIdx = JSONArray.toJavaObject(abnormalIdxJson, int[].class);
-//                String abnormalStr = Ints.join(",", abnormalIdx);
-//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-//                markdownGroupMessage.addBlobContent(localTimeStr);
-//                if (param.equals("lower")) {
-//                    markdownGroupMessage.addContent("下加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-//                } else {
-//                    markdownGroupMessage.addContent("上加热床 " + abnormalStr + "号加热棒温度低于平均值5℃。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-//                }
-//                break;
+            case "DoMonitorTempAlarm":
+                title = "加热棒状态报警";
+                markdownGroupMessage.setTitle(title);
+                String param = dataJson.getString("param");
+                int abnormalIdx = dataJson.getInteger("abnormalIdx");
+                float avgValue1 = dataJson.getFloatValue("avgValue");
+                float currentValue1 = dataJson.getFloatValue("currentValue");
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                if (param.equals("lower")) {
+                    markdownGroupMessage.addContent("下加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                } else {
+                    markdownGroupMessage.addContent("上加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                }
+                break;
             case "moldCtMonitor":
                 title = "阶段时长报警";
                 markdownGroupMessage.setTitle(title);
@@ -105,14 +105,14 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                     markdownGroupMessage = null;
                 }
                 break;
-//            case "FeedAlarm":
-//                title = "模造换料提醒";
-//                markdownGroupMessage.setTitle(title);
-//                markdownGroupMessage.addBlobContent(localTimeStr);
-//                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
-//                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-//                sendToAllSpeaker(machineName);
-//                break;
+            case "FeedAlarm":
+                title = "模造换料提醒";
+                markdownGroupMessage.setTitle(title);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
+                sendToAllSpeaker(machineName);
+                break;
             case "moldTempMonitor":
                 title = "模造温度曲线报警";
                 String moldParam = dataJson.getString("param");

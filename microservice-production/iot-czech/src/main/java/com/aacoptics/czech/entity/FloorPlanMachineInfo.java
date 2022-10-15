@@ -22,6 +22,8 @@ public class FloorPlanMachineInfo implements Serializable {
 
     private String ML;
 
+    private String hmiVersion;
+
     private String status;
 
     private String showStatus;
