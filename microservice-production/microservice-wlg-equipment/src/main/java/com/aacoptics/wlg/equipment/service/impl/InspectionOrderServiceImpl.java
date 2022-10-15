@@ -307,7 +307,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         {
             //判断是否需要维修
             Integer isRepair = inspectionOrderItem.getIsRepair();
-            if(isRepair == 1)
+            if(isRepair == 1 && InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))
             {
                 isRepairBoolean = true;
                 repairOrderService.createRepairOrderByInspection(targetInspectionOrder, inspectionOrderItem);
