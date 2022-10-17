@@ -14,6 +14,7 @@
         <module>microservice-jacob-provider</module>
         <module>microservice-sale-message</module>
         <module>microservice-feishu-photo</module>
+        <module>microservice-hikvision-api</module>
     </modules>
 
     <packaging>pom</packaging>
