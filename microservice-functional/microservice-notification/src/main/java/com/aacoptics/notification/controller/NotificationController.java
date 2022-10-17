@@ -1,5 +1,7 @@
 package com.aacoptics.notification.controller;
 
+import com.aacoptics.common.core.exception.ErrorType;
+import com.aacoptics.common.core.exception.SystemErrorType;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.form.*;
 import com.aacoptics.notification.entity.param.RobotQueryParam;
@@ -7,6 +9,8 @@ import com.aacoptics.notification.entity.param.UmsContentFeishuMsgHistoryQueryPa
 import com.aacoptics.notification.entity.po.UmsContentFeishuMsgHistory;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.vo.FeishuMessage;
+import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.exception.CommonErrorType;
 import com.aacoptics.notification.service.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -147,9 +151,16 @@ public class NotificationController {
     @DeleteMapping(value = "/deleteMessage/{id}")
     public Result deleteMessage(@PathVariable Long id, @RequestBody UmsContentFeishuMsgHistory umsContentFeishuMsgHistory) {
         umsContentFeishuMsgHistory.setId(id);
-        if (umsContentFeishuMsgHistoryService.deleteMessageByBatchId(umsContentFeishuMsgHistory))
-            return Result.success();
-        else
-            return Result.fail("撤回失败！");
+        try{
+            boolean res = umsContentFeishuMsgHistoryService.deleteMessageByBatchId(umsContentFeishuMsgHistory);
+            if (res)
+                return Result.success();
+            else
+                return Result.fail("撤回失败！");
+        }catch(BusinessException err){
+            return Result.fail(err);
+        }
+
+
     }
 }
