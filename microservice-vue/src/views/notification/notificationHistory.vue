@@ -107,7 +107,7 @@ export default {
           if (responseData.code === '000000') {
             this.$message({message: '撤回成功', type: 'success'})
           } else {
-            this.$message({message: responseData.data.msg, type: 'error'})
+            this.$message({message: responseData.msg, type: 'error'})
           }
           this.findPage(null)
         })
