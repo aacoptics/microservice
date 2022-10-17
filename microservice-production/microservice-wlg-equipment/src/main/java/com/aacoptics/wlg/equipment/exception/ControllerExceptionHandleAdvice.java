@@ -28,7 +28,11 @@ public class ControllerExceptionHandleAdvice {
             log.error("缺少对应的标头：" + e.getMessage(), e);
             res.setStatus(HttpStatus.BAD_REQUEST.value());
             return Result.fail("缺少对应的标头，详细信息：" + e.getMessage());
-        } else {
+        } else if (e instanceof BusinessException) {
+            log.error("业务异常：", e);
+            res.setStatus(HttpStatus.OK.value());
+            return Result.fail(CommonErrorType.BUSINESS_EXCEPTION, e.getLocalizedMessage());
+        }else {
             log.error(e.getMessage(), e);
             return Result.fail(e.getMessage());
         }
