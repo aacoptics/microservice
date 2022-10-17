@@ -158,7 +158,7 @@ public class NotificationController {
             else
                 return Result.fail("撤回失败！");
         }catch(BusinessException err){
-            return Result.fail(err);
+            return Result.fail(err.getMessage());
         }
 
 
