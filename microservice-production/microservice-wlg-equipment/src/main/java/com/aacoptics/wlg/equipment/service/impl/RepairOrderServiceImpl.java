@@ -144,7 +144,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
             }
 
             //更新设备状态为正常
-            Equipment equipment = equipmentService.get(Long.valueOf(idStr));
+            Equipment equipment = equipmentService.findEquipmentByMchCode(repairOrder.getMchCode());
             equipment.setStatus(EquipmentStatusConstants.NORMAL);
             equipmentService.update(equipment);
 
