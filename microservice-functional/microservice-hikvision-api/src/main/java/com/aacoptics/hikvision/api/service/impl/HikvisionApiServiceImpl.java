@@ -40,12 +40,12 @@ public class HikvisionApiServiceImpl implements HikvisionApiService {
         final String previewURLsApi = ARTEMIS_PATH + "/api/acs/v1/door/events";
         Map<String, String> path = new HashMap<String, String>(2) {
             {
-                put("https://", previewURLsApi);//根据现场环境部署确认是http还是https
+                put("https://", previewURLsApi);
             }
         };
         String contentType = "application/json";
         String body = JSONObject.toJSONString(doorEventParam);
-        String result = ArtemisHttpUtil.doPostStringArtemis(path, body, null, null, contentType, null);
+        String result = ArtemisHttpUtil.doPostStringArtemis(path, body, null, null, contentType);
         HikvisionApiResult<HikvisionApiPage<DoorEventDetail>> res =
                 JSONObject.parseObject(result,
                         new TypeReference<HikvisionApiResult<HikvisionApiPage<DoorEventDetail>>>() {

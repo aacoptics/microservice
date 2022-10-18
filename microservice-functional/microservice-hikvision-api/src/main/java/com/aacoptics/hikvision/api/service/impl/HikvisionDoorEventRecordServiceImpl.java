@@ -38,7 +38,7 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
         int nullCount = 0;
         int pageIdx = 1;
         int totalPage = 1;
-        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN.withHour(1));
+        LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN.withHour(LocalDateTime.now().minusHours(1).getHour()));
         LocalDateTime startTime = endTime.minusDays(1);
         while(pageIdx <= totalPage){
             DoorEventParam doorEventParam = new DoorEventParam(startTime, endTime, pageIdx, 1000);
