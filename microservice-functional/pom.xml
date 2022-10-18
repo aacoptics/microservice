@@ -15,6 +15,7 @@
         <module>microservice-sale-message</module>
         <module>microservice-feishu-photo</module>
         <module>microservice-hikvision-api</module>
+        <module>microservice-ldap-sync</module>
     </modules>
 
     <packaging>pom</packaging>
