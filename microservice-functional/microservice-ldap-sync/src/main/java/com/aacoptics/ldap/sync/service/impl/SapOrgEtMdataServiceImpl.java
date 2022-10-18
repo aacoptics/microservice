@@ -37,6 +37,8 @@ public class SapOrgEtMdataServiceImpl extends ServiceImpl<SapOrgEtMdataMapper, S
         LdapContext context = ldapService.ConnectToLdap();
         if (users.size() > 0) {
             for (SapOrgEtMdata user : users) {
+                if(user.getPernr().equals("JamesWang"))
+                    continue;
                 ldapService.CreateAdUser(user, context);
             }
         }
