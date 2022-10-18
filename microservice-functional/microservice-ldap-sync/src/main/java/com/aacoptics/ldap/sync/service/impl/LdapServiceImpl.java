@@ -47,11 +47,11 @@ public class LdapServiceImpl implements LdapService {
 
     @Override
     public void CreateAdUser(SapOrgEtMdata userInfo, LdapContext context) {
-        try{
-            if(StrUtil.isBlank(userInfo.getStat2()))
+        try {
+            if (StrUtil.isBlank(userInfo.getStat2()))
                 return;
 
-            if(!userInfo.getStat2().equals("3")){
+            if (!userInfo.getStat2().equals("3")) {
                 DisableAdAccount(userInfo.getPernr(), context);
                 return;
             }
@@ -70,7 +70,7 @@ public class LdapServiceImpl implements LdapService {
                 deptList.add(userInfo.getLev0DeptName());
                 if (!StrUtil.isBlank(userInfo.getLev1DeptNo()) && !userInfo.getLev1DeptNo().equals("00000000")) {
                     deptList.add(userInfo.getLev1DeptName());
-                    if (!StrUtil.isBlank(userInfo.getLev2DeptNo()) &&!userInfo.getLev2DeptNo().equals("00000000")) {
+                    if (!StrUtil.isBlank(userInfo.getLev2DeptNo()) && !userInfo.getLev2DeptNo().equals("00000000")) {
                         deptList.add(userInfo.getLev2DeptName());
                         if (!StrUtil.isBlank(userInfo.getLev3DeptNo()) && !userInfo.getLev3DeptNo().equals("00000000")) {
                             deptList.add(userInfo.getLev3DeptName());
@@ -110,8 +110,7 @@ public class LdapServiceImpl implements LdapService {
                 needCreateMail = true;
             }
             CreateAdUser(context, needCreateMail, userName, firstName, lastName, pyName, deptName, userDn, wifiGroup, printGroup);
-        }
-        catch (Exception err){
+        } catch (Exception err) {
             log.error(err.getMessage());
         }
     }
@@ -198,7 +197,7 @@ public class LdapServiceImpl implements LdapService {
 
     @Override
     public void DisableAdAccount(String jobNumber, LdapContext context) {
-        if(jobNumber.equals("60055111") || jobNumber.equals("60057699")
+        if (jobNumber.equals("60055111") || jobNumber.equals("60057699")
                 || jobNumber.equals(""))
             return;
         if (context != null) {

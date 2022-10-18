@@ -10,4 +10,6 @@ import java.util.List;
 public interface SapOrgEtMdataService extends IService<SapOrgEtMdata> {
 
     List<SapOrgEtMdata> listAll();
+
+    void syncLdapAccount();
 }
