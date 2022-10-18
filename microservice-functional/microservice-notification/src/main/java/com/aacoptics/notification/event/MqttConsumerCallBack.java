@@ -111,7 +111,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addBlobContent(localTimeStr);
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addContent("机台需要换料，请相关人员进行处理！");
-                sendToAllSpeaker(machineName);
+                //sendToAllSpeaker(machineName);
                 break;
             case "moldTempMonitor":
                 title = "模造温度曲线报警";

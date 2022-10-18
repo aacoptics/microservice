@@ -11,6 +11,4 @@ public interface VoiceService {
     String generateVoiceFile(String filePath, VoiceFileInfo voiceFileInfo);
 
     String formatVoiceFile(File inputFile, String outputFilePath) throws EncoderException, UnknownHostException;
-
-    String generateVoiceFileBak(String fileName, VoiceFileInfo voiceFileInfo);
 }

@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -53,10 +52,10 @@ public class FeishuServiceImplTest {
     @Test
     public void fetchAccessToken() throws EncoderException, UnknownHostException {
         SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
-        speakerVoiceFileInfo.setSpeakerIp("10.7.55.125").setSpeakerSn("ls20://02008669A7B1").setSpeakerPort(8888).setMessage("换料提醒！");
+        speakerVoiceFileInfo.setSpeakerIp("10.7.36.103").setSpeakerSn("ls20://020FF3BC43E6").setSpeakerPort(8888).setMessage("换料提醒！");
 
         String fileName = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        String filePath = voiceService.generateVoiceFile(fileName, speakerVoiceFileInfo);
+        String filePath = voiceService.generateVoiceFile(fileName + ".mp3", speakerVoiceFileInfo);
         File file = new File(filePath);
         if (!file.exists()) {
         }
@@ -77,7 +76,7 @@ public class FeishuServiceImplTest {
         paramsObject.set("urls", urlArray);
         object.set("params", paramsObject);
 
-        String test = okHttpCli.doPostJson(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
+        okHttpCli.doPostJson(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), object);
 
 //
 //        int a = FileUtils.getMp3Duration("d:\\Documents and Settings\\60054916\\Desktop\\test\\test.mp3");
@@ -101,14 +100,6 @@ public class FeishuServiceImplTest {
 //        //oc_0b61d548c8df1228c9ce8885f847a3c0
 //        String asd1 = asd;
     }
-    @Test
-    public void testGen(){
-        SpeakerVoiceFileInfo speakerVoiceFileInfo = new SpeakerVoiceFileInfo();
-        speakerVoiceFileInfo.setSpeakerIp("10.7.36.103").setSpeakerSn("ls20://020FF3BC43E6").setSpeakerPort(8888).setMessage("12345");
-        voiceService.generateVoiceFile("test", speakerVoiceFileInfo);
-    }
-
-
 
     @Test
     public void getUrl() {
