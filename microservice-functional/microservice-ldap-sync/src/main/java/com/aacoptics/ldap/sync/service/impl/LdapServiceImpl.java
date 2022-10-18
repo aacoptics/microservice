@@ -31,7 +31,7 @@ public class LdapServiceImpl implements LdapService {
         System.setProperty("com.sun.jndi.ldap.object.disableEndpointIdentification", "true");
         Hashtable<String, String> env = new Hashtable<>();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-        env.put("java.naming.ldap.factory.socket", "com.aac.dingding.ldap.DummySSLSocketFactory");
+        env.put("java.naming.ldap.factory.socket", "com.aacoptics.ldap.sync.ldap.DummySSLSocketFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple");
         env.put(Context.SECURITY_PRINCIPAL, ldapConfig.getAdminName());
         env.put(Context.SECURITY_CREDENTIALS, ldapConfig.getAdminPass());
@@ -47,67 +47,73 @@ public class LdapServiceImpl implements LdapService {
 
     @Override
     public void CreateAdUser(SapOrgEtMdata userInfo, LdapContext context) {
-        if(!userInfo.getStat2().equals("3")){
-            DisableAdAccount(userInfo.getPernr(), context);
-            log.info("禁用" + userInfo.getPernr() + "AD账号成功");
-            return;
-        }
-        if (!CommonConstants.AREA_MAP.containsKey(userInfo.getBtrtl())) {
-            log.error("找不到对应的地区");
-            return;
-        }
-        String userName = userInfo.getPernr();
-        String firstName = userInfo.getVorna();
-        String lastName = userInfo.getNachn();
-        String cnValue = lastName + firstName;
-        //String pyName = PinYinUtil.toPinyin(cnValue);
-        String pyName = userInfo.getName2();
+        try{
+            if(StrUtil.isBlank(userInfo.getStat2()))
+                return;
 
-        List<String> deptList = new ArrayList<>();
-        if (!StrUtil.isBlank(userInfo.getLev0DeptNo()) && !userInfo.getLev0DeptNo().equals("00000000")) {
-            deptList.add(userInfo.getLev0DeptName());
-            if (!StrUtil.isBlank(userInfo.getLev1DeptNo()) && !userInfo.getLev1DeptNo().equals("00000000")) {
-                deptList.add(userInfo.getLev1DeptName());
-                if (!StrUtil.isBlank(userInfo.getLev2DeptNo()) &&!userInfo.getLev2DeptNo().equals("00000000")) {
-                    deptList.add(userInfo.getLev2DeptName());
-                    if (!StrUtil.isBlank(userInfo.getLev3DeptNo()) && !userInfo.getLev3DeptNo().equals("00000000")) {
-                        deptList.add(userInfo.getLev3DeptName());
-                        if (!StrUtil.isBlank(userInfo.getLev4DeptNo()) && !userInfo.getLev4DeptNo().equals("00000000")) {
-                            deptList.add(userInfo.getLev4DeptName());
-                            if (!StrUtil.isBlank(userInfo.getLev5DeptNo()) && !userInfo.getLev5DeptNo().equals("00000000")) {
-                                deptList.add(userInfo.getLev5DeptName());
+            if(!userInfo.getStat2().equals("3")){
+                DisableAdAccount(userInfo.getPernr(), context);
+                return;
+            }
+            if (!CommonConstants.AREA_MAP.containsKey(userInfo.getBtrtl())) {
+                log.error("找不到对应的地区");
+                return;
+            }
+            String userName = userInfo.getPernr();
+            String firstName = userInfo.getVorna();
+            String lastName = userInfo.getNachn();
+            String cnValue = lastName + firstName;
+            String pyName = userInfo.getName2();
+
+            List<String> deptList = new ArrayList<>();
+            if (!StrUtil.isBlank(userInfo.getLev0DeptNo()) && !userInfo.getLev0DeptNo().equals("00000000")) {
+                deptList.add(userInfo.getLev0DeptName());
+                if (!StrUtil.isBlank(userInfo.getLev1DeptNo()) && !userInfo.getLev1DeptNo().equals("00000000")) {
+                    deptList.add(userInfo.getLev1DeptName());
+                    if (!StrUtil.isBlank(userInfo.getLev2DeptNo()) &&!userInfo.getLev2DeptNo().equals("00000000")) {
+                        deptList.add(userInfo.getLev2DeptName());
+                        if (!StrUtil.isBlank(userInfo.getLev3DeptNo()) && !userInfo.getLev3DeptNo().equals("00000000")) {
+                            deptList.add(userInfo.getLev3DeptName());
+                            if (!StrUtil.isBlank(userInfo.getLev4DeptNo()) && !userInfo.getLev4DeptNo().equals("00000000")) {
+                                deptList.add(userInfo.getLev4DeptName());
+                                if (!StrUtil.isBlank(userInfo.getLev5DeptNo()) && !userInfo.getLev5DeptNo().equals("00000000")) {
+                                    deptList.add(userInfo.getLev5DeptName());
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        String deptName = String.join("_", deptList.toArray(new String[deptList.size()]));
+            String deptName = String.join("_", deptList.toArray(new String[deptList.size()]));
 
-        String userDn;
-        if (userInfo.getBtrtl().equals("1010") ||
-                userInfo.getBtrtl().equals("1009") ||
-                userInfo.getBtrtl().equals("1015") ||
-                userInfo.getBtrtl().equals("1021")) {
-            userDn = "cn=" + cnValue + "," + CommonConstants.AREA_MAP.get(userInfo.getBtrtl()) + ",OU=Non-B_Accounts,OU=OF_Users,OU=AACOPTICS_Users," + ldapConfig.getDomainRoot();
-        } else {
-            userDn = "cn=" + cnValue + "," + CommonConstants.DEPT_MAP.getOrDefault(userInfo.getLev1DeptNo(), "OU=HR") + "," + CommonConstants.AREA_MAP.get(userInfo.getBtrtl()) + ",OU=Non-B_Accounts,OU=OF_Users,OU=AACOPTICS_Users," + ldapConfig.getDomainRoot();
+            String userDn;
+            if (userInfo.getBtrtl().equals("1010") ||
+                    userInfo.getBtrtl().equals("1009") ||
+                    userInfo.getBtrtl().equals("1015") ||
+                    userInfo.getBtrtl().equals("1021")) {
+                userDn = "cn=" + cnValue + "," + CommonConstants.AREA_MAP.get(userInfo.getBtrtl()) + ",OU=Non-B_Accounts,OU=OF_Users,OU=AACOPTICS_Users," + ldapConfig.getDomainRoot();
+            } else {
+                userDn = "cn=" + cnValue + "," + CommonConstants.DEPT_MAP.getOrDefault(userInfo.getLev1DeptNo(), "OU=HR") + "," + CommonConstants.AREA_MAP.get(userInfo.getBtrtl()) + ",OU=Non-B_Accounts,OU=OF_Users,OU=AACOPTICS_Users," + ldapConfig.getDomainRoot();
+            }
+            String printGroup;
+            String wifiGroup = CommonConstants.WIFI_NEMPLOYEE;
+            if (userInfo.getBtrtl().equals("1001") || userInfo.getBtrtl().equals("1002")) {
+                printGroup = CommonConstants.PRINT_SHENZHEN;
+            } else if (userInfo.getBtrtl().equals("1007")) {
+                printGroup = CommonConstants.PRINT_SHUYANG;
+            } else {
+                printGroup = CommonConstants.PRINT_MAIN;
+            }
+            boolean needCreateMail = false;
+            if (!Arrays.asList(new String[]{"30", "40", "70", "80"}).contains(userInfo.getPersk())) {
+                needCreateMail = true;
+            }
+            CreateAdUser(context, needCreateMail, userName, firstName, lastName, pyName, deptName, userDn, wifiGroup, printGroup);
         }
-        String printGroup;
-        String wifiGroup = CommonConstants.WIFI_NEMPLOYEE;
-        if (userInfo.getBtrtl().equals("1001") || userInfo.getBtrtl().equals("1002")) {
-            printGroup = CommonConstants.PRINT_SHENZHEN;
-        } else if (userInfo.getBtrtl().equals("1007")) {
-            printGroup = CommonConstants.PRINT_SHUYANG;
-        } else {
-            printGroup = CommonConstants.PRINT_MAIN;
+        catch (Exception err){
+            log.error(err.getMessage());
         }
-        Boolean needCreateMail = false;
-        if (!Arrays.asList(new String[]{"30", "40", "70", "80"}).contains(userInfo.getPersk())) {
-            needCreateMail = true;
-        }
-        CreateAdUser(context, needCreateMail, userName, firstName, lastName, pyName, deptName, userDn, wifiGroup, printGroup);
     }
 
     @Override
