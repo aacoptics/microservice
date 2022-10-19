@@ -37,4 +37,7 @@ public class EquipmentQueryForm extends BaseQueryForm<EquipmentQueryParam> {
     @ApiModelProperty(value = "责任人")
     private String dutyPersonId;
 
+    @ApiModelProperty(value = "设备编号")
+    private String equipNumber;
+
 }

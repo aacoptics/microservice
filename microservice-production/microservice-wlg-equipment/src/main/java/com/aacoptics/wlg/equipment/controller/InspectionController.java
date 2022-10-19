@@ -1,23 +1,33 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.equipment.entity.form.InspectionItemForm;
-import com.aacoptics.wlg.equipment.entity.form.InspectionMainForm;
-import com.aacoptics.wlg.equipment.entity.form.InspectionQueryForm;
-import com.aacoptics.wlg.equipment.entity.form.InspectionShiftForm;
+import com.aacoptics.wlg.equipment.entity.form.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
-import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
-import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
-import com.aacoptics.wlg.equipment.entity.po.InspectionShift;
+import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
+import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.aacoptics.wlg.equipment.service.InspectionMainService;
 import com.aacoptics.wlg.equipment.service.InspectionShiftService;
+import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/inspectionManagement")
@@ -134,5 +144,201 @@ public class InspectionController {
     public Result updateInspectionShift(@PathVariable Long id, @Valid @RequestBody InspectionShiftForm inspectionShiftForm) {
         InspectionShift inspectionShift = inspectionShiftForm.toPo(id, InspectionShift.class);
         return Result.success(inspectionShiftService.update(inspectionShift));
+    }
+
+
+    @ApiOperation(value = "导出点检维护Excel", notes = "导出点检维护Excel")
+    @PostMapping(value = "/exportInspectionExcel")
+    public void exportInspectionExcel(@Valid @RequestBody InspectionQueryForm inspectionQueryForm, HttpServletResponse response) throws Exception {
+        log.debug("query with name:{}", inspectionQueryForm);
+        List<InspectionMain> inspectionMainList = inspectionMainService.queryInspectionDataByCondition(inspectionQueryForm.toParam(InspectionQueryParam.class));
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("点检项维护数据");
+        XSSFRow titleRow = wbSheet.createRow(0);
+        titleRow.createCell(0).setCellValue("序号");
+        titleRow.createCell(1).setCellValue("设备名称");
+        titleRow.createCell(2).setCellValue("规格");
+        titleRow.createCell(3).setCellValue("型号");
+        titleRow.createCell(4).setCellValue("点检项");
+        titleRow.createCell(5).setCellValue("点检项判断标准");
+        titleRow.createCell(6).setCellValue("起始范围值");
+        titleRow.createCell(7).setCellValue("截至范围值");
+        titleRow.createCell(8).setCellValue("更新人");
+        titleRow.createCell(9).setCellValue("更新时间");
+        titleRow.createCell(10).setCellValue("创建人");
+        titleRow.createCell(11).setCellValue("创建时间");
+
+        //创建工作表
+        XSSFSheet wbShiftSheet = workbook.createSheet("点检班次维护数据");
+        XSSFRow shiftSheetTitleRow = wbShiftSheet.createRow(0);
+        shiftSheetTitleRow.createCell(0).setCellValue("序号");
+        shiftSheetTitleRow.createCell(1).setCellValue("设备名称");
+        shiftSheetTitleRow.createCell(2).setCellValue("规格");
+        shiftSheetTitleRow.createCell(3).setCellValue("型号");
+        shiftSheetTitleRow.createCell(4).setCellValue("班次");
+        shiftSheetTitleRow.createCell(5).setCellValue("开始时间");
+        shiftSheetTitleRow.createCell(6).setCellValue("结束时间");
+        shiftSheetTitleRow.createCell(7).setCellValue("更新人");
+        shiftSheetTitleRow.createCell(8).setCellValue("更新时间");
+        shiftSheetTitleRow.createCell(9).setCellValue("创建人");
+        shiftSheetTitleRow.createCell(10).setCellValue("创建时间");
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            //导出点检项表格
+            if (inspectionMainList != null && inspectionMainList.size() > 0) {
+                int rowNumber = 1;
+                for (int i = 0; i < inspectionMainList.size(); i++) {
+                    InspectionMain inspectionMain = inspectionMainList.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(rowNumber++);
+                    dataRow.createCell(0).setCellValue(rowNumber - 1);
+                    dataRow.createCell(1).setCellValue(inspectionMain.getMchName() != null ? inspectionMain.getMchName() + "" : "");
+                    dataRow.createCell(2).setCellValue(inspectionMain.getSpec() != null ? inspectionMain.getSpec() + "" : "");
+                    dataRow.createCell(3).setCellValue(inspectionMain.getTypeVersion() != null ? inspectionMain.getTypeVersion() + "" : "");
+
+                    List<InspectionItem> inspectionItemList = inspectionMain.getInspectionItemList();
+
+                    for(int j=0; j<inspectionItemList.size(); j++)
+                    {
+                        InspectionItem inspectionItem = inspectionItemList.get(j);
+                        if(j != 0)
+                        {
+                            dataRow = wbSheet.createRow(rowNumber++);
+                            dataRow.createCell(0).setCellValue(rowNumber - 1);
+                        }
+                        dataRow.createCell(4).setCellValue(inspectionItem.getCheckItem() != null ? inspectionItem.getCheckItem() + "" : "");
+                        dataRow.createCell(5).setCellValue(inspectionItem.getCheckItemStandard() != null ? inspectionItem.getCheckItemStandard() + "" : "");
+                        if(inspectionItem.getMinValue() != null) {
+                            dataRow.createCell(6).setCellValue(Double.valueOf(inspectionItem.getMinValue() + ""));
+                        }else{
+                            dataRow.createCell(6).setCellType(CellType.BLANK);
+                        }
+                        if(inspectionItem.getMaxValue() != null) {
+                            dataRow.createCell(7).setCellValue(Double.valueOf(inspectionItem.getMaxValue() + ""));
+                        }else{
+                            dataRow.createCell(7).setCellType(CellType.BLANK);
+                        }
+                        dataRow.createCell(8).setCellValue(inspectionItem.getUpdatedBy() != null ? inspectionItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(9).setCellValue(inspectionItem.getUpdatedTime() != null ? inspectionItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(10).setCellValue(inspectionItem.getCreatedBy() != null ? inspectionItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(11).setCellValue(inspectionItem.getCreatedTime() != null ? inspectionItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                    }
+
+                    //合并主表单元格
+                    for(int k=1; k<=3; k++) {
+                        if(inspectionItemList.size() <= 1)
+                        {
+                            continue;
+                        }
+                        ExcelUtil.mergeRegion(wbSheet, rowNumber-inspectionItemList.size(), rowNumber-1, k, k);
+                    }
+                }
+            }
+
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*20, 256*20, 256*15, 256*15, 256*15,
+                    256*20, 256*15, 256*20});
+
+
+            //导出班次表格
+            if (inspectionMainList != null && inspectionMainList.size() > 0) {
+                int shfitRowNumber = 1;
+                for (int i = 0; i < inspectionMainList.size(); i++) {
+                    InspectionMain inspectionMain = inspectionMainList.get(i);
+                    XSSFRow dataRow = wbShiftSheet.createRow(shfitRowNumber++);
+                    dataRow.createCell(0).setCellValue(shfitRowNumber - 1);
+                    dataRow.createCell(1).setCellValue(inspectionMain.getMchName() != null ? inspectionMain.getMchName() + "" : "");
+                    dataRow.createCell(2).setCellValue(inspectionMain.getSpec() != null ? inspectionMain.getSpec() + "" : "");
+                    dataRow.createCell(3).setCellValue(inspectionMain.getTypeVersion() != null ? inspectionMain.getTypeVersion() + "" : "");
+
+                    List<InspectionShift> inspectionShiftList = inspectionMain.getInspectionShiftList();
+
+                    for(int j=0; j<inspectionShiftList.size(); j++)
+                    {
+                        InspectionShift inspectionShift = inspectionShiftList.get(j);
+                        if(j != 0)
+                        {
+                            dataRow = wbShiftSheet.createRow(shfitRowNumber++);
+                            dataRow.createCell(0).setCellValue(shfitRowNumber - 1);
+                        }
+                        dataRow.createCell(4).setCellValue(inspectionShift.getShift() != null ? inspectionShift.getShift() + "" : "");
+                        dataRow.createCell(5).setCellValue(inspectionShift.getStartTime() != null ? inspectionShift.getStartTime() + "" : "");
+                        dataRow.createCell(6).setCellValue(inspectionShift.getEndTime() != null ? inspectionShift.getEndTime() + "" : "");
+                        dataRow.createCell(7).setCellValue(inspectionShift.getUpdatedBy() != null ? inspectionShift.getUpdatedBy() + "" : "");
+                        dataRow.createCell(8).setCellValue(inspectionShift.getUpdatedTime() != null ? inspectionShift.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(9).setCellValue(inspectionShift.getCreatedBy() != null ? inspectionShift.getCreatedBy() + "" : "");
+                        dataRow.createCell(10).setCellValue(inspectionShift.getCreatedTime() != null ? inspectionShift.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                    }
+
+                    //合并主表单元格
+                    for(int k=1; k<=3; k++) {
+                        if(inspectionShiftList.size() <= 1)
+                        {
+                            continue;
+                        }
+                        ExcelUtil.mergeRegion(wbShiftSheet, shfitRowNumber-inspectionShiftList.size(), shfitRowNumber-1, k, k);
+                    }
+                }
+            }
+
+            ExcelUtil.setSheetColumnWidth(wbShiftSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*20, 256*20, 256*15, 256*15,
+                    256*20, 256*15, 256*20});
+
+        } catch (Exception exception)
+        {
+            log.error("导出点检维护数据异常", exception);
+            throw exception;
+        }
+
+        ExcelUtil.exportXlsx(response, workbook, "点检维护数据.xlsx");
+    }
+
+
+
+    /**
+     * Excel模板下载
+     * @param response
+     */
+    @GetMapping("/downloadTemplate")
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        try {
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/inspection.xlsx");
+            if(inputStream == null)
+            {
+                throw new BusinessException("模板不存在");
+            }
+            //强制下载不打开
+            response.setContentType("application/force-download");
+            OutputStream out = response.getOutputStream();
+            //使用URLEncoder来防止文件名乱码或者读取错误
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("设备点检导入模板", "UTF-8"));
+            int b = 0;
+            byte[] buffer = new byte[1000000];
+            while (b != -1) {
+                b = inputStream.read(buffer);
+                if (b != -1) {
+                    out.write(buffer, 0, b);
+                }
+            }
+            inputStream.close();
+            out.close();
+            out.flush();
+        } catch (IOException e) {
+            log.error("模板下载异常", e);
+            throw e;
+        }
+    }
+
+
+
+    @ApiOperation(value = "点检数据Excel上传", notes = "点检数据Excel上传")
+    @ApiImplicitParam(name = "file", value = "Excel文件", required = true, dataType = "MultipartFile")
+    @PostMapping("/uploadExcel")
+    public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
+
+        inspectionMainService.importInspectionExcel(file.getInputStream());
+        return Result.success();
     }
 }

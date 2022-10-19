@@ -71,11 +71,17 @@ public class FloorPlanMachineInfoServiceImpl extends ServiceImpl<FloorPlanMachin
         //根据机台号到对应的表里获取T2字段的值
         for(FloorPlanMachineInfo floorPlanMachineInfo : machineInfoList) {
             String machineNumber = floorPlanMachineInfo.getMachineNo();
-            float t2 = floorPlanMachineInfoMapper.getTemperatureByMachineNo("G" + machineNumber);
-            DecimalFormat decimalFormat = new DecimalFormat(".00");
-            String temperature = decimalFormat.format(t2);
-            floorPlanMachineInfo.setTemperature(temperature);
-            floorPlanMachineInfo.setShowStatus(getShowStatus(floorPlanMachineInfo.getStatus()));
+            try {
+                float t2 = floorPlanMachineInfoMapper.getTemperatureByMachineNo("G" + machineNumber);
+                DecimalFormat decimalFormat = new DecimalFormat(".00");
+                String temperature = decimalFormat.format(t2);
+                floorPlanMachineInfo.setTemperature(temperature);
+                floorPlanMachineInfo.setShowStatus(getShowStatus(floorPlanMachineInfo.getStatus()));
+            } catch (Exception e) {
+                floorPlanMachineInfo.setTemperature("no data");
+                floorPlanMachineInfo.setShowStatus(getShowStatus(floorPlanMachineInfo.getStatus()));
+            }
+
         }
 
         return machineInfoList;

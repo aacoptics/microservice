@@ -110,6 +110,17 @@ public interface EquipmentService {
      */
     List<Equipment> findEquipmentList(String mchName, String spec, String typeVersion);
 
+    /**
+     * 根据设备名称，规格，型号查询设备数量
+     *
+     * @param mchName 设备名称
+     * @param spec 规格
+     * @param typeVersion 型号
+     *
+     * @return
+     */
+    Integer findEquipmentCountList(String mchName, String spec, String typeVersion);
+
 
     /**
      * 根据设备编码查询设备

@@ -18,7 +18,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="findLoading">查询
+            <el-button :loading="findLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -28,94 +28,111 @@
                 <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
+            <el-button type="info"
+                       @click="handleOpenExcelUpload">Excel导入
+              <template #icon>
+                <font-awesome-icon :icon="['fas','file-lines']"/>
+              </template>
+            </el-button>
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('点检维护')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
-                @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit" @handleCurrentChange="handleCurrentChange">
+      <SysTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
+                :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
+                :highlightCurrentRow="true" :showBatchDelete="false" :stripe="true" border
+                @findPage="findPage" @handleCurrentChange="handleCurrentChange" @handleDelete="handleDelete"
+                @handleEdit="handleEdit">
       </SysTable>
-      <el-tabs type="border-card" style="margin-top: 50px;">
+      <el-tabs style="margin-top: 50px;" type="border-card">
         <el-tab-pane label="点检项">
-          <el-button type="success" @click="handleAddInspectionItem" style="margin-bottom: 10px;">新增点检项
-                <template #icon>
-                  <font-awesome-icon :icon="['fas', 'plus']"/>
-                </template>
-              </el-button>
-          <el-table size="small" :data="inspectionItemTableData" border :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'left'}" v-loading="findDetailLoading">
-                <el-table-column prop="checkItem" label="点检项" width="180" />
-                <el-table-column prop="checkItemStandard" label="点检项判断标准" width="180" />
-                <el-table-column prop="minValue" label="起始范围值" />
-                <el-table-column prop="maxValue" label="截至范围值" />
-                <el-table-column prop="updatedBy" label="更新人" />
-                <el-table-column prop="updatedTime" label="更新时间" :formatter="dateTimeFormat"/>
-                <el-table-column prop="createdBy" label="创建人" />
-                <el-table-column prop="createdTime" label="创建时间" :formatter="dateTimeFormat"/>
-                <el-table-column label="操作" width="120" >
-                  <template #default="scope">
-                    <el-button size="small" @click="handleInspectionItemEdit(scope.$index, scope.row)" type="primary"
-                      >
-                      <template #icon>
-                        <font-awesome-icon :icon="['far', 'pen-to-square']"/>
-                      </template>
-                </el-button
-                    >
-                    <el-button
-                      size="small"
-                      type="danger"
-                      @click="handleInspectionItemDelete(scope.$index, scope.row)"
-                      >
-                      <template #icon>
-                        <font-awesome-icon :icon="['far', 'trash-can']"/>
-                      </template>
-                      </el-button
-                    >
+          <el-button style="margin-bottom: 10px;" type="success" @click="handleAddInspectionItem">新增点检项
+            <template #icon>
+              <font-awesome-icon :icon="['fas', 'plus']"/>
+            </template>
+          </el-button>
+          <el-table v-loading="findDetailLoading" :cell-style="{'text-align':'left'}" :data="inspectionItemTableData"
+                    :header-cell-style="{'text-align':'center'}"
+                    border size="small">
+            <el-table-column label="点检项" prop="checkItem" width="180"/>
+            <el-table-column label="点检项判断标准" prop="checkItemStandard" width="180"/>
+            <el-table-column label="起始范围值" prop="minValue"/>
+            <el-table-column label="截至范围值" prop="maxValue"/>
+            <el-table-column label="更新人" prop="updatedBy"/>
+            <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime"/>
+            <el-table-column label="创建人" prop="createdBy"/>
+            <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime"/>
+            <el-table-column label="操作" width="120">
+              <template #default="scope">
+                <el-button size="small" type="primary" @click="handleInspectionItemEdit(scope.$index, scope.row)"
+                >
+                  <template #icon>
+                    <font-awesome-icon :icon="['far', 'pen-to-square']"/>
                   </template>
-                </el-table-column>
-              </el-table>
+                </el-button
+                >
+                <el-button
+                    size="small"
+                    type="danger"
+                    @click="handleInspectionItemDelete(scope.$index, scope.row)"
+                >
+                  <template #icon>
+                    <font-awesome-icon :icon="['far', 'trash-can']"/>
+                  </template>
+                </el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
         <el-tab-pane label="点检班次">
-              <el-button type="success" @click="handleAddInspectionShift" style=" margin-bottom: 10px;">新增点检班次
-                <template #icon>
-                  <font-awesome-icon :icon="['fas', 'plus']"/>
-                </template>
-              </el-button>
-          <el-table size="small" :data="inspectionShiftTableData" border :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'left'}" v-loading="findDetailLoading">
-                <el-table-column prop="shift" label="班次" width="180" />
-                <el-table-column prop="startTime" label="开始时间" />
-                <el-table-column prop="endTime" label="结束时间" />
-                <el-table-column prop="updatedBy" label="更新人" />
-                <el-table-column prop="updatedTime" label="更新时间" :formatter="dateTimeFormat"/>
-                <el-table-column prop="createdBy" label="创建人" />
-                <el-table-column prop="createdTime" label="创建时间" :formatter="dateTimeFormat"/>
-                <el-table-column label="操作" width="120" >
-                  <template #default="scope" >
-                    <el-button size="small" @click="handleInspectionShiftEdit(scope.$index, scope.row)" type="primary"
-                      >
-                      <template #icon>
-                  <font-awesome-icon :icon="['far', 'pen-to-square']"/>
-                </template>
-                      </el-button
-                    >
-                    <el-button
-                      size="small"
-                      type="danger"
-                      @click="handleInspectionShiftDelete(scope.$index, scope.row)"
-                      >
-                      <template #icon>
-                        <font-awesome-icon :icon="['far', 'trash-can']"/>
-                      </template>
-                      </el-button
-                    >
+          <el-button style=" margin-bottom: 10px;" type="success" @click="handleAddInspectionShift">新增点检班次
+            <template #icon>
+              <font-awesome-icon :icon="['fas', 'plus']"/>
+            </template>
+          </el-button>
+          <el-table v-loading="findDetailLoading" :cell-style="{'text-align':'left'}" :data="inspectionShiftTableData"
+                    :header-cell-style="{'text-align':'center'}"
+                    border size="small">
+            <el-table-column label="班次" prop="shift" width="180"/>
+            <el-table-column label="开始时间" prop="startTime"/>
+            <el-table-column label="结束时间" prop="endTime"/>
+            <el-table-column label="更新人" prop="updatedBy"/>
+            <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime"/>
+            <el-table-column label="创建人" prop="createdBy"/>
+            <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime"/>
+            <el-table-column label="操作" width="120">
+              <template #default="scope">
+                <el-button size="small" type="primary" @click="handleInspectionShiftEdit(scope.$index, scope.row)"
+                >
+                  <template #icon>
+                    <font-awesome-icon :icon="['far', 'pen-to-square']"/>
                   </template>
-                </el-table-column>
-              </el-table>
+                </el-button
+                >
+                <el-button
+                    size="small"
+                    type="danger"
+                    @click="handleInspectionShiftDelete(scope.$index, scope.row)"
+                >
+                  <template #icon>
+                    <font-awesome-icon :icon="['far', 'trash-can']"/>
+                  </template>
+                </el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isInspectionAddOperation?'新增':'编辑'"
-                 width="25%" destroy-on-close>
+                 destroy-on-close width="25%">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
@@ -123,7 +140,8 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-select v-model="dataForm.mchName" clearable filterable placeholder="请选择设备名称" @change="selectMchName" style="width:100%">
+                <el-select v-model="dataForm.mchName" clearable filterable placeholder="请选择设备名称"
+                           style="width:100%" @change="selectMchName">
                   <el-option
                       v-for="item in mchNameOptions"
                       :key="item"
@@ -136,7 +154,8 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-select v-model="dataForm.spec" clearable filterable placeholder="请选择规格" @change="selectSpec" style="width:100%">
+                <el-select v-model="dataForm.spec" clearable filterable placeholder="请选择规格" style="width:100%"
+                           @change="selectSpec">
                   <el-option
                       v-for="item in specOptions"
                       :key="item"
@@ -147,9 +166,10 @@
                 </el-select>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+            <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-select v-model="dataForm.typeVersion" clearable filterable placeholder="请选择型号" style="width:100%">
+                <el-select v-model="dataForm.typeVersion" clearable filterable placeholder="请选择型号"
+                           style="width:100%">
                   <el-option
                       v-for="item in typeVersionOptions"
                       :key="item"
@@ -160,21 +180,25 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            </el-row>
-          
-           </el-form>
+          </el-row>
+
+        </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
-            <el-button :size="size" type="info" @click="cancel" style="margin-right: 0px;">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitInspectionMain" style="margin-right: 20px;">提交</el-button>
+            <el-button :size="size" style="margin-right: 0px;" type="info" @click="cancel">取消</el-button>
+            <el-button :loading="editLoading" :size="size" style="margin-right: 20px;" type="primary"
+                       @click="submitInspectionMain">提交
+            </el-button>
           </slot>
         </div>
       </el-dialog>
 
-      
-      <el-dialog v-model="inspectionItemDialogVisible" :close-on-click-modal="false" :title="isInspectionItemAddOperation?'新增点检项':'编辑点检项'"
-                 width="25%" destroy-on-close>
-        <el-form ref="inspectionItemDataForm" :model="inspectionItemDataForm" :rules="inspectionItemDataFormRules" :size="size" label-width="120px">
+
+      <el-dialog v-model="inspectionItemDialogVisible" :close-on-click-modal="false"
+                 :title="isInspectionItemAddOperation?'新增点检项':'编辑点检项'"
+                 destroy-on-close width="25%">
+        <el-form ref="inspectionItemDataForm" :model="inspectionItemDataForm" :rules="inspectionItemDataFormRules"
+                 :size="size" label-width="120px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="inspectionItemDataForm.id" auto-complete="off"></el-input>
           </el-form-item>
@@ -187,23 +211,25 @@
                 <el-input v-model="inspectionItemDataForm.checkItem" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+            <el-col :span="20">
               <el-form-item label="点检项判断标准" prop="checkItemStandard">
                 <el-input v-model="inspectionItemDataForm.checkItemStandard" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="起始范围值" prop="minValue">
-                <el-input-number v-model="inspectionItemDataForm.minValue" auto-complete="off" clearable style="width:100%"></el-input-number>
+                <el-input-number v-model="inspectionItemDataForm.minValue" auto-complete="off" clearable
+                                 style="width:100%"></el-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="截至范围值" prop="maxValue">
-                <el-input-number v-model="inspectionItemDataForm.maxValue" auto-complete="off" clearable style="width:100%"></el-input-number>
+                <el-input-number v-model="inspectionItemDataForm.maxValue" auto-complete="off" clearable
+                                 style="width:100%"></el-input-number>
               </el-form-item>
             </el-col>
           </el-row>
-          
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -214,9 +240,11 @@
       </el-dialog>
 
       <!-- 点检班次-->
-      <el-dialog v-model="inspectionShiftDialogVisible" :close-on-click-modal="false" :title="isInspectionShiftAddOperation?'新增点检班次':'编辑点检班次'"
-                 width="25%" destroy-on-close>
-        <el-form ref="inspectionShiftDataForm" :model="inspectionShiftDataForm" :rules="inspectionShiftDataFormRules" :size="size" label-width="100px">
+      <el-dialog v-model="inspectionShiftDialogVisible" :close-on-click-modal="false"
+                 :title="isInspectionShiftAddOperation?'新增点检班次':'编辑点检班次'"
+                 destroy-on-close width="25%">
+        <el-form ref="inspectionShiftDataForm" :model="inspectionShiftDataForm" :rules="inspectionShiftDataFormRules"
+                 :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="inspectionShiftDataForm.id" auto-complete="off"></el-input>
           </el-form-item>
@@ -229,23 +257,67 @@
                 <el-input v-model="inspectionShiftDataForm.shift" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+            <el-col :span="20">
               <el-form-item label="开始时间" prop="startTime">
-                <el-time-picker v-model="inspectionShiftDataForm.startTime" placeholder="班次开始时间" style="width:100%"/>
+                <el-time-picker v-model="inspectionShiftDataForm.startTime" placeholder="班次开始时间"
+                                style="width:100%"/>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="结束时间" prop="endTime">
-                <el-time-picker v-model="inspectionShiftDataForm.endTime" placeholder="班次结束时间" style="width:100%"/>
+                <el-time-picker v-model="inspectionShiftDataForm.endTime" placeholder="班次结束时间"
+                                style="width:100%"/>
               </el-form-item>
             </el-col>
           </el-row>
-          
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" type="info" @click="cancelInspectionShift">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitInspectionShift">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitInspectionShift">提交
+            </el-button>
+          </slot>
+        </div>
+      </el-dialog>
+
+
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'设备保养Excel导入'"
+
+                 width="400px">
+        <el-upload
+            :before-upload="beforeUpload"
+            :http-request="submitExcelUpload"
+            :multiple="false"
+            :show-file-list="false"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            action=""
+            class="upload-demo"
+            drag>
+          <font-awesome-icon :icon="['fas','cloud-arrow-up']" class="el-icon--upload"/>
+          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-progress
+                :duration="pregressDuration"
+                :indeterminate="true"
+                :percentage="progressPercentage"
+                :status="progressStatus"
+                :stroke-width="20"
+                :text-inside="true"
+                style="width:350px"
+            >
+              <span>{{ progressContent }}</span>
+            </el-progress>
+            <div style="padding-top: 20px;">
+              <el-button :loading="downloadTemplateLoading" :size="size" style="position: absolute;left: 20px;"
+                         type="primary"
+                         @click="downloadTemplate">模板下载
+              </el-button>
+              <el-button :size="size" type="success" @click="cancelExcelUpload">关闭</el-button>
+            </div>
           </slot>
         </div>
       </el-dialog>
@@ -255,9 +327,27 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteInspection, findInspectionPage, handleAdd, handleUpdate, addInspectionItem, 
-  updateInspectionItem, addInspectionShift, updateInspectionShift, findInspectionById, deleteInspectionItem, deleteInspectionShift} from "@/api/wlg/equipment/inspectionManagement";
-import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
+import {
+  addInspectionItem,
+  addInspectionShift,
+  deleteInspection,
+  deleteInspectionItem,
+  deleteInspectionShift,
+  downloadTemplate,
+  exportInspectionExcel,
+  findInspectionById,
+  findInspectionPage,
+  handleAdd,
+  handleUpdate,
+  updateInspectionItem,
+  updateInspectionShift,
+  uploadExcel
+} from "@/api/wlg/equipment/inspectionManagement";
+import {
+  findMchNameList,
+  findSpecListByMchName,
+  findTypeVersionListByMchNameAndSpec
+} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 export default {
@@ -287,6 +377,11 @@ export default {
       inspectionItemTableData: [],
       inspectionShiftTableData: [],
 
+      progressPercentage: 0,
+      progressContent: "",
+      pregressDuration: 6,
+      progressStatus: "",
+
       isInspectionAddOperation: false, // true:新增, false:编辑
       isInspectionItemAddOperation: false,
       isInspectionShiftAddOperation: false,
@@ -295,28 +390,33 @@ export default {
       inspectionItemDialogVisible: false,
       inspectionShiftDialogVisible: false,
 
+      excelUploadDialogVisible: false,
+
       editLoading: false,
       findLoading: false,
       findDetailLoading: false,
+      exportLoading: false,
+      downloadTemplateLoading: false,
+
       dataFormRules: {
         mchName: [{required: true, message: "请输入设备名称", trigger: "blur"}],
         spec: [{required: true, message: "请输入规格", trigger: "blur"}],
         typeVersion: [{required: true, message: "请输入型号", trigger: "blur"}],
       },
-      inspectionItemDataFormRules:{
+      inspectionItemDataFormRules: {
         checkItem: [{required: true, message: "请输入点检项", trigger: "blur"}],
         checkItemStandard: [{required: true, message: "请输入点检项判断标准", trigger: "blur"}],
         minValue: [{required: true, message: "请输入起始范围值", trigger: "blur"}],
         maxValue: [{required: true, message: "请输入截止范围值", trigger: "blur"}],
       },
-      inspectionShiftDataFormRules:{
+      inspectionShiftDataFormRules: {
         shift: [{required: true, message: "请输入班次", trigger: "blur"}],
         startTime: [{required: true, message: "请选择班次开始时间", trigger: "blur"}],
         endTime: [{required: true, message: "请选择班次结束时间", trigger: "blur"}],
       },
-      mchNameOptions:[],
-      specOptions:[],
-      typeVersionOptions:[],
+      mchNameOptions: [],
+      specOptions: [],
+      typeVersionOptions: [],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -329,13 +429,13 @@ export default {
         id: 0,
         checkItem: '',
         checkItemStandard: '',
-        minValue:null,
+        minValue: null,
         maxValue: null,
       },
-      inspectionShiftDataForm:{
+      inspectionShiftDataForm: {
         inspectionMainId: null,
         id: 0,
-        shift:'',
+        shift: '',
         startTime: '',
         endTime: '',
       },
@@ -378,18 +478,15 @@ export default {
             this.findDetailLoading = false;
             const responseData = res.data;
             if (responseData.code === "000000") {
-              if(responseData.data != null)
-              {
+              if (responseData.data != null) {
                 this.inspectionItemTableData = responseData.data.inspectionItemList;
                 this.inspectionShiftTableData = responseData.data.inspectionShiftList;
               }
             }
           });
     },
-    handleCurrentChange: function(val)
-    {
-      if(val == null || val.val == null)
-      {
+    handleCurrentChange: function (val) {
+      if (val == null || val.val == null) {
         this.currentSelectInspectionMainRowId = null;
         return;
       }
@@ -402,12 +499,11 @@ export default {
         deleteInspection(data.params[0]).then(data.callback);
     },
     handleInspectionItemDelete: function (index, row) {
-      if (row != null)
-      {
+      if (row != null) {
         this.$confirm('确认删除选中记录吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
           deleteInspectionItem(row).then((res) => {
             const responseData = res.data
@@ -427,12 +523,11 @@ export default {
 
     },
     handleInspectionShiftDelete: function (index, row) {
-      if (row != null)
-      {
+      if (row != null) {
         this.$confirm('确认删除选中记录吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
           deleteInspectionShift(row).then((res) => {
             const responseData = res.data
@@ -458,20 +553,19 @@ export default {
       this.dataForm = {
         id: 0,
         mchName: "",
-        spec:"",
+        spec: "",
         typeVersion: "",
       };
     },
     // 显示新增界面
     handleAddInspectionItem: function () {
-      if(this.currentSelectInspectionMainRowId == null || this.currentSelectInspectionMainRowId == 0)
-      {
+      if (this.currentSelectInspectionMainRowId == null || this.currentSelectInspectionMainRowId == 0) {
         this.$message({
-            message:
-                "请先选择一行点检设备",
-            type: "error",
-          });
-          return;
+          message:
+              "请先选择一行点检设备",
+          type: "error",
+        });
+        return;
       }
 
       this.inspectionItemDialogVisible = true;
@@ -481,20 +575,19 @@ export default {
         id: 0,
         checkItem: '',
         checkItemStandard: '',
-        minValue:null,
+        minValue: null,
         maxValue: null,
       };
     },
-        // 显示新增界面
+    // 显示新增界面
     handleAddInspectionShift: function () {
-      if(this.currentSelectInspectionMainRowId == null || this.currentSelectInspectionMainRowId == 0)
-      {
+      if (this.currentSelectInspectionMainRowId == null || this.currentSelectInspectionMainRowId == 0) {
         this.$message({
-            message:
-                "请先选择一行点检设备",
-            type: "error",
-          });
-          return;
+          message:
+              "请先选择一行点检设备",
+          type: "error",
+        });
+        return;
       }
       this.inspectionShiftDialogVisible = true;
       this.isInspectionShiftAddOperation = true;
@@ -527,8 +620,8 @@ export default {
       this.inspectionShiftDataForm.startTime = currentDate + " " + row.startTime;
       this.inspectionShiftDataForm.endTime = currentDate + " " + row.endTime;
     },
-     // 编辑
-     submitInspectionMain: function () {
+    // 编辑
+    submitInspectionMain: function () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -625,8 +718,8 @@ export default {
         }
       });
     },
-     // 提交
-     submitInspectionItem: function () {
+    // 提交
+    submitInspectionItem: function () {
       this.$refs.inspectionItemDataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -673,15 +766,32 @@ export default {
         }
       });
     },
-    selectMchName()
-    {
+
+    exportExcelData(excelFileName) {
+      let pageRequest = {};
+      pageRequest.mchName = this.filters.mchName;
+      pageRequest.spec = this.filters.spec;
+      pageRequest.typeVersion = this.filters.typeVersion;
+
+      this.exportLoading = true;
+      exportInspectionExcel(pageRequest).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
+    selectMchName() {
       this.dataForm.spec = "";
       this.dataForm.typeVersion = "";
 
       let params = {};
       params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
+      if (params.mchName == null || params.mchName == "") {
         return;
       }
       findSpecListByMchName(params).then(response => {
@@ -690,19 +800,16 @@ export default {
         }
       })
     },
-    selectSpec()
-    {
+    selectSpec() {
       this.dataForm.typeVersion = "";
 
       let params = {};
       params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
+      if (params.mchName == null || params.mchName == "") {
         return;
       }
       params.spec = this.dataForm.spec;
-      if(params.spec == null || params.spec == "")
-      {
+      if (params.spec == null || params.spec == "") {
         return;
       }
       findTypeVersionListByMchNameAndSpec(params).then(response => {
@@ -711,16 +818,74 @@ export default {
         }
       })
     },
+    handleOpenExcelUpload: function () {
+      this.excelUploadDialogVisible = true;
+
+      this.progressPercentage = 0;
+      this.progressContent = "";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+    },
+
+    submitExcelUpload(params) {
+      this.progressPercentage = 50;
+      this.progressContent = "Excel导入中，请稍等...";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+
+      uploadExcel(params).then((response) => {
+        const responseData = response.data
+
+        this.progressPercentage = 100;
+        this.pregressDuration = 0;
+        if (responseData.code === '000000') {
+          this.$message.success('上传成功！')
+
+          this.progressContent = "导入成功";
+          this.progressStatus = "success"
+        } else {
+          this.$message.error('上传失败！' + responseData.msg + "," + responseData.data)
+
+          this.progressContent = "导入失败";
+          this.progressStatus = "exception";
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
+    beforeUpload(file) {
+      const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel'
+      if (!isExcel) {
+        this.$message.error('只能上传xlsx, xls格式的文件！')
+        return false
+      }
+    },
+    downloadTemplate() {
+      this.downloadTemplateLoading = true;
+      downloadTemplate().then(res => {
+
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', '设备保养导入模板' + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+
+        this.downloadTemplateLoading = false;
+      });
+    },
+    cancelExcelUpload() {
+      this.excelUploadDialogVisible = false;
+    },
     // 取消
     cancel() {
       this.dialogVisible = false;
     },
-    cancelInspectionItem()
-    {
+    cancelInspectionItem() {
       this.inspectionItemDialogVisible = false;
     },
-    cancelInspectionShift()
-    {
+    cancelInspectionShift() {
       this.inspectionShiftDialogVisible = false;
     },
 
@@ -731,8 +896,7 @@ export default {
     dateFormat: function (dateValue) {
       return this.$moment(dateValue).format('YYYY-MM-DD')
     },
-    timeFormat: function(dateValue)
-    {
+    timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
     },
   },

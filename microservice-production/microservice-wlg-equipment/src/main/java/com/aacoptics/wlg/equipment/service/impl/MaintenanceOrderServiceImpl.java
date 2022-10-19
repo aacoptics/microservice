@@ -2,6 +2,7 @@ package com.aacoptics.wlg.equipment.service.impl;
 
 
 import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
@@ -103,10 +104,26 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         return this.removeById(id);
     }
 
+    @Transactional
     @Override
     public boolean update(MaintenanceOrder maintenanceOrder) {
 
         boolean isSuccess = this.updateById(maintenanceOrder);
+        if(isSuccess == false)
+        {
+            throw new BusinessException("更新工单异常");
+        }
+
+        List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
+        for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
+        {
+            isSuccess = maintenanceOrderItemService.update(maintenanceOrderItem);
+            if(isSuccess == false)
+            {
+                throw new BusinessException("更新工单项异常");
+            }
+        }
+
         return isSuccess;
     }
 
@@ -281,12 +298,15 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
     @Transactional
     @Override
     public boolean submitOrder(MaintenanceOrder maintenanceOrder) {
-        String mchCode = maintenanceOrder.getMchCode();
-        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
-        if(equipment == null)
+        String orderStatus = maintenanceOrder.getStatus();
+        if(!MaintenanceOrderStatusConstants.STAGED.equals(orderStatus) && !MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
         {
-            throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
+            throw new BusinessException("状态只能为1(已暂存)或2(已提交)，请确认");
         }
+
+        Long maintenanceOrderId =  maintenanceOrder.getId();
+        MaintenanceOrder targetMaintenanceOrder =  this.get(maintenanceOrderId);
+
 
         boolean isRepairBoolean = false;
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
@@ -294,21 +314,26 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         {
             //判断是否需要维修
             Integer isRepair = maintenanceOrderItem.getIsRepair();
-            if(isRepair == 1)
+            if(isRepair == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
             {
                 isRepairBoolean = true;
-                repairOrderService.createRepairOrderByMaintenance(maintenanceOrder, maintenanceOrderItem);
+                repairOrderService.createRepairOrderByMaintenance(targetMaintenanceOrder, maintenanceOrderItem);
             }
         }
 
+        targetMaintenanceOrder.setStatus(orderStatus); //设置状态
+        targetMaintenanceOrder.setMaintenanceOrderItemList(maintenanceOrderItemList);
+
         //更新设备状态
+        String mchCode = targetMaintenanceOrder.getMchCode();
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if(isRepairBoolean) {
             equipment.setStatus(EquipmentStatusConstants.REPAIR);
         }
         equipment.setLastMaintenanceDatetime(LocalDateTime.now());
         equipmentService.update(equipment);
 
-        boolean isSuccess = this.updateById(maintenanceOrder);
+        boolean isSuccess = this.update(targetMaintenanceOrder);
         return isSuccess;
     }
 }

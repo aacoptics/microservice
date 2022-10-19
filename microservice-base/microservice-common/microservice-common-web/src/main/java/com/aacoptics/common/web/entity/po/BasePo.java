@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class BasePo implements Serializable {
-    public final static String DEFAULT_USERNAME = "IoT";
+    public final static String DEFAULT_USERNAME = "UDS";
     @TableId(type = IdType.ID_WORKER)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;

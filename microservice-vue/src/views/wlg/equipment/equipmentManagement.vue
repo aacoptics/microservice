@@ -34,6 +34,9 @@
           <el-form-item label="责任人" prop="dutyPersonId">
             <el-input v-model="filters.dutyPersonId" clearable placeholder="责任人"></el-input>
           </el-form-item>
+          <el-form-item label="设备编号" prop="equipNumber">
+            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+          </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
@@ -52,19 +55,62 @@
         </el-form>
       </div>
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" 
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
-                :stripe="true" :show-operation="false"
+                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" 
+                :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
+                :stripe="true" :show-operation="true" :showOperationDel="false" @handleEdit="handleEdit"
                 @findPage="findPage">
       </SysTable>
 
 
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
+                 width="30%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+          <el-form-item v-if="false" label="Id" prop="id">
+            <el-input v-model="dataForm.id" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="资产编码" prop="mchCode">
+                <el-input v-model="dataForm.mchCode" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="资产名称" prop="mchName">
+                <el-input v-model="dataForm.mchName" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="规格" prop="spec">
+                <el-input v-model="dataForm.spec" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="型号" prop="typeVersion">
+                <el-input v-model="dataForm.typeVersion" :disabled="!operation" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备编号" prop="equipNumber">
+                <el-input v-model="dataForm.equipNumber" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          </el-form>
+        
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button :size="size" @click="cancel">取消</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitForm">提交</el-button>
+          </slot>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import SysTable from "@/components/SysTable";
-import {findEquipmentManagementPage, exportEquipmentExcel} from "@/api/wlg/equipment/equipmentManagement";
+import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
@@ -75,6 +121,10 @@ export default {
       size: "default",
 
       exportLoading: false,
+      editLoading: false,
+
+      operation: false, // true:新增, false:编辑
+      dialogVisible: false, // 新增编辑界面是否显示
 
       filters: {
         mchCode: "",
@@ -86,13 +136,23 @@ export default {
         assetManagerId: "",
         mchManagerId: "",
         dutyPersonId: "",
+        equipNumber: "",
       },
+      dataForm: {
+        id: 0,
+        mchCode: "",
+        mchName: "",
+        spec: "",
+        equipNumber: "",
+      },
+
       equipmentStatusOptions:[],
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
         {prop: "mchName", label: "资产名称", minWidth: 100},
         {prop: "spec", label: "规格", minWidth: 100},
         {prop: "typeVersion", label: "型号", minWidth: 100},
+        {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
         {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
         {prop: "equipState", label: "资产状态", minWidth: 100},
@@ -152,6 +212,7 @@ export default {
       this.pageRequest.assetManagerId = this.filters.assetManagerId;
       this.pageRequest.mchManagerId = this.filters.mchManagerId;
       this.pageRequest.dutyPersonId = this.filters.dutyPersonId;
+      this.pageRequest.equipNumber = this.filters.equipNumber;
 
       findEquipmentManagementPage(this.pageRequest)
           .then((res) => {
@@ -174,6 +235,7 @@ export default {
       pageRequest.assetManagerId = this.filters.assetManagerId;
       pageRequest.mchManagerId = this.filters.mchManagerId;
       pageRequest.dutyPersonId = this.filters.dutyPersonId;
+      pageRequest.equipNumber = this.filters.equipNumber;
 
       this.exportLoading = true;
       exportEquipmentExcel(pageRequest).then(res => {
@@ -186,6 +248,63 @@ export default {
         document.body.appendChild(link);
         link.click();
       });
+    },
+    // 显示编辑界面
+    handleEdit: function (params) {
+      this.dialogVisible = true;
+      this.operation = false;
+      this.dataForm = Object.assign({}, params.row);
+    },
+      // 编辑
+      submitForm: function () {
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {
+            this.editLoading = true;
+            let params = Object.assign({}, this.dataForm);
+            if (this.operation) {
+              handleAdd(params).then((res) => {
+                const responseData = res.data;
+                this.editLoading = false;
+                if (responseData.code === "000000") {
+                  this.$message({message: "操作成功", type: "success"});
+                  this.dialogVisible = false;
+                  this.$refs["dataForm"].resetFields();
+                } else {
+                  this.$message({
+                    message:
+                        "操作失败 " + getResponseDataMessage(responseData),
+                    type: "error",
+                  });
+                }
+                this.findPage(null);
+              });
+            } else {
+              handleUpdate(params).then((res) => {
+                const responseData = res.data;
+                this.editLoading = false;
+                if (responseData.code === "000000") {
+                  this.$message({message: "操作成功", type: "success"});
+                  this.dialogVisible = false;
+                  this.$refs["dataForm"].resetFields();
+                } else {
+                  this.$message({
+                    message:
+                        "操作失败, " + getResponseDataMessage(responseData),
+                    type: "error",
+                  });
+                }
+                this.findPage(null);
+              });
+            }
+          });
+        }
+      });
+    },
+
+    // 取消
+    cancel() {
+      this.dialogVisible = false;
     },
 
     statusFormat: function (row) {

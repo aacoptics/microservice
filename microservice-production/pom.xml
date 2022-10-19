@@ -21,6 +21,7 @@
         <module>iot-general-dashboard</module>
  		<module>microservice-wlg-equipment</module>
         <module>microservice-data-analysis-api</module>
+        <module>microservice-budget-report</module>
     </modules>
 
     <packaging>pom</packaging>

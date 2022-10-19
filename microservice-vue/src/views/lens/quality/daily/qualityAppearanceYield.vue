@@ -55,7 +55,8 @@
               </el-button>
             </el-form-item>
             <el-form-item>
-              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('外观良率报表')">导出报表
+              <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('外观良率报表')">
+                导出报表
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'download']"/>
                 </template>

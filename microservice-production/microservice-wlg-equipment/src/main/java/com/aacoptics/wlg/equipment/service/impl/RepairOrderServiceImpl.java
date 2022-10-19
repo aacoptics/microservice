@@ -1,9 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
-import com.aacoptics.wlg.equipment.constant.RepairOrderSourceConstants;
-import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.RepairOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
@@ -144,8 +142,16 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
             if (!RepairOrderStatusConstants.REPAIRED.equals(repairOrder.getStatus())) {
                 throw new BusinessException("工单【" + repairOrder.getOrderNumber() + "】不是已维修状态，不能确认");
             }
+
+            //更新设备状态为正常
+            Equipment equipment = equipmentService.findEquipmentByMchCode(repairOrder.getMchCode());
+            equipment.setStatus(EquipmentStatusConstants.NORMAL);
+            equipmentService.update(equipment);
+
+
             repairOrder.setStatus(RepairOrderStatusConstants.CONFIRMED);
             this.update(repairOrder);
+
         }
     }
 
@@ -167,16 +173,34 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
     @Override
     public boolean submitOrder(RepairOrder repairOrder) {
+        String orderStatus = repairOrder.getStatus();
+        if(!RepairOrderStatusConstants.STAGED.equals(orderStatus) && !RepairOrderStatusConstants.REPAIRED.equals(orderStatus))
+        {
+            throw new BusinessException("状态只能为1(已暂存)或2(已维修)，请确认");
+        }
+        RepairOrder targetRepairOrder = this.get(repairOrder.getId());
+        if(targetRepairOrder == null)
+        {
+            throw new BusinessException("ID为【" + repairOrder.getId() + "】的工单不存在，请确认");
+        }
 
-        repairOrder.setRepairDatetime(LocalDateTime.now());
-        boolean isSuccess = this.updateById(repairOrder);
+        targetRepairOrder.setRepairDesc(repairOrder.getRepairDesc());
+        targetRepairOrder.setRepairDatetime(LocalDateTime.now());
+        boolean isSuccess = this.updateById(targetRepairOrder);
         return isSuccess;
     }
 
     @Override
     public RepairOrder createRepairOrderByInspection(InspectionOrder inspectionOrder, InspectionOrderItem inspectionOrderItem) {
-
         RepairOrder repairOrder = new RepairOrder();
+
+        //生成工单号
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDateStr = orderNumberDateFormatter.format(currentDate);
+
+        repairOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
+
         repairOrder.setMchCode(inspectionOrder.getMchCode());
         repairOrder.setSourceType(RepairOrderSourceConstants.ORDER_SOURCE_TYPE_INSPECTION);
         repairOrder.setStatus(RepairOrderStatusConstants.CREATED);
@@ -195,6 +219,13 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
     @Override
     public RepairOrder createRepairOrderByMaintenance(MaintenanceOrder maintenanceOrder, MaintenanceOrderItem maintenanceOrderItem) {
         RepairOrder repairOrder = new RepairOrder();
+        //生成工单号
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter orderNumberDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String currentDateStr = orderNumberDateFormatter.format(currentDate);
+
+        repairOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
+
         repairOrder.setMchCode(maintenanceOrder.getMchCode());
         repairOrder.setDutyPersonId(maintenanceOrder.getDutyPersonId());
 

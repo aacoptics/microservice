@@ -141,6 +141,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getAssetManagerId()), "asset_manager_id", equipmentQueryParam.getAssetManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getMchManagerId()), "mch_manager_id", equipmentQueryParam.getMchManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipNumber()), "equip_number", equipmentQueryParam.getEquipNumber());
 
         queryWrapper.orderByAsc("mch_code");
         return this.page(page, queryWrapper);
@@ -159,6 +160,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getAssetManagerId()), "asset_manager_id", equipmentQueryParam.getAssetManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getMchManagerId()), "mch_manager_id", equipmentQueryParam.getMchManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipNumber()), "equip_number", equipmentQueryParam.getEquipNumber());
 
         queryWrapper.orderByAsc("mch_code");
         return this.baseMapper.selectList(queryWrapper);
@@ -179,7 +181,6 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
 
     @Override
     public boolean update(Equipment equipment) {
-
         boolean isSuccess = this.updateById(equipment);
         return isSuccess;
     }
@@ -223,6 +224,16 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.orderByAsc("mch_code");
 
        return equipmentMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public Integer findEquipmentCountList(String mchName, String spec, String typeVersion) {
+        QueryWrapper<Equipment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mch_name", mchName);
+        queryWrapper.eq("spec",spec);
+        queryWrapper.eq("type_version", typeVersion);
+
+        return equipmentMapper.selectCount(queryWrapper);
     }
 
     @Override

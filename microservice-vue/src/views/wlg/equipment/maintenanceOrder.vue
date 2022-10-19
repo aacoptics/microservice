@@ -4,41 +4,41 @@
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size" label-width="100px">
           <el-row>
-          <el-form-item label="设备编码" prop="mchCode">
-            <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
-          </el-form-item>
-          <el-form-item label="设备名称" prop="mchName">
-            <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
-          </el-form-item>
-          <el-form-item label="规格" prop="spec">
-            <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
-          </el-form-item>
-        </el-row>
+            <el-form-item label="设备编码" prop="mchCode">
+              <el-input v-model="filters.mchCode" clearable placeholder="设备编码"></el-input>
+            </el-form-item>
+            <el-form-item label="设备名称" prop="mchName">
+              <el-input v-model="filters.mchName" clearable placeholder="设备名称"></el-input>
+            </el-form-item>
+            <el-form-item label="规格" prop="spec">
+              <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
+            </el-form-item>
+          </el-row>
           <el-row>
-          <el-form-item label="型号" prop="typeVersion">
-            <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
-          </el-form-item>
-          <el-form-item label="工单状态" prop="status">
-          <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
-            <el-option
-                v-for="item in orderStatusOptions"
-                :key="item.dictValue"
-                :label="item.dictLabel"
-                :value="item.dictValue"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
+            <el-form-item label="型号" prop="typeVersion">
+              <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
+            </el-form-item>
+            <el-form-item label="工单状态" prop="status">
+              <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
+                <el-option
+                    v-for="item in orderStatusOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
           </el-row>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="findLoading">查询
+            <el-button :loading="findLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-            <el-button type="info" :loading="comfirmLoading" @click="handleBatchConfirm">批量确认
+            <el-button :loading="comfirmLoading" type="info" @click="handleBatchConfirm">批量确认
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'check']"/>
               </template>
@@ -52,45 +52,52 @@
           </el-form-item>
         </el-form>
       </div>
-      <orderTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" :showPreview="false"
-                :stripe="true"  :header-cell-style="{'text-align':'center'}" border @selection-change="handleSelectionChange"
-            :cell-style="{'text-align':'left'}" :show-operation="false"
-                @findPage="findPage" @handleCurrentChange="handleCurrentChange">
+      <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
+                  :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
+                  :highlightCurrentRow="true"
+                  :show-operation="false" :showBatchDelete="false" :showPreview="false"
+                  :stripe="true"
+                  border @findPage="findPage"
+                  @handleCurrentChange="handleCurrentChange" @selection-change="handleSelectionChange">
       </orderTable>
-      <el-tabs type="border-card" style="margin-top: 50px;">
+      <el-tabs style="margin-top: 50px;" type="border-card">
         <el-tab-pane label="保养项">
-          <el-table size="small" :data="maintenanceOrderItemTableData" border :header-cell-style="{'text-align':'center'}" :cell-style="{'text-align':'left'}" v-loading="findDetailLoading">
-                <el-table-column prop="maintenanceItem" label="保养项" width="180" />
-                <el-table-column prop="maintenanceItemStandard" label="保养项判断标准" width="180" />
-                <el-table-column prop="minValue" label="起始范围值" />
-                <el-table-column prop="maxValue" label="截至范围值" />
-                <el-table-column prop="actualValue" label="实际值" />
-                <el-table-column prop="isFinish" label="是否完成" />
-                <el-table-column prop="maintenanceResult" label="保养结果" />
-                <el-table-column prop="isException" label="是否存在异常" width="130"/>
-                <el-table-column prop="isFault" label="是否存在故障" width="130"/>
-                <el-table-column prop="isRepair" label="是否需要维修" width="130"/>
-                <el-table-column prop="faultDesc" label="故障描述" />
-                <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
-                <el-table-column prop="updatedBy" label="更新人" width="120"/>
-                <el-table-column prop="updatedTime" label="更新时间" :formatter="dateTimeFormat" width="120"/>
-                <el-table-column prop="createdBy" label="创建人" width="120"/>
-                <el-table-column prop="createdTime" label="创建时间" :formatter="dateTimeFormat" width="120"/>
-                <el-table-column label="故障照片" prop="faultImageId" fixed="right">
-                  <template #default="scope">
-                    <el-button size="small" type="primary" @click="handlePreview(scope.$index, scope.row)"
-                      >预览</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
+          <el-table v-loading="findDetailLoading" :cell-style="{'text-align':'left'}"
+                    :data="maintenanceOrderItemTableData"
+                    :header-cell-style="{'text-align':'center'}" border
+                    size="small">
+            <el-table-column label="保养项" prop="maintenanceItem" width="180"/>
+            <el-table-column label="保养项判断标准" prop="maintenanceItemStandard" width="180"/>
+            <el-table-column label="起始范围值" prop="minValue"/>
+            <el-table-column label="截至范围值" prop="maxValue"/>
+            <el-table-column label="实际值" prop="actualValue"/>
+            <el-table-column label="是否完成" prop="isFinish" :formatter="yesNoFormat"/>
+            <el-table-column label="保养结果" prop="maintenanceResult"/>
+            <el-table-column label="是否存在异常" prop="isException" width="130" :formatter="yesNoFormat"/>
+            <el-table-column label="是否存在故障" prop="isFault" width="130" :formatter="yesNoFormat"/>
+            <el-table-column label="是否需要维修" prop="isRepair" width="130" :formatter="yesNoFormat"/>
+            <el-table-column label="故障描述" prop="faultDesc"/>
+            <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
+            <el-table-column label="更新人" prop="updatedBy" width="120"/>
+            <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime" width="120"/>
+            <el-table-column label="创建人" prop="createdBy" width="120"/>
+            <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime" width="120"/>
+            <el-table-column fixed="right" label="故障照片" prop="faultImageId">
+              <template #default="scope">
+                <el-button size="small" type="primary" @click="handlePreview(scope.$index, scope.row)"
+                >预览
+                </el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
-      
+
       </el-tabs>
 
-      <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isMaintenanceOrderAddOperation?'新增':'编辑'"
-                 width="25%" destroy-on-close>
+      <el-dialog v-model="dialogVisible" :close-on-click-modal="false"
+                 :title="isMaintenanceOrderAddOperation?'新增':'编辑'"
+                 destroy-on-close width="25%">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
@@ -98,7 +105,8 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-select v-model="dataForm.mchName" allow-create clearable filterable placeholder="请选择设备名称" @change="selectMchName" style="width:100%">
+                <el-select v-model="dataForm.mchName" allow-create clearable filterable placeholder="请选择设备名称"
+                           style="width:100%" @change="selectMchName">
                   <el-option
                       v-for="item in mchNameOptions"
                       :key="item"
@@ -111,7 +119,8 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-select v-model="dataForm.spec" allow-create clearable filterable placeholder="请选择规格" @change="selectSpec" style="width:100%">
+                <el-select v-model="dataForm.spec" allow-create clearable filterable placeholder="请选择规格"
+                           style="width:100%" @change="selectSpec">
                   <el-option
                       v-for="item in specOptions"
                       :key="item"
@@ -122,9 +131,10 @@
                 </el-select>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+            <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-select v-model="dataForm.typeVersion" allow-create clearable filterable placeholder="请选择型号" style="width:100%">
+                <el-select v-model="dataForm.typeVersion" allow-create clearable filterable placeholder="请选择型号"
+                           style="width:100%">
                   <el-option
                       v-for="item in typeVersionOptions"
                       :key="item"
@@ -135,21 +145,25 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            </el-row>
-          
-           </el-form>
+          </el-row>
+
+        </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
-            <el-button :size="size" type="info" @click="cancel" style="margin-right: 0px;">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitMaintenanceOrderMain" style="margin-right: 20px;">提交</el-button>
+            <el-button :size="size" style="margin-right: 0px;" type="info" @click="cancel">取消</el-button>
+            <el-button :loading="editLoading" :size="size" style="margin-right: 20px;" type="primary"
+                       @click="submitMaintenanceOrderMain">提交
+            </el-button>
           </slot>
         </div>
       </el-dialog>
 
-      
-      <el-dialog v-model="maintenanceOrderItemDialogVisible" :close-on-click-modal="false" :title="isMaintenanceOrderItemAddOperation?'新增保养项':'编辑保养项'"
-                 width="25%" destroy-on-close>
-        <el-form ref="maintenanceOrderItemDataForm" :model="maintenanceOrderItemDataForm" :rules="maintenanceOrderItemDataFormRules" :size="size" label-width="120px">
+
+      <el-dialog v-model="maintenanceOrderItemDialogVisible" :close-on-click-modal="false"
+                 :title="isMaintenanceOrderItemAddOperation?'新增保养项':'编辑保养项'"
+                 destroy-on-close width="25%">
+        <el-form ref="maintenanceOrderItemDataForm" :model="maintenanceOrderItemDataForm"
+                 :rules="maintenanceOrderItemDataFormRules" :size="size" label-width="120px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="maintenanceOrderItemDataForm.id" auto-complete="off"></el-input>
           </el-form-item>
@@ -162,36 +176,40 @@
                 <el-input v-model="maintenanceOrderItemDataForm.checkItem" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-              <el-col :span="20">
+            <el-col :span="20">
               <el-form-item label="保养项判断标准" prop="checkItemStandard">
-                <el-input v-model="maintenanceOrderItemDataForm.checkItemStandard" auto-complete="off" clearable></el-input>
+                <el-input v-model="maintenanceOrderItemDataForm.checkItemStandard" auto-complete="off"
+                          clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="起始范围值" prop="minValue">
-                <el-input-number v-model="maintenanceOrderItemDataForm.minValue" auto-complete="off" clearable style="width:100%"></el-input-number>
+                <el-input-number v-model="maintenanceOrderItemDataForm.minValue" auto-complete="off" clearable
+                                 style="width:100%"></el-input-number>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="截至范围值" prop="maxValue">
-                <el-input-number v-model="maintenanceOrderItemDataForm.maxValue" auto-complete="off" clearable style="width:100%"></el-input-number>
+                <el-input-number v-model="maintenanceOrderItemDataForm.maxValue" auto-complete="off" clearable
+                                 style="width:100%"></el-input-number>
               </el-form-item>
             </el-col>
           </el-row>
-          
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" type="info" @click="cancelMaintenanceOrderItem">取消</el-button>
-            <el-button :loading="editLoading" :size="size" type="primary" @click="submitMaintenanceOrderItem">提交</el-button>
+            <el-button :loading="editLoading" :size="size" type="primary" @click="submitMaintenanceOrderItem">提交
+            </el-button>
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="previewDialogVisible" title="图片预览" 
-                 width="850px" destroy-on-close> 
-                 <div class="block">
-                 <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
-                 </div>
+      <el-dialog v-model="previewDialogVisible" destroy-on-close
+                 title="图片预览" width="850px">
+        <div class="block">
+          <el-image :src="imagePreviewSrc" style="width: 800px; height: 600px"/>
+        </div>
       </el-dialog>
     </div>
   </div>
@@ -199,8 +217,19 @@
 
 <script>
 import orderTable from "./orderTable";
-import {findMaintenanceOrderPage, handleAdd, handleUpdate,  findMaintenanceOrderById, handleBatchConfirm, exportMaintenanceOrderExcel} from "@/api/wlg/equipment/maintenanceOrder";
-import {findMchNameList, findSpecListByMchName, findTypeVersionListByMchNameAndSpec} from "@/api/wlg/equipment/equipmentManagement";
+import {
+  exportMaintenanceOrderExcel,
+  findMaintenanceOrderById,
+  findMaintenanceOrderPage,
+  handleAdd,
+  handleBatchConfirm,
+  handleUpdate
+} from "@/api/wlg/equipment/maintenanceOrder";
+import {
+  findMchNameList,
+  findSpecListByMchName,
+  findTypeVersionListByMchNameAndSpec
+} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {findImageById} from "@/api/wlg/equipment/image";
@@ -212,7 +241,7 @@ export default {
     return {
       size: "default",
       filters: {
-        mchCode:'',
+        mchCode: '',
         mchName: "",
         spec: "",
         typeVersion: "",
@@ -242,7 +271,7 @@ export default {
 
       isMaintenanceOrderAddOperation: false, // true:新增, false:编辑
       isMaintenanceOrderItemAddOperation: false,
-      previewDialogVisible:false,
+      previewDialogVisible: false,
 
       dialogVisible: false, // 新增编辑界面是否显示
       maintenanceOrderItemDialogVisible: false,
@@ -258,16 +287,16 @@ export default {
         spec: [{required: true, message: "请输入规格", trigger: "blur"}],
         typeVersion: [{required: true, message: "请输入型号", trigger: "blur"}],
       },
-      maintenanceOrderItemDataFormRules:{
+      maintenanceOrderItemDataFormRules: {
         checkItem: [{required: true, message: "请输入保养项", trigger: "blur"}],
         checkItemStandard: [{required: true, message: "请输入保养项判断标准", trigger: "blur"}],
         minValue: [{required: true, message: "请输入起始范围值", trigger: "blur"}],
         maxValue: [{required: true, message: "请输入截止范围值", trigger: "blur"}],
       },
 
-      mchNameOptions:[],
-      specOptions:[],
-      typeVersionOptions:[],
+      mchNameOptions: [],
+      specOptions: [],
+      typeVersionOptions: [],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -280,12 +309,13 @@ export default {
         id: 0,
         checkItem: '',
         checkItemStandard: '',
-        minValue:null,
+        minValue: null,
         maxValue: null,
       },
       currentSelectMaintenanceOrderMainRowId: null,
       multipleSelection: [],
-      orderStatusOptions:[]
+      orderStatusOptions: [],
+      yesNoOptions: [],
     };
   },
   mounted() {
@@ -294,9 +324,12 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-    getDict("wlg_em_maintenance_order_status").then(response => {
-      this.orderStatusOptions = response.data.data
-    })
+        getDict("wlg_em_maintenance_order_status").then(response => {
+          this.orderStatusOptions = response.data.data
+        })
+        getDict("wlg_em_yes_no").then(response => {
+          this.yesNoOptions = response.data.data
+        })
   },
   methods: {
     // 获取分页数据
@@ -328,18 +361,15 @@ export default {
             this.findDetailLoading = false;
             const responseData = res.data;
             if (responseData.code === "000000") {
-              if(responseData.data != null)
-              {
+              if (responseData.data != null) {
                 this.maintenanceOrderItemTableData = responseData.data.maintenanceOrderItemList;
               }
             }
           });
     },
-    handlePreview: function (index, row)
-    {
+    handlePreview: function (index, row) {
       let id = row.faultImageId;
-      if(id == null)
-      {
+      if (id == null) {
         this.$message.error('无故障图片！');
         return;
       }
@@ -360,10 +390,8 @@ export default {
         this.$message.error(err)
       })
     },
-    handleCurrentChange: function(val)
-    {
-      if(val == null || val.val == null)
-      {
+    handleCurrentChange: function (val) {
+      if (val == null || val.val == null) {
         this.currentSelectMaintenanceOrderMainRowId = null;
         return;
       }
@@ -374,17 +402,15 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;//存储选中的数据
     },
-      //处理批量确认
-    handleBatchConfirm: function()
-    {
-      if(this.multipleSelection == null || this.multipleSelection.length==0)
-      {
+    //处理批量确认
+    handleBatchConfirm: function () {
+      if (this.multipleSelection == null || this.multipleSelection.length == 0) {
         this.$message({
-            message:
-                "请至少选择一个工单",
-            type: "error",
-          });
-          return;
+          message:
+              "请至少选择一个工单",
+          type: "error",
+        });
+        return;
       }
 
       this.$confirm("确定批量确认吗？", "提示", {}).then(() => {
@@ -408,10 +434,10 @@ export default {
             });
           }
           this.findPage(null);
-        }); 
+        });
       });
     },
-   
+
     // 显示新增界面
     handleAdd: function () {
       this.dialogVisible = true;
@@ -420,12 +446,12 @@ export default {
       this.dataForm = {
         id: 0,
         mchName: "",
-        spec:"",
+        spec: "",
         typeVersion: "",
       };
     },
 
-    
+
     // 显示编辑界面
     handleEdit: function (params) {
       this.dialogVisible = true;
@@ -434,8 +460,8 @@ export default {
     },
 
 
-     // 编辑
-     submitMaintenanceOrderMain: function () {
+    // 编辑
+    submitMaintenanceOrderMain: function () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
@@ -480,16 +506,14 @@ export default {
         }
       });
     },
- 
-    selectMchName()
-    {
+
+    selectMchName() {
       this.dataForm.spec = "";
       this.dataForm.typeVersion = "";
 
       let params = {};
       params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
+      if (params.mchName == null || params.mchName == "") {
         return;
       }
       findSpecListByMchName(params).then(response => {
@@ -498,19 +522,16 @@ export default {
         }
       })
     },
-    selectSpec()
-    {
+    selectSpec() {
       this.dataForm.typeVersion = "";
 
       let params = {};
       params.mchName = this.dataForm.mchName;
-      if(params.mchName == null || params.mchName == "")
-      {
+      if (params.mchName == null || params.mchName == "") {
         return;
       }
       params.spec = this.dataForm.spec;
-      if(params.spec == null || params.spec == "")
-      {
+      if (params.spec == null || params.spec == "") {
         return;
       }
       findTypeVersionListByMchNameAndSpec(params).then(response => {
@@ -520,7 +541,7 @@ export default {
       })
     },
     exportExcelData(excelFileName) {
-      let pageRequest  = {};
+      let pageRequest = {};
       pageRequest.mchCode = this.filters.mchCode;
       pageRequest.mchName = this.filters.mchName;
       pageRequest.spec = this.filters.spec;
@@ -543,12 +564,14 @@ export default {
     cancel() {
       this.dialogVisible = false;
     },
-    cancelMaintenanceOrderItem()
-    {
+    cancelMaintenanceOrderItem() {
       this.maintenanceOrderItemDialogVisible = false;
     },
     statusFormat: function (row) {
       return selectDictLabel(this.orderStatusOptions, row.status);
+    },
+    yesNoFormat: function (row, column,cellValue) {
+      return selectDictLabel(this.yesNoOptions, cellValue);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {
@@ -557,8 +580,7 @@ export default {
     dateFormat: function (dateValue) {
       return this.$moment(dateValue).format('YYYY-MM-DD')
     },
-    timeFormat: function(dateValue)
-    {
+    timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
     },
   },

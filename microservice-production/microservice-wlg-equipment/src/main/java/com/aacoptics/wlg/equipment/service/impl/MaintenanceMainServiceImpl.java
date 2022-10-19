@@ -9,7 +9,9 @@ import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceItemMapper;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceMainMapper;
+import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
 import com.aacoptics.wlg.equipment.service.MaintenanceMainService;
+import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,8 +19,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +38,12 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
     @Resource
     MaintenanceItemMapper maintenanceItemMapper;
+
+    @Resource
+    MaintenanceItemService maintenanceItemService;
+
+    @Resource
+    EquipmentServiceImpl equipmentService;
 
     @Override
     public IPage<MaintenanceMain> query(Page page, MaintenanceQueryParam maintenanceQueryParam) {
@@ -45,6 +58,96 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
         return this.page(page, queryWrapper);
     }
 
+    @Override
+    public List<MaintenanceMain> queryMaintenanceDataByCondition(MaintenanceQueryParam maintenanceQueryParam) {
+
+        List<MaintenanceMain> maintenanceMainAndItemList = maintenanceMainMapper.findMaintenanceMainAndItemList(maintenanceQueryParam);
+
+        return maintenanceMainAndItemList;
+    }
+
+    @Transactional
+    @Override
+    public void importMaintenanceExcel(InputStream in) throws Exception {
+        List<String[]> excelDataList = ExcelUtil.read(in).get(0);
+
+        String[] titleArray = excelDataList.get(0);//标题行
+
+        String mchNameTitle = titleArray[1];
+        String specTitle = titleArray[2];
+        String typeVersionTitle = titleArray[3];
+        String maintenanceItemTitle = titleArray[5];
+        if ((!"设备名称".equals(mchNameTitle)) || (!"规格".equals(specTitle))|| (!"型号".equals(typeVersionTitle))|| (!"保养项".equals(maintenanceItemTitle))) {
+            throw new BusinessException("Excel模板错误，请确认!");
+        }
+
+        for (int i = 1; i < excelDataList.size(); i++) {
+            String[] dataArray = excelDataList.get(i);
+            if(dataArray == null || dataArray.length == 0)
+            {
+                break;
+            }
+            String mchName = dataArray[1]; //设备名称
+            String spec = dataArray[2]; //规格
+            String typeVersion = dataArray[3]; //型号
+            String maintenancePeriod = dataArray[4]; //保养周期
+            String maintenanceItem = dataArray[5]; //保养项
+            String maintenanceItemStandard = dataArray[6]; //保养项判断标准
+            String minValue = dataArray[7]; //起始范围值
+            String maxValue = dataArray[8]; //截至范围值
+
+            if (StringUtils.isEmpty(mchName)) {
+                throw new BusinessException("第" + (i + 1) + "行设备名称不能为空");
+            }
+            if (StringUtils.isEmpty(spec)) {
+                throw new BusinessException("第" + (i + 1) + "行规格不能为空");
+            }
+            if (StringUtils.isEmpty(typeVersion)) {
+                throw new BusinessException("第" + (i + 1) + "行型号不能为空");
+            }
+
+            try {
+                //判断是否存在是否
+                Integer equipmentCount = equipmentService.findEquipmentCountList(mchName, spec, typeVersion);
+                if(equipmentCount == 0)
+                {
+                    throw new BusinessException("设备名称为【" + mchName + "】规格【" + spec + "】型号【" + typeVersion + "】的设备不存在，请确认");
+                }
+
+                //保存保养设备
+                MaintenanceMain maintenanceMain = this.getByMchNameAndSpecAndTypeVersion(mchName, spec, typeVersion);
+                if (maintenanceMain == null) {
+                    maintenanceMain = new MaintenanceMain();
+                    maintenanceMain.setMchName(mchName);
+                    maintenanceMain.setSpec(spec);
+                    maintenanceMain.setTypeVersion(typeVersion);
+                }
+                maintenanceMain.setMaintenancePeriod(Long.valueOf(maintenancePeriod));
+                this.saveOrUpdate(maintenanceMain);
+
+                //保存保养项
+                Long maintenanceMainId = maintenanceMain.getId();
+                MaintenanceItem maintenanceItemObject = this.getItemByMaintenanceItemName(maintenanceMainId, maintenanceItem);
+                if(maintenanceItemObject == null)
+                {
+                    maintenanceItemObject = new MaintenanceItem();
+                    maintenanceItemObject.setMaintenanceMainId(maintenanceMainId);
+                }
+                maintenanceItemObject.setMaintenanceItem(maintenanceItem);
+                maintenanceItemObject.setMaintenanceItemStandard(maintenanceItemStandard);
+                maintenanceItemObject.setMinValue(new BigDecimal(minValue));
+                maintenanceItemObject.setMaxValue(new BigDecimal(maxValue));
+
+                maintenanceItemService.saveOrUpdate(maintenanceItemObject);
+
+            }catch (Exception exception)
+            {
+                log.error("第{}数据异常：{}", i, excelDataList.get(i));
+                log.error("异常信息", exception);
+                throw new BusinessException("第【" + (i+1) + "】行数据异常，" + exception.getClass().getSimpleName() + "，"+ exception.getMessage());
+            }
+        }
+    }
 
     @Override
     public boolean add(MaintenanceMain maintenanceMain) {
@@ -119,4 +222,27 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
         return maintenanceMain;
     }
 
+    @Override
+    public MaintenanceMain getByMchNameAndSpecAndTypeVersion(String mchName, String spec, String typeVersion) {
+        //校验是否存在
+        QueryWrapper<MaintenanceMain> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("mch_name", mchName);
+        queryWrapper.eq("spec", spec);
+        queryWrapper.eq("type_version", typeVersion);
+
+        MaintenanceMain maintenanceMain = maintenanceMainMapper.selectOne(queryWrapper);
+
+        return maintenanceMain;
+    }
+
+    @Override
+    public MaintenanceItem getItemByMaintenanceItemName(Long maintenanceMainId, String maintenanceItem) {
+        QueryWrapper<MaintenanceItem> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("maintenance_item", maintenanceItem);
+        queryWrapper.eq("maintenance_main_id", maintenanceMainId);
+
+        MaintenanceItem maintenanceItemObject = maintenanceItemMapper.selectOne(queryWrapper);
+
+        return maintenanceItemObject;
+    }
 }
