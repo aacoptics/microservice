@@ -18,7 +18,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -61,7 +63,8 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
                     hikvisionDoorEventRecord.setPersonName(doorEventDetail.getPersonDetail().getPersonName());
                     records.add(hikvisionDoorEventRecord);
                 }
-                addBatch(records);
+                Set<HikvisionDoorEventRecord> recordSets = new HashSet<>(records);
+                addBatch(new ArrayList<>(recordSets));
             }
             totalPage = res.getTotalPage();
             pageIdx++;
