@@ -29,6 +29,7 @@ public class BudgetUploadLogServiceImpl extends ServiceImpl<BudgetUploadLogMappe
         queryWrapper.like(StringUtils.isNotBlank(budgetUploadLogQueryParam.getExcelName()), "excel_name", budgetUploadLogQueryParam.getExcelName());
 
         queryWrapper.orderByAsc("excel_name");
+        queryWrapper.orderByDesc("upload_time");
         return this.page(page, queryWrapper);
     }
 

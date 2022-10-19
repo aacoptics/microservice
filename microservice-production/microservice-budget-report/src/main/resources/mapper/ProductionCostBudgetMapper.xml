@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aacoptics.budget.report.mapper.ResearchBudgetMapper">
+<mapper namespace="com.aacoptics.budget.report.mapper.ProductionCostBudgetMapper">
 
-    <select id="findResearchBudgetAllYearByUploadLogId" resultType="integer">
+    <select id="findProductionCostBudgetAllYearByUploadLogId" resultType="integer">
         select distinct year
-        from fb_research_budget
+        from fb_production_cost_budget
         where 1=1
         AND upload_log_id = #{uploadLogId}
         order by year
     </select>
 
-    <select id="findByBusinessDivisionAndProductLine" resultType="com.aacoptics.budget.report.entity.po.ResearchBudget">
+    <select id="findByBusinessDivisionAndProductLine" resultType="com.aacoptics.budget.report.entity.po.ProductionCostBudget">
         select top 1 *
-        from fb_research_budget
+        from fb_production_cost_budget
         where 1=1
         AND business_division = #{businessDivision}
         AND product_line = #{productLine}
@@ -20,15 +20,15 @@
     </select>
 
 
-    <select id="findResearchBudgetByUploadLogId" resultType="map">
+    <select id="findProductionCostBudgetByUploadLogId" resultType="map">
     with temp_year_1 as (
         select *
-        from fb_research_budget
+        from fb_production_cost_budget
         where year = #{firstYear}
           and upload_log_id = #{uploadLogId}),
         temp_year_2 as (
              select *
-             from fb_research_budget
+             from fb_production_cost_budget
              where year = #{secondYear}
                and upload_log_id = #{uploadLogId})
         select
@@ -36,10 +36,11 @@
             temp_year_1.product_line productLine,
             temp_year_1.data_version dataVersion,
             temp_year_1.item_seq itemSeq,
-            temp_year_1.row_no rowNo,
-            temp_year_1.cost_item costItem,
-            temp_year_1.cost_type costType,
-            temp_year_1.unit unit
+            temp_year_1.category_1 category1,
+            temp_year_1.category_2 category2,
+            temp_year_1.category_3 category3,
+            temp_year_1.unit unit,
+            temp_year_1.validation validation
             ${selectColumn}
         from temp_year_1
             left join temp_year_2 on temp_year_1.business_division = temp_year_2.business_division

@@ -75,7 +75,7 @@
                  width="75%">
           <div>
             <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="researchBudgetColumns" :data="researchBudgetDataResult"
-                     :height="550" :highlightCurrentRow="true"  v-loading="previewLoading"
+                     :height="550" :highlightCurrentRow="true"  v-loading="previewLoading" border
                      :stripe="true">
             </QueryAllTable>
 
@@ -171,6 +171,7 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
+      this.pageRequest.type = '研发费用预算';
       this.pageRequest.excelName = this.filters.excelName;
       findBudgetUploadLogPage(this.pageRequest)
           .then((res) => {
@@ -280,6 +281,15 @@ export default {
     },
     // 显示编辑界面
     handlePreview: function (params) {
+      if(params.row.status == 0)
+      {
+        this.$message({
+                    message:
+                        "已失效，不能预览！ ",
+                    type: "error",
+                  });
+        return;
+      }
       this.previewDialogVisible = true;
       this.findDetail(params.row);
     },

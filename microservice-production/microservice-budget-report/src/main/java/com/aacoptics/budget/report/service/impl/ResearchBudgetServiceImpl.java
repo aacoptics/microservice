@@ -1,6 +1,7 @@
 package com.aacoptics.budget.report.service.impl;
 
 
+import com.aacoptics.budget.report.constants.BudgetTypeConstants;
 import com.aacoptics.budget.report.constants.UploadLogStatusConstants;
 import com.aacoptics.budget.report.entity.param.ResearchBudgetQueryParam;
 import com.aacoptics.budget.report.entity.po.BudgetUploadLog;
@@ -248,26 +249,24 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         String tempBusinessDivision = dataRow[0]; //事业部
         String tempProductLine = dataRow[1]; //产品线
 
-        QueryWrapper<ResearchBudget> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("business_division", tempBusinessDivision);
-        queryWrapper.eq("product_line", tempProductLine);
-        queryWrapper.orderByAsc("item_seq");
-        ResearchBudget oldResearchBudget = researchBudgetMapper.selectOne(queryWrapper);
-        //1 删除存在的相同事业部，产品线数据
-        Long oldUploadLogId = oldResearchBudget.getUploadLogId();
+        ResearchBudget oldResearchBudget = researchBudgetMapper.findByBusinessDivisionAndProductLine(tempBusinessDivision, tempProductLine);
+        if(oldResearchBudget != null) {
+            //1 删除存在的相同事业部，产品线数据
+            Long oldUploadLogId = oldResearchBudget.getUploadLogId();
 
-        QueryWrapper<ResearchBudget> deleteWrapper = new QueryWrapper<>();
-        deleteWrapper.eq("upload_log_id", oldUploadLogId);
-        researchBudgetMapper.delete(deleteWrapper);
-        //2 更新上传日志记录状态
-        BudgetUploadLog oldUploadBudgetUploadLog = budgetUploadLogService.get(oldUploadLogId);
-        oldUploadBudgetUploadLog.setStatus(UploadLogStatusConstants.NO);
-        budgetUploadLogService.update(oldUploadBudgetUploadLog);
+            QueryWrapper<ResearchBudget> deleteWrapper = new QueryWrapper<>();
+            deleteWrapper.eq("upload_log_id", oldUploadLogId);
+            researchBudgetMapper.delete(deleteWrapper);
+            //2 更新上传日志记录状态
+            BudgetUploadLog oldUploadBudgetUploadLog = budgetUploadLogService.get(oldUploadLogId);
+            oldUploadBudgetUploadLog.setStatus(UploadLogStatusConstants.NO);
+            budgetUploadLogService.update(oldUploadBudgetUploadLog);
+        }
 
         //3 保存上传日志
         BudgetUploadLog budgetUploadLog = new BudgetUploadLog();
         budgetUploadLog.setExcelName(originalFilename);
-        budgetUploadLog.setType("研发费用预算");
+        budgetUploadLog.setType(BudgetTypeConstants.RESEARCH_BUDGET);
         budgetUploadLog.setUploadTime(LocalDateTime.now());
         budgetUploadLog.setUploadUser(this.getCurrentUsername());
         budgetUploadLog.setStatus(UploadLogStatusConstants.YES);
