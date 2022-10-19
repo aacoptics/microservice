@@ -15,6 +15,24 @@ public class AllData {
     private String partName;
     private String material;
     private String moldNo;
+
+    private String mfMoldTemp;
+    private String mfMaterialTemp;
+    private String mfJetVelocity;
+    private String mfVpSwitch;
+    private String mfHoldPressure1;
+    private String mfHoldPressure2;
+    private String mfHoldPressure3;
+    private String mfHoldPressure4;
+    private String mfHoldPressure5;
+    private String mfHoldPressure6;
+    private String mfHoldTime1;
+    private String mfHoldTime2;
+    private String mfHoldTime3;
+    private String mfHoldTime4;
+    private String mfHoldTime5;
+    private String mfHoldTime6;
+
     private String moldTemp;
     private String materialTemp;
     private String jetVelocity;
@@ -49,7 +67,10 @@ public class AllData {
     private String kanheEcc;
     private String faceEcc;
     private String annealingProcess;
-    private String kanheRoundness;
+
+    private String bpKanheRoundness;
+    private String dmpKanheRoundness;
+
     private String outerDiameterAverage;
     private String outerDiameterRange;
     private String outerDiameterRoundness;
@@ -59,10 +80,14 @@ public class AllData {
     private String r2Flatness;
     private String r1SplitAverage;
     private String r2SplitAverage;
+
+    private String wftR1;
+    private String wftR2;
+
     private String wftStability;
     private String wftConsistency;
     private String wftMaxAs;
-    private String wftOuterDiameterShrinkage;
+
     private String cftR1;
     private String cftR2;
     private String cftConsistency;
@@ -90,6 +115,10 @@ public class AllData {
     private String wholeDiameterThicknessRatio;
     private String maxAngleR1;
     private String maxAngleR2;
+
+    private String r1MaxHeightDifference;
+    private String r2MaxHeightDifference;
+
     private String r1R2Distance;
     private String middlePartThickness;
     private String bottomDiameterDistance;

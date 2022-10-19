@@ -28,7 +28,7 @@
           </el-form>
           <el-form :inline="true" :size="size">
             <el-form-item>
-              <el-button :loading="exportLoading" type="primary" @click="exportExcelTemplate('结构数据模板')">导出模板
+              <el-button :loading="exportLoading" type="primary" @click="exportExcelTemplate('模具数据模板')">导出模板
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'download']"/>
                 </template>
@@ -50,7 +50,7 @@
                 </el-button>
               </el-form-item>
               <el-form-item>
-                <el-button :loading="exportDataLoading" type="success" @click="exportData('结构数据表')">导出数据
+                <el-button :loading="exportDataLoading" type="success" @click="exportData('模具数据表')">导出数据
                   <template #icon>
                     <font-awesome-icon :icon="['fas', 'download']"/>
                   </template>
@@ -135,157 +135,85 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="光学芯厚(um)" prop="coreThicknessLens">
-                            <el-input v-model="dataForm.coreThicknessLens" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="模具类型" prop="moldType">
+                            <el-input v-model="dataForm.moldType" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="最厚壁厚(um)" prop="maxWallThickness">
-                            <el-input v-model="dataForm.maxWallThickness" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="最薄壁厚(um)" prop="minWallThickness">
-                            <el-input v-model="dataForm.minWallThickness" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="最厚/芯厚" prop="maxCoreRatio">
-                            <el-input v-model="dataForm.maxCoreRatio" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="光学厚薄比" prop="maxMinRatio">
-                            <el-input v-model="dataForm.maxMinRatio" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="模仁钝化工艺" prop="moldCorePassivation">
+                            <el-input v-model="dataForm.moldCorePassivation" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="整体外径(um)" prop="outerDiameter">
-                            <el-input v-model="dataForm.outerDiameter" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="流道类型" prop="runnerType">
+                            <el-input v-model="dataForm.runnerType" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="整体边厚(um)" prop="edgeThickness">
-                            <el-input v-model="dataForm.edgeThickness" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="一级分流道(mm)" prop="firstRunner">
+                            <el-input v-model="dataForm.firstRunner" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="整体最薄壁厚(um)" prop="wholeMinWallThickness">
-                            <el-input v-model="dataForm.wholeMinWallThickness" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="整体最厚壁厚(um)" prop="wholeMaxWallThickness">
-                            <el-input v-model="dataForm.wholeMaxWallThickness" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="整体厚薄比" prop="wholeMaxMinRatio">
-                            <el-input v-model="dataForm.wholeMaxMinRatio" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="整体径厚比" prop="wholeDiameterThicknessRatio">
-                            <el-input v-model="dataForm.wholeDiameterThicknessRatio" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="二级分流道(mm)" prop="secondRunner">
+                            <el-input v-model="dataForm.secondRunner" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="最大角度R1(°)" prop="maxAngleR1">
-                            <el-input v-model="dataForm.maxAngleR1" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="三级分流道(mm) " prop="thirdRunner">
+                            <el-input v-model="dataForm.thirdRunner" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="最大角度R2(°)" prop="maxAngleR2">
-                            <el-input v-model="dataForm.maxAngleR2" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="分型面(um)" prop="partingSurface">
+                            <el-input v-model="dataForm.partingSurface" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R1最大高度差(um)" prop="r1MaxHeightDifference">
-                            <el-input v-model="dataForm.r1MaxHeightDifference" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="R2最大高度差(um)" prop="r2MaxHeightDifference">
-                            <el-input v-model="dataForm.r2MaxHeightDifference" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="R1终端到R2坎合根部距离(um)" prop="r1R2Distance">
-                            <el-input v-model="dataForm.r1R2Distance" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="机构中间部分厚度(um)" prop="middlePartThickness">
-                            <el-input v-model="dataForm.middlePartThickness" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="分割位(um)" prop="splitPosition">
+                            <el-input v-model="dataForm.splitPosition" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="坎合底部到外径距离(um)" prop="bottomDiameterDistance">
-                            <el-input v-model="dataForm.bottomDiameterDistance" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="浇口类型" prop="gateType">
+                            <el-input v-model="dataForm.gateType" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="机构径厚比" prop="mechanismDiameterThicknessRatio">
-                            <el-input v-model="dataForm.mechanismDiameterThicknessRatio" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="浇口宽度(mm)" prop="gateWidth">
+                            <el-input v-model="dataForm.gateWidth" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R1坎合角度(°)" prop="r1KanheAngle">
-                            <el-input v-model="dataForm.r1KanheAngle" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="R1坎合高度(um)" prop="r1KanheHeight">
-                            <el-input v-model="dataForm.r1KanheHeight" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="R2坎合角度(°)" prop="r2KanheAngle">
-                            <el-input v-model="dataForm.r2KanheAngle" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="R2坎合高度(um)" prop="r2KanheHeight">
-                            <el-input v-model="dataForm.r2KanheHeight" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="浇口厚度(mm)" prop="gateThickness">
+                            <el-input v-model="dataForm.gateThickness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="R1消光位置(粗糙度SRTM)" prop="r1Srtm">
-                            <el-input v-model="dataForm.r1Srtm" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="浇口R1面厚度(mm)" prop="gateR1Thickness">
+                            <el-input v-model="dataForm.gateR1Thickness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R2消光位置(粗糙度SRTM)" prop="r2Srtm">
-                            <el-input v-model="dataForm.r2Srtm" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="浇口R2面厚度(mm)" prop="gateR2Thickness">
+                            <el-input v-model="dataForm.gateR2Thickness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="外径消光位置(粗糙度SRTM)" prop="outerDiameterSrtm">
-                            <el-input v-model="dataForm.outerDiameterSrtm" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="开模方式" prop="moldOpeningType">
+                            <el-input v-model="dataForm.moldOpeningType" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -311,11 +239,11 @@
         exportExcel,
         handleDelete,
         handleUpdate
-    } from "@/api/lens/analysis/structureData";
+    } from "@/api/lens/analysis/moldData";
     import {ElMessageBox} from "element-plus";
 
     export default {
-        name: "structureData",
+        name: "moldData",
         components: {SysTable},
         data() {
             return {
@@ -332,33 +260,20 @@
                     {prop: "project", label: "项目", minWidth: 100},
                     {prop: "partName", label: "零件名称", minWidth: 100},
                     {prop: "material", label: "材料", minWidth: 100},
-                    {prop: "coreThicknessLens", label: "光学芯厚(um)", minWidth: 100},
-                    {prop: "maxWallThickness", label: "最厚壁厚(um)", minWidth: 100},
-                    {prop: "minWallThickness", label: "最薄壁厚(um)", minWidth: 100},
-                    {prop: "maxCoreRatio", label: "最厚/芯厚", minWidth: 100},
-                    {prop: "maxMinRatio", label: "光学厚薄比", minWidth: 100},
-                    {prop: "outerDiameter", label: "整体外径(um)", minWidth: 100},
-                    {prop: "edgeThickness", label: "整体边厚(um)", minWidth: 100},
-                    {prop: "wholeMinWallThickness", label: "整体最薄壁厚(um)", minWidth: 100},
-                    {prop: "wholeMaxWallThickness", label: "整体最厚壁厚(um)", minWidth: 100},
-                    {prop: "wholeMaxMinRatio", label: "整体厚薄比", minWidth: 100},
-                    {prop: "wholeDiameterThicknessRatio", label: "整体径厚比", minWidth: 100},
-                    {prop: "maxAngleR1", label: "最大角度R1(°)", minWidth: 100},
-                    {prop: "maxAngleR2", label: "最大角度R2(°)", minWidth: 100},
-                    {prop: "r1MaxHeightDifference", label: "R1最大高度差(um)", minWidth: 100},
-                    {prop: "r2MaxHeightDifference", label: "R2最大高度差(um)", minWidth: 100},
-                    {prop: "r1R2Distance", label: "R1终端到R2坎合根部距离(um)", minWidth: 100},
-                    {prop: "middlePartThickness", label: "机构中间部分厚度(um)", minWidth: 100},
-                    {prop: "bottomDiameterDistance", label: "坎合底部到外径距离(um)", minWidth: 100},
-                    {prop: "mechanismDiameterThicknessRatio", label: "机构径厚比", minWidth: 100},
-                    {prop: "r1KanheAngle", label: "R1坎合角度(°)", minWidth: 100},
-                    {prop: "r1KanheHeight", label: "R1坎合高度(um)", minWidth: 100},
-                    {prop: "r2KanheAngle", label: "R2坎合角度(°)", minWidth: 100},
-                    {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100},
-                    {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100},
-                    {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100},
-                    {prop: "outerDiameterSrtm", label: "外径消光位置(粗糙度SRTM)", minWidth: 100},
-                    {prop: "assemblyDrawing", label: "组立图", minWidth: 100}
+                    {prop: "moldType", label: "模具类型", minWidth: 100},
+                    {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100},
+                    {prop: "runnerType", label: "流道类型", minWidth: 100},
+                    {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
+                    {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
+                    {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
+                    {prop: "partingSurface", label: "分型面(um)", minWidth: 100},
+                    {prop: "splitPosition", label: "分割位(um)", minWidth: 100},
+                    {prop: "gateType", label: "浇口类型", minWidth: 100},
+                    {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
+                    {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
+                    {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100},
+                    {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100},
+                    {prop: "moldOpeningType", label: "开模方式", minWidth: 100}
                 ],
                 pageRequest: {current: 1, size: 10},
                 pageResult: {},
@@ -374,33 +289,20 @@
                   project: "",
                   partName: "",
                   material: "",
-                  coreThicknessLens: "",
-                  maxWallThickness: "",
-                  minWallThickness: "",
-                  maxCoreRatio: "",
-                  maxMinRatio: "",
-                  outerDiameter: "",
-                  edgeThickness: "",
-                  wholeMinWallThickness: "",
-                  wholeMaxWallThickness: "",
-                  wholeMaxMinRatio: "",
-                  wholeDiameterThicknessRatio: "",
-                  maxAngleR1: "",
-                  maxAngleR2: "",
-                  r1MaxHeightDifference: "",
-                  r2MaxHeightDifference: "",
-                  r1R2Distance: "",
-                  middlePartThickness: "",
-                  bottomDiameterDistance: "",
-                  mechanismDiameterThicknessRatio: "",
-                  r1KanheAngle: "",
-                  r1KanheHeight: "",
-                  r2KanheAngle: "",
-                  r2KanheHeight: "",
-                  r1Srtm: "",
-                  r2Srtm: "",
-                  outerDiameterSrtm: "",
-                  assemblyDrawing: "",
+                  moldType: "",
+                  moldCorePassivation: "",
+                  runnerType: "",
+                  firstRunner: "",
+                  secondRunner: "",
+                  thirdRunner: "",
+                  partingSurface: "",
+                  splitPosition: "",
+                  gateType: "",
+                  gateWidth: "",
+                  gateThickness: "",
+                  gateR1Thickness: "",
+                  gateR2Thickness: "",
+                  moldOpeningType: "",
                   createdBy: "",
                   updatedBy: "",
                   createdTime: "",

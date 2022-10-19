@@ -132,6 +132,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="模具序号" prop="moldNo">
@@ -144,53 +145,56 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="芯厚" prop="coreThickness">
+                        <el-form-item label="芯厚(um)" prop="coreThickness">
                             <el-input v-model="dataForm.coreThickness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="芯厚极差" prop="coreThicknessRange">
+                        <el-form-item label="芯厚极差(um)" prop="coreThicknessRange">
                             <el-input v-model="dataForm.coreThicknessRange" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R1矢高" prop="r1VectorHeight">
+                        <el-form-item label="R1矢高(um)" prop="r1VectorHeight">
                             <el-input v-model="dataForm.r1VectorHeight" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R1矢高极差" prop="r1VectorHeightRange">
+                        <el-form-item label="R1矢高极差(um)" prop="r1VectorHeightRange">
                             <el-input v-model="dataForm.r1VectorHeightRange" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="R2矢高" prop="r2VectorHeight">
+                        <el-form-item label="R2矢高(um)" prop="r2VectorHeight">
                             <el-input v-model="dataForm.r2VectorHeight" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R2矢高极差" prop="r2VectorHeightRange">
+                        <el-form-item label="R2矢高极差(um)" prop="r2VectorHeightRange">
                             <el-input v-model="dataForm.r2VectorHeightRange" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="外径偏心" prop="outerDiameterEcc">
+                        <el-form-item label="外径偏心(%/规格)" prop="outerDiameterEcc">
                             <el-input v-model="dataForm.outerDiameterEcc" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="坎合偏心" prop="kanheEcc">
+                        <el-form-item label="坎合偏心(%/规格)" prop="kanheEcc">
                             <el-input v-model="dataForm.kanheEcc" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="面间偏心" prop="faceEcc">
+                        <el-form-item label="面间偏心(%/规格)" prop="faceEcc">
                             <el-input v-model="dataForm.faceEcc" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
@@ -200,114 +204,134 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="坎合圆度" prop="kanheRoundness">
-                            <el-input v-model="dataForm.kanheRoundness" auto-complete="off" clearable type="textarea"></el-input>
+                        <el-form-item label="BP坎合圆度(um)" prop="bpKanheRoundness">
+                            <el-input v-model="dataForm.bpKanheRoundness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="外径均值" prop="outerDiameterAverage">
+                        <el-form-item label="DMP坎合圆度(um)" prop="dmpKanheRoundness">
+                            <el-input v-model="dataForm.dmpKanheRoundness" auto-complete="off" clearable type="textarea"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="外径均值(um)" prop="outerDiameterAverage">
                             <el-input v-model="dataForm.outerDiameterAverage" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="外径极差" prop="outerDiameterRange">
+                        <el-form-item label="外径极差(um)" prop="outerDiameterRange">
                             <el-input v-model="dataForm.outerDiameterRange" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="外径圆度" prop="outerDiameterRoundness">
+                        <el-form-item label="外径圆度(um)" prop="outerDiameterRoundness">
                             <el-input v-model="dataForm.outerDiameterRoundness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="外径收缩率" prop="outerDiameterShrinkage">
+                        <el-form-item label="外径收缩率(‰)" prop="outerDiameterShrinkage">
                             <el-input v-model="dataForm.outerDiameterShrinkage" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="外径粗糙度" prop="outerDiameterRoughness">
+                        <el-form-item label="外径粗糙度(um)" prop="outerDiameterRoughness">
                             <el-input v-model="dataForm.outerDiameterRoughness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="R1平面度" prop="r1Flatness">
+                        <el-form-item label="R1平面度(um)" prop="r1Flatness">
                             <el-input v-model="dataForm.r1Flatness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="R2平面度" prop="r2Flatness">
+                        <el-form-item label="R2平面度(um)" prop="r2Flatness">
                             <el-input v-model="dataForm.r2Flatness" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="R1分割位均值" prop="r1SplitAverage">
+                </el-row>
+
+                <el-row>
+                  <el-col :span="8">
+                        <el-form-item label="R1分割位均值(um)" prop="r1SplitAverage">
                             <el-input v-model="dataForm.r1SplitAverage" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="R2分割位均值" prop="r2SplitAverage">
+                        <el-form-item label="R2分割位均值(um)" prop="r2SplitAverage">
                             <el-input v-model="dataForm.r2SplitAverage" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="5+3+3稳定性" prop="wftStability">
+                        <el-form-item label="R1(白片面型nm)" prop="wftR1">
+                            <el-input v-model="dataForm.wftR1" auto-complete="off" clearable type="textarea"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col :span="8">
+                        <el-form-item label="R2(白片面型nm)" prop="wftR2">
+                            <el-input v-model="dataForm.wftR2" auto-complete="off" clearable type="textarea"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="5+3+3稳定性(nm)" prop="wftStability">
                             <el-input v-model="dataForm.wftStability" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="全穴一致性(白片面型)" prop="wftConsistency">
+                        <el-form-item label="全穴一致性(白片面型nm)" prop="wftConsistency">
                             <el-input v-model="dataForm.wftConsistency" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
+                
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="最大AS(白片面型)" prop="wftMaxAs">
+                        <el-form-item label="最大AS(白片面型nm)" prop="wftMaxAs">
                             <el-input v-model="dataForm.wftMaxAs" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="外径收缩率(白片面型)" prop="wftOuterDiameterShrinkage">
-                            <el-input v-model="dataForm.wftOuterDiameterShrinkage" auto-complete="off" clearable type="textarea"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="R1(镀膜片面型)" prop="cftR1">
+                        <el-form-item label="R1(镀膜片面型nm)" prop="cftR1">
                             <el-input v-model="dataForm.cftR1" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="R2(镀膜片面型)" prop="cftR2">
+                        <el-form-item label="R2(镀膜片面型nm)" prop="cftR2">
                             <el-input v-model="dataForm.cftR2" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="全穴一致性(镀膜片面型)" prop="cftConsistency">
+                        <el-form-item label="全穴一致性(镀膜片面型nm)" prop="cftConsistency">
                             <el-input v-model="dataForm.cftConsistency" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="最大AS(镀膜片面型)" prop="cftMaxAs">
+                        <el-form-item label="最大AS(镀膜片面型nm)" prop="cftMaxAs">
                             <el-input v-model="dataForm.cftMaxAs" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
                         <el-form-item label="镀膜趋势" prop="coatingTrend">
                             <el-input v-model="dataForm.coatingTrend" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="R1镀膜片模拟结果" prop="cfsrR1">
                             <el-input v-model="dataForm.cfsrR1" auto-complete="off" clearable type="textarea"></el-input>
@@ -318,13 +342,14 @@
                             <el-input v-model="dataForm.cfsrR2" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
                         <el-form-item label="R1&R2镀膜片模拟结果" prop="cfsrR1R2">
                             <el-input v-model="dataForm.cfsrR1R2" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="毛边" prop="burr">
                             <el-input v-model="dataForm.burr" auto-complete="off" clearable type="textarea"></el-input>
@@ -335,11 +360,17 @@
                             <el-input v-model="dataForm.weldline" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
                         <el-form-item label="外观问题" prop="appearanceProblem">
                             <el-input v-model="dataForm.appearanceProblem" auto-complete="off" clearable type="textarea"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="外观问题图片" prop="appearanceImg">
+                            <el-input v-model="dataForm.appearanceImg" auto-complete="off" clearable type="textarea"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -393,41 +424,44 @@
                     {prop: "partName", label: "零件名称", minWidth: 100},
                     {prop: "material", label: "材料", minWidth: 100},
                     {prop: "moldNo", label: "模具序号", minWidth: 100},
-                    {prop: "coreThickness", label: "芯厚", minWidth: 100},
-                    {prop: "coreThicknessRange", label: "芯厚极差", minWidth: 100},
-                    {prop: "r1VectorHeight", label: "R1矢高", minWidth: 100},
-                    {prop: "r1VectorHeightRange", label: "R1矢高极差", minWidth: 100},
-                    {prop: "r2VectorHeight", label: "R2矢高", minWidth: 100},
-                    {prop: "r2VectorHeightRange", label: "R2矢高极差", minWidth: 100},
-                    {prop: "outerDiameterEcc", label: "外径偏心", minWidth: 100},
-                    {prop: "kanheEcc", label: "坎合偏心", minWidth: 100},
-                    {prop: "faceEcc", label: "面间偏心", minWidth: 100},
+                    {prop: "coreThickness", label: "芯厚(um)", minWidth: 100},
+                    {prop: "coreThicknessRange", label: "芯厚极差(um)", minWidth: 100},
+                    {prop: "r1VectorHeight", label: "R1矢高(um)", minWidth: 100},
+                    {prop: "r1VectorHeightRange", label: "R1矢高极差(um)", minWidth: 100},
+                    {prop: "r2VectorHeight", label: "R2矢高(um)", minWidth: 100},
+                    {prop: "r2VectorHeightRange", label: "R2矢高极差(um)", minWidth: 100},
+                    {prop: "outerDiameterEcc", label: "外径偏心(%/规格）", minWidth: 100},
+                    {prop: "kanheEcc", label: "坎合偏心(%/规格）", minWidth: 100},
+                    {prop: "faceEcc", label: "面间偏心(%/规格）", minWidth: 100},
                     {prop: "annealingProcess", label: "退火制程", minWidth: 100},
-                    {prop: "kanheRoundness", label: "坎合圆度", minWidth: 100},
-                    {prop: "outerDiameterAverage", label: "外径均值", minWidth: 100},
-                    {prop: "outerDiameterRange", label: "外径极差", minWidth: 100},
-                    {prop: "outerDiameterRoundness", label: "外径圆度", minWidth: 100},
-                    {prop: "outerDiameterShrinkage", label: "外径收缩率", minWidth: 100},
-                    {prop: "outerDiameterRoughness", label: "外径粗糙度", minWidth: 100},
-                    {prop: "r1Flatness", label: "R1平面度", minWidth: 100},
-                    {prop: "r2Flatness", label: "R2平面度", minWidth: 100},
-                    {prop: "r1SplitAverage", label: "R1分割位均值", minWidth: 100},
-                    {prop: "r2SplitAverage", label: "R2分割位均值", minWidth: 100},
-                    {prop: "wftStability", label: "5+3+3稳定性", minWidth: 100},
-                    {prop: "wftConsistency", label: "全穴一致性(白片面型)", minWidth: 100},
-                    {prop: "wftMaxAs", label: "最大AS(白片面型)", minWidth: 100},
-                    {prop: "wftOuterDiameterShrinkage", label: "外径收缩率(白片面型)", minWidth: 100},
-                    {prop: "cftR1", label: "R1(镀膜片面型)", minWidth: 100},
-                    {prop: "cftR2", label: "R2(镀膜片面型)", minWidth: 100},
-                    {prop: "cftConsistency", label: "全穴一致性(镀膜片面型)", minWidth: 100},
-                    {prop: "cftMaxAs", label: "最大AS(镀膜片面型)", minWidth: 100},
+                    {prop: "bpKanheRoundness", label: "BP坎合圆度(um)", minWidth: 100},
+                    {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)", minWidth: 100},
+                    {prop: "outerDiameterAverage", label: "外径均值(um)", minWidth: 100},
+                    {prop: "outerDiameterRange", label: "外径极差(um)", minWidth: 100},
+                    {prop: "outerDiameterRoundness", label: "外径圆度(um)", minWidth: 100},
+                    {prop: "outerDiameterShrinkage", label: "外径收缩率(‰)", minWidth: 100},
+                    {prop: "outerDiameterRoughness", label: "外径粗糙度(um)", minWidth: 100},
+                    {prop: "r1Flatness", label: "R1平面度(um)", minWidth: 100},
+                    {prop: "r2Flatness", label: "R2平面度(um)", minWidth: 100},
+                    {prop: "r1SplitAverage", label: "R1分割位均值(um)", minWidth: 100},
+                    {prop: "r2SplitAverage", label: "R2分割位均值(um)", minWidth: 100},
+                    {prop: "wftR1", label: "R1(白片面型nm)", minWidth: 100},
+                    {prop: "wftR2", label: "R2(白片面型nm)", minWidth: 100},
+                    {prop: "wftConsistency", label: "全穴一致性(白片面型nm)", minWidth: 100},
+                    {prop: "wftMaxAs", label: "最大AS(白片面型nm)", minWidth: 100},
+                    {prop: "wftStability", label: "5+3+3稳定性(nm)", minWidth: 100},
+                    {prop: "cftR1", label: "R1(镀膜片面型nm)", minWidth: 100},
+                    {prop: "cftR2", label: "R2(镀膜片面型nm)", minWidth: 100},
+                    {prop: "cftConsistency", label: "全穴一致性(镀膜片面型nm)", minWidth: 100},
+                    {prop: "cftMaxAs", label: "最大AS(镀膜片面型nm)", minWidth: 100},
                     {prop: "coatingTrend", label: "镀膜趋势", minWidth: 100},
                     {prop: "cfsrR1", label: "R1镀膜片模拟结果", minWidth: 100},
                     {prop: "cfsrR2", label: "R2镀膜片模拟结果", minWidth: 100},
                     {prop: "cfsrR1R2", label: "R1&R2镀膜片模拟结果", minWidth: 100},
-                    {prop: "burr", label: "毛边", minWidth: 100},
+                    {prop: "burr", label: "毛边(um)", minWidth: 100},
                     {prop: "weldline", label: "熔接线", minWidth: 100},
                     {prop: "appearanceProblem", label: "外观问题", minWidth: 100},
+                    {prop: "appearanceImg", label: "外观问题图片", minWidth: 100},
                     {prop: "remarks", label: "备注", minWidth: 100}
                 ],
                 pageRequest: {current: 1, size: 10},
@@ -455,7 +489,8 @@
                   kanheEcc: "",
                   faceEcc: "",
                   annealingProcess: "",
-                  kanheRoundness: "",
+                  bpKanheRoundness: "",
+                  dmpKanheRoundness: "",
                   outerDiameterAverage: "",
                   outerDiameterRange: "",
                   outerDiameterRoundness: "",
@@ -465,10 +500,11 @@
                   r2Flatness: "",
                   r1SplitAverage: "",
                   r2SplitAverage: "",
-                  wftStability: "",
+                  wftR1: "",
+                  wftR2: "",
                   wftConsistency: "",
                   wftMaxAs: "",
-                  wftOuterDiameterShrinkage: "",
+                  wftStability: "",
                   cftR1: "",
                   cftR2: "",
                   cftConsistency: "",

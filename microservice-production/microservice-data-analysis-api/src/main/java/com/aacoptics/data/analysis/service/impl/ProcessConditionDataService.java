@@ -34,7 +34,7 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
         if (!"项目量产工艺条件数据表".equals(title)) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
-        for (int i = 3; i < excelDataList.size(); i++) {
+        for (int i = 4; i < excelDataList.size(); i++) {
             String[] dataArray = excelDataList.get(i);
             if (dataArray == null || dataArray.length == 0) {
                 break;
@@ -67,29 +67,45 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
                 processConditionData = new ProcessConditionData();
             }
 
-            String moldTemp = dataArray[5];
-            String materialTemp = dataArray[6];
-            String jetVelocity = dataArray[7];
-            String vpSwitch = dataArray[8];
-            String holdPressure1 = dataArray[9];
-            String holdPressure2 = dataArray[10];
-            String holdPressure3 = dataArray[11];
-            String holdPressure4 = dataArray[12];
-            String holdPressure5 = dataArray[13];
-            String holdPressure6 = dataArray[14];
-            String holdTime1 = dataArray[15];
-            String holdTime2 = dataArray[16];
-            String holdTime3 = dataArray[17];
-            String holdTime4 = dataArray[18];
-            String holdTime5 = dataArray[19];
-            String holdTime6 = dataArray[20];
-            String holdPressureVelocity = dataArray[21];
-            String platenPosition = dataArray[22];
-            String openingSpeed = dataArray[23];
-            String ejectionSpeed = dataArray[24];
-            String coolingTime = dataArray[25];
-            String clampingForce = dataArray[26];
-            String passivation = dataArray[27];
+            String mfMoldTemp = dataArray[5];
+            String mfMaterialTemp = dataArray[6];
+            String mfJetVelocity = dataArray[7];
+            String mfVpSwitch = dataArray[8];
+            String mfHoldPressure1 = dataArray[9];
+            String mfHoldTime1 = dataArray[10];
+            String mfHoldPressure2 = dataArray[11];
+            String mfHoldTime2 = dataArray[12];
+            String mfHoldPressure3 = dataArray[13];
+            String mfHoldTime3 = dataArray[14];
+            String mfHoldPressure4 = dataArray[15];
+            String mfHoldTime4 = dataArray[16];
+            String mfHoldPressure5 = dataArray[17];
+            String mfHoldTime5 = dataArray[18];
+            String mfHoldPressure6 = dataArray[19];
+            String mfHoldTime6 = dataArray[20];
+            String moldTemp = dataArray[21];
+            String materialTemp = dataArray[22];
+            String jetVelocity = dataArray[23];
+            String vpSwitch = dataArray[24];
+            String holdPressure1 = dataArray[25];
+            String holdTime1 = dataArray[26];
+            String holdPressure2 = dataArray[27];
+            String holdTime2 = dataArray[28];
+            String holdPressure3 = dataArray[29];
+            String holdTime3 = dataArray[30];
+            String holdPressure4 = dataArray[31];
+            String holdTime4 = dataArray[32];
+            String holdPressure5 = dataArray[33];
+            String holdTime5 = dataArray[34];
+            String holdPressure6 = dataArray[35];
+            String holdTime6 = dataArray[36];
+            String holdPressureVelocity = dataArray[37];
+            String platenPosition = dataArray[38];
+            String openingSpeed = dataArray[39];
+            String ejectionSpeed = dataArray[40];
+            String coolingTime = dataArray[41];
+            String clampingForce = dataArray[42];
+            String passivation = dataArray[43];
 
             // 设置参数
             processConditionData.setCategory(category);
@@ -97,6 +113,24 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             processConditionData.setMoldNo(moldNo);
             processConditionData.setPartName(partName);
             processConditionData.setMaterial(material);
+
+            processConditionData.setMfMoldTemp(mfMoldTemp);
+            processConditionData.setMfMaterialTemp(mfMaterialTemp);
+            processConditionData.setMfJetVelocity(mfJetVelocity);
+            processConditionData.setMfVpSwitch(mfVpSwitch);
+            processConditionData.setMfHoldPressure1(mfHoldPressure1);
+            processConditionData.setMfHoldPressure2(mfHoldPressure2);
+            processConditionData.setMfHoldPressure3(mfHoldPressure3);
+            processConditionData.setMfHoldPressure4(mfHoldPressure4);
+            processConditionData.setMfHoldPressure5(mfHoldPressure5);
+            processConditionData.setMfHoldPressure6(mfHoldPressure6);
+            processConditionData.setMfHoldTime1(mfHoldTime1);
+            processConditionData.setMfHoldTime2(mfHoldTime2);
+            processConditionData.setMfHoldTime3(mfHoldTime3);
+            processConditionData.setMfHoldTime4(mfHoldTime4);
+            processConditionData.setMfHoldTime5(mfHoldTime5);
+            processConditionData.setMfHoldTime6(mfHoldTime6);
+
             processConditionData.setMoldTemp(moldTemp);
             processConditionData.setMaterialTemp(materialTemp);
             processConditionData.setJetVelocity(jetVelocity);
