@@ -29,33 +29,30 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
     @Resource
     HikvisionApiService hikvisionApiService;
 
-    public void addBatch(List<HikvisionDoorEventRecord> records){
+    public void addBatch(List<HikvisionDoorEventRecord> records) {
         this.saveBatch(records);
     }
 
     @Override
-    public void getHikvisionDoorEventRecord(){
-        int nullCount = 0;
+    public void getHikvisionDoorEventRecord() {
         int pageIdx = 1;
         int totalPage = 1;
         LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN.withHour(LocalDateTime.now().minusHours(1).getHour()));
         LocalDateTime startTime = endTime.minusDays(1);
-        while(pageIdx <= totalPage){
+        while (pageIdx <= totalPage) {
             DoorEventParam doorEventParam = new DoorEventParam(startTime, endTime, pageIdx, 1000);
             HikvisionApiPage<DoorEventDetail> res = hikvisionApiService.getDoorEvents(doorEventParam);
             List<DoorEventDetail> doorEventDetails = res.getList();
-            if(doorEventDetails.size() > 0){
+            if (doorEventDetails.size() > 0) {
                 List<HikvisionDoorEventRecord> records = new ArrayList<>();
                 for (DoorEventDetail doorEventDetail : doorEventDetails) {
-                    if(ObjectUtil.isEmpty(doorEventDetail.getPersonDetail())){
-                        nullCount++;
+                    if (ObjectUtil.isEmpty(doorEventDetail.getPersonDetail()))
                         continue;
-                    }
                     HikvisionDoorEventRecord hikvisionDoorEventRecord = new HikvisionDoorEventRecord();
                     hikvisionDoorEventRecord.setDoorName(doorEventDetail.getDoorName());
-                    if(doorEventDetail.getDoorName().contains("进"))
+                    if (doorEventDetail.getDoorName().contains("进"))
                         hikvisionDoorEventRecord.setInAndOutType(1);
-                    else if(doorEventDetail.getDoorName().contains("出"))
+                    else if (doorEventDetail.getDoorName().contains("出"))
                         hikvisionDoorEventRecord.setInAndOutType(0);
                     else
                         hikvisionDoorEventRecord.setInAndOutType(-1);
