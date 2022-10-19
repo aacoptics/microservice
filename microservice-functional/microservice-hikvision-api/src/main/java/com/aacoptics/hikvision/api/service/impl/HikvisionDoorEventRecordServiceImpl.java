@@ -53,8 +53,13 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
                     }
                     HikvisionDoorEventRecord hikvisionDoorEventRecord = new HikvisionDoorEventRecord();
                     hikvisionDoorEventRecord.setDoorName(doorEventDetail.getDoorName());
+                    if(doorEventDetail.getDoorName().contains("进"))
+                        hikvisionDoorEventRecord.setInAndOutType(1);
+                    else if(doorEventDetail.getDoorName().contains("出"))
+                        hikvisionDoorEventRecord.setInAndOutType(0);
+                    else
+                        hikvisionDoorEventRecord.setInAndOutType(-1);
                     hikvisionDoorEventRecord.setEventTime(doorEventDetail.getEventTime());
-                    hikvisionDoorEventRecord.setInAndOutType(doorEventDetail.getInAndOutType());
                     hikvisionDoorEventRecord.setJobNo(doorEventDetail.getPersonDetail().getJobNo());
                     hikvisionDoorEventRecord.setPersonName(doorEventDetail.getPersonDetail().getPersonName());
                     records.add(hikvisionDoorEventRecord);
