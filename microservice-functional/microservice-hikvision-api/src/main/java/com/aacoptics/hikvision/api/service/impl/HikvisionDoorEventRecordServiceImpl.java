@@ -40,13 +40,13 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
         int pageIdx = 1;
         int totalPage = 1;
         LocalDateTime endTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN.withHour(LocalDateTime.now().minusHours(1).getHour()));
-        LocalDateTime startTime = endTime.minusDays(1);
+        LocalDateTime startTime = endTime.minusHours(1);
+        List<HikvisionDoorEventRecord> records = new ArrayList<>();
         while (pageIdx <= totalPage) {
             DoorEventParam doorEventParam = new DoorEventParam(startTime, endTime, pageIdx, 1000);
             HikvisionApiPage<DoorEventDetail> res = hikvisionApiService.getDoorEvents(doorEventParam);
             List<DoorEventDetail> doorEventDetails = res.getList();
             if (doorEventDetails.size() > 0) {
-                List<HikvisionDoorEventRecord> records = new ArrayList<>();
                 for (DoorEventDetail doorEventDetail : doorEventDetails) {
                     if (ObjectUtil.isEmpty(doorEventDetail.getPersonDetail()))
                         continue;
@@ -63,11 +63,11 @@ public class HikvisionDoorEventRecordServiceImpl extends ServiceImpl<HikvisionDo
                     hikvisionDoorEventRecord.setPersonName(doorEventDetail.getPersonDetail().getPersonName());
                     records.add(hikvisionDoorEventRecord);
                 }
-                Set<HikvisionDoorEventRecord> recordSets = new HashSet<>(records);
-                addBatch(new ArrayList<>(recordSets));
             }
             totalPage = res.getTotalPage();
             pageIdx++;
         }
+        Set<HikvisionDoorEventRecord> recordSets = new HashSet<>(records);
+        addBatch(new ArrayList<>(recordSets));
     }
 }
