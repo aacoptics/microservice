@@ -11,4 +11,10 @@ public class BudgetTypeConstants {
      * 生产成本预算
      */
     public static final String PRODUCTION_COST_BUDGET = "生产成本预算";
+
+
+    /**
+     * 产品线P&L预算
+     */
+    public static final String PRODUCT_LINE_BUDGET = "产品线P&L预算";
 }

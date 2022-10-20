@@ -9,7 +9,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)" :loading="queryLoading">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -153,6 +153,7 @@ export default {
 
       downloadTemplateLoading: false,
       previewLoading: false,
+      queryLoading:false,
 
       excelUploadDialogVisible: false,
       previewDialogVisible: false,
@@ -173,8 +174,10 @@ export default {
       }
       this.pageRequest.type = '研发费用预算';
       this.pageRequest.excelName = this.filters.excelName;
+      this.queryLoading = true;
       findBudgetUploadLogPage(this.pageRequest)
           .then((res) => {
+            this.queryLoading = false;
             const responseData = res.data;
             if (responseData.code === "000000") {
               this.pageResult = responseData.data;

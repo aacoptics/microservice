@@ -31,7 +31,8 @@
       </BudgetLogTable>
 
 
-      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'生产成本预算Excel上传'"
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'产品线P&L预算Excel上传'"
+
                  width="400px">
         <el-upload
             :before-upload="beforeUpload"
@@ -70,10 +71,10 @@
         </div>
       </el-dialog>
 
-      <el-dialog v-model="previewDialogVisible" :close-on-click-modal="false" title="生产成本预算预览"
+      <el-dialog v-model="previewDialogVisible" :close-on-click-modal="false" title="产品线P&L预算预览"
                  width="75%">
           <div>
-            <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="productionCostBudgetColumns" :data="productionCostBudgetDataResult"
+            <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="productLineBudgetColumns" :data="productLineBudgetDataResult"
                      :height="550" :highlightCurrentRow="true"  v-loading="previewLoading" border
                      :stripe="true">
             </QueryAllTable>
@@ -93,13 +94,13 @@
 import BudgetLogTable from "@/views/finance/budget/budgetLogTable";
 import QueryAllTable from "@/components/QueryAllTable";
 
-import {findProductionCostBudgetPage, downloadTemplate, uploadExcel} from "@/api/finance/budget/productionCostBudget";
+import {findProductLineBudgetPage, downloadTemplate, uploadExcel} from "@/api/finance/budget/productLineBudget";
 import {deleteBudgetUploadLog, findBudgetUploadLogPage,} from "@/api/finance/budget/budgetUploadLog";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 
 export default {
-  name: "productionCostBudget",
+  name: "productLineBudget",
   components: {BudgetLogTable, QueryAllTable},
   data() {
     return {
@@ -118,36 +119,18 @@ export default {
         // {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
       ],
 
-      productionCostBudgetColumns: [
+      productLineBudgetColumns: [
         // {prop: "seq", label: "序号", minWidth: 80},
         {prop: "businessDivision", label: "事业部", minWidth: 150},
         {prop: "productLine", label: "产品线", minWidth: 120},
         {prop: "dataVersion", label: "数据版本", minWidth: 150},
         {prop: "itemSeq", label: "科目序号", minWidth: 120},
-        {prop: "category1", label: "分类1", minWidth: 120},
-        {prop: "category2", label: "分类2", minWidth: 260},
-        {prop: "category3", label: "分类3", minWidth: 150},
+        {prop: "costItem", label: "科目", minWidth: 260},
         {prop: "unit", label: "单位", minWidth: 120},
-        {prop: "validation", label: "校验", minWidth: 120},
-        {prop: "202201", label: "202201", minWidth: 120},
-        {prop: "202202", label: "202202", minWidth: 120},
-        {prop: "202203", label: "202203", minWidth: 120},
-        {prop: "202204", label: "202204", minWidth: 120},
-        {prop: "202205", label: "202205", minWidth: 120},
-        {prop: "202206", label: "202206", minWidth: 120},
-        {prop: "202207", label: "202207", minWidth: 120},
-        {prop: "202208", label: "202208", minWidth: 120},
-        {prop: "202209", label: "202209", minWidth: 120},
-        {prop: "202210", label: "202210", minWidth: 120},
-        {prop: "202211", label: "202211", minWidth: 120},
-        {prop: "202212", label: "202212", minWidth: 120},
-        {prop: "ytd", label: "YTD", minWidth: 120},
-        {prop: "ytg", label: "YTG", minWidth: 120},
-        {prop: "2022小计", label: "2022小计", minWidth: 120},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
-      productionCostBudgetDataResult: {},
+      productLineBudgetDataResult: {},
 
       downloadTemplateLoading: false,
       previewLoading: false,
@@ -170,7 +153,7 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.pageRequest.type = '生产成本预算';
+      this.pageRequest.type = '产品线P&L预算';
       this.pageRequest.excelName = this.filters.excelName;
       this.queryLoading = true;
       findBudgetUploadLogPage(this.pageRequest)
@@ -190,9 +173,9 @@ export default {
       }
       let params = {};
       params.uploadLogId = uploadLogRow.id;
-      this.productionCostBudgetDataResult = {};
+      this.productLineBudgetDataResult = {};
       this.previewLoading = true;
-      findProductionCostBudgetPage(params)
+      findProductLineBudgetPage(params)
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
@@ -200,8 +183,8 @@ export default {
               {
                 responseData.data.columns[i].formatter = this.percentFormat;
               }
-              this.productionCostBudgetColumns = responseData.data.columns;
-              this.productionCostBudgetDataResult.records = responseData.data.data;
+              this.productLineBudgetColumns = responseData.data.columns;
+              this.productLineBudgetDataResult.records = responseData.data.data;
             }
             else
             {
@@ -308,18 +291,11 @@ export default {
     },
     // 百分数格式化
     percentFormat: function (row, column) {
-      if(column.no >= 9)
+      if(column.no >= 6)
       {
-        if(row[column.property] != undefined && row[column.property] != null)
+        if(row.unit == '%')
         {
-          if(row.unit == '%')
-          {
-            return Number(row[column.property]*100).toFixed(2)+'%';
-          }
-          else
-          {
-            return Math.round(row[column.property]);
-          }
+          return Number(row[column.property]*100).toFixed(2)+'%';
         }
       }
       return row[column.property];
