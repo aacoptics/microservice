@@ -97,7 +97,7 @@ public class ProductionCostBudgetController {
     public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
 
         String originalFilename = file.getOriginalFilename();
-        productionCostBudgetService.importExcel(originalFilename, file.getInputStream());
+        productionCostBudgetService.importExcel(originalFilename, file, file.getInputStream());
         return Result.success();
     }
 }

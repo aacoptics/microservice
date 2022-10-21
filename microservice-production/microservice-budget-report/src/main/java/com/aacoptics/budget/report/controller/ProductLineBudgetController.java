@@ -97,7 +97,7 @@ public class ProductLineBudgetController {
     public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
 
         String originalFilename = file.getOriginalFilename();
-        productLineBudgetService.importExcel(originalFilename, file.getInputStream());
+        productLineBudgetService.importExcel(originalFilename, file, file.getInputStream());
         return Result.success();
     }
 }
