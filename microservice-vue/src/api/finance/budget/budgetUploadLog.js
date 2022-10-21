@@ -53,3 +53,14 @@ export function handleUpdate(updateForm) {
         data: updateForm
     })
 }
+
+export function downloadExcel(budgetUploadLogId) {
+    return request({
+        url: '/budget-report/budgetUploadLog/downloadExcel/' + budgetUploadLogId,
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+    })
+}

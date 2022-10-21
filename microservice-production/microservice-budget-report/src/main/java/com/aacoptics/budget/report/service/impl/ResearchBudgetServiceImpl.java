@@ -22,8 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -230,7 +234,7 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
 
     @Transactional
     @Override
-    public void importExcel(String originalFilename, InputStream in) throws Exception {
+    public void importExcel(String originalFilename, MultipartFile file, InputStream in) throws Exception {
         List<List<String[]>> sheetList = ExcelUtil.read(in);
 
         List<String[]> excelDataList = sheetList.get(1);
@@ -244,6 +248,13 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         if ((!"事业部".equals(businessDivisionTitle)) || (!"产品线".equals(productLineTitle))|| (!"数据版本".equals(dataVersionTitle))) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
+        InputStream excelImageInputStream = file.getInputStream();
+
+        byte[] excelImageData = new byte[(int) file.getSize()];
+        excelImageInputStream.read(excelImageData);
+
+
+
         //获取事业部，产品线用于判断唯一性
         String[] dataRow = excelDataList.get(2);
         String tempBusinessDivision = dataRow[0]; //事业部
@@ -270,7 +281,10 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         budgetUploadLog.setUploadTime(LocalDateTime.now());
         budgetUploadLog.setUploadUser(this.getCurrentUsername());
         budgetUploadLog.setStatus(UploadLogStatusConstants.YES);
+        budgetUploadLog.setExcelImage(excelImageData);
         budgetUploadLogService.add(budgetUploadLog);
+
+        excelImageInputStream.close();
 
         String firstYear = titleArray[9].substring(0, 4);
         String secondYear = titleArray[25].substring(0, 4);
@@ -351,7 +365,6 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
                 this.add(researchBudget);
             }
         }
-
     }
 
 }

@@ -50,4 +50,11 @@ public class BudgetUploadLog extends BasePo {
     @TableField(value = "status")
     private Integer status;
 
+
+    /**
+     * Excel原件
+     */
+    @TableField(value = "excel_image")
+    private byte[] excelImage;
+
 }

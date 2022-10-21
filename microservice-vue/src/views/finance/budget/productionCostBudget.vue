@@ -27,7 +27,7 @@
       <BudgetLogTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false" 
-                @findPage="findPage" @handleDelete="handleDelete" @handlePreview="handlePreview">
+                @findPage="findPage" @handleDelete="handleDelete" @handlePreview="handlePreview" @handleDownload="handleDownload">
       </BudgetLogTable>
 
 
@@ -94,7 +94,7 @@ import BudgetLogTable from "@/views/finance/budget/budgetLogTable";
 import QueryAllTable from "@/components/QueryAllTable";
 
 import {findProductionCostBudgetPage, downloadTemplate, uploadExcel} from "@/api/finance/budget/productionCostBudget";
-import {deleteBudgetUploadLog, findBudgetUploadLogPage,} from "@/api/finance/budget/budgetUploadLog";
+import {deleteBudgetUploadLog, findBudgetUploadLogPage, downloadExcel} from "@/api/finance/budget/budgetUploadLog";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 
@@ -297,6 +297,28 @@ export default {
       }
       this.previewDialogVisible = true;
       this.findDetail(params.row);
+    },
+    handleDownload: function (params) {
+      if(params.row.status == 0)
+      {
+        this.$message({
+                    message:
+                        "已失效，不能下载！ ",
+                    type: "error",
+                  });
+        return;
+      }
+      downloadExcel(params.row.id).then(res => {
+
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', params.row.excelName);
+        document.body.appendChild(link);
+        link.click();
+
+      });
     },
     cancelPreview()
     {
