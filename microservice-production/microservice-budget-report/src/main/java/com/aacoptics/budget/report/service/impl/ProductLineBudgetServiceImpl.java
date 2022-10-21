@@ -301,6 +301,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         budgetUploadLog.setUploadTime(LocalDateTime.now());
         budgetUploadLog.setUploadUser(this.getCurrentUsername());
         budgetUploadLog.setStatus(UploadLogStatusConstants.YES);
+        budgetUploadLog.setExcelImage(excelImageData);
         budgetUploadLogService.add(budgetUploadLog);
 
         excelImageInputStream.close();

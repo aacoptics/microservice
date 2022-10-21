@@ -280,6 +280,7 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
         budgetUploadLog.setUploadTime(LocalDateTime.now());
         budgetUploadLog.setUploadUser(this.getCurrentUsername());
         budgetUploadLog.setStatus(UploadLogStatusConstants.YES);
+        budgetUploadLog.setExcelImage(excelImageData);
         budgetUploadLogService.add(budgetUploadLog);
 
         excelImageInputStream.close();
