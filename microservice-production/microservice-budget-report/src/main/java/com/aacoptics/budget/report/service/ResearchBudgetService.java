@@ -5,6 +5,7 @@ import com.aacoptics.budget.report.entity.param.ResearchBudgetQueryParam;
 import com.aacoptics.budget.report.entity.po.ResearchBudget;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +64,6 @@ public interface ResearchBudgetService {
      * @throws IOException
      * @throws InvalidFormatException
      */
-    void importExcel(String originalFilename, InputStream in) throws Exception;
+    void importExcel(String originalFilename, MultipartFile file, InputStream in) throws Exception;
 
 }

@@ -18,13 +18,20 @@
       </el-table-column>
       <slot name="custom-column"></slot>
       <el-table-column v-if="showOperation" :label="action.operation" align="center" fixed="right" header-align="center"
-                       width="120">
+                       width="150">
         <template v-slot="scope">
           <el-button-group>
             <el-tooltip v-if="showOperation & showOperationPreview" :content="action.preview" placement="top">
               <el-button :size="size" type="primary" @click="handlePreview(scope.$index, scope.row)">
                 <template #icon>
                   <font-awesome-icon :icon="['far', 'file-lines']"/>
+                </template>
+              </el-button>
+            </el-tooltip>
+            <el-tooltip v-if="showOperation & showOperationDownload" :content="action.download" placement="top">
+              <el-button :size="size" type="success" @click="handleDownload(scope.$index, scope.row)">
+                <template #icon>
+                  <font-awesome-icon :icon="['far', 'file-excel']"/>
                 </template>
               </el-button>
             </el-tooltip>
@@ -90,6 +97,10 @@ export default {
       default: true
     },
     showOperationPreview: {  // 是否显示编辑操作组件
+      type: Boolean,
+      default: true
+    },
+    showOperationDownload: {  // 是否显示编辑操作组件
       type: Boolean,
       default: true
     },
@@ -163,7 +174,8 @@ export default {
         confirm: "确定",
         cancel: "取消",
         reset: "重置",
-        preview: "预览"
+        preview: "预览",
+        download: '下载'
       },
       // 分页信息
       pageRequest: {
@@ -211,6 +223,9 @@ export default {
     // 编辑
     handlePreview: function (index, row) {
       this.$emit('handlePreview', {index: index, row: row})
+    },
+    handleDownload: function (index, row) {
+      this.$emit('handleDownload', {index: index, row: row})
     },
     // 删除
     handleDelete: function (index, row) {

@@ -97,7 +97,7 @@ public class ResearchBudgetController {
     public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
 
         String originalFilename = file.getOriginalFilename();
-        researchBudgetService.importExcel(originalFilename, file.getInputStream());
+        researchBudgetService.importExcel(originalFilename, file, file.getInputStream());
         return Result.success();
     }
 }

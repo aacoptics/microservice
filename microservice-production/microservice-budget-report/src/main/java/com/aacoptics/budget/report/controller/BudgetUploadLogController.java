@@ -2,6 +2,8 @@ package com.aacoptics.budget.report.controller;
 
 import com.aacoptics.budget.report.entity.form.BudgetUploadLogQueryForm;
 import com.aacoptics.budget.report.entity.param.BudgetUploadLogQueryParam;
+import com.aacoptics.budget.report.entity.po.BudgetUploadLog;
+import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.service.BudgetUploadLogService;
 import com.aacoptics.common.core.vo.Result;
 import io.swagger.annotations.*;
@@ -9,7 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 
 @RestController
 @RequestMapping("/budgetUploadLog")
@@ -48,4 +56,36 @@ public class BudgetUploadLogController {
         return Result.success(budgetUploadLogService.get(id));
     }
 
+
+    /**
+     * Excel原件下载
+     * @param response
+     */
+    @GetMapping("/downloadExcel/{id}")
+    public void downloadExcel(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        try {
+           BudgetUploadLog budgetUploadLog = budgetUploadLogService.get(id);
+           if(budgetUploadLog == null)
+           {
+               throw new BusinessException("文件已不存在");
+           }
+           byte[] excelImage = budgetUploadLog.getExcelImage();
+
+            if(excelImage == null)
+            {
+                throw new BusinessException("文件已不存在");
+            }
+            //强制下载不打开
+            response.setContentType("application/force-download");
+            OutputStream out = response.getOutputStream();
+            //使用URLEncoder来防止文件名乱码或者读取错误
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(budgetUploadLog.getExcelName(), "UTF-8"));
+            out.write(excelImage);
+            out.close();
+            out.flush();
+        } catch (IOException e) {
+            log.error("文件下载异常", e);
+            throw e;
+        }
+    }
 }
