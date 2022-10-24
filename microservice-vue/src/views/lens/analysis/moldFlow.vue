@@ -28,7 +28,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button :loading="exportLoading" type="primary" @click="exportExcelTemplate('项目模流数据模板')">导出模板
+            <el-button :loading="exportLoading" type="primary" @click="exportExcelTemplate('模流数据模板')">导出模板
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
               </template>
@@ -50,7 +50,7 @@
               </el-button>
             </el-form-item>
             <el-form-item>
-              <el-button :loading="exportDataLoading" type="success" @click="exportData('项目模流数据表')">导出数据
+              <el-button :loading="exportDataLoading" type="success" @click="exportData('模流数据表')">导出数据
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'download']"/>
                 </template>
@@ -439,7 +439,7 @@ export default {
 
     // 取消
     cancel() {
-      this.dialogVisible = false;
+      this.editDialogVisible = false;
     },
 
     // 批量删除

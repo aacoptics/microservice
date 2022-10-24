@@ -52,7 +52,7 @@ export function exportExcel(conditions) {
 // 单条删除数据
 export function handleDelete(updateForm) {
     return request({
-        url: '/moldflow-data-analysis/moldFlow/delete/${updateForm.id}',
+        url: `/moldflow-data-analysis/moldFlow/delete/${updateForm.id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'

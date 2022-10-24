@@ -136,18 +136,20 @@ public class StructureDataController {
                     row.createCell(14).setCellValue(p.getWholeDiameterThicknessRatio());
                     row.createCell(15).setCellValue(p.getMaxAngleR1());
                     row.createCell(16).setCellValue(p.getMaxAngleR2());
-                    row.createCell(17).setCellValue(p.getR1R2Distance());
-                    row.createCell(18).setCellValue(p.getMiddlePartThickness());
-                    row.createCell(19).setCellValue(p.getBottomDiameterDistance());
-                    row.createCell(20).setCellValue(p.getMechanismDiameterThicknessRatio());
-                    row.createCell(21).setCellValue(p.getR1KanheAngle());
-                    row.createCell(22).setCellValue(p.getR1KanheHeight());
-                    row.createCell(23).setCellValue(p.getR2KanheAngle());
-                    row.createCell(24).setCellValue(p.getR2KanheHeight());
-                    row.createCell(25).setCellValue(p.getR1Srtm());
-                    row.createCell(26).setCellValue(p.getR2Srtm());
-                    row.createCell(27).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(28).setCellValue(p.getAssemblyDrawing());
+                    row.createCell(17).setCellValue(p.getR1MaxHeightDifference());
+                    row.createCell(18).setCellValue(p.getR2MaxHeightDifference());
+                    row.createCell(19).setCellValue(p.getR1R2Distance());
+                    row.createCell(20).setCellValue(p.getMiddlePartThickness());
+                    row.createCell(21).setCellValue(p.getBottomDiameterDistance());
+                    row.createCell(22).setCellValue(p.getMechanismDiameterThicknessRatio());
+                    row.createCell(23).setCellValue(p.getR1KanheAngle());
+                    row.createCell(24).setCellValue(p.getR1KanheHeight());
+                    row.createCell(25).setCellValue(p.getR2KanheAngle());
+                    row.createCell(26).setCellValue(p.getR2KanheHeight());
+                    row.createCell(27).setCellValue(p.getR1Srtm());
+                    row.createCell(28).setCellValue(p.getR2Srtm());
+                    row.createCell(29).setCellValue(p.getOuterDiameterSrtm());
+                    row.createCell(30).setCellValue(p.getAssemblyDrawing());
                 }
             }
 

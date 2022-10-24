@@ -431,7 +431,7 @@
 
         // 取消
         cancel() {
-          this.dialogVisible = false;
+          this.editDialogVisible = false;
         },
 
          // 批量删除

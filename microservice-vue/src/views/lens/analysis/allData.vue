@@ -185,7 +185,42 @@
             {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100},
             {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100},
             {prop: "outerDiameterSrtm", label: "外径消光位置(粗糙度SRTM)", minWidth: 100},
-            {prop: "assemblyDrawing", label: "组立图", minWidth: 100}
+            {prop: "assemblyDrawing", label: "组立图", minWidth: 100},
+
+            {prop: "moldType", label: "模具类型", minWidth: 100},
+            {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100},
+            {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100},
+            {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100},
+            {prop: "simulateWireLength", label: "模拟熔接线长度(mm)", minWidth: 100},
+            {prop: "wholePercent", label: "整体(%)", minWidth: 100},
+            {prop: "effectiveR1", label: "R1有效径(%)", minWidth: 100},
+            {prop: "effectiveR2", label: "R2有效径(%)", minWidth: 100},
+            {prop: "ridgeR1", label: "R1坎合(%)", minWidth: 100},
+            {prop: "ridgeR2", label: "R2坎合(%)", minWidth: 100},
+            {prop: "refractiveR1", label: "R1(nm)", minWidth: 100},
+            {prop: "refractiveR2", label: "R2(nm)", minWidth: 100},
+            {prop: "competitorName", label: "竞品名称", minWidth: 100},
+            {prop: "competitorLink", label: "竞品链接", minWidth: 100},
+            {prop: "competitorAssemblyDrawing", label: "竞品组立图", minWidth: 100},
+
+            {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100},
+            {prop: "runnerType", label: "流道类型", minWidth: 100},
+            {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
+            {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
+            {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
+            {prop: "partingSurface", label: "分型面(um)", minWidth: 100},
+            {prop: "splitPosition", label: "分割位(um)", minWidth: 100},
+            {prop: "gateType", label: "浇口类型", minWidth: 100},
+            {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
+            {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
+            {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100},
+            {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100},
+            {prop: "moldOpeningType", label: "开模方式", minWidth: 100}
+
+
+
+
+
         ],
         pageRequest: {current: 1, size: 10},
         pageResult: {}

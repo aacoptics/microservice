@@ -16,6 +16,7 @@ public class AllData {
     private String material;
     private String moldNo;
 
+    // 工艺条件数据
     private String mfMoldTemp;
     private String mfMaterialTemp;
     private String mfJetVelocity;
@@ -32,7 +33,6 @@ public class AllData {
     private String mfHoldTime4;
     private String mfHoldTime5;
     private String mfHoldTime6;
-
     private String moldTemp;
     private String materialTemp;
     private String jetVelocity;
@@ -57,6 +57,7 @@ public class AllData {
     private String clampingForce;
     private String passivation;
 
+    // 成型结果数据
     private String coreThickness;
     private String coreThicknessRange;
     private String r1VectorHeight;
@@ -67,10 +68,8 @@ public class AllData {
     private String kanheEcc;
     private String faceEcc;
     private String annealingProcess;
-
     private String bpKanheRoundness;
     private String dmpKanheRoundness;
-
     private String outerDiameterAverage;
     private String outerDiameterRange;
     private String outerDiameterRoundness;
@@ -80,14 +79,11 @@ public class AllData {
     private String r2Flatness;
     private String r1SplitAverage;
     private String r2SplitAverage;
-
     private String wftR1;
     private String wftR2;
-
     private String wftStability;
     private String wftConsistency;
     private String wftMaxAs;
-
     private String cftR1;
     private String cftR2;
     private String cftConsistency;
@@ -102,6 +98,7 @@ public class AllData {
     private String appearanceImg;
     private String remarks;
 
+    // 结构数据
     private String coreThicknessLens;
     private String maxWallThickness;
     private String minWallThickness;
@@ -115,10 +112,8 @@ public class AllData {
     private String wholeDiameterThicknessRatio;
     private String maxAngleR1;
     private String maxAngleR2;
-
     private String r1MaxHeightDifference;
     private String r2MaxHeightDifference;
-
     private String r1R2Distance;
     private String middlePartThickness;
     private String bottomDiameterDistance;
@@ -131,5 +126,37 @@ public class AllData {
     private String r2Srtm;
     private String outerDiameterSrtm;
     private String assemblyDrawing;
+
+    // 模流数据
+    private String moldType;
+    private String moldDiameterRate;
+    private String flowFrontTemperature;
+    private String vpChangePressure;
+    private String simulateWireLength;
+    private String wholePercent;
+    private String effectiveR1;
+    private String effectiveR2;
+    private String ridgeR1;
+    private String ridgeR2;
+    private String refractiveR1;
+    private String refractiveR2;
+    private String competitorName;
+    private String competitorLink;
+    private String competitorAssemblyDrawing;// 竞品组立图
+
+    // 模具数据
+    private String moldCorePassivation;
+    private String runnerType;
+    private String firstRunner;
+    private String secondRunner;
+    private String thirdRunner;
+    private String partingSurface;
+    private String splitPosition;
+    private String gateType;
+    private String gateWidth;
+    private String gateThickness;
+    private String gateR1Thickness;
+    private String gateR2Thickness;
+    private String moldOpeningType;
 
 }

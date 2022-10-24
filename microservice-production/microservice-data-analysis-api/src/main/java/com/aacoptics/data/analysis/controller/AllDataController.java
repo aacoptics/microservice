@@ -186,6 +186,35 @@ public class AllDataController {
                     row.createCell(108).setCellValue(p.getOuterDiameterSrtm());
                     row.createCell(109).setCellValue(p.getAssemblyDrawing());
 
+                    row.createCell(110).setCellValue(p.getMoldType());
+                    row.createCell(111).setCellValue(p.getMoldDiameterRate());
+                    row.createCell(112).setCellValue(p.getFlowFrontTemperature());
+                    row.createCell(113).setCellValue(p.getVpChangePressure());
+                    row.createCell(114).setCellValue(p.getSimulateWireLength());
+                    row.createCell(115).setCellValue(p.getWholePercent());
+                    row.createCell(116).setCellValue(p.getEffectiveR1());
+                    row.createCell(117).setCellValue(p.getEffectiveR2());
+                    row.createCell(118).setCellValue(p.getRidgeR1());
+                    row.createCell(119).setCellValue(p.getRidgeR2());
+                    row.createCell(120).setCellValue(p.getRefractiveR1());
+                    row.createCell(121).setCellValue(p.getRefractiveR2());
+                    row.createCell(122).setCellValue(p.getCompetitorName());
+                    row.createCell(123).setCellValue(p.getCompetitorLink());
+                    row.createCell(124).setCellValue(p.getCompetitorAssemblyDrawing());
+
+                    row.createCell(125).setCellValue(p.getMoldCorePassivation());
+                    row.createCell(126).setCellValue(p.getRunnerType());
+                    row.createCell(127).setCellValue(p.getFirstRunner());
+                    row.createCell(128).setCellValue(p.getSecondRunner());
+                    row.createCell(129).setCellValue(p.getThirdRunner());
+                    row.createCell(130).setCellValue(p.getPartingSurface());
+                    row.createCell(131).setCellValue(p.getSplitPosition());
+                    row.createCell(132).setCellValue(p.getGateType());
+                    row.createCell(133).setCellValue(p.getGateWidth());
+                    row.createCell(134).setCellValue(p.getGateThickness());
+                    row.createCell(135).setCellValue(p.getGateR1Thickness());
+                    row.createCell(136).setCellValue(p.getGateR2Thickness());
+                    row.createCell(137).setCellValue(p.getMoldOpeningType());
                 }
             }
         } catch (Exception e) {

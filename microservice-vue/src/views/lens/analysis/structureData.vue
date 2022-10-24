@@ -60,50 +60,50 @@
           </el-form>
         </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
-                :stripe="false" @findPage="findPage">
-        <template v-slot:custom-column>
-          <el-table-column align="center" fixed="right" header-align="center" label="操作"
-                           width="120">
-            <template v-slot="scope">
-              <el-button-group>
-                <el-tooltip content="编辑" placement="top">
-                  <el-button size="small" type="primary" @click="handleEdit({index: scope.index, row: scope.row})">
-                    <template #icon>
-                      <font-awesome-icon :icon="['far', 'pen-to-square']"/>
-                    </template>
-                  </el-button>
-                </el-tooltip>
-                <el-tooltip content="删除" placement="top">
-                  <el-button size="small" type="danger" @click="handleDelete(scope.row)">
-                    <template #icon>
-                      <font-awesome-icon :icon="['far', 'trash-can']"/>
-                    </template>
-                  </el-button>
-                </el-tooltip>
-              </el-button-group>
-            </template>
-          </el-table-column>
-        </template>
-      </SysTable>
+        <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
+                  :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
+                  :stripe="false" @findPage="findPage">
+          <template v-slot:custom-column>
+            <el-table-column align="center" fixed="right" header-align="center" label="操作"
+                            width="120">
+              <template v-slot="scope">
+                <el-button-group>
+                  <el-tooltip content="编辑" placement="top">
+                    <el-button size="small" type="primary" @click="handleEdit({index: scope.index, row: scope.row})">
+                      <template #icon>
+                        <font-awesome-icon :icon="['far', 'pen-to-square']"/>
+                      </template>
+                    </el-button>
+                  </el-tooltip>
+                  <el-tooltip content="删除" placement="top">
+                    <el-button size="small" type="danger" @click="handleDelete(scope.row)">
+                      <template #icon>
+                        <font-awesome-icon :icon="['far', 'trash-can']"/>
+                      </template>
+                    </el-button>
+                  </el-tooltip>
+                </el-button-group>
+              </template>
+            </el-table-column>
+          </template>
+        </SysTable>
 
-      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'" width="30%">
-        <el-upload
-            :before-upload="beforeUpload"
-            :http-request="submitExcelUpload"
-            :multiple="false"
-            :show-file-list="false"
-            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            action=""
-            class="upload-demo"
-            drag>
-          <font-awesome-icon :icon="['fas', 'cloud-arrow-up']" size="6x"/>
-          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
-        </el-upload>
-        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
-        </div>
-      </el-dialog>
+        <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'" width="30%">
+          <el-upload
+              :before-upload="beforeUpload"
+              :http-request="submitExcelUpload"
+              :multiple="false"
+              :show-file-list="false"
+              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              action=""
+              class="upload-demo"
+              drag>
+            <font-awesome-icon :icon="['fas', 'cloud-arrow-up']" size="6x"/>
+            <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+          </el-upload>
+          <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          </div>
+        </el-dialog>
 
         <el-dialog v-model="editDialogVisible" :close-on-click-modal="false" :title="编辑" width="90%">
             <el-form ref="dataForm" :model="dataForm" :size="size" label-width="100px">
@@ -510,7 +510,7 @@
 
       // 取消
       cancel() {
-        this.dialogVisible = false;
+        this.editDialogVisible = false;
       },
 
       // 批量删除

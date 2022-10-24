@@ -92,6 +92,22 @@
           </el-table-column>
         </template>
       </SysTable>
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'Excel导入'" width="30%">
+        <el-upload
+            :before-upload="beforeUpload"
+            :http-request="submitExcelUpload"
+            :multiple="false"
+            :show-file-list="false"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            action=""
+            class="upload-demo"
+            drag>
+          <font-awesome-icon :icon="['fas', 'cloud-arrow-up']" size="6x"/>
+          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+        </div>
+      </el-dialog>
       <el-dialog v-model="editDialogVisible" :close-on-click-modal="false" :title="编辑" width="90%">
           <el-form ref="dataForm" :model="dataForm" :size="size" label-width="100px">
               <el-form-item v-if="false" label="Id" prop="id">
@@ -629,7 +645,7 @@
 
     // 取消
     cancel() {
-      this.dialogVisible = false;
+      this.editDialogVisible = false;
     },
 
     // 批量删除
