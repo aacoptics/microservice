@@ -18,22 +18,41 @@ public class ProcessConditionData extends BasePo {
     private String partName;
     private String material;
     private String moldNo;
+
+    private String mfMoldTemp;
+    private String mfMaterialTemp;
+    private String mfJetVelocity;
+    private String mfVpSwitch;
+    private String mfHoldPressure1;
+    private String mfHoldTime1;
+    private String mfHoldPressure2;
+    private String mfHoldTime2;
+    private String mfHoldPressure3;
+    private String mfHoldTime3;
+    private String mfHoldPressure4;
+    private String mfHoldTime4;
+    private String mfHoldPressure5;
+    private String mfHoldTime5;
+    private String mfHoldPressure6;
+    private String mfHoldTime6;
+
     private String moldTemp;
     private String materialTemp;
     private String jetVelocity;
     private String vpSwitch;
     private String holdPressure1;
-    private String holdPressure2;
-    private String holdPressure3;
-    private String holdPressure4;
-    private String holdPressure5;
-    private String holdPressure6;
     private String holdTime1;
+    private String holdPressure2;
     private String holdTime2;
+    private String holdPressure3;
     private String holdTime3;
+    private String holdPressure4;
     private String holdTime4;
+    private String holdPressure5;
     private String holdTime5;
+    private String holdPressure6;
     private String holdTime6;
+
     private String holdPressureVelocity;
     private String platenPosition;
     private String openingSpeed;

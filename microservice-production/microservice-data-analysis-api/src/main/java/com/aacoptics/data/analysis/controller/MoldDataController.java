@@ -2,9 +2,9 @@ package com.aacoptics.data.analysis.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.data.analysis.entity.form.QueryParams;
-import com.aacoptics.data.analysis.entity.po.StructureData;
+import com.aacoptics.data.analysis.entity.po.MoldData;
 import com.aacoptics.data.analysis.exception.WlgReportErrorType;
-import com.aacoptics.data.analysis.service.IStructureDataService;
+import com.aacoptics.data.analysis.service.IMoldDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,13 +28,13 @@ import java.net.URLEncoder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/structureData")
-@Api("StructureDataController")
+@RequestMapping("/moldData")
+@Api("MoldDataController")
 @Slf4j
-public class StructureDataController {
+public class MoldDataController {
 
     @Resource
-    IStructureDataService structureDataService;
+    IMoldDataService moldDataService;
 
     /**
      * 导出模板
@@ -42,14 +42,14 @@ public class StructureDataController {
      * @param response
      */
     @PostMapping("/exportTemplate")
-    public void downloadStructureDataTemplate(HttpServletResponse response) throws IOException {
+    public void downloadMoldDataTemplate(HttpServletResponse response) throws IOException {
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/structureData.xlsx");
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/moldData.xlsx");
             //强制下载不打开
             response.setContentType("application/force-download");
             OutputStream out = response.getOutputStream();
             //使用URLEncoder来防止文件名乱码或者读取错误
-            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("结构数据模板", "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("模具数据模板", "UTF-8"));
             int b = 0;
             byte[] buffer = new byte[1000000];
             while (b != -1) {
@@ -67,11 +67,11 @@ public class StructureDataController {
         }
     }
 
-    @ApiOperation(value = "结构数据Excel上传", notes = "结构数据Excel上传")
+    @ApiOperation(value = "模具数据Excel上传", notes = "模具数据Excel上传")
     @ApiImplicitParam(name = "file", value = "Excel文件", required = true, dataType = "MultipartFile")
     @PostMapping("/uploadExcel")
     public Result uploadExcel(@RequestPart("file") MultipartFile file) throws Exception {
-        structureDataService.importStructureDataExcel(file.getInputStream());
+        moldDataService.importMoldDataExcel(file.getInputStream());
         return Result.success();
     }
 
@@ -81,13 +81,13 @@ public class StructureDataController {
      * @param queryParams
      * @return
      */
-    @ApiOperation(value = "条件搜索结构数据", notes = "条件搜索结构数据")
+    @ApiOperation(value = "条件搜索模具数据", notes = "条件搜索模具数据")
     @PostMapping("/getDataByConditions")
     public Result getDataByConditions(@RequestBody QueryParams queryParams) {
         Integer page = queryParams.getCurrent();
         Integer size = queryParams.getSize();
-        Page<StructureData> iPage = new Page<>(page, size);
-        IPage<StructureData> res = structureDataService.getDataByConditions(iPage,
+        Page<MoldData> iPage = new Page<>(page, size);
+        IPage<MoldData> res = moldDataService.getDataByConditions(iPage,
                 queryParams.getCategory(),
                 queryParams.getProject(),
                 queryParams.getPartName(),
@@ -99,21 +99,21 @@ public class StructureDataController {
     }
 
 
-    @ApiOperation(value = "导出结构数据Excel", notes = "导出结构数据Excel")
+    @ApiOperation(value = "导出模具数据Excel", notes = "导出模具数据Excel")
     @PostMapping(value = "/exportExcel")
-    public void exportStructureDataExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
+    public void exportMoldDataExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
         XSSFWorkbook wb = null;
         try {
             // 根据查询条件获取数据
-            List<StructureData> datas = structureDataService.getAllDataByConditions(queryParams);
+            List<MoldData> datas = moldDataService.getAllDataByConditions(queryParams);
             // 读取模板
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/structureData.xlsx");
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/moldData.xlsx");
             wb = (XSSFWorkbook) WorkbookFactory.create(inputStream);
             XSSFSheet sheet = wb.getSheetAt(0);
 
             if (datas != null && datas.size() > 0) {
                 for (int i = 0; i < datas.size(); i++) {
-                    StructureData p = datas.get(i);
+                    MoldData p = datas.get(i);
                     // 获取行
                     XSSFRow row = sheet.getRow(i + 3);
                     if (row == null) {
@@ -123,33 +123,20 @@ public class StructureDataController {
                     row.createCell(1).setCellValue(p.getProject());
                     row.createCell(2).setCellValue(p.getPartName());
                     row.createCell(3).setCellValue(p.getMaterial());
-                    row.createCell(4).setCellValue(p.getCoreThicknessLens());
-                    row.createCell(5).setCellValue(p.getMaxWallThickness());
-                    row.createCell(6).setCellValue(p.getMinWallThickness());
-                    row.createCell(7).setCellValue(p.getMaxCoreRatio());
-                    row.createCell(8).setCellValue(p.getMaxMinRatio());
-                    row.createCell(9).setCellValue(p.getOuterDiameter());
-                    row.createCell(10).setCellValue(p.getEdgeThickness());
-                    row.createCell(11).setCellValue(p.getWholeMinWallThickness());
-                    row.createCell(12).setCellValue(p.getWholeMaxWallThickness());
-                    row.createCell(13).setCellValue(p.getWholeMaxMinRatio());
-                    row.createCell(14).setCellValue(p.getWholeDiameterThicknessRatio());
-                    row.createCell(15).setCellValue(p.getMaxAngleR1());
-                    row.createCell(16).setCellValue(p.getMaxAngleR2());
-                    row.createCell(17).setCellValue(p.getR1MaxHeightDifference());
-                    row.createCell(18).setCellValue(p.getR2MaxHeightDifference());
-                    row.createCell(19).setCellValue(p.getR1R2Distance());
-                    row.createCell(20).setCellValue(p.getMiddlePartThickness());
-                    row.createCell(21).setCellValue(p.getBottomDiameterDistance());
-                    row.createCell(22).setCellValue(p.getMechanismDiameterThicknessRatio());
-                    row.createCell(23).setCellValue(p.getR1KanheAngle());
-                    row.createCell(24).setCellValue(p.getR1KanheHeight());
-                    row.createCell(25).setCellValue(p.getR2KanheAngle());
-                    row.createCell(26).setCellValue(p.getR2KanheHeight());
-                    row.createCell(27).setCellValue(p.getR1Srtm());
-                    row.createCell(28).setCellValue(p.getR2Srtm());
-                    row.createCell(29).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(30).setCellValue(p.getAssemblyDrawing());
+                    row.createCell(4).setCellValue(p.getMoldType());
+                    row.createCell(5).setCellValue(p.getMoldCorePassivation());
+                    row.createCell(6).setCellValue(p.getRunnerType());
+                    row.createCell(7).setCellValue(p.getFirstRunner());
+                    row.createCell(8).setCellValue(p.getSecondRunner());
+                    row.createCell(9).setCellValue(p.getThirdRunner());
+                    row.createCell(10).setCellValue(p.getPartingSurface());
+                    row.createCell(11).setCellValue(p.getSplitPosition());
+                    row.createCell(12).setCellValue(p.getGateType());
+                    row.createCell(13).setCellValue(p.getGateWidth());
+                    row.createCell(14).setCellValue(p.getGateThickness());
+                    row.createCell(15).setCellValue(p.getGateR1Thickness());
+                    row.createCell(16).setCellValue(p.getGateR2Thickness());
+                    row.createCell(17).setCellValue(p.getMoldOpeningType());
                 }
             }
 
@@ -157,22 +144,22 @@ public class StructureDataController {
             log.error("导出数据异常", e);
             throw e;
         }
-        ExcelUtil.exportXlsx(response, wb, "结构数据.xlsx");
+        ExcelUtil.exportXlsx(response, wb, "模具数据.xlsx");
     }
 
 
-    @ApiOperation(value = "删除结构数据", notes = "根据url的id来指定删除对象")
+    @ApiOperation(value = "删除模具数据", notes = "根据url的id来指定删除对象")
     @ApiImplicitParam(paramType = "path", name = "id", value = "结构数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(structureDataService.delete(id));
+        return Result.success(moldDataService.delete(id));
     }
 
 
-    @ApiOperation(value = "更新结构数据", notes = "修改指定位置的数据")
+    @ApiOperation(value = "更新模具数据", notes = "修改指定位置的数据")
     @PostMapping(value = "/update")
-    public Result update(@RequestBody StructureData structureData) {
-        return Result.success(structureDataService.update(structureData));
+    public Result update(@RequestBody MoldData moldData) {
+        return Result.success(moldDataService.update(moldData));
     }
 
 }

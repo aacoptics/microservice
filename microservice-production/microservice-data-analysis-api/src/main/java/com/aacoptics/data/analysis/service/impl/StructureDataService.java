@@ -77,18 +77,22 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             String wholeDiameterThicknessRatio = dataArray[14];
             String maxAngleR1 = dataArray[15];
             String maxAngleR2 = dataArray[16];
-            String r1R2Distance = dataArray[17];
-            String middlePartThickness = dataArray[18];
-            String bottomDiameterDistance = dataArray[19];
-            String mechanismDiameterThicknessRatio = dataArray[20];
-            String r1KanheAngle = dataArray[21];
-            String r1KanheHeight = dataArray[22];
-            String r2KanheAngle = dataArray[23];
-            String r2KanheHeight = dataArray[24];
-            String r1Srtm = dataArray[25];
-            String r2Srtm = dataArray[26];
-            String outerDiameterSrtm = dataArray[27];
-            String assemblyDrawing = dataArray[28];
+
+            String r1MaxHeightDifference = dataArray[17];
+            String r2MaxHeightDifference = dataArray[18];
+
+            String r1R2Distance = dataArray[19];
+            String middlePartThickness = dataArray[20];
+            String bottomDiameterDistance = dataArray[21];
+            String mechanismDiameterThicknessRatio = dataArray[22];
+            String r1KanheAngle = dataArray[23];
+            String r1KanheHeight = dataArray[24];
+            String r2KanheAngle = dataArray[25];
+            String r2KanheHeight = dataArray[26];
+            String r1Srtm = dataArray[27];
+            String r2Srtm = dataArray[28];
+            String outerDiameterSrtm = dataArray[29];
+            String assemblyDrawing = dataArray[30];
 
             // 设置参数
             structureData.setCategory(category);
@@ -108,6 +112,8 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             structureData.setWholeMinWallThickness(wholeMinWallThickness);
             structureData.setMaxAngleR1(maxAngleR1);
             structureData.setMaxAngleR2(maxAngleR2);
+            structureData.setR1MaxHeightDifference(r1MaxHeightDifference);
+            structureData.setR2MaxHeightDifference(r2MaxHeightDifference);
             structureData.setR1R2Distance(r1R2Distance);
             structureData.setMiddlePartThickness(middlePartThickness);
             structureData.setBottomDiameterDistance(bottomDiameterDistance);

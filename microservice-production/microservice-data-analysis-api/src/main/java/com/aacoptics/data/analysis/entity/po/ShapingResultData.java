@@ -29,7 +29,10 @@ public class ShapingResultData extends BasePo {
     private String kanheEcc;
     private String faceEcc;
     private String annealingProcess;
-    private String kanheRoundness;
+
+    private String bpKanheRoundness;
+    private String dmpKanheRoundness;
+
     private String outerDiameterAverage;
     private String outerDiameterRange;
     private String outerDiameterRoundness;
@@ -39,10 +42,14 @@ public class ShapingResultData extends BasePo {
     private String r2Flatness;
     private String r1SplitAverage;
     private String r2SplitAverage;
+
+    private String wftR1;
+    private String wftR2;
+
     private String wftStability;
     private String wftConsistency;
     private String wftMaxAs;
-    private String wftOuterDiameterShrinkage;
+
     private String cftR1;
     private String cftR2;
     private String cftConsistency;
