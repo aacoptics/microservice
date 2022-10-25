@@ -275,6 +275,8 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
 
         //3 保存上传日志
         BudgetUploadLog budgetUploadLog = new BudgetUploadLog();
+        budgetUploadLog.setBusinessDivision(tempBusinessDivision);
+        budgetUploadLog.setProductLine(tempProductLine);
         budgetUploadLog.setExcelName(originalFilename);
         budgetUploadLog.setType(BudgetTypeConstants.PRODUCTION_COST_BUDGET);
         budgetUploadLog.setUploadTime(LocalDateTime.now());

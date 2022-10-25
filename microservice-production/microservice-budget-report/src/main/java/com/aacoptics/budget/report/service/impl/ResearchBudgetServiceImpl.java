@@ -276,6 +276,8 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
 
         //3 保存上传日志
         BudgetUploadLog budgetUploadLog = new BudgetUploadLog();
+        budgetUploadLog.setBusinessDivision(tempBusinessDivision);
+        budgetUploadLog.setProductLine(tempProductLine);
         budgetUploadLog.setExcelName(originalFilename);
         budgetUploadLog.setType(BudgetTypeConstants.RESEARCH_BUDGET);
         budgetUploadLog.setUploadTime(LocalDateTime.now());
