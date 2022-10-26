@@ -330,7 +330,7 @@ export default {
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm:ss");
     },
-    // 百分数格式化
+    // 数据格式化
     percentFormat: function (row, column) {
       if(column.no >= 9)
       {

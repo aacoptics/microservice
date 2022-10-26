@@ -16,6 +16,10 @@ public interface ProductLineBudgetMapper extends BaseMapper<ProductLineBudget> {
 
     List<Integer> findProductLineBudgetAllYearByUploadLogId(@Param("uploadLogId") Long uploadLogId);
 
+
+    List<Integer> findProductLineBudgetAllYearByCondition(@Param("businessDivision") String businessDivision,
+                                                            @Param("productLineList") List<String> productLineList);
+
     ProductLineBudget findByBusinessDivisionAndProductLine(@Param("businessDivision") String businessDivision, @Param("productLine") String productLine);
 
 
@@ -23,5 +27,11 @@ public interface ProductLineBudgetMapper extends BaseMapper<ProductLineBudget> {
                                                               @Param("uploadLogId") Long uploadLogId,
                                                               @Param("firstYear") Integer firstYear,
                                                               @Param("secondYear") Integer secondYear);
+
+    List<Map<String, Object>> findProductLineBudgetByCondition(@Param("selectColumn") String selectColumn,
+                                                                 @Param("businessDivision") String businessDivision,
+                                                                 @Param("productLineList") List<String> productLineList,
+                                                                 @Param("firstYear") Integer firstYear,
+                                                                 @Param("secondYear") Integer secondYear);
 
 }

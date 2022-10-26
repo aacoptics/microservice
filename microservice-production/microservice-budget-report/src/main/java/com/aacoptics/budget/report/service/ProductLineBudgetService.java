@@ -9,19 +9,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public interface ProductLineBudgetService {
 
 
     /**
-     * 根据条件查询产品线预算预算
+     * 根据条件查询产品线预算
      *
      * @return
      */
     Map<String, Object> query(Page page, ProductLineBudgetQueryParam productLineBudgetQueryParam);
 
+    /**
+     * 根据条件查询产品线预算
+     *
+     * @return
+     */
+    Map<String, Object> findByUploadLogId(Long uploadLogId);
 
+
+    /**
+     * 根据条件查询产品线预算
+     *
+     * @return
+     */
+    Map<String, Object> findByCondition(String businessDivision, List<String> productLineList);
 
     /**
      * 更新上传产品线预算信息

@@ -50,8 +50,15 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
     public Map<String, Object> query(Page page, ProductLineBudgetQueryParam productLineBudgetQueryParam) {
         Long uploadLogId = productLineBudgetQueryParam.getUploadLogId();
         if (uploadLogId == null) {
-            throw new BusinessException("上传日志ID不能为空");
+            return this.findByCondition(productLineBudgetQueryParam.getBusinessDivision(),
+                    productLineBudgetQueryParam.getProductLineList());
         }
+
+        return this.findByUploadLogId(uploadLogId);
+    }
+
+    @Override
+    public Map<String, Object> findByUploadLogId(Long uploadLogId) {
         //获取存在的年份数据
         List<Integer> yearList = productLineBudgetMapper.findProductLineBudgetAllYearByUploadLogId(uploadLogId);
         if (yearList == null || yearList.size() == 0) {
@@ -64,7 +71,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         String selectColumn = this.createSelectColumn(yearList);
 
         List<Map<String, Object>> productLineBudgetList = productLineBudgetMapper.findProductLineBudgetByUploadLogId(
-                selectColumn, productLineBudgetQueryParam.getUploadLogId(), yearList.get(0), yearList.get(1));
+                selectColumn, uploadLogId, yearList.get(0), yearList.get(1));
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("columns", titleJsonArray);
@@ -73,6 +80,28 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         return resultMap;
     }
 
+    @Override
+    public Map<String, Object> findByCondition(String businessDivision, List<String> productLineList) {
+        //获取存在的年份数据
+        List<Integer> yearList = productLineBudgetMapper.findProductLineBudgetAllYearByCondition(businessDivision, productLineList);
+        if (yearList == null || yearList.size() == 0) {
+            throw new BusinessException("数据不存在");
+        }
+        //构建表头
+        JSONArray titleJsonArray = this.createReportTableTitle(yearList);
+
+        //构建查询列
+        String selectColumn = this.createReportSelectColumn(yearList);
+
+        List<Map<String, Object>> productLineBudgetList = productLineBudgetMapper.findProductLineBudgetByCondition(
+                selectColumn, businessDivision, productLineList, yearList.get(0), yearList.get(1));
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("columns", titleJsonArray);
+        resultMap.put("data", productLineBudgetList);
+
+        return resultMap;
+    }
 
     /**
      * 创建查询列
@@ -128,6 +157,62 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         return selectColumn.toString();
     }
 
+
+    /**
+     * 创建查询列
+     *
+     * @param yearList
+     * @return
+     */
+    private String createReportSelectColumn(List<Integer> yearList) {
+        StringBuffer selectColumn = new StringBuffer(); // 例：temp_year_1.month_01_phone_value month_01_phone_value
+
+        for (int i = 0; i < yearList.size(); i++) {
+            Integer year = yearList.get(i);
+            for (int j = 1; j <= 12; j++) {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_phone_value) as '" + columnName + "手机类'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_tv_value) as '" + columnName + "TV'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_watch_value) as '" + columnName + "手表'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_ar_vr_value) as '" + columnName + "AR/VR'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_laptop_value) as '" + columnName + "笔电'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_tablet_value) as '" + columnName + "平板'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_vehicle_value) as '" + columnName + "车载'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_iot_other_value) as '" + columnName + "IOT&Other'");
+                selectColumn.append(", sum(temp_year_" + (i + 1) + ".month_" + monthStr + "_total_value) as '" + columnName + "小计'");
+
+                if(j%3 == 0)
+                {
+                    String qColumnName = year + "Q" + j/3;
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_phone_value) as '" + qColumnName + "手机类'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_tv_value) as '" + qColumnName + "TV'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_watch_value) as '" + qColumnName + "手表'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_ar_vr_value) as '" + qColumnName + "AR/VR'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_laptop_value) as '" + qColumnName + "笔电'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_tablet_value) as '" + qColumnName + "平板'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_vehicle_value) as '" + qColumnName + "车载'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_iot_other_value) as '" + qColumnName + "IOT&Other'");
+                    selectColumn.append(", sum(temp_year_" + (i + 1) + ".q" + j/3 + "_total_value) as '" + qColumnName + "小计'");
+                }
+            }
+
+            String columnName = year + "Yr";
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_phone_value) as '" + columnName + "手机类'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_tv_value) as '" + columnName + "TV'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_watch_value) as '" + columnName + "手表'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_ar_vr_value) as '" + columnName + "AR/VR'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_laptop_value) as '" + columnName + "笔电'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_tablet_value) as '" + columnName + "平板'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_vehicle_value) as '" + columnName + "车载'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_iot_other_value) as '" + columnName + "IOT&Other'");
+            selectColumn.append(", sum(temp_year_" + (i + 1) + ".year_total_value) as '" + columnName + "小计'");
+        }
+
+        return selectColumn.toString();
+    }
+
+
     /**
      * 创建前端页面表头列
      *
@@ -174,6 +259,54 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         unitColumnJsonObject.put("minWidth", "120");
         titleJsonArray.add(unitColumnJsonObject);
 
+        this.addYearDataTitle(titleJsonArray, yearList);
+
+        return titleJsonArray;
+    }
+
+
+    /**
+     * 创建前端页面表头列
+     *
+     * @param yearList
+     * @return
+     */
+    private JSONArray createReportTableTitle(List<Integer> yearList) {
+        JSONArray titleJsonArray = new JSONArray();
+
+        JSONObject itemSeqColumnJsonObject = new JSONObject();
+        itemSeqColumnJsonObject.put("prop", "itemSeq");
+        itemSeqColumnJsonObject.put("label", "科目序号");
+        itemSeqColumnJsonObject.put("minWidth", "120");
+        titleJsonArray.add(itemSeqColumnJsonObject);
+
+
+        JSONObject costItemColumnJsonObject = new JSONObject();
+        costItemColumnJsonObject.put("prop", "costItem");
+        costItemColumnJsonObject.put("label", "科目");
+        costItemColumnJsonObject.put("minWidth", "260");
+        titleJsonArray.add(costItemColumnJsonObject);
+
+
+        JSONObject unitColumnJsonObject = new JSONObject();
+        unitColumnJsonObject.put("prop", "unit");
+        unitColumnJsonObject.put("label", "单位");
+        unitColumnJsonObject.put("minWidth", "120");
+        titleJsonArray.add(unitColumnJsonObject);
+
+        this.addYearDataTitle(titleJsonArray, yearList);
+
+        return titleJsonArray;
+    }
+
+
+    /**
+     * 创建前端页面表头列
+     *
+     * @param yearList
+     * @return
+     */
+    private JSONArray addYearDataTitle(JSONArray titleJsonArray, List<Integer> yearList) {
 
         List<String> suffixList = new ArrayList<>();
         suffixList.add("手机类");
