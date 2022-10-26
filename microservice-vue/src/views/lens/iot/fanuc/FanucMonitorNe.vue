@@ -544,83 +544,97 @@
                 </template>
               </el-button>
               <el-button size="small" type="success"
-                         @click="exportExcel('#monitDataTable', 'MonitData.xlsx')">导出
+                         @click="json2Excel(fanucDialogMonitData, 'MonitData.xlsx')">导出
                 <template #icon>
                   <font-awesome-icon :icon="['fas','download']"/>
                 </template>
               </el-button>
-              <el-table
-                  id="monitDataTable"
-                  :data="fanucDialogMonitData"
-                  border
-                  header-row-class-name="tableHead"
-                  height=495px
-                  v-loading="queryLoading"
-                  style="width: 100%;margin-top: 10px">
-                <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
-                <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>
-                <el-table-column :width="150" label="项目号" prop="condMoldFileName"></el-table-column>
-                <el-table-column :width="185" label="注塑时间" prop="monitDateTime"></el-table-column>
-                <el-table-column :width="45" label="状态" prop="monitStatus"></el-table-column>
-                <el-table-column :width="20 * '循环时间'.length" label="循环时间" prop="monitCycle"></el-table-column>
-                <el-table-column :width="65" label="循环数" prop="monitCyclecount"></el-table-column>
-                <el-table-column :width="65" label="射出数" prop="monitShotcount"></el-table-column>
-                <el-table-column :width="65" label="正品数" prop="monitGoodcount"></el-table-column>
-                <el-table-column :width="20 * '射出时间'.length" label="射出时间" prop="monitInjTime"></el-table-column>
-                <el-table-column :width="20 * '计量时间'.length" label="计量时间"
-                                 prop="monitRecovTime"></el-table-column>
-                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲"
-                                 prop="monitMCushion"></el-table-column>
-                <el-table-column :width="20 * '计量位置'.length" label="计量位置"
-                                 prop="monitExtrdPos"></el-table-column>
-                <el-table-column :width="20 * '峰值压'.length" label="峰值压" prop="monitPeakPrs"></el-table-column>
-                <el-table-column :width="20 * 'V_P位置'.length" label="V_P位置" prop="monitVPPos"></el-table-column>
-                <el-table-column :width="20 * '模具1'.length" label="模具1" prop="monitMold1"></el-table-column>
-                <el-table-column :width="20 * '模具2'.length" label="模具2" prop="monitMold2"></el-table-column>
-                <el-table-column :width="20 * '喷嘴1'.length" label="喷嘴1" prop="monitNozzle"></el-table-column>
-                <el-table-column :width="20 * '喷嘴2'.length" label="喷嘴2" prop="monitNozzle2"></el-table-column>
-                <el-table-column :width="20 * '料筒1'.length" label="料筒1" prop="monitBarrel1"></el-table-column>
-                <el-table-column :width="20 * '料筒2'.length" label="料筒2" prop="monitBarrel2"></el-table-column>
-                <el-table-column :width="20 * '料筒3'.length" label="料筒3" prop="monitBarrel3"></el-table-column>
-                <el-table-column :width="20 * '料筒4'.length" label="料筒4" prop="monitBarrel4"></el-table-column>
-                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度"
-                                 prop="monitFeedTh"></el-table-column>
-                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置"
-                                 prop="monitExtrdStart"></el-table-column>
-                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩"
-                                 prop="monitExtrdTorq"></el-table-column>
-                <el-table-column :width="20 * '模具3'.length" label="模具3" prop="monitMold3"></el-table-column>
-                <el-table-column :width="20 * '模具4'.length" label="模具4" prop="monitMold4"></el-table-column>
-                <el-table-column :width="20 * '峰值时间'.length" label="峰值时间" prop="monitPeakT"></el-table-column>
-                <el-table-column :width="20 * '峰值位置'.length" label="峰值位置" prop="monitPeakPos"></el-table-column>
-                <el-table-column :width="20 * '推顶固定偏差扭矩'.length" label="推顶固定偏差扭矩"
-                                 prop="monitEjeDevStTrq"></el-table-column>
-                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间"
-                                 prop="monitCloseTime"></el-table-column>
-                <el-table-column :width="20 * 'V-P压力'.length" label="V-P压力" prop="monitVPPrs"></el-table-column>
-                <el-table-column :width="20 * '模具5'.length" label="模具5" prop="monitMold5"></el-table-column>
-                <el-table-column :width="20 * '模具6'.length" label="模具6" prop="monitMold6"></el-table-column>
-                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压"
-                                 prop="monitInjPres"></el-table-column>
-                <el-table-column :width="20 * 'V-P补偿'.length" label="V-P补偿" prop="monitVPAdj"></el-table-column>
-                <el-table-column :width="20 * '逆流峰值'.length" label="逆流峰值" prop="monitFlwPeak"></el-table-column>
-                <el-table-column :width="20 * '逆流量'.length" label="逆流量" prop="monitBackflw"></el-table-column>
-                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间"
-                                 prop="monitLockupTim"></el-table-column>
-                <el-table-column :width="20 * '取出时间'.length" label="取出时间"
-                                 prop="monitPickupTim"></el-table-column>
-                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间"
-                                 prop="monitResidenceT"></el-table-column>
-                <el-table-column :width="20 * '顶杆平均偏差扭矩'.length" label="顶杆平均偏差扭矩"
-                                 prop="monitEjeDevAvTrq"></el-table-column>
-                <el-table-column :width="20 * '模具7'.length" label="模具7" prop="monitMold7"></el-table-column>
-                <el-table-column :width="20 * '模具8'.length" label="模具8" prop="monitMold8"></el-table-column>
-                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置"
-                                 prop="monitInjStartPos"></el-table-column>
-                <el-table-column :width="20 * '螺杆旋转量'.length" label="螺杆旋转量"
-                                 prop="monitScrewRevolution"></el-table-column>
-                <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>
-              </el-table>
+              <div style="height: 495px">
+                <el-auto-resizer>
+                  <template #default="{ height, width }">
+                    <el-table-v2
+                        :columns="fanucDialogMonitDataColumns"
+                        :data="fanucDialogMonitData"
+                        :width="width"
+                        :height="height"
+                        v-loading="queryLoading"
+                        fixed
+                    />
+                  </template>
+                </el-auto-resizer>
+              </div>
+              <!--              <el-table-->
+              <!--                  id="monitDataTable"-->
+              <!--                  :data="fanucDialogMonitData"-->
+              <!--                  border-->
+              <!--                  header-row-class-name="tableHead"-->
+              <!--                  height=495px-->
+              <!--                  v-loading="queryLoading"-->
+              <!--                  style="width: 100%;margin-top: 10px">-->
+              <!--                <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>-->
+              <!--                <el-table-column :width="150" label="项目号" prop="condMoldFileName"></el-table-column>-->
+              <!--                <el-table-column :width="185" label="注塑时间" prop="monitDateTime"></el-table-column>-->
+              <!--                <el-table-column :width="45" label="状态" prop="monitStatus"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '循环时间'.length" label="循环时间" prop="monitCycle"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="循环数" prop="monitCyclecount"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="射出数" prop="monitShotcount"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="正品数" prop="monitGoodcount"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出时间'.length" label="射出时间" prop="monitInjTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量时间'.length" label="计量时间"-->
+              <!--                                 prop="monitRecovTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲"-->
+              <!--                                 prop="monitMCushion"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量位置'.length" label="计量位置"-->
+              <!--                                 prop="monitExtrdPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值压'.length" label="峰值压" prop="monitPeakPrs"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V_P位置'.length" label="V_P位置" prop="monitVPPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具1'.length" label="模具1" prop="monitMold1"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具2'.length" label="模具2" prop="monitMold2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '喷嘴1'.length" label="喷嘴1" prop="monitNozzle"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '喷嘴2'.length" label="喷嘴2" prop="monitNozzle2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒1'.length" label="料筒1" prop="monitBarrel1"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒2'.length" label="料筒2" prop="monitBarrel2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒3'.length" label="料筒3" prop="monitBarrel3"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒4'.length" label="料筒4" prop="monitBarrel4"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度"-->
+              <!--                                 prop="monitFeedTh"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置"-->
+              <!--                                 prop="monitExtrdStart"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩"-->
+              <!--                                 prop="monitExtrdTorq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具3'.length" label="模具3" prop="monitMold3"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具4'.length" label="模具4" prop="monitMold4"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值时间'.length" label="峰值时间" prop="monitPeakT"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值位置'.length" label="峰值位置" prop="monitPeakPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '推顶固定偏差扭矩'.length" label="推顶固定偏差扭矩"-->
+              <!--                                 prop="monitEjeDevStTrq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间"-->
+              <!--                                 prop="monitCloseTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V-P压力'.length" label="V-P压力" prop="monitVPPrs"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具5'.length" label="模具5" prop="monitMold5"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具6'.length" label="模具6" prop="monitMold6"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压"-->
+              <!--                                 prop="monitInjPres"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V-P补偿'.length" label="V-P补偿" prop="monitVPAdj"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '逆流峰值'.length" label="逆流峰值" prop="monitFlwPeak"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '逆流量'.length" label="逆流量" prop="monitBackflw"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间"-->
+              <!--                                 prop="monitLockupTim"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '取出时间'.length" label="取出时间"-->
+              <!--                                 prop="monitPickupTim"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间"-->
+              <!--                                 prop="monitResidenceT"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '顶杆平均偏差扭矩'.length" label="顶杆平均偏差扭矩"-->
+              <!--                                 prop="monitEjeDevAvTrq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具7'.length" label="模具7" prop="monitMold7"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具8'.length" label="模具8" prop="monitMold8"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置"-->
+              <!--                                 prop="monitInjStartPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '螺杆旋转量'.length" label="螺杆旋转量"-->
+              <!--                                 prop="monitScrewRevolution"></el-table-column>-->
+              <!--                <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>-->
+              <!--              </el-table>-->
             </div>
             <div v-if="tabRadio === '报警履历'" class="block">
               <el-date-picker
@@ -820,405 +834,762 @@ export default {
       }
       return wbOut
     },
-    onStatusRadioClick(statusCode) {
-      const idx = this.statusRadioValue.indexOf(statusCode)
-      if (idx > -1)
-        this.statusRadioValue.splice(idx, 1)
-      else
-        this.statusRadioValue.push(statusCode)
-    },
-    onRadioClick() {
-      this.fanucDialogCondData = []
-      this.fanucDialogMonitData = []
-    },
-    checkMachineStatus(status) {
-      return status !== '-1';
-    },
-    onCardClick(mcName) {
-      this.dialogMachineName = mcName
-      this.dialogVisible = true
-    },
-    onDialogClosed() {
-      this.fanucDialogCondData = []
-      this.dateTimePickerValue = []
-    },
-    getEquipList() {
-      selectEquips().then((response) => {
-        const responseData = response.data
-        if (responseData.code === '000000') {
-          this.equipList = responseData.data;
-        }
-      })
-    },
-    getDialogMachineCondData() {
-      if (this.dateTimePickerValue.length !== 2) {
-        this.$message.error("请选择查询时间段");
-      } else {
-        const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-        const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-        this.queryLoading = true
-        getCondData(startTime, endTime, this.dialogMachineName).then((response) => {
-          const responseData = response.data
-          if (responseData.code === '000000') {
-            this.fanucDialogCondData = responseData.data;
-          }
-          this.queryLoading = false
-        }).catch(() => {
-          this.queryLoading = false
-        })
-      }
-    },
-    getDialogMachineMonitData() {
-      if (this.dateTimePickerValue.length !== 2) {
-        this.$message.error("请选择查询时间段");
-      } else {
-        const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-        const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-        this.queryLoading = true
-        getMonitData(startTime, endTime, this.dialogMachineName).then((response) => {
-          const responseData = response.data
-          if (responseData.code === '000000') {
-            this.fanucDialogMonitData = responseData.data;
-          }
-          this.queryLoading = false
-        }).catch(() => {
-          this.queryLoading = false
-        })
-      }
-    },
-    getDialogMachineAlarmData() {
-      if (this.dateTimePickerValue.length !== 2) {
-        this.$message.error("请选择查询时间段");
-      } else {
-        const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-        const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-        this.queryLoading = true
-        getAlarmData(startTime, endTime, this.dialogMachineName).then((response) => {
-          const responseData = response.data
-          if (responseData.code === '000000') {
-            this.fanucDialogAlarmData = responseData.data;
-          }
-          this.queryLoading = false
-        }).catch(() => {
-          this.queryLoading = false
-        })
-      }
-    },
-    showPieChart() {
-      const chartDom = document.getElementById('pieChart');
-      const myChart = echarts.init(chartDom);
-      let option;
-      option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} %"
-        },
-        legend: {
-          top: '5%',
-          left: 'center'
-        },
-        series: [
-          {
-            name: '状态',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '28',
-                fontWeight: 'bold'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: this.getMoldData(this.fanucMoldData[this.dialogMachineName])
-          }
-        ],
-        color: ["rgba(59,162,114,1)", "rgba(250,200,88,1)", "rgba(84,112,198,1)", "rgba(238,102,102,1)", "rgba(154,96,180,1)", "gray", "rgba(252,132,82,1)"]
+    json2Excel(data, excelFileName) {
+      const wopts = {
+        bookType: 'xlsx',
+        bookSST: false,
+        type: 'binary'
       };
-      myChart.setOption(option);
-    },
-    drawCircleChart(chartId) {
-      const chartDom = document.getElementById(chartId);
-      const myChart = echarts.init(chartDom);
-      let option;
-      const listData = this.getMoldData(this.fanucMoldData[chartId.replace('circleChart', '')])
-      option = {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {d}%'
-        },
-        legend: {
-          itemWidth: 10,
-          itemHeight: 10,
-          icon: 'circle',
-          x: 'right',
-          y: 'center',
-          orient: 'vertical', //设置图例排列纵向显示
-          align: 'left',       //设置图例中文字位置在icon标识符的右侧
-          itemGap: 3,         //设置图例之间的间距
-          padding: [0, 0, 0, 0], //设置图例与圆环图之间的间距
-          bottom: '55%',       //距离下边距
-          formatter: function (name) {  //该函数用于设置图例显示后的百分比
-            let value = 0;
-            listData.forEach((item) => {
-              if (item.name === name) {
-                value = item.value;
-              }
-            })
-            return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
-          },
-          textStyle: { //图例文字的样式
-            color: 'black',
-            fontSize: 12,
-          },
-          data: ['自动运转', '运转待机', '手动运转', '报警', '生产完成', '停机', '其他'],
-        },
-        // graphic: [  //为环形图中间添加文字
-        //   {
-        //     tooltip: {
-        //       trigger: 'item',
-        //       formatter: "当前状态: " + this.status[fanucData.monitStatus]
-        //     },
-        //     elements: [{
-        //       type: "circle",
-        //       shape: {
-        //         cx: 40,
-        //         cy: 40,
-        //         r: 20
-        //
-        //       },
-        //       left: "12.3%",
-        //       top: "39%",
-        //       style: {
-        //         fill: this.statusColor[fanucData.monitStatus],
-        //       }
-        //     }]
-        //
-        //   },
-        // ],
-        series: [{
-          name: '状态占比',
-          type: 'pie',
-          radius: ['50%', '62%'],
-          center: ['20%', '50%'],
-          data: listData,
-          label: false,
-          labelLine: false,
-        }
-        ],
-        color: ["rgba(59,162,114,1)", "rgba(250,200,88,1)", "rgba(84,112,198,1)", "rgb(238,102,102)", "rgba(154,96,180,1)", "gray", "rgba(252,132,82,1)"]
-      }
+      const workBook = {
+        SheetNames: ['Sheet1'],
+        Sheets: {},
+        Props: {}
+      };
+      //1、XLSX.utils.json_to_sheet(data) 接收一个对象数组并返回一个基于对象关键字自动生成的“标题”的工作表，默认的列顺序由使用Object.keys的字段的第一次出现确定
+      //2、将数据放入对象workBook的Sheets中等待输出
+      workBook.Sheets['Sheet1'] = XLSX.utils.json_to_sheet(data)
 
-      // setInterval(() => {
-      //   const list = this.getMoldData(fanucData)
-      //   myChart.setOption({
-      //     legend: {
-      //       formatter: function (name) {  //该函数用于设置图例显示后的百分比
-      //         let value = 0;
-      //         list.forEach((item) => {
-      //           if (item.name === name) {
-      //             value = item.value;
-      //           }
-      //         })
-      //         return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
-      //       }
-      //     },
-      //     series: [{
-      //       data: list
-      //     }]
-      //   });
-      // }, 10000);
-
-      myChart.setOption(option);
+      //3、XLSX.write() 开始编写Excel表格
+      //4、changeData() 将数据处理成需要输出的格式
+      saveAs(new Blob([this.changeData(XLSX.write(workBook, wopts))], {type: 'application/octet-stream'}), excelFileName)
     },
-    refreshData(chartId) {
-      const chartDom = document.getElementById(chartId);
-      if (!chartDom)
-        return
-      const myChart = echarts.getInstanceByDom(chartDom)
-      if (!myChart) {
-        this.drawCircleChart(chartId)
-        return;
+    changeData(s) {
+
+      //如果存在ArrayBuffer对象(es6) 最好采用该对象
+      if (typeof ArrayBuffer !== 'undefined') {
+
+        //1、创建一个字节长度为s.length的内存区域
+        var buf = new ArrayBuffer(s.length);
+
+        //2、创建一个指向buf的Unit8视图，开始于字节0，直到缓冲区的末尾
+        var view = new Uint8Array(buf);
+
+        //3、返回指定位置的字符的Unicode编码
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+
+      } else {
+        var buf = new Array(s.length);
+        for (var i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
       }
-      //更新数据
-      const list = this.getMoldData(this.fanucMoldData[chartId.replace('circleChart', '')])
-      myChart.setOption({
-        legend: {
-          formatter: function (name) {  //该函数用于设置图例显示后的百分比
-            let value = 0;
-            list.forEach((item) => {
-              if (item.name === name) {
-                value = item.value;
-              }
-            })
-            return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
+    },
+      onStatusRadioClick(statusCode)
+      {
+        const idx = this.statusRadioValue.indexOf(statusCode)
+        if (idx > -1)
+          this.statusRadioValue.splice(idx, 1)
+        else
+          this.statusRadioValue.push(statusCode)
+      }
+    ,
+      onRadioClick()
+      {
+        this.fanucDialogCondData = []
+        this.fanucDialogMonitData = []
+      }
+    ,
+      checkMachineStatus(status)
+      {
+        return status !== '-1';
+      }
+    ,
+      onCardClick(mcName)
+      {
+        this.dialogMachineName = mcName
+        this.dialogVisible = true
+      }
+    ,
+      onDialogClosed()
+      {
+        this.fanucDialogCondData = []
+        this.dateTimePickerValue = []
+      }
+    ,
+      getEquipList()
+      {
+        selectEquips().then((response) => {
+          const responseData = response.data
+          if (responseData.code === '000000') {
+            this.equipList = responseData.data;
           }
+        })
+      }
+    ,
+      getDialogMachineCondData()
+      {
+        if (this.dateTimePickerValue.length !== 2) {
+          this.$message.error("请选择查询时间段");
+        } else {
+          const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+          const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+          this.queryLoading = true
+          getCondData(startTime, endTime, this.dialogMachineName).then((response) => {
+            const responseData = response.data
+            if (responseData.code === '000000') {
+              this.fanucDialogCondData = responseData.data;
+            }
+            this.queryLoading = false
+          }).catch(() => {
+            this.queryLoading = false
+          })
+        }
+      }
+    ,
+      getDialogMachineMonitData()
+      {
+        if (this.dateTimePickerValue.length !== 2) {
+          this.$message.error("请选择查询时间段");
+        } else {
+          const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+          const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+          this.queryLoading = true
+          getMonitData(startTime, endTime, this.dialogMachineName).then((response) => {
+            const responseData = response.data
+            if (responseData.code === '000000') {
+              this.fanucDialogMonitData = responseData.data;
+            }
+            this.queryLoading = false
+          }).catch(() => {
+            this.queryLoading = false
+          })
+        }
+      }
+    ,
+      getDialogMachineAlarmData()
+      {
+        if (this.dateTimePickerValue.length !== 2) {
+          this.$message.error("请选择查询时间段");
+        } else {
+          const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+          const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+          this.queryLoading = true
+          getAlarmData(startTime, endTime, this.dialogMachineName).then((response) => {
+            const responseData = response.data
+            if (responseData.code === '000000') {
+              this.fanucDialogAlarmData = responseData.data;
+            }
+            this.queryLoading = false
+          }).catch(() => {
+            this.queryLoading = false
+          })
+        }
+      }
+    ,
+      showPieChart()
+      {
+        const chartDom = document.getElementById('pieChart');
+        const myChart = echarts.init(chartDom);
+        let option;
+        option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} %"
+          },
+          legend: {
+            top: '5%',
+            left: 'center'
+          },
+          series: [
+            {
+              name: '状态',
+              type: 'pie',
+              radius: ['40%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '28',
+                  fontWeight: 'bold'
+                }
+              },
+              labelLine: {
+                show: false
+              },
+              data: this.getMoldData(this.fanucMoldData[this.dialogMachineName])
+            }
+          ],
+          color: ["rgba(59,162,114,1)", "rgba(250,200,88,1)", "rgba(84,112,198,1)", "rgba(238,102,102,1)", "rgba(154,96,180,1)", "gray", "rgba(252,132,82,1)"]
+        };
+        myChart.setOption(option);
+      }
+    ,
+      drawCircleChart(chartId)
+      {
+        const chartDom = document.getElementById(chartId);
+        const myChart = echarts.init(chartDom);
+        let option;
+        const listData = this.getMoldData(this.fanucMoldData[chartId.replace('circleChart', '')])
+        option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b}: {d}%'
+          },
+          legend: {
+            itemWidth: 10,
+            itemHeight: 10,
+            icon: 'circle',
+            x: 'right',
+            y: 'center',
+            orient: 'vertical', //设置图例排列纵向显示
+            align: 'left',       //设置图例中文字位置在icon标识符的右侧
+            itemGap: 3,         //设置图例之间的间距
+            padding: [0, 0, 0, 0], //设置图例与圆环图之间的间距
+            bottom: '55%',       //距离下边距
+            formatter: function (name) {  //该函数用于设置图例显示后的百分比
+              let value = 0;
+              listData.forEach((item) => {
+                if (item.name === name) {
+                  value = item.value;
+                }
+              })
+              return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
+            },
+            textStyle: { //图例文字的样式
+              color: 'black',
+              fontSize: 12,
+            },
+            data: ['自动运转', '运转待机', '手动运转', '报警', '生产完成', '停机', '其他'],
+          },
+          // graphic: [  //为环形图中间添加文字
+          //   {
+          //     tooltip: {
+          //       trigger: 'item',
+          //       formatter: "当前状态: " + this.status[fanucData.monitStatus]
+          //     },
+          //     elements: [{
+          //       type: "circle",
+          //       shape: {
+          //         cx: 40,
+          //         cy: 40,
+          //         r: 20
+          //
+          //       },
+          //       left: "12.3%",
+          //       top: "39%",
+          //       style: {
+          //         fill: this.statusColor[fanucData.monitStatus],
+          //       }
+          //     }]
+          //
+          //   },
+          // ],
+          series: [{
+            name: '状态占比',
+            type: 'pie',
+            radius: ['50%', '62%'],
+            center: ['20%', '50%'],
+            data: listData,
+            label: false,
+            labelLine: false,
+          }
+          ],
+          color: ["rgba(59,162,114,1)", "rgba(250,200,88,1)", "rgba(84,112,198,1)", "rgb(238,102,102)", "rgba(154,96,180,1)", "gray", "rgba(252,132,82,1)"]
+        }
+
+        // setInterval(() => {
+        //   const list = this.getMoldData(fanucData)
+        //   myChart.setOption({
+        //     legend: {
+        //       formatter: function (name) {  //该函数用于设置图例显示后的百分比
+        //         let value = 0;
+        //         list.forEach((item) => {
+        //           if (item.name === name) {
+        //             value = item.value;
+        //           }
+        //         })
+        //         return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
+        //       }
+        //     },
+        //     series: [{
+        //       data: list
+        //     }]
+        //   });
+        // }, 10000);
+
+        myChart.setOption(option);
+      }
+    ,
+      refreshData(chartId)
+      {
+        const chartDom = document.getElementById(chartId);
+        if (!chartDom)
+          return
+        const myChart = echarts.getInstanceByDom(chartDom)
+        if (!myChart) {
+          this.drawCircleChart(chartId)
+          return;
+        }
+        //更新数据
+        const list = this.getMoldData(this.fanucMoldData[chartId.replace('circleChart', '')])
+        myChart.setOption({
+          legend: {
+            formatter: function (name) {  //该函数用于设置图例显示后的百分比
+              let value = 0;
+              list.forEach((item) => {
+                if (item.name === name) {
+                  value = item.value;
+                }
+              })
+              return `${name}  ${value}%`;  //返回出图例所显示的内容是名称+百分比
+            }
+          },
+          series: [{
+            data: list
+          }]
+        });
+        // const option = myChart.getOption();
+        // option.series[0].data = data;
+        // myChart.setOption(option);
+      }
+    ,
+      getMoldData(fanucData)
+      {
+        const moldData = [];
+        const mold_automate = fanucData.Data.mold_automate.replace('%', '').trim()
+        const mold_wait = fanucData.Data.mold_wait.replace('%', '').trim()
+        const mold_manual = fanucData.Data.mold_manual.replace('%', '').trim()
+        const mold_alarm = fanucData.Data.mold_alarm.replace('%', '').trim()
+        const mold_complete = fanucData.Data.mold_complete.replace('%', '').trim()
+        const mold_shutdown = fanucData.Data.mold_shutdown.replace('%', '').trim()
+        const mold_other = (100.00 - mold_automate - mold_wait - mold_manual - mold_alarm - mold_complete - mold_shutdown).toFixed(2)
+        moldData.push({value: mold_automate, name: '自动运转'})
+        moldData.push({value: mold_wait, name: '运转待机'})
+        moldData.push({value: mold_manual, name: '手动运转'})
+        moldData.push({value: mold_alarm, name: '报警'})
+        moldData.push({value: mold_complete, name: '生产完成'})
+        moldData.push({value: mold_shutdown, name: '停机'})
+        moldData.push({value: mold_other, name: '其他'})
+        return moldData;
+      }
+    ,
+      setDefaultCount()
+      {
+        this.statusCount = {
+          '02': 0,
+          '00': 0,
+          '01': 0,
+          '17': 0,
+          '03': 0,
+          '16': 0,
+          '11': 0,
+          '50': 0,
+          '-1': 0,
+          default: 0
+        }
+      }
+    },
+    beforeUnmount() {
+      this.disconnect();
+    },
+    data() {
+      return {
+        fanucDialogMonitDataColumns: [
+          {
+            key: 'monitMcName',
+            dataKey: 'monitMcName',
+            title: '机台号',
+            width: 80,
+          },
+          {
+            key: 'monitMcId',
+            dataKey: 'monitMcId',
+            title: '机台ID',
+            width: 20 * '机台ID'.length,
+          },
+          {
+            key: 'condMoldFileName',
+            dataKey: 'condMoldFileName',
+            title: '项目号',
+            width: 150,
+          },
+          {
+            key: 'monitDateTime',
+            dataKey: 'monitDateTime',
+            title: '注塑时间',
+            width: 185,
+          },
+          {
+            key: 'monitStatus',
+            dataKey: 'monitStatus',
+            title: '状态',
+            width: 45,
+          },
+          {
+            key: 'monitCycle',
+            dataKey: 'monitCycle',
+            title: '循环时间',
+            width: 20 * '循环时间'.length,
+          },
+          {
+            key: 'monitCyclecount',
+            dataKey: 'monitCyclecount',
+            title: '循环数',
+            width: 65,
+          },
+          {
+            key: 'monitShotcount',
+            dataKey: 'monitShotcount',
+            title: '射出数',
+            width: 65,
+          },
+          {
+            key: 'monitGoodcount',
+            dataKey: 'monitGoodcount',
+            title: '正品数',
+            width: 65,
+          },
+          {
+            key: 'monitInjTime',
+            dataKey: 'monitInjTime',
+            title: '射出时间',
+            width: 20 * '射出时间'.length,
+          },
+          {
+            key: 'monitRecovTime',
+            dataKey: 'monitRecovTime',
+            title: '计量时间',
+            width: 20 * '计量时间'.length,
+          },
+          {
+            key: 'monitMCushion',
+            dataKey: 'monitMCushion',
+            title: '最小缓冲',
+            width: 20 * '最小缓冲'.length,
+          },
+          {
+            key: 'monitExtrdPos',
+            dataKey: 'monitExtrdPos',
+            title: '计量位置',
+            width: 20 * '计量位置'.length,
+          },
+          {
+            key: 'monitPeakPrs',
+            dataKey: 'monitPeakPrs',
+            title: '峰值压',
+            width: 20 * '峰值压'.length,
+          },
+          {
+            key: 'monitVPPos',
+            dataKey: 'monitVPPos',
+            title: 'V_P位置',
+            width: 20 * 'V_P位置'.length,
+          },
+          {
+            key: 'monitMold1',
+            dataKey: 'monitMold1',
+            title: '模具1',
+            width: 20 * '模具1'.length,
+          },
+          {
+            key: 'monitMold2',
+            dataKey: 'monitMold2',
+            title: '模具2',
+            width: 20 * '模具2'.length,
+          },
+          {
+            key: 'monitMold3',
+            dataKey: 'monitMold3',
+            title: '模具3',
+            width: 20 * '模具3'.length,
+          },
+          {
+            key: 'monitMold4',
+            dataKey: 'monitMold4',
+            title: '模具4',
+            width: 20 * '模具4'.length,
+          },
+          {
+            key: 'monitMold5',
+            dataKey: 'monitMold5',
+            title: '模具5',
+            width: 20 * '模具5'.length,
+          },
+          {
+            key: 'monitMold6',
+            dataKey: 'monitMold6',
+            title: '模具6',
+            width: 20 * '模具6'.length,
+          },
+          {
+            key: 'monitMold7',
+            dataKey: 'monitMold7',
+            title: '模具7',
+            width: 20 * '模具7'.length,
+          },
+          {
+            key: 'monitMold8',
+            dataKey: 'monitMold8',
+            title: '模具8',
+            width: 20 * '模具8'.length,
+          },
+          {
+            key: 'monitNozzle',
+            dataKey: 'monitNozzle',
+            title: '喷嘴1',
+            width: 20 * '喷嘴1'.length,
+          },
+          {
+            key: 'monitNozzle2',
+            dataKey: 'monitNozzle2',
+            title: '喷嘴2',
+            width: 20 * '喷嘴2'.length,
+          },
+          {
+            key: 'monitBarrel1',
+            dataKey: 'monitBarrel1',
+            title: '料筒1',
+            width: 20 * '料筒1'.length,
+          },
+          {
+            key: 'monitBarrel2',
+            dataKey: 'monitBarrel2',
+            title: '料筒2',
+            width: 20 * '料筒2'.length,
+          },
+          {
+            key: 'monitBarrel3',
+            dataKey: 'monitBarrel3',
+            title: '料筒3',
+            width: 20 * '料筒3'.length,
+          },
+          {
+            key: 'monitBarrel4',
+            dataKey: 'monitBarrel4',
+            title: '料筒4',
+            width: 20 * '料筒4'.length,
+          },
+          {
+            key: 'monitFeedTh',
+            dataKey: 'monitFeedTh',
+            title: '料斗下温度',
+            width: 20 * '料斗下温度'.length,
+          },
+          {
+            key: 'monitExtrdStart',
+            dataKey: 'monitExtrdStart',
+            title: '计量开始位置',
+            width: 20 * '计量开始位置'.length,
+          },
+          {
+            key: 'monitExtrdTorq',
+            dataKey: 'monitExtrdTorq',
+            title: '计量扭矩',
+            width: 20 * '计量扭矩'.length,
+          },
+          {
+            key: 'monitPeakT',
+            dataKey: 'monitPeakT',
+            title: '峰值时间',
+            width: 20 * '峰值时间'.length,
+          },
+          {
+            key: 'monitPeakPos',
+            dataKey: 'monitPeakPos',
+            title: '峰值位置',
+            width: 20 * '峰值位置'.length,
+          },
+          {
+            key: 'monitEjeDevStTrq',
+            dataKey: 'monitEjeDevStTrq',
+            title: '推顶固定偏差扭矩',
+            width: 20 * '推顶固定偏差扭矩'.length,
+          },
+          {
+            key: 'monitCloseTime',
+            dataKey: 'monitCloseTime',
+            title: '关闭时间',
+            width: 20 * '关闭时间'.length,
+          },
+          {
+            key: 'monitVPPrs',
+            dataKey: 'monitVPPrs',
+            title: 'V-P压力',
+            width: 20 * 'V-P压力'.length,
+          },
+          {
+            key: 'monitInjPres',
+            dataKey: 'monitInjPres',
+            title: '射出开始压',
+            width: 20 * '射出开始压'.length,
+          },
+          {
+            key: 'monitVPAdj',
+            dataKey: 'monitVPAdj',
+            title: 'V-P补偿',
+            width: 20 * 'V-P补偿'.length,
+          },
+          {
+            key: 'monitFlwPeak',
+            dataKey: 'monitFlwPeak',
+            title: '逆流峰值',
+            width: 20 * '逆流峰值'.length,
+          },
+          {
+            key: 'monitBackflw',
+            dataKey: 'monitBackflw',
+            title: '逆流量',
+            width: 20 * '逆流量'.length,
+          },
+          {
+            key: 'monitLockupTim',
+            dataKey: 'monitLockupTim',
+            title: '锁模时间',
+            width: 20 * '锁模时间'.length,
+          },
+          {
+            key: 'monitPickupTim',
+            dataKey: 'monitPickupTim',
+            title: '取出时间',
+            width: 20 * '取出时间'.length,
+          },
+          {
+            key: 'monitResidenceT',
+            dataKey: 'monitResidenceT',
+            title: '树脂滞留时间',
+            width: 20 * '树脂滞留时间'.length,
+          },
+          {
+            key: 'monitEjeDevAvTrq',
+            dataKey: 'monitEjeDevAvTrq',
+            title: '顶杆平均偏差扭矩',
+            width: 20 * '顶杆平均偏差扭矩'.length,
+          },
+          {
+            key: 'monitInjStartPos',
+            dataKey: 'monitInjStartPos',
+            title: '射出开始位置',
+            width: 20 * '射出开始位置'.length,
+          },
+          {
+            key: 'monitScrewRevolution',
+            dataKey: 'monitScrewRevolution',
+            title: '螺杆旋转量',
+            width: 20 * '螺杆旋转量'.length,
+          },
+          {
+            key: 'dbCreateTime',
+            dataKey: 'dbCreateTime',
+            title: '插入时间',
+            width: 20 * '插入时间'.length,
+          },
+        ],
+        queryLoading: false,
+        floorInfo: '',
+        siteInfo: '',
+        client: {
+          connected: false,
         },
-        series: [{
-          data: list
-        }]
-      });
-      // const option = myChart.getOption();
-      // option.series[0].data = data;
-      // myChart.setOption(option);
+        circlePieData: {},
+        tabRadio: '成型条件',
+        shortcuts: [{
+          text: '最近一周',
+          value: (() => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end]
+          })()
+        }, {
+          text: '最近一个月',
+          value: (() => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end]
+          })()
+        }, {
+          text: '最近三个月',
+          value: (() => {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+            return [start, end]
+          })()
+        }],
+        dateTimePickerValue: [],
+        dialogMachineName: '',
+        dialogVisible: false,
+        fanucMonitorInfo: [],
+        fanucMonitorData: {},
+        fanucCondData: {},
+        fanucMoldData: {},
+        fanucDialogData: {
+          monitData: {},
+          condData: {},
+          moldData: {},
+          moldFileName: ""
+        },
+        fanucDialogCondData: [],
+        fanucDialogMonitData: [],
+        fanucDialogAlarmData: [],
+        statusType: {
+          '-1': 'item_disconnect',
+          '00': 'item_manual',
+          '01': 'item_wait',
+          '02': 'item_automatic',
+          '03': 'item_alarm',
+          '17': 'item_hold',
+          '50': 'item_semiAuto'
+        },
+        status: {
+          '-1': '离线',
+          '00': '手动运转',
+          '01': '运转待机',
+          '02': '自动运转',
+          '03': '报警',
+          '16': '冷间启动',
+          '17': '低温保持',
+          '11': '清料',
+          '50': '半自动',
+          default: '其他'
+        },
+        statusRadio: ['02', '00', '01', '17', '03', '16', '11', '50', '-1', 'default'],
+        statusRadioValue: ['02', '00', '01', '17', '03', '16', '11', '50', '-1', 'default'],
+        statusColor: {
+          '-1': "gray",
+          '00': "rgba(84,112,198,1)",
+          '01': "rgba(250,200,88,1)",
+          '02': "rgba(59,162,114,1)",
+          '03': "rgba(238,102,102,1)",
+          '17': "rgba(252,132,82,1)",
+          '16': "rgba(252,132,82,1)",
+          '11': "rgba(252,132,82,1)",
+          '50': "rgba(154,96,180,1)",
+          default: "rgba(252,132,82,1)"
+        },
+        statusCount: {
+          '02': 0,
+          '00': 0,
+          '01': 0,
+          '17': 0,
+          '03': 0,
+          '16': 0,
+          '11': 0,
+          '50': 0,
+          '-1': 0,
+          default: 0
+        },
+        equipList: []
+      }
     },
-    getMoldData(fanucData) {
-      const moldData = [];
-      const mold_automate = fanucData.Data.mold_automate.replace('%', '').trim()
-      const mold_wait = fanucData.Data.mold_wait.replace('%', '').trim()
-      const mold_manual = fanucData.Data.mold_manual.replace('%', '').trim()
-      const mold_alarm = fanucData.Data.mold_alarm.replace('%', '').trim()
-      const mold_complete = fanucData.Data.mold_complete.replace('%', '').trim()
-      const mold_shutdown = fanucData.Data.mold_shutdown.replace('%', '').trim()
-      const mold_other = (100.00 - mold_automate - mold_wait - mold_manual - mold_alarm - mold_complete - mold_shutdown).toFixed(2)
-      moldData.push({value: mold_automate, name: '自动运转'})
-      moldData.push({value: mold_wait, name: '运转待机'})
-      moldData.push({value: mold_manual, name: '手动运转'})
-      moldData.push({value: mold_alarm, name: '报警'})
-      moldData.push({value: mold_complete, name: '生产完成'})
-      moldData.push({value: mold_shutdown, name: '停机'})
-      moldData.push({value: mold_other, name: '其他'})
-      return moldData;
-    },
-    setDefaultCount() {
-      this.statusCount = {
-        '02': 0,
-        '00': 0,
-        '01': 0,
-        '17': 0,
-        '03': 0,
-        '16': 0,
-        '11': 0,
-        '50': 0,
-        '-1': 0,
-        default: 0
+    watch: {
+      $route: {
+        handler() {
+          let _this = this;
+          setTimeout(function () {
+            _this.floorInfo = _this.$route.query.position.substring(2, _this.$route.query.position.length)
+            _this.initConnect()
+          }, 100);
+        },
+        deep: true,
       }
     }
-  },
-  beforeUnmount() {
-    this.disconnect();
-  },
-  data() {
-    return {
-      queryLoading: false,
-      floorInfo: '',
-      siteInfo: '',
-      client: {
-        connected: false,
-      },
-      circlePieData: {},
-      tabRadio: '成型条件',
-      shortcuts: [{
-        text: '最近一周',
-        value: (() => {
-          const end = new Date();
-          const start = new Date();
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-          return [start, end]
-        })()
-      }, {
-        text: '最近一个月',
-        value: (() => {
-          const end = new Date();
-          const start = new Date();
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-          return [start, end]
-        })()
-      }, {
-        text: '最近三个月',
-        value: (() => {
-          const end = new Date();
-          const start = new Date();
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-          return [start, end]
-        })()
-      }],
-      dateTimePickerValue: [],
-      dialogMachineName: '',
-      dialogVisible: false,
-      fanucMonitorInfo: [],
-      fanucMonitorData: {},
-      fanucCondData: {},
-      fanucMoldData: {},
-      fanucDialogData: {
-        monitData: {},
-        condData: {},
-        moldData: {},
-        moldFileName: ""
-      },
-      fanucDialogCondData: [],
-      fanucDialogMonitData: [],
-      fanucDialogAlarmData: [],
-      statusType: {
-        '-1': 'item_disconnect',
-        '00': 'item_manual',
-        '01': 'item_wait',
-        '02': 'item_automatic',
-        '03': 'item_alarm',
-        '17': 'item_hold',
-        '50': 'item_semiAuto'
-      },
-      status: {
-        '-1': '离线',
-        '00': '手动运转',
-        '01': '运转待机',
-        '02': '自动运转',
-        '03': '报警',
-        '16': '冷间启动',
-        '17': '低温保持',
-        '11': '清料',
-        '50': '半自动',
-        default: '其他'
-      },
-      statusRadio: ['02', '00', '01', '17', '03', '16', '11', '50', '-1', 'default'],
-      statusRadioValue: ['02', '00', '01', '17', '03', '16', '11', '50', '-1', 'default'],
-      statusColor: {
-        '-1': "gray",
-        '00': "rgba(84,112,198,1)",
-        '01': "rgba(250,200,88,1)",
-        '02': "rgba(59,162,114,1)",
-        '03': "rgba(238,102,102,1)",
-        '17': "rgba(252,132,82,1)",
-        '16': "rgba(252,132,82,1)",
-        '11': "rgba(252,132,82,1)",
-        '50': "rgba(154,96,180,1)",
-        default: "rgba(252,132,82,1)"
-      },
-      statusCount: {
-        '02': 0,
-        '00': 0,
-        '01': 0,
-        '17': 0,
-        '03': 0,
-        '16': 0,
-        '11': 0,
-        '50': 0,
-        '-1': 0,
-        default: 0
-      },
-      equipList: []
-    }
-  },
-  watch: {
-    $route: {
-      handler() {
-        let _this = this;
-        setTimeout(function () {
-          _this.floorInfo = _this.$route.query.position.substring(2, _this.$route.query.position.length)
-          _this.initConnect()
-        }, 100);
-      },
-      deep: true,
-    }
-  }
-};
+  };
 </script>
 
 <style scoped>
