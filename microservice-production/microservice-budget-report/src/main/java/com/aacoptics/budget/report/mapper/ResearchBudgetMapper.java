@@ -18,11 +18,21 @@ public interface ResearchBudgetMapper extends BaseMapper<ResearchBudget> {
 
     List<Integer> findResearchBudgetAllYearByUploadLogId(@Param("uploadLogId") Long uploadLogId);
 
+    List<Integer> findResearchBudgetAllYearByCondition(@Param("businessDivision") String businessDivision,
+                                                       @Param("productLineList") List<String> productLineList);
+
+
     ResearchBudget findByBusinessDivisionAndProductLine(@Param("businessDivision") String businessDivision, @Param("productLine") String productLine);
 
 
     List<Map<String, Object>> findResearchBudgetByUploadLogId(@Param("selectColumn") String selectColumn,
                                                               @Param("uploadLogId") Long uploadLogId,
+                                                              @Param("firstYear") Integer firstYear,
+                                                              @Param("secondYear") Integer secondYear);
+
+    List<Map<String, Object>> findResearchBudgetByCondition(@Param("selectColumn") String selectColumn,
+                                                              @Param("businessDivision") String businessDivision,
+                                                              @Param("productLineList") List<String> productLineList,
                                                               @Param("firstYear") Integer firstYear,
                                                               @Param("secondYear") Integer secondYear);
 

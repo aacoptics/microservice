@@ -19,6 +19,22 @@
         order by item_seq
     </select>
 
+    <select id="findResearchBudgetAllYearByCondition" resultType="integer">
+        select distinct year
+        from fb_research_budget
+        where 1=1
+        <if test="businessDivision != '' and businessDivision != null">
+            AND business_division = #{businessDivision}
+        </if>
+        <if test="productLineList != null and productLineList.size() > 0">
+            AND product_line in
+            <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                 #{productLine}
+            </foreach>
+        </if>
+        order by year
+    </select>
+
 
     <select id="findResearchBudgetByUploadLogId" resultType="map">
     with temp_year_1 as (
@@ -47,6 +63,55 @@
             and temp_year_1.data_version = temp_year_2.data_version
             and temp_year_1.item_seq = temp_year_2.item_seq
         order by temp_year_1.item_seq;
+    </select>
+
+
+
+    <select id="findResearchBudgetByCondition" resultType="map">
+    with temp_year_1 as (
+        select *
+        from fb_research_budget
+        where year = #{firstYear}
+                <if test="businessDivision != '' and businessDivision != null">
+                    AND business_division = #{businessDivision}
+                </if>
+                <if test="productLineList != null and productLineList.size() > 0">
+                    AND product_line in
+                    <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                        #{productLine}
+                    </foreach>
+                </if>),
+        temp_year_2 as (
+             select *
+             from fb_research_budget
+             where year = #{secondYear}
+                <if test="businessDivision != '' and businessDivision != null">
+                    AND business_division = #{businessDivision}
+                </if>
+                <if test="productLineList != null and productLineList.size() > 0">
+                    AND product_line in
+                    <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                        #{productLine}
+                    </foreach>
+                </if>)
+        select
+            temp_year_1.item_seq itemSeq,
+            temp_year_1.row_no rowNo,
+            temp_year_1.cost_item costItem,
+            temp_year_1.cost_type costType,
+            temp_year_1.unit unit
+            ${selectColumn}
+        from temp_year_1
+            left join temp_year_2 on temp_year_1.business_division = temp_year_2.business_division
+            and temp_year_1.product_line = temp_year_2.product_line
+            and temp_year_1.data_version = temp_year_2.data_version
+            and temp_year_1.item_seq = temp_year_2.item_seq
+            group by temp_year_1.item_seq,
+                    temp_year_1.row_no,
+                    temp_year_1.cost_item,
+                    temp_year_1.cost_type,
+                    temp_year_1.unit
+        order by temp_year_1.item_seq
     </select>
 
 </mapper>

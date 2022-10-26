@@ -58,6 +58,43 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         Long uploadLogId = researchBudgetQueryParam.getUploadLogId();
         if(uploadLogId == null)
         {
+            return this.findByCondition(researchBudgetQueryParam.getBusinessDivision(), researchBudgetQueryParam.getProductLineList());
+        }
+       return this.findByUploadLogId(uploadLogId);
+
+    }
+
+
+    @Override
+    public Map<String, Object> findByCondition(String businessDivision, List<String> productLineList) {
+        //获取存在的年份数据
+        List<Integer>  yearList = researchBudgetMapper.findResearchBudgetAllYearByCondition(businessDivision,
+                productLineList);
+        if(yearList == null || yearList.size() == 0)
+        {
+            throw new BusinessException("数据不存在");
+        }
+        //构建表头
+        JSONArray titleJsonArray = this.createReportTableTitle(yearList);
+
+        //构建查询列
+        String selectColumn = this.createReportSelectColumn(yearList);
+
+        List<Map<String, Object>> researchBudgetList = researchBudgetMapper.findResearchBudgetByCondition(
+                selectColumn, businessDivision, productLineList,
+                yearList.get(0), yearList.get(1));
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("columns", titleJsonArray);
+        resultMap.put("data", researchBudgetList);
+
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> findByUploadLogId(Long uploadLogId) {
+        if(uploadLogId == null)
+        {
             throw new BusinessException("上传日志ID不能为空");
         }
         //获取存在的年份数据
@@ -73,7 +110,7 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         String selectColumn = this.createSelectColumn(yearList);
 
         List<Map<String, Object>> researchBudgetList = researchBudgetMapper.findResearchBudgetByUploadLogId(
-                selectColumn, researchBudgetQueryParam.getUploadLogId(), yearList.get(0), yearList.get(1));
+                selectColumn, uploadLogId, yearList.get(0), yearList.get(1));
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("columns", titleJsonArray);
@@ -112,6 +149,38 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
 
         return selectColumn.toString();
     }
+
+
+    /**
+     * 创建统计报表查询列
+     * @param yearList
+     * @return
+     */
+    private String createReportSelectColumn(List<Integer> yearList)
+    {
+        StringBuffer selectColumn = new StringBuffer(); // 例：temp_year_01.month_01_value month_01_value
+
+        for(int i=0; i<yearList.size(); i++)
+        {
+            Integer year = yearList.get(i);
+            for(int j=1; j<=12; j++)
+            {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+                selectColumn.append(", sum(temp_year_" + (i+1) + ".month_"+ monthStr +"_value) as '" + columnName + "'");
+            }
+            for(int k=1; k<=4; k++)
+            {
+                String columnName = year + "Q" + k;
+                selectColumn.append(", sum(temp_year_" + (i+1) + ".q"+ k +"_value) as '" + columnName + "'");
+            }
+            String columnName = year + "全年";
+            selectColumn.append(", sum(temp_year_" + (i+1) + ".year_value) as '" + columnName + "'");
+        }
+
+        return selectColumn.toString();
+    }
+
 
     /**
      * 创建前端页面表头列
@@ -170,6 +239,60 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         unitColumnJsonObject.put("minWidth", "120");
         titleJsonArray.add(unitColumnJsonObject);
 
+        this.addYearDataTitle(titleJsonArray, yearList);
+
+        return titleJsonArray;
+    }
+
+
+
+    /**
+     * 创建统计报表前端页面表头列
+     *
+     * @param yearList
+     * @return
+     */
+    private JSONArray createReportTableTitle(List<Integer> yearList)
+    {
+        JSONArray titleJsonArray = new JSONArray();
+
+        JSONObject itemSeqColumnJsonObject = new JSONObject();
+        itemSeqColumnJsonObject.put("prop", "itemSeq");
+        itemSeqColumnJsonObject.put("label", "科目序号");
+        itemSeqColumnJsonObject.put("minWidth", "120");
+        titleJsonArray.add(itemSeqColumnJsonObject);
+
+        JSONObject rowNoColumnJsonObject = new JSONObject();
+        rowNoColumnJsonObject.put("prop", "rowNo");
+        rowNoColumnJsonObject.put("label", "行项目号");
+        rowNoColumnJsonObject.put("minWidth", "120");
+        titleJsonArray.add(rowNoColumnJsonObject);
+
+        JSONObject costItemColumnJsonObject = new JSONObject();
+        costItemColumnJsonObject.put("prop", "costItem");
+        costItemColumnJsonObject.put("label", "费用项目");
+        costItemColumnJsonObject.put("minWidth", "260");
+        titleJsonArray.add(costItemColumnJsonObject);
+
+        JSONObject costTypeColumnJsonObject = new JSONObject();
+        costTypeColumnJsonObject.put("prop", "costType");
+        costTypeColumnJsonObject.put("label", "固定/变动费用");
+        costTypeColumnJsonObject.put("minWidth", "150");
+        titleJsonArray.add(costTypeColumnJsonObject);
+
+        JSONObject unitColumnJsonObject = new JSONObject();
+        unitColumnJsonObject.put("prop", "unit");
+        unitColumnJsonObject.put("label", "单位");
+        unitColumnJsonObject.put("minWidth", "120");
+        titleJsonArray.add(unitColumnJsonObject);
+
+        this.addYearDataTitle(titleJsonArray, yearList);
+
+        return titleJsonArray;
+    }
+
+    private JSONArray addYearDataTitle(JSONArray titleJsonArray, List<Integer> yearList)
+    {
         for(Integer year : yearList)
         {
             for(int i=1; i<=12; i++) {
