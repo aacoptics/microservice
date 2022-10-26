@@ -197,6 +197,7 @@
                   border
                   header-row-class-name="tableHead"
                   height=495px
+                  v-loading="queryLoading"
                   style="width: 100%;margin-top: 10px">
                 <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
                 <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>
@@ -554,6 +555,7 @@
                   border
                   header-row-class-name="tableHead"
                   height=495px
+                  v-loading="queryLoading"
                   style="width: 100%;margin-top: 10px">
                 <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
                 <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>
@@ -648,6 +650,7 @@
                   border
                   header-row-class-name="tableHead"
                   height=495px
+                  v-loading="queryLoading"
                   style="width: 100%;margin-top: 10px">
                 <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
                 <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>
@@ -853,11 +856,15 @@ export default {
       } else {
         const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
         const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+        this.queryLoading = true
         getCondData(startTime, endTime, this.dialogMachineName).then((response) => {
           const responseData = response.data
           if (responseData.code === '000000') {
             this.fanucDialogCondData = responseData.data;
           }
+          this.queryLoading = false
+        }).catch(() => {
+          this.queryLoading = false
         })
       }
     },
@@ -867,11 +874,15 @@ export default {
       } else {
         const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
         const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+        this.queryLoading = true
         getMonitData(startTime, endTime, this.dialogMachineName).then((response) => {
           const responseData = response.data
           if (responseData.code === '000000') {
             this.fanucDialogMonitData = responseData.data;
           }
+          this.queryLoading = false
+        }).catch(() => {
+          this.queryLoading = false
         })
       }
     },
@@ -881,11 +892,15 @@ export default {
       } else {
         const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
         const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+        this.queryLoading = true
         getAlarmData(startTime, endTime, this.dialogMachineName).then((response) => {
           const responseData = response.data
           if (responseData.code === '000000') {
             this.fanucDialogAlarmData = responseData.data;
           }
+          this.queryLoading = false
+        }).catch(() => {
+          this.queryLoading = false
         })
       }
     },
@@ -1092,6 +1107,7 @@ export default {
   },
   data() {
     return {
+      queryLoading: false,
       floorInfo: '',
       siteInfo: '',
       client: {
