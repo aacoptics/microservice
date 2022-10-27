@@ -29,6 +29,8 @@ public interface ProductLineBudgetMapper extends BaseMapper<ProductLineBudget> {
                                                               @Param("secondYear") Integer secondYear);
 
     List<Map<String, Object>> findProductLineBudgetByCondition(@Param("selectColumn") String selectColumn,
+                                                               @Param("selectPercentColumn") String selectPercentColumn,
+                                                               @Param("grossProfitRateSelectColumn") String grossProfitRateSelectColumn,
                                                                  @Param("businessDivision") String businessDivision,
                                                                  @Param("productLineList") List<String> productLineList,
                                                                  @Param("firstYear") Integer firstYear,

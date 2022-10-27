@@ -96,9 +96,14 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
 
         //构建查询列
         String selectColumn = this.createReportSelectColumn(yearList);
+        //构建百分比查询列
+        String percentSelectColumn = this.createReportPercentSelectColumn(yearList);
+
+        //构建毛利率查询列
+        String grossProfitRateSelectColumn = this.createGrossProfitRateSelectColumn(yearList);
 
         List<Map<String, Object>> productionCostBudgetList = productionCostBudgetMapper.findProductionCostBudgetByCondition(
-                selectColumn, businessDivision, productLineList, yearList.get(0), yearList.get(1));
+                selectColumn, percentSelectColumn, grossProfitRateSelectColumn, businessDivision, productLineList, yearList.get(0), yearList.get(1));
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("columns", titleJsonArray);
@@ -165,6 +170,66 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
         return selectColumn.toString();
     }
 
+
+    /**
+     * 创建百分比查询列
+     *
+     * @param yearList
+     * @return
+     */
+    private String createReportPercentSelectColumn(List<Integer> yearList) {
+        StringBuffer selectColumn = new StringBuffer();
+
+        for (int i = 0; i < yearList.size(); i++) {
+            Integer year = yearList.get(i);
+            for (int j = 1; j <= 12; j++) {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+                selectColumn.append(", b.[" + columnName + "]/a.[" + columnName + "] as '" + columnName + "'");
+            }
+            String ytdColumnName = year + "YTD";
+            selectColumn.append(", b.[" + ytdColumnName + "]/a.[" + ytdColumnName + "] as '" + ytdColumnName + "'");
+
+            String ytgColumnName = year + "YTG";
+            selectColumn.append(", b.[" + ytgColumnName + "]/a.[" + ytgColumnName + "] as '" + ytgColumnName + "'");
+
+            String columnName = year + "小计";
+            selectColumn.append(", b.[" + columnName + "]/a.[" + columnName + "] as '" + columnName + "'");
+        }
+
+        return selectColumn.toString();
+    }
+
+
+    /**
+     * 创建毛利率百分比查询列
+     *
+     * @param yearList
+     * @return
+     */
+    private String createGrossProfitRateSelectColumn(List<Integer> yearList) {
+        StringBuffer selectColumn = new StringBuffer();
+
+        for (int i = 0; i < yearList.size(); i++) {
+            Integer year = yearList.get(i);
+            for (int j = 1; j <= 12; j++) {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+                selectColumn.append(", 1 - b.[" + columnName + "]/a.[" + columnName + "] as '" + columnName + "'");
+            }
+            String ytdColumnName = year + "YTD";
+            selectColumn.append(", 1 - b.[" + ytdColumnName + "]/a.[" + ytdColumnName + "] as '" + ytdColumnName + "'");
+
+            String ytgColumnName = year + "YTG";
+            selectColumn.append(", 1 - b.[" + ytgColumnName + "]/a.[" + ytgColumnName + "] as '" + ytgColumnName + "'");
+
+            String columnName = year + "小计";
+            selectColumn.append(", 1 - b.[" + columnName + "]/a.[" + columnName + "] as '" + columnName + "'");
+        }
+
+        return selectColumn.toString();
+    }
+
     /**
      * 创建前端页面表头列
      *
@@ -177,54 +242,63 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
         businessDivisionColumnJsonObject.put("prop", "businessDivision");
         businessDivisionColumnJsonObject.put("label", "事业部");
         businessDivisionColumnJsonObject.put("minWidth", "150");
+        businessDivisionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(businessDivisionColumnJsonObject);
 
         JSONObject productLineColumnJsonObject = new JSONObject();
         productLineColumnJsonObject.put("prop", "productLine");
         productLineColumnJsonObject.put("label", "产品线");
         productLineColumnJsonObject.put("minWidth", "120");
+        productLineColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(productLineColumnJsonObject);
 
         JSONObject dataVersionColumnJsonObject = new JSONObject();
         dataVersionColumnJsonObject.put("prop", "dataVersion");
         dataVersionColumnJsonObject.put("label", "数据版本");
         dataVersionColumnJsonObject.put("minWidth", "150");
+        dataVersionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(dataVersionColumnJsonObject);
 
         JSONObject itemSeqColumnJsonObject = new JSONObject();
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
         JSONObject rowNoColumnJsonObject = new JSONObject();
         rowNoColumnJsonObject.put("prop", "category1");
         rowNoColumnJsonObject.put("label", "分类1");
         rowNoColumnJsonObject.put("minWidth", "200");
+        rowNoColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(rowNoColumnJsonObject);
 
         JSONObject costItemColumnJsonObject = new JSONObject();
         costItemColumnJsonObject.put("prop", "category2");
         costItemColumnJsonObject.put("label", "分类2");
         costItemColumnJsonObject.put("minWidth", "270");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
         JSONObject costTypeColumnJsonObject = new JSONObject();
         costTypeColumnJsonObject.put("prop", "category3");
         costTypeColumnJsonObject.put("label", "分类3");
         costTypeColumnJsonObject.put("minWidth", "180");
+//        costTypeColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costTypeColumnJsonObject);
 
         JSONObject unitColumnJsonObject = new JSONObject();
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+//        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
         JSONObject validationColumnJsonObject = new JSONObject();
         validationColumnJsonObject.put("prop", "validation");
         validationColumnJsonObject.put("label", "校验");
         validationColumnJsonObject.put("minWidth", "120");
+//        validationColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(validationColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);
@@ -246,37 +320,43 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
         JSONObject rowNoColumnJsonObject = new JSONObject();
         rowNoColumnJsonObject.put("prop", "category1");
         rowNoColumnJsonObject.put("label", "分类1");
         rowNoColumnJsonObject.put("minWidth", "200");
+        rowNoColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(rowNoColumnJsonObject);
 
         JSONObject costItemColumnJsonObject = new JSONObject();
         costItemColumnJsonObject.put("prop", "category2");
         costItemColumnJsonObject.put("label", "分类2");
         costItemColumnJsonObject.put("minWidth", "270");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
         JSONObject costTypeColumnJsonObject = new JSONObject();
         costTypeColumnJsonObject.put("prop", "category3");
         costTypeColumnJsonObject.put("label", "分类3");
         costTypeColumnJsonObject.put("minWidth", "180");
+        costTypeColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costTypeColumnJsonObject);
 
         JSONObject unitColumnJsonObject = new JSONObject();
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
-        JSONObject validationColumnJsonObject = new JSONObject();
-        validationColumnJsonObject.put("prop", "validation");
-        validationColumnJsonObject.put("label", "校验");
-        validationColumnJsonObject.put("minWidth", "120");
-        titleJsonArray.add(validationColumnJsonObject);
+//        JSONObject validationColumnJsonObject = new JSONObject();
+//        validationColumnJsonObject.put("prop", "validation");
+//        validationColumnJsonObject.put("label", "校验");
+//        validationColumnJsonObject.put("minWidth", "120");
+//        validationColumnJsonObject.put("fixed", "left");
+//        titleJsonArray.add(validationColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);
 

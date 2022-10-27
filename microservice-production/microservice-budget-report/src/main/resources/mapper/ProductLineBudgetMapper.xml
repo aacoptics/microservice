@@ -92,7 +92,8 @@
                     <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
                         #{productLine}
                     </foreach>
-                </if>)
+                </if>),
+        temp_sum as (
         select
             temp_year_1.item_seq itemSeq,
             temp_year_1.cost_item costItem,
@@ -105,8 +106,76 @@
             and temp_year_1.item_seq = temp_year_2.item_seq
         group by temp_year_1.item_seq,
                 temp_year_1.cost_item,
-                temp_year_1.unit
-        order by temp_year_1.item_seq
+                temp_year_1.unit)
+        select *
+        from temp_sum
+        union all
+            select 8 itemSeq, '毛利率%' costItem, '%' unit
+            ${grossProfitRateSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 2) a
+            join
+            (
+            select *
+            from temp_sum
+            where itemSeq = 3) b on 1 = 1
+        union all
+            select 10                                                 itemSeq,
+            '研发费用占销售额比重%'                                      costItem,
+            '%'                                                unit
+            ${selectPercentColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 2) a
+            join
+            (
+            select *
+            from temp_sum
+            where itemSeq = 9) b on 1 = 1
+        union all
+            select 12                                                 itemSeq,
+            '营销费用占销售额比重%'                                      costItem,
+            '%'                                                unit
+            ${selectPercentColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 2) a
+            join
+            (
+            select *
+            from temp_sum
+            where itemSeq = 11) b on 1 = 1
+        union all
+            select 14                                                 itemSeq,
+            '管理费用占销售额比重%'                                      costItem,
+            '%'                                                unit
+            ${selectPercentColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 2) a
+            join
+            (
+            select *
+            from temp_sum
+            where itemSeq = 13) b on 1 = 1
+        union all
+            select 17 itemSeq, '利润率' costItem, '%' unit
+            ${selectPercentColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 2) a
+            join
+            (
+            select *
+            from temp_sum
+            where itemSeq = 16) b on 1 = 1
+            order by itemSeq
     </select>
 
 </mapper>

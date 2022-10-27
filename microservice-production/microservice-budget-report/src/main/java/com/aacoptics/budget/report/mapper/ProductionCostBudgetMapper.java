@@ -30,6 +30,8 @@ public interface ProductionCostBudgetMapper extends BaseMapper<ProductionCostBud
                                                               @Param("secondYear") Integer secondYear);
 
     List<Map<String, Object>> findProductionCostBudgetByCondition(@Param("selectColumn") String selectColumn,
+                                                                  @Param("percentSelectColumn") String percentSelectColumn,
+                                                                  @Param("grossProfitRateSelectColumn") String grossProfitRateSelectColumn,
                                                                     @Param("businessDivision") String businessDivision,
                                                                     @Param("productLineList") List<String> productLineList,
                                                                     @Param("firstYear") Integer firstYear,

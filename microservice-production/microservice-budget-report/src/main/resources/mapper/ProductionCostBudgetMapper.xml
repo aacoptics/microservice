@@ -98,7 +98,8 @@
                 <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
                     #{productLine}
                 </foreach>
-            </if>)
+            </if>),
+            temp_sum as (
         select
             temp_year_1.item_seq itemSeq,
             temp_year_1.category_1 category1,
@@ -117,8 +118,178 @@
                     temp_year_1.category_2,
                     temp_year_1.category_3,
                     temp_year_1.unit,
-                    temp_year_1.validation
-        order by temp_year_1.item_seq
+                    temp_year_1.validation)
+        select *
+        from temp_sum
+        union all
+            select 5          itemSeq,
+            '汇总(KRMB)' category1,
+            '毛利率'      category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${grossProfitRateSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 6) b on 1 = 1
+        union all
+            select 8          itemSeq,
+            '汇总(KRMB)' category1,
+            '料成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 7) b on 1 = 1
+        union all
+            select 11         itemSeq,
+            '汇总(KRMB)' category1,
+            '工成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 9) b on 1 = 1
+        union all
+            select 13         itemSeq,
+            '汇总(KRMB)' category1,
+            '费成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 12) b on 1 = 1
+        union all
+            select 15                itemSeq,
+            '汇总(KRMB)'        category1,
+            '租赁/折旧/摊销费用占产值比%' category2,
+            ''                category3,
+            '%'               unit,
+            ''                validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 14) b on 1 = 1
+        union all
+            select 17            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '工装模具摊销占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 16) b on 1 = 1
+        union all
+            select 19             itemSeq,
+            '其中主要费成本构成项目'  category1,
+            '维修与维护成本占产值比%' category2,
+            ''             category3,
+            '%'            unit,
+            ''             validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 18) b on 1 = 1
+        union all
+            select 21            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '耗材成本占产值比%'   category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 20) b on 1 = 1
+        union all
+            select 23              itemSeq,
+            '其中主要费成本构成项目'   category1,
+            '水电气等能源成本占产值比%' category2,
+            ''              category3,
+            '%'             unit,
+            ''              validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 22) b on 1 = 1
+        union all
+            select 26            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '间接人工成本占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 24) b on 1 = 1
+        union all
+            select 28            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '辅助部门费用占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 27) b on 1 = 1
+        union all
+            select 30                     itemSeq,
+            '其中主要费成本构成项目'          category1,
+            '车间管理费/物流费用/其他成本占产值比%' category2,
+            ''                     category3,
+            '%'                    unit,
+            ''                     validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 29) b on 1 = 1
+        order by itemSeq
     </select>
 
 </mapper>

@@ -93,8 +93,14 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         //构建查询列
         String selectColumn = this.createReportSelectColumn(yearList);
 
+        //构建分数查询列
+        String selectPercentColumn = this.createReportPercentSelectColumn(yearList);
+        //构建毛利率查询列
+        String grossProfitRateSelectColumn = this.createGrossProfitRateSelectColumn(yearList);
+
         List<Map<String, Object>> productLineBudgetList = productLineBudgetMapper.findProductLineBudgetByCondition(
-                selectColumn, businessDivision, productLineList, yearList.get(0), yearList.get(1));
+                selectColumn, selectPercentColumn, grossProfitRateSelectColumn,
+                businessDivision, productLineList, yearList.get(0), yearList.get(1));
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("columns", titleJsonArray);
@@ -214,6 +220,118 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
 
 
     /**
+     * 创建百分数查询列
+     *
+     * @param yearList
+     * @return
+     */
+    private String createReportPercentSelectColumn(List<Integer> yearList) {
+        StringBuffer selectColumn = new StringBuffer(); // 例：temp_year_1.month_01_phone_value month_01_phone_value
+
+        for (int i = 0; i < yearList.size(); i++) {
+            Integer year = yearList.get(i);
+            for (int j = 1; j <= 12; j++) {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+
+                //求百分比行
+                selectColumn.append(", b.[" + columnName + "手机类]/a.[" + columnName + "手机类] as '" + columnName + "手机类'");
+                selectColumn.append(", b.[" + columnName + "TV]/a.[" + columnName + "TV] as '" + columnName + "TV'");
+                selectColumn.append(", b.[" + columnName + "手表]/a.[" + columnName + "手表] as '" + columnName + "手表'");
+                selectColumn.append(", b.[" + columnName + "AR/VR]/a.[" + columnName + "AR/VR] as '" + columnName + "AR/VR'");
+                selectColumn.append(", b.[" + columnName + "笔电]/a.[" + columnName + "笔电] as '" + columnName + "笔电'");
+                selectColumn.append(", b.[" + columnName + "平板]/a.[" + columnName + "平板] as '" + columnName + "平板'");
+                selectColumn.append(", b.[" + columnName + "车载]/a.[" + columnName + "车载] as '" + columnName + "车载'");
+                selectColumn.append(", b.[" + columnName + "IOT&Other]/a.[" + columnName + "IOT&Other] as '" + columnName + "IOT&Other'");
+                selectColumn.append(", b.[" + columnName + "小计]/a.[" + columnName + "小计] as '" + columnName + "小计'");
+
+                if(j%3 == 0)
+                {
+                    String qColumnName = year + "Q" + j/3;
+                    selectColumn.append(", b.[" + qColumnName + "手机类]/a.[" + qColumnName + "手机类] as '" + qColumnName + "手机类'");
+                    selectColumn.append(", b.[" + qColumnName + "TV]/a.[" + qColumnName + "TV] as '" + qColumnName + "TV'");
+                    selectColumn.append(", b.[" + qColumnName + "手表]/a.[" + qColumnName + "手表] as '" + qColumnName + "手表'");
+                    selectColumn.append(", b.[" + qColumnName + "AR/VR]/a.[" + qColumnName + "AR/VR] as '" + qColumnName + "AR/VR'");
+                    selectColumn.append(", b.[" + qColumnName + "笔电]/a.[" + qColumnName + "笔电] as '" + qColumnName + "笔电'");
+                    selectColumn.append(", b.[" + qColumnName + "平板]/a.[" + qColumnName + "平板] as '" + qColumnName + "平板'");
+                    selectColumn.append(", b.[" + qColumnName + "车载]/a.[" + qColumnName + "车载] as '" + qColumnName + "车载'");
+                    selectColumn.append(", b.[" + qColumnName + "IOT&Other]/a.[" + qColumnName + "IOT&Other] as '" + qColumnName + "IOT&Other'");
+                    selectColumn.append(", b.[" + qColumnName + "小计]/a.[" + qColumnName + "小计] as '" + qColumnName + "小计'");
+                }
+            }
+
+            String columnName = year + "Yr";
+            selectColumn.append(", b.[" + columnName + "手机类]/a.[" + columnName + "手机类] as '" + columnName + "手机类'");
+            selectColumn.append(", b.[" + columnName + "TV]/a.[" + columnName + "TV] as '" + columnName + "TV'");
+            selectColumn.append(", b.[" + columnName + "手表]/a.[" + columnName + "手表] as '" + columnName + "手表'");
+            selectColumn.append(", b.[" + columnName + "AR/VR]/a.[" + columnName + "AR/VR] as '" + columnName + "AR/VR'");
+            selectColumn.append(", b.[" + columnName + "笔电]/a.[" + columnName + "笔电] as '" + columnName + "笔电'");
+            selectColumn.append(", b.[" + columnName + "平板]/a.[" + columnName + "平板] as '" + columnName + "平板'");
+            selectColumn.append(", b.[" + columnName + "车载]/a.[" + columnName + "车载] as '" + columnName + "车载'");
+            selectColumn.append(", b.[" + columnName + "IOT&Other]/a.[" + columnName + "IOT&Other] as '" + columnName + "IOT&Other'");
+            selectColumn.append(", b.[" + columnName + "小计]/a.[" + columnName + "小计] as '" + columnName + "小计'");
+        }
+
+        return selectColumn.toString();
+    }
+
+    /**
+     * 创建毛利率百分数查询列
+     *
+     * @param yearList
+     * @return
+     */
+    private String createGrossProfitRateSelectColumn(List<Integer> yearList) {
+        StringBuffer selectColumn = new StringBuffer(); // 例：temp_year_1.month_01_phone_value month_01_phone_value
+
+        for (int i = 0; i < yearList.size(); i++) {
+            Integer year = yearList.get(i);
+            for (int j = 1; j <= 12; j++) {
+                String monthStr = String.format("%02d", j);
+                String columnName = year + monthStr;
+
+                //求百分比行
+                selectColumn.append(", 1 - b.[" + columnName + "手机类]/a.[" + columnName + "手机类] as '" + columnName + "手机类'");
+                selectColumn.append(", 1 - b.[" + columnName + "TV]/a.[" + columnName + "TV] as '" + columnName + "TV'");
+                selectColumn.append(", 1 - b.[" + columnName + "手表]/a.[" + columnName + "手表] as '" + columnName + "手表'");
+                selectColumn.append(", 1 - b.[" + columnName + "AR/VR]/a.[" + columnName + "AR/VR] as '" + columnName + "AR/VR'");
+                selectColumn.append(", 1 - b.[" + columnName + "笔电]/a.[" + columnName + "笔电] as '" + columnName + "笔电'");
+                selectColumn.append(", 1 - b.[" + columnName + "平板]/a.[" + columnName + "平板] as '" + columnName + "平板'");
+                selectColumn.append(", 1 - b.[" + columnName + "车载]/a.[" + columnName + "车载] as '" + columnName + "车载'");
+                selectColumn.append(", 1 - b.[" + columnName + "IOT&Other]/a.[" + columnName + "IOT&Other] as '" + columnName + "IOT&Other'");
+                selectColumn.append(", 1 - b.[" + columnName + "小计]/a.[" + columnName + "小计] as '" + columnName + "小计'");
+
+                if(j%3 == 0)
+                {
+                    String qColumnName = year + "Q" + j/3;
+                    selectColumn.append(", 1 - b.[" + qColumnName + "手机类]/a.[" + qColumnName + "手机类] as '" + qColumnName + "手机类'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "TV]/a.[" + qColumnName + "TV] as '" + qColumnName + "TV'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "手表]/a.[" + qColumnName + "手表] as '" + qColumnName + "手表'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "AR/VR]/a.[" + qColumnName + "AR/VR] as '" + qColumnName + "AR/VR'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "笔电]/a.[" + qColumnName + "笔电] as '" + qColumnName + "笔电'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "平板]/a.[" + qColumnName + "平板] as '" + qColumnName + "平板'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "车载]/a.[" + qColumnName + "车载] as '" + qColumnName + "车载'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "IOT&Other]/a.[" + qColumnName + "IOT&Other] as '" + qColumnName + "IOT&Other'");
+                    selectColumn.append(", 1 - b.[" + qColumnName + "小计]/a.[" + qColumnName + "小计] as '" + qColumnName + "小计'");
+                }
+            }
+
+            String columnName = year + "Yr";
+            selectColumn.append(", 1 - b.[" + columnName + "手机类]/a.[" + columnName + "手机类] as '" + columnName + "手机类'");
+            selectColumn.append(", 1 - b.[" + columnName + "TV]/a.[" + columnName + "TV] as '" + columnName + "TV'");
+            selectColumn.append(", 1 - b.[" + columnName + "手表]/a.[" + columnName + "手表] as '" + columnName + "手表'");
+            selectColumn.append(", 1 - b.[" + columnName + "AR/VR]/a.[" + columnName + "AR/VR] as '" + columnName + "AR/VR'");
+            selectColumn.append(", 1 - b.[" + columnName + "笔电]/a.[" + columnName + "笔电] as '" + columnName + "笔电'");
+            selectColumn.append(", 1 - b.[" + columnName + "平板]/a.[" + columnName + "平板] as '" + columnName + "平板'");
+            selectColumn.append(", 1 - b.[" + columnName + "车载]/a.[" + columnName + "车载] as '" + columnName + "车载'");
+            selectColumn.append(", 1 - b.[" + columnName + "IOT&Other]/a.[" + columnName + "IOT&Other] as '" + columnName + "IOT&Other'");
+            selectColumn.append(", 1 - b.[" + columnName + "小计]/a.[" + columnName + "小计] as '" + columnName + "小计'");
+        }
+
+        return selectColumn.toString();
+    }
+
+    /**
      * 创建前端页面表头列
      *
      * @param yearList
@@ -225,24 +343,28 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         businessDivisionColumnJsonObject.put("prop", "businessDivision");
         businessDivisionColumnJsonObject.put("label", "事业部");
         businessDivisionColumnJsonObject.put("minWidth", "150");
+        businessDivisionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(businessDivisionColumnJsonObject);
 
         JSONObject productLineColumnJsonObject = new JSONObject();
         productLineColumnJsonObject.put("prop", "productLine");
         productLineColumnJsonObject.put("label", "产品线");
         productLineColumnJsonObject.put("minWidth", "120");
+        productLineColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(productLineColumnJsonObject);
 
         JSONObject dataVersionColumnJsonObject = new JSONObject();
         dataVersionColumnJsonObject.put("prop", "dataVersion");
         dataVersionColumnJsonObject.put("label", "数据版本");
         dataVersionColumnJsonObject.put("minWidth", "150");
+        dataVersionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(dataVersionColumnJsonObject);
 
         JSONObject itemSeqColumnJsonObject = new JSONObject();
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
 
@@ -250,6 +372,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         costItemColumnJsonObject.put("prop", "costItem");
         costItemColumnJsonObject.put("label", "科目");
         costItemColumnJsonObject.put("minWidth", "260");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
 
@@ -257,6 +380,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+//        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);
@@ -278,6 +402,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
 
@@ -285,6 +410,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         costItemColumnJsonObject.put("prop", "costItem");
         costItemColumnJsonObject.put("label", "科目");
         costItemColumnJsonObject.put("minWidth", "260");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
 
@@ -292,6 +418,7 @@ public class ProductLineBudgetServiceImpl extends ServiceImpl<ProductLineBudgetM
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);

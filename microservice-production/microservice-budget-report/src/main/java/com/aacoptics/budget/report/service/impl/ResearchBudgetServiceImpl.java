@@ -195,48 +195,56 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         businessDivisionColumnJsonObject.put("prop", "businessDivision");
         businessDivisionColumnJsonObject.put("label", "事业部");
         businessDivisionColumnJsonObject.put("minWidth", "150");
+        businessDivisionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(businessDivisionColumnJsonObject);
 
         JSONObject productLineColumnJsonObject = new JSONObject();
         productLineColumnJsonObject.put("prop", "productLine");
         productLineColumnJsonObject.put("label", "产品线");
         productLineColumnJsonObject.put("minWidth", "120");
+        productLineColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(productLineColumnJsonObject);
 
         JSONObject dataVersionColumnJsonObject = new JSONObject();
         dataVersionColumnJsonObject.put("prop", "dataVersion");
         dataVersionColumnJsonObject.put("label", "数据版本");
         dataVersionColumnJsonObject.put("minWidth", "150");
+        dataVersionColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(dataVersionColumnJsonObject);
 
         JSONObject itemSeqColumnJsonObject = new JSONObject();
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
         JSONObject rowNoColumnJsonObject = new JSONObject();
         rowNoColumnJsonObject.put("prop", "rowNo");
         rowNoColumnJsonObject.put("label", "行项目号");
         rowNoColumnJsonObject.put("minWidth", "120");
+        rowNoColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(rowNoColumnJsonObject);
 
         JSONObject costItemColumnJsonObject = new JSONObject();
         costItemColumnJsonObject.put("prop", "costItem");
         costItemColumnJsonObject.put("label", "费用项目");
         costItemColumnJsonObject.put("minWidth", "260");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
         JSONObject costTypeColumnJsonObject = new JSONObject();
         costTypeColumnJsonObject.put("prop", "costType");
         costTypeColumnJsonObject.put("label", "固定/变动费用");
         costTypeColumnJsonObject.put("minWidth", "150");
+//        costTypeColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costTypeColumnJsonObject);
 
         JSONObject unitColumnJsonObject = new JSONObject();
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+//        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);
@@ -260,30 +268,35 @@ public class ResearchBudgetServiceImpl extends ServiceImpl<ResearchBudgetMapper,
         itemSeqColumnJsonObject.put("prop", "itemSeq");
         itemSeqColumnJsonObject.put("label", "科目序号");
         itemSeqColumnJsonObject.put("minWidth", "120");
+        itemSeqColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(itemSeqColumnJsonObject);
 
         JSONObject rowNoColumnJsonObject = new JSONObject();
         rowNoColumnJsonObject.put("prop", "rowNo");
         rowNoColumnJsonObject.put("label", "行项目号");
         rowNoColumnJsonObject.put("minWidth", "120");
+        rowNoColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(rowNoColumnJsonObject);
 
         JSONObject costItemColumnJsonObject = new JSONObject();
         costItemColumnJsonObject.put("prop", "costItem");
         costItemColumnJsonObject.put("label", "费用项目");
         costItemColumnJsonObject.put("minWidth", "260");
+        costItemColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costItemColumnJsonObject);
 
         JSONObject costTypeColumnJsonObject = new JSONObject();
         costTypeColumnJsonObject.put("prop", "costType");
         costTypeColumnJsonObject.put("label", "固定/变动费用");
         costTypeColumnJsonObject.put("minWidth", "150");
+        costTypeColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(costTypeColumnJsonObject);
 
         JSONObject unitColumnJsonObject = new JSONObject();
         unitColumnJsonObject.put("prop", "unit");
         unitColumnJsonObject.put("label", "单位");
         unitColumnJsonObject.put("minWidth", "120");
+        unitColumnJsonObject.put("fixed", "left");
         titleJsonArray.add(unitColumnJsonObject);
 
         this.addYearDataTitle(titleJsonArray, yearList);
