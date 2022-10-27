@@ -15,7 +15,9 @@ public interface BusinessDivisionProductLineMapper extends BaseMapper<BusinessDi
 
     List<String> getAllBusinessDivision();
 
-    List<String> getProductLineByBusinessDivision(@Param("businessDivision") String businessDivision);
+    List<String> getProductLineByBusinessDivision(@Param("businessDivision") String businessDivision,
+                                                  @Param("verificationPermission") boolean verificationPermission,
+                                                  @Param("userCode") String userCode);
 
 
 }

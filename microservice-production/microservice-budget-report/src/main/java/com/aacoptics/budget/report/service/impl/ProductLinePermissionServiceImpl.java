@@ -4,7 +4,9 @@ import com.aacoptics.budget.report.entity.param.ProductLinePermissionQueryParam;
 import com.aacoptics.budget.report.entity.po.ProductLinePermission;
 import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.mapper.ProductLinePermissionMapper;
+import com.aacoptics.budget.report.provider.UserProvider;
 import com.aacoptics.budget.report.service.ProductLinePermissionService;
+import com.aacoptics.common.core.vo.Result;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,6 +25,9 @@ public class ProductLinePermissionServiceImpl extends ServiceImpl<ProductLinePer
 
     @Autowired
     private ProductLinePermissionMapper productLinePermissionMapper;
+
+    @Autowired
+    private UserProvider userProvider;
 
 
     @Override
@@ -96,8 +101,19 @@ public class ProductLinePermissionServiceImpl extends ServiceImpl<ProductLinePer
         String productLine = productLinePermission.getProductLine();
         String userCode = productLinePermission.getUserCode();
 
+        Result result = userProvider.getByUsername(userCode);
+        if(result.isFail())
+        {
+            throw new BusinessException("查询用户异常," + result.getMsg());
+        }
+        Object userObject = result.getData();
+        if(userObject == null)
+        {
+            throw new BusinessException("用户【" + userCode + "】不存在，请确认！");
+        }
 
         QueryWrapper<ProductLinePermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("business_division", businessDivision);
         queryWrapper.eq("product_line", productLine);
         queryWrapper.eq("user_code", userCode);
 

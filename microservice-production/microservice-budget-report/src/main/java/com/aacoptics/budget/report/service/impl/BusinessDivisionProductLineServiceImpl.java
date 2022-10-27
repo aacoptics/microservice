@@ -2,9 +2,12 @@ package com.aacoptics.budget.report.service.impl;
 
 import com.aacoptics.budget.report.entity.param.BusinessDivisionProductLineQueryParam;
 import com.aacoptics.budget.report.entity.po.BusinessDivisionProductLine;
+import com.aacoptics.budget.report.entity.po.ProductLinePermission;
 import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.mapper.BusinessDivisionProductLineMapper;
 import com.aacoptics.budget.report.service.BusinessDivisionProductLineService;
+import com.aacoptics.budget.report.service.ProductLinePermissionService;
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +27,13 @@ public class BusinessDivisionProductLineServiceImpl extends ServiceImpl<Business
     @Autowired
     private BusinessDivisionProductLineMapper businessDivisionProductLineMapper;
 
+    @Autowired
+    private ProductLinePermissionService productLinePermissionService;
+
+
+    private String getCurrentUsername() {
+        return StringUtils.defaultIfBlank(UserContextHolder.getInstance().getUsername(), "IoT");
+    }
 
     @Override
     public List<BusinessDivisionProductLine> getAll() {
@@ -38,7 +48,14 @@ public class BusinessDivisionProductLineServiceImpl extends ServiceImpl<Business
 
     @Override
     public List<String> getProductLineByBusinessDivision(String businessDivision) {
-        return businessDivisionProductLineMapper.getProductLineByBusinessDivision(businessDivision);
+        String username = this.getCurrentUsername();
+        List<ProductLinePermission> productLinePermissionList = productLinePermissionService.getByUserCode(username);
+        boolean verificationPermission = false;
+        if(productLinePermissionList.size() > 0)
+        {
+            verificationPermission = true;
+        }
+        return businessDivisionProductLineMapper.getProductLineByBusinessDivision(businessDivision, verificationPermission, username);
     }
 
 
