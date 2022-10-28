@@ -1,23 +1,20 @@
 package com.aacoptics.budget.report.entity.param;
 
-import com.aacoptics.budget.report.entity.po.ProductionCostBudget;
-import com.aacoptics.budget.report.entity.po.ResearchBudget;
+import com.aacoptics.budget.report.entity.po.ProductLinePermission;
 import com.aacoptics.common.web.entity.param.BaseParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductionCostBudgetQueryParam extends BaseParam<ProductionCostBudget> {
+public class ProductLinePermissionQueryParam extends BaseParam<ProductLinePermission> {
 
     /**
-     * 上传日志ID
+     * 类型
      */
-    private Long uploadLogId;
+    private String type;
 
     /**
      * 事业部
@@ -27,6 +24,11 @@ public class ProductionCostBudgetQueryParam extends BaseParam<ProductionCostBudg
     /**
      * 产品线
      */
-    private List<String> productLineList;
+    private String productLine;
+
+    /**
+     * 域账号
+     */
+    private String userCode;
 
 }

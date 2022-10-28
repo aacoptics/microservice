@@ -16,6 +16,11 @@ public interface ProductionCostBudgetMapper extends BaseMapper<ProductionCostBud
 
     List<Integer> findProductionCostBudgetAllYearByUploadLogId(@Param("uploadLogId") Long uploadLogId);
 
+
+    List<Integer> findProductionCostBudgetAllYearByCondition(@Param("businessDivision") String businessDivision,
+                                                               @Param("productLineList") List<String> productLineList);
+
+
     ProductionCostBudget findByBusinessDivisionAndProductLine(@Param("businessDivision") String businessDivision,
                                                         @Param("productLine") String productLine);
 
@@ -23,5 +28,15 @@ public interface ProductionCostBudgetMapper extends BaseMapper<ProductionCostBud
                                                               @Param("uploadLogId") Long uploadLogId,
                                                               @Param("firstYear") Integer firstYear,
                                                               @Param("secondYear") Integer secondYear);
+
+    List<Map<String, Object>> findProductionCostBudgetByCondition(@Param("selectColumn") String selectColumn,
+                                                                  @Param("percentSelectColumn") String percentSelectColumn,
+                                                                  @Param("grossProfitRateSelectColumn") String grossProfitRateSelectColumn,
+                                                                    @Param("businessDivision") String businessDivision,
+                                                                    @Param("productLineList") List<String> productLineList,
+                                                                    @Param("firstYear") Integer firstYear,
+                                                                    @Param("secondYear") Integer secondYear,
+                                                                  @Param("verificationPermission") boolean verificationPermission,
+                                                                  @Param("userCode") String userCode);
 
 }

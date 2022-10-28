@@ -22,7 +22,20 @@ public interface ResearchBudgetService {
      */
     Map<String, Object> query(Page page, ResearchBudgetQueryParam researchBudgetQueryParam);
 
+    /**
+     * 根据条件查询研发费用预算
+     *
+     * @return
+     */
+    Map<String, Object> findByUploadLogId(Long uploadLogId);
 
+
+    /**
+     * 根据条件查询研发费用预算
+     *
+     * @return
+     */
+    Map<String, Object> findByCondition(String businessDivision, List<String> productLine);
 
     /**
      * 更新上传研发费用信息
@@ -55,6 +68,8 @@ public interface ResearchBudgetService {
      * @return
      */
     ResearchBudget get(Long id);
+
+
 
 
     /**
