@@ -5,10 +5,12 @@ import com.aacoptics.budget.report.constants.BudgetTypeConstants;
 import com.aacoptics.budget.report.constants.UploadLogStatusConstants;
 import com.aacoptics.budget.report.entity.param.ProductionCostBudgetQueryParam;
 import com.aacoptics.budget.report.entity.po.BudgetUploadLog;
+import com.aacoptics.budget.report.entity.po.ProductLinePermission;
 import com.aacoptics.budget.report.entity.po.ProductionCostBudget;
 import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.mapper.ProductionCostBudgetMapper;
 import com.aacoptics.budget.report.service.BudgetUploadLogService;
+import com.aacoptics.budget.report.service.ProductLinePermissionService;
 import com.aacoptics.budget.report.service.ProductionCostBudgetService;
 import com.aacoptics.budget.report.util.ExcelUtil;
 import com.aacoptics.common.core.util.UserContextHolder;
@@ -42,6 +44,9 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
 
     @Resource
     private ProductionCostBudgetMapper productionCostBudgetMapper;
+
+    @Resource
+    private ProductLinePermissionService productLinePermissionService;
 
 
     private String getCurrentUsername() {
@@ -85,11 +90,22 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
 
     @Override
     public Map<String, Object> findByCondition(String businessDivision, List<String> productLineList) {
+
+        //判断是否验证权限
+        String username = this.getCurrentUsername();
+
+        List<ProductLinePermission> productLinePermissionList =  productLinePermissionService.getByUserCode(username);
+        boolean verificationPermission = false;
+        if(productLinePermissionList.size() > 0)
+        {
+            verificationPermission = true;
+        }
+
         //获取存在的年份数据
         List<Integer> yearList = productionCostBudgetMapper.findProductionCostBudgetAllYearByCondition(businessDivision,
                 productLineList);
         if (yearList == null || yearList.size() == 0) {
-            throw new BusinessException("数据不存在");
+            throw new BusinessException("数据不存在，请先上传预算数据！");
         }
         //构建表头
         JSONArray titleJsonArray = this.createReportTableTitle(yearList);
@@ -103,7 +119,8 @@ public class ProductionCostBudgetServiceImpl extends ServiceImpl<ProductionCostB
         String grossProfitRateSelectColumn = this.createGrossProfitRateSelectColumn(yearList);
 
         List<Map<String, Object>> productionCostBudgetList = productionCostBudgetMapper.findProductionCostBudgetByCondition(
-                selectColumn, percentSelectColumn, grossProfitRateSelectColumn, businessDivision, productLineList, yearList.get(0), yearList.get(1));
+                selectColumn, percentSelectColumn, grossProfitRateSelectColumn, businessDivision,
+                productLineList, yearList.get(0), yearList.get(1), verificationPermission, username);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("columns", titleJsonArray);

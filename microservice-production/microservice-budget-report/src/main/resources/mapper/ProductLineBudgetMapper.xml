@@ -70,6 +70,13 @@
         from fb_product_line_budget
         where year = #{firstYear}
             and unit != '%'
+            <if test="verificationPermission == true">
+                AND exists (
+                select 1 from fb_product_line_permission
+                where user_code= #{userCode}
+                and fb_product_line_permission.business_division=fb_product_line_budget.business_division
+                and fb_product_line_permission.product_line=fb_product_line_budget.product_line )
+            </if>
             <if test="businessDivision != '' and businessDivision != null">
                 AND business_division = #{businessDivision}
             </if>
@@ -84,6 +91,13 @@
              from fb_product_line_budget
              where year = #{secondYear}
                 and unit != '%'
+                <if test="verificationPermission == true">
+                    AND exists (
+                    select 1 from fb_product_line_permission
+                    where user_code= #{userCode}
+                    and fb_product_line_permission.business_division=fb_product_line_budget.business_division
+                    and fb_product_line_permission.product_line=fb_product_line_budget.product_line )
+                </if>
                 <if test="businessDivision != '' and businessDivision != null">
                     AND business_division = #{businessDivision}
                 </if>

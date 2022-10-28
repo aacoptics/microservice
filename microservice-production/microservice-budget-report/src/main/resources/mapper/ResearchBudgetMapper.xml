@@ -72,6 +72,13 @@
         select *
         from fb_research_budget
         where year = #{firstYear}
+                <if test="verificationPermission == true">
+                    AND exists (
+                    select 1 from fb_product_line_permission
+                    where user_code= #{userCode}
+                    and fb_product_line_permission.business_division=fb_research_budget.business_division
+                    and fb_product_line_permission.product_line=fb_research_budget.product_line )
+                </if>
                 <if test="businessDivision != '' and businessDivision != null">
                     AND business_division = #{businessDivision}
                 </if>
@@ -85,6 +92,13 @@
              select *
              from fb_research_budget
              where year = #{secondYear}
+                <if test="verificationPermission == true">
+                    AND exists (
+                    select 1 from fb_product_line_permission
+                    where user_code= #{userCode}
+                    and fb_product_line_permission.business_division=fb_research_budget.business_division
+                    and fb_product_line_permission.product_line=fb_research_budget.product_line )
+                </if>
                 <if test="businessDivision != '' and businessDivision != null">
                     AND business_division = #{businessDivision}
                 </if>

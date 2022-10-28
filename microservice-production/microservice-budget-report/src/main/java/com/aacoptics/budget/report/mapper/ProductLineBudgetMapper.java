@@ -34,6 +34,8 @@ public interface ProductLineBudgetMapper extends BaseMapper<ProductLineBudget> {
                                                                  @Param("businessDivision") String businessDivision,
                                                                  @Param("productLineList") List<String> productLineList,
                                                                  @Param("firstYear") Integer firstYear,
-                                                                 @Param("secondYear") Integer secondYear);
+                                                                 @Param("secondYear") Integer secondYear,
+                                                               @Param("verificationPermission") boolean verificationPermission,
+                                                               @Param("userCode") String userCode);
 
 }
