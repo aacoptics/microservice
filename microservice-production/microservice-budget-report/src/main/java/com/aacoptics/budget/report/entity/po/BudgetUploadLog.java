@@ -57,4 +57,17 @@ public class BudgetUploadLog extends BasePo {
     @TableField(value = "excel_image")
     private byte[] excelImage;
 
+
+    /**
+     * 事业部
+     */
+    @TableField(value = "business_division")
+    private String businessDivision;
+
+    /**
+     * 产品线
+     */
+    @TableField(value = "product_line")
+    private String productLine;
+
 }

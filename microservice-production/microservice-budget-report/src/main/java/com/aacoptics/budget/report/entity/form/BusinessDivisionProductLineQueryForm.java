@@ -1,24 +1,21 @@
 package com.aacoptics.budget.report.entity.form;
 
-import com.aacoptics.budget.report.entity.param.ResearchBudgetQueryParam;
+import com.aacoptics.budget.report.entity.param.BusinessDivisionProductLineQueryParam;
+import com.aacoptics.budget.report.entity.param.ProductLinePermissionQueryParam;
 import com.aacoptics.common.web.entity.form.BaseQueryForm;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @ApiModel
 @Data
-public class ResearchBudgetQueryForm extends BaseQueryForm<ResearchBudgetQueryParam> {
-
-    @ApiModelProperty(value = "上传日志ID")
-    private Long uploadLogId;
+public class BusinessDivisionProductLineQueryForm extends BaseQueryForm<BusinessDivisionProductLineQueryParam> {
 
 
     @ApiModelProperty(value = "事业部")
     private String businessDivision;
 
     @ApiModelProperty(value = "产品线")
-    private List<String> productLineList;
+    private String productLine;
+
 }

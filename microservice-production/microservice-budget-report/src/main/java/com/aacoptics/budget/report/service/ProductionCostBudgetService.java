@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public interface ProductionCostBudgetService {
@@ -21,6 +22,21 @@ public interface ProductionCostBudgetService {
      */
     Map<String, Object> query(Page page, ProductionCostBudgetQueryParam productionCostBudgetQueryParam);
 
+
+    /**
+     * 根据条件查询生产成本预算
+     *
+     * @return
+     */
+    Map<String, Object> findByUploadLogId(Long uploadLogId);
+
+
+    /**
+     * 根据条件查询生产成本预算
+     *
+     * @return
+     */
+    Map<String, Object> findByCondition(String businessDivision, List<String> productLineList);
 
 
     /**

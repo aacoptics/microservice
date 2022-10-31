@@ -109,7 +109,9 @@ export default {
         excelName: "",
       },
       columns: [
-        {prop: "excelName", label: "文件名称", minWidth: 110},
+        {prop: "businessDivision", label: "事业部", minWidth: 150},
+        {prop: "productLine", label: "产品线", minWidth: 120},
+        {prop: "excelName", label: "文件名称", minWidth: 210},
         {prop: "uploadTime", label: "上传时间", minWidth: 100, formatter: this.dateTimeFormat},
         {prop: "uploadUser", label: "上传用户", minWidth: 100},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
