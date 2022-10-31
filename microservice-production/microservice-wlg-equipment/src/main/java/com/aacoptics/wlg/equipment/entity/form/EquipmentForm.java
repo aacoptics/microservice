@@ -205,4 +205,10 @@ public class EquipmentForm extends BaseForm<Equipment> {
     @TableField(value = "last_maintenance_datetime")
     private LocalDateTime lastMaintenanceDatetime;
 
+    /**
+     * 设备责任人
+     */
+    @ApiModelProperty(value = "设备责任人")
+    private String equipDuty;
+
 }

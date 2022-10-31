@@ -239,7 +239,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
     @Override
     public Equipment findEquipmentByMchCode(String mchCode) {
         QueryWrapper<Equipment> equipmentQueryWrapper = new QueryWrapper<>();
-        equipmentQueryWrapper.eq("mch_code", mchCode);
+        equipmentQueryWrapper.eq("mch_code", mchCode).or().eq("equip_number", mchCode);
         Equipment equipment = equipmentMapper.selectOne(equipmentQueryWrapper);
         return equipment;
     }

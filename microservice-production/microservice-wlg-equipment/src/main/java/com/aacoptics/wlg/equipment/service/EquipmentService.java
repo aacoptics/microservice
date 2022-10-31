@@ -123,7 +123,7 @@ public interface EquipmentService {
 
 
     /**
-     * 根据设备编码查询设备
+     * 根据设备编码或编号查询设备
      *
      * @param mchCode 设备编码
      * @return

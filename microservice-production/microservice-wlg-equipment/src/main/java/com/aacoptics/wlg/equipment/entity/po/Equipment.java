@@ -229,4 +229,10 @@ public class Equipment extends BasePo {
     @TableField(value = "last_maintenance_datetime")
     private LocalDateTime lastMaintenanceDatetime;
 
+    /**
+     * 设备负责人
+     */
+    @TableField(value = "equip_duty")
+    private String equipDuty;
+
 }

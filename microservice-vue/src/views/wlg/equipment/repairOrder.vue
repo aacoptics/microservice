@@ -18,6 +18,9 @@
             <el-form-item label="型号" prop="typeVersion">
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
+            <el-form-item label="设备编号" prop="equipNumber">
+            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+          </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -156,10 +159,11 @@ import {
   handleBatchConfirm,
   handleUpdate
 } from "@/api/wlg/equipment/repairOrder";
-import {findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
+import {findEquipmentByMchCode, convertUser} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {addImage, findImageById} from "@/api/wlg/equipment/image";
+import {getAllUser} from "@/api/system/user"
 
 export default {
   name: "repairOrder",
@@ -177,25 +181,27 @@ export default {
         spec: "",
         typeVersion: "",
         status: "",
+        equipNumber: "",
       },
       columns: [
         {prop: "orderNumber", label: "工单号", minWidth: 110},
         {prop: "mchCode", label: "设备编码", minWidth: 110},
         {prop: "mchName", label: "设备名称", minWidth: 150},
-        {prop: "spec", label: "规格", minWidth: 100},
-        {prop: "typeVersion", label: "型号", minWidth: 120},
+        {prop: "equipNumber", label: "设备编号", minWidth: 150},
+        {prop: "spec", label: "规格", minWidth: 120},
+        {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "factoryNo", label: "出厂编码", minWidth: 130},
-        {prop: "dutyPersonId", label: "责任人", minWidth: 100},
+        {prop: "dutyPersonId", label: "接单人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "faultDesc", label: "故障描述", minWidth: 200},
         // {prop: "faultPhoto", label: "故障照片", minWidth: 100},
         {prop: "repairDesc", label: "维修说明", minWidth: 200},
         {prop: "repairDatetime", label: "维修时间", minWidth: 100},
         {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
-        {prop: "updatedBy", label: "更新人", minWidth: 100},
-        {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
-        {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "updatedBy", label: "操作人", minWidth: 150, formatter: this.userFormat},
+        {prop: "updatedTime", label: "操作时间", minWidth: 120, formatter: this.dateTimeFormat},
+        // {prop: "createdBy", label: "创建人", minWidth: 120},
+        // {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -235,6 +241,7 @@ export default {
       multipleSelection: [],
       orderStatusOptions: [],
       orderSourceOptions: [],
+      userOptions: [],
     };
   },
   mounted() {
@@ -244,7 +251,9 @@ export default {
     getDict("wlg_em_repair_order_source").then(response => {
       this.orderSourceOptions = response.data.data
     });
-
+    getAllUser().then(response => {
+      this.userOptions = response.data.data
+    })
   },
   methods: {
     // 获取分页数据
@@ -257,6 +266,7 @@ export default {
       this.pageRequest.spec = this.filters.spec;
       this.pageRequest.typeVersion = this.filters.typeVersion;
       this.pageRequest.status = this.filters.status;
+      this.pageRequest.equipNumber = this.filters.equipNumber;
       this.findLoading = true;
       findRepairOrderPage(this.pageRequest)
           .then((res) => {
@@ -488,6 +498,9 @@ export default {
     },
     timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
+    },
+    userFormat: function (row, column, cellValue) {
+      return convertUser(this.userOptions, cellValue)
     },
   },
 };

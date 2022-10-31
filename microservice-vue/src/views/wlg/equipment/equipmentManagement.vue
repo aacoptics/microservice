@@ -40,7 +40,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)">查询
+            <el-button type="primary" @click="findPage(null)" :loading="queryLoading">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -94,6 +94,19 @@
                 <el-input v-model="dataForm.equipNumber" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备负责人" prop="status">
+              <el-select v-model="dataForm.equipDuty" clearable placeholder="设备负责人" style="width:100%">
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            </el-col>
           </el-row>
           </el-form>
         
@@ -110,7 +123,9 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate} from "@/api/wlg/equipment/equipmentManagement";
+
+import {getAllUser} from "@/api/system/user"
+import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate, convertUser} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
@@ -122,6 +137,7 @@ export default {
 
       exportLoading: false,
       editLoading: false,
+      queryLoading:false,
 
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
@@ -144,15 +160,18 @@ export default {
         mchName: "",
         spec: "",
         equipNumber: "",
+        equipDuty: "",
       },
 
       equipmentStatusOptions:[],
+      userOptions: [],
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
-        {prop: "mchName", label: "资产名称", minWidth: 100},
-        {prop: "spec", label: "规格", minWidth: 100},
-        {prop: "typeVersion", label: "型号", minWidth: 100},
+        {prop: "mchName", label: "资产名称", minWidth: 120},
+        {prop: "spec", label: "规格", minWidth: 120},
+        {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "equipNumber", label: "设备编号", minWidth: 150},
+        {prop: "equipDuty", label: "设备负责人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
         {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
         {prop: "equipState", label: "资产状态", minWidth: 100},
@@ -174,12 +193,12 @@ export default {
         {prop: "buildingName", label: "楼栋名称", minWidth: 100},
         {prop: "floorCode", label: "楼层编码", minWidth: 100},
         {prop: "floorName", label: "楼层名称", minWidth: 100},
-        {prop: "assetManagerId", label: "资产管理员", minWidth: 110},
-        {prop: "mchManagerId", label: "设备管理员", minWidth: 110},
-        {prop: "dutyPersonId", label: "责任人", minWidth: 100},
-        {prop: "deptManagerId", label: "部门经理", minWidth: 100},
-        {prop: "deptDirectorId", label: "部门总监", minWidth: 100},
-        {prop: "vicePresidentId", label: "部门VP", minWidth: 100},
+        {prop: "assetManagerId", label: "资产管理员", minWidth: 150, formatter: this.userFormat},
+        {prop: "mchManagerId", label: "设备管理员", minWidth:150, formatter: this.userFormat},
+        {prop: "dutyPersonId", label: "责任人", minWidth: 150, formatter: this.userFormat},
+        {prop: "deptManagerId", label: "部门经理", minWidth: 150, formatter: this.userFormat},
+        {prop: "deptDirectorId", label: "部门总监", minWidth: 150, formatter: this.userFormat},
+        {prop: "vicePresidentId", label: "部门VP", minWidth: 150, formatter: this.userFormat},
         {prop: "lastInspectionDatetime", label: "最后点检日期", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "lastMaintenanceDatetime", label: "最后保养日期", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
@@ -195,6 +214,9 @@ export default {
   mounted() {
     getDict("wlg_em_equipment_status").then(response => {
       this.equipmentStatusOptions = response.data.data
+    })
+    getAllUser().then(response => {
+      this.userOptions = response.data.data
     })
   },
   methods: {
@@ -214,8 +236,10 @@ export default {
       this.pageRequest.dutyPersonId = this.filters.dutyPersonId;
       this.pageRequest.equipNumber = this.filters.equipNumber;
 
+      this.queryLoading = true;
       findEquipmentManagementPage(this.pageRequest)
           .then((res) => {
+            this.queryLoading = false;
             const responseData = res.data;
             if (responseData.code === "000000") {
               this.pageResult = responseData.data;
@@ -309,6 +333,9 @@ export default {
 
     statusFormat: function (row) {
       return selectDictLabel(this.equipmentStatusOptions, row.status);
+    },
+    userFormat: function (row, column, cellValue) {
+      return convertUser(this.userOptions, cellValue)
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {
