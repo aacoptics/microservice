@@ -897,6 +897,8 @@ export default {
     },
     onDialogClosed() {
       this.fanucDialogCondData = []
+      this.fanucDialogMonitData = []
+      this.fanucDialogAlarmData = []
       this.dateTimePickerValue = []
     },
     getEquipList() {
