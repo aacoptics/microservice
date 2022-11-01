@@ -259,7 +259,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                 throw new BusinessException("工单【" + inspectionOrder.getOrderNumber() + "】不是已提交状态，不能确认");
             }
             inspectionOrder.setStatus(InspectionOrderStatusConstants.CONFIRMED);
-            this.update(inspectionOrder);
+            this.updateById(inspectionOrder);
         }
     }
 
