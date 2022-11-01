@@ -118,10 +118,14 @@ public class EquipmentController {
         //只更新设备编号
         String equipNumber = equipment.getEquipNumber();
         String equipDuty = equipment.getEquipDuty() != null ? equipment.getEquipDuty().trim() : null;
+        String equipDutyManager = equipmentForm.getEquipDutyManager() != null ? equipmentForm.getEquipDutyManager().trim() : null;
 
         Equipment equipmentTarget = equipmentService.get(equipment.getId());
         equipmentTarget.setEquipNumber(equipNumber);
         equipmentTarget.setEquipDuty(equipDuty);
+        equipmentTarget.setEquipDutyManager(equipDutyManager);
+        equipmentTarget.setEquipCategory(equipmentForm.getEquipCategory());
+
         return Result.success(equipmentService.update(equipmentTarget));
     }
 

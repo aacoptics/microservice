@@ -2,6 +2,8 @@ package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.DataDictConstants;
+import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.RepairOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.RepairOrderQueryForm;
@@ -82,8 +84,20 @@ public class RepairOrderController {
     })
     @PutMapping(value = "/{id}")
     public Result update(@PathVariable Long id, @Valid @RequestBody RepairOrderForm repairOrderForm) {
-        RepairOrder repairOrder = repairOrderForm.toPo(id, RepairOrder.class);
-        return Result.success(repairOrderService.update(repairOrder));
+
+        RepairOrder repairOrderTarget = repairOrderService.get(id);
+        if(RepairOrderStatusConstants.REPAIRED.equals(repairOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已维修，不能更新接单人");
+        }
+        if(RepairOrderStatusConstants.CONFIRMED.equals(repairOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已确认，不能更新接单人");
+        }
+
+        repairOrderTarget.setDutyPersonId(repairOrderForm.getDutyPersonId() != null ? repairOrderForm.getDutyPersonId().trim() : null);
+
+        return Result.success(repairOrderService.update(repairOrderTarget));
     }
 
     @ApiOperation(value = "获取维修工单", notes = "获取指定维修工单信息")

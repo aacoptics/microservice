@@ -2,6 +2,8 @@ package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.DataDictConstants;
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
+import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
@@ -82,8 +84,21 @@ public class MaintenanceOrderController {
     })
     @PutMapping(value = "/{id}")
     public Result update(@PathVariable Long id, @Valid @RequestBody MaintenanceOrderForm maintenanceOrderForm) {
-        MaintenanceOrder maintenanceOrder = maintenanceOrderForm.toPo(id, MaintenanceOrder.class);
-        return Result.success(maintenanceOrderService.update(maintenanceOrder));
+
+        MaintenanceOrder maintenanceOrderTarget = maintenanceOrderService.get(id);
+        if(MaintenanceOrderStatusConstants.COMMITTED.equals(maintenanceOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已保养，不能更新接单人");
+        }
+        if(MaintenanceOrderStatusConstants.CONFIRMED.equals(maintenanceOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已确认，不能更新接单人");
+        }
+
+
+        maintenanceOrderTarget.setDutyPersonId(maintenanceOrderForm.getDutyPersonId() != null ? maintenanceOrderForm.getDutyPersonId().trim() : null);
+
+        return Result.success(maintenanceOrderService.update(maintenanceOrderTarget));
     }
 
     @ApiOperation(value = "获取保养工单", notes = "获取指定保养工单信息")

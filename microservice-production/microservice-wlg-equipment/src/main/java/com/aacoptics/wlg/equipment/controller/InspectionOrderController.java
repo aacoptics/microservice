@@ -2,6 +2,7 @@ package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.DataDictConstants;
+import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.entity.form.EquipmentQueryForm;
 import com.aacoptics.wlg.equipment.entity.form.InspectionOrderForm;
 import com.aacoptics.wlg.equipment.entity.form.InspectionOrderQueryForm;
@@ -89,8 +90,20 @@ public class InspectionOrderController {
     })
     @PutMapping(value = "/{id}")
     public Result update(@PathVariable Long id, @Valid @RequestBody InspectionOrderForm inspectionOrderForm) {
-        InspectionOrder inspectionOrder = inspectionOrderForm.toPo(id, InspectionOrder.class);
-        return Result.success(inspectionOrderService.update(inspectionOrder));
+
+        InspectionOrder inspectionOrderTarget = inspectionOrderService.get(id);
+        if(InspectionOrderStatusConstants.COMMITTED.equals(inspectionOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已点检，不能更新接单人");
+        }
+        if(InspectionOrderStatusConstants.CONFIRMED.equals(inspectionOrderTarget.getStatus()))
+        {
+            throw new BusinessException("工单已确认，不能更新接单人");
+        }
+
+        inspectionOrderTarget.setDutyPersonId(inspectionOrderForm.getDutyPersonId() != null ? inspectionOrderForm.getDutyPersonId().trim() : null);
+
+        return Result.success(inspectionOrderService.update(inspectionOrderTarget));
     }
 
     @ApiOperation(value = "获取点检工单", notes = "获取指定点检工单信息")

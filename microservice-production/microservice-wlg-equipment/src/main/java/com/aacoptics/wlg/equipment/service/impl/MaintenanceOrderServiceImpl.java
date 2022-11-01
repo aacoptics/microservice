@@ -115,12 +115,12 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         }
 
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
-        for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
-        {
-            isSuccess = maintenanceOrderItemService.update(maintenanceOrderItem);
-            if(isSuccess == false)
-            {
-                throw new BusinessException("更新工单项异常");
+        if(maintenanceOrderItemList != null) {
+            for (MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList) {
+                isSuccess = maintenanceOrderItemService.update(maintenanceOrderItem);
+                if (isSuccess == false) {
+                    throw new BusinessException("更新工单项异常");
+                }
             }
         }
 
@@ -259,7 +259,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         for(int i=0; i<maintenanceOrderIds.size(); i++)
         {
             String idStr = maintenanceOrderIds.get(i);
-            MaintenanceOrder maintenanceOrder = this.getById(Long.valueOf(idStr));
+            MaintenanceOrder maintenanceOrder = this.get(Long.valueOf(idStr));
             if(!MaintenanceOrderStatusConstants.COMMITTED.equals(maintenanceOrder.getStatus()))
             {
                 throw new BusinessException("工单【" + maintenanceOrder.getOrderNumber() + "】不是已提交状态，不能确认");
