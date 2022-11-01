@@ -265,7 +265,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 throw new BusinessException("工单【" + maintenanceOrder.getOrderNumber() + "】不是已提交状态，不能确认");
             }
             maintenanceOrder.setStatus(MaintenanceOrderStatusConstants.CONFIRMED);
-            this.update(maintenanceOrder);
+            this.updateById(maintenanceOrder);
         }
     }
 
