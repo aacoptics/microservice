@@ -34,7 +34,12 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('生产成本预算合计报表')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
 
           </el-form-item>
         </el-form>
@@ -52,7 +57,7 @@
 <script>
 import QueryAllTable from "@/components/QueryAllTable";
 
-import {findProductionCostBudgetPage} from "@/api/finance/budget/productionCostBudget";
+import {findProductionCostBudgetPage, exportProductionCostBudgetExcel} from "@/api/finance/budget/productionCostBudget";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {findAllBusinessDivision, findProductLineByBusinessDivision} from "@/api/finance/budget/businessDivisionProductLine";
 
@@ -99,7 +104,7 @@ export default {
       ],
       productionCostBudgetDataResult: {},
       queryLoading:false,
-
+      exportLoading: false,
     };
   },
   mounted() {
@@ -163,14 +168,30 @@ export default {
             }
           })
     },
-    
+    exportExcelData(excelFileName) {
+      let params = {};
+      params.businessDivision = this.filters.businessDivision;
+      params.productLineList = this.filters.productLine;
+
+      this.exportLoading = true;
+      exportProductionCostBudgetExcel(params).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm:ss");
     },
     // 数据格式化
     percentFormat: function (row, column) {
-      if(column.no >= 6)
+      if(column.no >= 5)
       {
         if(row[column.property] != undefined && row[column.property] != null)
         {

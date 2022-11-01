@@ -243,7 +243,8 @@ export default {
           this.$message.success('上传成功！')
 
           this.progressContent = "导入成功";
-          this.progressStatus = "success"
+          this.progressStatus = "success";
+          this.findPage(null);
         } else {
           this.$message.error('上传失败！' + responseData.msg + "," + responseData.data)
 
