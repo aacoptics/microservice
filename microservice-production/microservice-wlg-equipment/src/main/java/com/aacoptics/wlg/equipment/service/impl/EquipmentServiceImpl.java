@@ -142,6 +142,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getMchManagerId()), "mch_manager_id", equipmentQueryParam.getMchManagerId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipNumber()), "equip_number", equipmentQueryParam.getEquipNumber());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipCategory()), "equip_category", equipmentQueryParam.getEquipCategory());
 
         queryWrapper.orderByAsc("mch_code");
         return this.page(page, queryWrapper);
@@ -220,7 +221,11 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq("mch_name", mchName);
         queryWrapper.eq("spec",spec);
         queryWrapper.eq("type_version", typeVersion);
-
+        queryWrapper.and(wq -> {
+            return wq.eq("equip_category", "厂务设备")
+            .or()
+            .eq("equip_category","生产设备");
+                });
         queryWrapper.orderByAsc("mch_code");
 
        return equipmentMapper.selectList(queryWrapper);

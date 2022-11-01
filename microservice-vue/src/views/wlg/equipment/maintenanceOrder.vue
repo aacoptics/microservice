@@ -58,8 +58,8 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="false" :showBatchDelete="false" :showPreview="false"
-                  :stripe="true"
+                  :show-operation="true" :showBatchDelete="false" :showPreview="false" :showOperationDel="false"
+                  :stripe="true" @handleEdit="handleEdit"
                   border @findPage="findPage"
                   @handleCurrentChange="handleCurrentChange" @selection-change="handleSelectionChange">
       </orderTable>
@@ -107,46 +107,37 @@
           </el-form-item>
           <el-row>
             <el-col :span="20">
+              <el-form-item label="工单号" prop="mchName">
+                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-select v-model="dataForm.mchName" allow-create clearable filterable placeholder="请选择设备名称"
-                           style="width:100%" @change="selectMchName">
-                  <el-option
-                      v-for="item in mchNameOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-select v-model="dataForm.spec" allow-create clearable filterable placeholder="请选择规格"
-                           style="width:100%" @change="selectSpec">
-                  <el-option
-                      v-for="item in specOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-select v-model="dataForm.typeVersion" allow-create clearable filterable placeholder="请选择型号"
-                           style="width:100%">
-                  <el-option
-                      v-for="item in typeVersionOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
               </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="接单人" prop="status">
+              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
             </el-col>
           </el-row>
 

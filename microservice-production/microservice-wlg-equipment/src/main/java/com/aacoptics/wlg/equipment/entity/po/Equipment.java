@@ -235,4 +235,16 @@ public class Equipment extends BasePo {
     @TableField(value = "equip_duty")
     private String equipDuty;
 
+    /**
+     * 设备负责人经理
+     */
+    @TableField(value = "equip_duty_manager")
+    private String equipDutyManager;
+
+    /**
+     * 设备属性（厂务固资、厂务设备、生产固资、生产设备、其他）
+     */
+    @TableField(value = "equip_category")
+    private String equipCategory;
+
 }

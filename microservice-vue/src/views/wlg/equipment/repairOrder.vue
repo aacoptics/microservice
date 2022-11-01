@@ -63,9 +63,9 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="false"
-                  :showBatchDelete="false"
+                  :showBatchDelete="false" :showOperationDel="false"
                   :stripe="true" border @findPage="findPage"
-                  @handlePreview="handlePreview"
+                  @handlePreview="handlePreview" 
                   @selection-change="handleSelectionChange">
       </orderTable>
 
@@ -145,6 +145,61 @@
         </div>
       </el-dialog>
 
+      
+      <el-dialog v-model="dialogEditDutyPersonVisible" :close-on-click-modal="false"
+                 title="编辑接单人"
+                 destroy-on-close width="25%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+          <el-form-item v-if="false" label="Id" prop="id">
+            <el-input v-model="dataForm.id" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="工单号" prop="mchName">
+                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备名称" prop="mchName">
+                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="规格" prop="spec">
+                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="型号" prop="typeVersion">
+                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="接单人" prop="status">
+              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            </el-col>
+          </el-row>
+
+        </el-form>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button :size="size" style="margin-right: 0px;" type="info" @click="cancelEditPerson">取消</el-button>
+            <el-button :loading="editLoading" :size="size" style="margin-right: 20px;" type="primary"
+                       @click="submitRepairOrderMain">提交
+            </el-button>
+          </slot>
+        </div>
+      </el-dialog>
+
 
     </div>
   </div>
@@ -214,6 +269,7 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       repairOrderItemDialogVisible: false,
       previewDialogVisible: false,
+      dialogEditDutyPersonVisible: false,
 
       editLoading: false,
       findLoading: false,
@@ -350,7 +406,7 @@ export default {
     },
     // 显示编辑界面
     handleEdit: function (params) {
-      this.dialogVisible = true;
+      this.dialogEditDutyPersonVisible = true;
       this.isRepairOrderAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
     },
@@ -377,6 +433,10 @@ export default {
         this.$message.error(err)
       })
     },
+    cancelEditPerson() {
+      this.dialogEditDutyPersonVisible = false;
+    },
+    
     //处理批量确认
     handleBatchConfirm: function () {
       if (this.multipleSelection == null || this.multipleSelection.length == 0) {
@@ -443,7 +503,7 @@ export default {
                 this.editLoading = false;
                 if (responseData.code === "000000") {
                   this.$message({message: "操作成功", type: "success"});
-                  this.dialogVisible = false;
+                  this.dialogEditDutyPersonVisible = false;
                   this.$refs["dataForm"].resetFields();
                 } else {
                   this.$message({

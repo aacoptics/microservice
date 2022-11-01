@@ -363,9 +363,9 @@ export default {
         checkItem: "",
       },
       columns: [
-        {prop: "mchName", label: "设备名称", minWidth: 110},
-        {prop: "spec", label: "规格", minWidth: 100},
-        {prop: "typeVersion", label: "型号", minWidth: 100},
+        {prop: "mchName", label: "设备名称", minWidth: 150},
+        {prop: "spec", label: "规格", minWidth: 150},
+        {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},

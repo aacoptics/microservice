@@ -211,4 +211,15 @@ public class EquipmentForm extends BaseForm<Equipment> {
     @ApiModelProperty(value = "设备责任人")
     private String equipDuty;
 
+    /**
+     * 设备责任人管理
+     */
+    @ApiModelProperty(value = "设备责任人管理")
+    private String equipDutyManager;
+
+    /**
+     * 设备属性
+     */
+    @ApiModelProperty(value = "设备属性")
+    private String equipCategory;
 }

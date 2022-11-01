@@ -12,33 +12,46 @@
           <el-form-item label="规格" prop="spec">
             <el-input v-model="filters.spec" clearable placeholder="规格"></el-input>
           </el-form-item>
+        </el-form>
+        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="型号" prop="typeVersion">
             <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
           </el-form-item>
-        </el-form>
-        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="出厂编码" prop="factoryNo">
             <el-input v-model="filters.factoryNo" clearable placeholder="出厂编码"></el-input>
           </el-form-item>
           <el-form-item label="位置编码" prop="locationNo">
             <el-input v-model="filters.locationNo" clearable placeholder="位置编码"></el-input>
           </el-form-item>
+        </el-form>
+        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="资产管理员" prop="assetManagerId">
             <el-input v-model="filters.assetManagerId" clearable placeholder="资产管理员"></el-input>
           </el-form-item>
           <el-form-item label="设备管理员" prop="mchManagerId">
             <el-input v-model="filters.mchManagerId" clearable placeholder="设备管理员"></el-input>
           </el-form-item>
-        </el-form>
-        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="责任人" prop="dutyPersonId">
             <el-input v-model="filters.dutyPersonId" clearable placeholder="责任人"></el-input>
           </el-form-item>
+        </el-form>
+        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item label="设备编号" prop="equipNumber">
             <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
           </el-form-item>
+          <el-form-item label="设备属性" prop="equipCategory">
+              <el-select v-model="filters.equipCategory" clearable placeholder="设备属性" style="width:90%" filterable>
+                <el-option
+                    v-for="item in equipCategoryOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
         </el-form>
-        <el-form :inline="true" :size="size">
+        <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item>
             <el-button type="primary" @click="findPage(null)" :loading="queryLoading">查询
               <template #icon>
@@ -64,7 +77,7 @@
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
                  width="30%">
-        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="120px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
@@ -95,13 +108,39 @@
               </el-form-item>
             </el-col>
             <el-col :span="20">
-              <el-form-item label="设备负责人" prop="status">
-              <el-select v-model="dataForm.equipDuty" clearable placeholder="设备负责人" style="width:100%">
+              <el-form-item label="设备负责人" prop="equipDuty">
+              <el-select v-model="dataForm.equipDuty" clearable placeholder="设备负责人" style="width:100%" filterable>
                 <el-option
                     v-for="item in userOptions"
                     :key="item.username"
                     :label="item.username + '（' + item.name + '）'"
                     :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备负责人经理" prop="equipDutyManager">
+              <el-select v-model="dataForm.equipDutyManager" clearable placeholder="设备负责人经理" style="width:100%" filterable>
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备属性" prop="equipCategory">
+              <el-select v-model="dataForm.equipCategory" clearable placeholder="设备属性" style="width:100%" filterable>
+                <el-option
+                    v-for="item in equipCategoryOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
                 >
                 </el-option>
               </el-select>
@@ -153,6 +192,7 @@ export default {
         mchManagerId: "",
         dutyPersonId: "",
         equipNumber: "",
+        equipCategory: "",
       },
       dataForm: {
         id: 0,
@@ -161,10 +201,14 @@ export default {
         spec: "",
         equipNumber: "",
         equipDuty: "",
+        equipDutyManager: "",
+        equipCategory: "",
       },
 
       equipmentStatusOptions:[],
       userOptions: [],
+      equipCategoryOptions:[],
+
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
         {prop: "mchName", label: "资产名称", minWidth: 120},
@@ -172,6 +216,8 @@ export default {
         {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "equipDuty", label: "设备负责人", minWidth: 150, formatter: this.userFormat},
+        {prop: "equipDutyManager", label: "设备负责人经理", minWidth: 150, formatter: this.userFormat},
+        {prop: "equipCategory", label: "设备属性", minWidth: 120, },
         {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
         {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
         {prop: "equipState", label: "资产状态", minWidth: 100},
@@ -215,6 +261,9 @@ export default {
     getDict("wlg_em_equipment_status").then(response => {
       this.equipmentStatusOptions = response.data.data
     })
+    getDict("wlg_em_equipment_category").then(response => {
+      this.equipCategoryOptions = response.data.data
+    })
     getAllUser().then(response => {
       this.userOptions = response.data.data
     })
@@ -235,6 +284,7 @@ export default {
       this.pageRequest.mchManagerId = this.filters.mchManagerId;
       this.pageRequest.dutyPersonId = this.filters.dutyPersonId;
       this.pageRequest.equipNumber = this.filters.equipNumber;
+      this.pageRequest.equipCategory = this.filters.equipCategory;
 
       this.queryLoading = true;
       findEquipmentManagementPage(this.pageRequest)
