@@ -65,7 +65,8 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         if (equipment == null) {
             throw new BusinessException("设备编码【" + mchCode + "】不存在，请确认");
         }
-        repairOrder.setDutyPersonId(equipment.getDutyPersonId());
+        //优先取设备负责人，如果为空则取责任人
+        repairOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
 
         repairOrder.setStatus(RepairOrderStatusConstants.CREATED);
         repairOrder.setSourceType(RepairOrderSourceConstants.ORDER_SOURCE_TYPE_MANUAL);

@@ -187,7 +187,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     InspectionOrder inspectionOrder = new InspectionOrder();
                     inspectionOrder.setOrderNumber(this.getNextOrderNumber(orderNumberDateStr));
                     inspectionOrder.setMchCode(equipment.getMchCode());
-                    inspectionOrder.setDutyPersonId(equipment.getDutyPersonId());
+                    //优先取设备负责人，如果为空则取责任人
+                    inspectionOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
                     inspectionOrder.setInspectionDate(currentDate);
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 

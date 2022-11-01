@@ -46,4 +46,9 @@ public class RepairOrderQueryParam extends BaseParam<RepairOrder> {
      * 工单状态
      */
     private String status;
+
+    /**
+     * 设备编号
+     */
+    private String equipNumber;
 }

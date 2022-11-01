@@ -1,12 +1,19 @@
 package com.aacoptics.budget.report.controller;
 
 import com.aacoptics.budget.report.entity.form.ProductLineBudgetQueryForm;
+import com.aacoptics.budget.report.entity.form.ResearchBudgetQueryForm;
 import com.aacoptics.budget.report.entity.param.ProductLineBudgetQueryParam;
+import com.aacoptics.budget.report.entity.param.ResearchBudgetQueryParam;
 import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.service.ProductLineBudgetService;
+import com.aacoptics.budget.report.util.ExcelUtil;
 import com.aacoptics.common.core.vo.Result;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +23,10 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/productLineBudget")
@@ -100,4 +110,89 @@ public class ProductLineBudgetController {
         productLineBudgetService.importExcel(originalFilename, file, file.getInputStream());
         return Result.success();
     }
+
+
+    @ApiOperation(value = "导出Excel", notes = "导出Excel")
+    @PostMapping(value = "/exportExcel")
+    public void exportExcel(@Valid @RequestBody ProductLineBudgetQueryForm productLineBudgetQueryForm, HttpServletResponse response) throws Exception {
+        log.debug("query with name:{}", productLineBudgetQueryForm);
+        Map<String, Object> budgetDataMap = productLineBudgetService.query(productLineBudgetQueryForm.getPage(), productLineBudgetQueryForm.toParam(ProductLineBudgetQueryParam.class));
+
+
+        JSONArray titleJsonArray = (JSONArray) budgetDataMap.get("columns");
+        List<Map<String, Object>> productLineBudgetList = (List<Map<String, Object>>) budgetDataMap.get("data");
+
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("产品线P&L预算合计报表");
+
+        XSSFRow titleRow = wbSheet.createRow(0);
+        for (int i = 0; i < titleJsonArray.size(); i++) {
+            JSONObject titleJson = titleJsonArray.getJSONObject(i);
+            titleRow.createCell(i).setCellValue(titleJson.getString("label"));
+        }
+
+
+        try {
+            if (productLineBudgetList != null && productLineBudgetList.size() > 0) {
+                for (int i = 0; i < productLineBudgetList.size(); i++) {
+                    Map<String, Object> productLineBudgetMap = productLineBudgetList.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(i + 1);
+
+                    for (int j = 0; j < titleJsonArray.size(); j++) {
+                        String prop = titleJsonArray.getJSONObject(j).getString("prop");
+
+                        XSSFCell dataCell = dataRow.createCell(j);
+                        if (j <= 2) {
+                            dataCell.setCellValue(productLineBudgetMap.get(prop) != null ? productLineBudgetMap.get(prop) + "" : "");
+                        } else {
+                            if("%".equals(productLineBudgetMap.get("unit")))
+                            {
+                                XSSFCellStyle cellStyle = workbook.createCellStyle();
+                                cellStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00%"));
+                                dataCell.setCellStyle(cellStyle);
+
+                                if (productLineBudgetMap.containsKey(prop) && productLineBudgetMap.get(prop) != null) {
+                                    dataCell.setCellValue(Double.valueOf(productLineBudgetMap.get(prop) + ""));
+                                } else {
+                                    dataCell.setCellType(CellType.BLANK);
+                                }
+                            }
+                            else {
+                                if (productLineBudgetMap.containsKey(prop) && productLineBudgetMap.get(prop) != null) {
+                                    dataCell.setCellValue(new BigDecimal(productLineBudgetMap.get(prop) + "").setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
+                                } else {
+                                    dataCell.setCellType(CellType.BLANK);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            int[] columnWidthArray = new int[titleJsonArray.size()+1];
+            for(int i=0; i<titleJsonArray.size(); i++)
+            {
+                if(i == 0)
+                {
+                    columnWidthArray[i] = 256*10;
+                }else if(i == 1)
+                {
+                    columnWidthArray[i] = 256*25;
+                }
+                else
+                {
+                    columnWidthArray[i] = 256*15;
+                }
+            }
+            ExcelUtil.setSheetColumnWidth(wbSheet, columnWidthArray);
+
+        } catch (Exception exception) {
+            log.error("导出产品线P&L预算合计报表异常", exception);
+            throw exception;
+        }
+
+        ExcelUtil.exportXlsx(response, workbook, "产品线P&L预算合计报表.xlsx");
+    }
+
 }

@@ -117,8 +117,11 @@ public class EquipmentController {
         Equipment equipment = equipmentForm.toPo(id, Equipment.class);
         //只更新设备编号
         String equipNumber = equipment.getEquipNumber();
+        String equipDuty = equipment.getEquipDuty() != null ? equipment.getEquipDuty().trim() : null;
+
         Equipment equipmentTarget = equipmentService.get(equipment.getId());
         equipmentTarget.setEquipNumber(equipNumber);
+        equipmentTarget.setEquipDuty(equipDuty);
         return Result.success(equipmentService.update(equipmentTarget));
     }
 

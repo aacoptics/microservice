@@ -34,7 +34,12 @@
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
             </el-button>
-
+            <el-button :loading="exportLoading" :size="size" type="success"
+                       @click="exportExcelData('研发费用预算合计报表')">导出
+              <template #icon>
+                <font-awesome-icon :icon="['fas','download']"/>
+              </template>
+            </el-button>
 
           </el-form-item>
         </el-form>
@@ -52,7 +57,7 @@
 <script>
 import QueryAllTable from "@/components/QueryAllTable";
 
-import {findResearchBudgetPage} from "@/api/finance/budget/researchBudget";
+import {findResearchBudgetPage, exportResearchBudgetExcel} from "@/api/finance/budget/researchBudget";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {findAllBusinessDivision, findProductLineByBusinessDivision} from "@/api/finance/budget/businessDivisionProductLine";
 
@@ -99,6 +104,7 @@ export default {
       ],
       researchBudgetDataResult: {},
       queryLoading:false,
+      exportLoading: false,
 
     };
   },
@@ -160,6 +166,23 @@ export default {
           })
     },
     
+    exportExcelData(excelFileName) {
+      let params = {};
+      params.businessDivision = this.filters.businessDivision;
+      params.productLineList = this.filters.productLine;
+
+      this.exportLoading = true;
+      exportResearchBudgetExcel(params).then(res => {
+        this.exportLoading = false;
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', excelFileName + "-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm:ss");

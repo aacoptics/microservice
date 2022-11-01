@@ -198,7 +198,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
                 maintenanceOrder.setMchCode(equipment.getMchCode());
-                maintenanceOrder.setDutyPersonId(equipment.getDutyPersonId());
+                //优先取设备负责人，如果为空则取责任人
+                maintenanceOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
+
                 maintenanceOrder.setMaintenanceDate(maintenanceDate); //计划保养日期
                 maintenanceOrder.setMaintenancePeriod(maintenanceMain.getMaintenancePeriod());
                 maintenanceOrder.setPeriodUnit(maintenanceMain.getPeriodUnit());
