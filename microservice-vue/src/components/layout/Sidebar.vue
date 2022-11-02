@@ -50,7 +50,7 @@ export default {
   position: absolute;
   background-color: #ecf5ff;
   left: 0;
-  top: 70px;
+  top: 50px;
   bottom: 0;
   overflow-y: scroll;
 }
