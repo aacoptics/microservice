@@ -74,3 +74,15 @@ export function downloadTemplate() {
         responseType: 'blob',
     })
 }
+
+export function exportProductLineBudgetExcel(conditions) {
+    return request({
+        url: '/budget-report/productLineBudget/exportExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

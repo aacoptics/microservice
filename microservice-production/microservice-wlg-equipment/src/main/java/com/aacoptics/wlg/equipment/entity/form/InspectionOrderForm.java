@@ -14,20 +14,20 @@ import java.util.List;
 @Data
 public class InspectionOrderForm extends BaseForm<InspectionOrder> {
 
-    @NotBlank(message = "资产名称不能为空")
     @ApiModelProperty(value = "资产名称")
     private String mchName;
 
-    @NotBlank(message = "规格不能为空")
     @ApiModelProperty(value = "规格")
     private String spec;
 
-    @NotBlank(message = "型号不能为空")
     @ApiModelProperty(value = "型号")
     private String typeVersion;
 
     @ApiModelProperty(value = "状态")
     private String status;
+
+    @ApiModelProperty(value = "接单人")
+    private String dutyPersonId;
 
 
     private List<InspectionOrderItem> inspectionOrderItemList;

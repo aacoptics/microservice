@@ -28,6 +28,9 @@ public class RepairOrderForm extends BaseForm<RepairOrder> {
     @ApiModelProperty(value = "维修说明")
     private String repairDesc;
 
+    @ApiModelProperty(value = "接单人")
+    private String dutyPersonId;
+
     @ApiModelProperty(value = "状态")
     private String status;
 

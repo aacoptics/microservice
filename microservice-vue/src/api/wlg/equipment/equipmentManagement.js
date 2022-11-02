@@ -111,3 +111,15 @@ export function exportEquipmentExcel(conditions) {
         data: conditions
     })
 }
+
+export function convertUser(userObject, value) {
+    let userInfo = [];
+    userInfo.push(value);
+    Object.keys(userObject).some((key) => {
+        if (userObject[key].username.trim() === ('' + value)) {
+            userInfo.push('（' + userObject[key].name + '）');
+            return true;
+        }
+    })
+    return userInfo.join('');
+}

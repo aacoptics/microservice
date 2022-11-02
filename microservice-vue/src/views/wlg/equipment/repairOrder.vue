@@ -18,6 +18,9 @@
             <el-form-item label="型号" prop="typeVersion">
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
+            <el-form-item label="设备编号" prop="equipNumber">
+            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+          </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -60,9 +63,9 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="false"
-                  :showBatchDelete="false"
+                  :showBatchDelete="false" :showOperationDel="false"
                   :stripe="true" border @findPage="findPage"
-                  @handlePreview="handlePreview"
+                  @handlePreview="handlePreview" 
                   @selection-change="handleSelectionChange">
       </orderTable>
 
@@ -142,6 +145,61 @@
         </div>
       </el-dialog>
 
+      
+      <el-dialog v-model="dialogEditDutyPersonVisible" :close-on-click-modal="false"
+                 title="编辑接单人"
+                 destroy-on-close width="25%">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+          <el-form-item v-if="false" label="Id" prop="id">
+            <el-input v-model="dataForm.id" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="工单号" prop="mchName">
+                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="设备名称" prop="mchName">
+                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="规格" prop="spec">
+                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="型号" prop="typeVersion">
+                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="接单人" prop="status">
+              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            </el-col>
+          </el-row>
+
+        </el-form>
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-button :size="size" style="margin-right: 0px;" type="info" @click="cancelEditPerson">取消</el-button>
+            <el-button :loading="editLoading" :size="size" style="margin-right: 20px;" type="primary"
+                       @click="submitRepairOrderMain">提交
+            </el-button>
+          </slot>
+        </div>
+      </el-dialog>
+
 
     </div>
   </div>
@@ -156,10 +214,11 @@ import {
   handleBatchConfirm,
   handleUpdate
 } from "@/api/wlg/equipment/repairOrder";
-import {findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
+import {findEquipmentByMchCode, convertUser} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {addImage, findImageById} from "@/api/wlg/equipment/image";
+import {getAllUser} from "@/api/system/user"
 
 export default {
   name: "repairOrder",
@@ -177,25 +236,27 @@ export default {
         spec: "",
         typeVersion: "",
         status: "",
+        equipNumber: "",
       },
       columns: [
         {prop: "orderNumber", label: "工单号", minWidth: 110},
         {prop: "mchCode", label: "设备编码", minWidth: 110},
         {prop: "mchName", label: "设备名称", minWidth: 150},
-        {prop: "spec", label: "规格", minWidth: 100},
-        {prop: "typeVersion", label: "型号", minWidth: 120},
+        {prop: "equipNumber", label: "设备编号", minWidth: 150},
+        {prop: "spec", label: "规格", minWidth: 120},
+        {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "factoryNo", label: "出厂编码", minWidth: 130},
-        {prop: "dutyPersonId", label: "责任人", minWidth: 100},
+        {prop: "dutyPersonId", label: "接单人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "faultDesc", label: "故障描述", minWidth: 200},
         // {prop: "faultPhoto", label: "故障照片", minWidth: 100},
         {prop: "repairDesc", label: "维修说明", minWidth: 200},
         {prop: "repairDatetime", label: "维修时间", minWidth: 100},
         {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
-        {prop: "updatedBy", label: "更新人", minWidth: 100},
-        {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
-        {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "updatedBy", label: "操作人", minWidth: 150, formatter: this.userFormat},
+        {prop: "updatedTime", label: "操作时间", minWidth: 120, formatter: this.dateTimeFormat},
+        // {prop: "createdBy", label: "创建人", minWidth: 120},
+        // {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -208,6 +269,7 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       repairOrderItemDialogVisible: false,
       previewDialogVisible: false,
+      dialogEditDutyPersonVisible: false,
 
       editLoading: false,
       findLoading: false,
@@ -235,6 +297,7 @@ export default {
       multipleSelection: [],
       orderStatusOptions: [],
       orderSourceOptions: [],
+      userOptions: [],
     };
   },
   mounted() {
@@ -244,7 +307,9 @@ export default {
     getDict("wlg_em_repair_order_source").then(response => {
       this.orderSourceOptions = response.data.data
     });
-
+    getAllUser().then(response => {
+      this.userOptions = response.data.data
+    })
   },
   methods: {
     // 获取分页数据
@@ -257,6 +322,7 @@ export default {
       this.pageRequest.spec = this.filters.spec;
       this.pageRequest.typeVersion = this.filters.typeVersion;
       this.pageRequest.status = this.filters.status;
+      this.pageRequest.equipNumber = this.filters.equipNumber;
       this.findLoading = true;
       findRepairOrderPage(this.pageRequest)
           .then((res) => {
@@ -340,7 +406,7 @@ export default {
     },
     // 显示编辑界面
     handleEdit: function (params) {
-      this.dialogVisible = true;
+      this.dialogEditDutyPersonVisible = true;
       this.isRepairOrderAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
     },
@@ -367,6 +433,10 @@ export default {
         this.$message.error(err)
       })
     },
+    cancelEditPerson() {
+      this.dialogEditDutyPersonVisible = false;
+    },
+    
     //处理批量确认
     handleBatchConfirm: function () {
       if (this.multipleSelection == null || this.multipleSelection.length == 0) {
@@ -433,7 +503,7 @@ export default {
                 this.editLoading = false;
                 if (responseData.code === "000000") {
                   this.$message({message: "操作成功", type: "success"});
-                  this.dialogVisible = false;
+                  this.dialogEditDutyPersonVisible = false;
                   this.$refs["dataForm"].resetFields();
                 } else {
                   this.$message({
@@ -488,6 +558,9 @@ export default {
     },
     timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
+    },
+    userFormat: function (row, column, cellValue) {
+      return convertUser(this.userOptions, cellValue)
     },
   },
 };

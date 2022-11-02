@@ -115,12 +115,12 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         }
 
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
-        for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
-        {
-            isSuccess = maintenanceOrderItemService.update(maintenanceOrderItem);
-            if(isSuccess == false)
-            {
-                throw new BusinessException("更新工单项异常");
+        if(maintenanceOrderItemList != null) {
+            for (MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList) {
+                isSuccess = maintenanceOrderItemService.update(maintenanceOrderItem);
+                if (isSuccess == false) {
+                    throw new BusinessException("更新工单项异常");
+                }
             }
         }
 
@@ -198,7 +198,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
                 maintenanceOrder.setMchCode(equipment.getMchCode());
-                maintenanceOrder.setDutyPersonId(equipment.getDutyPersonId());
+                //优先取设备负责人，如果为空则取责任人
+                maintenanceOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
+
                 maintenanceOrder.setMaintenanceDate(maintenanceDate); //计划保养日期
                 maintenanceOrder.setMaintenancePeriod(maintenanceMain.getMaintenancePeriod());
                 maintenanceOrder.setPeriodUnit(maintenanceMain.getPeriodUnit());
@@ -257,13 +259,13 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         for(int i=0; i<maintenanceOrderIds.size(); i++)
         {
             String idStr = maintenanceOrderIds.get(i);
-            MaintenanceOrder maintenanceOrder = this.getById(Long.valueOf(idStr));
+            MaintenanceOrder maintenanceOrder = this.get(Long.valueOf(idStr));
             if(!MaintenanceOrderStatusConstants.COMMITTED.equals(maintenanceOrder.getStatus()))
             {
                 throw new BusinessException("工单【" + maintenanceOrder.getOrderNumber() + "】不是已提交状态，不能确认");
             }
             maintenanceOrder.setStatus(MaintenanceOrderStatusConstants.CONFIRMED);
-            this.update(maintenanceOrder);
+            this.updateById(maintenanceOrder);
         }
     }
 

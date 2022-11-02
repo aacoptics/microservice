@@ -22,7 +22,8 @@
                    B.MCH_NAME,
                    B.SPEC,
                    B.TYPE_VERSION,
-                   B.FACTORY_NO
+                   B.FACTORY_NO,
+                   B.EQUIP_NUMBER
             FROM EM_REPAIR_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
             WHERE 1=1
@@ -40,6 +41,9 @@
             </if>
             <if test="repairOrderQueryParam.typeVersion != null and repairOrderQueryParam.typeVersion!=''">
                 AND B.TYPE_VERSION = #{repairOrderQueryParam.typeVersion}
+            </if>
+            <if test="repairOrderQueryParam.equipNumber != null and repairOrderQueryParam.equipNumber!=''">
+                AND B.EQUIP_NUMBER = #{repairOrderQueryParam.equipNumber}
             </if>
             ORDER BY A.ORDER_NUMBER
     </select>
@@ -66,12 +70,13 @@
         B.MCH_NAME,
         B.SPEC,
         B.TYPE_VERSION,
-        B.FACTORY_NO
+        B.FACTORY_NO,
+        B.EQUIP_NUMBER
         FROM EM_REPAIR_ORDER A
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
         WHERE 1=1
         AND A.STATUS IN ('0', '1')
-        AND A.MCH_CODE = #{mchCode}
+        AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
         ORDER BY A.CREATED_TIME
     </select>
 

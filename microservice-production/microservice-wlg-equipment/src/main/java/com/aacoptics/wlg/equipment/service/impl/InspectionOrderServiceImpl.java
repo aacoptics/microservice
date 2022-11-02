@@ -109,12 +109,12 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
             throw new BusinessException("更新工单异常");
         }
         List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
-        for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
-        {
-            isSuccess = inspectionOrderItemService.update(inspectionOrderItem);
-            if(isSuccess == false)
-            {
-                throw new BusinessException("更新工单项异常");
+        if(inspectionOrderItemList != null) {
+            for (InspectionOrderItem inspectionOrderItem : inspectionOrderItemList) {
+                isSuccess = inspectionOrderItemService.update(inspectionOrderItem);
+                if (isSuccess == false) {
+                    throw new BusinessException("更新工单项异常");
+                }
             }
         }
         return isSuccess;
@@ -187,7 +187,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     InspectionOrder inspectionOrder = new InspectionOrder();
                     inspectionOrder.setOrderNumber(this.getNextOrderNumber(orderNumberDateStr));
                     inspectionOrder.setMchCode(equipment.getMchCode());
-                    inspectionOrder.setDutyPersonId(equipment.getDutyPersonId());
+                    //优先取设备负责人，如果为空则取责任人
+                    inspectionOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
                     inspectionOrder.setInspectionDate(currentDate);
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 
@@ -252,13 +253,13 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         for(int i=0; i<inspectionOrderIds.size(); i++)
         {
             String idStr = inspectionOrderIds.get(i);
-            InspectionOrder inspectionOrder = this.getById(Long.valueOf(idStr));
+            InspectionOrder inspectionOrder = this.get(Long.valueOf(idStr));
             if(!InspectionOrderStatusConstants.COMMITTED.equals(inspectionOrder.getStatus()))
             {
                 throw new BusinessException("工单【" + inspectionOrder.getOrderNumber() + "】不是已提交状态，不能确认");
             }
             inspectionOrder.setStatus(InspectionOrderStatusConstants.CONFIRMED);
-            this.update(inspectionOrder);
+            this.updateById(inspectionOrder);
         }
     }
 

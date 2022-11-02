@@ -16,6 +16,7 @@
         <result property="shiftEndTime" column="SHIFT_END_TIME" />
         <result property="dutyPersonId" column="DUTY_PERSON_ID" />
         <result property="status" column="STATUS" />
+        <result property="equipNumber" column="EQUIP_NUMBER" />
         <result property="createdTime" column="CREATED_TIME"/>
         <result property="createdBy" column="CREATED_BY"/>
         <result property="updatedTime" column="UPDATED_TIME"/>
@@ -66,7 +67,8 @@
                    B.MCH_NAME,
                    B.SPEC,
                    B.TYPE_VERSION,
-                   B.FACTORY_NO
+                   B.FACTORY_NO,
+                   B.EQUIP_NUMBER
             FROM EM_INSPECTION_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
             WHERE 1=1
@@ -84,6 +86,9 @@
             </if>
             <if test="inspectionOrderQueryParam.typeVersion != null and inspectionOrderQueryParam.typeVersion!=''">
                 AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
+            </if>
+            <if test="inspectionOrderQueryParam.equipNumber != null and inspectionOrderQueryParam.equipNumber!=''">
+                AND B.EQUIP_NUMBER = #{inspectionOrderQueryParam.equipNumber}
             </if>
             ORDER BY A.ORDER_NUMBER
     </select>
@@ -107,6 +112,7 @@
         B.SPEC,
         B.TYPE_VERSION,
         B.FACTORY_NO,
+        B.EQUIP_NUMBER,
         C.ID ITEM_ID,
         C.CHECK_ITEM,
         C.CHECK_ITEM_STANDARD,
@@ -162,11 +168,12 @@
         B.MCH_NAME,
         B.SPEC,
         B.TYPE_VERSION,
-        B.FACTORY_NO
+        B.FACTORY_NO,
+        B.EQUIP_NUMBER
         FROM EM_INSPECTION_ORDER A
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
         WHERE 1=1
-        AND A.MCH_CODE = #{mchCode}
+        AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
         AND A.STATUS IN ('0', '1')
         ORDER BY A.INSPECTION_DATE, A.SHIFT_START_TIME
     </select>

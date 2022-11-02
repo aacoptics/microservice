@@ -18,6 +18,9 @@
             <el-form-item label="型号" prop="typeVersion">
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
+            <el-form-item label="设备编号" prop="equipNumber">
+            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+          </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -55,8 +58,8 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="false" :showBatchDelete="false" :showPreview="false"
-                  :stripe="true"
+                  :show-operation="true" :showBatchDelete="false" :showPreview="false" :showOperationDel="false"
+                  :stripe="true" @handleEdit="handleEdit"
                   border @findPage="findPage"
                   @handleCurrentChange="handleCurrentChange" @selection-change="handleSelectionChange">
       </orderTable>
@@ -78,10 +81,10 @@
             <el-table-column label="是否需要维修" prop="isRepair" width="130" :formatter="yesNoFormat"/>
             <el-table-column label="故障描述" prop="faultDesc"/>
             <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
-            <el-table-column label="更新人" prop="updatedBy" width="120"/>
-            <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime" width="120"/>
-            <el-table-column label="创建人" prop="createdBy" width="120"/>
-            <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime" width="120"/>
+            <el-table-column label="操作人" prop="updatedBy" width="150" :formatter="userFormat" />
+            <el-table-column :formatter="dateTimeFormat" label="操作时间" prop="updatedTime" width="120"/>
+            <!-- <el-table-column label="创建人" prop="createdBy" width="120"/>
+            <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime" width="120"/> -->
             <el-table-column fixed="right" label="故障照片" prop="faultImageId">
               <template #default="scope">
                 <el-button size="small" type="primary" @click="handlePreview(scope.$index, scope.row)"
@@ -104,46 +107,37 @@
           </el-form-item>
           <el-row>
             <el-col :span="20">
+              <el-form-item label="工单号" prop="mchName">
+                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-select v-model="dataForm.mchName" allow-create clearable filterable placeholder="请选择设备名称"
-                           style="width:100%" @change="selectMchName">
-                  <el-option
-                      v-for="item in mchNameOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-select v-model="dataForm.spec" allow-create clearable filterable placeholder="请选择规格"
-                           style="width:100%" @change="selectSpec">
-                  <el-option
-                      v-for="item in specOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-select v-model="dataForm.typeVersion" allow-create clearable filterable placeholder="请选择型号"
-                           style="width:100%">
-                  <el-option
-                      v-for="item in typeVersionOptions"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
               </el-form-item>
+            </el-col>
+            <el-col :span="20">
+              <el-form-item label="接单人" prop="status">
+              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
+                <el-option
+                    v-for="item in userOptions"
+                    :key="item.username"
+                    :label="item.username + '（' + item.name + '）'"
+                    :value="item.username"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
             </el-col>
           </el-row>
 
@@ -228,11 +222,13 @@ import {
 import {
   findMchNameList,
   findSpecListByMchName,
-  findTypeVersionListByMchNameAndSpec
+  findTypeVersionListByMchNameAndSpec,
+  convertUser
 } from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {findImageById} from "@/api/wlg/equipment/image";
+import {getAllUser} from "@/api/system/user"
 
 export default {
   name: "maintenanceOrder",
@@ -246,6 +242,7 @@ export default {
         spec: "",
         typeVersion: "",
         status: "",
+        equipNumber: "",
       },
       imagePreviewSrc: '',
 
@@ -253,10 +250,11 @@ export default {
         {prop: "orderNumber", label: "工单号", minWidth: 110},
         {prop: "mchCode", label: "设备编码", minWidth: 110},
         {prop: "mchName", label: "设备名称", minWidth: 150},
+        {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 120},
         {prop: "typeVersion", label: "型号", minWidth: 150},
         {prop: "factoryNo", label: "出厂编码", minWidth: 130},
-        {prop: "dutyPersonId", label: "责任人", minWidth: 100},
+        {prop: "dutyPersonId", label: "接单人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "maintenanceDate", label: "保养日期", minWidth: 100},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
@@ -316,6 +314,7 @@ export default {
       multipleSelection: [],
       orderStatusOptions: [],
       yesNoOptions: [],
+      userOptions: [],
     };
   },
   mounted() {
@@ -324,12 +323,15 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-        getDict("wlg_em_maintenance_order_status").then(response => {
-          this.orderStatusOptions = response.data.data
-        })
-        getDict("wlg_em_yes_no").then(response => {
-          this.yesNoOptions = response.data.data
-        })
+    getDict("wlg_em_maintenance_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
+    })
+    getDict("wlg_em_yes_no").then(response => {
+      this.yesNoOptions = response.data.data
+    })
+    getAllUser().then(response => {
+      this.userOptions = response.data.data
+    })
   },
   methods: {
     // 获取分页数据
@@ -342,6 +344,7 @@ export default {
       this.pageRequest.spec = this.filters.spec;
       this.pageRequest.typeVersion = this.filters.typeVersion;
       this.pageRequest.status = this.filters.status;
+      this.pageRequest.equipNumber = this.filters.equipNumber;
       this.findLoading = true;
       findMaintenanceOrderPage(this.pageRequest)
           .then((res) => {
@@ -582,6 +585,9 @@ export default {
     },
     timeFormat: function (dateValue) {
       return this.$moment(dateValue).format("HH:mm:ss");
+    },
+    userFormat: function (row, column, cellValue) {
+      return convertUser(this.userOptions, cellValue)
     },
   },
 };

@@ -27,4 +27,7 @@ public class RepairOrderQueryForm extends BaseQueryForm<RepairOrderQueryParam> {
 
     @ApiModelProperty(value = "工单状态")
     private String status;
+
+    @ApiModelProperty(value = "设备编号")
+    private String equipNumber;
 }

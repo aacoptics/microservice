@@ -117,8 +117,15 @@ public class EquipmentController {
         Equipment equipment = equipmentForm.toPo(id, Equipment.class);
         //只更新设备编号
         String equipNumber = equipment.getEquipNumber();
+        String equipDuty = equipment.getEquipDuty() != null ? equipment.getEquipDuty().trim() : null;
+        String equipDutyManager = equipmentForm.getEquipDutyManager() != null ? equipmentForm.getEquipDutyManager().trim() : null;
+
         Equipment equipmentTarget = equipmentService.get(equipment.getId());
         equipmentTarget.setEquipNumber(equipNumber);
+        equipmentTarget.setEquipDuty(equipDuty);
+        equipmentTarget.setEquipDutyManager(equipDutyManager);
+        equipmentTarget.setEquipCategory(equipmentForm.getEquipCategory());
+
         return Result.success(equipmentService.update(equipmentTarget));
     }
 
@@ -187,35 +194,38 @@ public class EquipmentController {
         titleRow.createCell(3).setCellValue("规格");
         titleRow.createCell(4).setCellValue("型号");
         titleRow.createCell(5).setCellValue("设备编号");
-        titleRow.createCell(6).setCellValue("状态");
-        titleRow.createCell(7).setCellValue("资产状态编码");
-        titleRow.createCell(8).setCellValue("资产状态");
-        titleRow.createCell(9).setCellValue("资产使用性质编码");
-        titleRow.createCell(10).setCellValue("资产使用性质名称");
-        titleRow.createCell(11).setCellValue("资产分类编码");
-        titleRow.createCell(12).setCellValue("资产分类名称");
-        titleRow.createCell(13).setCellValue("专业大类编码");
-        titleRow.createCell(14).setCellValue("专业大类名称");
-        titleRow.createCell(15).setCellValue("专业小类编码");
-        titleRow.createCell(16).setCellValue("专业小类名称");
-        titleRow.createCell(17).setCellValue("出厂编码");
-        titleRow.createCell(18).setCellValue("位置编码");
-        titleRow.createCell(19).setCellValue("地区编码");
-        titleRow.createCell(20).setCellValue("地区名称");
-        titleRow.createCell(21).setCellValue("厂区编码");
-        titleRow.createCell(22).setCellValue("厂区名称");
-        titleRow.createCell(23).setCellValue("楼栋编码");
-        titleRow.createCell(24).setCellValue("楼栋名称");
-        titleRow.createCell(25).setCellValue("楼层编码");
-        titleRow.createCell(26).setCellValue("楼层名称");
-        titleRow.createCell(27).setCellValue("资产管理员");
-        titleRow.createCell(28).setCellValue("设备管理员");
-        titleRow.createCell(29).setCellValue("责任人");
-        titleRow.createCell(30).setCellValue("部门经理");
-        titleRow.createCell(31).setCellValue("部门总监");
-        titleRow.createCell(32).setCellValue("部门VP");
-        titleRow.createCell(33).setCellValue("最后点检日期");
-        titleRow.createCell(34).setCellValue("最后保养日期");
+        titleRow.createCell(6).setCellValue("设备负责人");
+        titleRow.createCell(7).setCellValue("设备负责人经理");
+        titleRow.createCell(8).setCellValue("设备属性");
+        titleRow.createCell(9).setCellValue("状态");
+        titleRow.createCell(10).setCellValue("资产状态编码");
+        titleRow.createCell(11).setCellValue("资产状态");
+        titleRow.createCell(12).setCellValue("资产使用性质编码");
+        titleRow.createCell(13).setCellValue("资产使用性质名称");
+        titleRow.createCell(14).setCellValue("资产分类编码");
+        titleRow.createCell(15).setCellValue("资产分类名称");
+        titleRow.createCell(16).setCellValue("专业大类编码");
+        titleRow.createCell(17).setCellValue("专业大类名称");
+        titleRow.createCell(18).setCellValue("专业小类编码");
+        titleRow.createCell(19).setCellValue("专业小类名称");
+        titleRow.createCell(20).setCellValue("出厂编码");
+        titleRow.createCell(21).setCellValue("位置编码");
+        titleRow.createCell(22).setCellValue("地区编码");
+        titleRow.createCell(23).setCellValue("地区名称");
+        titleRow.createCell(24).setCellValue("厂区编码");
+        titleRow.createCell(25).setCellValue("厂区名称");
+        titleRow.createCell(26).setCellValue("楼栋编码");
+        titleRow.createCell(27).setCellValue("楼栋名称");
+        titleRow.createCell(28).setCellValue("楼层编码");
+        titleRow.createCell(29).setCellValue("楼层名称");
+        titleRow.createCell(30).setCellValue("资产管理员");
+        titleRow.createCell(31).setCellValue("设备管理员");
+        titleRow.createCell(32).setCellValue("责任人");
+        titleRow.createCell(33).setCellValue("部门经理");
+        titleRow.createCell(34).setCellValue("部门总监");
+        titleRow.createCell(35).setCellValue("部门VP");
+        titleRow.createCell(36).setCellValue("最后点检日期");
+        titleRow.createCell(37).setCellValue("最后保养日期");
 
         try {
             if (equipmentList != null && equipmentList.size() > 0) {
@@ -229,6 +239,9 @@ public class EquipmentController {
                     dataRow.createCell(3).setCellValue(equipment.getSpec() != null ? equipment.getSpec() + "" : "");
                     dataRow.createCell(4).setCellValue(equipment.getTypeVersion() != null ? equipment.getTypeVersion() + "" : "");
                     dataRow.createCell(5).setCellValue(equipment.getEquipNumber() != null ? equipment.getEquipNumber() + "" : "");
+                    dataRow.createCell(6).setCellValue(equipment.getEquipDuty() != null ? equipment.getEquipDuty() + "" : "");
+                    dataRow.createCell(7).setCellValue(equipment.getEquipDutyManager() != null ? equipment.getEquipDutyManager() + "" : "");
+                    dataRow.createCell(8).setCellValue(equipment.getEquipCategory() != null ? equipment.getEquipCategory() + "" : "");
                     //状态通过数据字典翻译
                     String equipmentStatus = equipment.getStatus() != null ? equipment.getStatus() + "" : "";
                     if(StringUtils.isNotEmpty(equipmentStatus))
@@ -238,40 +251,40 @@ public class EquipmentController {
                             equipmentStatus = equipmentStatusMap.get(equipmentStatus);
                         }
                     }
-                    dataRow.createCell(6).setCellValue(equipmentStatus);
-                    dataRow.createCell(7).setCellValue(equipment.getEquipStateDb() != null ? equipment.getEquipStateDb() + "" : "");
-                    dataRow.createCell(8).setCellValue(equipment.getEquipState() != null ? equipment.getEquipState() + "" : "");
-                    dataRow.createCell(9).setCellValue(equipment.getAssetGeneralCode() != null ? equipment.getAssetGeneralCode() + "" : "");
-                    dataRow.createCell(10).setCellValue(equipment.getAssetGeneralDesc() != null ? equipment.getAssetGeneralDesc() + "" : "");
-                    dataRow.createCell(11).setCellValue(equipment.getAssetClassifyCode() != null ? equipment.getAssetClassifyCode() + "" : "");
-                    dataRow.createCell(12).setCellValue(equipment.getAssetClassifyDesc() != null ? equipment.getAssetClassifyDesc() + "" : "");
-                    dataRow.createCell(13).setCellValue(equipment.getMajorBigCode() != null ? equipment.getMajorBigCode() + "" : "");
-                    dataRow.createCell(14).setCellValue(equipment.getMajorBigDesc() != null ? equipment.getMajorBigDesc() + "" : "");
-                    dataRow.createCell(15).setCellValue(equipment.getMajorSmallCode() != null ? equipment.getMajorSmallCode() + "" : "");
-                    dataRow.createCell(16).setCellValue(equipment.getMajorSmallDesc() != null ? equipment.getMajorSmallDesc() + "" : "");
-                    dataRow.createCell(17).setCellValue(equipment.getFactoryNo() != null ? equipment.getFactoryNo() + "" : "");
-                    dataRow.createCell(18).setCellValue(equipment.getLocationNo() != null ? equipment.getLocationNo() + "" : "");
-                    dataRow.createCell(19).setCellValue(equipment.getAreaCode() != null ? equipment.getAreaCode() + "" : "");
-                    dataRow.createCell(20).setCellValue(equipment.getAreaName() != null ? equipment.getAreaName() + "" : "");
-                    dataRow.createCell(21).setCellValue(equipment.getFactoryId() != null ? equipment.getFactoryId() + "" : "");
-                    dataRow.createCell(22).setCellValue(equipment.getFactoryName() != null ? equipment.getFactoryName() + "" : "");
-                    dataRow.createCell(23).setCellValue(equipment.getBuildingId() != null ? equipment.getBuildingId() + "" : "");
-                    dataRow.createCell(24).setCellValue(equipment.getBuildingName() != null ? equipment.getBuildingName() + "" : "");
-                    dataRow.createCell(25).setCellValue(equipment.getFloorCode() != null ? equipment.getFloorCode() + "" : "");
-                    dataRow.createCell(26).setCellValue(equipment.getFloorName() != null ? equipment.getFloorName() + "" : "");
-                    dataRow.createCell(27).setCellValue(equipment.getAssetManagerId() != null ? equipment.getAssetManagerId() + "" : "");
-                    dataRow.createCell(28).setCellValue(equipment.getMchManagerId() != null ? equipment.getMchManagerId() + "" : "");
-                    dataRow.createCell(29).setCellValue(equipment.getDutyPersonId() != null ? equipment.getDutyPersonId() + "" : "");
-                    dataRow.createCell(30).setCellValue(equipment.getDeptManagerId() != null ? equipment.getDeptManagerId() + "" : "");
-                    dataRow.createCell(31).setCellValue(equipment.getDeptDirectorId() != null ? equipment.getDeptDirectorId() + "" : "");
-                    dataRow.createCell(32).setCellValue(equipment.getVicePresidentId() != null ? equipment.getVicePresidentId() + "" : "");
-                    dataRow.createCell(33).setCellValue(equipment.getLastInspectionDatetime() != null ? equipment.getLastInspectionDatetime().format(dateTimeFormatter) : "");
-                    dataRow.createCell(34).setCellValue(equipment.getLastMaintenanceDatetime() != null ? equipment.getLastMaintenanceDatetime().format(dateTimeFormatter) : "");
+                    dataRow.createCell(9).setCellValue(equipmentStatus);
+                    dataRow.createCell(10).setCellValue(equipment.getEquipStateDb() != null ? equipment.getEquipStateDb() + "" : "");
+                    dataRow.createCell(11).setCellValue(equipment.getEquipState() != null ? equipment.getEquipState() + "" : "");
+                    dataRow.createCell(12).setCellValue(equipment.getAssetGeneralCode() != null ? equipment.getAssetGeneralCode() + "" : "");
+                    dataRow.createCell(13).setCellValue(equipment.getAssetGeneralDesc() != null ? equipment.getAssetGeneralDesc() + "" : "");
+                    dataRow.createCell(14).setCellValue(equipment.getAssetClassifyCode() != null ? equipment.getAssetClassifyCode() + "" : "");
+                    dataRow.createCell(15).setCellValue(equipment.getAssetClassifyDesc() != null ? equipment.getAssetClassifyDesc() + "" : "");
+                    dataRow.createCell(16).setCellValue(equipment.getMajorBigCode() != null ? equipment.getMajorBigCode() + "" : "");
+                    dataRow.createCell(17).setCellValue(equipment.getMajorBigDesc() != null ? equipment.getMajorBigDesc() + "" : "");
+                    dataRow.createCell(18).setCellValue(equipment.getMajorSmallCode() != null ? equipment.getMajorSmallCode() + "" : "");
+                    dataRow.createCell(19).setCellValue(equipment.getMajorSmallDesc() != null ? equipment.getMajorSmallDesc() + "" : "");
+                    dataRow.createCell(20).setCellValue(equipment.getFactoryNo() != null ? equipment.getFactoryNo() + "" : "");
+                    dataRow.createCell(21).setCellValue(equipment.getLocationNo() != null ? equipment.getLocationNo() + "" : "");
+                    dataRow.createCell(22).setCellValue(equipment.getAreaCode() != null ? equipment.getAreaCode() + "" : "");
+                    dataRow.createCell(23).setCellValue(equipment.getAreaName() != null ? equipment.getAreaName() + "" : "");
+                    dataRow.createCell(24).setCellValue(equipment.getFactoryId() != null ? equipment.getFactoryId() + "" : "");
+                    dataRow.createCell(25).setCellValue(equipment.getFactoryName() != null ? equipment.getFactoryName() + "" : "");
+                    dataRow.createCell(26).setCellValue(equipment.getBuildingId() != null ? equipment.getBuildingId() + "" : "");
+                    dataRow.createCell(27).setCellValue(equipment.getBuildingName() != null ? equipment.getBuildingName() + "" : "");
+                    dataRow.createCell(28).setCellValue(equipment.getFloorCode() != null ? equipment.getFloorCode() + "" : "");
+                    dataRow.createCell(29).setCellValue(equipment.getFloorName() != null ? equipment.getFloorName() + "" : "");
+                    dataRow.createCell(30).setCellValue(equipment.getAssetManagerId() != null ? equipment.getAssetManagerId() + "" : "");
+                    dataRow.createCell(31).setCellValue(equipment.getMchManagerId() != null ? equipment.getMchManagerId() + "" : "");
+                    dataRow.createCell(32).setCellValue(equipment.getDutyPersonId() != null ? equipment.getDutyPersonId() + "" : "");
+                    dataRow.createCell(33).setCellValue(equipment.getDeptManagerId() != null ? equipment.getDeptManagerId() + "" : "");
+                    dataRow.createCell(34).setCellValue(equipment.getDeptDirectorId() != null ? equipment.getDeptDirectorId() + "" : "");
+                    dataRow.createCell(35).setCellValue(equipment.getVicePresidentId() != null ? equipment.getVicePresidentId() + "" : "");
+                    dataRow.createCell(36).setCellValue(equipment.getLastInspectionDatetime() != null ? equipment.getLastInspectionDatetime().format(dateTimeFormatter) : "");
+                    dataRow.createCell(37).setCellValue(equipment.getLastMaintenanceDatetime() != null ? equipment.getLastMaintenanceDatetime().format(dateTimeFormatter) : "");
 
                 }
             }
 
-            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*20, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*20, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
                     256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*20, 256*20});
 
         } catch (Exception exception)
