@@ -51,6 +51,7 @@
         SELECT
         distinct MCH_NAME
         FROM EM_EQUIPMENT
+        WHERE EQUIP_CATEGORY IN ('生产设备', '厂务设备')
         ORDER BY MCH_NAME
     </select>
 
