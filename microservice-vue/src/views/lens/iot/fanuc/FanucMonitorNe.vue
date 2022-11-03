@@ -1208,6 +1208,9 @@ export default {
           dataKey: 'monitDateTime',
           title: '注塑时间',
           width: 185,
+          cellRenderer: ({cellData: monitDateTime}) => (
+              <span>{this.$moment(monitDateTime).format("YYYY-MM-DD HH:mm:ss")}</span>
+          ),
         },
         {
           key: 'monitStatus',
