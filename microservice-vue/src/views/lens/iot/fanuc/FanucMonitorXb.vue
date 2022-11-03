@@ -523,7 +523,11 @@
                                  prop="condTransMode"></el-table-column>
                 <el-table-column :width="20 * '工序监视项目05'.length" label="工序监视项目05"
                                  prop="condProcMoniItem5"></el-table-column>
-                <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>
+                <el-table-column :width="160" label="插入时间" prop="dbCreateTime">
+                  <template #default="scope">
+                    <span>{{ this.$moment(scope.row.dbCreateTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+                  </template>
+                </el-table-column>
               </el-table>
             </div>
             <div v-if="tabRadio === '监控数据'" class="block">
@@ -562,83 +566,83 @@
                   </template>
                 </el-auto-resizer>
               </div>
-<!--              <el-button size="small" type="success"-->
-<!--                         @click="exportExcel('#monitDataTable', 'MonitData.xlsx')">导出-->
-<!--                <template #icon>-->
-<!--                  <font-awesome-icon :icon="['fas','download']"/>-->
-<!--                </template>-->
-<!--              </el-button>-->
-<!--              <el-table-->
-<!--                  id="monitDataTable"-->
-<!--                  :data="fanucDialogMonitData"-->
-<!--                  border-->
-<!--                  header-row-class-name="tableHead"-->
-<!--                  height=495px-->
-<!--                  style="width: 100%;margin-top: 10px">-->
-<!--                <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>-->
-<!--                <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>-->
-<!--                <el-table-column :width="150" label="项目号" prop="condMoldFileName"></el-table-column>-->
-<!--                <el-table-column :width="185" label="注塑时间" prop="monitDateTime"></el-table-column>-->
-<!--                <el-table-column :width="45" label="状态" prop="monitStatus"></el-table-column>-->
-<!--                <el-table-column :width="20 * '循环时间'.length" label="循环时间" prop="monitCycle"></el-table-column>-->
-<!--                <el-table-column :width="65" label="循环数" prop="monitCyclecount"></el-table-column>-->
-<!--                <el-table-column :width="65" label="射出数" prop="monitShotcount"></el-table-column>-->
-<!--                <el-table-column :width="65" label="正品数" prop="monitGoodcount"></el-table-column>-->
-<!--                <el-table-column :width="20 * '射出时间'.length" label="射出时间" prop="monitInjTime"></el-table-column>-->
-<!--                <el-table-column :width="20 * '计量时间'.length" label="计量时间"-->
-<!--                                 prop="monitRecovTime"></el-table-column>-->
-<!--                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲"-->
-<!--                                 prop="monitMCushion"></el-table-column>-->
-<!--                <el-table-column :width="20 * '计量位置'.length" label="计量位置"-->
-<!--                                 prop="monitExtrdPos"></el-table-column>-->
-<!--                <el-table-column :width="20 * '峰值压'.length" label="峰值压" prop="monitPeakPrs"></el-table-column>-->
-<!--                <el-table-column :width="20 * 'V_P位置'.length" label="V_P位置" prop="monitVPPos"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具1'.length" label="模具1" prop="monitMold1"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具2'.length" label="模具2" prop="monitMold2"></el-table-column>-->
-<!--                <el-table-column :width="20 * '喷嘴1'.length" label="喷嘴1" prop="monitNozzle"></el-table-column>-->
-<!--                <el-table-column :width="20 * '喷嘴2'.length" label="喷嘴2" prop="monitNozzle2"></el-table-column>-->
-<!--                <el-table-column :width="20 * '料筒1'.length" label="料筒1" prop="monitBarrel1"></el-table-column>-->
-<!--                <el-table-column :width="20 * '料筒2'.length" label="料筒2" prop="monitBarrel2"></el-table-column>-->
-<!--                <el-table-column :width="20 * '料筒3'.length" label="料筒3" prop="monitBarrel3"></el-table-column>-->
-<!--                <el-table-column :width="20 * '料筒4'.length" label="料筒4" prop="monitBarrel4"></el-table-column>-->
-<!--                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度"-->
-<!--                                 prop="monitFeedTh"></el-table-column>-->
-<!--                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置"-->
-<!--                                 prop="monitExtrdStart"></el-table-column>-->
-<!--                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩"-->
-<!--                                 prop="monitExtrdTorq"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具3'.length" label="模具3" prop="monitMold3"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具4'.length" label="模具4" prop="monitMold4"></el-table-column>-->
-<!--                <el-table-column :width="20 * '峰值时间'.length" label="峰值时间" prop="monitPeakT"></el-table-column>-->
-<!--                <el-table-column :width="20 * '峰值位置'.length" label="峰值位置" prop="monitPeakPos"></el-table-column>-->
-<!--                <el-table-column :width="20 * '推顶固定偏差扭矩'.length" label="推顶固定偏差扭矩"-->
-<!--                                 prop="monitEjeDevStTrq"></el-table-column>-->
-<!--                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间"-->
-<!--                                 prop="monitCloseTime"></el-table-column>-->
-<!--                <el-table-column :width="20 * 'V-P压力'.length" label="V-P压力" prop="monitVPPrs"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具5'.length" label="模具5" prop="monitMold5"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具6'.length" label="模具6" prop="monitMold6"></el-table-column>-->
-<!--                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压"-->
-<!--                                 prop="monitInjPres"></el-table-column>-->
-<!--                <el-table-column :width="20 * 'V-P补偿'.length" label="V-P补偿" prop="monitVPAdj"></el-table-column>-->
-<!--                <el-table-column :width="20 * '逆流峰值'.length" label="逆流峰值" prop="monitFlwPeak"></el-table-column>-->
-<!--                <el-table-column :width="20 * '逆流量'.length" label="逆流量" prop="monitBackflw"></el-table-column>-->
-<!--                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间"-->
-<!--                                 prop="monitLockupTim"></el-table-column>-->
-<!--                <el-table-column :width="20 * '取出时间'.length" label="取出时间"-->
-<!--                                 prop="monitPickupTim"></el-table-column>-->
-<!--                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间"-->
-<!--                                 prop="monitResidenceT"></el-table-column>-->
-<!--                <el-table-column :width="20 * '顶杆平均偏差扭矩'.length" label="顶杆平均偏差扭矩"-->
-<!--                                 prop="monitEjeDevAvTrq"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具7'.length" label="模具7" prop="monitMold7"></el-table-column>-->
-<!--                <el-table-column :width="20 * '模具8'.length" label="模具8" prop="monitMold8"></el-table-column>-->
-<!--                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置"-->
-<!--                                 prop="monitInjStartPos"></el-table-column>-->
-<!--                <el-table-column :width="20 * '螺杆旋转量'.length" label="螺杆旋转量"-->
-<!--                                 prop="monitScrewRevolution"></el-table-column>-->
-<!--                <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>-->
-<!--              </el-table>-->
+              <!--              <el-button size="small" type="success"-->
+              <!--                         @click="exportExcel('#monitDataTable', 'MonitData.xlsx')">导出-->
+              <!--                <template #icon>-->
+              <!--                  <font-awesome-icon :icon="['fas','download']"/>-->
+              <!--                </template>-->
+              <!--              </el-button>-->
+              <!--              <el-table-->
+              <!--                  id="monitDataTable"-->
+              <!--                  :data="fanucDialogMonitData"-->
+              <!--                  border-->
+              <!--                  header-row-class-name="tableHead"-->
+              <!--                  height=495px-->
+              <!--                  style="width: 100%;margin-top: 10px">-->
+              <!--                <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>-->
+              <!--                <el-table-column :width="150" label="项目号" prop="condMoldFileName"></el-table-column>-->
+              <!--                <el-table-column :width="185" label="注塑时间" prop="monitDateTime"></el-table-column>-->
+              <!--                <el-table-column :width="45" label="状态" prop="monitStatus"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '循环时间'.length" label="循环时间" prop="monitCycle"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="循环数" prop="monitCyclecount"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="射出数" prop="monitShotcount"></el-table-column>-->
+              <!--                <el-table-column :width="65" label="正品数" prop="monitGoodcount"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出时间'.length" label="射出时间" prop="monitInjTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量时间'.length" label="计量时间"-->
+              <!--                                 prop="monitRecovTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '最小缓冲'.length" label="最小缓冲"-->
+              <!--                                 prop="monitMCushion"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量位置'.length" label="计量位置"-->
+              <!--                                 prop="monitExtrdPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值压'.length" label="峰值压" prop="monitPeakPrs"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V_P位置'.length" label="V_P位置" prop="monitVPPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具1'.length" label="模具1" prop="monitMold1"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具2'.length" label="模具2" prop="monitMold2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '喷嘴1'.length" label="喷嘴1" prop="monitNozzle"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '喷嘴2'.length" label="喷嘴2" prop="monitNozzle2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒1'.length" label="料筒1" prop="monitBarrel1"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒2'.length" label="料筒2" prop="monitBarrel2"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒3'.length" label="料筒3" prop="monitBarrel3"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料筒4'.length" label="料筒4" prop="monitBarrel4"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '料斗下温度'.length" label="料斗下温度"-->
+              <!--                                 prop="monitFeedTh"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量开始位置'.length" label="计量开始位置"-->
+              <!--                                 prop="monitExtrdStart"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '计量扭矩'.length" label="计量扭矩"-->
+              <!--                                 prop="monitExtrdTorq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具3'.length" label="模具3" prop="monitMold3"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具4'.length" label="模具4" prop="monitMold4"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值时间'.length" label="峰值时间" prop="monitPeakT"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '峰值位置'.length" label="峰值位置" prop="monitPeakPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '推顶固定偏差扭矩'.length" label="推顶固定偏差扭矩"-->
+              <!--                                 prop="monitEjeDevStTrq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '关闭时间'.length" label="关闭时间"-->
+              <!--                                 prop="monitCloseTime"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V-P压力'.length" label="V-P压力" prop="monitVPPrs"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具5'.length" label="模具5" prop="monitMold5"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具6'.length" label="模具6" prop="monitMold6"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出开始压'.length" label="射出开始压"-->
+              <!--                                 prop="monitInjPres"></el-table-column>-->
+              <!--                <el-table-column :width="20 * 'V-P补偿'.length" label="V-P补偿" prop="monitVPAdj"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '逆流峰值'.length" label="逆流峰值" prop="monitFlwPeak"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '逆流量'.length" label="逆流量" prop="monitBackflw"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '锁模时间'.length" label="锁模时间"-->
+              <!--                                 prop="monitLockupTim"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '取出时间'.length" label="取出时间"-->
+              <!--                                 prop="monitPickupTim"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '树脂滞留时间'.length" label="树脂滞留时间"-->
+              <!--                                 prop="monitResidenceT"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '顶杆平均偏差扭矩'.length" label="顶杆平均偏差扭矩"-->
+              <!--                                 prop="monitEjeDevAvTrq"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具7'.length" label="模具7" prop="monitMold7"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '模具8'.length" label="模具8" prop="monitMold8"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '射出开始位置'.length" label="射出开始位置"-->
+              <!--                                 prop="monitInjStartPos"></el-table-column>-->
+              <!--                <el-table-column :width="20 * '螺杆旋转量'.length" label="螺杆旋转量"-->
+              <!--                                 prop="monitScrewRevolution"></el-table-column>-->
+              <!--                <el-table-column :width="185" label="插入时间" prop="dbCreateTime"></el-table-column>-->
+              <!--              </el-table>-->
             </div>
             <div v-if="tabRadio === '报警履历'" class="block">
               <el-date-picker
@@ -676,7 +680,11 @@
                 <el-table-column :width="180" label="报警开始时间" prop="alarmDate"></el-table-column>
                 <el-table-column :width="180" label="报警结束时间" prop="alarmResetTime"></el-table-column>
                 <el-table-column :width="180" label="持续时间" prop="alarmDownTime"></el-table-column>
-                <el-table-column :width="180" label="插入时间" prop="dbCreateTime"></el-table-column>
+                <el-table-column :width="160" label="插入时间" prop="dbCreateTime">
+                  <template #default="scope">
+                    <span>{{ this.$moment(scope.row.dbCreateTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+                  </template>
+                </el-table-column>
               </el-table>
             </div>
             <!--            <div v-if="tabRadio === '数据分析'" class="block">-->
@@ -909,8 +917,7 @@ export default {
         }
       })
     },
-    getDialogMachineCondData()
-    {
+    getDialogMachineCondData() {
       if (this.dateTimePickerValue.length !== 2) {
         this.$message.error("请选择查询时间段");
       } else {
@@ -929,8 +936,7 @@ export default {
       }
     }
     ,
-    getDialogMachineMonitData()
-    {
+    getDialogMachineMonitData() {
       if (this.dateTimePickerValue.length !== 2) {
         this.$message.error("请选择查询时间段");
       } else {
@@ -949,8 +955,7 @@ export default {
       }
     }
     ,
-    getDialogMachineAlarmData()
-    {
+    getDialogMachineAlarmData() {
       if (this.dateTimePickerValue.length !== 2) {
         this.$message.error("请选择查询时间段");
       } else {
@@ -1459,7 +1464,10 @@ export default {
           key: 'dbCreateTime',
           dataKey: 'dbCreateTime',
           title: '插入时间',
-          width: 20 * '插入时间'.length,
+          width: 160,
+          cellRenderer: ({cellData: dbCreateTime}) => (
+              <span>{this.$moment(dbCreateTime).format("YYYY-MM-DD HH:mm:ss")}</span>
+          ),
         },
       ],
       queryLoading: false,
