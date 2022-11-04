@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -199,7 +200,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
                 maintenanceOrder.setMchCode(equipment.getMchCode());
                 //优先取设备负责人，如果为空则取责任人
-                maintenanceOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
+                maintenanceOrder.setDutyPersonId(StringUtils.isNotEmpty(equipment.getEquipDuty()) ? equipment.getEquipDuty() : equipment.getDutyPersonId());
 
                 maintenanceOrder.setMaintenanceDate(maintenanceDate); //计划保养日期
                 maintenanceOrder.setMaintenancePeriod(maintenanceMain.getMaintenancePeriod());
