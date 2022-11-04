@@ -4,7 +4,7 @@
     <select id="getMoldingParamData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData">
         select * from (
         SELECT machine_name, wafer_id, recipe_name, recipe_phase, #{paramName} as param_name, ${paramName} as param_value, plc_time, a.create_time,
-        ROW_NUMBER() over (partition by wafer_id order by a.id) as plc_time_stamp
+        (ROW_NUMBER() over (partition by wafer_id order by a.id)) * 2 as plc_time_stamp
         --         datediff(second, min(plc_time) over (partition by wafer_id), plc_time) as plc_time_stamp
         FROM t_wlg_molding_machine_param_detail_data a
         join t_wlg_molding_machine_param_data_base b
