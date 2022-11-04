@@ -123,3 +123,24 @@ export function convertUser(userObject, value) {
     })
     return userInfo.join('');
 }
+
+export function uploadExcel(param) {
+    const formData = new FormData()
+    formData.append('file', param.file)
+    return request({
+        url: '/wlg-equipment/equipmentManagement/uploadExcel',
+        method: 'post',
+        data: formData
+    })
+}
+
+export function downloadTemplate() {
+    return request({
+        url: '/wlg-equipment/equipmentManagement/downloadTemplate',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+    })
+}
