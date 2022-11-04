@@ -1,5 +1,6 @@
 package com.aacoptics.wlg.dashboard.service;
 
+import com.aacoptics.wlg.dashboard.entity.MoldingAbnormalData;
 import com.aacoptics.wlg.dashboard.entity.MoldingEventData;
 import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
 import com.alibaba.fastjson.JSONArray;
@@ -19,4 +20,9 @@ public interface MoldingEventDataService {
                                              LocalDateTime startTime,
                                              LocalDateTime endTime,
                                              Page page);
+
+    IPage<MoldingAbnormalData> getMachineAbnormalData(String machineName,
+                                                LocalDateTime startTime,
+                                                LocalDateTime endTime,
+                                                Page page);
 }
