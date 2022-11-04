@@ -26,4 +26,11 @@ public class MoldingEventDataServiceImpl extends ServiceImpl<MoldingEventDataMap
         return moldingEventDataMapper.getMachineEvents(page, machineName, startTime, endTime);
     }
 
+    public IPage<MoldingEventData> getMachineErrors(String machineName,
+                                                    LocalDateTime startTime,
+                                                    LocalDateTime endTime,
+                                                    Page page) {
+        return moldingEventDataMapper.getMachineErrors(page, machineName, startTime, endTime);
+    }
+
 }

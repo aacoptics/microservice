@@ -14,4 +14,9 @@ public interface MoldingEventDataService {
                                              LocalDateTime startTime,
                                              LocalDateTime endTime,
                                              Page page);
+
+    IPage<MoldingEventData> getMachineErrors(String machineName,
+                                             LocalDateTime startTime,
+                                             LocalDateTime endTime,
+                                             Page page);
 }

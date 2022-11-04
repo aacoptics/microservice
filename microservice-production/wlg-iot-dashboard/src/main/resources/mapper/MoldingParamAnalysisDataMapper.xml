@@ -10,7 +10,7 @@
         else param_name end as param_name,
                avg_value, std_value, a.create_time
         FROM [t_wlg_molding_machine_param_analysis_data] a
-        join [t_wlg_molding_machine_param_data_base] b
+        join [t_wlg_molding_machine_param_analysis_data_base] b
         on a.serial_id = b.serial_id
         join t_molding_machine_opc_ua_node c
         on a.param_id = c.id
