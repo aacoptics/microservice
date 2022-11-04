@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -188,7 +189,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setOrderNumber(this.getNextOrderNumber(orderNumberDateStr));
                     inspectionOrder.setMchCode(equipment.getMchCode());
                     //优先取设备负责人，如果为空则取责任人
-                    inspectionOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
+                    inspectionOrder.setDutyPersonId(StringUtils.isNotEmpty(equipment.getEquipDuty()) ? equipment.getEquipDuty() : equipment.getDutyPersonId());
                     inspectionOrder.setInspectionDate(currentDate);
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 
