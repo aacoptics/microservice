@@ -64,4 +64,34 @@ public interface IProcessConditionDataService extends IService<ProcessConditionD
      */
     boolean update(ProcessConditionData processConditionData);
 
+    /**
+     *  获取类别
+     * @return
+     */
+    List<ProcessConditionData> getCategory();
+
+    /**
+     *  获取类别
+     * @return
+     */
+    List<ProcessConditionData> getProject();
+
+    /**
+     *  获取零件名称
+     * @return
+     */
+    List<ProcessConditionData> getPartName();
+
+    /**
+     *  获取材料
+     * @return
+     */
+    List<ProcessConditionData> getMaterial();
+
+    /**
+     *  获取模具序号
+     * @return
+     */
+    List<ProcessConditionData> getMoldNo();
+
 }

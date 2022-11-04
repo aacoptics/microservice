@@ -6,27 +6,37 @@
           <el-row>
             <el-col :span="4">
               <el-form-item label="类别" prop="category">
-                <el-input v-model="filters.category" clearable placeholder="类别"></el-input>
+                <el-select v-model.trim="filters.category" placeholder="" clearable style="width: 180px;">
+                  <el-option v-for="item in categoryList" :key="item.category" :value="item.category" :label="item.category"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="项目" prop="project">
-                <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
+                <el-select v-model.trim="filters.project" placeholder="" clearable style="width: 180px;">
+                  <el-option v-for="item in projectList" :key="item.project" :value="item.project" :label="item.project"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="零件名称" prop="partName">
-                <el-input v-model="filters.partName" clearable placeholder="零件名称"></el-input>
+                <el-select v-model.trim="filters.partName" placeholder="" clearable style="width: 180px;">
+                  <el-option v-for="item in partNameList" :key="item.partName" :value="item.partName" :label="item.partName"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="材料" prop="material">
-                <el-input v-model="filters.material" clearable placeholder="材料"></el-input>
+                <el-select v-model.trim="filters.material" placeholder="" clearable style="width: 180px;">
+                  <el-option v-for="item in materialList" :key="item.material" :value="item.material" :label="item.material"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
-              <el-form-item label="模具名称" prop="moldNo">
-                <el-input v-model="filters.moldNo" clearable placeholder="模具名称"></el-input>
+              <el-form-item label="模具序号" prop="moldNo">
+                <el-select v-model.trim="filters.moldNo" placeholder="" clearable style="width: 180px;">
+                  <el-option v-for="item in moldNoList" :key="item.moldNo" :value="item.moldNo" :label="item.moldNo"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -388,7 +398,12 @@
     getDataByConditions,
     handleDelete,
     handleUpdate,
-    uploadExcel
+    uploadExcel,
+    getCategory,
+    getProject,
+    getPartName,
+    getMaterial,
+    getMoldNo
   } from "@/api/lens/analysis/processConditionData";
   import {ElMessageBox} from "element-plus";
   export default {
@@ -406,11 +421,11 @@
         },
         columns: [
             {type: "index", label: "序号", minWidth: 50},
-            {prop: "category", label: "类别", minWidth: 100},
-            {prop: "project", label: "项目", minWidth: 100},
-            {prop: "partName", label: "零件名称", minWidth: 100},
-            {prop: "material", label: "材料", minWidth: 100},
-            {prop: "moldNo", label: "模具序号", minWidth: 100},
+            {prop: "category", label: "类别", minWidth: 100, sortable:false},
+            {prop: "project", label: "项目", minWidth: 100, sortable:false},
+            {prop: "partName", label: "零件名称", minWidth: 100, sortable:false},
+            {prop: "material", label: "材料", minWidth: 100, sortable:false},
+            {prop: "moldNo", label: "模具序号", minWidth: 100, sortable:false},
             {prop: "mfMoldTemp", label: "模流-模温(℃)", minWidth: 100},
             {prop: "mfMaterialTemp", label: "模流-料温(℃)", minWidth: 100},
             {prop: "mfJetVelocity", label: "模流-射速(mm/s)", minWidth: 100},
@@ -449,7 +464,7 @@
             {prop: "ejectionSpeed", label: "顶出速度(mm/s)", minWidth: 100},
             {prop: "coolingTime", label: "冷却时间(s)", minWidth: 100},
             {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100},
-            {prop: "passivation", label: "钝化工艺", minWidth: 100},
+            {prop: "passivation", label: "钝化工艺", minWidth: 100, sortable:false},
         ],
         pageRequest: {current: 1, size: 10},
         pageResult: {},
@@ -510,11 +525,76 @@
           createdTime: "",
           updatedTime: ""
         },
+        categoryList: [],
+        projectList: [],
+        partNameList: [],
+        materialList: [],
+        moldNoList: []
       };
+    },
+    created () {
+      this.init()
     },
     mounted() {
     },
     methods: {
+      async init(){
+        this.categoryList = await this.getCategory();
+        this.projectList = await this.getProject();
+        this.partNameList = await this.getPartName();
+        this.materialList = await this.getMaterial();
+        this.moldNoList = await this.getMoldNo();
+      },
+      getCategory () {
+        return new Promise((resolve, reject) => {
+          getCategory().then(res => {
+            if (res.data.code !== "000000") {
+              resolve([])
+            }
+            resolve(res.data.data)
+          })
+        })
+      },
+      getProject () {
+        return new Promise((resolve, reject) => {
+          getProject().then(res => {
+            if (res.data.code !== "000000") {
+              resolve([])
+            }
+            resolve(res.data.data)
+          })
+        })
+      },
+      getPartName () {
+        return new Promise((resolve, reject) => {
+          getPartName().then(res => {
+            if (res.data.code !== "000000") {
+              resolve([])
+            }
+            resolve(res.data.data)
+          })
+        })
+      },
+      getMaterial () {
+        return new Promise((resolve, reject) => {
+          getMaterial().then(res => {
+            if (res.data.code !== "000000") {
+              resolve([])
+            }
+            resolve(res.data.data)
+          })
+        })
+      },
+      getMoldNo () {
+        return new Promise((resolve, reject) => {
+          getMoldNo().then(res => {
+            if (res.data.code !== "000000") {
+              resolve([])
+            }
+            resolve(res.data.data)
+          })
+        })
+      },
       // 获取分页数据
       findPage: function (data) {
         if (data !== null) {
@@ -529,6 +609,18 @@
             .then((res) => {
               const responseData = res.data;
               if (responseData.code === "000000") {
+                responseData.data.records.map((value) => {
+                  for (let key in value) {
+                    if (key !== 'category' && key !== 'project' && key !== 'partName' &&
+                    key !== 'material' && key !== 'moldNo' && key !== 'id' &&
+                    key !== 'createdBy' && key !== 'createdTime' && key !== 'updatedBy' &&
+                    key !== 'updatedTime' && key !== 'passivation') {
+                    //过滤不需要转换类型的值
+                    //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
+                        value[key] = Number(value[key])
+                    }
+                  }
+                });
                 this.pageResult = responseData.data;
               } else {
                 this.$message({message: getResponseDataMessage(responseData), type: "error"});

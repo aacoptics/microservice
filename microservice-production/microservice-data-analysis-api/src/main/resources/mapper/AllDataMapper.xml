@@ -163,16 +163,16 @@
         and pcd.material = tmd.material
         where 1=1
         <if test="category != '' and category != null">
-            AND pcd.category like CONCAT('%',#{category},'%')
+            AND pcd.category=#{category}
         </if>
         <if test="project != '' and project != null">
-            AND pcd.project like CONCAT('%',#{project},'%')
+            AND pcd.project=#{project}
         </if>
         <if test="partName != '' and partName != null">
-            AND pcd.part_name like CONCAT('%',#{partName},'%')
+            AND pcd.part_name=#{partName}
         </if>
         <if test="material != '' and material != null">
-            AND pcd.material like CONCAT('%',#{material},'%')
+            AND pcd.material=#{material}
         </if>
     </select>
 
@@ -338,16 +338,16 @@
         and pcd.material = tmd.material
         where 1=1
         <if test="category != '' and category != null">
-            AND pcd.category like CONCAT('%',#{category},'%')
+            AND pcd.category=#{category}
         </if>
         <if test="project != '' and project != null">
-            AND pcd.project like CONCAT('%',#{project},'%')
+            AND pcd.project=#{project}
         </if>
         <if test="partName != '' and partName != null">
-            AND pcd.part_name like CONCAT('%',#{partName},'%')
+            AND pcd.part_name=#{partName}
         </if>
         <if test="material != '' and material != null">
-            AND pcd.material like CONCAT('%',#{material},'%')
+            AND pcd.material=#{material}
         </if>
     </select>
 

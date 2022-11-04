@@ -6,6 +6,7 @@ import com.aacoptics.data.analysis.entity.po.MoldFlowData;
 import com.aacoptics.data.analysis.exception.WlgReportErrorType;
 import com.aacoptics.data.analysis.service.IMoldFlowService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
+import com.aacoptics.data.analysis.util.FtpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -103,6 +104,8 @@ public class MoldFlowController {
     @PostMapping(value = "/exportExcel")
     public void exportMoldFlowExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
         XSSFWorkbook wb = null;
+        String picPath = "ftp://" + FtpUtil.getUserName() + ":" + FtpUtil.getPassword()
+                + "@" + FtpUtil.getFtpHostIp() + ":" + FtpUtil.getFtpPort() + "/" + "moldFlowData/";
         try {
             // 根据查询条件获取数据
             List<MoldFlowData> datas = moldFlowService.getAllDataByConditions(queryParams);
@@ -137,7 +140,8 @@ public class MoldFlowController {
                     row.createCell(15).setCellValue(p.getRefractiveR2());
                     row.createCell(16).setCellValue(p.getCompetitorName());
                     row.createCell(17).setCellValue(p.getCompetitorLink());
-                    row.createCell(18).setCellValue(p.getAssemblyDrawing());
+                    row.createCell(18).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+
                 }
             }
 
@@ -161,6 +165,31 @@ public class MoldFlowController {
     @PostMapping(value = "/update")
     public Result update(@RequestBody MoldFlowData moldFlowData) {
         return Result.success(moldFlowService.update(moldFlowData));
+    }
+
+
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(moldFlowService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(moldFlowService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(moldFlowService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(moldFlowService.getMaterial());
     }
 
 }

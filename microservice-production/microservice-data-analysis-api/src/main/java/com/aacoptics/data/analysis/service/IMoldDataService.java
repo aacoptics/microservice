@@ -2,6 +2,7 @@ package com.aacoptics.data.analysis.service;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
 import com.aacoptics.data.analysis.entity.po.MoldData;
+import com.aacoptics.data.analysis.entity.po.MoldFlowData;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -63,5 +64,29 @@ public interface IMoldDataService extends IService<MoldData> {
      * @return
      */
     boolean update(MoldData moldData);
+
+    /**
+     *  获取类别
+     * @return
+     */
+    List<MoldData> getCategory();
+
+    /**
+     *  获取项目
+     * @return
+     */
+    List<MoldData> getProject();
+
+    /**
+     *  获取零件名称
+     * @return
+     */
+    List<MoldData> getPartName();
+
+    /**
+     *  获取材料
+     * @return
+     */
+    List<MoldData> getMaterial();
 
 }

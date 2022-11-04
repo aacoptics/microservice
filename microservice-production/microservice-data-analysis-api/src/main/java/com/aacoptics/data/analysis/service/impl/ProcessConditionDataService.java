@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
 
     @Override
     public void importProcessConditionDataExcel(InputStream in) throws Exception {
-        List<String[]> excelDataList = ExcelUtil.read(in).get(0);
+        Workbook workbook = ExcelUtil.getWorkbook(in);
+        List<String[]> excelDataList = ExcelUtil.read(workbook).get(0);
         String[] titleArray = excelDataList.get(0);//标题行
         String title = titleArray[0];
         if (!"项目量产工艺条件数据表".equals(title)) {
@@ -67,44 +69,44 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
                 processConditionData = new ProcessConditionData();
             }
 
-            String mfMoldTemp = dataArray[5];
-            String mfMaterialTemp = dataArray[6];
-            String mfJetVelocity = dataArray[7];
-            String mfVpSwitch = dataArray[8];
-            String mfHoldPressure1 = dataArray[9];
-            String mfHoldTime1 = dataArray[10];
-            String mfHoldPressure2 = dataArray[11];
-            String mfHoldTime2 = dataArray[12];
-            String mfHoldPressure3 = dataArray[13];
-            String mfHoldTime3 = dataArray[14];
-            String mfHoldPressure4 = dataArray[15];
-            String mfHoldTime4 = dataArray[16];
-            String mfHoldPressure5 = dataArray[17];
-            String mfHoldTime5 = dataArray[18];
-            String mfHoldPressure6 = dataArray[19];
-            String mfHoldTime6 = dataArray[20];
-            String moldTemp = dataArray[21];
-            String materialTemp = dataArray[22];
-            String jetVelocity = dataArray[23];
-            String vpSwitch = dataArray[24];
-            String holdPressure1 = dataArray[25];
-            String holdTime1 = dataArray[26];
-            String holdPressure2 = dataArray[27];
-            String holdTime2 = dataArray[28];
-            String holdPressure3 = dataArray[29];
-            String holdTime3 = dataArray[30];
-            String holdPressure4 = dataArray[31];
-            String holdTime4 = dataArray[32];
-            String holdPressure5 = dataArray[33];
-            String holdTime5 = dataArray[34];
-            String holdPressure6 = dataArray[35];
-            String holdTime6 = dataArray[36];
-            String holdPressureVelocity = dataArray[37];
-            String platenPosition = dataArray[38];
-            String openingSpeed = dataArray[39];
-            String ejectionSpeed = dataArray[40];
-            String coolingTime = dataArray[41];
-            String clampingForce = dataArray[42];
+            String mfMoldTemp = ExcelUtil.handleDecimal(dataArray[5],0);
+            String mfMaterialTemp = ExcelUtil.handleDecimal(dataArray[6],0);
+            String mfJetVelocity = ExcelUtil.handleDecimal(dataArray[7],0);
+            String mfVpSwitch = ExcelUtil.handleDecimal(dataArray[8],0);
+            String mfHoldPressure1 = ExcelUtil.handleDecimal(dataArray[9],0);
+            String mfHoldTime1 = ExcelUtil.handleDecimal(dataArray[10],0);
+            String mfHoldPressure2 = ExcelUtil.handleDecimal(dataArray[11],0);
+            String mfHoldTime2 = ExcelUtil.handleDecimal(dataArray[12],0);
+            String mfHoldPressure3 = ExcelUtil.handleDecimal(dataArray[13],0);
+            String mfHoldTime3 = ExcelUtil.handleDecimal(dataArray[14],0);
+            String mfHoldPressure4 = ExcelUtil.handleDecimal(dataArray[15],0);
+            String mfHoldTime4 = ExcelUtil.handleDecimal(dataArray[16],0);
+            String mfHoldPressure5 = ExcelUtil.handleDecimal(dataArray[17],0);
+            String mfHoldTime5 = ExcelUtil.handleDecimal(dataArray[18],0);
+            String mfHoldPressure6 = ExcelUtil.handleDecimal(dataArray[19],0);
+            String mfHoldTime6 = ExcelUtil.handleDecimal(dataArray[20],0);
+            String moldTemp = ExcelUtil.handleDecimal(dataArray[21],0);
+            String materialTemp = ExcelUtil.handleDecimal(dataArray[22],0);
+            String jetVelocity = ExcelUtil.handleDecimal(dataArray[23],0);
+            String vpSwitch = ExcelUtil.handleDecimal(dataArray[24],0);
+            String holdPressure1 = ExcelUtil.handleDecimal(dataArray[25],0);
+            String holdTime1 = ExcelUtil.handleDecimal(dataArray[26],0);
+            String holdPressure2 = ExcelUtil.handleDecimal(dataArray[27],0);
+            String holdTime2 = ExcelUtil.handleDecimal(dataArray[28],0);
+            String holdPressure3 = ExcelUtil.handleDecimal(dataArray[29],0);
+            String holdTime3 = ExcelUtil.handleDecimal(dataArray[30],0);
+            String holdPressure4 = ExcelUtil.handleDecimal(dataArray[31],0);
+            String holdTime4 = ExcelUtil.handleDecimal(dataArray[32],0);
+            String holdPressure5 = ExcelUtil.handleDecimal(dataArray[33],0);
+            String holdTime5 = ExcelUtil.handleDecimal(dataArray[34],0);
+            String holdPressure6 = ExcelUtil.handleDecimal(dataArray[35],0);
+            String holdTime6 = ExcelUtil.handleDecimal(dataArray[36],0);
+            String holdPressureVelocity = ExcelUtil.handleDecimal(dataArray[37],0);
+            String platenPosition = ExcelUtil.handleDecimal(dataArray[38],0);
+            String openingSpeed = ExcelUtil.handleDecimal(dataArray[39],0);
+            String ejectionSpeed = ExcelUtil.handleDecimal(dataArray[40],0);
+            String coolingTime = ExcelUtil.handleDecimal(dataArray[41],0);
+            String clampingForce = ExcelUtil.handleDecimal(dataArray[42],0);
             String passivation = dataArray[43];
 
             // 设置参数
@@ -164,11 +166,11 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
     @Override
     public IPage<ProcessConditionData> getDataByConditions(Page<ProcessConditionData> iPage, String category, String project, String partName, String material, String moldNo) {
         QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(category), "category", category)
-                .like(StringUtils.isNotBlank(project), "project", project)
-                .like(StringUtils.isNotBlank(partName), "part_name", partName)
-                .like(StringUtils.isNotBlank(material), "material", material)
-                .like(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+        queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
+                .eq(StringUtils.isNotBlank(project), "project", project)
+                .eq(StringUtils.isNotBlank(partName), "part_name", partName)
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
         IPage<ProcessConditionData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -176,11 +178,11 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
     @Override
     public List<ProcessConditionData> getAllDataByConditions(QueryParams queryParams) {
         QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
-                .like(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
-                .like(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .like(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
-                .like(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
+        queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
+                .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
+                .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
+                .eq(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
         List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
         return processConditionDatas;
     }
@@ -194,6 +196,47 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
     public boolean update(ProcessConditionData processConditionData) {
         return this.updateById(processConditionData);
     }
+
+    @Override
+    public List<ProcessConditionData> getCategory() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("category").select("category");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
+    @Override
+    public List<ProcessConditionData> getProject() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("project").select("project");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
+    @Override
+    public List<ProcessConditionData> getPartName() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("part_name").select("part_name");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
+    @Override
+    public List<ProcessConditionData> getMaterial() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("material").select("material");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
+    @Override
+    public List<ProcessConditionData> getMoldNo() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("mold_no").select("mold_no");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
 
     private ProcessConditionData getProcessConditionData(String category, String project, String partName, String material, String moldNo) {
 
@@ -210,6 +253,8 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
         }
         return null;
     }
+
+
 
 
 }

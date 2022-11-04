@@ -6,6 +6,7 @@ import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.aacoptics.data.analysis.exception.WlgReportErrorType;
 import com.aacoptics.data.analysis.service.IStructureDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
+import com.aacoptics.data.analysis.util.FtpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -91,7 +92,10 @@ public class StructureDataController {
                 queryParams.getCategory(),
                 queryParams.getProject(),
                 queryParams.getPartName(),
-                queryParams.getMaterial());
+                queryParams.getMaterial(),
+                queryParams.getSearchType(),
+                queryParams.getStartValue(),
+                queryParams.getEndValue());
         if (res.getTotal() == 0) {
             return Result.fail(WlgReportErrorType.BUSINESS_EXCEPTION, "查询数据为空！");
         }
@@ -103,6 +107,8 @@ public class StructureDataController {
     @PostMapping(value = "/exportExcel")
     public void exportStructureDataExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
         XSSFWorkbook wb = null;
+        String picPath = "ftp://" + FtpUtil.getUserName() + ":" + FtpUtil.getPassword()
+                + "@" + FtpUtil.getFtpHostIp() + ":" + FtpUtil.getFtpPort() + "/" + "structureData/";
         try {
             // 根据查询条件获取数据
             List<StructureData> datas = structureDataService.getAllDataByConditions(queryParams);
@@ -149,7 +155,7 @@ public class StructureDataController {
                     row.createCell(27).setCellValue(p.getR1Srtm());
                     row.createCell(28).setCellValue(p.getR2Srtm());
                     row.createCell(29).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(30).setCellValue(p.getAssemblyDrawing());
+                    row.createCell(30).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
                 }
             }
 
@@ -174,5 +180,30 @@ public class StructureDataController {
     public Result update(@RequestBody StructureData structureData) {
         return Result.success(structureDataService.update(structureData));
     }
+
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(structureDataService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(structureDataService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(structureDataService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(structureDataService.getMaterial());
+    }
+
 
 }

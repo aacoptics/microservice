@@ -4,24 +4,32 @@
         <div class="toolbar w-full" style="float:left;padding-top:10px;padding-left:15px;">
           <el-form :inline="true" :size="size" :model="filters">
             <el-row>
-              <el-col :span="4">
+              <el-col :span="5">
                 <el-form-item label="类别" prop="category">
-                  <el-input v-model="filters.category" clearable placeholder="类别"></el-input>
+                  <el-select v-model.trim="filters.category" placeholder="" clearable style="width: 180px;">
+                    <el-option v-for="item in categoryList" :key="item.category" :value="item.category" :label="item.category"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <el-form-item label="项目" prop="project">
-                  <el-input v-model="filters.project" clearable placeholder="项目"></el-input>
+                  <el-select v-model.trim="filters.project" placeholder="" clearable style="width: 180px;">
+                    <el-option v-for="item in projectList" :key="item.project" :value="item.project" :label="item.project"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <el-form-item label="零件名称" prop="partName">
-                  <el-input v-model="filters.partName" clearable placeholder="零件名称"></el-input>
+                  <el-select v-model.trim="filters.partName" placeholder="" clearable style="width: 180px;">
+                    <el-option v-for="item in partNameList" :key="item.partName" :value="item.partName" :label="item.partName"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <el-form-item label="材料" prop="material">
-                  <el-input v-model="filters.material" clearable placeholder="材料"></el-input>
+                  <el-select v-model.trim="filters.material" placeholder="" clearable style="width: 180px;">
+                    <el-option v-for="item in materialList" :key="item.material" :value="item.material" :label="item.material"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -238,7 +246,11 @@
         getDataByConditions,
         exportExcel,
         handleDelete,
-        handleUpdate
+        handleUpdate,
+        getCategory,
+        getProject,
+        getPartName,
+        getMaterial,
     } from "@/api/lens/analysis/moldData";
     import {ElMessageBox} from "element-plus";
 
@@ -256,24 +268,24 @@
                 },
                 columns: [
                     {type: "index", label: "序号", minWidth: 50},
-                    {prop: "category", label: "类别", minWidth: 100},
-                    {prop: "project", label: "项目", minWidth: 100},
-                    {prop: "partName", label: "零件名称", minWidth: 100},
-                    {prop: "material", label: "材料", minWidth: 100},
-                    {prop: "moldType", label: "模具类型", minWidth: 100},
-                    {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100},
-                    {prop: "runnerType", label: "流道类型", minWidth: 100},
+                    {prop: "category", label: "类别", minWidth: 100, sortable:false},
+                    {prop: "project", label: "项目", minWidth: 100, sortable:false},
+                    {prop: "partName", label: "零件名称", minWidth: 100, sortable:false},
+                    {prop: "material", label: "材料", minWidth: 100, sortable:false},
+                    {prop: "moldType", label: "模具类型", minWidth: 100, sortable:false},
+                    {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100, sortable:false},
+                    {prop: "runnerType", label: "流道类型", minWidth: 100, sortable:false},
                     {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
                     {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
                     {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
                     {prop: "partingSurface", label: "分型面(um)", minWidth: 100},
                     {prop: "splitPosition", label: "分割位(um)", minWidth: 100},
-                    {prop: "gateType", label: "浇口类型", minWidth: 100},
+                    {prop: "gateType", label: "浇口类型", minWidth: 100, sortable:false},
                     {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
                     {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
                     {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100},
                     {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100},
-                    {prop: "moldOpeningType", label: "开模方式", minWidth: 100}
+                    {prop: "moldOpeningType", label: "开模方式", minWidth: 100, sortable:false}
                 ],
                 pageRequest: {current: 1, size: 10},
                 pageResult: {},
@@ -308,11 +320,64 @@
                   createdTime: "",
                   updatedTime: ""
                 },
+                categoryList: [],
+                projectList: [],
+                partNameList: [],
+                materialList: [],
             };
         },
         mounted() {
         },
+        created () {
+          this.init()
+        },
         methods: {
+          async init(){
+            this.categoryList = await this.getCategory();
+            this.projectList = await this.getProject();
+            this.partNameList = await this.getPartName();
+            this.materialList = await this.getMaterial();
+          },
+          getCategory () {
+            return new Promise((resolve, reject) => {
+              getCategory().then(res => {
+                if (res.data.code !== "000000") {
+                  resolve([])
+                }
+                resolve(res.data.data)
+              })
+            })
+          },
+          getProject () {
+            return new Promise((resolve, reject) => {
+              getProject().then(res => {
+                if (res.data.code !== "000000") {
+                  resolve([])
+                }
+                resolve(res.data.data)
+              })
+            })
+          },
+          getPartName () {
+            return new Promise((resolve, reject) => {
+              getPartName().then(res => {
+                if (res.data.code !== "000000") {
+                  resolve([])
+                }
+                resolve(res.data.data)
+              })
+            })
+          },
+          getMaterial () {
+              return new Promise((resolve, reject) => {
+                getMaterial().then(res => {
+                  if (res.data.code !== "000000") {
+                    resolve([])
+                  }
+                  resolve(res.data.data)
+                })
+              })
+          },
           // 获取分页数据
           findPage: function (data) {
             if (data !== null) {
@@ -326,6 +391,17 @@
                 .then((res) => {
                   const responseData = res.data;
                   if (responseData.code === "000000") {
+                    responseData.data.records.map((value) => {
+                      for (let key in value) {
+                        if (key === 'firstRunner' || key === 'secondRunner' || key === 'thirdRunner' ||
+                        key === 'partingSurface' || key === 'splitPosition' || key === 'gateWidth' ||
+                        key === 'gateThickness' || key === 'gateR1Thickness' || key === 'gateR2Thickness') {
+                        //过滤不需要转换类型的值
+                        //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
+                            value[key] = Number(value[key])
+                        }
+                      }
+                    });
                     this.pageResult = responseData.data;
                   } else {
                     this.$message({message: getResponseDataMessage(responseData), type: "error"});

@@ -21,4 +21,10 @@ public class QueryParams {
     private String material;
     @ApiModelProperty(value = "模具序号")
     private String moldNo;
+    @ApiModelProperty(value = "搜索类型")
+    private String searchType;
+    @ApiModelProperty(value = "起始值")
+    private String startValue;
+    @ApiModelProperty(value = "结束值")
+    private String endValue;
 }
