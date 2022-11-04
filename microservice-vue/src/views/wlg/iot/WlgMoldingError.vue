@@ -64,8 +64,8 @@ export default {
       columns: [
         {prop: "machineName", label: "机台号", minWidth: 110},
         {prop: "eventInfo", label: "错误级别", minWidth: 100},
-        {prop: "startTime", label: "开始时间", minWidth: 120},
-        {prop: "endTime", label: "结束时间", minWidth: 120}
+        {prop: "startTime", label: "开始时间", minWidth: 120 , formatter: this.dateTimeFormat},
+        {prop: "endTime", label: "结束时间", minWidth: 120 , formatter: this.dateTimeFormat}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -107,6 +107,9 @@ export default {
           this.machineNameArray = responseData.data
         }
       })
+    },
+    dateTimeFormat: function (row, column) {
+      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
     },
   },
   mounted() {

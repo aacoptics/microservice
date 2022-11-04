@@ -76,7 +76,7 @@ export default {
         {prop: "abnormalType", label: "异常类型", minWidth: 80},
         {prop: "avgValue", label: "平均值", minWidth: 80},
         {prop: "abnormalValue", label: "异常值", minWidth: 80},
-        {prop: "createTime", label: "时间", minWidth: 120}
+        {prop: "createTime", label: "时间", minWidth: 120, formatter: this.dateTimeFormat}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -118,6 +118,9 @@ export default {
           this.machineNameArray = responseData.data
         }
       })
+    },
+    dateTimeFormat: function (row, column) {
+      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
     },
   },
   mounted() {
