@@ -57,6 +57,12 @@
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
+            </el-button>           
+            <el-button type="info"
+                       @click="handleOpenExcelUpload">Excel导入
+              <template #icon>
+                <font-awesome-icon :icon="['fas','file-lines']"/>
+              </template>
             </el-button>
             <el-button :loading="exportLoading" :size="size" type="success"
                        @click="exportExcelData('设备清单')">导出
@@ -74,6 +80,46 @@
                 @findPage="findPage">
       </SysTable>
 
+
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'设备清单Excel导入'"
+
+                 width="400px">
+        <el-upload
+            :before-upload="beforeUpload"
+            :http-request="submitExcelUpload"
+            :multiple="false"
+            :show-file-list="false"
+            accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            action=""
+            class="upload-demo"
+            drag>
+          <font-awesome-icon :icon="['fas','cloud-arrow-up']" class="el-icon--upload"/>
+          <div class="el-upload__text">将Excel文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+
+        <div class="dialog-footer" style="padding-top: 20px;text-align: end">
+          <slot name="footer">
+            <el-progress
+                :duration="pregressDuration"
+                :indeterminate="true"
+                :percentage="progressPercentage"
+                :status="progressStatus"
+                :stroke-width="20"
+                :text-inside="true"
+                style="width:350px"
+            >
+              <span>{{ progressContent }}</span>
+            </el-progress>
+            <div style="padding-top: 20px;">
+              <el-button :loading="downloadTemplateLoading" :size="size" style="position: absolute;left: 20px;"
+                         type="primary"
+                         @click="downloadTemplate">模板下载
+              </el-button>
+              <el-button :size="size" type="success" @click="cancelExcelUpload">关闭</el-button>
+            </div>
+          </slot>
+        </div>
+      </el-dialog>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
                  width="30%">
@@ -164,7 +210,7 @@
 import SysTable from "@/components/SysTable";
 
 import {getAllUser} from "@/api/system/user"
-import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate, convertUser} from "@/api/wlg/equipment/equipmentManagement";
+import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate, convertUser, downloadTemplate, uploadExcel} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
@@ -208,6 +254,13 @@ export default {
       equipmentStatusOptions:[],
       userOptions: [],
       equipCategoryOptions:[],
+
+      progressPercentage: 0,
+      progressContent: "",
+      pregressDuration: 6,
+      progressStatus: "",
+      excelUploadDialogVisible: false,
+      downloadTemplateLoading: false,
 
       columns: [
         {prop: "mchCode", label: "资产编码", minWidth: 110},
@@ -375,7 +428,67 @@ export default {
         }
       });
     },
+    handleOpenExcelUpload: function () {
+      this.excelUploadDialogVisible = true;
 
+      this.progressPercentage = 0;
+      this.progressContent = "";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+    },
+
+    submitExcelUpload(params) {
+      this.progressPercentage = 50;
+      this.progressContent = "Excel导入中，请稍等...";
+      this.progressStatus = "";
+      this.pregressDuration = 6;
+
+      uploadExcel(params).then((response) => {
+        const responseData = response.data
+
+        this.progressPercentage = 100;
+        this.pregressDuration = 0;
+        if (responseData.code === '000000') {
+          this.$message.success('上传成功！')
+
+          this.progressContent = "导入成功";
+          this.progressStatus = "success";
+          this.findPage(null);
+        } else {
+          this.$message.error('上传失败！' + responseData.msg + "," + responseData.data)
+
+          this.progressContent = "导入失败";
+          this.progressStatus = "exception";
+        }
+      }).catch((err) => {
+        this.$message.error(err)
+      })
+    },
+    beforeUpload(file) {
+      const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel'
+      if (!isExcel) {
+        this.$message.error('只能上传xlsx, xls格式的文件！')
+        return false
+      }
+    },
+    downloadTemplate() {
+      this.downloadTemplateLoading = true;
+      downloadTemplate().then(res => {
+
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', '设备清单Excel导入模板.xlsx');
+        document.body.appendChild(link);
+        link.click();
+
+        this.downloadTemplateLoading = false;
+      });
+    },
+    cancelExcelUpload() {
+      this.excelUploadDialogVisible = false;
+    },
     // 取消
     cancel() {
       this.dialogVisible = false;

@@ -90,7 +90,7 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             String mchName = dataArray[1]; //设备名称
             String spec = dataArray[2]; //规格
             String typeVersion = dataArray[3]; //型号
-            String maintenancePeriod = dataArray[4]; //保养周期
+            String maintenancePeriodStr = dataArray[4]; //保养周期
             String maintenanceItem = dataArray[5]; //保养项
             String maintenanceItemStandard = dataArray[6]; //保养项判断标准
             String minValue = dataArray[7]; //起始范围值
@@ -104,6 +104,11 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             }
             if (StringUtils.isEmpty(typeVersion)) {
                 throw new BusinessException("第" + (i + 1) + "行型号不能为空");
+            }
+            Long maintenancePeriod = Long.valueOf(maintenancePeriodStr);
+            if(maintenancePeriod < 1)
+            {
+                throw new BusinessException("第" + (i + 1) + "行保养周期必须大于等于1");
             }
 
             try {
@@ -122,7 +127,7 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
                     maintenanceMain.setSpec(spec);
                     maintenanceMain.setTypeVersion(typeVersion);
                 }
-                maintenanceMain.setMaintenancePeriod(Long.valueOf(maintenancePeriod));
+                maintenanceMain.setMaintenancePeriod(maintenancePeriod);
                 this.saveOrUpdate(maintenanceMain);
 
                 //保存保养项
@@ -151,6 +156,11 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
     @Override
     public boolean add(MaintenanceMain maintenanceMain) {
+        if(maintenanceMain.getMaintenancePeriod() < 1)
+        {
+            throw new BusinessException("保养周期必须大于等于1，请确认！");
+        }
+
         //校验是否存在
         QueryWrapper<MaintenanceMain> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("mch_name", maintenanceMain.getMchName());
@@ -184,6 +194,10 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
     @Override
     public boolean update(MaintenanceMain maintenanceMain) {
+        if(maintenanceMain.getMaintenancePeriod() < 1)
+        {
+            throw new BusinessException("保养周期必须大于等于1，请确认！");
+        }
         //校验是否存在
         QueryWrapper<MaintenanceMain> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("mch_name", maintenanceMain.getMchName());
