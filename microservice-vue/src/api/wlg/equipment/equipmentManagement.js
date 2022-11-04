@@ -111,3 +111,36 @@ export function exportEquipmentExcel(conditions) {
         data: conditions
     })
 }
+
+export function convertUser(userObject, value) {
+    let userInfo = [];
+    userInfo.push(value);
+    Object.keys(userObject).some((key) => {
+        if (userObject[key].username.trim() === ('' + value)) {
+            userInfo.push('（' + userObject[key].name + '）');
+            return true;
+        }
+    })
+    return userInfo.join('');
+}
+
+export function uploadExcel(param) {
+    const formData = new FormData()
+    formData.append('file', param.file)
+    return request({
+        url: '/wlg-equipment/equipmentManagement/uploadExcel',
+        method: 'post',
+        data: formData
+    })
+}
+
+export function downloadTemplate() {
+    return request({
+        url: '/wlg-equipment/equipmentManagement/downloadTemplate',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+    })
+}

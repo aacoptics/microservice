@@ -12,7 +12,7 @@ export default {
 .mainPage-container {
   position: relative;
   width: 100%;
-  height: 98.8%;
+  height: 98%;
   background-image: url(../../assets/img/back.jpg);
   background-size: 100% 100%;
   border: 1px solid #ddd;

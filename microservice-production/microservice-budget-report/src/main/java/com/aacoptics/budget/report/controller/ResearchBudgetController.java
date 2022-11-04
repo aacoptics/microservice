@@ -4,9 +4,17 @@ import com.aacoptics.budget.report.entity.form.ResearchBudgetQueryForm;
 import com.aacoptics.budget.report.entity.param.ResearchBudgetQueryParam;
 import com.aacoptics.budget.report.exception.BusinessException;
 import com.aacoptics.budget.report.service.ResearchBudgetService;
+import com.aacoptics.budget.report.util.ExcelUtil;
 import com.aacoptics.common.core.vo.Result;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/researchBudget")
@@ -58,14 +70,14 @@ public class ResearchBudgetController {
 
     /**
      * Excel模板下载
+     *
      * @param response
      */
     @GetMapping("/downloadTemplate")
     public void downloadTemplate(HttpServletResponse response) throws IOException {
         try {
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/2023年研发费用预算模版_xx事业部_20221014 v4.xlsx");
-            if(inputStream == null)
-            {
+            if (inputStream == null) {
                 throw new BusinessException("模板不存在");
             }
             //强制下载不打开
@@ -100,4 +112,59 @@ public class ResearchBudgetController {
         researchBudgetService.importExcel(originalFilename, file, file.getInputStream());
         return Result.success();
     }
+
+
+    @ApiOperation(value = "导出Excel", notes = "导出Excel")
+    @PostMapping(value = "/exportExcel")
+    public void exportExcel(@Valid @RequestBody ResearchBudgetQueryForm researchBudgetQueryForm, HttpServletResponse response) throws Exception {
+        log.debug("query with name:{}", researchBudgetQueryForm);
+        Map<String, Object> budgetDataMap = researchBudgetService.query(researchBudgetQueryForm.getPage(), researchBudgetQueryForm.toParam(ResearchBudgetQueryParam.class));
+
+
+        JSONArray titleJsonArray = (JSONArray) budgetDataMap.get("columns");
+        List<Map<String, Object>> researchBudgetList = (List<Map<String, Object>>) budgetDataMap.get("data");
+
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("研发费用预算合计报表");
+
+        XSSFRow titleRow = wbSheet.createRow(0);
+        for (int i = 0; i < titleJsonArray.size(); i++) {
+            JSONObject titleJson = titleJsonArray.getJSONObject(i);
+            titleRow.createCell(i).setCellValue(titleJson.getString("label"));
+        }
+
+        try {
+            if (researchBudgetList != null && researchBudgetList.size() > 0) {
+                for (int i = 0; i < researchBudgetList.size(); i++) {
+                    Map<String, Object> researchBudgetMap = researchBudgetList.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(i + 1);
+
+                    for (int j = 0; j < titleJsonArray.size(); j++) {
+                        String prop = titleJsonArray.getJSONObject(j).getString("prop");
+
+                        if (j <= 4) {
+                            dataRow.createCell(j).setCellValue(researchBudgetMap.get(prop) != null ? researchBudgetMap.get(prop) + "" : "");
+                        } else {
+                            if (researchBudgetMap.containsKey(prop) && researchBudgetMap.get(prop) != null) {
+                                dataRow.createCell(j).setCellValue(Double.valueOf(researchBudgetMap.get(prop) + ""));
+                            } else {
+                                dataRow.createCell(j).setCellType(CellType.BLANK);
+                            }
+                        }
+                    }
+                }
+            }
+
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[]{256 * 10, 256 * 15, 256 * 25, 256 * 15, 256 * 10});
+
+        } catch (Exception exception) {
+            log.error("导出研发费用预算合计报表异常", exception);
+            throw exception;
+        }
+
+        ExcelUtil.exportXlsx(response, workbook, "研发费用预算合计报表.xlsx");
+    }
+
 }

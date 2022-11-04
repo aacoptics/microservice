@@ -1,6 +1,8 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
+import com.aacoptics.wlg.dashboard.entity.MoldingAbnormalData;
 import com.aacoptics.wlg.dashboard.entity.MoldingEventData;
+import com.aacoptics.wlg.dashboard.mapper.MoldingAbnormalDataMapper;
 import com.aacoptics.wlg.dashboard.mapper.MoldingEventDataMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -19,11 +21,29 @@ public class MoldingEventDataServiceImpl extends ServiceImpl<MoldingEventDataMap
     @Resource
     private MoldingEventDataMapper moldingEventDataMapper;
 
+    @Resource
+    private MoldingAbnormalDataMapper moldingAbnormalDataMapper;
+
     public IPage<MoldingEventData> getMachineEvents(String machineName,
                                                     LocalDateTime startTime,
                                                     LocalDateTime endTime,
                                                     Page page) {
         return moldingEventDataMapper.getMachineEvents(page, machineName, startTime, endTime);
+    }
+
+    public IPage<MoldingEventData> getMachineErrors(String machineName,
+                                                    LocalDateTime startTime,
+                                                    LocalDateTime endTime,
+                                                    Page page) {
+        return moldingEventDataMapper.getMachineErrors(page, machineName, startTime, endTime);
+    }
+
+    public IPage<MoldingAbnormalData> getMachineAbnormalData(String machineName,
+                                                      LocalDateTime startTime,
+                                                      LocalDateTime endTime,
+                                                      Page page){
+        return moldingAbnormalDataMapper.getMachineAbnormalData(page, machineName, startTime, endTime);
+
     }
 
 }

@@ -74,3 +74,16 @@ export function downloadTemplate() {
         responseType: 'blob',
     })
 }
+
+
+export function exportResearchBudgetExcel(conditions) {
+    return request({
+        url: '/budget-report/researchBudget/exportExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        responseType: 'blob',
+        data: conditions
+    })
+}

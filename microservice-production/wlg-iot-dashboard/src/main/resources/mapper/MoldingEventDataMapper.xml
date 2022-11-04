@@ -4,17 +4,34 @@
 
     <select id="getMachineEvents" resultType="com.aacoptics.wlg.dashboard.entity.MoldingEventData">
         select [id]
-             ,[site]
-             ,[machine_name]
-             ,[event_info]
-             ,[alarm_info]
-             ,[start_time]
-             ,[end_time]
-             ,[create_time]
+             , [site]
+             , [machine_name]
+             , [event_info]
+             , [alarm_info]
+             , [start_time]
+             , [end_time]
+             , [create_time]
         from t_wlg_molding_machine_event_data
         where machine_name = #{machineName}
           and start_time between #{startTime} and #{endTime}
-        and end_time is not null
+          and end_time is not null
+        order by start_time
+    </select>
+
+    <select id="getMachineErrors" resultType="com.aacoptics.wlg.dashboard.entity.MoldingEventData">
+        SELECT [id]
+             , [site]
+             , [machine_name]
+             , case [status_id] when 2 then 'unitcontrol_error' when 3 then 'unitcontrol_fatal_error' end as event_info
+             , [status_value]                                                                             as alarm_info
+             , [start_time]
+             , [end_time]
+             , [create_time]
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
+        where machine_name = #{machineName}
+          and start_time between #{startTime} and #{endTime}
+          and end_time is not null
+          and [status_value] = 'true'
         order by start_time
     </select>
 

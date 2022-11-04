@@ -167,7 +167,7 @@ export default {
       action: {
         operation: "操作",
         add: "新增",
-        edit: "编辑",
+        edit: "编辑接单人",
         delete: "删除",
         batchDelete: "批量删除",
         search: "查询",

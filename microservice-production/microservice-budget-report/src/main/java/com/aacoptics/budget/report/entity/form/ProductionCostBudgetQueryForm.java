@@ -7,10 +7,18 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @ApiModel
 @Data
 public class ProductionCostBudgetQueryForm extends BaseQueryForm<ProductionCostBudgetQueryParam> {
 
     @ApiModelProperty(value = "上传日志ID")
     private Long uploadLogId;
+
+    @ApiModelProperty(value = "事业部")
+    private String businessDivision;
+
+    @ApiModelProperty(value = "产品线")
+    private List<String> productLineList;
 }

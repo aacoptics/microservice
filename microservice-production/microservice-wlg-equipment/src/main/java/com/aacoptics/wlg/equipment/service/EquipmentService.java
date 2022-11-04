@@ -4,12 +4,23 @@ import com.aacoptics.wlg.equipment.entity.param.EquipmentQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.Equipment;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 public interface EquipmentService {
 
+    /**
+     * 解析Excel数据，并保存到数据库
+     *
+     * @param in
+     * @throws IOException
+     * @throws InvalidFormatException
+     */
+    void importEquipmentExcel(InputStream in) throws Exception;
 
     /**
      * 从EAM数据库获取WLG设备
@@ -123,7 +134,7 @@ public interface EquipmentService {
 
 
     /**
-     * 根据设备编码查询设备
+     * 根据设备编码或编号查询设备
      *
      * @param mchCode 设备编码
      * @return

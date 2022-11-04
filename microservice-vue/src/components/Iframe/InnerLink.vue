@@ -44,7 +44,7 @@ export default {
     const iframeId = ("#" + this.iframeId).replace(/\//g, "\\/");
     const iframe = document.querySelector(iframeId);
     const deviceHeight = document.documentElement.clientHeight;
-    iframe.style.height = (Number(deviceHeight) - 158) + 'px'; //数字是页面布局高度差
+    iframe.style.height = (Number(deviceHeight) - 123) + 'px'; //数字是页面布局高度差
 
     // iframe页面loading控制
     if (iframe.attachEvent) {

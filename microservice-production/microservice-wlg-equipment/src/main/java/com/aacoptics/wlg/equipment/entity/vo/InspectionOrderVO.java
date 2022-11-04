@@ -33,6 +33,11 @@ public class InspectionOrderVO extends BasePo {
     private String mchName;
 
     /**
+     * 设备编号
+     */
+    private String equipNumber;
+
+    /**
      * 规格
      */
     private String spec;
