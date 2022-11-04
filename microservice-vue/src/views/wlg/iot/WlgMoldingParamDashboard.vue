@@ -180,6 +180,17 @@
           </el-table>
         </el-col>
       </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <div id="avgLineChart"
+               style="margin-top: 10px;height: 600px; width: 100%"></div>
+        </el-col>
+        <el-col :span="12">
+          <div id="stdLineChart"
+               style="margin-top: 10px;height: 600px; width: 100%"></div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -424,6 +435,42 @@ export default {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.analysisData = responseData.data
+          const legendInfo = []
+          const serialAvgDataArray = []
+          const serialStdDataArray = []
+          const xAxisInfo = []
+          let tempParam = ''
+          let serialAvgData = {data: []}
+          let serialStdData = {data: []}
+          this.analysisData.forEach(item => {
+            if(item.paramName !== tempParam){
+              legendInfo.push(item.paramName)
+              if(serialAvgData.data.length > 0)
+                serialAvgDataArray.push(serialAvgData)
+              if(serialStdData.data.length > 0)
+                serialStdDataArray.push(serialStdData)
+              serialAvgData = {
+                name: item.paramName,
+                data: [],
+                type: 'line',
+                smooth: true
+              }
+
+              serialStdData = {
+                name: item.paramName,
+                data: [],
+                type: 'line',
+                smooth: true
+              }
+              tempParam = item.paramName;
+            }
+            if(xAxisInfo.indexOf(item.waferId) === -1)
+              xAxisInfo.push(item.waferId)
+            serialAvgData.data.push(item.avgValue)
+            serialStdData.data.push(item.stdValue)
+          })
+          this.drawAvgLineChart(xAxisInfo, legendInfo, serialAvgDataArray)
+          this.drawStdLineChart(xAxisInfo, legendInfo, serialStdDataArray)
         }
       })
     },
@@ -805,6 +852,70 @@ export default {
         };
         myChart.setOption(option, true);
       }
+
+      option && myChart.setOption(option, true);
+    },
+
+    drawAvgLineChart(xAxisInfo, legendInfo, serialAvgDataArray) {
+      const chartDom = document.getElementById('avgLineChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        xAxis: {
+          type: 'category',
+          data: xAxisInfo
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        legend: {
+          data: legendInfo
+        },
+
+        tooltip: {
+          order: 'valueDesc',
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          },
+          confine: true,
+        },
+        series: serialAvgDataArray
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    drawStdLineChart(xAxisInfo, legendInfo, serialStdDataArray) {
+      const chartDom = document.getElementById('stdLineChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        xAxis: {
+          type: 'category',
+          data: xAxisInfo
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        legend: {
+          data: legendInfo
+        },
+
+        tooltip: {
+          order: 'valueDesc',
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          },
+          confine: true,
+        },
+        series: serialStdDataArray
+      };
 
       option && myChart.setOption(option, true);
     }
