@@ -6,54 +6,54 @@
           <el-row>
             <el-col :span="4">
               <el-form-item label="类别" prop="category">
-                <el-select v-model.trim="filters.category" placeholder="" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.category" placeholder="" clearable style="width: 150px;">
                   <el-option v-for="item in categoryList" :key="item.category" :value="item.category" :label="item.category"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="项目" prop="project">
-                <el-select v-model.trim="filters.project" placeholder="" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.project" placeholder="" clearable style="width: 150px;">
                   <el-option v-for="item in projectList" :key="item.project" :value="item.project" :label="item.project"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="零件名称" prop="partName">
-                <el-select v-model.trim="filters.partName" placeholder="" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.partName" placeholder="" clearable style="width: 150px;">
                   <el-option v-for="item in partNameList" :key="item.partName" :value="item.partName" :label="item.partName"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="材料" prop="material">
-                <el-select v-model.trim="filters.material" placeholder="" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.material" placeholder="" clearable style="width: 150px;">
                   <el-option v-for="item in materialList" :key="item.material" :value="item.material" :label="item.material"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4">
               <el-form-item label="模具序号" prop="moldNo">
-                <el-select v-model.trim="filters.moldNo" placeholder="" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.moldNo" placeholder="" clearable style="width: 150px;">
                   <el-option v-for="item in moldNoList" :key="item.moldNo" :value="item.moldNo" :label="item.moldNo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="4">
+            <el-col :span="5">
               <el-form-item label="搜索类型" prop="searchType">
-                <el-select v-model.trim="filters.searchType" placeholder="请选择" clearable style="width: 180px;">
+                <el-select v-model.trim="filters.searchType" placeholder="请选择" clearable style="width: 150px;">
                   <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="5">
               <el-form-item label="起始值" prop="startValue">
                 <el-input v-model="filters.startValue" clearable placeholder="起始值"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="5">
               <el-form-item label="结束值" prop="endValue">
                 <el-input v-model="filters.endValue" clearable placeholder="结束值"></el-input>
               </el-form-item>
