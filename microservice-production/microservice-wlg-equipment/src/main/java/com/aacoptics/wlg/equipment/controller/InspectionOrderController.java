@@ -67,6 +67,17 @@ public class InspectionOrderController {
         return Result.success(inspectionOrderService.query(inspectionOrderQueryForm.getPage(), inspectionOrderQueryForm.toParam(InspectionOrderQueryParam.class)));
     }
 
+    @ApiOperation(value = "搜索点检工单明细", notes = "搜索点检工单明细")
+    @ApiImplicitParam(name = "projectMapQueryForm", value = "点检工单查询参数", required = true, dataType = "ProjectMapQueryForm")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/queryDetail")
+    public Result queryDetail(@Valid @RequestBody InspectionOrderQueryForm inspectionOrderQueryForm) {
+        log.debug("query with name:{}", inspectionOrderQueryForm);
+        return Result.success(inspectionOrderService.queryDetail(inspectionOrderQueryForm.getPage(), inspectionOrderQueryForm.toParam(InspectionOrderQueryParam.class)));
+    }
+
     @ApiOperation(value = "新增点检工单", notes = "新增一个点检工单信息")
     @ApiImplicitParam(name = "InspectionForm", value = "新增点检工单form表单", required = true, dataType = "InspectionOrderForm")
     @PostMapping
@@ -179,6 +190,17 @@ public class InspectionOrderController {
         else {
             log.error("获取" + DataDictConstants.INSPECTION_ORDER_STATUS + "数据字典失败，" + orderStatusResult.getMsg());
         }
+        //是否
+        Result yesNoResult = dataDictProvider.getDataDictList(DataDictConstants.YES_NO);
+        HashMap<String, String> yesNoMap = new HashMap<String, String>();
+        if(yesNoResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)yesNoResult.getData();
+            yesNoMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.YES_NO + "数据字典失败，" + yesNoResult.getMsg());
+        }
 
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -274,11 +296,47 @@ public class InspectionOrderController {
                         }else{
                             dataRow.createCell(17).setCellType(CellType.BLANK);
                         }
-                        dataRow.createCell(18).setCellValue(inspectionOrderItem.getIsFinish() != null ? inspectionOrderItem.getIsFinish() + "" : "");
+
+                        String isFinish = inspectionOrderItem.getIsFinish() != null ? inspectionOrderItem.getIsFinish() + "" : "";
+                        if(StringUtils.isNotEmpty(isFinish))
+                        {
+                            if(yesNoMap.containsKey(isFinish))
+                            {
+                                isFinish = yesNoMap.get(isFinish);
+                            }
+                        }
+                        dataRow.createCell(18).setCellValue(isFinish);
                         dataRow.createCell(19).setCellValue(inspectionOrderItem.getCheckResult() != null ? inspectionOrderItem.getCheckResult() + "" : "");
-                        dataRow.createCell(20).setCellValue(inspectionOrderItem.getIsException() != null ? inspectionOrderItem.getIsException() + "" : "");
-                        dataRow.createCell(21).setCellValue(inspectionOrderItem.getIsFault() != null ? inspectionOrderItem.getIsFault() + "" : "");
-                        dataRow.createCell(22).setCellValue(inspectionOrderItem.getIsRepair() != null ? inspectionOrderItem.getIsRepair() + "" : "");
+
+                        String isException = inspectionOrderItem.getIsException() != null ? inspectionOrderItem.getIsException() + "" : "";
+                        if(StringUtils.isNotEmpty(isException))
+                        {
+                            if(yesNoMap.containsKey(isException))
+                            {
+                                isException = yesNoMap.get(isException);
+                            }
+                        }
+                        dataRow.createCell(20).setCellValue(isException);
+
+                        String isFault = inspectionOrderItem.getIsFault() != null ? inspectionOrderItem.getIsFault() + "" : "";
+                        if(StringUtils.isNotEmpty(isFault))
+                        {
+                            if(yesNoMap.containsKey(isFault))
+                            {
+                                isFault = yesNoMap.get(isFault);
+                            }
+                        }
+                        dataRow.createCell(21).setCellValue(isFault);
+
+                        String isRepair = inspectionOrderItem.getIsRepair() != null ? inspectionOrderItem.getIsRepair() + "" : "";
+                        if(StringUtils.isNotEmpty(isRepair))
+                        {
+                            if(yesNoMap.containsKey(isRepair))
+                            {
+                                isRepair = yesNoMap.get(isRepair);
+                            }
+                        }
+                        dataRow.createCell(22).setCellValue(isRepair);
                         dataRow.createCell(23).setCellValue(inspectionOrderItem.getFaultDesc() != null ? inspectionOrderItem.getFaultDesc() + "" : "");
                         dataRow.createCell(24).setCellValue(inspectionOrderItem.getUpdatedBy() != null ? inspectionOrderItem.getUpdatedBy() + "" : "");
                         dataRow.createCell(25).setCellValue(inspectionOrderItem.getUpdatedTime() != null ? inspectionOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");

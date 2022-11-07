@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
@@ -60,6 +61,14 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         IPage<InspectionOrderVO> inspectionOrderVOIPage = inspectionOrderMapper.findInspectionOrderList(page, inspectionOrderQueryParam);
 
         return inspectionOrderVOIPage;
+    }
+
+    @Override
+    public IPage<InspectionOrderDetailVO> queryDetail(Page page, InspectionOrderQueryParam inspectionOrderQueryParam) {
+
+        IPage<InspectionOrderDetailVO> inspectionOrderDetailList = inspectionOrderMapper.findInspectionOrderDetailList(page, inspectionOrderQueryParam);
+
+        return inspectionOrderDetailList;
     }
 
     @Override

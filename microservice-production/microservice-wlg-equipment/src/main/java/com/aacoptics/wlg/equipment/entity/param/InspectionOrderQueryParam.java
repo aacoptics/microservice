@@ -51,4 +51,9 @@ public class InspectionOrderQueryParam extends BaseParam<InspectionOrder> {
      */
     private String equipNumber;
 
+
+    /**
+     * 点检项
+     */
+    private String checkItem;
 }

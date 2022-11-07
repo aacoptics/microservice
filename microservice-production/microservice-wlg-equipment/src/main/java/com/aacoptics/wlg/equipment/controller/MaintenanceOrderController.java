@@ -61,6 +61,18 @@ public class MaintenanceOrderController {
         return Result.success(maintenanceOrderService.query(maintenanceOrderQueryForm.getPage(), maintenanceOrderQueryForm.toParam(MaintenanceOrderQueryParam.class)));
     }
 
+    @ApiOperation(value = "搜索保养工单", notes = "根据条件搜索保养工单信息")
+    @ApiImplicitParam(name = "projectMapQueryForm", value = "保养工单查询参数", required = true, dataType = "ProjectMapQueryForm")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/queryDetail")
+    public Result queryDetail(@Valid @RequestBody MaintenanceOrderQueryForm maintenanceOrderQueryForm) {
+        log.debug("query with name:{}", maintenanceOrderQueryForm);
+        return Result.success(maintenanceOrderService.queryDetail(maintenanceOrderQueryForm.getPage(), maintenanceOrderQueryForm.toParam(MaintenanceOrderQueryParam.class)));
+    }
+
+
     @ApiOperation(value = "新增保养工单", notes = "新增一个保养工单信息")
     @ApiImplicitParam(name = "MaintenanceForm", value = "新增保养工单form表单", required = true, dataType = "MaintenanceOrderForm")
     @PostMapping
@@ -172,6 +184,17 @@ public class MaintenanceOrderController {
         else {
             log.error("获取" + DataDictConstants.MAINTENANCE_ORDER_STATUS + "数据字典失败，" + orderStatusResult.getMsg());
         }
+        //是否
+        Result yesNoResult = dataDictProvider.getDataDictList(DataDictConstants.YES_NO);
+        HashMap<String, String> yesNoMap = new HashMap<String, String>();
+        if(yesNoResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)yesNoResult.getData();
+            yesNoMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.YES_NO + "数据字典失败，" + yesNoResult.getMsg());
+        }
 
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -262,11 +285,47 @@ public class MaintenanceOrderController {
                         }else{
                             dataRow.createCell(14).setCellType(CellType.BLANK);
                         }
-                        dataRow.createCell(15).setCellValue(maintenanceOrderItem.getIsFinish() != null ? maintenanceOrderItem.getIsFinish() + "" : "");
+
+                        String isFinish = maintenanceOrderItem.getIsFinish() != null ? maintenanceOrderItem.getIsFinish() + "" : "";
+                        if(StringUtils.isNotEmpty(isFinish))
+                        {
+                            if(yesNoMap.containsKey(isFinish))
+                            {
+                                isFinish = yesNoMap.get(isFinish);
+                            }
+                        }
+                        dataRow.createCell(15).setCellValue(isFinish);
                         dataRow.createCell(16).setCellValue(maintenanceOrderItem.getMaintenanceResult() != null ? maintenanceOrderItem.getMaintenanceResult() + "" : "");
-                        dataRow.createCell(17).setCellValue(maintenanceOrderItem.getIsException() != null ? maintenanceOrderItem.getIsException() + "" : "");
-                        dataRow.createCell(18).setCellValue(maintenanceOrderItem.getIsFault() != null ? maintenanceOrderItem.getIsFault() + "" : "");
-                        dataRow.createCell(19).setCellValue(maintenanceOrderItem.getIsRepair() != null ? maintenanceOrderItem.getIsRepair() + "" : "");
+
+                        String isException = maintenanceOrderItem.getIsException() != null ? maintenanceOrderItem.getIsException() + "" : "";
+                        if(StringUtils.isNotEmpty(isException))
+                        {
+                            if(yesNoMap.containsKey(isException))
+                            {
+                                isException = yesNoMap.get(isException);
+                            }
+                        }
+                        dataRow.createCell(17).setCellValue(isException);
+
+                        String isFault = maintenanceOrderItem.getIsFault() != null ? maintenanceOrderItem.getIsFault() + "" : "";
+                        if(StringUtils.isNotEmpty(isFault))
+                        {
+                            if(yesNoMap.containsKey(isFault))
+                            {
+                                isFault = yesNoMap.get(isFault);
+                            }
+                        }
+                        dataRow.createCell(18).setCellValue(isFault);
+
+                        String isRepair = maintenanceOrderItem.getIsRepair() != null ? maintenanceOrderItem.getIsRepair() + "" : "";
+                        if(StringUtils.isNotEmpty(isRepair))
+                        {
+                            if(yesNoMap.containsKey(isRepair))
+                            {
+                                isRepair = yesNoMap.get(isRepair);
+                            }
+                        }
+                        dataRow.createCell(19).setCellValue(isRepair);
                         dataRow.createCell(20).setCellValue(maintenanceOrderItem.getFaultDesc() != null ? maintenanceOrderItem.getFaultDesc() + "" : "");
                         dataRow.createCell(21).setCellValue(maintenanceOrderItem.getUpdatedBy() != null ? maintenanceOrderItem.getUpdatedBy() + "" : "");
                         dataRow.createCell(22).setCellValue(maintenanceOrderItem.getUpdatedTime() != null ? maintenanceOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");

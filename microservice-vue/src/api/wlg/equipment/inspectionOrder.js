@@ -143,3 +143,14 @@ export function exportInspectionOrderExcel(conditions) {
         data: conditions
     })
 }
+
+export function findInspectionOrderDetailPage(conditions) {
+    return request({
+        url: '/wlg-equipment/inspectionOrder/queryDetail',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}

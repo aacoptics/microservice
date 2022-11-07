@@ -9,6 +9,7 @@ import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceOrderItemMapper;
@@ -65,6 +66,14 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         return maintenanceOrderVOIPage;
     }
 
+
+    @Override
+    public IPage<MaintenanceOrderDetailVO> queryDetail(Page page, MaintenanceOrderQueryParam maintenanceOrderQueryParam) {
+
+        IPage<MaintenanceOrderDetailVO> maintenanceOrderDetailList = maintenanceOrderMapper.findMaintenanceOrderDetailList(page, maintenanceOrderQueryParam);
+
+        return maintenanceOrderDetailList;
+    }
 
 
     @Override

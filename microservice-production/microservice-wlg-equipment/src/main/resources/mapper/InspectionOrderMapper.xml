@@ -94,6 +94,67 @@
     </select>
 
 
+
+    <select id="findInspectionOrderDetailList" resultType="com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO">
+        SELECT A.ID,
+        A.ORDER_NUMBER,
+        A.MCH_CODE,
+        A.INSPECTION_DATE,
+        A.INSPECTION_SHIFT,
+        A.SHIFT_START_TIME,
+        A.SHIFT_END_TIME,
+        A.DUTY_PERSON_ID,
+        A.STATUS,
+        B.MCH_NAME,
+        B.SPEC,
+        B.TYPE_VERSION,
+        B.FACTORY_NO,
+        B.EQUIP_NUMBER,
+        C.CHECK_ITEM,
+        C.CHECK_ITEM_STANDARD,
+        C.MIN_VALUE,
+        C.MAX_VALUE,
+        C.ACTUAL_VALUE,
+        C.CHECK_RESULT,
+        C.IS_EXCEPTION,
+        C.IS_FINISH,
+        C.IS_FAULT,
+        C.FAULT_DESC,
+        C.FAULT_IMAGE_ID,
+        C.IS_REPAIR,
+        C.CREATED_TIME,
+        C.CREATED_BY,
+        C.UPDATED_TIME,
+        C.UPDATED_BY
+        FROM EM_INSPECTION_ORDER A
+        LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        LEFT JOIN EM_INSPECTION_ORDER_ITEM C ON A.ID = C.INSPECTION_ORDER_ID
+        WHERE 1=1
+        <if test="inspectionOrderQueryParam.mchCode != null and inspectionOrderQueryParam.mchCode!=''">
+            AND A.MCH_CODE = #{inspectionOrderQueryParam.mchCode}
+        </if>
+        <if test="inspectionOrderQueryParam.status != null and inspectionOrderQueryParam.status!=''">
+            AND A.STATUS = #{inspectionOrderQueryParam.status}
+        </if>
+        <if test="inspectionOrderQueryParam.mchName != null and inspectionOrderQueryParam.mchName!=''">
+            AND B.MCH_NAME = #{inspectionOrderQueryParam.mchName}
+        </if>
+        <if test="inspectionOrderQueryParam.spec != null and inspectionOrderQueryParam.spec!=''">
+            AND B.SPEC = #{inspectionOrderQueryParam.spec}
+        </if>
+        <if test="inspectionOrderQueryParam.typeVersion != null and inspectionOrderQueryParam.typeVersion!=''">
+            AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
+        </if>
+        <if test="inspectionOrderQueryParam.equipNumber != null and inspectionOrderQueryParam.equipNumber!=''">
+            AND B.EQUIP_NUMBER = #{inspectionOrderQueryParam.equipNumber}
+        </if>
+        <if test="inspectionOrderQueryParam.checkItem != null and inspectionOrderQueryParam.checkItem!=''">
+            AND C.CHECK_ITEM = #{inspectionOrderQueryParam.checkItem}
+        </if>
+        ORDER BY A.ORDER_NUMBER, C.CHECK_ITEM
+    </select>
+
+
     <select id="findInspectionOrderAndItemList" resultMap="InspectionOrderAndItemVO">
         SELECT A.ID,
         A.ORDER_NUMBER,
@@ -147,6 +208,9 @@
         </if>
         <if test="inspectionOrderQueryParam.typeVersion != null and inspectionOrderQueryParam.typeVersion!=''">
             AND B.TYPE_VERSION = #{inspectionOrderQueryParam.typeVersion}
+        </if>
+        <if test="inspectionOrderQueryParam.checkItem != null and inspectionOrderQueryParam.checkItem!=''">
+            AND C.CHECK_ITEM = #{inspectionOrderQueryParam.checkItem}
         </if>
         ORDER BY A.ORDER_NUMBER
     </select>
