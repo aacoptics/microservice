@@ -30,4 +30,7 @@ public class MaintenanceOrderQueryForm extends BaseQueryForm<MaintenanceOrderQue
 
     @ApiModelProperty(value = "设备编号")
     private String equipNumber;
+
+    @ApiModelProperty(value = "保养项")
+    private String maintenanceItem;
 }
