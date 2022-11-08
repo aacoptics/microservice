@@ -8,13 +8,11 @@ import com.aacoptics.wlg.equipment.entity.po.FeishuMessage;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.MessageHistory;
-import com.aacoptics.wlg.equipment.provider.FeishuApi;
 import com.aacoptics.wlg.equipment.provider.NotificationProvider;
 import com.aacoptics.wlg.equipment.service.InspectionOrderService;
 import com.aacoptics.wlg.equipment.service.MaintenanceOrderService;
 import com.aacoptics.wlg.equipment.service.MessageHistoryService;
 import com.aacoptics.wlg.equipment.service.MessageService;
-import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +36,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private MessageHistoryService messageHistoryService;
-
-    @Resource
-    private FeishuApi feishuApi;
-
 
 
     @Override
@@ -78,14 +72,13 @@ public class MessageServiceImpl implements MessageService {
             }
             contentStringBuffer.append("请注意处理！");
 
-            JSONObject cardJson = feishuApi.getMarkdownMessage(contentStringBuffer.toString(), null);
+            String content = contentStringBuffer.toString();
 
-            String cardMessage = cardJson.toJSONString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
             feishuMessage.setSendType(RECEIVE_TYPE);
             feishuMessage.setSendId(dutyPersonId);
-            feishuMessage.setContent(cardMessage);
+            feishuMessage.setContent(content);
 
             Result result = notificationProvider.sendFeishuNotification(feishuMessage);
             if(result.isSuccess()){
@@ -95,7 +88,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setReceiveId(dutyPersonId);
                 messageHistory.setReceiveType(RECEIVE_TYPE);
                 messageHistory.setType(MessageTypeConstants.INSPECTION_EXCEPTION);
-                messageHistory.setMessage(cardMessage);
+                messageHistory.setMessage(content);
 
                 messageHistoryService.add(messageHistory);
 
