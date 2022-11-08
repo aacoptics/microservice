@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -67,10 +68,13 @@ public class MessageServiceImpl implements MessageService {
                 InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
                 if(inspectionOrderItem.getIsException() == 1)
                 {
+                    BigDecimal minValue = inspectionOrderItem.getMinValue();
+                    BigDecimal maxValue = inspectionOrderItem.getMaxValue();
+                    BigDecimal actualValue = inspectionOrderItem.getActualValue();
                     contentStringBuffer.append(inspectionOrderItem.getCheckItem() +
-                            "：参数范围值为" + inspectionOrderItem.getMinValue().toPlainString()
-                            + "到" + inspectionOrderItem.getMaxValue().toPlainString() +
-                            "；实际参数为" + inspectionOrderItem.getActualValue().toPlainString() + "  \n");
+                            "：参数范围值为" + minValue.toPlainString()
+                            + "到" + maxValue.toPlainString() +
+                            "，实际参数为" + (actualValue != null ? actualValue.toPlainString() : "")  + "  \n");
                 }
             }
             contentStringBuffer.append("请注意处理！");
