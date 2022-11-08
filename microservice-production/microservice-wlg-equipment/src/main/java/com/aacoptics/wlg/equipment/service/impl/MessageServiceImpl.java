@@ -67,7 +67,10 @@ public class MessageServiceImpl implements MessageService {
                 InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
                 if(inspectionOrderItem.getIsException() == 1)
                 {
-                    contentStringBuffer.append(inspectionOrderItem.getCheckItem() + "：参数范围值为" + inspectionOrderItem.getMinValue() + "到" + inspectionOrderItem.getMaxValue() + "；实际参数为" + inspectionOrderItem.getActualValue() + "  \n");
+                    contentStringBuffer.append(inspectionOrderItem.getCheckItem() +
+                            "：参数范围值为" + inspectionOrderItem.getMinValue().toPlainString()
+                            + "到" + inspectionOrderItem.getMaxValue().toPlainString() +
+                            "；实际参数为" + inspectionOrderItem.getActualValue().toPlainString() + "  \n");
                 }
             }
             contentStringBuffer.append("请注意处理！");
