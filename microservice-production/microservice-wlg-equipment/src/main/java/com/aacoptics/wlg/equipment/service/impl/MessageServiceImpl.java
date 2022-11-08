@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -56,24 +57,29 @@ public class MessageServiceImpl implements MessageService {
 
 
             StringBuffer contentStringBuffer = new StringBuffer();
-            contentStringBuffer.append("**点检设备异常通知（测试）**\\n;");
-            contentStringBuffer.append("工单号：" +orderNumber + "\\n");
-            contentStringBuffer.append("资产编码：" +mchCode + "\\n");
-            contentStringBuffer.append("存在点检项异常：\\n");
+            contentStringBuffer.append("**点检设备异常通知（测试）**  \n");
+            contentStringBuffer.append("工单号：" +orderNumber + "  \n");
+            contentStringBuffer.append("资产编码：" +mchCode + "  \n");
+            contentStringBuffer.append("存在点检项异常：  \n");
 
             List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
             for(int j=0; j<inspectionOrderItemList.size(); j++)
             {
-                InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(i);
+                InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
                 if(inspectionOrderItem.getIsException() == 1)
                 {
-                    contentStringBuffer.append("参数范围值为" + inspectionOrderItem.getMinValue() + "到" + inspectionOrderItem.getMaxValue() + "；实际参数为" + inspectionOrderItem.getActualValue() + "\\n");
+                    BigDecimal minValue = inspectionOrderItem.getMinValue();
+                    BigDecimal maxValue = inspectionOrderItem.getMaxValue();
+                    BigDecimal actualValue = inspectionOrderItem.getActualValue();
+                    contentStringBuffer.append(inspectionOrderItem.getCheckItem() +
+                            "：参数范围值为" + minValue.toPlainString()
+                            + "到" + maxValue.toPlainString() +
+                            "，实际参数为" + (actualValue != null ? actualValue.toPlainString() : "")  + "  \n");
                 }
             }
             contentStringBuffer.append("请注意处理！");
 
             String content = contentStringBuffer.toString();
-
 
             FeishuMessage feishuMessage = new FeishuMessage();
             feishuMessage.setSendType(RECEIVE_TYPE);
@@ -102,5 +108,21 @@ public class MessageServiceImpl implements MessageService {
             }
         }
         return true;
+    }
+
+
+    @Override
+    public boolean sendMaintenanceExceptionMessage() {
+        return false;
+    }
+
+    @Override
+    public boolean sendInspectionTimeoutMessage() {
+        return false;
+    }
+
+    @Override
+    public boolean sendMaintenanceTimeoutMessage() {
+        return false;
     }
 }

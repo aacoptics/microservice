@@ -13,4 +13,29 @@ public interface MessageService {
      */
     boolean sendInspectionExceptionMessage();
 
+
+    /**
+     * 推送保养异常工单
+     *
+     * @return
+     */
+    boolean sendMaintenanceExceptionMessage();
+
+
+    /**
+     * 推送点检超时工单
+     *
+     * @return
+     */
+    boolean sendInspectionTimeoutMessage();
+
+
+
+    /**
+     * 推送保养超时工单
+     *
+     * @return
+     */
+    boolean sendMaintenanceTimeoutMessage();
+
 }
