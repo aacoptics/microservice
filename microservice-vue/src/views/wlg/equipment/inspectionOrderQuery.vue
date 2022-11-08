@@ -58,10 +58,9 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="false" :showBatchDelete="false" :showPreview="false" :showOperationDel="false"
-                  :stripe="true"
-                  border @findPage="findPage" 
-                  @handleCurrentChange="handleCurrentChange" >
+                  :show-operation="false" :showBatchDelete="false" :showOperationDel="false"
+                  :stripe="true" @handlePreview="handlePreview" :showBatchOperation="false"
+                  border @findPage="findPage" >
       </orderTable>
 
 
@@ -187,7 +186,6 @@ export default {
         {prop: "isRepair", label: "是否需要维修", minWidth: 120, formatter: this.yesNoFormat},
         {prop: "faultDesc", label: "故障描述", minWidth: 100},
 
-        {prop: "faultPhoto", label: "故障照片", minWidth: 100},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
@@ -305,8 +303,8 @@ export default {
         link.click();
       });
     },
-    handlePreview: function (index, row) {
-      let id = row.faultImageId;
+    handlePreview: function (params) {
+      let id = params.row.faultImageId;
       if (id == null) {
         this.$message.error('无故障图片！');
         return;
