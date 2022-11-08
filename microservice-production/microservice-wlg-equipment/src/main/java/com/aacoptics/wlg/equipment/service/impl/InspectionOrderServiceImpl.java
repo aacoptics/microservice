@@ -130,6 +130,10 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         return isSuccess;
     }
 
+    @Override
+    public boolean updateById(InspectionOrder inspectionOrder) {
+        return super.updateById(inspectionOrder);
+    }
 
     @Override
     public InspectionOrder get(Long id) {
@@ -208,7 +212,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setShiftStartTime(shiftStartTime);
                     inspectionOrder.setShiftEndTime(shiftEndTime);
                     inspectionOrder.setStatus(InspectionOrderStatusConstants.CREATED);
-
+                    inspectionOrder.setExceptionNotification(NotificationStatusConstants.NO);
+                    inspectionOrder.setTimeoutNotification(NotificationStatusConstants.NO);
                     //创建工单点检项
                     List<InspectionOrderItem> inspectionOrderItemList = new ArrayList<>();
                     for(InspectionItem inspectionItem : inspectionItemList)
@@ -339,5 +344,17 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
         boolean isSuccess = this.updateById(targetInspectionOrder);
         return isSuccess;
+    }
+
+    @Override
+    public List<InspectionOrder> findInspectionExceptionOrder() {
+        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
+        inspectionOrderQueryWrapper.eq("exception_notification", NotificationStatusConstants.NO);
+        inspectionOrderQueryWrapper.in("status", InspectionOrderStatusConstants.COMMITTED, InspectionOrderStatusConstants.CONFIRMED);
+        inspectionOrderQueryWrapper.inSql("id","select inspection_order_id from em_inspection_order_item where is_exception = 1");
+        inspectionOrderQueryWrapper.orderByAsc("order_number");
+        List<InspectionOrder> inspectionOrderList = this.list(inspectionOrderQueryWrapper);
+
+        return inspectionOrderList;
     }
 }

@@ -58,10 +58,9 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="false" :showBatchDelete="false" :showPreview="false" :showOperationDel="false"
-                  :stripe="true" 
-                  border @findPage="findPage"
-                  @handleCurrentChange="handleCurrentChange" @selection-change="handleSelectionChange">
+                  :show-operation="false" :showBatchDelete="false"  :showOperationDel="false" :showBatchOperation="false"
+                  :stripe="true"  @handlePreview="handlePreview"
+                  border @findPage="findPage" >
       </orderTable>
   
     </div>
@@ -127,7 +126,6 @@ export default {
         {prop: "isFault", label: "是否存在故障", minWidth: 150, formatter: this.yesNoFormat},
         {prop: "isRepair", label: "是否需要维修", minWidth: 150, formatter: this.yesNoFormat},
         {prop: "faultDesc", label: "故障描述", minWidth: 150},
-        {prop: "faultImageId", label: "故障照片", minWidth: 150},
 
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -211,8 +209,8 @@ export default {
             }
           });
     },
-    handlePreview: function (index, row) {
-      let id = row.faultImageId;
+    handlePreview: function (params) {
+      let id = params.row.faultImageId;
       if (id == null) {
         this.$message.error('无故障图片！');
         return;
@@ -234,18 +232,7 @@ export default {
         this.$message.error(err)
       })
     },
-    handleCurrentChange: function (val) {
-      if (val == null || val.val == null) {
-        this.currentSelectMaintenanceOrderMainRowId = null;
-        return;
-      }
-      this.currentSelectMaintenanceOrderMainRowId = val.val.id;
-      this.findMaintenanceOrderDetail(this.currentSelectMaintenanceOrderMainRowId);
-    },
-    //获取多选的数据
-    handleSelectionChange(val) {
-      this.multipleSelection = val;//存储选中的数据
-    },
+
    
     exportExcelData(excelFileName) {
       let pageRequest = {};
