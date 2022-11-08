@@ -1,12 +1,11 @@
 package com.aacoptics.wlg.equipment.provider;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 
 @Slf4j
 @Component
@@ -15,32 +14,32 @@ public class FeishuApi {
     public JSONObject getMarkdownMessage(String content, String imageKey){
         //config
         JSONObject config = new JSONObject();
-        config.set("wide_screen_mode", true);
-        config.set("enable_forward", true);
+        config.put("wide_screen_mode", true);
+        config.put("enable_forward", true);
 
         //elements
         JSONArray elements = new JSONArray();
 
         JSONObject text = new JSONObject();
-        text.set("content", content);
-        text.set("tag", "markdown");
+        text.put("content", content);
+        text.put("tag", "markdown");
         elements.add(text);
 
-        if(StrUtil.isNotEmpty(imageKey)){
+        if(StringUtils.isNotEmpty(imageKey)){
             JSONObject textContent = new JSONObject();
-            textContent.set("tag","plain_text");
-            textContent.set("content","");
+            textContent.put("tag","plain_text");
+            textContent.put("content","");
             JSONObject elementImg = new JSONObject();
-            elementImg.set("tag", "img");
-            elementImg.set("img_key", imageKey);
-            elementImg.set("mode", "fit_horizontal");
-            elementImg.set("alt", textContent);
+            elementImg.put("tag", "img");
+            elementImg.put("img_key", imageKey);
+            elementImg.put("mode", "fit_horizontal");
+            elementImg.put("alt", textContent);
             elements.add(elementImg);
         }
 
         JSONObject card = new JSONObject();
-        card.set("config", config);
-        card.set("elements", elements);
+        card.put("config", config);
+        card.put("elements", elements);
         return card;
     }
 
