@@ -1,8 +1,6 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.MessageTypeConstants;
 import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
@@ -16,7 +14,7 @@ import com.aacoptics.wlg.equipment.service.InspectionOrderService;
 import com.aacoptics.wlg.equipment.service.MaintenanceOrderService;
 import com.aacoptics.wlg.equipment.service.MessageHistoryService;
 import com.aacoptics.wlg.equipment.service.MessageService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -82,7 +80,7 @@ public class MessageServiceImpl implements MessageService {
 
             JSONObject cardJson = feishuApi.getMarkdownMessage(contentStringBuffer.toString(), null);
 
-            String cardMessage = JSONUtil.toJsonStr(cardJson);
+            String cardMessage = cardJson.toJSONString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
             feishuMessage.setSendType(RECEIVE_TYPE);
