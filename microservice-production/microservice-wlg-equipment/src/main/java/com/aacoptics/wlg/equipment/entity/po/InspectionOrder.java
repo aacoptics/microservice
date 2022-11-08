@@ -70,6 +70,19 @@ public class InspectionOrder extends BasePo {
     private String status;
 
     /**
+     * 异常通知
+     */
+    @TableField(value = "exception_notification")
+    private Integer exceptionNotification;
+
+    /**
+     * 超时通知
+     */
+    @TableField(value = "timeout_notification")
+    private Integer timeoutNotification;
+
+
+    /**
      * 点检项
      */
     @TableField(exist = false)

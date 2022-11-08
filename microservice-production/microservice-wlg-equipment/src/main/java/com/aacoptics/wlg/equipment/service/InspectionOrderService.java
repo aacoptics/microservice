@@ -38,6 +38,14 @@ public interface InspectionOrderService {
     boolean update(InspectionOrder inspectionOrder);
 
     /**
+     * 更新点检工单信息
+     *
+     * @param inspectionOrder
+     */
+    boolean updateById(InspectionOrder inspectionOrder);
+
+
+    /**
      * 根据id删除点检工单
      *
      * @param id
@@ -121,4 +129,12 @@ public interface InspectionOrderService {
      * @return
      */
     List<InspectionOrderAndItemVO> queryInspectionOrderByCondition(InspectionOrderQueryParam inspectionOrderQueryParam);
+
+
+    /**
+     * 查找点检异常工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionExceptionOrder();
 }
