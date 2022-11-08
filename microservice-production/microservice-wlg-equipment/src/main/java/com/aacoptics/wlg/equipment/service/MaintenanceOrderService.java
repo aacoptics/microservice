@@ -6,6 +6,7 @@ import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,6 +22,13 @@ public interface MaintenanceOrderService {
      */
     IPage<MaintenanceOrderVO> query(Page page, MaintenanceOrderQueryParam maintenanceOrderQueryParam);
 
+
+    /**
+     * 根据条件查询保养工单信息
+     *
+     * @return
+     */
+    IPage<MaintenanceOrderDetailVO> queryDetail(Page page, MaintenanceOrderQueryParam maintenanceOrderQueryParam);
 
 
     /**

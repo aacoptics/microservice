@@ -11,4 +11,6 @@ public class DataDictConstants {
     public static final String REPAIR_ORDER_STATUS = "wlg_em_repair_order_status"; //维修工单状态
 
     public static final String REPAIR_ORDER_SOURCE = "wlg_em_repair_order_source"; //维修工单来源
+
+    public static final String YES_NO = "wlg_em_yes_no"; //是否
 }

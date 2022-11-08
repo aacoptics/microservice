@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -19,6 +20,13 @@ public interface InspectionOrderService {
      * @return
      */
     IPage<InspectionOrderVO> query(Page page, InspectionOrderQueryParam inspectionOrderQueryParam);
+
+    /**
+     * 根据条件查询点检工单及工单项明细信息
+     *
+     * @return
+     */
+    IPage<InspectionOrderDetailVO> queryDetail(Page page, InspectionOrderQueryParam inspectionOrderQueryParam);
 
 
 
