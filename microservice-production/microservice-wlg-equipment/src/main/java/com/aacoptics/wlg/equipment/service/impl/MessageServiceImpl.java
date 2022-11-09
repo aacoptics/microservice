@@ -54,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
 
 
             StringBuffer contentStringBuffer = new StringBuffer();
-            contentStringBuffer.append("**点检设备异常通知（测试）**  \n");
+            contentStringBuffer.append("**WLG点检设备异常通知**  \n");
             contentStringBuffer.append("工单号：" +orderNumber + "  \n");
             contentStringBuffer.append("资产编码：" +mchCode + "  \n");
             contentStringBuffer.append("存在点检项异常：  \n");
@@ -65,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
             for(int j=0; j<inspectionOrderItemList.size(); j++)
             {
                 InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
-                if(inspectionOrderItem.getIsException() == 1)
+                if(inspectionOrderItem.getIsException() != null && inspectionOrderItem.getIsException() == 1)
                 {
                     BigDecimal minValue = inspectionOrderItem.getMinValue();
                     BigDecimal maxValue = inspectionOrderItem.getMaxValue();
@@ -128,23 +128,22 @@ public class MessageServiceImpl implements MessageService {
 
 
             StringBuffer contentStringBuffer = new StringBuffer();
-            contentStringBuffer.append("**保养设备异常通知（测试）**  \n");
+            contentStringBuffer.append("**WLG保养设备异常通知**  \n");
             contentStringBuffer.append("工单号：" +orderNumber + "  \n");
             contentStringBuffer.append("资产编码：" +mchCode + "  \n");
             contentStringBuffer.append("存在保养项异常：  \n");
 
             List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
 
-            int index = 1;
             for(int j=0; j<maintenanceOrderItemList.size(); j++)
             {
                 MaintenanceOrderItem maintenanceOrderItem = maintenanceOrderItemList.get(j);
-                if(maintenanceOrderItem.getIsException() == 1)
+                if(maintenanceOrderItem.getIsException() != null && maintenanceOrderItem.getIsException() == 1)
                 {
                     BigDecimal minValue = maintenanceOrderItem.getMinValue();
                     BigDecimal maxValue = maintenanceOrderItem.getMaxValue();
                     BigDecimal actualValue = maintenanceOrderItem.getActualValue();
-                    contentStringBuffer.append(index++ + "." + maintenanceOrderItem.getMaintenanceItem() +
+                    contentStringBuffer.append(maintenanceOrderItem.getMaintenanceItem() +
                             "：参数范围值为" + minValue.stripTrailingZeros().toPlainString()
                             + "到" + maxValue.stripTrailingZeros().toPlainString() +
                             "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "")  + "  \n");
@@ -202,7 +201,7 @@ public class MessageServiceImpl implements MessageService {
             }
 
             StringBuffer contentStringBuffer = new StringBuffer();
-            contentStringBuffer.append("**点检超时通知（测试）**  \n");
+            contentStringBuffer.append("**WLG设备点检超时通知**  \n");
             for(int j=0; j<inspectionOrderList.size(); j++)
             {
                 InspectionOrder inspectionOrder = inspectionOrderList.get(j);
@@ -269,7 +268,7 @@ public class MessageServiceImpl implements MessageService {
             }
 
             StringBuffer contentStringBuffer = new StringBuffer();
-            contentStringBuffer.append("**保养超时通知（测试）**  \n");
+            contentStringBuffer.append("**WLG设备保养超时通知**  \n");
 
             for(MaintenanceOrder maintenanceOrder : maintenanceOrderList)
             {

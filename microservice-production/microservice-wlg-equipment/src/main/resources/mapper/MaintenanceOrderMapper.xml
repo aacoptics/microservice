@@ -210,8 +210,8 @@
     </select>
 
 
-    <select id="findOrderByMchCode" resultType="com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO">
-        SELECT TOP 1 A.ID,
+    <select id="findOrderByMchCode" resultMap="MaintenanceOrderAndItemVO">
+        SELECT A.ID,
         A.ORDER_NUMBER,
         A.MCH_CODE,
         A.MAINTENANCE_DATE,
@@ -227,13 +227,30 @@
         B.SPEC,
         B.TYPE_VERSION,
         B.FACTORY_NO,
-        B.EQUIP_NUMBER
+        B.EQUIP_NUMBER,
+        C.ID ITEM_ID,
+        C.MAINTENANCE_ITEM,
+        C.MAINTENANCE_ITEM_STANDARD,
+        C.MIN_VALUE,
+        C.MAX_VALUE,
+        C.ACTUAL_VALUE,
+        C.MAINTENANCE_RESULT,
+        C.IS_EXCEPTION,
+        C.IS_FINISH,
+        C.IS_FAULT,
+        C.FAULT_DESC,
+        C.IS_REPAIR,
+        C.CREATED_TIME ITEM_CREATED_TIME,
+        C.CREATED_BY ITEM_CREATED_BY,
+        C.UPDATED_TIME ITEM_UPDATED_TIME,
+        C.UPDATED_BY ITEM_UPDATED_BY
         FROM EM_MAINTENANCE_ORDER A
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        LEFT JOIN EM_MAINTENANCE_ORDER_ITEM C ON A.ID = C.MAINTENANCE_ORDER_ID
         WHERE 1=1
         AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
         AND A.STATUS IN ('0', '1')
-        ORDER BY A.MAINTENANCE_DATE
+        ORDER BY A.ORDER_NUMBER, A.MAINTENANCE_DATE, C.MAINTENANCE_ITEM
     </select>
 
 

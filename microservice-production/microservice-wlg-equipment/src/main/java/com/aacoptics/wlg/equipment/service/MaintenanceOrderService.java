@@ -108,7 +108,7 @@ public interface MaintenanceOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    MaintenanceOrderAndItemVO findOrderByMchCode(String mchCode);
+    List<MaintenanceOrderAndItemVO> findOrderByMchCode(String mchCode);
 
     /**
      * 提交保养结果

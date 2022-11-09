@@ -279,27 +279,19 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
     }
 
     @Override
-    public InspectionOrderAndItemVO findOrderByMchCode(String mchCode) {
+    public List<InspectionOrderAndItemVO> findOrderByMchCode(String mchCode) {
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if(equipment == null)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        InspectionOrderAndItemVO inspectionOrderAndItemVO = inspectionOrderMapper.findOrderByMchCode(mchCode);
-        if(inspectionOrderAndItemVO == null)
+        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findOrderByMchCode(mchCode);
+        if(inspectionOrderAndItemVOList == null || inspectionOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要点检的工单，请确认！");
         }
-        //查询点检项
-        QueryWrapper<InspectionOrderItem> inspectionOrderItemQueryWrapper = new QueryWrapper<InspectionOrderItem>();
-        inspectionOrderItemQueryWrapper.eq( "inspection_order_id", inspectionOrderAndItemVO.getId());
-
-        inspectionOrderItemQueryWrapper.orderByAsc("check_item");
-        List<InspectionOrderItem> inspectionOrderItemList = inspectionOrderItemMapper.selectList(inspectionOrderItemQueryWrapper);
-
-        inspectionOrderAndItemVO.setInspectionOrderItemList(inspectionOrderItemList);
-        return inspectionOrderAndItemVO;
+        return inspectionOrderAndItemVOList;
     }
 
 
