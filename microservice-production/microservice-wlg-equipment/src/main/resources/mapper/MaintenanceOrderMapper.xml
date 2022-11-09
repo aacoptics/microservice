@@ -236,4 +236,15 @@
         ORDER BY A.MAINTENANCE_DATE
     </select>
 
+
+    <select id="findMaintenanceTimeoutOrderDutyPersonIdList" resultType="string">
+        SELECT DISTINCT DUTY_PERSON_ID
+        FROM EM_MAINTENANCE_ORDER A
+        WHERE 1 = 1
+        AND A.TIMEOUT_NOTIFICATION = 0
+        AND A.STATUS = 0
+        AND dateadd(m, maintenance_period, maintenance_date) &lt; getdate()
+        ORDER BY A.DUTY_PERSON_ID
+    </select>
+
 </mapper>

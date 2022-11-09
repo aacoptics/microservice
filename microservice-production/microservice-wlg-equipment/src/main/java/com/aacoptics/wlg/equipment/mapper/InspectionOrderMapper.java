@@ -39,4 +39,7 @@ public interface InspectionOrderMapper extends BaseMapper<InspectionOrder> {
 
     @DS("WLGIOT")
     InspectionOrderAndItemVO findOrderByMchCode(@Param("mchCode")  String mchCode);
+
+    @DS("WLGIOT")
+    List<String> findInspectionTimeoutOrderDutyPersonIdList();
 }

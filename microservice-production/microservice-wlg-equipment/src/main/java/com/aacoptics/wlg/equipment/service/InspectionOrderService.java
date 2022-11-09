@@ -137,4 +137,18 @@ public interface InspectionOrderService {
      * @return
      */
     List<InspectionOrder> findInspectionExceptionOrder();
+
+    /**
+     * 查找点检超时工单责任人
+     *
+     * @return
+     */
+    List<String> findInspectionTimeoutOrderDutyPersonIdList();
+
+    /**
+     * 查找点检超时工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionTimeoutOrderByDutyPersonId(String dutyPersonId);
 }

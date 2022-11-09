@@ -71,13 +71,59 @@ public class SchedulerHandle {
     }
 
     /**
-     * 推送保养存在异常的工单消息
+     * 推送点检存在异常的工单消息
      */
     @XxlJob("sendInspectionExceptionMessage")
     public void sendInspectionExceptionMessage()
     {
         try {
             messageService.sendInspectionExceptionMessage();
+            XxlJobHelper.handleSuccess();
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail(e.getMessage());
+        }
+    }
+
+    /**
+     * 推送保养存在异常的工单消息
+     */
+    @XxlJob("sendMaintenanceExceptionMessage")
+    public void sendMaintenanceExceptionMessage()
+    {
+        try {
+            messageService.sendMaintenanceExceptionMessage();
+            XxlJobHelper.handleSuccess();
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail(e.getMessage());
+        }
+    }
+
+    /**
+     * 推送点检超时的工单消息
+     */
+    @XxlJob("sendInspectionTimeoutMessage")
+    public void sendInspectionTimeoutMessage()
+    {
+        try {
+            messageService.sendInspectionTimeoutMessage();
+            XxlJobHelper.handleSuccess();
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 推送保养超时的工单消息
+     */
+    @XxlJob("sendMaintenanceTimeoutMessage")
+    public void sendMaintenanceTimeoutMessage()
+    {
+        try {
+            messageService.sendMaintenanceTimeoutMessage();
             XxlJobHelper.handleSuccess();
         } catch (Exception e) {
             XxlJobHelper.log(e);
