@@ -241,4 +241,17 @@
         AND A.STATUS IN ('0', '1')
         ORDER BY A.INSPECTION_DATE, A.SHIFT_START_TIME
     </select>
+
+
+    <select id="findInspectionTimeoutOrderDutyPersonIdList" resultType="string">
+        SELECT DISTINCT DUTY_PERSON_ID
+        FROM EM_INSPECTION_ORDER A
+        WHERE 1 = 1
+        AND A.TIMEOUT_NOTIFICATION = 0
+        AND A.STATUS = 0
+        AND A.SHIFT_END_TIME &lt; GETDATE()
+        ORDER BY A.DUTY_PERSON_ID
+    </select>
+
+
 </mapper>

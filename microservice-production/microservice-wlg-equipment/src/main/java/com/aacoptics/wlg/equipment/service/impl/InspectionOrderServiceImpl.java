@@ -357,4 +357,23 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
         return inspectionOrderList;
     }
+
+    @Override
+    public List<String> findInspectionTimeoutOrderDutyPersonIdList() {
+        List<String> dutyPersonIdList = inspectionOrderMapper.findInspectionTimeoutOrderDutyPersonIdList();
+        return dutyPersonIdList;
+    }
+
+    @Override
+    public List<InspectionOrder> findInspectionTimeoutOrderByDutyPersonId(String dutyPersonId) {
+        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
+        inspectionOrderQueryWrapper.eq("duty_person_id", dutyPersonId);
+        inspectionOrderQueryWrapper.eq("timeout_notification", NotificationStatusConstants.NO);
+        inspectionOrderQueryWrapper.eq("status", InspectionOrderStatusConstants.CREATED);
+        inspectionOrderQueryWrapper.lt("shift_end_time", LocalDateTime.now());
+        inspectionOrderQueryWrapper.orderByAsc("order_number");
+        List<InspectionOrder> inspectionOrderList = this.list(inspectionOrderQueryWrapper);
+
+        return inspectionOrderList;
+    }
 }
