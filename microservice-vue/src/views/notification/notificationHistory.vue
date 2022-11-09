@@ -20,8 +20,8 @@
       </el-form>
     </div>
     <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-              :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-              :stripe="false" :show-operation="false"
+              :height="400" :highlightCurrentRow="true" :show-operation="false"
+              :showBatchDelete="false" :stripe="false"
               @findPage="findPage">
       <template v-slot:custom-column>
         <el-table-column align="center" fixed="right" header-align="center" label="消息状态">
@@ -51,11 +51,7 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {getDict} from "@/api/system/dictData";
-import {getResponseDataMessage} from "@/utils/commonUtils";
-import {deleteRobot, findRobotInfoPage, handleAdd, handleUpdate} from "@/api/notification/robot";
 import {deleteMessage, queryMessageHistory} from "@/api/notification/notificationTask";
-import {handleUpdateFeedingAlarm} from "@/api/wlg/iot/moldingMachineParamData";
 
 export default {
   name: "notificationRobot",

@@ -19,8 +19,8 @@
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
             <el-form-item label="设备编号" prop="equipNumber">
-            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
-          </el-form-item>
+              <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+            </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -65,7 +65,7 @@
                   :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="false"
                   :showBatchDelete="false" :showOperationDel="false"
                   :stripe="true" border @findPage="findPage"
-                  @handlePreview="handlePreview" 
+                  @handlePreview="handlePreview"
                   @selection-change="handleSelectionChange">
       </orderTable>
 
@@ -145,10 +145,10 @@
         </div>
       </el-dialog>
 
-      
+
       <el-dialog v-model="dialogEditDutyPersonVisible" :close-on-click-modal="false"
-                 title="编辑接单人"
-                 destroy-on-close width="25%">
+                 destroy-on-close
+                 title="编辑接单人" width="25%">
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
@@ -156,36 +156,36 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="工单号" prop="mchName">
-                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+                <el-input v-model="dataForm.orderNumber" clearable disabled placeholder="工单号"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
+                <el-input v-model="dataForm.mchName" clearable disabled placeholder="设备名称"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
+                <el-input v-model="dataForm.spec" clearable disabled placeholder="规格"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
+                <el-input v-model="dataForm.typeVersion" clearable disabled placeholder="型号"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="接单人" prop="status">
-              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
-                <el-option
-                    v-for="item in userOptions"
-                    :key="item.username"
-                    :label="item.username + '（' + item.name + '）'"
-                    :value="item.username"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+                <el-select v-model="dataForm.dutyPersonId" clearable filterable placeholder="接单人" style="width:100%">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.username"
+                      :label="item.username + '（' + item.name + '）'"
+                      :value="item.username"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -214,7 +214,7 @@ import {
   handleBatchConfirm,
   handleUpdate
 } from "@/api/wlg/equipment/repairOrder";
-import {findEquipmentByMchCode, convertUser} from "@/api/wlg/equipment/equipmentManagement";
+import {convertUser, findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {addImage, findImageById} from "@/api/wlg/equipment/image";
@@ -436,7 +436,7 @@ export default {
     cancelEditPerson() {
       this.dialogEditDutyPersonVisible = false;
     },
-    
+
     //处理批量确认
     handleBatchConfirm: function () {
       if (this.multipleSelection == null || this.multipleSelection.length == 0) {

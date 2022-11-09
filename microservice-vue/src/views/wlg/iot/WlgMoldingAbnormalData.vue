@@ -53,12 +53,7 @@
 
 <script>
 
-import {
-  getMachineAbnormalData,
-  getMachineErrors,
-  getMachineEvents,
-  getMachineName
-} from "@/api/wlg/iot/moldingMachineParamData";
+import {getMachineAbnormalData, getMachineName} from "@/api/wlg/iot/moldingMachineParamData";
 import SysTable from "@/components/SysTable";
 
 export default {

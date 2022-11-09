@@ -4,26 +4,27 @@
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
           <el-form-item label="事业部" prop="businessDivision">
-            <el-select v-model="filters.businessDivision" clearable filterable placeholder="请选择事业部" style="width:100%" @change="findProductLineByBusinessDivision">
-                  <el-option
-                      v-for="item in businessDivisionOptions"
-                      :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
+            <el-select v-model="filters.businessDivision" clearable filterable placeholder="请选择事业部"
+                       style="width:100%" @change="findProductLineByBusinessDivision">
+              <el-option
+                  v-for="item in businessDivisionOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="产品线" prop="productLine">
-            <el-select v-model="filters.productLine" clearable filterable placeholder="请选择产品线" style="width:100%" >
-                  <el-option
-                      v-for="item in productLineOptions"
-                      :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
+            <el-select v-model="filters.productLine" clearable filterable placeholder="请选择产品线" style="width:100%">
+              <el-option
+                  v-for="item in productLineOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size">
@@ -57,12 +58,13 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="事业部" prop="businessDivision">
-                <el-select v-model="dataForm.businessDivision" clearable filterable placeholder="请选择事业部" style="width:100%" @change="findProductLineByBusinessDivision">
+                <el-select v-model="dataForm.businessDivision" clearable filterable placeholder="请选择事业部"
+                           style="width:100%" @change="findProductLineByBusinessDivision">
                   <el-option
                       v-for="item in businessDivisionOptions"
                       :key="item"
-                    :label="item"
-                    :value="item"
+                      :label="item"
+                      :value="item"
                   >
                   </el-option>
                 </el-select>
@@ -72,12 +74,13 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="产品线" prop="productLine">
-                <el-select v-model="dataForm.productLine" clearable filterable placeholder="请选择产品线" style="width:100%" >
+                <el-select v-model="dataForm.productLine" clearable filterable placeholder="请选择产品线"
+                           style="width:100%">
                   <el-option
                       v-for="item in productLineOptions"
                       :key="item"
-                    :label="item"
-                    :value="item"
+                      :label="item"
+                      :value="item"
                   >
                   </el-option>
                 </el-select>
@@ -105,8 +108,16 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteProductLinePermission, findProductLinePermissionPage, handleAdd, handleUpdate,} from "@/api/finance/budget/productLinePermission";
-import {findAllBusinessDivision, findProductLineByBusinessDivision} from "@/api/finance/budget/businessDivisionProductLine";
+import {
+  deleteProductLinePermission,
+  findProductLinePermissionPage,
+  handleAdd,
+  handleUpdate,
+} from "@/api/finance/budget/productLinePermission";
+import {
+  findAllBusinessDivision,
+  findProductLineByBusinessDivision
+} from "@/api/finance/budget/businessDivisionProductLine";
 
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
@@ -141,7 +152,7 @@ export default {
         productLine: [{required: true, message: "请输入产品线", trigger: "blur"}],
         userCode: [{required: true, message: "请输入用户", trigger: "blur"}],
       },
-      typeOptions:[],
+      typeOptions: [],
       businessDivisionOptions: [],
       productLineOptions: [],
       // 新增编辑界面数据
@@ -186,8 +197,7 @@ export default {
     },
 
     findProductLineByBusinessDivision: function (val) {
-      if(val == '')
-      {
+      if (val == '') {
         this.productLineOptions = [];
         return;
       }
@@ -201,7 +211,7 @@ export default {
             }
           })
     },
-    
+
     // 批量删除
     handleDelete: function (data) {
       if (data.params.length > 0)

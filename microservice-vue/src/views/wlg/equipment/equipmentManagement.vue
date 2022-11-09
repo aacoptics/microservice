@@ -40,24 +40,24 @@
             <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
           </el-form-item>
           <el-form-item label="设备属性" prop="equipCategory">
-              <el-select v-model="filters.equipCategory" clearable placeholder="设备属性" style="width:90%" filterable>
-                <el-option
-                    v-for="item in equipCategoryOptions"
-                    :key="item.dictValue"
-                    :label="item.dictLabel"
-                    :value="item.dictValue"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+            <el-select v-model="filters.equipCategory" clearable filterable placeholder="设备属性" style="width:90%">
+              <el-option
+                  v-for="item in equipCategoryOptions"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size" label-width="100px">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="queryLoading">查询
+            <el-button :loading="queryLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
-            </el-button>           
+            </el-button>
             <el-button type="info"
                        @click="handleOpenExcelUpload">Excel导入
               <template #icon>
@@ -73,11 +73,11 @@
           </el-form-item>
         </el-form>
       </div>
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult" 
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false" 
-                :header-cell-style="{'text-align':'center'}" border :cell-style="{'text-align':'left'}"
-                :stripe="true" :show-operation="true" :showOperationDel="false" @handleEdit="handleEdit"
-                @findPage="findPage">
+      <SysTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
+                :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
+                :highlightCurrentRow="true" :show-operation="true" :showBatchDelete="false"
+                :showOperationDel="false" :stripe="true" border @findPage="findPage"
+                @handleEdit="handleEdit">
       </SysTable>
 
 
@@ -145,7 +145,8 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-input v-model="dataForm.typeVersion" :disabled="!operation" auto-complete="off" clearable></el-input>
+                <el-input v-model="dataForm.typeVersion" :disabled="!operation" auto-complete="off"
+                          clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
@@ -155,46 +156,49 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="设备负责人" prop="equipDuty">
-              <el-select v-model="dataForm.equipDuty" clearable placeholder="设备负责人" style="width:100%" filterable>
-                <el-option
-                    v-for="item in userOptions"
-                    :key="item.username"
-                    :label="item.username + '（' + item.name + '）'"
-                    :value="item.username"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+                <el-select v-model="dataForm.equipDuty" clearable filterable placeholder="设备负责人"
+                           style="width:100%">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.username"
+                      :label="item.username + '（' + item.name + '）'"
+                      :value="item.username"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="设备负责人经理" prop="equipDutyManager">
-              <el-select v-model="dataForm.equipDutyManager" clearable placeholder="设备负责人经理" style="width:100%" filterable>
-                <el-option
-                    v-for="item in userOptions"
-                    :key="item.username"
-                    :label="item.username + '（' + item.name + '）'"
-                    :value="item.username"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+                <el-select v-model="dataForm.equipDutyManager" clearable filterable placeholder="设备负责人经理"
+                           style="width:100%">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.username"
+                      :label="item.username + '（' + item.name + '）'"
+                      :value="item.username"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="设备属性" prop="equipCategory">
-              <el-select v-model="dataForm.equipCategory" clearable placeholder="设备属性" style="width:100%" filterable>
-                <el-option
-                    v-for="item in equipCategoryOptions"
-                    :key="item.dictValue"
-                    :label="item.dictLabel"
-                    :value="item.dictValue"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+                <el-select v-model="dataForm.equipCategory" clearable filterable placeholder="设备属性"
+                           style="width:100%">
+                  <el-option
+                      v-for="item in equipCategoryOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
-          </el-form>
-        
+        </el-form>
+
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
             <el-button :size="size" @click="cancel">取消</el-button>
@@ -210,7 +214,15 @@
 import SysTable from "@/components/SysTable";
 
 import {getAllUser} from "@/api/system/user"
-import {findEquipmentManagementPage, exportEquipmentExcel, handleAdd, handleUpdate, convertUser, downloadTemplate, uploadExcel} from "@/api/wlg/equipment/equipmentManagement";
+import {
+  convertUser,
+  downloadTemplate,
+  exportEquipmentExcel,
+  findEquipmentManagementPage,
+  handleAdd,
+  handleUpdate,
+  uploadExcel
+} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
@@ -222,7 +234,7 @@ export default {
 
       exportLoading: false,
       editLoading: false,
-      queryLoading:false,
+      queryLoading: false,
 
       operation: false, // true:新增, false:编辑
       dialogVisible: false, // 新增编辑界面是否显示
@@ -251,9 +263,9 @@ export default {
         equipCategory: "",
       },
 
-      equipmentStatusOptions:[],
+      equipmentStatusOptions: [],
       userOptions: [],
-      equipCategoryOptions:[],
+      equipCategoryOptions: [],
 
       progressPercentage: 0,
       progressContent: "",
@@ -270,8 +282,8 @@ export default {
         {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "equipDuty", label: "设备负责人", minWidth: 150, formatter: this.userFormat},
         {prop: "equipDutyManager", label: "设备负责人经理", minWidth: 150, formatter: this.userFormat},
-        {prop: "equipCategory", label: "设备属性", minWidth: 120, },
-        {prop: "status", label: "状态", minWidth: 100,  formatter: this.statusFormat},
+        {prop: "equipCategory", label: "设备属性", minWidth: 120,},
+        {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "equipStateDb", label: "资产状态编码", minWidth: 120},
         {prop: "equipState", label: "资产状态", minWidth: 100},
         {prop: "assetGeneralCode", label: "资产使用性质编码", minWidth: 140},
@@ -293,7 +305,7 @@ export default {
         {prop: "floorCode", label: "楼层编码", minWidth: 100},
         {prop: "floorName", label: "楼层名称", minWidth: 100},
         {prop: "assetManagerId", label: "资产管理员", minWidth: 150, formatter: this.userFormat},
-        {prop: "mchManagerId", label: "设备管理员", minWidth:150, formatter: this.userFormat},
+        {prop: "mchManagerId", label: "设备管理员", minWidth: 150, formatter: this.userFormat},
         {prop: "dutyPersonId", label: "责任人", minWidth: 150, formatter: this.userFormat},
         {prop: "deptManagerId", label: "部门经理", minWidth: 150, formatter: this.userFormat},
         {prop: "deptDirectorId", label: "部门总监", minWidth: 150, formatter: this.userFormat},
@@ -352,7 +364,7 @@ export default {
     },
 
     exportExcelData(excelFileName) {
-      let pageRequest  = {};
+      let pageRequest = {};
       pageRequest.mchCode = this.filters.mchCode;
       pageRequest.mchName = this.filters.mchName;
       pageRequest.spec = this.filters.spec;
@@ -382,8 +394,8 @@ export default {
       this.operation = false;
       this.dataForm = Object.assign({}, params.row);
     },
-      // 编辑
-      submitForm: function () {
+    // 编辑
+    submitForm: function () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {

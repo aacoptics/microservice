@@ -76,7 +76,7 @@ export function getStream(params) {
         url: '/moldflow-data-analysis/allData/fileStream',
         method: 'get',
         params: params,
-        responseType: "blob", 
+        responseType: "blob",
         headers: {
             'Cache-Control': 'no-cache'
         }
