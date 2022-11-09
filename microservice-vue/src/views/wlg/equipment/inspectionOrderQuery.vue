@@ -19,8 +19,8 @@
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
             <el-form-item label="设备编号" prop="equipNumber">
-            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
-          </el-form-item>
+              <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+            </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -58,9 +58,9 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="false" :showBatchDelete="false" :showOperationDel="false"
-                  :stripe="true" @handlePreview="handlePreview" :showBatchOperation="false"
-                  border @findPage="findPage" >
+                  :show-operation="false" :showBatchDelete="false" :showBatchOperation="false"
+                  :showOperationDel="false" :stripe="true" border
+                  @findPage="findPage" @handlePreview="handlePreview">
       </orderTable>
 
 
@@ -125,19 +125,9 @@ import orderTable from "./orderTable";
 import {
   exportInspectionOrderExcel,
   findInspectionOrderById,
-  findInspectionOrderPage,
-  handleAdd,
-  handleBatchConfirm,
-  handleUpdate,
   findInspectionOrderDetailPage
 } from "@/api/wlg/equipment/inspectionOrder";
-import {
-  findMchNameList,
-  findSpecListByMchName,
-  findTypeVersionListByMchNameAndSpec,
-  convertUser
-} from "@/api/wlg/equipment/equipmentManagement";
-import {getResponseDataMessage} from "@/utils/commonUtils";
+import {convertUser, findMchNameList} from "@/api/wlg/equipment/equipmentManagement";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
 import {findImageById} from "@/api/wlg/equipment/image";
 import {getAllUser} from "@/api/system/user"
@@ -234,9 +224,9 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-    getDict("wlg_em_inspection_order_status").then(response => {
-      this.orderStatusOptions = response.data.data
-    })
+        getDict("wlg_em_inspection_order_status").then(response => {
+          this.orderStatusOptions = response.data.data
+        })
     getDict("wlg_em_yes_no").then(response => {
       this.yesNoOptions = response.data.data
     })
@@ -326,13 +316,12 @@ export default {
         this.$message.error(err)
       })
     },
-   
 
 
     statusFormat: function (row) {
       return selectDictLabel(this.orderStatusOptions, row.status);
     },
-    yesNoFormat: function (row, column,cellValue) {
+    yesNoFormat: function (row, column, cellValue) {
       return selectDictLabel(this.yesNoOptions, cellValue);
     },
     // 时间格式化

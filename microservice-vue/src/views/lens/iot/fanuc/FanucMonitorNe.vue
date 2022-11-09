@@ -193,11 +193,11 @@
               <el-table
                   id="condDataTable"
                   :key="1"
+                  v-loading="queryLoading"
                   :data="fanucDialogCondData"
                   border
                   header-row-class-name="tableHead"
                   height=495px
-                  v-loading="queryLoading"
                   style="width: 100%;margin-top: 10px">
                 <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
                 <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>
@@ -557,11 +557,11 @@
                 <el-auto-resizer>
                   <template #default="{ height, width }">
                     <el-table-v2
+                        v-loading="queryLoading"
                         :columns="fanucDialogMonitDataColumns"
                         :data="fanucDialogMonitData"
-                        :width="width"
                         :height="height"
-                        v-loading="queryLoading"
+                        :width="width"
                         fixed
                     />
                   </template>
@@ -664,11 +664,11 @@
               </el-button>
               <el-table
                   id="alarmDataTable"
+                  v-loading="queryLoading"
                   :data="fanucDialogAlarmData"
                   border
                   header-row-class-name="tableHead"
                   height=495px
-                  v-loading="queryLoading"
                   style="width: 100%;margin-top: 10px">
                 <el-table-column :width="80" label="机台号" prop="monitMcName"></el-table-column>
                 <el-table-column :width="20 * '机台ID'.length" label="机台ID" prop="monitMcId"></el-table-column>

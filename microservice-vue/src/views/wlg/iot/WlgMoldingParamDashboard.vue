@@ -443,11 +443,11 @@ export default {
           let serialAvgData = {data: []}
           let serialStdData = {data: []}
           this.analysisData.forEach(item => {
-            if(item.paramName !== tempParam){
+            if (item.paramName !== tempParam) {
               legendInfo.push(item.paramName)
-              if(serialAvgData.data.length > 0)
+              if (serialAvgData.data.length > 0)
                 serialAvgDataArray.push(serialAvgData)
-              if(serialStdData.data.length > 0)
+              if (serialStdData.data.length > 0)
                 serialStdDataArray.push(serialStdData)
               serialAvgData = {
                 name: item.paramName,
@@ -464,7 +464,7 @@ export default {
               }
               tempParam = item.paramName;
             }
-            if(xAxisInfo.indexOf(item.waferId) === -1)
+            if (xAxisInfo.indexOf(item.waferId) === -1)
               xAxisInfo.push(item.waferId)
             serialAvgData.data.push(item.avgValue)
             serialStdData.data.push(item.stdValue)

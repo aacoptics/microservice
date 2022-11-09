@@ -6,29 +6,33 @@
           <el-row>
             <el-col :span="5">
               <el-form-item label="类别" prop="category">
-                <el-select v-model.trim="filters.category" placeholder="" clearable style="width: 180px;">
-                  <el-option v-for="item in categoryList" :key="item.category" :value="item.category" :label="item.category"></el-option>
+                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 180px;">
+                  <el-option v-for="item in categoryList" :key="item.category" :label="item.category"
+                             :value="item.category"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="项目" prop="project">
-                <el-select v-model.trim="filters.project" placeholder="" clearable style="width: 180px;">
-                  <el-option v-for="item in projectList" :key="item.project" :value="item.project" :label="item.project"></el-option>
+                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 180px;">
+                  <el-option v-for="item in projectList" :key="item.project" :label="item.project"
+                             :value="item.project"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="零件名称" prop="partName">
-                <el-select v-model.trim="filters.partName" placeholder="" clearable style="width: 180px;">
-                  <el-option v-for="item in partNameList" :key="item.partName" :value="item.partName" :label="item.partName"></el-option>
+                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 180px;">
+                  <el-option v-for="item in partNameList" :key="item.partName" :label="item.partName"
+                             :value="item.partName"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="材料" prop="material">
-                <el-select v-model.trim="filters.material" placeholder="" clearable style="width: 180px;">
-                  <el-option v-for="item in materialList" :key="item.material" :value="item.material" :label="item.material"></el-option>
+                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 180px;">
+                  <el-option v-for="item in materialList" :key="item.material" :label="item.material"
+                             :value="item.material"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -72,11 +76,11 @@
                 :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
                 :stripe="false" @findPage="findPage">
         <template v-slot:custom-column>
-          <el-table-column align="center" header-align="center" prop="assemblyDrawing" label="竞品组立图" width="100">
+          <el-table-column align="center" header-align="center" label="竞品组立图" prop="assemblyDrawing" width="100">
             <template v-slot="imgScope">
               <el-button type="primary" @click="preview(imgScope.row.assemblyDrawing)">预览
                 <template #icon>
-                  <font-awesome-icon icon="fa-solid fa-image" />
+                  <font-awesome-icon icon="fa-solid fa-image"/>
                 </template>
               </el-button>
             </template>
@@ -164,7 +168,8 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="流动前沿温度(℃)" prop="flowFrontTemperature">
-                <el-input v-model="dataForm.flowFrontTemperature" auto-complete="off" clearable type="textarea"></el-input>
+                <el-input v-model="dataForm.flowFrontTemperature" auto-complete="off" clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -174,7 +179,8 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="模拟熔接线长度(mm)" prop="simulateWireLength">
-                <el-input v-model="dataForm.simulateWireLength" auto-complete="off" clearable type="textarea"></el-input>
+                <el-input v-model="dataForm.simulateWireLength" auto-complete="off" clearable
+                          type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -240,11 +246,12 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" :width="dialogWidth" @close="closeImg">
+      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" :width="dialogWidth"
+                 @close="closeImg">
         <el-image
-          :width="imgWidth"
-          :src="codeImg"
-          :fit="contain" @load="onLoadImg">
+            :fit="contain"
+            :src="codeImg"
+            :width="imgWidth" @load="onLoadImg">
         </el-image>
       </el-dialog>
     </div>
@@ -257,14 +264,14 @@ import SysTable from "@/components/SysTable";
 import {
   exportExcel,
   exportExcelTemplate,
+  getCategory,
   getDataByConditions,
+  getMaterial,
+  getPartName,
+  getProject,
   handleDelete,
   handleUpdate,
   uploadExcel,
-  getCategory,
-  getProject,
-  getPartName,
-  getMaterial,
 } from "@/api/lens/analysis/moldFlow";
 import {getStream} from "@/api/lens/analysis/allData";
 import {ElMessageBox} from "element-plus";
@@ -283,11 +290,11 @@ export default {
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
-        {prop: "category", label: "类别", minWidth: 100, sortable:false},
-        {prop: "project", label: "项目", minWidth: 100, sortable:false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable:false},
-        {prop: "material", label: "材料", minWidth: 100, sortable:false},
-        {prop: "moldType", label: "模具类型", minWidth: 100, sortable:false},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {prop: "material", label: "材料", minWidth: 100, sortable: false},
+        {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
         {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100},
         {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100},
         {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100},
@@ -299,8 +306,8 @@ export default {
         {prop: "ridgeR2", label: "R2坎合(%)", minWidth: 100},
         {prop: "refractiveR1", label: "R1(nm)", minWidth: 100},
         {prop: "refractiveR2", label: "R2(nm)", minWidth: 100},
-        {prop: "competitorName", label: "竞品名称", minWidth: 100, sortable:false},
-        {prop: "competitorLink", label: "竞品链接", minWidth: 100, sortable:false}
+        {prop: "competitorName", label: "竞品名称", minWidth: 100, sortable: false},
+        {prop: "competitorLink", label: "竞品链接", minWidth: 100, sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -348,17 +355,17 @@ export default {
   },
   mounted() {
   },
-  created () {
+  created() {
     this.init()
   },
   methods: {
-    async init(){
-        this.categoryList = await this.getCategory();
-        this.projectList = await this.getProject();
-        this.partNameList = await this.getPartName();
-        this.materialList = await this.getMaterial();
-      },
-    getCategory () {
+    async init() {
+      this.categoryList = await this.getCategory();
+      this.projectList = await this.getProject();
+      this.partNameList = await this.getPartName();
+      this.materialList = await this.getMaterial();
+    },
+    getCategory() {
       return new Promise((resolve, reject) => {
         getCategory().then(res => {
           if (res.data.code !== "000000") {
@@ -368,7 +375,7 @@ export default {
         })
       })
     },
-    getProject () {
+    getProject() {
       return new Promise((resolve, reject) => {
         getProject().then(res => {
           if (res.data.code !== "000000") {
@@ -378,7 +385,7 @@ export default {
         })
       })
     },
-    getPartName () {
+    getPartName() {
       return new Promise((resolve, reject) => {
         getPartName().then(res => {
           if (res.data.code !== "000000") {
@@ -388,15 +395,15 @@ export default {
         })
       })
     },
-    getMaterial () {
-        return new Promise((resolve, reject) => {
-          getMaterial().then(res => {
-            if (res.data.code !== "000000") {
-              resolve([])
-            }
-            resolve(res.data.data)
-          })
+    getMaterial() {
+      return new Promise((resolve, reject) => {
+        getMaterial().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
         })
+      })
     },
     // 获取分页数据
     findPage: function (data) {
@@ -414,12 +421,12 @@ export default {
               responseData.data.records.map((value) => {
                 for (let key in value) {
                   if (key === 'moldDiameterRate' || key === 'flowFrontTemperature' || key === 'vpChangePressure' ||
-                  key === 'simulateWireLength' || key === 'wholePercent' || key === 'effectiveR1' ||
-                  key === 'effectiveR2' || key === 'ridgeR1' || key === 'ridgeR2' ||
-                  key === 'refractiveR1' || key === 'refractiveR2') {
-                  //过滤不需要转换类型的值
-                  //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
-                      value[key] = Number(value[key])
+                      key === 'simulateWireLength' || key === 'wholePercent' || key === 'effectiveR1' ||
+                      key === 'effectiveR2' || key === 'ridgeR1' || key === 'ridgeR2' ||
+                      key === 'refractiveR1' || key === 'refractiveR2') {
+                    //过滤不需要转换类型的值
+                    //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
+                    value[key] = Number(value[key])
                   }
                 }
               });
@@ -555,37 +562,37 @@ export default {
       })
     },
     // 图片展示处理
-    preview(fileName){
-      this.picDialogVisible=true
-      let params={
+    preview(fileName) {
+      this.picDialogVisible = true
+      let params = {
         filePathPrefix: "moldFlowData",
         fileName: fileName
       }
-      getStream(params).then(res =>{
+      getStream(params).then(res => {
         console.log(res.data)
         const url = window.URL.createObjectURL(res.data)
         this.codeImg = url
-        }).catch((err) => {
+      }).catch((err) => {
         ElMessageBox.alert(err, '获取图片失败', {
           dangerouslyUseHTMLString: true,
           type: 'error'
         })
         this.picDialogVisible = false;
-        });
+      });
     },
 
     // 调整图片高度
-    onLoadImg(e){
+    onLoadImg(e) {
       var img = e.target;
       var width = 0;
       if (img.fileSize > 0 || (img.width > 1 && img.height > 1)) {
-          width = img.width;
+        width = img.width;
       }
-      this.imgWidth= width + 'px';
+      this.imgWidth = width + 'px';
       this.dialogWidth = width + 30 + 'px';
     },
-     // 关闭图片对话框
-    closeImg(){
+    // 关闭图片对话框
+    closeImg() {
       this.codeImg = ""
     }
   }

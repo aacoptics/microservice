@@ -19,8 +19,8 @@
               <el-input v-model="filters.typeVersion" clearable placeholder="型号"></el-input>
             </el-form-item>
             <el-form-item label="设备编号" prop="equipNumber">
-            <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
-          </el-form-item>
+              <el-input v-model="filters.equipNumber" clearable placeholder="设备编号"></el-input>
+            </el-form-item>
             <el-form-item label="工单状态" prop="status">
               <el-select v-model="filters.status" clearable placeholder="工单状态" style="width:90%">
                 <el-option
@@ -58,10 +58,10 @@
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
                   :highlightCurrentRow="true"
-                  :show-operation="true" :showBatchDelete="false" :showPreview="false" :showOperationDel="false"
+                  :show-operation="true" :showBatchDelete="false" :showOperationDel="false" :showPreview="false"
                   :stripe="true"
-                  border @findPage="findPage" @handleEdit="handleEdit"
-                  @handleCurrentChange="handleCurrentChange" @selection-change="handleSelectionChange">
+                  border @findPage="findPage" @handleCurrentChange="handleCurrentChange"
+                  @handleEdit="handleEdit" @selection-change="handleSelectionChange">
       </orderTable>
       <el-tabs style="margin-top: 50px;" type="border-card">
         <el-tab-pane label="点检项">
@@ -74,14 +74,14 @@
             <el-table-column label="起始范围值" prop="minValue"/>
             <el-table-column label="截至范围值" prop="maxValue"/>
             <el-table-column label="实际值" prop="actualValue"/>
-            <el-table-column label="是否完成" prop="isFinish" :formatter="yesNoFormat"/>
+            <el-table-column :formatter="yesNoFormat" label="是否完成" prop="isFinish"/>
             <el-table-column label="点检结果" prop="checkResult"/>
-            <el-table-column label="是否存在异常" prop="isException" width="130" :formatter="yesNoFormat"/>
-            <el-table-column label="是否存在故障" prop="isFault" width="130" :formatter="yesNoFormat"/>
-            <el-table-column label="是否需要维修" prop="isRepair" width="130" :formatter="yesNoFormat"/>
+            <el-table-column :formatter="yesNoFormat" label="是否存在异常" prop="isException" width="130"/>
+            <el-table-column :formatter="yesNoFormat" label="是否存在故障" prop="isFault" width="130"/>
+            <el-table-column :formatter="yesNoFormat" label="是否需要维修" prop="isRepair" width="130"/>
             <el-table-column label="故障描述" prop="faultDesc"/>
             <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
-            <el-table-column label="操作人" prop="updatedBy" width="150" :formatter="userFormat"/>
+            <el-table-column :formatter="userFormat" label="操作人" prop="updatedBy" width="150"/>
             <el-table-column :formatter="dateTimeFormat" label="操作时间" prop="updatedTime" width="120"/>
             <!-- <el-table-column label="创建人" prop="createdBy" width="120"/>
             <el-table-column :formatter="dateTimeFormat" label="创建时间" prop="createdTime" width="120"/> -->
@@ -108,36 +108,36 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="工单号" prop="mchName">
-                <el-input v-model="dataForm.orderNumber" clearable placeholder="工单号" disabled ></el-input>
+                <el-input v-model="dataForm.orderNumber" clearable disabled placeholder="工单号"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="设备名称" prop="mchName">
-                <el-input v-model="dataForm.mchName" clearable placeholder="设备名称" disabled ></el-input>
+                <el-input v-model="dataForm.mchName" clearable disabled placeholder="设备名称"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="规格" prop="spec">
-                <el-input v-model="dataForm.spec" clearable placeholder="规格" disabled ></el-input>
+                <el-input v-model="dataForm.spec" clearable disabled placeholder="规格"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="型号" prop="typeVersion">
-                <el-input v-model="dataForm.typeVersion" clearable placeholder="型号" disabled ></el-input>
+                <el-input v-model="dataForm.typeVersion" clearable disabled placeholder="型号"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20">
               <el-form-item label="接单人" prop="status">
-              <el-select v-model="dataForm.dutyPersonId" clearable placeholder="接单人" style="width:100%" filterable>
-                <el-option
-                    v-for="item in userOptions"
-                    :key="item.username"
-                    :label="item.username + '（' + item.name + '）'"
-                    :value="item.username"
-                >
-                </el-option>
-              </el-select>
-            </el-form-item>
+                <el-select v-model="dataForm.dutyPersonId" clearable filterable placeholder="接单人" style="width:100%">
+                  <el-option
+                      v-for="item in userOptions"
+                      :key="item.username"
+                      :label="item.username + '（' + item.name + '）'"
+                      :value="item.username"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
 
@@ -220,10 +220,10 @@ import {
   handleUpdate
 } from "@/api/wlg/equipment/inspectionOrder";
 import {
+  convertUser,
   findMchNameList,
   findSpecListByMchName,
-  findTypeVersionListByMchNameAndSpec,
-  convertUser
+  findTypeVersionListByMchNameAndSpec
 } from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
@@ -335,9 +335,9 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-    getDict("wlg_em_inspection_order_status").then(response => {
-      this.orderStatusOptions = response.data.data
-    })
+        getDict("wlg_em_inspection_order_status").then(response => {
+          this.orderStatusOptions = response.data.data
+        })
     getDict("wlg_em_yes_no").then(response => {
       this.yesNoOptions = response.data.data
     })
@@ -589,7 +589,7 @@ export default {
     statusFormat: function (row) {
       return selectDictLabel(this.orderStatusOptions, row.status);
     },
-    yesNoFormat: function (row, column,cellValue) {
+    yesNoFormat: function (row, column, cellValue) {
       return selectDictLabel(this.yesNoOptions, cellValue);
     },
     // 时间格式化

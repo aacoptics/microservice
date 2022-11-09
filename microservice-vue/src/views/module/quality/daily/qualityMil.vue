@@ -389,7 +389,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="oa单号" prop="oaProcessCode">
-                <el-input v-model="dataForm.oaProcessCode" auto-complete="off" autosize clearable :disabled="!operation"
+                <el-input v-model="dataForm.oaProcessCode" :disabled="!operation" auto-complete="off" autosize clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
