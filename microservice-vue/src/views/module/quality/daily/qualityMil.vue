@@ -199,23 +199,23 @@
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <!--el-col :span="8">
               <el-form-item v-if="'' +dataForm.milType === '1' || '' +dataForm.milType === '2'" label="分类"
                             prop="type">
                 <el-input v-model="dataForm.type" auto-complete="off" clearable></el-input>
               </el-form-item>
-            </el-col>
+            </el-col-->
             <el-col :span="8">
-              <el-form-item v-if="'' +dataForm.milType === '4'" label="风险分项" prop="risk">
+              <!--el-form-item v-if="'' +dataForm.milType === '4'" label="风险分项" prop="risk">
                 <el-input v-model="dataForm.risk" auto-complete="off" clearable></el-input>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="风险类别" prop="riskType">
+              <!--el-form-item label="风险类别" prop="riskType">
                 <el-input v-model="dataForm.riskType" auto-complete="off" clearable></el-input>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
             <el-col :span="8">
               <el-form-item label="严重等级" prop="severityLevel">
@@ -331,10 +331,10 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="计划完成时间" prop="planFinishDate">
+              <!--el-form-item label="计划完成时间" prop="planFinishDate">
                 <el-date-picker v-model="dataForm.planFinishDate" auto-complete="off" type="datetime">
                 </el-date-picker>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
           </el-row>
           <el-row>
@@ -345,7 +345,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="处罚责任人" prop="punishmentPerson">
+              <!--el-form-item label="处罚责任人" prop="punishmentPerson">
                 <el-select v-model="dataForm.punishmentPerson" clearable filterable placeholder="处罚责任人">
                   <el-option
                       v-for="item in userOptions"
@@ -355,24 +355,24 @@
                   >
                   </el-option>
                 </el-select>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
             <el-col :span="8">
-              <el-form-item label="处罚措施" prop="punishmentMeasures">
+              <!--el-form-item label="处罚措施" prop="punishmentMeasures">
                 <el-input v-model="dataForm.punishmentMeasures" auto-complete="off" clearable></el-input>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="是否再次发生" prop="happenTimes">
+              <!--el-form-item label="是否再次发生" prop="happenTimes">
                 <el-input-number v-model="dataForm.happenTimes" auto-complete="off" clearable></el-input-number>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
             <el-col :span="8">
-              <el-form-item label="再次不良比例" prop="badAgainRate">
+              <!--el-form-item label="再次不良比例" prop="badAgainRate">
                 <el-input v-model="dataForm.badAgainRate" auto-complete="off" clearable></el-input>
-              </el-form-item>
+              </el-form-item-->
             </el-col>
             <el-col :span="8">
               <el-form-item label="批次" prop="remark">
@@ -381,9 +381,15 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="24">
-              <el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
+            <el-col :span="8">
+              <!--el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
                 <el-input v-model="dataForm.statusSync" auto-complete="off" autosize clearable
+                          type="textarea"></el-input>
+              </el-form-item-->
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="oa单号" prop="oaProcessCode">
+                <el-input v-model="dataForm.oaProcessCode" auto-complete="off" autosize clearable :disabled="!operation"
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -457,12 +463,13 @@ export default {
         {prop: "index", label: "序号", minWidth: 80},
         {prop: "milType", label: "MIL类型", minWidth: 100, formatter: this.milTypeFormat},
         {prop: "project", label: "项目", minWidth: 100},
-        {prop: "type", label: "分类", minWidth: 100},
-        {prop: "risk", label: "风险分项", minWidth: 100},
-        {prop: "riskType", label: "风险类别", minWidth: 100},
+        // {prop: "type", label: "分类", minWidth: 100},
+        // {prop: "risk", label: "风险分项", minWidth: 100},
+        // {prop: "riskType", label: "风险类别", minWidth: 100},
         {prop: "severityLevel", label: "严重等级", minWidth: 100},
         {prop: "eventHappenDate", label: "发生时间", minWidth: 100, formatter: this.dateFormat},
         {prop: "remark", label: "批次", minWidth: 150},
+        {prop: "oaProcessCode", label: "oa单号", minWidth: 150},
         {prop: "customer", label: "客户", minWidth: 100},
         {prop: "site", label: "厂区", minWidth: 100},
         {prop: "workshop", label: "工段", minWidth: 100},
@@ -474,13 +481,13 @@ export default {
         {prop: "responsibility", label: "负责人", minWidth: 100, formatter: this.userFormat},
         {prop: "productionManager", label: "生产经理", minWidth: 100},
         {prop: "status", label: "状态", minWidth: 100},
-        {prop: "planFinishDate", label: "计划完成时间", minWidth: 150, formatter: this.dateTimeFormat},
+        // {prop: "planFinishDate", label: "计划完成时间", minWidth: 150, formatter: this.dateTimeFormat},
         {prop: "actualFinishDate", label: "实际完成时间", minWidth: 150, formatter: this.dateTimeFormat},
-        {prop: "punishmentPerson", label: "处罚责任人", minWidth: 150},
-        {prop: "punishmentMeasures", label: "处罚措施", minWidth: 150},
-        {prop: "happenTimes", label: "是否再次发生", minWidth: 150},
-        {prop: "badAgainRate", label: "再次不良比例", minWidth: 150},
-        {prop: "statusSync", label: "每日状态更新", minWidth: 150},
+        // {prop: "punishmentPerson", label: "处罚责任人", minWidth: 150},
+        // {prop: "punishmentMeasures", label: "处罚措施", minWidth: 150},
+        // {prop: "happenTimes", label: "是否再次发生", minWidth: 150},
+        // {prop: "badAgainRate", label: "再次不良比例", minWidth: 150},
+        // {prop: "statusSync", label: "每日状态更新", minWidth: 150},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
@@ -503,6 +510,7 @@ export default {
         solutionProgress: [{required: true, message: '请输入对策&处理进展', trigger: 'blur'}],
         responsibilities: [{required: true, message: '请输入负责人', trigger: 'blur'}],
         status: [{required: true, message: '请输入状态', trigger: 'blur'}],
+        oaProcessCode: [{required: true, message: '请输入oa单号', trigger: 'blur'}],
       },
       qualityMilTypeOptions: [],
       qualityMilTypeAddOptions: [],
@@ -538,6 +546,7 @@ export default {
         happenTimes: "",
         badAgainRate: "",
         remark: "",
+        oaProcessCode: "",
         statusSync: "",
       },
     };
@@ -643,6 +652,7 @@ export default {
         happenTimes: "",
         badAgainRate: "",
         remark: "",
+        oaProcessCode: "",
         statusSync: "",
       };
     },
