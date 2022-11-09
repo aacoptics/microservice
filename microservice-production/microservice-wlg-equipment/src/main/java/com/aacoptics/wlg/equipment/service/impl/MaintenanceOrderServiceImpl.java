@@ -287,28 +287,20 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
 
     @Override
-    public MaintenanceOrderAndItemVO findOrderByMchCode(String mchCode) {
+    public List<MaintenanceOrderAndItemVO> findOrderByMchCode(String mchCode) {
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if(equipment == null)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        MaintenanceOrderAndItemVO maintenanceOrderAndItemVO = maintenanceOrderMapper.findOrderByMchCode(mchCode);
-        if(maintenanceOrderAndItemVO == null)
+        List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderMapper.findOrderByMchCode(mchCode);
+        if(maintenanceOrderAndItemVOList == null || maintenanceOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要保养的工单，请确认！");
         }
-        //查询保养项
-        QueryWrapper<MaintenanceOrderItem> maintenanceOrderItemQueryWrapper = new QueryWrapper<MaintenanceOrderItem>();
-        maintenanceOrderItemQueryWrapper.eq( "maintenance_order_id", maintenanceOrderAndItemVO.getId());
 
-        maintenanceOrderItemQueryWrapper.orderByAsc("maintenance_item");
-        List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrderItemMapper.selectList(maintenanceOrderItemQueryWrapper);
-
-        maintenanceOrderAndItemVO.setMaintenanceOrderItemList(maintenanceOrderItemList);
-
-        return maintenanceOrderAndItemVO;
+        return maintenanceOrderAndItemVOList;
     }
 
 

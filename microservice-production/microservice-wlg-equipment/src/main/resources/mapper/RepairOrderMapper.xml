@@ -51,7 +51,7 @@
 
 
     <select id="findOrderByMchCode" resultType="com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO">
-        SELECT TOP 1 A.ID,
+        SELECT A.ID,
         A.ORDER_NUMBER,
         A.MCH_CODE,
         A.FAULT_DESC,

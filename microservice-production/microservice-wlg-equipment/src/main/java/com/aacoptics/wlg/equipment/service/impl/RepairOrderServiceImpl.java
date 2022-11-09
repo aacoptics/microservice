@@ -158,18 +158,18 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
 
     @Override
-    public RepairOrderVO findOrderByMchCode(String mchCode) {
+    public List<RepairOrderVO> findOrderByMchCode(String mchCode) {
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if (equipment == null) {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        RepairOrderVO repairOrderVO = repairOrderMapper.findOrderByMchCode(mchCode);
-        if (repairOrderVO == null) {
+        List<RepairOrderVO> repairOrderVOList = repairOrderMapper.findOrderByMchCode(mchCode);
+        if (repairOrderVOList == null || repairOrderVOList.size() == 0) {
             throw new BusinessException("设备【" + mchCode + "】不存在需要维修的工单，请确认！");
         }
 
-        return repairOrderVO;
+        return repairOrderVOList;
     }
 
     @Override

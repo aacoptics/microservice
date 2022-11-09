@@ -111,7 +111,7 @@ public interface InspectionOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    InspectionOrderAndItemVO findOrderByMchCode(String mchCode);
+    List<InspectionOrderAndItemVO> findOrderByMchCode(String mchCode);
 
 
     /**
