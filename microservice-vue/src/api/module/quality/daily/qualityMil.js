@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function findQualityMilPage(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/listQualityMil',
+        url: '/module-quality-daily-api/moduleQualityMil/listQualityMil',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function findQualityMilPage(conditions) {
 
 export function listAllUser() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/users',
+        url: '/module-quality-daily-api/moduleQualityMil/users',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ export function listAllUser() {
 
 export function handleUpdate(updateForm) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/update',
+        url: '/module-quality-daily-api/moduleQualityMil/update',
         method: 'put',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export function handleUpdate(updateForm) {
 
 export function handleDelete(milType, id) {
     return request({
-        url: `/non-mobile-quality-daily/nonMobileQualityMil/delete/${milType}/${id}`,
+        url: `/module-quality-daily-api/moduleQualityMil/delete/${milType}/${id}`,
         method: 'delete',
         headers: {
             'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ export function handleDelete(milType, id) {
 
 export function handleAdd(addForm) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/add',
+        url: '/module-quality-daily-api/moduleQualityMil/add',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/uploadExcel',
+        url: '/module-quality-daily-api/moduleQualityMil/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -65,7 +65,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityMil/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ export function exportExcel() {
 
 export function listQualityMilExportExcel(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityMil/listQualityMil/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityMil/listQualityMil/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

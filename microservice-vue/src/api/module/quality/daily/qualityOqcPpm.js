@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHeaders(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityOqcPpm/listHeaders',
+        url: '/module-quality-daily-api/moduleQualityOqcPpm/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function listHeaders(conditions) {
 
 export function listSummary(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityOqcPpm/listSummary',
+        url: '/module-quality-daily-api/moduleQualityOqcPpm/listSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityOqcPpm/uploadExcel',
+        url: '/module-quality-daily-api/moduleQualityOqcPpm/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -34,7 +34,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityOqcPpm/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityOqcPpm/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export function exportExcel() {
 
 export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityOqcPpm/listSummary/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityOqcPpm/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

@@ -122,7 +122,7 @@ import {
   listSummary,
   listSummaryExportExcel,
   uploadExcel
-} from "@/api/lens/nonMobile/quality/qualityAppearanceYield";
+} from "@/api/module/quality/daily/qualityAppearanceYield";
 import {ElMessageBox} from "element-plus";
 import * as echarts from "echarts";
 

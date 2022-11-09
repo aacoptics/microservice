@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHeaders(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listHeaders',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function listHeaders(conditions) {
 
 export function listDetailHeaders(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listDetailHeaders',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listDetailHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ export function listDetailHeaders(conditions) {
 
 export function listSummary(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listSummary',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ export function listSummary(conditions) {
 
 export function listDetailSummary(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listDetailSummary',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listDetailSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/uploadExcel',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -56,7 +56,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ export function exportExcel() {
 
 export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listSummary/exportExcel',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export function listSummaryExportExcel(conditions) {
 
 export function listLineChat(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listLineChat',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listLineChat',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ export function listLineChat(conditions) {
 
 export function listLine() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualityAppearanceYield/listLine',
+        url: '/module-quality-daily-api/moduleQualityAppearanceYield/listLine',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

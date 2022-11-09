@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listHeaders(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/listHeaders',
+        url: '/module-quality-daily-api/moduleQualitySortingData/listHeaders',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -13,7 +13,7 @@ export function listHeaders(conditions) {
 
 export function listSummary(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/listSummary',
+        url: '/module-quality-daily-api/moduleQualitySortingData/listSummary',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -26,7 +26,7 @@ export function uploadExcel(param) {
     const formData = new FormData()
     formData.append('file', param.file)
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/uploadExcel',
+        url: '/module-quality-daily-api/moduleQualitySortingData/uploadExcel',
         method: 'post',
         data: formData
     })
@@ -34,7 +34,7 @@ export function uploadExcel(param) {
 
 export function exportExcel() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/exportExcel',
+        url: '/module-quality-daily-api/moduleQualitySortingData/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export function exportExcel() {
 
 export function listSummaryExportExcel(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/listSummary/exportExcel',
+        url: '/module-quality-daily-api/moduleQualitySortingData/listSummary/exportExcel',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export function listSummaryExportExcel(conditions) {
 
 export function listLineChat(conditions) {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/listLineChat',
+        url: '/module-quality-daily-api/moduleQualitySortingData/listLineChat',
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export function listLineChat(conditions) {
 
 export function listProject() {
     return request({
-        url: '/non-mobile-quality-daily/nonMobileQualitySortingData/listProject',
+        url: '/module-quality-daily-api/moduleQualitySortingData/listProject',
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

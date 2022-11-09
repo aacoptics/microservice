@@ -102,7 +102,7 @@ import {
   listSummary,
   listSummaryExportExcel,
   uploadExcel
-} from "@/api/lens/nonMobile/quality/qualityOqcPpm";
+} from "@/api/module/quality/daily/qualityOqcPpm";
 import {ElMessageBox} from "element-plus";
 
 export default {

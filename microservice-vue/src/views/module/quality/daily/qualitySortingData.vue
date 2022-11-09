@@ -113,7 +113,7 @@ import {
   listSummary,
   listSummaryExportExcel,
   uploadExcel
-} from "@/api/lens/nonMobile/quality/qualitySortingData";
+} from "@/api/module/quality/daily/qualitySortingData";
 import {ElMessageBox} from "element-plus";
 import * as echarts from "echarts";
 import {getDict} from "@/api/system/dictData";
