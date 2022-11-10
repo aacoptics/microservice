@@ -6,10 +6,7 @@ import com.aacoptics.wlg.equipment.constant.MessageTypeConstants;
 import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.provider.NotificationProvider;
-import com.aacoptics.wlg.equipment.service.InspectionOrderService;
-import com.aacoptics.wlg.equipment.service.MaintenanceOrderService;
-import com.aacoptics.wlg.equipment.service.MessageHistoryService;
-import com.aacoptics.wlg.equipment.service.MessageService;
+import com.aacoptics.wlg.equipment.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +32,9 @@ public class MessageServiceImpl implements MessageService {
     @Resource
     private MessageHistoryService messageHistoryService;
 
+    @Resource
+    private EquipmentService equipmentService;
+
 
     @Override
     public boolean sendInspectionExceptionMessage() {
@@ -51,12 +51,17 @@ public class MessageServiceImpl implements MessageService {
             String dutyPersonId = inspectionOrder.getDutyPersonId();
             String mchCode = inspectionOrder.getMchCode();
             String orderNumber = inspectionOrder.getOrderNumber();
-
+            //获取设备
+            Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+            String equipNumber = equipment.getEquipNumber();
+            String mchName = equipment.getMchName();
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG点检设备异常通知**  \n");
             contentStringBuffer.append("工单号：" +orderNumber + "  \n");
             contentStringBuffer.append("资产编码：" +mchCode + "  \n");
+            contentStringBuffer.append("设备编号：" +equipNumber + "  \n");
+            contentStringBuffer.append("设备名称：" +mchName + "  \n");
             contentStringBuffer.append("存在点检项异常：  \n");
 
             List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
@@ -126,11 +131,17 @@ public class MessageServiceImpl implements MessageService {
             String mchCode = maintenanceOrder.getMchCode();
             String orderNumber = maintenanceOrder.getOrderNumber();
 
+            //获取设备
+            Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+            String equipNumber = equipment.getEquipNumber();
+            String mchName = equipment.getMchName();
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG保养设备异常通知**  \n");
             contentStringBuffer.append("工单号：" +orderNumber + "  \n");
             contentStringBuffer.append("资产编码：" +mchCode + "  \n");
+            contentStringBuffer.append("设备编号：" +equipNumber + "  \n");
+            contentStringBuffer.append("设备名称：" +mchName + "  \n");
             contentStringBuffer.append("存在保养项异常：  \n");
 
             List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
