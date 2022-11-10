@@ -104,20 +104,20 @@
           </el-row>
         </el-form>
         <el-form :inline="true" :label-width="100" :size="size">
-          <el-form-item>
+          <!--el-form-item>
             <el-button :loading="exportLoading" type="primary" @click="exportExcelData('质量MIL模板')">导出模板
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'download']"/>
               </template>
             </el-button>
-          </el-form-item>
-          <el-form-item>
+          </el-form-item-->
+          <!--el-form-item>
             <el-button type="success" @click="handleAdd">新增
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'plus']"/>
               </template>
             </el-button>
-          </el-form-item>
+          </el-form-item-->
           <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
@@ -126,13 +126,13 @@
             </el-button>
           </el-form-item>
           <el-row align="middle" class="float-right" justify="center">
-            <el-form-item>
+            <!--el-form-item>
               <el-button size="small" type="info" @click="handleOpenExcelUpload">导入
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'upload']"/>
                 </template>
               </el-button>
-            </el-form-item>
+            </el-form-item-->
             <el-form-item>
               <el-button :loading="exportReportLoading" type="success" @click="exportReportExcelData('Mil报表')">导出报表
                 <template #icon>
@@ -146,7 +146,7 @@
       <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
                 :height="400" :highlightCurrentRow="true" :show-operation="false" :showBatchDelete="false"
                 :stripe="false" @findPage="findPage">
-        <template v-slot:custom-column>
+        <!--template v-slot:custom-column>
           <el-table-column align="center" fixed="right" header-align="center" label="操作"
                            width="120">
             <template v-slot="scope">
@@ -168,7 +168,7 @@
               </el-button-group>
             </template>
           </el-table-column>
-        </template>
+        </template-->
       </SysTable>
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
