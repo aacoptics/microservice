@@ -66,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
 
             List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
 
-            int index = 1;
+
             for(int j=0; j<inspectionOrderItemList.size(); j++)
             {
                 InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
@@ -75,7 +75,7 @@ public class MessageServiceImpl implements MessageService {
                     BigDecimal minValue = inspectionOrderItem.getMinValue();
                     BigDecimal maxValue = inspectionOrderItem.getMaxValue();
                     BigDecimal actualValue = inspectionOrderItem.getActualValue();
-                    contentStringBuffer.append(index++ + "." + inspectionOrderItem.getCheckItem() +
+                    contentStringBuffer.append(inspectionOrderItem.getCheckItem() +
                             "：参数范围值为" + minValue.stripTrailingZeros().toPlainString()
                             + "到" + maxValue.stripTrailingZeros().toPlainString() +
                             "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "")  + "  \n");
@@ -218,8 +218,12 @@ public class MessageServiceImpl implements MessageService {
                 InspectionOrder inspectionOrder = inspectionOrderList.get(j);
                 String mchCode = inspectionOrder.getMchCode();
                 String orderNumber = inspectionOrder.getOrderNumber();
+                //获取设备
+                Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+                String equipNumber = equipment.getEquipNumber();
+                String mchName = equipment.getMchName();
 
-                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "  \n");
+                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "，设备编号：" + equipNumber + "  \n");
             }
 
             contentStringBuffer.append("未在班次内按时进行点检，请注意处理！");
@@ -286,7 +290,12 @@ public class MessageServiceImpl implements MessageService {
                 String mchCode = maintenanceOrder.getMchCode();
                 String orderNumber = maintenanceOrder.getOrderNumber();
 
-                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "  \n");
+                //获取设备
+                Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+                String equipNumber = equipment.getEquipNumber();
+                String mchName = equipment.getMchName();
+
+                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "，设备编号：" + equipNumber + "  \n");
             }
 
             contentStringBuffer.append("未按时保养，请注意处理！");
