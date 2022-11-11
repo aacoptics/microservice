@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -140,7 +141,13 @@ public class MoldFlowController {
                     row.createCell(15).setCellValue(p.getRefractiveR2());
                     row.createCell(16).setCellValue(p.getCompetitorName());
                     row.createCell(17).setCellValue(p.getCompetitorLink());
-                    row.createCell(18).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
+                        row.createCell(18).setCellValue("");
+                    } else if (p.getAssemblyDrawing().indexOf(".") != -1) {
+                        row.createCell(18).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    } else {
+                        row.createCell(18).setCellValue("");
+                    }
 
                 }
             }

@@ -76,44 +76,59 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 shapingResultData = new ShapingResultData();
             }
 
-            String coreThickness = ExcelUtil.handleDecimal(dataArray[5],1);
-            String coreThicknessRange = ExcelUtil.handleDecimal(dataArray[6],1);
-            String r1VectorHeight = ExcelUtil.handleDecimal(dataArray[7],1);
-            String r1VectorHeightRange = ExcelUtil.handleDecimal(dataArray[8],1);
-            String r2VectorHeight = ExcelUtil.handleDecimal(dataArray[9],1);
-            String r2VectorHeightRange = ExcelUtil.handleDecimal(dataArray[10],1);
-            String outerDiameterEcc = ExcelUtil.handleDecimal(dataArray[11],1);
-            String kanheEcc = ExcelUtil.handleDecimal(dataArray[12],1);
-            String faceEcc = ExcelUtil.handleDecimal(dataArray[13],1);
-            String annealingProcess = ExcelUtil.handleDecimal(dataArray[14],0);
-            String bpKanheRoundness = ExcelUtil.handleDecimal(dataArray[15],1);
-            String dmpKanheRoundness = ExcelUtil.handleDecimal(dataArray[16],1);
-            String outerDiameterAverage = ExcelUtil.handleDecimal(dataArray[17],1);
-            String outerDiameterRange = ExcelUtil.handleDecimal(dataArray[18],1);
-            String outerDiameterRoundness = ExcelUtil.handleDecimal(dataArray[19],1);
-            String outerDiameterShrinkage = ExcelUtil.handleDecimal(dataArray[20],1);
-            String outerDiameterRoughness = ExcelUtil.handleDecimal(dataArray[21],1);
-            String r1Flatness = ExcelUtil.handleDecimal(dataArray[22],1);
-            String r2Flatness = ExcelUtil.handleDecimal(dataArray[23],1);
-            String r1SplitAverage = ExcelUtil.handleDecimal(dataArray[24],1);
-            String r2SplitAverage = ExcelUtil.handleDecimal(dataArray[25],1);
-            String wftR1 = ExcelUtil.handleDecimal(dataArray[26],0);
-            String wftR2 = ExcelUtil.handleDecimal(dataArray[27],0);
-            String wftConsistency = ExcelUtil.handleDecimal(dataArray[28],0);
-            String wftMaxAs = ExcelUtil.handleDecimal(dataArray[29],0);
-            String wftStability = ExcelUtil.handleDecimal(dataArray[30],0);
-            String cftR1 = ExcelUtil.handleDecimal(dataArray[31],0);
-            String cftR2 = ExcelUtil.handleDecimal(dataArray[32],0);
-            String cftConsistency = ExcelUtil.handleDecimal(dataArray[33],0);
-            String cftMaxAs = ExcelUtil.handleDecimal(dataArray[34],0);
+            String coreThickness = ExcelUtil.handleDecimal(dataArray[5], 1);
+            String coreThicknessRange = ExcelUtil.handleDecimal(dataArray[6], 1);
+            String r1VectorHeight = ExcelUtil.handleDecimal(dataArray[7], 1);
+            String r1VectorHeightRange = ExcelUtil.handleDecimal(dataArray[8], 1);
+            String r2VectorHeight = ExcelUtil.handleDecimal(dataArray[9], 1);
+            String r2VectorHeightRange = ExcelUtil.handleDecimal(dataArray[10], 1);
+            String outerDiameterEcc = ExcelUtil.handleDecimal(dataArray[11], 1);
+            String kanheEcc = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String faceEcc = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String annealingProcess = ExcelUtil.handleDecimal(dataArray[14], 0);
+            String bpKanheRoundness = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String dmpKanheRoundness = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String outerDiameterAverage = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String outerDiameterRange = ExcelUtil.handleDecimal(dataArray[18], 1);
+            String outerDiameterRoundness = ExcelUtil.handleDecimal(dataArray[19], 1);
+            String outerDiameterShrinkage = ExcelUtil.handleDecimal(dataArray[20], 1);
+            String outerDiameterRoughness = ExcelUtil.handleDecimal(dataArray[21], 1);
+            String r1Flatness = ExcelUtil.handleDecimal(dataArray[22], 1);
+            String r2Flatness = ExcelUtil.handleDecimal(dataArray[23], 1);
+            String r1SplitAverage = ExcelUtil.handleDecimal(dataArray[24], 1);
+            String r2SplitAverage = ExcelUtil.handleDecimal(dataArray[25], 1);
+            String wftR1 = ExcelUtil.handleDecimal(dataArray[26], 0);
+            String wftR2 = ExcelUtil.handleDecimal(dataArray[27], 0);
+            String wftConsistency = ExcelUtil.handleDecimal(dataArray[28], 0);
+            String wftMaxAs = ExcelUtil.handleDecimal(dataArray[29], 0);
+            String wftStability = ExcelUtil.handleDecimal(dataArray[30], 0);
+            String cftR1 = ExcelUtil.handleDecimal(dataArray[31], 0);
+            String cftR2 = ExcelUtil.handleDecimal(dataArray[32], 0);
+            String cftConsistency = ExcelUtil.handleDecimal(dataArray[33], 0);
+            String cftMaxAs = ExcelUtil.handleDecimal(dataArray[34], 0);
             String coatingTrend = pathsMap.get(i + "_" + 35); // 图片路径
+            if (coatingTrend == null) {
+                coatingTrend = "";
+            }
             String cfsrR1 = pathsMap.get(i + "_" + 36); // 图片路径
+            if (cfsrR1 == null) {
+                cfsrR1 = "";
+            }
             String cfsrR2 = pathsMap.get(i + "_" + 37); // 图片路径
+            if (cfsrR2 == null) {
+                cfsrR2 = "";
+            }
             String cfsrR1R2 = pathsMap.get(i + "_" + 38); // 图片路径
-            String burr = ExcelUtil.handleDecimal(dataArray[39],1);
+            if (cfsrR1R2 == null) {
+                cfsrR1R2 = "";
+            }
+            String burr = ExcelUtil.handleDecimal(dataArray[39], 1);
             String weldline = dataArray[40];
             String appearanceProblem = dataArray[41];
-            String appearanceImg =  pathsMap.get(i + "_" + 42); // 图片路径
+            String appearanceImg = pathsMap.get(i + "_" + 42); // 图片路径
+            if (appearanceImg == null) {
+                appearanceImg = "";
+            }
             String remarks = dataArray[43];
 
             // 设置参数
@@ -169,7 +184,7 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
 
     @Override
     public IPage<ShapingResultData> getDataByConditions(Page<ShapingResultData> iPage, String category, String project,
-                                                        String partName, String material, String moldNo,String searchType,
+                                                        String partName, String material, String moldNo, String searchType,
                                                         String startValue, String endValue) {
         QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
