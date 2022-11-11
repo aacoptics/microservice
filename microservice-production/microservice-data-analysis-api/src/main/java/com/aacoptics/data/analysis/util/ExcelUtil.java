@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Excel工具类
@@ -532,8 +533,12 @@ public class ExcelUtil {
      * @return
      */
     public static String handleDecimal(String str, int number) {
-        double decimal = Double.valueOf(str);
         String format = str;
+        boolean integerOrDouble = isIntegerOrDouble(str);
+        if (!integerOrDouble) {
+            return format;
+        }
+        double decimal = Double.valueOf(str);
         // 取整
         if (number == 0) {
             long i = Math.round(decimal);
@@ -659,6 +664,26 @@ public class ExcelUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 判断是否是整型或者浮点型
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isIntegerOrDouble(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        boolean integerFlag = pattern.matcher(str).matches();
+        if (integerFlag) {
+            return true;
+        }
+        Pattern pattern1 = Pattern.compile("^[-\\+]?\\d*[.]\\d+$");
+        boolean floatFlag = pattern1.matcher(str).matches();
+        return floatFlag;
     }
 
 
