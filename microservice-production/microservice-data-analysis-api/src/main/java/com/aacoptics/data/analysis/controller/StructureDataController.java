@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -155,7 +156,11 @@ public class StructureDataController {
                     row.createCell(27).setCellValue(p.getR1Srtm());
                     row.createCell(28).setCellValue(p.getR2Srtm());
                     row.createCell(29).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(30).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    if(StringUtils.isEmpty(p.getAssemblyDrawing())){
+                        row.createCell(30).setCellValue("");
+                    }else{
+                        row.createCell(30).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    }
                 }
             }
 

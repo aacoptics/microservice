@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -161,14 +162,34 @@ public class ShapingResultDataController {
                     row.createCell(32).setCellValue(p.getCftR2());
                     row.createCell(33).setCellValue(p.getCftConsistency());
                     row.createCell(34).setCellValue(p.getCftMaxAs());
-                    row.createCell(35).setCellValue(picPath + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
-                    row.createCell(36).setCellValue(picPath + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
-                    row.createCell(37).setCellValue(picPath + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
-                    row.createCell(38).setCellValue(picPath + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                        row.createCell(35).setCellValue("");
+                    } else {
+                        row.createCell(35).setCellValue(picPath + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(36).setCellValue("");
+                    } else {
+                        row.createCell(36).setCellValue(picPath + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(37).setCellValue("");
+                    } else {
+                        row.createCell(37).setCellValue(picPath + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(38).setCellValue("");
+                    } else {
+                        row.createCell(38).setCellValue(picPath + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
                     row.createCell(39).setCellValue(p.getBurr());
                     row.createCell(40).setCellValue(p.getWeldline());
                     row.createCell(41).setCellValue(p.getAppearanceProblem());
-                    row.createCell(42).setCellValue(picPath + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(42).setCellValue("");
+                    } else {
+                        row.createCell(42).setCellValue(picPath + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
                     row.createCell(43).setCellValue(p.getRemarks());
                 }
             }

@@ -103,6 +103,9 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             String r2Srtm = dataArray[28];
             String outerDiameterSrtm = dataArray[29];
             String assemblyDrawing = pathsMap.get(i + "_" + 30); // 图片路径
+            if (assemblyDrawing == null) {
+                assemblyDrawing = "";
+            }
 
             // 设置参数
             structureData.setCategory(category);

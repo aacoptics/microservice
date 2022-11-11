@@ -89,6 +89,9 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             String competitorName = dataArray[16];
             String competitorLink = dataArray[17];
             String assemblyDrawing = pathsMap.get(i + "_" + 18); // 图片路径
+            if (assemblyDrawing == null) {
+                assemblyDrawing = "";
+            }
 
             // 设置参数
 

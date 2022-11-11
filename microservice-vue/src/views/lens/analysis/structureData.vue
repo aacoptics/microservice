@@ -718,21 +718,27 @@ export default {
     },
     // 图片展示处理
     preview(fileName) {
-      this.picDialogVisible = true
       let params = {
         filePathPrefix: "structureData",
         fileName: fileName
       }
-      getStream(params).then(res => {
-        console.log(res.data)
-        const url = window.URL.createObjectURL(res.data)
-        this.codeImg = url
+      getStream(params).then(res =>{
+        console.log(res.data.size)
+        if(res.data.size){
+          this.picDialogVisible=true
+          const url = window.URL.createObjectURL(res.data)
+          this.codeImg = url
+        }else{
+          ElMessageBox.alert('无相应图片', {
+            dangerouslyUseHTMLString: true,
+            type: 'error'
+          })
+        }
       }).catch((err) => {
         ElMessageBox.alert(err, '获取图片失败', {
           dangerouslyUseHTMLString: true,
           type: 'error'
         })
-        this.picDialogVisible = false;
       });
     },
 

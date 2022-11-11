@@ -158,14 +158,34 @@ public class AllDataController {
                     row.createCell(71).setCellValue(p.getCftR2());
                     row.createCell(72).setCellValue(p.getCftConsistency());
                     row.createCell(73).setCellValue(p.getCftMaxAs());
-                    row.createCell(74).setCellValue(picPath + "shapingResultData/" + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
-                    row.createCell(75).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
-                    row.createCell(76).setCellValue(picPath + "shapingResultData/" + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
-                    row.createCell(77).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                        row.createCell(74).setCellValue("");
+                    } else {
+                        row.createCell(74).setCellValue(picPath + "shapingResultData/" + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(75).setCellValue("");
+                    } else {
+                        row.createCell(75).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(76).setCellValue("");
+                    } else {
+                        row.createCell(76).setCellValue(picPath + "shapingResultData/" + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(77).setCellValue("");
+                    } else {
+                        row.createCell(77).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
                     row.createCell(78).setCellValue(p.getBurr());
                     row.createCell(79).setCellValue(p.getWeldline());
                     row.createCell(80).setCellValue(p.getAppearanceProblem());
-                    row.createCell(81).setCellValue(picPath + "shapingResultData/" + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(81).setCellValue("");
+                    } else {
+                        row.createCell(81).setCellValue(picPath + "shapingResultData/" + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
                     row.createCell(82).setCellValue(p.getRemarks());
 
                     row.createCell(83).setCellValue(p.getCoreThicknessLens());
@@ -194,7 +214,11 @@ public class AllDataController {
                     row.createCell(106).setCellValue(p.getR1Srtm());
                     row.createCell(107).setCellValue(p.getR2Srtm());
                     row.createCell(108).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(109).setCellValue(picPath + "structureData/" + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
+                        row.createCell(109).setCellValue("");
+                    } else {
+                        row.createCell(109).setCellValue(picPath + "structureData/" + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    }
 
                     row.createCell(110).setCellValue(p.getMoldType());
                     row.createCell(111).setCellValue(p.getMoldDiameterRate());
@@ -210,7 +234,13 @@ public class AllDataController {
                     row.createCell(121).setCellValue(p.getRefractiveR2());
                     row.createCell(122).setCellValue(p.getCompetitorName());
                     row.createCell(123).setCellValue(p.getCompetitorLink());
-                    row.createCell(124).setCellValue(picPath + "moldFlowData/" + p.getCompetitorAssemblyDrawing().substring(0, p.getCompetitorAssemblyDrawing().indexOf(".")));
+                    if (StringUtils.isEmpty(p.getCompetitorAssemblyDrawing())) {
+                        row.createCell(124).setCellValue("");
+
+                    } else {
+                        row.createCell(124).setCellValue(picPath + "moldFlowData/" + p.getCompetitorAssemblyDrawing().substring(0, p.getCompetitorAssemblyDrawing().indexOf(".")));
+
+                    }
 
                     row.createCell(125).setCellValue(p.getMoldCorePassivation());
                     row.createCell(126).setCellValue(p.getRunnerType());
@@ -239,35 +269,33 @@ public class AllDataController {
     public void toStream(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String filePathPrefix = request.getParameter("filePathPrefix");
         String fileNameWithExt = request.getParameter("fileName");
-        String fileName = "";
-        String ext = "";
         if (StringUtils.isNotEmpty(fileNameWithExt) && fileNameWithExt.indexOf(".") != -1) {
             String[] split = fileNameWithExt.split("\\.");
-            fileName = split[0];
-            ext = split[1];
-        }
-        FtpUtil.connect();
-        FtpUtil.changeWorkingDirectory(filePathPrefix);
-        InputStream inputStream = FtpUtil.getInputStream(fileName);
-        if (ext.equals("png")) {
-            response.setContentType("image/png");
-        } else {
-            response.setContentType("image/jpeg");
-        }
-        OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+            String fileName = split[0];
+            String ext = split[1];
+            FtpUtil.connect();
+            FtpUtil.changeWorkingDirectory(filePathPrefix);
+            InputStream inputStream = FtpUtil.getInputStream(fileName);
+            if (ext.equals("png")) {
+                response.setContentType("image/png");
+            } else {
+                response.setContentType("image/jpeg");
+            }
+            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
 
-        //创建存放文件内容的数组
-        byte[] buff = new byte[1024];
-        //所读取的内容使用n来接收
-        int n;
-        //当没有读取完时,继续读取,循环
-        while ((n = inputStream.read(buff)) != -1) {
-            //将字节数组的数据全部写入到输出流中
-            outputStream.write(buff, 0, n);
+            //创建存放文件内容的数组
+            byte[] buff = new byte[1024];
+            //所读取的内容使用n来接收
+            int n;
+            //当没有读取完时,继续读取,循环
+            while ((n = inputStream.read(buff)) != -1) {
+                //将字节数组的数据全部写入到输出流中
+                outputStream.write(buff, 0, n);
+            }
+            //关流
+            outputStream.close();
+            inputStream.close();
         }
-        //关流
-        outputStream.close();
-        inputStream.close();
     }
 
 }
