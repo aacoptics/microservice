@@ -39,6 +39,8 @@ public class FtpUtil {
             }
             ftp.setFileType(FTPClient.BINARY_FILE_TYPE);
             ftp.setBufferSize(1024 * 1024 * 10);
+            ftp.enterLocalPassiveMode();
+            ftp.setRemoteVerificationEnabled(false);
             int reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
                 ftp.disconnect();
