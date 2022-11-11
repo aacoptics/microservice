@@ -66,9 +66,13 @@
 
 <script>
 import SysTable from "@/components/SysTable";
-import {deleteBusinessDivisionProductLine, findBusinessDivisionProductLinePage, handleAdd, handleUpdate,} from "@/api/finance/budget/businessDivisionProductLine";
+import {
+  deleteBusinessDivisionProductLine,
+  findBusinessDivisionProductLinePage,
+  handleAdd,
+  handleUpdate,
+} from "@/api/finance/budget/businessDivisionProductLine";
 import {getResponseDataMessage} from "@/utils/commonUtils";
-import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
   name: "businessDivisionProductLineManagement",

@@ -4,10 +4,9 @@ package com.aacoptics.wlg.equipment.service.impl;
 import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
 import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
-import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
+import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
-import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
@@ -139,6 +138,11 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
 
     @Override
+    public boolean updateById(MaintenanceOrder maintenanceOrder) {
+        return super.updateById(maintenanceOrder);
+    }
+
+    @Override
     public MaintenanceOrder get(Long id) {
         MaintenanceOrder maintenanceOrder = this.getById(id);
         if (Objects.isNull(maintenanceOrder)) {
@@ -217,6 +221,8 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
                 maintenanceOrder.setStatus(MaintenanceOrderStatusConstants.CREATED);
 
+                maintenanceOrder.setExceptionNotification(NotificationStatusConstants.NO);
+                maintenanceOrder.setTimeoutNotification(NotificationStatusConstants.NO);
                 //创建工单保养项
                 List<MaintenanceOrderItem> maintenanceOrderItemList = new ArrayList<>();
                 for(MaintenanceItem maintenanceItem : maintenanceItemList)
@@ -281,28 +287,20 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
 
     @Override
-    public MaintenanceOrderAndItemVO findOrderByMchCode(String mchCode) {
+    public List<MaintenanceOrderAndItemVO> findOrderByMchCode(String mchCode) {
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if(equipment == null)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        MaintenanceOrderAndItemVO maintenanceOrderAndItemVO = maintenanceOrderMapper.findOrderByMchCode(mchCode);
-        if(maintenanceOrderAndItemVO == null)
+        List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderMapper.findOrderByMchCode(mchCode);
+        if(maintenanceOrderAndItemVOList == null || maintenanceOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要保养的工单，请确认！");
         }
-        //查询保养项
-        QueryWrapper<MaintenanceOrderItem> maintenanceOrderItemQueryWrapper = new QueryWrapper<MaintenanceOrderItem>();
-        maintenanceOrderItemQueryWrapper.eq( "maintenance_order_id", maintenanceOrderAndItemVO.getId());
 
-        maintenanceOrderItemQueryWrapper.orderByAsc("maintenance_item");
-        List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrderItemMapper.selectList(maintenanceOrderItemQueryWrapper);
-
-        maintenanceOrderAndItemVO.setMaintenanceOrderItemList(maintenanceOrderItemList);
-
-        return maintenanceOrderAndItemVO;
+        return maintenanceOrderAndItemVOList;
     }
 
 
@@ -347,5 +345,35 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
         boolean isSuccess = this.update(targetMaintenanceOrder);
         return isSuccess;
+    }
+
+    @Override
+    public List<MaintenanceOrder> findMaintenanceExceptionOrder() {
+        QueryWrapper<MaintenanceOrder> maintenanceOrderQueryWrapper = new QueryWrapper<>();
+        maintenanceOrderQueryWrapper.eq("exception_notification", NotificationStatusConstants.NO);
+        maintenanceOrderQueryWrapper.in("status", InspectionOrderStatusConstants.COMMITTED, InspectionOrderStatusConstants.CONFIRMED);
+        maintenanceOrderQueryWrapper.inSql("id","select maintenance_order_id from em_maintenance_order_item where is_exception = 1");
+        maintenanceOrderQueryWrapper.orderByAsc("order_number");
+        List<MaintenanceOrder> maintenanceOrderList = this.list(maintenanceOrderQueryWrapper);
+
+        return maintenanceOrderList;
+    }
+
+    @Override
+    public List<String> findMaintenanceTimeoutOrderDutyPersonIdList() {
+        return maintenanceOrderMapper.findMaintenanceTimeoutOrderDutyPersonIdList();
+    }
+
+    @Override
+    public List<MaintenanceOrder> findMaintenanceTimeoutOrderByDutyPersonId(String dutyPersonId) {
+        QueryWrapper<MaintenanceOrder> maintenanceOrderQueryWrapper = new QueryWrapper<>();
+        maintenanceOrderQueryWrapper.eq("duty_person_id", dutyPersonId);
+        maintenanceOrderQueryWrapper.eq("timeout_notification", NotificationStatusConstants.NO);
+        maintenanceOrderQueryWrapper.eq("status", InspectionOrderStatusConstants.CREATED);
+        maintenanceOrderQueryWrapper.apply("dateadd(m, maintenance_period, maintenance_date) < getdate()");
+        maintenanceOrderQueryWrapper.orderByAsc("order_number");
+        List<MaintenanceOrder> maintenanceOrderList = this.list(maintenanceOrderQueryWrapper);
+
+        return maintenanceOrderList;
     }
 }

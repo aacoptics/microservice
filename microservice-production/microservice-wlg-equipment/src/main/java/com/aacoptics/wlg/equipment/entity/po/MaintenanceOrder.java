@@ -63,6 +63,18 @@ public class MaintenanceOrder extends BasePo {
     private String status;
 
     /**
+     * 异常通知
+     */
+    @TableField(value = "exception_notification")
+    private Integer exceptionNotification;
+
+    /**
+     * 超时通知
+     */
+    @TableField(value = "timeout_notification")
+    private Integer timeoutNotification;
+
+    /**
      * 保养项
      */
     @TableField(exist = false)

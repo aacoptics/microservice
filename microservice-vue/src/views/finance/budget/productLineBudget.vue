@@ -9,7 +9,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage(null)" :loading="queryLoading">查询
+            <el-button :loading="queryLoading" type="primary" @click="findPage(null)">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -25,9 +25,10 @@
         </el-form>
       </div>
       <BudgetLogTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="false" 
-                @findPage="findPage" @handleDelete="handleDelete" @handlePreview="handlePreview" @handleDownload="handleDownload">
+                      :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
+                      :stripe="false"
+                      @findPage="findPage" @handleDelete="handleDelete" @handleDownload="handleDownload"
+                      @handlePreview="handlePreview">
       </BudgetLogTable>
 
 
@@ -73,16 +74,17 @@
 
       <el-dialog v-model="previewDialogVisible" :close-on-click-modal="false" title="产品线P&L预算预览"
                  width="75%">
-          <div>
-            <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="productLineBudgetColumns" :data="productLineBudgetDataResult"
-                     :height="550" :highlightCurrentRow="true"  v-loading="previewLoading" border
-                     :stripe="true">
-            </QueryAllTable>
+        <div>
+          <QueryAllTable id="condDataTable" ref="queryAllTable" v-loading="previewLoading"
+                         :columns="productLineBudgetColumns"
+                         :data="productLineBudgetDataResult" :height="550" :highlightCurrentRow="true" :stripe="true"
+                         border>
+          </QueryAllTable>
 
-          </div>
+        </div>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
-            <el-button :size="size" @click="cancelPreview" type="success">取消</el-button>
+            <el-button :size="size" type="success" @click="cancelPreview">取消</el-button>
           </slot>
         </div>
       </el-dialog>
@@ -94,8 +96,8 @@
 import BudgetLogTable from "@/views/finance/budget/budgetLogTable";
 import QueryAllTable from "@/components/QueryAllTable";
 
-import {findProductLineBudgetPage, downloadTemplate, uploadExcel} from "@/api/finance/budget/productLineBudget";
-import {deleteBudgetUploadLog, findBudgetUploadLogPage, downloadExcel} from "@/api/finance/budget/budgetUploadLog";
+import {downloadTemplate, findProductLineBudgetPage, uploadExcel} from "@/api/finance/budget/productLineBudget";
+import {deleteBudgetUploadLog, downloadExcel, findBudgetUploadLogPage} from "@/api/finance/budget/budgetUploadLog";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 
 
@@ -136,7 +138,7 @@ export default {
 
       downloadTemplateLoading: false,
       previewLoading: false,
-      queryLoading:false,
+      queryLoading: false,
 
       excelUploadDialogVisible: false,
       previewDialogVisible: false,
@@ -181,20 +183,17 @@ export default {
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
-              for(var i=0; i<responseData.data.columns.length; i++)
-              {
+              for (var i = 0; i < responseData.data.columns.length; i++) {
                 responseData.data.columns[i].formatter = this.percentFormat;
               }
               this.productLineBudgetColumns = responseData.data.columns;
               this.productLineBudgetDataResult.records = responseData.data.data;
-            }
-            else
-            {
+            } else {
               this.$message({
-                    message:
-                        "预览失败 " + getResponseDataMessage(responseData),
-                    type: "error",
-                  });
+                message:
+                    "预览失败 " + getResponseDataMessage(responseData),
+                type: "error",
+              });
             }
             this.previewLoading = false;
           });
@@ -272,26 +271,24 @@ export default {
     },
     // 显示编辑界面
     handlePreview: function (params) {
-      if(params.row.status == 0)
-      {
+      if (params.row.status == 0) {
         this.$message({
-                    message:
-                        "已失效，不能预览！ ",
-                    type: "error",
-                  });
+          message:
+              "已失效，不能预览！ ",
+          type: "error",
+        });
         return;
       }
       this.previewDialogVisible = true;
       this.findDetail(params.row);
     },
     handleDownload: function (params) {
-      if(params.row.status == 0)
-      {
+      if (params.row.status == 0) {
         this.$message({
-                    message:
-                        "已失效，不能下载！ ",
-                    type: "error",
-                  });
+          message:
+              "已失效，不能下载！ ",
+          type: "error",
+        });
         return;
       }
       downloadExcel(params.row.id).then(res => {
@@ -306,8 +303,7 @@ export default {
 
       });
     },
-    cancelPreview()
-    {
+    cancelPreview() {
       this.previewDialogVisible = false;
     },
     // 时间格式化
@@ -316,22 +312,17 @@ export default {
     },
     // 百分数格式化
     percentFormat: function (row, column) {
-      if(column.no >= 6)
-      {
-        if(row.unit == '%')
-        {
-          return Number(row[column.property]*100).toFixed(2)+'%';
+      if (column.no >= 6) {
+        if (row.unit == '%') {
+          return Number(row[column.property] * 100).toFixed(2) + '%';
         }
       }
       return row[column.property];
     },
     statusFormat: function (row, column) {
-      if(row[column.property] == 1)
-      {
+      if (row[column.property] == 1) {
         return '生效中';
-      }
-      else if(row[column.property] == 0)
-      {
+      } else if (row[column.property] == 0) {
         return '已失效';
       }
     },

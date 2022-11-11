@@ -91,7 +91,7 @@ public interface RepairOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    RepairOrderVO findOrderByMchCode(String mchCode);
+    List<RepairOrderVO> findOrderByMchCode(String mchCode);
 
 
     /**

@@ -38,6 +38,14 @@ public interface InspectionOrderService {
     boolean update(InspectionOrder inspectionOrder);
 
     /**
+     * 更新点检工单信息
+     *
+     * @param inspectionOrder
+     */
+    boolean updateById(InspectionOrder inspectionOrder);
+
+
+    /**
      * 根据id删除点检工单
      *
      * @param id
@@ -103,7 +111,7 @@ public interface InspectionOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    InspectionOrderAndItemVO findOrderByMchCode(String mchCode);
+    List<InspectionOrderAndItemVO> findOrderByMchCode(String mchCode);
 
 
     /**
@@ -121,4 +129,26 @@ public interface InspectionOrderService {
      * @return
      */
     List<InspectionOrderAndItemVO> queryInspectionOrderByCondition(InspectionOrderQueryParam inspectionOrderQueryParam);
+
+
+    /**
+     * 查找点检异常工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionExceptionOrder();
+
+    /**
+     * 查找点检超时工单责任人
+     *
+     * @return
+     */
+    List<String> findInspectionTimeoutOrderDutyPersonIdList();
+
+    /**
+     * 查找点检超时工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionTimeoutOrderByDutyPersonId(String dutyPersonId);
 }
