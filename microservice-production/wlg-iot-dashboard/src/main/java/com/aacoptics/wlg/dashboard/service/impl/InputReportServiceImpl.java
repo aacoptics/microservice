@@ -64,6 +64,8 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
     @Override
     public void updateOutPutInfo(InputReport inputReport) {
         UpdateWrapper<InputReport> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("start_wafer_id", inputReport.getStartWaferId());
+        updateWrapper.set("end_wafer_id", inputReport.getEndWaferId());
         updateWrapper.set("broken_ok", inputReport.getBrokenOk());
         updateWrapper.set("broken_ng", inputReport.getBrokenNg());
         updateWrapper.set("output_qty", inputReport.getOutputQty());
