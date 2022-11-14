@@ -81,18 +81,18 @@
         <el-table-column label="标准周期" prop="standardCt" width="65"/>
         <el-table-column label="平均周期" prop="avgCycle" width="65"/>
 
-        <el-table-column label="起始batch ID" prop="startWaferId" width="80">
+        <el-table-column label="起始batch ID" prop="startWaferId" width="90">
           <template v-slot="scope">
             <el-input v-show="scope.row.iseditor" v-model="scope.row.startWaferId"
-                              style="width: 70px"/>
-            <span>{{ scope.row.startWaferId }}</span>
+                              style="width: 70px" size="small"/>
+            <span v-show="!scope.row.iseditor">{{ scope.row.startWaferId }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="终止batch ID" prop="endWaferId" width="65">
+        <el-table-column label="终止batch ID" prop="endWaferId" width="90">
           <template v-slot="scope">
             <el-input v-show="scope.row.iseditor" v-model="scope.row.endWaferId"
-                      style="width: 70px"/>
-            <span>{{ scope.row.endWaferId }}</span>
+                      style="width: 70px"  size="small"/>
+            <span v-show="!scope.row.iseditor">{{ scope.row.endWaferId }}</span>
           </template>
         </el-table-column>
 
