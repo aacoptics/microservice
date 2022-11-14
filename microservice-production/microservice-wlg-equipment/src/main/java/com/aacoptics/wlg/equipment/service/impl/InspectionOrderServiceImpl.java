@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
@@ -16,6 +17,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.tomcat.jni.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +61,14 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         IPage<InspectionOrderVO> inspectionOrderVOIPage = inspectionOrderMapper.findInspectionOrderList(page, inspectionOrderQueryParam);
 
         return inspectionOrderVOIPage;
+    }
+
+    @Override
+    public IPage<InspectionOrderDetailVO> queryDetail(Page page, InspectionOrderQueryParam inspectionOrderQueryParam) {
+
+        IPage<InspectionOrderDetailVO> inspectionOrderDetailList = inspectionOrderMapper.findInspectionOrderDetailList(page, inspectionOrderQueryParam);
+
+        return inspectionOrderDetailList;
     }
 
     @Override
@@ -120,6 +130,10 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         return isSuccess;
     }
 
+    @Override
+    public boolean updateById(InspectionOrder inspectionOrder) {
+        return super.updateById(inspectionOrder);
+    }
 
     @Override
     public InspectionOrder get(Long id) {
@@ -188,7 +202,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setOrderNumber(this.getNextOrderNumber(orderNumberDateStr));
                     inspectionOrder.setMchCode(equipment.getMchCode());
                     //优先取设备负责人，如果为空则取责任人
-                    inspectionOrder.setDutyPersonId(equipment.getEquipDuty() != null ? equipment.getEquipDuty() : equipment.getDutyPersonId());
+                    inspectionOrder.setDutyPersonId(StringUtils.isNotEmpty(equipment.getEquipDuty()) ? equipment.getEquipDuty() : equipment.getDutyPersonId());
                     inspectionOrder.setInspectionDate(currentDate);
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 
@@ -198,7 +212,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setShiftStartTime(shiftStartTime);
                     inspectionOrder.setShiftEndTime(shiftEndTime);
                     inspectionOrder.setStatus(InspectionOrderStatusConstants.CREATED);
-
+                    inspectionOrder.setExceptionNotification(NotificationStatusConstants.NO);
+                    inspectionOrder.setTimeoutNotification(NotificationStatusConstants.NO);
                     //创建工单点检项
                     List<InspectionOrderItem> inspectionOrderItemList = new ArrayList<>();
                     for(InspectionItem inspectionItem : inspectionItemList)
@@ -264,27 +279,19 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
     }
 
     @Override
-    public InspectionOrderAndItemVO findOrderByMchCode(String mchCode) {
+    public List<InspectionOrderAndItemVO> findOrderByMchCode(String mchCode) {
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
         if(equipment == null)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        InspectionOrderAndItemVO inspectionOrderAndItemVO = inspectionOrderMapper.findOrderByMchCode(mchCode);
-        if(inspectionOrderAndItemVO == null)
+        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findOrderByMchCode(mchCode);
+        if(inspectionOrderAndItemVOList == null || inspectionOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要点检的工单，请确认！");
         }
-        //查询点检项
-        QueryWrapper<InspectionOrderItem> inspectionOrderItemQueryWrapper = new QueryWrapper<InspectionOrderItem>();
-        inspectionOrderItemQueryWrapper.eq( "inspection_order_id", inspectionOrderAndItemVO.getId());
-
-        inspectionOrderItemQueryWrapper.orderByAsc("check_item");
-        List<InspectionOrderItem> inspectionOrderItemList = inspectionOrderItemMapper.selectList(inspectionOrderItemQueryWrapper);
-
-        inspectionOrderAndItemVO.setInspectionOrderItemList(inspectionOrderItemList);
-        return inspectionOrderAndItemVO;
+        return inspectionOrderAndItemVOList;
     }
 
 
@@ -329,5 +336,36 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
         boolean isSuccess = this.updateById(targetInspectionOrder);
         return isSuccess;
+    }
+
+    @Override
+    public List<InspectionOrder> findInspectionExceptionOrder() {
+        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
+        inspectionOrderQueryWrapper.eq("exception_notification", NotificationStatusConstants.NO);
+        inspectionOrderQueryWrapper.in("status", InspectionOrderStatusConstants.COMMITTED, InspectionOrderStatusConstants.CONFIRMED);
+        inspectionOrderQueryWrapper.inSql("id","select inspection_order_id from em_inspection_order_item where is_exception = 1");
+        inspectionOrderQueryWrapper.orderByAsc("order_number");
+        List<InspectionOrder> inspectionOrderList = this.list(inspectionOrderQueryWrapper);
+
+        return inspectionOrderList;
+    }
+
+    @Override
+    public List<String> findInspectionTimeoutOrderDutyPersonIdList() {
+        List<String> dutyPersonIdList = inspectionOrderMapper.findInspectionTimeoutOrderDutyPersonIdList();
+        return dutyPersonIdList;
+    }
+
+    @Override
+    public List<InspectionOrder> findInspectionTimeoutOrderByDutyPersonId(String dutyPersonId) {
+        QueryWrapper<InspectionOrder> inspectionOrderQueryWrapper = new QueryWrapper<>();
+        inspectionOrderQueryWrapper.eq("duty_person_id", dutyPersonId);
+        inspectionOrderQueryWrapper.eq("timeout_notification", NotificationStatusConstants.NO);
+        inspectionOrderQueryWrapper.eq("status", InspectionOrderStatusConstants.CREATED);
+        inspectionOrderQueryWrapper.lt("shift_end_time", LocalDateTime.now());
+        inspectionOrderQueryWrapper.orderByAsc("order_number");
+        List<InspectionOrder> inspectionOrderList = this.list(inspectionOrderQueryWrapper);
+
+        return inspectionOrderList;
     }
 }

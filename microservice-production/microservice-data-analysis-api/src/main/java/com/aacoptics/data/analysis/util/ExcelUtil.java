@@ -5,22 +5,25 @@ import com.aacoptics.data.analysis.exception.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ooxml.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.*;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Excel工具类
@@ -66,16 +69,28 @@ public class ExcelUtil {
         handler.handle(getSheetByIdx(wb, sheetIdx));
     }
 
+    /**
+     * 获取workbook
+     *
+     * @param in
+     * @return
+     * @throws IOException
+     * @throws InvalidFormatException
+     */
+    public static Workbook getWorkbook(InputStream in) throws IOException, InvalidFormatException {
+        // 创建工作簿
+        Workbook wb = createWorkBook(in);
+        return wb;
+    }
+
 
     /**
      * 读取excel全部sheet全部行数据<br>未关闭io
      *
-     * @param in
+     * @param wb
      * @return List<List < String [ ]>> <br>List<String[]>表示第i个sheet<br> String[]表示sheet某行
      */
-    public static List<List<String[]>> read(InputStream in) throws IOException, InvalidFormatException {
-        // 创建工作簿
-        Workbook wb = createWorkBook(in);
+    public static List<List<String[]>> read(Workbook wb) throws IOException, InvalidFormatException {
         // 默认读取所有行，所有列
         return readExcel(wb);
     }
@@ -509,4 +524,167 @@ public class ExcelUtil {
             sheet.setColumnWidth(i, columnWidthList.get(i));
         }
     }
+
+    /**
+     * 有效数字处理
+     *
+     * @param str
+     * @param number
+     * @return
+     */
+    public static String handleDecimal(String str, int number) {
+        String format = str;
+        boolean integerOrDouble = isIntegerOrDouble(str);
+        if (!integerOrDouble) {
+            return format;
+        }
+        double decimal = Double.valueOf(str);
+        // 取整
+        if (number == 0) {
+            long i = Math.round(decimal);
+            format = String.valueOf(i);
+        } else {
+
+            format = String.format("%." + number + "f", decimal);
+        }
+        return format;
+    }
+
+    /**
+     * 获取图片
+     *
+     * @param wb
+     * @return
+     * @throws IOException
+     */
+    public static Map<String, PictureData> getPictures(Workbook wb) throws IOException {
+        XSSFSheet sheet = (XSSFSheet) wb.getSheetAt(0);
+        Map<String, PictureData> map = new HashMap<>();
+        List<POIXMLDocumentPart> relations = sheet.getRelations();
+        for (POIXMLDocumentPart part : relations) {
+            if (part instanceof XSSFDrawing) {
+                XSSFDrawing drawing = (XSSFDrawing) part;
+                List<XSSFShape> shapes = drawing.getShapes();
+                for (XSSFShape shape : shapes) {
+                    XSSFPicture picture = (XSSFPicture) shape;
+                    XSSFClientAnchor anchor = picture.getPreferredSize();
+                    CTMarker from = anchor.getFrom();
+                    // int rowNum = from.getRow();
+                    // int colNum = from.getCol();
+                    String key = from.getRow() + "_" + from.getCol();
+                    // System.out.println(rowNum + "-------" + colNum);
+                    map.put(key, picture.getPictureData());
+                }
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 删除文件，文件重复写入需要替换
+     *
+     * @param fileName 文件名
+     * @return 删除成功返回true, 失败返回false
+     */
+    public static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        if (file.isFile() && file.exists()) {
+            file.delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 图片保存
+     *
+     * @param sheetList
+     * @param filePathPrefix
+     * @return
+     * @throws Exception
+     */
+    public static Map<String, String> saveImg(Map<String, PictureData> sheetList, String filePathPrefix) throws Exception {
+        Map<String, String> map = new HashMap<>();
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory(filePathPrefix);
+        for (Map.Entry<String, PictureData> entry : sheetList.entrySet()) {
+            // 获取图片流
+            PictureData pic = entry.getValue();
+            // 获取图片索引
+            String picName = entry.getKey() + "_" + (new Date()).getTime();
+            // 获取图片格式
+            String ext = pic.suggestFileExtension();
+            map.put(entry.getKey(), picName + "." + ext);
+            FtpUtil.uploadFile(new ByteArrayInputStream(pic.getData()), picName);
+        }
+        return map;
+    }
+
+    /**
+     * 将图片导入到Excel
+     *
+     * @param wb
+     * @param filePathPrefix
+     * @param fileNameWithExt
+     * @param row
+     * @param col
+     * @param scaleX
+     * @param scaleY
+     */
+    public static void exportImg(Workbook wb, XSSFSheet sheet, String filePathPrefix, String fileNameWithExt, int row, int col, double scaleX, double scaleY) {
+        try {
+            String fileName = "";
+            String ext = "";
+            if (StringUtils.isNotEmpty(fileNameWithExt) && fileNameWithExt.indexOf(".") != -1) {
+                String[] split = fileNameWithExt.split("\\.");
+                fileName = split[0];
+                ext = split[1];
+            }
+            FtpUtil.connect();
+            FtpUtil.changeWorkingDirectory(filePathPrefix);
+            InputStream inputStream = FtpUtil.getInputStream(fileName);
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            int pictureIdx = 0;
+            if (ext.equals("png")) {
+                pictureIdx = wb.addPicture(bytes, wb.PICTURE_TYPE_PNG);
+            } else {
+                pictureIdx = wb.addPicture(bytes, wb.PICTURE_TYPE_JPEG);
+            }
+            CreationHelper helper = wb.getCreationHelper();
+            ClientAnchor anchor = helper.createClientAnchor();
+            // 图片插入坐标
+            anchor.setCol1(col);
+            anchor.setRow1(row);
+
+            Drawing drawing = sheet.createDrawingPatriarch();
+            // 插入图片
+            Picture pict = drawing.createPicture(anchor, pictureIdx);
+            pict.resize(scaleX, scaleY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 判断是否是整型或者浮点型
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isIntegerOrDouble(String str) {
+        if (StringUtils.isEmpty(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        boolean integerFlag = pattern.matcher(str).matches();
+        if (integerFlag) {
+            return true;
+        }
+        Pattern pattern1 = Pattern.compile("^[-\\+]?\\d*[.]\\d+$");
+        boolean floatFlag = pattern1.matcher(str).matches();
+        return floatFlag;
+    }
+
+
 }

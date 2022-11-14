@@ -72,4 +72,57 @@ export function handleUpdate(updateForm) {
     })
 }
 
+// 获取类别
+export function getCategory() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getCategory',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
 
+// 获取项目
+export function getProject() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getProject',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取零件名称
+export function getPartName() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getPartName',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取材料
+export function getMaterial() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getMaterial',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取模具序号
+export function getMoldNo() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getMoldNo',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

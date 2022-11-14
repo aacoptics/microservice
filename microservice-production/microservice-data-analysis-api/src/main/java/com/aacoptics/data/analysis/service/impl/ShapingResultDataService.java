@@ -1,6 +1,7 @@
 package com.aacoptics.data.analysis.service.impl;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
+import com.aacoptics.data.analysis.entity.po.ProcessConditionData;
 import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.exception.BusinessException;
 import com.aacoptics.data.analysis.mapper.ShapingResultDataMapper;
@@ -12,11 +13,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.PictureData;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -27,12 +31,18 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
 
     @Override
     public void importShapingResultDataExcel(InputStream in) throws Exception {
-        List<String[]> excelDataList = ExcelUtil.read(in).get(0);
+        Workbook workbook = ExcelUtil.getWorkbook(in);
+        List<String[]> excelDataList = ExcelUtil.read(workbook).get(0);
         String[] titleArray = excelDataList.get(0);//标题行
         String title = titleArray[0];
         if (!"项目量产成型结果数据表".equals(title)) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
+
+        // 提取excel中的图片并保存
+        String filePathPrefix = "shapingResultData";
+        Map<String, PictureData> pictures = ExcelUtil.getPictures(workbook);
+        Map<String, String> pathsMap = ExcelUtil.saveImg(pictures, filePathPrefix);
         for (int i = 3; i < excelDataList.size(); i++) {
             String[] dataArray = excelDataList.get(i);
             if (dataArray == null || dataArray.length == 0) {
@@ -66,44 +76,59 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 shapingResultData = new ShapingResultData();
             }
 
-            String coreThickness = dataArray[5];
-            String coreThicknessRange = dataArray[6];
-            String r1VectorHeight = dataArray[7];
-            String r1VectorHeightRange = dataArray[8];
-            String r2VectorHeight = dataArray[9];
-            String r2VectorHeightRange = dataArray[10];
-            String outerDiameterEcc = dataArray[11];
-            String kanheEcc = dataArray[12];
-            String faceEcc = dataArray[13];
-            String annealingProcess = dataArray[14];
-            String bpKanheRoundness = dataArray[15];
-            String dmpKanheRoundness = dataArray[16];
-            String outerDiameterAverage = dataArray[17];
-            String outerDiameterRange = dataArray[18];
-            String outerDiameterRoundness = dataArray[19];
-            String outerDiameterShrinkage = dataArray[20];
-            String outerDiameterRoughness = dataArray[21];
-            String r1Flatness = dataArray[22];
-            String r2Flatness = dataArray[23];
-            String r1SplitAverage = dataArray[24];
-            String r2SplitAverage = dataArray[25];
-            String wftR1 = dataArray[26];
-            String wftR2 = dataArray[27];
-            String wftConsistency = dataArray[28];
-            String wftMaxAs = dataArray[29];
-            String wftStability = dataArray[30];
-            String cftR1 = dataArray[31];
-            String cftR2 = dataArray[32];
-            String cftConsistency = dataArray[33];
-            String cftMaxAs = dataArray[34];
-            String coatingTrend = dataArray[35];
-            String cfsrR1 = dataArray[36];
-            String cfsrR2 = dataArray[37];
-            String cfsrR1R2 = dataArray[38];
-            String burr = dataArray[39];
+            String coreThickness = ExcelUtil.handleDecimal(dataArray[5], 1);
+            String coreThicknessRange = ExcelUtil.handleDecimal(dataArray[6], 1);
+            String r1VectorHeight = ExcelUtil.handleDecimal(dataArray[7], 1);
+            String r1VectorHeightRange = ExcelUtil.handleDecimal(dataArray[8], 1);
+            String r2VectorHeight = ExcelUtil.handleDecimal(dataArray[9], 1);
+            String r2VectorHeightRange = ExcelUtil.handleDecimal(dataArray[10], 1);
+            String outerDiameterEcc = ExcelUtil.handleDecimal(dataArray[11], 1);
+            String kanheEcc = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String faceEcc = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String annealingProcess = ExcelUtil.handleDecimal(dataArray[14], 0);
+            String bpKanheRoundness = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String dmpKanheRoundness = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String outerDiameterAverage = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String outerDiameterRange = ExcelUtil.handleDecimal(dataArray[18], 1);
+            String outerDiameterRoundness = ExcelUtil.handleDecimal(dataArray[19], 1);
+            String outerDiameterShrinkage = ExcelUtil.handleDecimal(dataArray[20], 1);
+            String outerDiameterRoughness = ExcelUtil.handleDecimal(dataArray[21], 1);
+            String r1Flatness = ExcelUtil.handleDecimal(dataArray[22], 1);
+            String r2Flatness = ExcelUtil.handleDecimal(dataArray[23], 1);
+            String r1SplitAverage = ExcelUtil.handleDecimal(dataArray[24], 1);
+            String r2SplitAverage = ExcelUtil.handleDecimal(dataArray[25], 1);
+            String wftR1 = ExcelUtil.handleDecimal(dataArray[26], 0);
+            String wftR2 = ExcelUtil.handleDecimal(dataArray[27], 0);
+            String wftConsistency = ExcelUtil.handleDecimal(dataArray[28], 0);
+            String wftMaxAs = ExcelUtil.handleDecimal(dataArray[29], 0);
+            String wftStability = ExcelUtil.handleDecimal(dataArray[30], 0);
+            String cftR1 = ExcelUtil.handleDecimal(dataArray[31], 0);
+            String cftR2 = ExcelUtil.handleDecimal(dataArray[32], 0);
+            String cftConsistency = ExcelUtil.handleDecimal(dataArray[33], 0);
+            String cftMaxAs = ExcelUtil.handleDecimal(dataArray[34], 0);
+            String coatingTrend = pathsMap.get(i + "_" + 35); // 图片路径
+            if (coatingTrend == null) {
+                coatingTrend = "";
+            }
+            String cfsrR1 = pathsMap.get(i + "_" + 36); // 图片路径
+            if (cfsrR1 == null) {
+                cfsrR1 = "";
+            }
+            String cfsrR2 = pathsMap.get(i + "_" + 37); // 图片路径
+            if (cfsrR2 == null) {
+                cfsrR2 = "";
+            }
+            String cfsrR1R2 = pathsMap.get(i + "_" + 38); // 图片路径
+            if (cfsrR1R2 == null) {
+                cfsrR1R2 = "";
+            }
+            String burr = ExcelUtil.handleDecimal(dataArray[39], 1);
             String weldline = dataArray[40];
             String appearanceProblem = dataArray[41];
-            String appearanceImg = dataArray[42];
+            String appearanceImg = pathsMap.get(i + "_" + 42); // 图片路径
+            if (appearanceImg == null) {
+                appearanceImg = "";
+            }
             String remarks = dataArray[43];
 
             // 设置参数
@@ -158,13 +183,18 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
     }
 
     @Override
-    public IPage<ShapingResultData> getDataByConditions(Page<ShapingResultData> iPage, String category, String project, String partName, String material, String moldNo) {
+    public IPage<ShapingResultData> getDataByConditions(Page<ShapingResultData> iPage, String category, String project,
+                                                        String partName, String material, String moldNo, String searchType,
+                                                        String startValue, String endValue) {
         QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(category), "category", category)
-                .like(StringUtils.isNotBlank(project), "project", project)
-                .like(StringUtils.isNotBlank(partName), "part_name", partName)
-                .like(StringUtils.isNotBlank(material), "material", material)
-                .like(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+        queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
+                .eq(StringUtils.isNotBlank(project), "project", project)
+                .eq(StringUtils.isNotBlank(partName), "part_name", partName)
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+        if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(startValue) && StringUtils.isNotBlank(endValue)) {
+            queryWrapper.between(searchType, Float.valueOf(startValue), Float.valueOf(endValue));
+        }
         IPage<ShapingResultData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -172,11 +202,16 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
     @Override
     public List<ShapingResultData> getAllDataByConditions(QueryParams queryParams) {
         QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
-                .like(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
-                .like(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .like(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
-                .like(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
+        queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
+                .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
+                .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
+                .eq(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
+        if (StringUtils.isNotBlank(queryParams.getSearchType())
+                && StringUtils.isNotBlank(queryParams.getStartValue())
+                && StringUtils.isNotBlank(queryParams.getEndValue())) {
+            queryWrapper.between(queryParams.getSearchType(), Float.valueOf(queryParams.getStartValue()), Float.valueOf(queryParams.getEndValue()));
+        }
         List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
         return shapingResultDatas;
     }
@@ -189,6 +224,46 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
     @Override
     public boolean update(ShapingResultData shapingResultData) {
         return this.updateById(shapingResultData);
+    }
+
+    @Override
+    public List<ShapingResultData> getCategory() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("category").select("category");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    @Override
+    public List<ShapingResultData> getProject() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("project").select("project");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    @Override
+    public List<ShapingResultData> getPartName() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("part_name").select("part_name");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    @Override
+    public List<ShapingResultData> getMaterial() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("material").select("material");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    @Override
+    public List<ShapingResultData> getMoldNo() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("mold_no").select("mold_no");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
     }
 
     private ShapingResultData getShapingResultData(String category, String project, String partName, String material, String moldNo) {

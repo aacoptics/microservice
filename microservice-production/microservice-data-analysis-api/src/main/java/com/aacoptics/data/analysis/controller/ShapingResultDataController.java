@@ -6,12 +6,14 @@ import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.exception.WlgReportErrorType;
 import com.aacoptics.data.analysis.service.IShapingResultDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
+import com.aacoptics.data.analysis.util.FtpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -92,7 +94,10 @@ public class ShapingResultDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
-                queryParams.getMoldNo());
+                queryParams.getMoldNo(),
+                queryParams.getSearchType(),
+                queryParams.getStartValue(),
+                queryParams.getEndValue());
         if (res.getTotal() == 0) {
             return Result.fail(WlgReportErrorType.BUSINESS_EXCEPTION, "查询数据为空！");
         }
@@ -104,6 +109,8 @@ public class ShapingResultDataController {
     @PostMapping(value = "/exportExcel")
     public void exportShapingResultDataExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
         XSSFWorkbook wb = null;
+        String picPath = "ftp://" + FtpUtil.getUserName() + ":" + FtpUtil.getPassword()
+                + "@" + FtpUtil.getFtpHostIp() + ":" + FtpUtil.getFtpPort() + "/" + "shapingResultData/";
         try {
             // 根据查询条件获取数据
             List<ShapingResultData> datas = shapingResultDataService.getAllDataByConditions(queryParams);
@@ -155,14 +162,34 @@ public class ShapingResultDataController {
                     row.createCell(32).setCellValue(p.getCftR2());
                     row.createCell(33).setCellValue(p.getCftConsistency());
                     row.createCell(34).setCellValue(p.getCftMaxAs());
-                    row.createCell(35).setCellValue(p.getCoatingTrend());
-                    row.createCell(36).setCellValue(p.getCfsrR1());
-                    row.createCell(37).setCellValue(p.getCfsrR2());
-                    row.createCell(38).setCellValue(p.getCfsrR1R2());
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                        row.createCell(35).setCellValue("");
+                    } else {
+                        row.createCell(35).setCellValue(picPath + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(36).setCellValue("");
+                    } else {
+                        row.createCell(36).setCellValue(picPath + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(37).setCellValue("");
+                    } else {
+                        row.createCell(37).setCellValue(picPath + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(38).setCellValue("");
+                    } else {
+                        row.createCell(38).setCellValue(picPath + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
                     row.createCell(39).setCellValue(p.getBurr());
                     row.createCell(40).setCellValue(p.getWeldline());
                     row.createCell(41).setCellValue(p.getAppearanceProblem());
-                    row.createCell(42).setCellValue(p.getAppearanceImg());
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(42).setCellValue("");
+                    } else {
+                        row.createCell(42).setCellValue(picPath + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
                     row.createCell(43).setCellValue(p.getRemarks());
                 }
             }
@@ -185,6 +212,36 @@ public class ShapingResultDataController {
     @PostMapping(value = "/update")
     public Result update(@RequestBody ShapingResultData shapingResultData) {
         return Result.success(shapingResultDataService.update(shapingResultData));
+    }
+
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(shapingResultDataService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(shapingResultDataService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(shapingResultDataService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(shapingResultDataService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取模具序号", notes = "获取模具序号")
+    @GetMapping(value = "/getMoldNo")
+    public Result getMoldNo() {
+        return Result.success(shapingResultDataService.getMoldNo());
     }
 
 }

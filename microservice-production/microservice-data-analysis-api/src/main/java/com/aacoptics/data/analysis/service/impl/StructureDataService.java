@@ -1,6 +1,7 @@
 package com.aacoptics.data.analysis.service.impl;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
+import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.aacoptics.data.analysis.exception.BusinessException;
 import com.aacoptics.data.analysis.mapper.StructureDataMapper;
@@ -12,11 +13,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.PictureData;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -28,12 +32,18 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
 
     @Override
     public void importStructureDataExcel(InputStream in) throws Exception {
-        List<String[]> excelDataList = ExcelUtil.read(in).get(0);
+        Workbook workbook = ExcelUtil.getWorkbook(in);
+        List<String[]> excelDataList = ExcelUtil.read(workbook).get(0);
         String[] titleArray = excelDataList.get(0);//标题行
         String title = titleArray[0];
         if (!"项目量产结构数据表".equals(title)) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
+
+        // 提取excel中的图片并保存
+        String filePathPrefix = "structureData";
+        Map<String, PictureData> pictures = ExcelUtil.getPictures(workbook);
+        Map<String, String> pathsMap = ExcelUtil.saveImg(pictures, filePathPrefix);
         for (int i = 3; i < excelDataList.size(); i++) {
             String[] dataArray = excelDataList.get(i);
             if (dataArray == null || dataArray.length == 0) {
@@ -64,35 +74,38 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             }
 
 
-            String coreThickness = dataArray[4];
-            String maxWallThickness = dataArray[5];
-            String minWallThickness = dataArray[6];
-            String maxCoreRatio = dataArray[7];
-            String maxMinRatio = dataArray[8];
-            String outerDiameter = dataArray[9];
-            String edgeThickness = dataArray[10];
-            String wholeMinWallThickness = dataArray[11];
-            String wholeMaxWallThickness = dataArray[12];
-            String wholeMaxMinRatio = dataArray[13];
-            String wholeDiameterThicknessRatio = dataArray[14];
-            String maxAngleR1 = dataArray[15];
-            String maxAngleR2 = dataArray[16];
+            String coreThickness = ExcelUtil.handleDecimal(dataArray[4], 1);
+            String maxWallThickness = ExcelUtil.handleDecimal(dataArray[5], 1);
+            String minWallThickness = ExcelUtil.handleDecimal(dataArray[6], 1);
+            String maxCoreRatio = ExcelUtil.handleDecimal(dataArray[7], 1);
+            String maxMinRatio = ExcelUtil.handleDecimal(dataArray[8], 1);
+            String outerDiameter = ExcelUtil.handleDecimal(dataArray[9], 1);
+            String edgeThickness = ExcelUtil.handleDecimal(dataArray[10], 1);
+            String wholeMinWallThickness = ExcelUtil.handleDecimal(dataArray[11], 1);
+            String wholeMaxWallThickness = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String wholeMaxMinRatio = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String wholeDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[14], 1);
+            String maxAngleR1 = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String maxAngleR2 = ExcelUtil.handleDecimal(dataArray[16], 1);
 
-            String r1MaxHeightDifference = dataArray[17];
-            String r2MaxHeightDifference = dataArray[18];
+            String r1MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String r2MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[18], 1);
 
-            String r1R2Distance = dataArray[19];
-            String middlePartThickness = dataArray[20];
-            String bottomDiameterDistance = dataArray[21];
-            String mechanismDiameterThicknessRatio = dataArray[22];
-            String r1KanheAngle = dataArray[23];
-            String r1KanheHeight = dataArray[24];
-            String r2KanheAngle = dataArray[25];
-            String r2KanheHeight = dataArray[26];
+            String r1R2Distance = ExcelUtil.handleDecimal(dataArray[19], 1);
+            String middlePartThickness = ExcelUtil.handleDecimal(dataArray[20], 1);
+            String bottomDiameterDistance = ExcelUtil.handleDecimal(dataArray[21], 1);
+            String mechanismDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[22], 1);
+            String r1KanheAngle = ExcelUtil.handleDecimal(dataArray[23], 1);
+            String r1KanheHeight = ExcelUtil.handleDecimal(dataArray[24], 1);
+            String r2KanheAngle = ExcelUtil.handleDecimal(dataArray[25], 1);
+            String r2KanheHeight = ExcelUtil.handleDecimal(dataArray[26], 1);
             String r1Srtm = dataArray[27];
             String r2Srtm = dataArray[28];
             String outerDiameterSrtm = dataArray[29];
-            String assemblyDrawing = dataArray[30];
+            String assemblyDrawing = pathsMap.get(i + "_" + 30); // 图片路径
+            if (assemblyDrawing == null) {
+                assemblyDrawing = "";
+            }
 
             // 设置参数
             structureData.setCategory(category);
@@ -133,12 +146,17 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
     }
 
     @Override
-    public IPage<StructureData> getDataByConditions(Page<StructureData> iPage, String category, String project, String partName, String material) {
+    public IPage<StructureData> getDataByConditions(Page<StructureData> iPage, String category, String project,
+                                                    String partName, String material, String searchType,
+                                                    String startValue, String endValue) {
         QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(category), "category", category)
-                .like(StringUtils.isNotBlank(project), "project", project)
-                .like(StringUtils.isNotBlank(partName), "part_name", partName)
-                .like(StringUtils.isNotBlank(material), "material", material);
+        queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
+                .eq(StringUtils.isNotBlank(project), "project", project)
+                .eq(StringUtils.isNotBlank(partName), "part_name", partName)
+                .eq(StringUtils.isNotBlank(material), "material", material);
+        if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(startValue) && StringUtils.isNotBlank(endValue)) {
+            queryWrapper.between(searchType, Float.valueOf(startValue), Float.valueOf(endValue));
+        }
         IPage<StructureData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -146,10 +164,15 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
     @Override
     public List<StructureData> getAllDataByConditions(QueryParams queryParams) {
         QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
-                .like(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
-                .like(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .like(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+        queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
+                .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
+                .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+        if (StringUtils.isNotBlank(queryParams.getSearchType())
+                && StringUtils.isNotBlank(queryParams.getStartValue())
+                && StringUtils.isNotBlank(queryParams.getEndValue())) {
+            queryWrapper.between(queryParams.getSearchType(), Float.valueOf(queryParams.getStartValue()), Float.valueOf(queryParams.getEndValue()));
+        }
         List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
         return structureDatas;
     }
@@ -162,6 +185,38 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
     @Override
     public boolean update(StructureData structureData) {
         return this.updateById(structureData);
+    }
+
+    @Override
+    public List<StructureData> getCategory() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("category").select("category");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
+    }
+
+    @Override
+    public List<StructureData> getProject() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("project").select("project");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
+    }
+
+    @Override
+    public List<StructureData> getPartName() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("part_name").select("part_name");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
+    }
+
+    @Override
+    public List<StructureData> getMaterial() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("material").select("material");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
     }
 
     private StructureData getStructureData(String category, String project, String partName, String material) {

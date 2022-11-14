@@ -4,32 +4,34 @@
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
           <el-form-item label="事业部" prop="businessDivision">
-            <el-select v-model="filters.businessDivision" clearable filterable placeholder="请选择事业部" style="width:100%" @change="findProductLineByBusinessDivision">
-                  <el-option
-                      v-for="item in businessDivisionOptions"
-                      :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
+            <el-select v-model="filters.businessDivision" clearable filterable placeholder="请选择事业部"
+                       style="width:100%" @change="findProductLineByBusinessDivision">
+              <el-option
+                  v-for="item in businessDivisionOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="产品线" prop="productLine">
-            <el-select v-model="filters.productLine" clearable filterable placeholder="请选择产品线" style="width:100%" multiple collapse-tags
-              collapse-tags-tooltip>
-                  <el-option
-                      v-for="item in productLineOptions"
-                      :key="item"
-                    :label="item"
-                    :value="item"
-                  >
-                  </el-option>
-                </el-select>
+            <el-select v-model="filters.productLine" clearable collapse-tags collapse-tags-tooltip filterable
+                       multiple placeholder="请选择产品线"
+                       style="width:100%">
+              <el-option
+                  v-for="item in productLineOptions"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button type="primary" @click="findPage()" :loading="queryLoading">查询
+            <el-button :loading="queryLoading" type="primary" @click="findPage()">查询
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -44,10 +46,11 @@
           </el-form-item>
         </el-form>
       </div>
-      <QueryAllTable id="condDataTable" ref="queryAllTable" :columns="researchBudgetColumns" :data="researchBudgetDataResult"
-                     :height="550" :highlightCurrentRow="true"  v-loading="queryLoading" border
-                     :stripe="true">
-            </QueryAllTable>
+      <QueryAllTable id="condDataTable" ref="queryAllTable" v-loading="queryLoading"
+                     :columns="researchBudgetColumns"
+                     :data="researchBudgetDataResult" :height="550" :highlightCurrentRow="true" :stripe="true"
+                     border>
+      </QueryAllTable>
 
 
     </div>
@@ -57,9 +60,12 @@
 <script>
 import QueryAllTable from "@/components/QueryAllTable";
 
-import {findResearchBudgetPage, exportResearchBudgetExcel} from "@/api/finance/budget/researchBudget";
+import {exportResearchBudgetExcel, findResearchBudgetPage} from "@/api/finance/budget/researchBudget";
 import {getResponseDataMessage} from "@/utils/commonUtils";
-import {findAllBusinessDivision, findProductLineByBusinessDivision} from "@/api/finance/budget/businessDivisionProductLine";
+import {
+  findAllBusinessDivision,
+  findProductLineByBusinessDivision
+} from "@/api/finance/budget/businessDivisionProductLine";
 
 
 export default {
@@ -103,7 +109,7 @@ export default {
         {prop: "2022全年", label: "2022全年", minWidth: 120},
       ],
       researchBudgetDataResult: {},
-      queryLoading:false,
+      queryLoading: false,
       exportLoading: false,
 
     };
@@ -117,7 +123,7 @@ export default {
       let params = {};
       params.businessDivision = this.filters.businessDivision;
       params.productLineList = this.filters.productLine;
-      
+
       this.researchBudgetDataResult = {};
       this.queryLoading = true;
       findResearchBudgetPage(params)
@@ -126,14 +132,12 @@ export default {
             if (responseData.code === "000000") {
               this.researchBudgetColumns = responseData.data.columns;
               this.researchBudgetDataResult.records = responseData.data.data;
-            }
-            else
-            {
+            } else {
               this.$message({
-                    message:
-                        "查询失败 " + getResponseDataMessage(responseData),
-                    type: "error",
-                  });
+                message:
+                    "查询失败 " + getResponseDataMessage(responseData),
+                type: "error",
+              });
             }
             this.queryLoading = false;
           });
@@ -150,8 +154,7 @@ export default {
     },
 
     findProductLineByBusinessDivision: function (val) {
-      if(val == '')
-      {
+      if (val == '') {
         this.productLineOptions = [];
         return;
       }
@@ -165,7 +168,7 @@ export default {
             }
           })
     },
-    
+
     exportExcelData(excelFileName) {
       let params = {};
       params.businessDivision = this.filters.businessDivision;
@@ -187,7 +190,7 @@ export default {
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm:ss");
     },
-    
+
   },
 };
 </script>

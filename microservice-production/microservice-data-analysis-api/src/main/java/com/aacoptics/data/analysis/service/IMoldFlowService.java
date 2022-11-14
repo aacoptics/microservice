@@ -62,4 +62,29 @@ public interface IMoldFlowService extends IService<MoldFlowData> {
      */
     boolean update(MoldFlowData moldFlowData);
 
+    /**
+     *  获取类别
+     * @return
+     */
+    List<MoldFlowData> getCategory();
+
+    /**
+     *  获取项目
+     * @return
+     */
+    List<MoldFlowData> getProject();
+
+    /**
+     *  获取零件名称
+     * @return
+     */
+    List<MoldFlowData> getPartName();
+
+    /**
+     *  获取材料
+     * @return
+     */
+    List<MoldFlowData> getMaterial();
+
+
 }

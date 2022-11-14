@@ -4,6 +4,7 @@ import com.aacoptics.wlg.equipment.entity.param.MaintenanceOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderVO;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.baomidou.dynamic.datasource.annotation.DS;
@@ -29,8 +30,16 @@ public interface MaintenanceOrderMapper extends BaseMapper<MaintenanceOrder> {
 
 
     @DS("WLGIOT")
+    IPage<MaintenanceOrderDetailVO> findMaintenanceOrderDetailList(@Param("page")  Page page,
+                                                                   @Param("maintenanceOrderQueryParam")  MaintenanceOrderQueryParam maintenanceOrderQueryParam);
+
+
+    @DS("WLGIOT")
     List<MaintenanceOrderAndItemVO> findMaintenanceOrderAndItemList(@Param("maintenanceOrderQueryParam")  MaintenanceOrderQueryParam maintenanceOrderQueryParam);
 
     @DS("WLGIOT")
-    MaintenanceOrderAndItemVO findOrderByMchCode(@Param("mchCode")  String mchCode);
+    List<MaintenanceOrderAndItemVO> findOrderByMchCode(@Param("mchCode")  String mchCode);
+
+    @DS("WLGIOT")
+    List<String> findMaintenanceTimeoutOrderDutyPersonIdList();
 }

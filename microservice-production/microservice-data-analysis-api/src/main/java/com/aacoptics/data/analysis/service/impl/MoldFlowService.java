@@ -15,11 +15,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.PictureData;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -30,12 +33,17 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
 
     @Override
     public void importMoldFlowExcel(InputStream in) throws Exception {
-        List<String[]> excelDataList = ExcelUtil.read(in).get(0);
+        Workbook workbook = ExcelUtil.getWorkbook(in);
+        List<String[]> excelDataList = ExcelUtil.read(workbook).get(0);
         String[] titleArray = excelDataList.get(0);//标题行
         String title = titleArray[0];
         if (!"项目量产模流数据表".equals(title)) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
+        // 提取excel中的图片并保存
+        String filePathPrefix = "moldFlowData";
+        Map<String, PictureData> pictures = ExcelUtil.getPictures(workbook);
+        Map<String, String> pathsMap = ExcelUtil.saveImg(pictures, filePathPrefix);
         for (int i = 3; i < excelDataList.size(); i++) {
             String[] dataArray = excelDataList.get(i);
             if (dataArray == null || dataArray.length == 0) {
@@ -67,20 +75,23 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
 
 
             String moldType = dataArray[4];
-            String moldDiameterRate = dataArray[5];
-            String flowFrontTemperature = dataArray[6];
-            String vpChangePressure = dataArray[7];
-            String simulateWireLength = dataArray[8];
-            String wholePercent = dataArray[9];
-            String effectiveR1 = dataArray[10];
-            String effectiveR2 = dataArray[11];
-            String ridgeR1 = dataArray[12];
-            String ridgeR2 = dataArray[13];
-            String refractiveR1 = dataArray[14];
-            String refractiveR2 = dataArray[15];
+            String moldDiameterRate = ExcelUtil.handleDecimal(dataArray[5],2);
+            String flowFrontTemperature = ExcelUtil.handleDecimal(dataArray[6],2);
+            String vpChangePressure = ExcelUtil.handleDecimal(dataArray[7],2);
+            String simulateWireLength = ExcelUtil.handleDecimal(dataArray[8],2);
+            String wholePercent = ExcelUtil.handleDecimal(dataArray[9],2);
+            String effectiveR1 = ExcelUtil.handleDecimal(dataArray[10],2);
+            String effectiveR2 = ExcelUtil.handleDecimal(dataArray[11],2);
+            String ridgeR1 = ExcelUtil.handleDecimal(dataArray[12],2);
+            String ridgeR2 = ExcelUtil.handleDecimal(dataArray[13],2);
+            String refractiveR1 = ExcelUtil.handleDecimal(dataArray[14],0);
+            String refractiveR2 = ExcelUtil.handleDecimal(dataArray[15],0);
             String competitorName = dataArray[16];
             String competitorLink = dataArray[17];
-            String assemblyDrawing = dataArray[18];
+            String assemblyDrawing = pathsMap.get(i + "_" + 18); // 图片路径
+            if (assemblyDrawing == null) {
+                assemblyDrawing = "";
+            }
 
             // 设置参数
 
@@ -113,10 +124,10 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
     @Override
     public IPage<MoldFlowData> getDataByConditions(Page<MoldFlowData> iPage, String category, String project, String partName, String material) {
         QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(category), "category", category)
-                .like(StringUtils.isNotBlank(project), "project", project)
-                .like(StringUtils.isNotBlank(partName), "part_name", partName)
-                .like(StringUtils.isNotBlank(material), "material", material);
+        queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
+                .eq(StringUtils.isNotBlank(project), "project", project)
+                .eq(StringUtils.isNotBlank(partName), "part_name", partName)
+                .eq(StringUtils.isNotBlank(material), "material", material);
         IPage<MoldFlowData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -124,10 +135,10 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
     @Override
     public List<MoldFlowData> getAllDataByConditions(QueryParams queryParams) {
         QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
-                .like(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
-                .like(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .like(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+        queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
+                .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
+                .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
         List<MoldFlowData> structureDatas = moldFlowMapper.selectList(queryWrapper);
         return structureDatas;
     }
@@ -140,6 +151,38 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
     @Override
     public boolean update(MoldFlowData moldFlowData) {
         return this.updateById(moldFlowData);
+    }
+
+    @Override
+    public List<MoldFlowData> getCategory() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("category").select("category");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
+    }
+
+    @Override
+    public List<MoldFlowData> getProject() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("project").select("project");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
+    }
+
+    @Override
+    public List<MoldFlowData> getPartName() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("part_name").select("part_name");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
+    }
+
+    @Override
+    public List<MoldFlowData> getMaterial() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("material").select("material");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
     }
 
     private MoldFlowData getMoldFlowData(String category, String project, String partName, String material) {

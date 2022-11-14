@@ -72,4 +72,59 @@ export function handleUpdate(updateForm) {
     })
 }
 
+// 获取类别
+export function getCategory() {
+    return request({
+        url: '/moldflow-data-analysis/shapingResultData/getCategory',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取项目
+export function getProject() {
+    return request({
+        url: '/moldflow-data-analysis/shapingResultData/getProject',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取零件名称
+export function getPartName() {
+    return request({
+        url: '/moldflow-data-analysis/shapingResultData/getPartName',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取材料
+export function getMaterial() {
+    return request({
+        url: '/moldflow-data-analysis/shapingResultData/getMaterial',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取模具序号
+export function getMoldNo() {
+    return request({
+        url: '/moldflow-data-analysis/shapingResultData/getMoldNo',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 

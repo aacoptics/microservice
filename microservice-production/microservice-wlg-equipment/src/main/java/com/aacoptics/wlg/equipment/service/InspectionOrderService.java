@@ -5,6 +5,7 @@ import com.aacoptics.wlg.equipment.entity.po.InspectionOrderItem;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrder;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,6 +21,13 @@ public interface InspectionOrderService {
      */
     IPage<InspectionOrderVO> query(Page page, InspectionOrderQueryParam inspectionOrderQueryParam);
 
+    /**
+     * 根据条件查询点检工单及工单项明细信息
+     *
+     * @return
+     */
+    IPage<InspectionOrderDetailVO> queryDetail(Page page, InspectionOrderQueryParam inspectionOrderQueryParam);
+
 
 
     /**
@@ -28,6 +36,14 @@ public interface InspectionOrderService {
      * @param inspectionOrder
      */
     boolean update(InspectionOrder inspectionOrder);
+
+    /**
+     * 更新点检工单信息
+     *
+     * @param inspectionOrder
+     */
+    boolean updateById(InspectionOrder inspectionOrder);
+
 
     /**
      * 根据id删除点检工单
@@ -95,7 +111,7 @@ public interface InspectionOrderService {
      * @param mchCode 设备编码
      * @return
      */
-    InspectionOrderAndItemVO findOrderByMchCode(String mchCode);
+    List<InspectionOrderAndItemVO> findOrderByMchCode(String mchCode);
 
 
     /**
@@ -113,4 +129,26 @@ public interface InspectionOrderService {
      * @return
      */
     List<InspectionOrderAndItemVO> queryInspectionOrderByCondition(InspectionOrderQueryParam inspectionOrderQueryParam);
+
+
+    /**
+     * 查找点检异常工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionExceptionOrder();
+
+    /**
+     * 查找点检超时工单责任人
+     *
+     * @return
+     */
+    List<String> findInspectionTimeoutOrderDutyPersonIdList();
+
+    /**
+     * 查找点检超时工单项
+     *
+     * @return
+     */
+    List<InspectionOrder> findInspectionTimeoutOrderByDutyPersonId(String dutyPersonId);
 }

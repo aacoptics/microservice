@@ -4,6 +4,7 @@ import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionMain;
 import com.aacoptics.wlg.equipment.entity.po.InspectionOrder;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderAndItemVO;
+import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderDetailVO;
 import com.aacoptics.wlg.equipment.entity.vo.InspectionOrderVO;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.baomidou.dynamic.datasource.annotation.DS;
@@ -28,8 +29,17 @@ public interface InspectionOrderMapper extends BaseMapper<InspectionOrder> {
                                                      @Param("inspectionOrderQueryParam")  InspectionOrderQueryParam inspectionOrderQueryParam);
 
     @DS("WLGIOT")
+    IPage<InspectionOrderDetailVO> findInspectionOrderDetailList(@Param("page")  Page page,
+                                                                 @Param("inspectionOrderQueryParam")  InspectionOrderQueryParam inspectionOrderQueryParam);
+
+
+
+    @DS("WLGIOT")
     List<InspectionOrderAndItemVO> findInspectionOrderAndItemList(@Param("inspectionOrderQueryParam")  InspectionOrderQueryParam inspectionOrderQueryParam);
 
     @DS("WLGIOT")
-    InspectionOrderAndItemVO findOrderByMchCode(@Param("mchCode")  String mchCode);
+    List<InspectionOrderAndItemVO> findOrderByMchCode(@Param("mchCode")  String mchCode);
+
+    @DS("WLGIOT")
+    List<String> findInspectionTimeoutOrderDutyPersonIdList();
 }

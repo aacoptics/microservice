@@ -162,4 +162,27 @@ public class MoldDataController {
         return Result.success(moldDataService.update(moldData));
     }
 
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(moldDataService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(moldDataService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(moldDataService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(moldDataService.getMaterial());
+    }
 }

@@ -6,11 +6,13 @@ import com.aacoptics.data.analysis.entity.po.AllData;
 import com.aacoptics.data.analysis.exception.WlgReportErrorType;
 import com.aacoptics.data.analysis.service.IAllDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
+import com.aacoptics.data.analysis.util.FtpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -18,8 +20,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController
@@ -59,6 +65,8 @@ public class AllDataController {
     @PostMapping(value = "/exportExcel")
     public void exportAllDataExcel(@RequestBody QueryParams queryParams, HttpServletResponse response) throws Exception {
         XSSFWorkbook wb = null;
+        String picPath = "ftp://" + FtpUtil.getUserName() + ":" + FtpUtil.getPassword()
+                + "@" + FtpUtil.getFtpHostIp() + ":" + FtpUtil.getFtpPort() + "/";
         try {
             // 根据查询条件获取数据
             List<AllData> datas = allDataService.getAllDataByConditions(queryParams);
@@ -119,6 +127,7 @@ public class AllDataController {
                     row.createCell(41).setCellValue(p.getCoolingTime());
                     row.createCell(42).setCellValue(p.getClampingForce());
                     row.createCell(43).setCellValue(p.getPassivation());
+
                     row.createCell(44).setCellValue(p.getCoreThickness());
                     row.createCell(45).setCellValue(p.getCoreThicknessRange());
                     row.createCell(46).setCellValue(p.getR1VectorHeight());
@@ -149,15 +158,36 @@ public class AllDataController {
                     row.createCell(71).setCellValue(p.getCftR2());
                     row.createCell(72).setCellValue(p.getCftConsistency());
                     row.createCell(73).setCellValue(p.getCftMaxAs());
-                    row.createCell(74).setCellValue(p.getCoatingTrend());
-                    row.createCell(75).setCellValue(p.getCfsrR1());
-                    row.createCell(76).setCellValue(p.getCfsrR2());
-                    row.createCell(77).setCellValue(p.getCfsrR1R2());
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                        row.createCell(74).setCellValue("");
+                    } else {
+                        row.createCell(74).setCellValue(picPath + "shapingResultData/" + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(75).setCellValue("");
+                    } else {
+                        row.createCell(75).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(76).setCellValue("");
+                    } else {
+                        row.createCell(76).setCellValue(picPath + "shapingResultData/" + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(77).setCellValue("");
+                    } else {
+                        row.createCell(77).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
                     row.createCell(78).setCellValue(p.getBurr());
                     row.createCell(79).setCellValue(p.getWeldline());
                     row.createCell(80).setCellValue(p.getAppearanceProblem());
-                    row.createCell(81).setCellValue(p.getAppearanceImg());
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(81).setCellValue("");
+                    } else {
+                        row.createCell(81).setCellValue(picPath + "shapingResultData/" + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
                     row.createCell(82).setCellValue(p.getRemarks());
+
                     row.createCell(83).setCellValue(p.getCoreThicknessLens());
                     row.createCell(84).setCellValue(p.getMaxWallThickness());
                     row.createCell(85).setCellValue(p.getMinWallThickness());
@@ -184,7 +214,11 @@ public class AllDataController {
                     row.createCell(106).setCellValue(p.getR1Srtm());
                     row.createCell(107).setCellValue(p.getR2Srtm());
                     row.createCell(108).setCellValue(p.getOuterDiameterSrtm());
-                    row.createCell(109).setCellValue(p.getAssemblyDrawing());
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
+                        row.createCell(109).setCellValue("");
+                    } else {
+                        row.createCell(109).setCellValue(picPath + "structureData/" + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    }
 
                     row.createCell(110).setCellValue(p.getMoldType());
                     row.createCell(111).setCellValue(p.getMoldDiameterRate());
@@ -200,7 +234,13 @@ public class AllDataController {
                     row.createCell(121).setCellValue(p.getRefractiveR2());
                     row.createCell(122).setCellValue(p.getCompetitorName());
                     row.createCell(123).setCellValue(p.getCompetitorLink());
-                    row.createCell(124).setCellValue(p.getCompetitorAssemblyDrawing());
+                    if (StringUtils.isEmpty(p.getCompetitorAssemblyDrawing())) {
+                        row.createCell(124).setCellValue("");
+
+                    } else {
+                        row.createCell(124).setCellValue(picPath + "moldFlowData/" + p.getCompetitorAssemblyDrawing().substring(0, p.getCompetitorAssemblyDrawing().indexOf(".")));
+
+                    }
 
                     row.createCell(125).setCellValue(p.getMoldCorePassivation());
                     row.createCell(126).setCellValue(p.getRunnerType());
@@ -223,4 +263,39 @@ public class AllDataController {
         }
         ExcelUtil.exportXlsx(response, wb, "关联数据.xlsx");
     }
+
+    @ApiOperation(value = "图片流", notes = "读取ftp服务器图片")
+    @GetMapping(value = "/fileStream")
+    public void toStream(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String filePathPrefix = request.getParameter("filePathPrefix");
+        String fileNameWithExt = request.getParameter("fileName");
+        if (StringUtils.isNotEmpty(fileNameWithExt) && fileNameWithExt.indexOf(".") != -1) {
+            String[] split = fileNameWithExt.split("\\.");
+            String fileName = split[0];
+            String ext = split[1];
+            FtpUtil.connect();
+            FtpUtil.changeWorkingDirectory(filePathPrefix);
+            InputStream inputStream = FtpUtil.getInputStream(fileName);
+            if (ext.equals("png")) {
+                response.setContentType("image/png");
+            } else {
+                response.setContentType("image/jpeg");
+            }
+            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+
+            //创建存放文件内容的数组
+            byte[] buff = new byte[1024];
+            //所读取的内容使用n来接收
+            int n;
+            //当没有读取完时,继续读取,循环
+            while ((n = inputStream.read(buff)) != -1) {
+                //将字节数组的数据全部写入到输出流中
+                outputStream.write(buff, 0, n);
+            }
+            //关流
+            outputStream.close();
+            inputStream.close();
+        }
+    }
+
 }

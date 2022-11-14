@@ -2,6 +2,7 @@ package com.aacoptics.data.analysis.service;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
 import com.aacoptics.data.analysis.entity.po.ProcessConditionData;
+import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -37,7 +38,10 @@ public interface IStructureDataService extends IService<StructureData> {
                                                     String category,
                                                     String project,
                                                     String partName,
-                                                    String material);
+                                                    String material,
+                                                    String searchType,
+                                                    String startValue,
+                                                    String endValue);
 
     /**
      * 根据查询条件获取所有数据
@@ -61,5 +65,29 @@ public interface IStructureDataService extends IService<StructureData> {
      * @return
      */
     boolean update(StructureData structureData);
+
+    /**
+     *  获取类别
+     * @return
+     */
+    List<StructureData> getCategory();
+
+    /**
+     *  获取项目
+     * @return
+     */
+    List<StructureData> getProject();
+
+    /**
+     *  获取零件名称
+     * @return
+     */
+    List<StructureData> getPartName();
+
+    /**
+     *  获取材料
+     * @return
+     */
+    List<StructureData> getMaterial();
 
 }

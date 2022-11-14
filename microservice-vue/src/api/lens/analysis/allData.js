@@ -25,3 +25,60 @@ export function exportExcel(conditions) {
         data: conditions
     })
 }
+
+// 获取类别
+export function getCategory() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getCategory',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取项目
+export function getProject() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getProject',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取零件名称
+export function getPartName() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getPartName',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取材料
+export function getMaterial() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getMaterial',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取图片流
+export function getStream(params) {
+    return request({
+        url: '/moldflow-data-analysis/allData/fileStream',
+        method: 'get',
+        params: params,
+        responseType: "blob",
+        headers: {
+            'Cache-Control': 'no-cache'
+        }
+    })
+}

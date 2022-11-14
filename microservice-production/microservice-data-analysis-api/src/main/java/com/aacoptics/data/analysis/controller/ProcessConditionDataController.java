@@ -190,4 +190,34 @@ public class ProcessConditionDataController {
         return Result.success(processConditionDataService.update(processConditionData));
     }
 
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(processConditionDataService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(processConditionDataService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(processConditionDataService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(processConditionDataService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取模具序号", notes = "获取模具序号")
+    @GetMapping(value = "/getMoldNo")
+    public Result getMoldNo() {
+        return Result.success(processConditionDataService.getMoldNo());
+    }
+
 }
