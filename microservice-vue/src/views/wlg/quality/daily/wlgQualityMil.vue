@@ -279,7 +279,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="对策&处理进展" prop="solutionProgress">
-                <el-input v-model="dataForm.solutionProgress" :disabled="!operation" auto-complete="off" autosize
+                <el-input v-model="dataForm.solutionProgress" auto-complete="off" autosize
                           clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
