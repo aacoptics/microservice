@@ -212,6 +212,21 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="24">
+              <el-form-item v-if="'' + dataForm.milType === '1'" label="品名" prop="batchName">
+                <el-select v-model="dataForm.batchName" allow-create clearable filterable placeholder="品名">
+                  <el-option
+                      v-for="item in qualityBatchNameOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="风险类别" prop="riskType">
                 <el-input v-model="dataForm.riskType" auto-complete="off" clearable></el-input>
@@ -278,8 +293,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item v-if="'' +dataForm.milType === '4'" label="对策&处理进展" prop="solutionProgress">
-                <el-input v-model="dataForm.solutionProgress" :disabled="!operation" auto-complete="off" autosize
+              <el-form-item label="对策&处理进展" prop="solutionProgress">
+                <el-input v-model="dataForm.solutionProgress" auto-complete="off" autosize
                           clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -382,7 +397,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
+              <el-form-item v-if="'' + dataForm.milType === '4'" label="每日状态更新" prop="statusSync">
                 <el-input v-model="dataForm.statusSync" auto-complete="off" autosize clearable
                           type="textarea"></el-input>
               </el-form-item>
@@ -457,6 +472,7 @@ export default {
         {prop: "index", label: "序号", minWidth: 80},
         {prop: "milType", label: "MIL类型", minWidth: 100, formatter: this.milTypeFormat},
         {prop: "project", label: "项目", minWidth: 100},
+        {prop: "batchName", label: "品名", minWidth: 100},
         {prop: "type", label: "分类", minWidth: 100},
         {prop: "risk", label: "风险分项", minWidth: 100},
         {prop: "riskType", label: "风险类别", minWidth: 100},
@@ -507,6 +523,7 @@ export default {
       qualityMilTypeOptions: [],
       qualityMilTypeAddOptions: [],
       qualityMilSeverityLevelOptions: [],
+      qualityBatchNameOptions: [],
       qualityMilStatusOptions: [],
       userOptions: [],
       // 新增编辑界面数据
@@ -514,6 +531,7 @@ export default {
         milType: "0",
         id: "0",
         project: "",
+        batchName: "",
         type: "",
         risk: "",
         riskType: "",
@@ -552,6 +570,9 @@ export default {
     })
     getDict("quality_mil_severity_level").then(response => {
       this.qualityMilSeverityLevelOptions = response.data.data
+    })
+    getDict("quality_batch_name").then(response => {
+      this.qualityBatchNameOptions = response.data.data
     })
     getDict("quality_mil_status").then(response => {
       this.qualityMilStatusOptions = response.data.data
@@ -619,6 +640,7 @@ export default {
         milType: "1",
         id: null,
         project: "",
+        batchName: "",
         type: "",
         risk: "",
         riskType: "",
@@ -630,7 +652,7 @@ export default {
         station: "",
         questionPresentation: "",
         reasonAnalysis: "",
-        solutionProgress: "-",
+        solutionProgress: "",
         lessonLearn: "",
         responsibility: "-",
         responsibilities: [],
