@@ -214,15 +214,8 @@
           <el-row>
             <el-col :span="24">
               <el-form-item v-if="'' + dataForm.milType === '1'" label="品名" prop="batchName">
-                <el-select v-model="dataForm.batchName" allow-create clearable filterable placeholder="品名">
-                  <el-option
-                      v-for="item in qualityBatchNameOptions"
-                      :key="item.dictValue"
-                      :label="item.dictLabel"
-                      :value="item.dictValue"
-                  >
-                  </el-option>
-                </el-select>
+                <el-input v-model="dataForm.batchName" auto-complete="off"
+                          autosize clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -516,7 +509,7 @@ export default {
         customer: [{required: true, message: '请输入客户', trigger: 'blur'}],
         site: [{required: true, message: '请输入厂区', trigger: 'blur'}],
         questionPresentation: [{required: true, message: '请输入问题描述', trigger: 'blur'}],
-        solutionProgress: [{required: true, message: '请输入对策&处理进展', trigger: 'blur'}],
+        // solutionProgress: [{required: true, message: '请输入对策&处理进展', trigger: 'blur'}],
         responsibilities: [{required: true, message: '请输入负责人', trigger: 'blur'}],
         status: [{required: true, message: '请输入状态', trigger: 'blur'}],
       },
