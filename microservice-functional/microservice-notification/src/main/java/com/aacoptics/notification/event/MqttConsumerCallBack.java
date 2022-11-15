@@ -77,7 +77,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         String title = null;
         switch (msgJson.getString("Message")) {
             case "DoMonitorTempAlarm":
-                title = "加热棒状态报警";
+                title = "加热棒/模具温度报警";
                 markdownGroupMessage.setTitle(title);
                 String param = dataJson.getString("param");
                 int abnormalIdx = dataJson.getInteger("abnormalIdx");
