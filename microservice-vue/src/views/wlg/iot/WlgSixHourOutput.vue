@@ -87,14 +87,14 @@
         <el-table-column label="起始模次" prop="startCycleNo" width="90">
           <template v-slot="scope">
             <el-input v-show="scope.row.iseditor" v-model="scope.row.startCycleNo"
-                              style="width: 70px" size="small"/>
+                      size="small" style="width: 70px"/>
             <span v-show="!scope.row.iseditor">{{ scope.row.startCycleNo }}</span>
           </template>
         </el-table-column>
         <el-table-column label="终止模次" prop="endCycleNo" width="90">
           <template v-slot="scope">
             <el-input v-show="scope.row.iseditor" v-model="scope.row.endCycleNo"
-                      style="width: 70px"  size="small"/>
+                      size="small" style="width: 70px"/>
             <span v-show="!scope.row.iseditor">{{ scope.row.endCycleNo }}</span>
           </template>
         </el-table-column>
