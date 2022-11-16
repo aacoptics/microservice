@@ -56,34 +56,40 @@ public class InputReport implements Serializable {
     @ExcelIgnore
     private Integer avgCycle;
 
-    @Excel(name = "投入数", orderNum = "11")
+    @Excel(name = "投入数", orderNum = "13")
     private Integer inputQty;
 
-    @Excel(name = "起始模次", orderNum = "9")
+    @Excel(name = "起始Wafer Id", orderNum = "9")
     private String startWaferId;
 
-    @Excel(name = "截止模次", orderNum = "10")
+    @Excel(name = "截止Wafer Id", orderNum = "10")
     private String endWaferId;
 
-    @Excel(name = "碎裂可流转", orderNum = "12")
+    @Excel(name = "起始模次", orderNum = "11")
+    private String startCycleNo;
+
+    @Excel(name = "截止模次", orderNum = "12")
+    private String endCycleNo;
+
+    @Excel(name = "碎裂可流转", orderNum = "14")
     private Integer brokenOk;
 
-    @Excel(name = "碎裂不可流转", orderNum = "13")
+    @Excel(name = "碎裂不可流转", orderNum = "15")
     private Integer brokenNg;
 
-    @Excel(name = "产出数", orderNum = "14")
+    @Excel(name = "产出数", orderNum = "16")
     private Integer outputQty;
 
-    @Excel(name = "日期", orderNum = "15", format = "yyyy/MM/dd", width = 12)
+    @Excel(name = "日期", orderNum = "17", format = "yyyy/MM/dd", width = 12)
     private LocalDateTime createTime;
 
     @ExcelIgnore
     private LocalDateTime updateTime;
 
-    @Excel(name = "更新人", orderNum = "16")
+    @Excel(name = "更新人", orderNum = "18")
     private String updateUser;
 
-    @Excel(name = "异常说明", orderNum = "17")
+    @Excel(name = "异常说明", orderNum = "19")
     private String abnormalReason;
 
     @TableField(exist = false)

@@ -874,13 +874,13 @@ export default {
         filePathPrefix: "shapingResultData",
         fileName: fileName
       }
-      getStream(params).then(res =>{
+      getStream(params).then(res => {
         console.log(res.data.size)
-        if(res.data.size){
-          this.picDialogVisible=true
+        if (res.data.size) {
+          this.picDialogVisible = true
           const url = window.URL.createObjectURL(res.data)
           this.codeImg = url
-        }else{
+        } else {
           ElMessageBox.alert('无相应图片', {
             dangerouslyUseHTMLString: true,
             type: 'error'

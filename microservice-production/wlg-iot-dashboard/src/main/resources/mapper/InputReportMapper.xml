@@ -18,6 +18,8 @@
         ,a.[input_qty]
         ,a.[start_wafer_id]
         ,a.[end_wafer_id]
+        ,a.[start_cycle_no]
+        ,a.[end_cycle_no]
         ,a.[broken_ok]
         ,a.[broken_ng]
         ,a.[output_qty]

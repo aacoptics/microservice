@@ -84,6 +84,21 @@
         <el-table-column label="起始batch ID" prop="startWaferId" width="65"/>
         <el-table-column label="终止batch ID" prop="endWaferId" width="65"/>
 
+        <el-table-column label="起始模次" prop="startCycleNo" width="90">
+          <template v-slot="scope">
+            <el-input v-show="scope.row.iseditor" v-model="scope.row.startCycleNo"
+                      size="small" style="width: 70px"/>
+            <span v-show="!scope.row.iseditor">{{ scope.row.startCycleNo }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="终止模次" prop="endCycleNo" width="90">
+          <template v-slot="scope">
+            <el-input v-show="scope.row.iseditor" v-model="scope.row.endCycleNo"
+                      size="small" style="width: 70px"/>
+            <span v-show="!scope.row.iseditor">{{ scope.row.endCycleNo }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="投入数" prop="inputQty" width="55">
           <template v-slot="scope">
             <el-tag style="width: 30px">{{ scope.row.inputQty }}</el-tag>

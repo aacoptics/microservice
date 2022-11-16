@@ -278,8 +278,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item v-if="'' +dataForm.milType === '4'" label="对策&处理进展" prop="solutionProgress">
-                <el-input v-model="dataForm.solutionProgress" :disabled="!operation" auto-complete="off" autosize
+              <el-form-item label="对策&处理进展" prop="solutionProgress">
+                <el-input v-model="dataForm.solutionProgress" auto-complete="off" autosize
                           clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -382,7 +382,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
+              <el-form-item v-if="'' + dataForm.milType === '4'" label="每日状态更新" prop="statusSync">
                 <el-input v-model="dataForm.statusSync" auto-complete="off" autosize clearable
                           type="textarea"></el-input>
               </el-form-item>
@@ -630,7 +630,7 @@ export default {
         station: "",
         questionPresentation: "",
         reasonAnalysis: "",
-        solutionProgress: "-",
+        solutionProgress: "",
         lessonLearn: "",
         responsibility: "-",
         responsibilities: [],

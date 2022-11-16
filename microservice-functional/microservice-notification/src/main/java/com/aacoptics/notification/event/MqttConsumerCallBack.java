@@ -77,7 +77,7 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         String title = null;
         switch (msgJson.getString("Message")) {
             case "DoMonitorTempAlarm":
-                title = "加热棒状态报警";
+                title = "加热棒/模具温度报警";
                 markdownGroupMessage.setTitle(title);
                 String param = dataJson.getString("param");
                 int abnormalIdx = dataJson.getInteger("abnormalIdx");
@@ -85,11 +85,21 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 float currentValue1 = dataJson.getFloatValue("currentValue");
                 markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
                 markdownGroupMessage.addBlobContent(localTimeStr);
-                if (param.equals("lower")) {
-                    markdownGroupMessage.addContent("下加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
-                } else {
-                    markdownGroupMessage.addContent("上加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                if(abnormalIdx > 0){
+                    if (param.equals("lower")) {
+                        markdownGroupMessage.addContent("下加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                    } else {
+                        markdownGroupMessage.addContent("上加热床 " + abnormalIdx + "号加热棒温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查加热棒状态，通知工艺人员确定产品性能。");
+                    }
                 }
+                else{
+                    if (param.equals("lower")) {
+                        markdownGroupMessage.addContent("下模具温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查下模具状态，通知工艺人员确定产品性能。");
+                    } else {
+                        markdownGroupMessage.addContent("上模具温度超过阈值，当前值：" + currentValue1 + "，平均值：" + avgValue1 + "。生产人员及时通知设备人员检查上模具状态，通知工艺人员确定产品性能。");
+                    }
+                }
+
                 break;
             case "moldCtMonitor":
                 title = "阶段时长报警";
