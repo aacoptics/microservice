@@ -591,8 +591,8 @@ export default {
     onLoadImg(e) {
       var img = e.target;
       var width = 0;
-      if (img.fileSize > 0 || (img.width > 1 && img.height > 1)) {
-        width = img.width;
+      if (img.fileSize > 0 || (img.naturalWidth > 1 && img.naturalHeight > 1)) {
+        width = img.naturalWidth;
       }
       this.imgWidth = width + 'px';
       this.dialogWidth = width + 30 + 'px';
