@@ -12,10 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -51,20 +48,19 @@ public class CycleDetailController {
 
     @PostMapping("/downloadExcel")
     @ApiOperation(value = "下载Excel", notes = "下载Excel")
-    public Result downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
+    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
         String path = cycleDetailService.exportExcel(cycleDetailParam);
         InputStream inputStream = Files.newInputStream(Paths.get(path));// 文件的存放路径
         response.reset();
-        response.setContentType("application/octet-stream");
+        response.setContentType("application/force-download");
         String filename = new File(path).getName();
         response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
-        ServletOutputStream outputStream = response.getOutputStream();
+        OutputStream out = response.getOutputStream();
         byte[] b = new byte[1024];
         int len;
         while ((len = inputStream.read(b)) > 0) {
-            outputStream.write(b, 0, len);
+            out.write(b, 0, len);
         }
         inputStream.close();
-        return Result.success();
     }
 }

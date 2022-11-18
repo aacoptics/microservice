@@ -163,52 +163,52 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="U编号" prop="uCode">
-              <el-input v-model="dataForm.uCode" auto-complete="off" clearable></el-input>
+            <el-form-item label="U编号" prop="ucode">
+              <el-input v-model="dataForm.ucode" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="U数值" prop="uValue">
-              <el-input-number v-model="dataForm.uValue" :precision="2" :step="0.1" clearable></el-input-number>
+            <el-form-item label="U数值" prop="uvalue">
+              <el-input-number v-model="dataForm.uvalue" :precision="2" :step="0.1" clearable></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="U角度" prop="uAngle">
-              <el-input-number v-model="dataForm.uAngle" :precision="2" :step="0.1" clearable></el-input-number>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="V编号" prop="vCode">
-              <el-input v-model="dataForm.vCode" auto-complete="off" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="V数值" prop="vValue">
-              <el-input-number v-model="dataForm.vValue" :precision="2" :step="0.1" clearable></el-input-number>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="V角度" prop="vAngle">
-              <el-input-number v-model="dataForm.vAngle" :precision="2" :step="0.1" clearable></el-input-number>
+            <el-form-item label="U角度" prop="uangle">
+              <el-input-number v-model="dataForm.uangle" :precision="2" :step="0.1" clearable></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="W编号" prop="wCode">
-              <el-input v-model="dataForm.wCode" auto-complete="off" clearable></el-input>
+            <el-form-item label="V编号" prop="vcode">
+              <el-input v-model="dataForm.vcode" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="W数值" prop="wValue">
-              <el-input-number v-model="dataForm.wValue" :precision="2" :step="0.1" clearable></el-input-number>
+            <el-form-item label="V数值" prop="vvalue">
+              <el-input-number v-model="dataForm.vvalue" :precision="2" :step="0.1" clearable></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="W角度" prop="wAngle">
-              <el-input-number v-model="dataForm.wAngle" :precision="2" :step="0.1" clearable></el-input-number>
+            <el-form-item label="V角度" prop="vangle">
+              <el-input-number v-model="dataForm.vangle" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="W编号" prop="wcode">
+              <el-input v-model="dataForm.wcode" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="W数值" prop="wvalue">
+              <el-input-number v-model="dataForm.wvalue" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="W角度" prop="wangle">
+              <el-input-number v-model="dataForm.wangle" :precision="2" :step="0.1" clearable></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -297,15 +297,15 @@ export default {
         {sortable: false, prop: "aggregateResult", label: "综合结果", minWidth: 120},
         {sortable: false, prop: "batchNo", label: "批次号", minWidth: 160},
         {sortable: false, prop: "smeltingBatch", label: "熔炼批次", minWidth: 160},
-        {sortable: false, prop: "uCode", label: "U编号", minWidth: 80},
-        {sortable: false, prop: "uValue", label: "U数值", minWidth: 80},
-        {sortable: false, prop: "uAngle", label: "U角度", minWidth: 80},
-        {sortable: false, prop: "vCode", label: "U编号", minWidth: 80},
-        {sortable: false, prop: "vValue", label: "U数值", minWidth: 80},
-        {sortable: false, prop: "vAngle", label: "U角度", minWidth: 80},
-        {sortable: false, prop: "wCode", label: "U编号", minWidth: 80},
-        {sortable: false, prop: "wValue", label: "U数值", minWidth: 80},
-        {sortable: false, prop: "wAngle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "ucode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "uvalue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "uangle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "vcode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "vvalue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "vangle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "wcode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "wvalue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "wangle", label: "U角度", minWidth: 80},
         {sortable: false, prop: "updateUser", label: "更新人", minWidth: 100},
         {sortable: false, prop: "updateTime", label: "更新时间", minWidth: 130},
         {sortable: false, prop: "createTime", label: "创建时间", minWidth: 130},
@@ -316,10 +316,10 @@ export default {
       dialogVisible: false, // 新增编辑界面是否显示
       editLoading: false,
       dataFormRules: {
-        robotName: [{required: true, message: "请输入群名称", trigger: "blur"}],
-        robotType: [{required: true, message: "请选择机器人类型", trigger: "change"},],
-        chatType: [{required: true, message: "请选择群类型", trigger: "change"},],
-        robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
+        // robotName: [{required: true, message: "请输入群名称", trigger: "blur"}],
+        // robotType: [{required: true, message: "请选择机器人类型", trigger: "change"},],
+        // chatType: [{required: true, message: "请选择群类型", trigger: "change"},],
+        // robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
       },
       dieBreakingOptions: [],
       grabBreakingOptions: [],
@@ -349,15 +349,15 @@ export default {
         aggregateResult: null,
         batchNo: null,
         smeltingBatch: null,
-        uCode: null,
-        uValue: null,
-        uAngle: null,
-        vCode: null,
-        vValue: null,
-        vAngle: null,
-        wCode: null,
-        wValue: null,
-        wAngle: null,
+        ucode: null,
+        uvalue: null,
+        uangle: null,
+        vcode: null,
+        vvalue: null,
+        vangle: null,
+        wcode: null,
+        wvalue: null,
+        wangle: null,
         updateTime: "",
         updateUser: "",
         createTime: "",
@@ -409,6 +409,13 @@ export default {
       this.pageRequest.machineNames = this.filters.machineNames;
       downloadExcel(this.pageRequest)
           .then((res) => {
+            let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+            let link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = url;
+            link.setAttribute('download', params.row.excelName);
+            document.body.appendChild(link);
+            link.click();
             // const responseData = res.data;
             // if (responseData.code === "000000") {
             //   this.pageResult = responseData.data;
