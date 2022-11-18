@@ -48,7 +48,7 @@ public class CycleDetailController {
 
     @PostMapping("/downloadExcel")
     @ApiOperation(value = "下载Excel", notes = "下载Excel")
-    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
+    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) {
         try {
             String path = cycleDetailService.exportExcel(cycleDetailParam);
             File file = new File(path);

@@ -413,7 +413,7 @@ export default {
             let link = document.createElement('a');
             link.style.display = 'none';
             link.href = url;
-            link.setAttribute('download', params.row.excelName);
+            link.setAttribute('download', 'wlg-cycle_detail.xlsx');
             document.body.appendChild(link);
             link.click();
           })
