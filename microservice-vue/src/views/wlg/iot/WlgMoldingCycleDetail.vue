@@ -491,6 +491,9 @@ export default {
                 this.editLoading = false;
                 return
               }
+              if(params.stickingLower == null){
+                params.stickingLower = '0'
+              }
               handleCycleDetailUpdate(params).then((res) => {
                 const responseData = res.data;
                 this.editLoading = false;
