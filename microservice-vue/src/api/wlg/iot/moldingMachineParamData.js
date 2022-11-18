@@ -226,3 +226,14 @@ export function getCycleDetail(queryForm) {
         data: queryForm
     })
 }
+
+export function downloadExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/downloadExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm
+    })
+}

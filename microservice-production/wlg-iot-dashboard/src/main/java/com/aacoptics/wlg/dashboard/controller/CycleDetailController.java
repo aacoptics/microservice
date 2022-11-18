@@ -51,7 +51,7 @@ public class CycleDetailController {
 
     @PostMapping("/downloadExcel")
     @ApiOperation(value = "下载Excel", notes = "下载Excel")
-    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
+    public Result downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
         String path = cycleDetailService.exportExcel(cycleDetailParam);
         InputStream inputStream = Files.newInputStream(Paths.get(path));// 文件的存放路径
         response.reset();
@@ -65,5 +65,6 @@ public class CycleDetailController {
             outputStream.write(b, 0, len);
         }
         inputStream.close();
+        return Result.success();
     }
 }

@@ -39,9 +39,9 @@
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" @click="handleAdd">新增
+          <el-button type="success" @click="handleDownload">导出
             <template #icon>
-              <font-awesome-icon :icon="['fas', 'plus']"/>
+              <font-awesome-icon :icon="['fas', 'cloud-arrow-down']"/>
             </template>
           </el-button>
         </el-form-item>
@@ -228,7 +228,12 @@ import SysTable from "@/components/SysTable";
 import {getDict} from "@/api/system/dictData";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {deleteRobot, findRobotInfoPage, handleAdd, handleUpdate} from "@/api/notification/robot";
-import {getCycleDetail, getMachineName, handleCycleDetailUpdate} from "@/api/wlg/iot/moldingMachineParamData";
+import {
+  downloadExcel,
+  getCycleDetail,
+  getMachineName,
+  handleCycleDetailUpdate
+} from "@/api/wlg/iot/moldingMachineParamData";
 import {getUserDetail, getUsername} from "@/utils/auth";
 
 export default {
@@ -390,6 +395,25 @@ export default {
       } else {
         this.filters.machineNames = []
       }
+    },
+    handleDownload:function () {
+      if(this.dateTimePickerValue.length !== 2){
+        this.$message({message: "请先选择时间段！", type: "error"});
+        return
+      }
+
+      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      this.pageRequest.startTime = startTime;
+      this.pageRequest.endTime = endTime;
+      this.pageRequest.machineNames = this.filters.machineNames;
+      downloadExcel(this.pageRequest)
+          .then((res) => {
+            // const responseData = res.data;
+            // if (responseData.code === "000000") {
+            //   this.pageResult = responseData.data;
+            // }
+          })
     },
     // 获取分页数据
     findPage: function (data) {
