@@ -1,7 +1,7 @@
 <template>
   <div class="aac-container">
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
-      <el-form :inline="true" :size="size" label-width="100px">
+      <el-form :inline="true" :size="size">
         <el-form-item label="机台号" prop="machineName">
           <el-select v-model="filters.machineNames"
                      :size="size"
@@ -22,10 +22,10 @@
               v-model="dateTimePickerValue"
               :shortcuts="shortcuts"
               :size="size"
-              end-placeholder="结束日期"
-              format="YYYY-MM-DD HH:00"
+              end-placeholder="结束时间"
+              format="YYYY-MM-DD HH:mm:ss"
               range-separator="至"
-              start-placeholder="开始日期"
+              start-placeholder="开始时间"
               type="datetimerange">
           </el-date-picker>
         </el-form-item>
@@ -54,22 +54,60 @@
     </SysTable>
 
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
-               width="40%">
+               width="60%">
       <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
         <el-form-item v-if="false" label="Id" prop="id">
           <el-input v-model="dataForm.id" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="送测记录" prop="measRecord">
+          <el-input v-model="dataForm.measRecord" auto-complete="off" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="调整动作" prop="operateRecord">
+          <el-input v-model="dataForm.operateRecord" auto-complete="off" clearable></el-input>
+        </el-form-item>
+
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="群名称" prop="robotName">
-              <el-input v-model="dataForm.robotName" auto-complete="off" clearable></el-input>
+          <el-col :span="3">
+            <el-form-item label="是否粘下模" prop="stickingLower">
+            <el-switch
+                v-model="dataForm.stickingLower"
+                class="ml-2"
+                :active-value="1"
+                :inactive-value="0"
+            />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="机器人类型" prop="robotType">
-              <el-select v-model="dataForm.robotType" clearable placeholder="机器人类型" style="width:100%">
+          <el-col :span="6">
+            <el-form-item label="开模碎裂" prop="dieBreaking">
+              <el-select v-model="dataForm.dieBreaking" clearable placeholder="开模碎裂" style="width:100%">
                 <el-option
-                    v-for="item in robotOptions"
+                    v-for="item in dieBreakingOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="抓取碎裂" prop="grabBreaking">
+              <el-select v-model="dataForm.grabBreaking" clearable placeholder="抓取碎裂" style="width:100%">
+                <el-option
+                    v-for="item in grabBreakingOptions"
+                    :key="item.dictValue"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="9">
+            <el-form-item label="冷却过程碎裂" prop="coolingBreaking">
+              <el-select v-model="dataForm.coolingBreaking" clearable placeholder="冷却过程碎裂" style="width:100%">
+                <el-option
+                    v-for="item in coolingBreakingOptions"
                     :key="item.dictValue"
                     :label="item.dictLabel"
                     :value="item.dictValue"
@@ -79,25 +117,98 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="dataForm.remark" auto-complete="off" clearable></el-input>
+        </el-form-item>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="群类型" prop="chatType">
-              <el-select v-model="dataForm.chatType" clearable placeholder="群类型" style="width:100%">
-                <el-option
-                    v-for="item in chatTypeOptions"
-                    :key="item.dictValue"
-                    :label="item.dictLabel"
-                    :value="item.dictValue"
-                >
-                </el-option>
-              </el-select>
+          <el-col :span="8">
+            <el-form-item label="性能确认-偏心" prop="decenterResult">
+              <el-input v-model="dataForm.decenterResult" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="性能确认-芯厚" prop="thicknessResult">
+              <el-input v-model="dataForm.thicknessResult" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="性能确认-面型" prop="mxpvResult">
+              <el-input v-model="dataForm.mxpvResult" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <el-form-item v-if="dataForm.robotType === 'group_robot'" label="机器人链接" prop="robotUrl">
-              <el-input v-model="dataForm.robotUrl" auto-complete="off" clearable></el-input>
+          <el-col :span="12">
+            <el-form-item label="性能确认结果" prop="performanceResult">
+              <el-input v-model="dataForm.performanceResult" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="综合结果" prop="aggregateResult">
+              <el-input v-model="dataForm.aggregateResult" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="批次号" prop="batchNo">
+              <el-input v-model="dataForm.batchNo" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="熔炼批次" prop="smeltingBatch">
+              <el-input v-model="dataForm.smeltingBatch" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="U编号" prop="uCode">
+              <el-input v-model="dataForm.uCode" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="U数值" prop="uValue">
+              <el-input-number v-model="dataForm.uValue" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="U角度" prop="uAngle">
+              <el-input-number v-model="dataForm.uAngle" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="V编号" prop="vCode">
+              <el-input v-model="dataForm.vCode" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="V数值" prop="vValue">
+              <el-input-number v-model="dataForm.vValue" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="V角度" prop="vAngle">
+              <el-input-number v-model="dataForm.vAngle" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="W编号" prop="wCode">
+              <el-input v-model="dataForm.wCode" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="W数值" prop="wValue">
+              <el-input-number v-model="dataForm.wValue" :precision="2" :step="0.1" clearable></el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="W角度" prop="wAngle">
+              <el-input-number v-model="dataForm.wAngle" :precision="2" :step="0.1" clearable></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -118,6 +229,7 @@ import {getDict} from "@/api/system/dictData";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {deleteRobot, findRobotInfoPage, handleAdd, handleUpdate} from "@/api/notification/robot";
 import {getCycleDetail, getMachineName, handleCycleDetailUpdate} from "@/api/wlg/iot/moldingMachineParamData";
+import {getUserDetail, getUsername} from "@/utils/auth";
 
 export default {
   name: "notificationRobot",
@@ -159,39 +271,39 @@ export default {
           },
         }],
       columns: [
-        {prop: "cycleDate", label: "日期", minWidth: 110},
-        {prop: "shiftClass", label: "班别", minWidth: 110},
-        {prop: "machineName", label: "机台号", minWidth: 110},
-        {prop: "cycleTime", label: "开始时间", minWidth: 110},
-        {prop: "cycleNo", label: "模次号", minWidth: 80},
-        {prop: "waferId", label: "log file编号", minWidth: 80},
-        {prop: "recipeName", label: "Recipe name", minWidth: 350},
-        {prop: "measRecord", label: "送测记录", minWidth: 350},
-        {prop: "operateRecord", label: "调整动作", minWidth: 350},
-        {prop: "stickingLower", label: "是否粘下模", minWidth: 350},
-        {prop: "dieBreaking", label: "开模碎裂", minWidth: 350},
-        {prop: "grabBreaking", label: "抓取碎裂", minWidth: 350},
-        {prop: "coolingBreaking", label: "冷却过程碎裂", minWidth: 350},
-        {prop: "remark", label: "备注", minWidth: 350},
-        {prop: "decenterResult", label: "性能确认-偏心", minWidth: 350},
-        {prop: "thicknessResult", label: "性能确认-芯厚", minWidth: 350},
-        {prop: "mxpvResult", label: "性能确认-面型", minWidth: 350},
-        {prop: "performanceResult", label: "性能确认结果", minWidth: 350},
-        {prop: "aggregateResult", label: "综合结果", minWidth: 350},
-        {prop: "batchNo", label: "批次号", minWidth: 350},
-        {prop: "smeltingBatch", label: "熔炼批次", minWidth: 350},
-        {prop: "uCode", label: "U编号", minWidth: 350},
-        {prop: "uValue", label: "U数值", minWidth: 350},
-        {prop: "uAngle", label: "U角度", minWidth: 350},
-        {prop: "vCode", label: "U编号", minWidth: 350},
-        {prop: "vValue", label: "U数值", minWidth: 350},
-        {prop: "vAngle", label: "U角度", minWidth: 350},
-        {prop: "wCode", label: "U编号", minWidth: 350},
-        {prop: "wValue", label: "U数值", minWidth: 350},
-        {prop: "wAngle", label: "U角度", minWidth: 350},
-        {prop: "updateUser", label: "更新人", minWidth: 100},
-        {prop: "updateTime", label: "更新时间", minWidth: 120},
-        {prop: "createTime", label: "创建时间", minWidth: 120},
+        {sortable: false, prop: "cycleDate", label: "日期", minWidth: 80, fixed: "left"},
+        {sortable: false, prop: "shiftClass", label: "班别", minWidth: 40, fixed: "left"},
+        {sortable: false, prop: "machineName", label: "机台号", minWidth: 70, fixed: "left"},
+        {sortable: false, prop: "cycleTime", label: "开始时间", minWidth: 80, fixed: "left"},
+        {sortable: false, prop: "cycleNo", label: "模次号", minWidth: 60, fixed: "left"},
+        {sortable: false, prop: "waferId", label: "log file编号", minWidth: 60, fixed: "left"},
+        {sortable: false, prop: "recipeName", label: "Recipe name", minWidth: 160, fixed: "left"},
+        {sortable: false, prop: "measRecord", label: "送测记录", minWidth: 160},
+        {sortable: false, prop: "operateRecord", label: "调整动作", minWidth: 160},
+        {sortable: false, prop: "stickingLower", label: "是否粘下模", minWidth: 40},
+        {sortable: false, prop: "dieBreaking", label: "开模碎裂", minWidth: 40},
+        {sortable: false, prop: "grabBreaking", label: "抓取碎裂", minWidth: 40},
+        {sortable: false, prop: "coolingBreaking", label: "冷却过程碎裂", minWidth: 40},
+        {sortable: false, prop: "remark", label: "备注", minWidth: 160},
+        {sortable: false, prop: "decenterResult", label: "性能确认-偏心", minWidth: 120},
+        {sortable: false, prop: "thicknessResult", label: "性能确认-芯厚", minWidth: 120},
+        {sortable: false, prop: "mxpvResult", label: "性能确认-面型", minWidth: 120},
+        {sortable: false, prop: "performanceResult", label: "性能确认结果", minWidth: 120},
+        {sortable: false, prop: "aggregateResult", label: "综合结果", minWidth: 120},
+        {sortable: false, prop: "batchNo", label: "批次号", minWidth: 160},
+        {sortable: false, prop: "smeltingBatch", label: "熔炼批次", minWidth: 160},
+        {sortable: false, prop: "uCode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "uValue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "uAngle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "vCode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "vValue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "vAngle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "wCode", label: "U编号", minWidth: 80},
+        {sortable: false, prop: "wValue", label: "U数值", minWidth: 80},
+        {sortable: false, prop: "wAngle", label: "U角度", minWidth: 80},
+        {sortable: false, prop: "updateUser", label: "更新人", minWidth: 100},
+        {sortable: false, prop: "updateTime", label: "更新时间", minWidth: 130},
+        {sortable: false, prop: "createTime", label: "创建时间", minWidth: 130},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -204,8 +316,9 @@ export default {
         chatType: [{required: true, message: "请选择群类型", trigger: "change"},],
         robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
       },
-      robotOptions: [],
-      chatTypeOptions: [],
+      dieBreakingOptions: [],
+      grabBreakingOptions: [],
+      coolingBreakingOptions: [],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -248,11 +361,14 @@ export default {
   },
   mounted() {
     this.getMachineName();
-    getDict("notification_robot_type").then(response => {
-      this.robotOptions = response.data.data
+    getDict("wlg_die_breaking_type").then(response => {
+      this.dieBreakingOptions = response.data.data
     })
-    getDict("notification_chat_type").then(response => {
-      this.chatTypeOptions = response.data.data
+    getDict("wlg_grab_breaking_type").then(response => {
+      this.grabBreakingOptions = response.data.data
+    })
+    getDict("wlg_cooling_breaking_type").then(response => {
+      this.coolingBreakingOptions = response.data.data
     })
 
   },
@@ -329,6 +445,7 @@ export default {
               //   this.findPage(null);
               // });
             } else {
+              params.updateUser = this.userRealName;
               handleCycleDetailUpdate(params).then((res) => {
                 const responseData = res.data;
                 this.editLoading = false;
@@ -361,5 +478,13 @@ export default {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
     }
   },
+  computed:{
+    userRealName() {
+      let userName = getUsername()
+      let userDetail = getUserDetail()
+      let realName = userDetail && userDetail.name ? userDetail.name : userName;
+      return realName ? realName : this.name;
+    },
+  }
 };
 </script>

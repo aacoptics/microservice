@@ -94,28 +94,28 @@ public class CycleDetail implements Serializable {
     private String uCode;
 
     @Excel(name = "U数值", orderNum = "23")
-    private Decimal uValue;
+    private String uValue;
 
     @Excel(name = "U角度", orderNum = "24")
-    private Decimal uAngle;
+    private String uAngle;
 
     @Excel(name = "V编号", orderNum = "25")
     private String vCode;
 
     @Excel(name = "V数值", orderNum = "26")
-    private Decimal vValue;
+    private String vValue;
 
     @Excel(name = "V角度", orderNum = "27")
-    private Decimal vAngle;
+    private String vAngle;
 
     @Excel(name = "W编号", orderNum = "28")
     private String wCode;
 
     @Excel(name = "W数值", orderNum = "29")
-    private Decimal wValue;
+    private String wValue;
 
     @Excel(name = "W角度", orderNum = "30")
-    private Decimal wAngle;
+    private String wAngle;
 
     @Excel(name = "更新时间", orderNum = "31", format = "yyyy/MM/dd hh:mm:ss", width = 18)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
