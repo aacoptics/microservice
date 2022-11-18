@@ -382,7 +382,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <!--el-form-item v-if="dataForm.milType === 4" label="每日状态更新" prop="statusSync">
+              <!--el-form-item v-if="'' + dataForm.milType === '4'" label="每日状态更新" prop="statusSync">
                 <el-input v-model="dataForm.statusSync" auto-complete="off" autosize clearable
                           type="textarea"></el-input>
               </el-form-item-->

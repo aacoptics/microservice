@@ -722,13 +722,13 @@ export default {
         filePathPrefix: "structureData",
         fileName: fileName
       }
-      getStream(params).then(res =>{
+      getStream(params).then(res => {
         console.log(res.data.size)
-        if(res.data.size){
-          this.picDialogVisible=true
+        if (res.data.size) {
+          this.picDialogVisible = true
           const url = window.URL.createObjectURL(res.data)
           this.codeImg = url
-        }else{
+        } else {
           ElMessageBox.alert('无相应图片', {
             dangerouslyUseHTMLString: true,
             type: 'error'
@@ -746,8 +746,8 @@ export default {
     onLoadImg(e) {
       var img = e.target;
       var width = 0;
-      if (img.fileSize > 0 || (img.width > 1 && img.height > 1)) {
-        width = img.width;
+      if (img.fileSize > 0 || (img.naturalWidth > 1 && img.naturalHeight > 1)) {
+        width = img.naturalWidth;
       }
       this.imgWidth = width + 'px';
       this.dialogWidth = width + 30 + 'px';
