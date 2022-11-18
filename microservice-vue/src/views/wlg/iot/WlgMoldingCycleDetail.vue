@@ -346,7 +346,7 @@ export default {
         recipeName: "",
         measRecord: null,
         operateRecord: null,
-        stickingLower: null,
+        stickingLower: '0',
         dieBreaking: null,
         grabBreaking: null,
         coolingBreaking: null,
