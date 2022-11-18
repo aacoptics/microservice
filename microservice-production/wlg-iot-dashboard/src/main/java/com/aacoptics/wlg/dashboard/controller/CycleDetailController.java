@@ -9,7 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/CycleDetail")
@@ -37,5 +46,24 @@ public class CycleDetailController {
     public Result search(@Valid @RequestBody CycleDetailParam cycleDetailParam) {
         log.debug("search with cycleDetailParam:{}", cycleDetailParam);
         return Result.success(cycleDetailService.query(cycleDetailParam.getPage(), cycleDetailParam));
+    }
+
+
+    @PostMapping("/downloadExcel")
+    @ApiOperation(value = "下载Excel", notes = "下载Excel")
+    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
+        String path = cycleDetailService.exportExcel(cycleDetailParam);
+        InputStream inputStream = Files.newInputStream(Paths.get(path));// 文件的存放路径
+        response.reset();
+        response.setContentType("application/octet-stream");
+        String filename = new File(path).getName();
+        response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+        ServletOutputStream outputStream = response.getOutputStream();
+        byte[] b = new byte[1024];
+        int len;
+        while ((len = inputStream.read(b)) > 0) {
+            outputStream.write(b, 0, len);
+        }
+        inputStream.close();
     }
 }
