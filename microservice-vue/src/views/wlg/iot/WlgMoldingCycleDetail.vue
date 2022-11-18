@@ -272,7 +272,7 @@ export default {
           callback()
         }
       } else {
-        callback()
+        callback(new Error('请输入模次号！'))
       }
     }
     return {
@@ -516,11 +516,6 @@ export default {
               // });
             } else {
               params.updateUser = this.userRealName;
-              if (!this.checkCycleNo(params.cycleNo)) {
-                this.$message({message: "模次号格式不正确，请检查！", type: "error"});
-                this.editLoading = false;
-                return
-              }
               handleCycleDetailUpdate(params).then((res) => {
                 const responseData = res.data;
                 this.editLoading = false;
@@ -547,14 +542,6 @@ export default {
     cancel() {
       this.dialogVisible = false;
     },
-    checkCycleNo(str) {
-      const reg = /W[1-9]\d*/;  /*定义验证表达式*/
-      return reg.test(str);   /*进行验证*/
-    },
-    checkNumber(str) {
-      const reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/;  /*定义验证表达式*/
-      return reg.test(str);   /*进行验证*/
-    }
   },
   computed: {
     userRealName() {
