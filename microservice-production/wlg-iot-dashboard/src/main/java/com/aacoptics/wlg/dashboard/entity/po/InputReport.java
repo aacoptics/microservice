@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.po;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelIgnore;

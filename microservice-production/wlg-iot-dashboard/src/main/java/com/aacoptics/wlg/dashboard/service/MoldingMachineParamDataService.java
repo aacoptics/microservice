@@ -1,7 +1,7 @@
 package com.aacoptics.wlg.dashboard.service;
 
-import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
-import com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMachineParamData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingParamAnalysisData;
 import com.alibaba.fastjson.JSONArray;
 
 import java.time.LocalDateTime;

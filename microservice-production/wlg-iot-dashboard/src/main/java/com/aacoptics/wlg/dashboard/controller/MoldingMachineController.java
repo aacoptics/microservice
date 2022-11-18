@@ -1,8 +1,8 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.dashboard.entity.MoldingMachine;
-import com.aacoptics.wlg.dashboard.entity.MoldingParamThreshold;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMachine;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingParamThreshold;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineService;
 import com.aacoptics.wlg.dashboard.service.MoldingParamThresholdService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

@@ -1,8 +1,7 @@
 package com.aacoptics.wlg.dashboard.mapper;
 
 
-import com.aacoptics.wlg.dashboard.entity.MoldingAbnormalData;
-import com.aacoptics.wlg.dashboard.entity.MoldingEventData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.vo;
 
 import java.util.ArrayList;
 import java.util.Iterator;

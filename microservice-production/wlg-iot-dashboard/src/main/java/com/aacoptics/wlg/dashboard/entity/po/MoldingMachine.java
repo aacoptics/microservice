@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.po;
 
 import com.aacoptics.common.web.entity.po.BasePo;
 import com.baomidou.mybatisplus.annotation.TableField;

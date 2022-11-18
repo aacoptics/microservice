@@ -1,8 +1,8 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.dashboard.entity.MoldingAnalysisDataParam;
-import com.aacoptics.wlg.dashboard.entity.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingAnalysisDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingDataParam;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
