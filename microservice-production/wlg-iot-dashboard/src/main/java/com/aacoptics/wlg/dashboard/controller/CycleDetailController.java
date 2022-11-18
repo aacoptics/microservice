@@ -66,7 +66,7 @@ public class CycleDetailController {
             response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
             response.addHeader("Content-Length", "" + file.length());
             OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
-            response.setContentType("application/octet-stream");
+            response.setContentType("application/force-download");
             outputStream.write(buffer);
             outputStream.flush();
         } catch (IOException ex) {
