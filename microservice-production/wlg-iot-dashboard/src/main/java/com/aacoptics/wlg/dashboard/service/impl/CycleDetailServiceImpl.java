@@ -27,7 +27,8 @@ public class CycleDetailServiceImpl extends ServiceImpl<CycleDetailMapper, Cycle
         QueryWrapper<CycleDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.in(null != cycleDetailParam.getMachineNames() && cycleDetailParam.getMachineNames().size() > 0, "machine_name", cycleDetailParam.getMachineNames());
         queryWrapper.ge(null != cycleDetailParam.getStartTime(), "start_time", cycleDetailParam.getStartTime())
-                .le(null != cycleDetailParam.getEndTime(), "start_time", cycleDetailParam.getEndTime());
+                .le(null != cycleDetailParam.getEndTime(), "start_time", cycleDetailParam.getEndTime())
+                .orderByDesc("id");
         return this.page(page, queryWrapper);
     }
 }
