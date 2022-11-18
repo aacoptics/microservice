@@ -56,16 +56,16 @@ public class CycleDetail implements Serializable {
     private String operateRecord;
 
     @Excel(name = "是否粘下模", orderNum = "10")
-    private Integer stickingLower;
+    private String stickingLower;
 
     @Excel(name = "开模碎裂", orderNum = "11")
-    private Integer dieBreaking;
+    private String dieBreaking;
 
     @Excel(name = "抓取碎裂", orderNum = "12")
-    private Integer grabBreaking;
+    private String grabBreaking;
 
     @Excel(name = "冷却过程碎裂", orderNum = "13")
-    private Integer coolingBreaking;
+    private String coolingBreaking;
 
     @Excel(name = "备注", orderNum = "14")
     private String remark;
