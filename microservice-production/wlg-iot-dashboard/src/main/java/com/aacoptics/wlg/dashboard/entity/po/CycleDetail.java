@@ -92,31 +92,31 @@ public class CycleDetail implements Serializable {
     private String smeltingBatch;
 
     @Excel(name = "U编号", orderNum = "22")
-    @JSONField(name = "wValue")
+    @JSONField(name = "uCode")
     private String uCode;
 
     @Excel(name = "U数值", orderNum = "23")
-    @JSONField(name = "wValue")
+    @JSONField(name = "uValue")
     private String uValue;
 
     @Excel(name = "U角度", orderNum = "24")
-    @JSONField(name = "wValue")
+    @JSONField(name = "uAngle")
     private String uAngle;
 
     @Excel(name = "V编号", orderNum = "25")
-    @JSONField(name = "wValue")
+    @JSONField(name = "vCode")
     private String vCode;
 
     @Excel(name = "V数值", orderNum = "26")
-    @JSONField(name = "wValue")
+    @JSONField(name = "vValue")
     private String vValue;
 
     @Excel(name = "V角度", orderNum = "27")
-    @JSONField(name = "wValue")
+    @JSONField(name = "vAngle")
     private String vAngle;
 
     @Excel(name = "W编号", orderNum = "28")
-    @JSONField(name = "wValue")
+    @JSONField(name = "wCode")
     private String wCode;
 
     @Excel(name = "W数值", orderNum = "29")
