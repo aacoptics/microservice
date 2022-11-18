@@ -2,6 +2,7 @@ package com.aacoptics.wlg.dashboard.entity.po;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelIgnore;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -91,30 +92,39 @@ public class CycleDetail implements Serializable {
     private String smeltingBatch;
 
     @Excel(name = "U编号", orderNum = "22")
+    @JSONField(name = "wValue")
     private String uCode;
 
     @Excel(name = "U数值", orderNum = "23")
+    @JSONField(name = "wValue")
     private String uValue;
 
     @Excel(name = "U角度", orderNum = "24")
+    @JSONField(name = "wValue")
     private String uAngle;
 
     @Excel(name = "V编号", orderNum = "25")
+    @JSONField(name = "wValue")
     private String vCode;
 
     @Excel(name = "V数值", orderNum = "26")
+    @JSONField(name = "wValue")
     private String vValue;
 
     @Excel(name = "V角度", orderNum = "27")
+    @JSONField(name = "wValue")
     private String vAngle;
 
     @Excel(name = "W编号", orderNum = "28")
+    @JSONField(name = "wValue")
     private String wCode;
 
     @Excel(name = "W数值", orderNum = "29")
+    @JSONField(name = "wValue")
     private String wValue;
 
     @Excel(name = "W角度", orderNum = "30")
+    @JSONField(name = "wAngle")
     private String wAngle;
 
     @Excel(name = "更新时间", orderNum = "31", format = "yyyy/MM/dd hh:mm:ss", width = 18)
