@@ -408,7 +408,7 @@ export default {
       this.pageRequest.endTime = endTime;
       this.pageRequest.machineNames = this.filters.machineNames;
       downloadExcel(this.pageRequest)
-          .then((res) => {
+          .then(res => {
             let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
             let link = document.createElement('a');
             link.style.display = 'none';
@@ -416,10 +416,6 @@ export default {
             link.setAttribute('download', params.row.excelName);
             document.body.appendChild(link);
             link.click();
-            // const responseData = res.data;
-            // if (responseData.code === "000000") {
-            //   this.pageResult = responseData.data;
-            // }
           })
     },
     // 获取分页数据

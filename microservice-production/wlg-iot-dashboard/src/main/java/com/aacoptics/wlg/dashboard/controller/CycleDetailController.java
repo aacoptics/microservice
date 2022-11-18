@@ -49,18 +49,28 @@ public class CycleDetailController {
     @PostMapping("/downloadExcel")
     @ApiOperation(value = "下载Excel", notes = "下载Excel")
     public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) throws IOException {
-        String path = cycleDetailService.exportExcel(cycleDetailParam);
-        InputStream inputStream = Files.newInputStream(Paths.get(path));// 文件的存放路径
-        response.reset();
-        response.setContentType("application/force-download");
-        String filename = new File(path).getName();
-        response.addHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
-        OutputStream out = response.getOutputStream();
-        byte[] b = new byte[1024];
-        int len;
-        while ((len = inputStream.read(b)) > 0) {
-            out.write(b, 0, len);
+        try {
+            String path = cycleDetailService.exportExcel(cycleDetailParam);
+            File file = new File(path);
+            log.info(file.getPath());
+            String filename = file.getName();
+            String ext = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+            log.info("文件后缀名：" + ext);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            InputStream fis = new BufferedInputStream(fileInputStream);
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            response.reset();
+            response.setCharacterEncoding("UTF-8");
+            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+            response.addHeader("Content-Length", "" + file.length());
+            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            outputStream.write(buffer);
+            outputStream.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        inputStream.close();
     }
 }
