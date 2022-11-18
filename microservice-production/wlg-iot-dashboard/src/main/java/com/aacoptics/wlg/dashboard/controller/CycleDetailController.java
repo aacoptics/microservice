@@ -6,6 +6,8 @@ import com.aacoptics.wlg.dashboard.entity.po.CycleDetail;
 import com.aacoptics.wlg.dashboard.service.CycleDetailService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -45,32 +48,36 @@ public class CycleDetailController {
         return Result.success(cycleDetailService.query(cycleDetailParam.getPage(), cycleDetailParam));
     }
 
-
     @PostMapping("/downloadExcel")
     @ApiOperation(value = "下载Excel", notes = "下载Excel")
-    public void downloadLocal(CycleDetailParam cycleDetailParam, HttpServletResponse response) {
+    public void downloadLocal(@RequestBody CycleDetailParam cycleDetailParam, HttpServletResponse response) {
+        OutputStream os = null;
+        InputStream is = null;
         try {
-            String path = cycleDetailService.exportExcel(cycleDetailParam);
-            File file = new File(path);
+            File file = cycleDetailService.exportExcel(cycleDetailParam);
             log.info(file.getPath());
             String filename = file.getName();
-            String ext = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
-            log.info("文件后缀名：" + ext);
-            FileInputStream fileInputStream = new FileInputStream(file);
-            InputStream fis = new BufferedInputStream(fileInputStream);
-            byte[] buffer = new byte[fis.available()];
-            fis.read(buffer);
-            fis.close();
-            //强制下载不打开
-            response.setContentType("application/force-download");
-            OutputStream out = response.getOutputStream();
-            //使用URLEncoder来防止文件名乱码或者读取错误
+            os = response.getOutputStream();
+            response.reset();
+            response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
-            out.write(buffer);
-            out.close();
-            out.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            is = Files.newInputStream(file.toPath());
+            IOUtils.copy(is, response.getOutputStream());
+        } catch (IOException e) {
+            log.error(ExceptionUtils.getFullStackTrace(e));
+        } finally {
+            try {
+                if (is != null)
+                    is.close();
+            } catch (IOException e) {
+                log.error(ExceptionUtils.getFullStackTrace(e));
+            }
+            try {
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                log.error(ExceptionUtils.getFullStackTrace(e));
+            }
         }
     }
 }

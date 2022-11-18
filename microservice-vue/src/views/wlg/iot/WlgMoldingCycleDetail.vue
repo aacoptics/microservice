@@ -408,16 +408,18 @@ export default {
       this.pageRequest.endTime = endTime;
       this.pageRequest.machineNames = this.filters.machineNames;
       downloadExcel(this.pageRequest)
-          .then(res => {
-            const fileName = res.headers["content-disposition"].split(";")[1].split("filename=")[1];
-            let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
-            let link = document.createElement('a');
-            link.style.display = 'none';
-            link.href = url;
-            link.setAttribute('download', fileName);
-            document.body.appendChild(link);
-            link.click();
-          })
+          .then( (response) => {
+            if (response.headers['content-type'] === 'APPLICATION/OCTET-STREAM') {
+              let filename = '模造机模次明细.xlsx'
+              //response.data为下载的文件数据
+              let url = window.URL.createObjectURL(new Blob([response.data]))
+              let link = document.createElement('a')
+              link.style.display = 'none'
+              link.href = url
+              link.setAttribute('download', filename)
+              document.body.appendChild(link)
+              link.click()
+            }})
     },
     // 获取分页数据
     findPage: function (data) {

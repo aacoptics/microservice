@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -53,7 +54,7 @@ public class CycleDetailServiceImpl extends ServiceImpl<CycleDetailMapper, Cycle
     }
 
     @Override
-    public String exportExcel(CycleDetailParam cycleDetailParam) throws IOException {
+    public File exportExcel(CycleDetailParam cycleDetailParam) throws IOException {
         String tempDir = System.getProperty("java.io.tmpdir");
         long currentTimeMillis = System.currentTimeMillis();
         String fileName = "wlg-cycle_detail-" + currentTimeMillis + ".xlsx";
@@ -71,7 +72,7 @@ public class CycleDetailServiceImpl extends ServiceImpl<CycleDetailMapper, Cycle
             workbook.write(out);
             out.close();
             workbook.close();
-            return tempDir + "/" + fileName;
+            return new File(tempDir + "/" + fileName);
         }
         return null;
     }

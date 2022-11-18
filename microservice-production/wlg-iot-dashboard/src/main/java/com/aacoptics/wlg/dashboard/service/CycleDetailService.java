@@ -5,10 +5,11 @@ import com.aacoptics.wlg.dashboard.entity.po.CycleDetail;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.io.File;
 import java.io.IOException;
 
 public interface CycleDetailService {
     boolean update(CycleDetail cycleDetail);
     IPage<CycleDetail> query(Page page, CycleDetailParam cycleDetailParam);
-    String exportExcel(CycleDetailParam cycleDetailParam) throws IOException;
+    File exportExcel(CycleDetailParam cycleDetailParam) throws IOException;
 }

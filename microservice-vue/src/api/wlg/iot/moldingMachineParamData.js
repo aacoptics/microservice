@@ -234,6 +234,7 @@ export function downloadExcel(queryForm) {
         headers: {
             'Content-Type': 'application/json'
         },
-        data: queryForm
+        data: queryForm,
+        responseType: 'blob'
     })
 }

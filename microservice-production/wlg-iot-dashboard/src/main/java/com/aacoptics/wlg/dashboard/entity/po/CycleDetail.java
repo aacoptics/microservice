@@ -47,7 +47,7 @@ public class CycleDetail implements Serializable {
     @Excel(name = "log file编号", orderNum = "6")
     private String waferId;
 
-    @Excel(name = "Recipe name", orderNum = "7")
+    @Excel(name = "Recipe name", orderNum = "7", width = 24)
     private String recipeName;
 
     @Excel(name = "送测记录", orderNum = "8")
