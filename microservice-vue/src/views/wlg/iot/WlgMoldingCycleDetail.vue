@@ -49,7 +49,7 @@
     </div>
     <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
               :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-              :stripe="false" :show-operation-del="false"
+              :stripe="false" :show-operation-del="false" :size="size"
               @findPage="findPage" @handleEdit="handleEdit">
     </SysTable>
 
