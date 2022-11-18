@@ -61,14 +61,14 @@ public class CycleDetailController {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
             fis.close();
-            response.reset();
-            response.setCharacterEncoding("UTF-8");
-            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
-            response.addHeader("Content-Length", "" + file.length());
-            OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+            //强制下载不打开
             response.setContentType("application/force-download");
-            outputStream.write(buffer);
-            outputStream.flush();
+            OutputStream out = response.getOutputStream();
+            //使用URLEncoder来防止文件名乱码或者读取错误
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
+            out.write(buffer);
+            out.close();
+            out.flush();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
