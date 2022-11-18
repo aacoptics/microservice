@@ -59,9 +59,18 @@
         <el-form-item v-if="false" label="Id" prop="id">
           <el-input v-model="dataForm.id" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="送测记录" prop="measRecord">
-          <el-input v-model="dataForm.measRecord" auto-complete="off" clearable></el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="模次号" prop="cycleNo">
+              <el-input v-model="dataForm.cycleNo" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="18">
+            <el-form-item label="送测记录" prop="measRecord">
+              <el-input v-model="dataForm.measRecord" auto-complete="off" clearable></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="调整动作" prop="operateRecord">
           <el-input v-model="dataForm.operateRecord" auto-complete="off" clearable></el-input>
         </el-form-item>
