@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 public class CycleDetailParam implements Serializable {
-    private String machineName;
+    private List<String> machineNames;
 
     /**
      * 分页查询的参数，当前页数

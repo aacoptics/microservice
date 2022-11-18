@@ -25,7 +25,7 @@ public class CycleDetailServiceImpl extends ServiceImpl<CycleDetailMapper, Cycle
     @Override
     public IPage<CycleDetail> query(Page page, CycleDetailParam cycleDetailParam) {
         QueryWrapper<CycleDetail> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(cycleDetailParam.getMachineName()), "machine_name", cycleDetailParam.getMachineName());
+        queryWrapper.in(null != cycleDetailParam.getMachineNames() && cycleDetailParam.getMachineNames().size() > 0, "machine_name", cycleDetailParam.getMachineNames());
         queryWrapper.ge(null != cycleDetailParam.getStartTime(), "start_time", cycleDetailParam.getStartTime())
                 .le(null != cycleDetailParam.getEndTime(), "start_time", cycleDetailParam.getEndTime());
         return this.page(page, queryWrapper);
