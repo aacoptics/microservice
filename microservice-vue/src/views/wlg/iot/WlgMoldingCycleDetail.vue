@@ -178,12 +178,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="U数值" prop="uvalue">
-              <el-input-number v-model="dataForm.uvalue" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.uvalue" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="U角度" prop="uangle">
-              <el-input-number v-model="dataForm.uangle" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.uangle" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -195,12 +195,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="V数值" prop="vvalue">
-              <el-input-number v-model="dataForm.vvalue" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.vvalue" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="V角度" prop="vangle">
-              <el-input-number v-model="dataForm.vangle" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.vangle" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -212,12 +212,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="W数值" prop="wvalue">
-              <el-input-number v-model="dataForm.wvalue" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.wvalue" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="W角度" prop="wangle">
-              <el-input-number v-model="dataForm.wangle" :precision="2" :step="0.1" clearable></el-input-number>
+              <el-input v-model="dataForm.wangle" auto-complete="off" clearable></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -249,6 +249,32 @@ export default {
   name: "notificationRobot",
   components: {SysTable},
   data() {
+    const checkNumber = (rule, value, callback) => {
+      if (value) {
+        const reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/;
+        if (reg.test(value) === false) {
+          callback(new Error('只可输入数字'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
+    const checkCycleNo = (rule, value, callback) => {
+      if (value) {
+        if(value === "跳模")
+          callback()
+        const reg = /W[1-9]\d*/;
+        if (reg.test(value) === false) {
+          callback(new Error('模次号格式不正确，请检查！'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
     return {
       size: "small",
       filters: {
@@ -327,8 +353,13 @@ export default {
       dataFormRules: {
         // robotName: [{required: true, message: "请输入群名称", trigger: "blur"}],
         // robotType: [{required: true, message: "请选择机器人类型", trigger: "change"},],
-        // chatType: [{required: true, message: "请选择群类型", trigger: "change"},],
-        // robotUrl: [{required: true, message: "请输入机器人URL", trigger: "blur"},]
+        cycleNo: {required: true, trigger: 'blur', validator: checkCycleNo},
+        uvalue: {required: false, trigger: 'blur', validator: checkNumber},
+        uangle: {required: false, trigger: 'blur', validator: checkNumber},
+        vvalue: {required: false, trigger: 'blur', validator: checkNumber},
+        vangle: {required: false, trigger: 'blur', validator: checkNumber},
+        wvalue: {required: false, trigger: 'blur', validator: checkNumber},
+        wangle: {required: false, trigger: 'blur', validator: checkNumber},
       },
       dieBreakingOptions: [],
       grabBreakingOptions: [],
@@ -485,8 +516,7 @@ export default {
               // });
             } else {
               params.updateUser = this.userRealName;
-              if(!this.checkCycleNo(params.cycleNo))
-              {
+              if (!this.checkCycleNo(params.cycleNo)) {
                 this.$message({message: "模次号格式不正确，请检查！", type: "error"});
                 this.editLoading = false;
                 return
@@ -519,6 +549,10 @@ export default {
     },
     checkCycleNo(str) {
       const reg = /W[1-9]\d*/;  /*定义验证表达式*/
+      return reg.test(str);   /*进行验证*/
+    },
+    checkNumber(str) {
+      const reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/;  /*定义验证表达式*/
       return reg.test(str);   /*进行验证*/
     }
   },
