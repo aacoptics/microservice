@@ -3,7 +3,7 @@
     <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
       <el-form :inline="true" :size="size" label-width="100px">
         <el-form-item label="机台号" prop="machineName">
-          <el-select v-model="machineNames"
+          <el-select v-model="filters.machineNames"
                      :size="size"
                      collapse-tags
                      multiple
@@ -49,8 +49,8 @@
     </div>
     <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
               :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-              :stripe="false"
-              @findPage="findPage" @handleDelete="handleDelete" @handleEdit="handleEdit">
+              :stripe="false" :show-operation-del="false"
+              @findPage="findPage" @handleEdit="handleEdit">
     </SysTable>
 
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
@@ -117,27 +117,81 @@ import SysTable from "@/components/SysTable";
 import {getDict} from "@/api/system/dictData";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {deleteRobot, findRobotInfoPage, handleAdd, handleUpdate} from "@/api/notification/robot";
+import {getCycleDetail, getMachineName, handleCycleDetailUpdate} from "@/api/wlg/iot/moldingMachineParamData";
 
 export default {
   name: "notificationRobot",
   components: {SysTable},
   data() {
     return {
-      size: "default",
+      size: "small",
       filters: {
-        robotName: "",
-        robotType: "",
-        chatType: ""
+        machineNames: []
       },
+      okAllChecked: false,
+      machineNameArray: [],
+      dateTimePickerValue: [],
+      shortcuts: [{
+        text: '最近一天',
+        value: (() => {
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24);
+          return [start, end]
+        })()
+      },
+        {
+          text: '最近一周',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            return [start, end]
+          },
+        },
+        {
+          text: '最近一个月',
+          value: () => {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            return [start, end]
+          },
+        }],
       columns: [
-        {prop: "robotName", label: "群名称", minWidth: 110},
-        {prop: "robotType", label: "机器人类型", minWidth: 80, formatter: this.robotTypeFormat},
-        {prop: "chatType", label: "群类型", minWidth: 80, formatter: this.chatTypeFormat},
-        {prop: "robotUrl", label: "机器人url", minWidth: 350},
-        {prop: "updatedBy", label: "更新人", minWidth: 100},
-        {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "createdBy", label: "创建人", minWidth: 120},
-        {prop: "createdTime", label: "创建时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "cycleDate", label: "日期", minWidth: 110},
+        {prop: "shiftClass", label: "班别", minWidth: 110},
+        {prop: "machineName", label: "机台号", minWidth: 110},
+        {prop: "cycleTime", label: "开始时间", minWidth: 110},
+        {prop: "cycleNo", label: "模次号", minWidth: 80},
+        {prop: "waferId", label: "log file编号", minWidth: 80},
+        {prop: "recipeName", label: "Recipe name", minWidth: 350},
+        {prop: "measRecord", label: "送测记录", minWidth: 350},
+        {prop: "operateRecord", label: "调整动作", minWidth: 350},
+        {prop: "stickingLower", label: "是否粘下模", minWidth: 350},
+        {prop: "dieBreaking", label: "开模碎裂", minWidth: 350},
+        {prop: "grabBreaking", label: "抓取碎裂", minWidth: 350},
+        {prop: "coolingBreaking", label: "冷却过程碎裂", minWidth: 350},
+        {prop: "remark", label: "备注", minWidth: 350},
+        {prop: "decenterResult", label: "性能确认-偏心", minWidth: 350},
+        {prop: "thicknessResult", label: "性能确认-芯厚", minWidth: 350},
+        {prop: "mxpvResult", label: "性能确认-面型", minWidth: 350},
+        {prop: "performanceResult", label: "性能确认结果", minWidth: 350},
+        {prop: "aggregateResult", label: "综合结果", minWidth: 350},
+        {prop: "batchNo", label: "批次号", minWidth: 350},
+        {prop: "smeltingBatch", label: "熔炼批次", minWidth: 350},
+        {prop: "uCode", label: "U编号", minWidth: 350},
+        {prop: "uValue", label: "U数值", minWidth: 350},
+        {prop: "uAngle", label: "U角度", minWidth: 350},
+        {prop: "vCode", label: "U编号", minWidth: 350},
+        {prop: "vValue", label: "U数值", minWidth: 350},
+        {prop: "vAngle", label: "U角度", minWidth: 350},
+        {prop: "wCode", label: "U编号", minWidth: 350},
+        {prop: "wValue", label: "U数值", minWidth: 350},
+        {prop: "wAngle", label: "U角度", minWidth: 350},
+        {prop: "updateUser", label: "更新人", minWidth: 100},
+        {prop: "updateTime", label: "更新时间", minWidth: 120},
+        {prop: "createTime", label: "创建时间", minWidth: 120},
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -155,14 +209,45 @@ export default {
       // 新增编辑界面数据
       dataForm: {
         id: 0,
-        robotName: "",
-        robotType: "app_robot",
-        chatType: "",
-        robotUrl: ""
+        machineName: "",
+        cycleDate: "",
+        cycleTime: "",
+        startTime: "",
+        shiftClass: "",
+        cycleNo: "",
+        waferId: "",
+        recipeName: "",
+        measRecord: null,
+        operateRecord: null,
+        stickingLower: null,
+        dieBreaking: null,
+        grabBreaking: null,
+        coolingBreaking: null,
+        remark: null,
+        decenterResult: null,
+        thicknessResult: null,
+        mxpvResult: null,
+        performanceResult: null,
+        aggregateResult: null,
+        batchNo: null,
+        smeltingBatch: null,
+        uCode: null,
+        uValue: null,
+        uAngle: null,
+        vCode: null,
+        vValue: null,
+        vAngle: null,
+        wCode: null,
+        wValue: null,
+        wAngle: null,
+        updateTime: "",
+        updateUser: "",
+        createTime: "",
       },
     };
   },
   mounted() {
+    this.getMachineName();
     getDict("notification_robot_type").then(response => {
       this.robotOptions = response.data.data
     })
@@ -172,15 +257,38 @@ export default {
 
   },
   methods: {
+    getMachineName() {
+      getMachineName().then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.machineNameArray = responseData.data
+        }
+      })
+    },
+    okSelectAll() {
+      this.filters.machineNames = []
+      if (this.okAllChecked) {
+        this.machineNameArray.map(item => {
+          this.filters.machineNames.push(item.machineName)
+        })
+      } else {
+        this.filters.machineNames = []
+      }
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.pageRequest.robotName = this.filters.robotName;
-      this.pageRequest.robotType = this.filters.robotType;
-      this.pageRequest.chatType = this.filters.chatType;
-      findRobotInfoPage(this.pageRequest)
+      if(this.dateTimePickerValue.length > 0){
+        const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+        const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+        this.pageRequest.startTime = startTime;
+        this.pageRequest.endTime = endTime;
+      }
+      this.pageRequest.machineNames = this.filters.machineNames;
+
+      getCycleDetail(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
             if (responseData.code === "000000") {
@@ -188,25 +296,6 @@ export default {
             }
           })
           .then(data != null ? data.callback : "");
-    },
-
-    // 批量删除
-    handleDelete: function (data) {
-      if (data.params.length > 0)
-        deleteRobot(data.params[0]).then(data.callback);
-    },
-    // 显示新增界面
-    handleAdd: function () {
-      this.dialogVisible = true;
-      this.operation = true;
-      this.$refs.sysTable.handleClearSelection();
-      this.dataForm = {
-        id: 0,
-        robotName: "",
-        robotType: "app_robot",
-        chatType: "",
-        robotUrl: ""
-      };
     },
 
     // 显示编辑界面
@@ -223,24 +312,24 @@ export default {
             this.editLoading = true;
             let params = Object.assign({}, this.dataForm);
             if (this.operation) {
-              handleAdd(params).then((res) => {
-                const responseData = res.data;
-                this.editLoading = false;
-                if (responseData.code === "000000") {
-                  this.$message({message: "操作成功", type: "success"});
-                  this.dialogVisible = false;
-                  this.$refs["dataForm"].resetFields();
-                } else {
-                  this.$message({
-                    message:
-                        "操作失败 " + getResponseDataMessage(responseData),
-                    type: "error",
-                  });
-                }
-                this.findPage(null);
-              });
+              // handleAdd(params).then((res) => {
+              //   const responseData = res.data;
+              //   this.editLoading = false;
+              //   if (responseData.code === "000000") {
+              //     this.$message({message: "操作成功", type: "success"});
+              //     this.dialogVisible = false;
+              //     this.$refs["dataForm"].resetFields();
+              //   } else {
+              //     this.$message({
+              //       message:
+              //           "操作失败 " + getResponseDataMessage(responseData),
+              //       type: "error",
+              //     });
+              //   }
+              //   this.findPage(null);
+              // });
             } else {
-              handleUpdate(params).then((res) => {
+              handleCycleDetailUpdate(params).then((res) => {
                 const responseData = res.data;
                 this.editLoading = false;
                 if (responseData.code === "000000") {
@@ -270,18 +359,6 @@ export default {
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
-    },
-    robotTypeFormat: function (row, column) {
-      const typeInfo = this.robotOptions.find(item => {
-        return item.dictValue === row[column.property];
-      });
-      return typeInfo.dictLabel
-    },
-    chatTypeFormat: function (row, column) {
-      const typeInfo = this.chatTypeOptions.find(item => {
-        return item.dictValue === row[column.property];
-      });
-      return typeInfo.dictLabel
     }
   },
 };

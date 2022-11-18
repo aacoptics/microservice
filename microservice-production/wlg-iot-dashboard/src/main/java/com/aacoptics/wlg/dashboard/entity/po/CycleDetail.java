@@ -53,6 +53,7 @@ public class CycleDetail implements Serializable {
 
     @Excel(name = "调整动作", orderNum = "9")
     private String operateRecord;
+
     @Excel(name = "是否粘下模", orderNum = "10")
     private Integer stickingLower;
 
@@ -117,12 +118,13 @@ public class CycleDetail implements Serializable {
     private Decimal wAngle;
 
     @Excel(name = "更新时间", orderNum = "31", format = "yyyy/MM/dd hh:mm:ss", width = 18)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime updateTime;
+
     @Excel(name = "更新人", orderNum = "32")
     private String updateUser;
 
     @Excel(name = "创建时间", orderNum = "33", format = "yyyy/MM/dd hh:mm:ss", width = 18)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime createTime;
 }
