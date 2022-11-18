@@ -69,12 +69,12 @@
         <el-row>
           <el-col :span="3">
             <el-form-item label="是否粘下模" prop="stickingLower">
-            <el-switch
-                v-model="dataForm.stickingLower"
-                class="ml-2"
-                :active-value="1"
-                :inactive-value="0"
-            />
+              <el-switch
+                  v-model="dataForm.stickingLower"
+                  class="ml-2"
+                  :active-value="1"
+                  :inactive-value="0"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -396,22 +396,21 @@ export default {
         this.filters.machineNames = []
       }
     },
-    handleDownload:function () {
-      if(this.dateTimePickerValue.length !== 2){
+    handleDownload: function () {
+      console.log(this.dateTimePickerValue)
+      if (this.dateTimePickerValue == null || this.dateTimePickerValue.length !== 2) {
         this.$message({message: "请先选择时间段！", type: "error"});
         return
       }
-
       const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
       this.pageRequest.startTime = startTime;
       this.pageRequest.endTime = endTime;
       this.pageRequest.machineNames = this.filters.machineNames;
       downloadExcel(this.pageRequest)
-          .then( (response) => {
+          .then((response) => {
             if (response.headers['content-type'] === 'APPLICATION/OCTET-STREAM') {
               let filename = '模造机模次明细.xlsx'
-              //response.data为下载的文件数据
               let url = window.URL.createObjectURL(new Blob([response.data]))
               let link = document.createElement('a')
               link.style.display = 'none'
@@ -419,14 +418,15 @@ export default {
               link.setAttribute('download', filename)
               document.body.appendChild(link)
               link.click()
-            }})
+            }
+          })
     },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      if(this.dateTimePickerValue.length > 0){
+      if (this.dateTimePickerValue.length > 0) {
         const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
         const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
         this.pageRequest.startTime = startTime;
@@ -508,7 +508,7 @@ export default {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
     }
   },
-  computed:{
+  computed: {
     userRealName() {
       let userName = getUsername()
       let userDetail = getUserDetail()
