@@ -1,9 +1,7 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.aacoptics.common.core.util.UserContextHolder;
-import com.aacoptics.wlg.dashboard.entity.MoldingMachine;
-import com.aacoptics.wlg.dashboard.entity.MoldingParamThreshold;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMachine;
 import com.aacoptics.wlg.dashboard.mapper.MoldingMachineMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

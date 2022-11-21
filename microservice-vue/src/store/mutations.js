@@ -11,9 +11,11 @@ export default {
     },
     clearTags(state) {
         state.tagsList = []
+        state.iframeViews = []
     },
     closeTagsOther(state, data) {
         state.tagsList = data;
+        state.iframeViews = state.iframeViews.filter(item => item.path === data[0].path)
     },
     closeCurrentTag(state, data) {
         for (let i = 0, len = state.tagsList.length; i < len; i++) {
@@ -42,5 +44,16 @@ export default {
     // 侧边栏折叠
     handleCollapse(state, data) {
         state.collapse = data;
-    }
+    },
+    addIframeView(state, data) {
+        if (state.iframeViews.some(v => v.path === data.path)) return
+        state.iframeViews.push(
+            Object.assign({}, data, {
+                title: data.meta.title || 'no-name'
+            })
+        )
+    },
+    delIframeView(state, data) {
+        state.iframeViews = state.iframeViews.filter(item => item.path !== data.path)
+    },
 }

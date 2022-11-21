@@ -74,6 +74,11 @@ public class MaintenanceOrderAndItemVO extends BasePo {
      */
     private String status;
 
+    /**
+     * 设备编号
+     */
+    private String equipNumber;
+
 
     private List<MaintenanceOrderItem> maintenanceOrderItemList;
 

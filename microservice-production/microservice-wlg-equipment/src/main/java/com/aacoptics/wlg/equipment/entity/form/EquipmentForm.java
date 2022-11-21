@@ -188,6 +188,12 @@ public class EquipmentForm extends BaseForm<Equipment> {
     private String deptDirectorId;
 
     /**
+     * 设备编号
+     */
+    @ApiModelProperty(value = "设备编号")
+    private String equipNumber;
+
+    /**
      * 最后点检时间
      */
     @ApiModelProperty(value = "最后点检时间")
@@ -199,4 +205,21 @@ public class EquipmentForm extends BaseForm<Equipment> {
     @TableField(value = "last_maintenance_datetime")
     private LocalDateTime lastMaintenanceDatetime;
 
+    /**
+     * 设备责任人
+     */
+    @ApiModelProperty(value = "设备责任人")
+    private String equipDuty;
+
+    /**
+     * 设备责任人管理
+     */
+    @ApiModelProperty(value = "设备责任人管理")
+    private String equipDutyManager;
+
+    /**
+     * 设备属性
+     */
+    @ApiModelProperty(value = "设备属性")
+    private String equipCategory;
 }

@@ -30,7 +30,7 @@ export default {
     resizeFrame(id) {
       const oIframe = document.getElementById(id);
       const deviceHeight = document.documentElement.clientHeight;
-      oIframe.style.height = (Number(deviceHeight) - 158) + 'px'; //数字是页面布局高度差
+      oIframe.style.height = (Number(deviceHeight) - 123) + 'px'; //数字是页面布局高度差
     }
   }
 }

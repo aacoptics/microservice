@@ -30,6 +30,10 @@ public class StructureData extends BasePo {
     private String wholeDiameterThicknessRatio;
     private String maxAngleR1;
     private String maxAngleR2;
+
+    private String r1MaxHeightDifference;
+    private String r2MaxHeightDifference;
+
     private String r1R2Distance;
     private String middlePartThickness;
     private String bottomDiameterDistance;

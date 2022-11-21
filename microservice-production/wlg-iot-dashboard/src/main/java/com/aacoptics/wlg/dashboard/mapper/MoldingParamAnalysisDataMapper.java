@@ -1,8 +1,7 @@
 package com.aacoptics.wlg.dashboard.mapper;
 
 
-import com.aacoptics.wlg.dashboard.entity.InputReport;
-import com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingParamAnalysisData;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -115,38 +115,57 @@ public class ProcessConditionDataController {
                 for (int i = 0; i < datas.size(); i++) {
                     ProcessConditionData p = datas.get(i);
                     // 获取行
-                    XSSFRow row = sheet.getRow(i + 3);
+                    XSSFRow row = sheet.getRow(i + 4);
                     if (row == null) {
-                        row = sheet.createRow(i + 3);
+                        row = sheet.createRow(i + 4);
                     }
                     row.createCell(0).setCellValue(p.getCategory());
                     row.createCell(1).setCellValue(p.getProject());
                     row.createCell(2).setCellValue(p.getMoldNo());
                     row.createCell(3).setCellValue(p.getPartName());
                     row.createCell(4).setCellValue(p.getMaterial());
-                    row.createCell(5).setCellValue(p.getMoldTemp());
-                    row.createCell(6).setCellValue(p.getMaterialTemp());
-                    row.createCell(7).setCellValue(p.getJetVelocity());
-                    row.createCell(8).setCellValue(p.getVpSwitch());
-                    row.createCell(9).setCellValue(p.getHoldPressure1());
-                    row.createCell(10).setCellValue(p.getHoldPressure2());
-                    row.createCell(11).setCellValue(p.getHoldPressure3());
-                    row.createCell(12).setCellValue(p.getHoldPressure4());
-                    row.createCell(13).setCellValue(p.getHoldPressure5());
-                    row.createCell(14).setCellValue(p.getHoldPressure6());
-                    row.createCell(15).setCellValue(p.getHoldTime1());
-                    row.createCell(16).setCellValue(p.getHoldTime2());
-                    row.createCell(17).setCellValue(p.getHoldTime3());
-                    row.createCell(18).setCellValue(p.getHoldTime4());
-                    row.createCell(19).setCellValue(p.getHoldTime5());
-                    row.createCell(20).setCellValue(p.getHoldTime6());
-                    row.createCell(21).setCellValue(p.getHoldPressureVelocity());
-                    row.createCell(22).setCellValue(p.getPlatenPosition());
-                    row.createCell(23).setCellValue(p.getOpeningSpeed());
-                    row.createCell(24).setCellValue(p.getEjectionSpeed());
-                    row.createCell(25).setCellValue(p.getCoolingTime());
-                    row.createCell(26).setCellValue(p.getClampingForce());
-                    row.createCell(27).setCellValue(p.getPassivation());
+
+                    row.createCell(5).setCellValue(p.getMfMoldTemp());
+                    row.createCell(6).setCellValue(p.getMfMaterialTemp());
+                    row.createCell(7).setCellValue(p.getMfJetVelocity());
+                    row.createCell(8).setCellValue(p.getMfVpSwitch());
+                    row.createCell(9).setCellValue(p.getMfHoldPressure1());
+                    row.createCell(10).setCellValue(p.getMfHoldTime1());
+                    row.createCell(11).setCellValue(p.getMfHoldPressure2());
+                    row.createCell(12).setCellValue(p.getMfHoldTime2());
+                    row.createCell(13).setCellValue(p.getMfHoldPressure3());
+                    row.createCell(14).setCellValue(p.getMfHoldTime3());
+                    row.createCell(15).setCellValue(p.getMfHoldPressure4());
+                    row.createCell(16).setCellValue(p.getMfHoldTime4());
+                    row.createCell(17).setCellValue(p.getMfHoldPressure5());
+                    row.createCell(18).setCellValue(p.getMfHoldTime5());
+                    row.createCell(19).setCellValue(p.getMfHoldPressure6());
+                    row.createCell(20).setCellValue(p.getMfHoldTime6());
+
+
+                    row.createCell(21).setCellValue(p.getMoldTemp());
+                    row.createCell(22).setCellValue(p.getMaterialTemp());
+                    row.createCell(23).setCellValue(p.getJetVelocity());
+                    row.createCell(24).setCellValue(p.getVpSwitch());
+                    row.createCell(25).setCellValue(p.getHoldPressure1());
+                    row.createCell(26).setCellValue(p.getHoldTime1());
+                    row.createCell(27).setCellValue(p.getHoldPressure2());
+                    row.createCell(28).setCellValue(p.getHoldTime2());
+                    row.createCell(29).setCellValue(p.getHoldPressure3());
+                    row.createCell(30).setCellValue(p.getHoldTime3());
+                    row.createCell(31).setCellValue(p.getHoldPressure4());
+                    row.createCell(32).setCellValue(p.getHoldTime4());
+                    row.createCell(33).setCellValue(p.getHoldPressure5());
+                    row.createCell(34).setCellValue(p.getHoldTime5());
+                    row.createCell(35).setCellValue(p.getHoldPressure6());
+                    row.createCell(36).setCellValue(p.getHoldTime6());
+                    row.createCell(37).setCellValue(p.getHoldPressureVelocity());
+                    row.createCell(38).setCellValue(p.getPlatenPosition());
+                    row.createCell(39).setCellValue(p.getOpeningSpeed());
+                    row.createCell(40).setCellValue(p.getEjectionSpeed());
+                    row.createCell(41).setCellValue(p.getCoolingTime());
+                    row.createCell(42).setCellValue(p.getClampingForce());
+                    row.createCell(43).setCellValue(p.getPassivation());
                 }
             }
 
@@ -169,6 +188,36 @@ public class ProcessConditionDataController {
     @PostMapping(value = "/update")
     public Result update(@RequestBody ProcessConditionData processConditionData) {
         return Result.success(processConditionDataService.update(processConditionData));
+    }
+
+    @ApiOperation(value = "获取类别", notes = "获取类别")
+    @GetMapping(value = "/getCategory")
+    public Result getCategory() {
+        return Result.success(processConditionDataService.getCategory());
+    }
+
+    @ApiOperation(value = "获取项目", notes = "获取项目")
+    @GetMapping(value = "/getProject")
+    public Result getProject() {
+        return Result.success(processConditionDataService.getProject());
+    }
+
+    @ApiOperation(value = "获取零件名称", notes = "获取零件名称")
+    @GetMapping(value = "/getPartName")
+    public Result getPartName() {
+        return Result.success(processConditionDataService.getPartName());
+    }
+
+    @ApiOperation(value = "获取材料", notes = "获取材料")
+    @GetMapping(value = "/getMaterial")
+    public Result getMaterial() {
+        return Result.success(processConditionDataService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取模具序号", notes = "获取模具序号")
+    @GetMapping(value = "/getMoldNo")
+    public Result getMoldNo() {
+        return Result.success(processConditionDataService.getMoldNo());
     }
 
 }

@@ -169,15 +169,26 @@
       <el-row>
         <el-col :span="24">
           <el-table :data="analysisData" style="width: 100%">
-            <el-table-column prop="machineName" label="机台号" width="180" />
-            <el-table-column prop="waferId" label="wafer id" width="180" />
-            <el-table-column prop="recipePhase" label="阶段" width="180" />
-            <el-table-column prop="recipeName" label="配方" width="180" />
-            <el-table-column prop="paramName" label="参数" width="180" />
-            <el-table-column prop="avgValue" label="平均值" width="180" />
-            <el-table-column prop="stdValue" label="标准差" width="180" />
-            <el-table-column prop="createTime" label="创建时间" width="180" />
+            <el-table-column label="机台号" prop="machineName" width="180"/>
+            <el-table-column label="wafer id" prop="waferId" width="180"/>
+            <el-table-column label="阶段" prop="recipePhase" width="180"/>
+            <el-table-column label="配方" prop="recipeName" width="180"/>
+            <el-table-column label="参数" prop="paramName" width="180"/>
+            <el-table-column label="平均值" prop="avgValue" width="180"/>
+            <el-table-column label="标准差" prop="stdValue" width="180"/>
+            <el-table-column label="创建时间" prop="createTime" width="180"/>
           </el-table>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="12">
+          <div id="avgLineChart"
+               style="margin-top: 10px;height: 600px; width: 100%"></div>
+        </el-col>
+        <el-col :span="12">
+          <div id="stdLineChart"
+               style="margin-top: 10px;height: 600px; width: 100%"></div>
         </el-col>
       </el-row>
     </div>
@@ -251,103 +262,103 @@ export default {
       ngWaferIds: [],
       waferIdArray: [],
       paramValue: {},
-      analysisData:[],
+      analysisData: [],
       paramNameArray: [
-         "Customer_Input1"
-        ,"customer_temperature_0"
-        ,"customer_temperature_1"
-        ,"customer_temperature_2"
-        ,"customer_temperature_3"
-        ,"customer_temperature_4"
-        ,"customer_temperature_5"
-        ,"customer_temperature_6"
-        ,"customer_temperature_7"
-        ,"exchange_heater_dutycycle_actual"
-        ,"exchange_temp_actual"
-        ,"exchange_temp_control_enabled"
-        ,"exchange_temp_control_setpoint_actual"
-        ,"intermediate_heater_dutycycle_actual"
-        ,"intermediate_temp_actual"
-        ,"intermediate_temp_control_enabled"
-        ,"intermediate_temp_control_setpoint_actual"
-        ,"lc_forming_valve_open"
-        ,"lc_nitrogen_valve_open"
-        ,"lc_pressure_actual"
-        ,"lc_vacuum_valve_open"
-        ,"lc_vent_valve_open"
-        ,"lower_guard_temp_actual"
-        ,"lower_mold_temp_actual"
-        ,"lower_moldcore_section_dutycycle_actual_0"
-        ,"lower_moldcore_section_dutycycle_actual_1"
-        ,"lower_moldcore_section_dutycycle_actual_2"
-        ,"lower_moldcore_section_dutycycle_actual_3"
-        ,"lower_moldcore_section_dutycycle_actual_4"
-        ,"lower_moldcore_section_dutycycle_actual_5"
-        ,"lower_moldcore_section_dutycycle_actual_6"
-        ,"lower_moldcore_section_dutycycle_actual_7"
-        ,"lower_moldcore_section_dutycycle_actual_8"
-        ,"lower_moldcore_section_dutycycle_actual_9"
-        ,"lower_moldcore_section_temp_actual_0"
-        ,"lower_moldcore_section_temp_actual_1"
-        ,"lower_moldcore_section_temp_actual_2"
-        ,"lower_moldcore_section_temp_actual_3"
-        ,"lower_moldcore_section_temp_actual_4"
-        ,"lower_moldcore_section_temp_actual_5"
-        ,"lower_moldcore_section_temp_actual_6"
-        ,"lower_moldcore_section_temp_actual_7"
-        ,"lower_moldcore_section_temp_actual_8"
-        ,"lower_moldcore_section_temp_actual_9"
-        ,"lower_moldcore_temp_control_enabled"
-        ,"lower_moldcore_temp_control_setpoint"
-        ,"mc_forming_valve_open"
-        ,"mc_nitrogen_valve_open"
-        ,"mc_pressure_actual"
-        ,"mc_pressure_control_enabled"
-        ,"mc_pressure_control_setpoint_actual"
-        ,"mc_pressure_control_type"
-        ,"mc_proportional_valve_actual"
-        ,"mc_vacuum_valve_open"
-        ,"press_force_actual"
-        ,"press_force_control_enabled"
-        ,"press_force_control_setpoint"
-        ,"press_force_no_deadweight"
-        ,"press_force_raw"
-        ,"press_position_actual"
-        ,"sideforce_counterpressure_actual"
-        ,"sideforce_lowerU_setpoint_actual"
-        ,"sideforce_lowerV_setpoint_actual"
-        ,"sideforce_lowerW_setpoint_actual"
-        ,"sideforce_upperU_setpoint_actual"
-        ,"sideforce_upperV_setpoint_actual"
-        ,"sideforce_upperW_setpoint_actual"
-        ,"upper_guard_temp_actual"
-        ,"upper_mold_temp_actual"
-        ,"upper_moldcore_section_dutycycle_actual_0"
-        ,"upper_moldcore_section_dutycycle_actual_1"
-        ,"upper_moldcore_section_dutycycle_actual_2"
-        ,"upper_moldcore_section_dutycycle_actual_3"
-        ,"upper_moldcore_section_dutycycle_actual_4"
-        ,"upper_moldcore_section_dutycycle_actual_5"
-        ,"upper_moldcore_section_dutycycle_actual_6"
-        ,"upper_moldcore_section_dutycycle_actual_7"
-        ,"upper_moldcore_section_dutycycle_actual_8"
-        ,"upper_moldcore_section_dutycycle_actual_9"
-        ,"upper_moldcore_section_temp_actual_0"
-        ,"upper_moldcore_section_temp_actual_1"
-        ,"upper_moldcore_section_temp_actual_2"
-        ,"upper_moldcore_section_temp_actual_3"
-        ,"upper_moldcore_section_temp_actual_4"
-        ,"upper_moldcore_section_temp_actual_5"
-        ,"upper_moldcore_section_temp_actual_6"
-        ,"upper_moldcore_section_temp_actual_7"
-        ,"upper_moldcore_section_temp_actual_8"
-        ,"upper_moldcore_section_temp_actual_9"
-        ,"upper_moldcore_temp_control_enabled"
-        ,"upper_moldcore_temp_control_setpoint"
-        ,"vacuumhead_heater_dutycycle_actual"
-        ,"vacuumhead_temp_actual"
-        ,"vacuumhead_temp_control_enabled"
-        ,"vacuumhead_temp_control_setpoint_actual"
+        "Customer_Input1"
+        , "customer_temperature_0"
+        , "customer_temperature_1"
+        , "customer_temperature_2"
+        , "customer_temperature_3"
+        , "customer_temperature_4"
+        , "customer_temperature_5"
+        , "customer_temperature_6"
+        , "customer_temperature_7"
+        , "exchange_heater_dutycycle_actual"
+        , "exchange_temp_actual"
+        , "exchange_temp_control_enabled"
+        , "exchange_temp_control_setpoint_actual"
+        , "intermediate_heater_dutycycle_actual"
+        , "intermediate_temp_actual"
+        , "intermediate_temp_control_enabled"
+        , "intermediate_temp_control_setpoint_actual"
+        , "lc_forming_valve_open"
+        , "lc_nitrogen_valve_open"
+        , "lc_pressure_actual"
+        , "lc_vacuum_valve_open"
+        , "lc_vent_valve_open"
+        , "lower_guard_temp_actual"
+        , "lower_mold_temp_actual"
+        , "lower_moldcore_section_dutycycle_actual_0"
+        , "lower_moldcore_section_dutycycle_actual_1"
+        , "lower_moldcore_section_dutycycle_actual_2"
+        , "lower_moldcore_section_dutycycle_actual_3"
+        , "lower_moldcore_section_dutycycle_actual_4"
+        , "lower_moldcore_section_dutycycle_actual_5"
+        , "lower_moldcore_section_dutycycle_actual_6"
+        , "lower_moldcore_section_dutycycle_actual_7"
+        , "lower_moldcore_section_dutycycle_actual_8"
+        , "lower_moldcore_section_dutycycle_actual_9"
+        , "lower_moldcore_section_temp_actual_0"
+        , "lower_moldcore_section_temp_actual_1"
+        , "lower_moldcore_section_temp_actual_2"
+        , "lower_moldcore_section_temp_actual_3"
+        , "lower_moldcore_section_temp_actual_4"
+        , "lower_moldcore_section_temp_actual_5"
+        , "lower_moldcore_section_temp_actual_6"
+        , "lower_moldcore_section_temp_actual_7"
+        , "lower_moldcore_section_temp_actual_8"
+        , "lower_moldcore_section_temp_actual_9"
+        , "lower_moldcore_temp_control_enabled"
+        , "lower_moldcore_temp_control_setpoint"
+        , "mc_forming_valve_open"
+        , "mc_nitrogen_valve_open"
+        , "mc_pressure_actual"
+        , "mc_pressure_control_enabled"
+        , "mc_pressure_control_setpoint_actual"
+        , "mc_pressure_control_type"
+        , "mc_proportional_valve_actual"
+        , "mc_vacuum_valve_open"
+        , "press_force_actual"
+        , "press_force_control_enabled"
+        , "press_force_control_setpoint"
+        , "press_force_no_deadweight"
+        , "press_force_raw"
+        , "press_position_actual"
+        , "sideforce_counterpressure_actual"
+        , "sideforce_lowerU_setpoint_actual"
+        , "sideforce_lowerV_setpoint_actual"
+        , "sideforce_lowerW_setpoint_actual"
+        , "sideforce_upperU_setpoint_actual"
+        , "sideforce_upperV_setpoint_actual"
+        , "sideforce_upperW_setpoint_actual"
+        , "upper_guard_temp_actual"
+        , "upper_mold_temp_actual"
+        , "upper_moldcore_section_dutycycle_actual_0"
+        , "upper_moldcore_section_dutycycle_actual_1"
+        , "upper_moldcore_section_dutycycle_actual_2"
+        , "upper_moldcore_section_dutycycle_actual_3"
+        , "upper_moldcore_section_dutycycle_actual_4"
+        , "upper_moldcore_section_dutycycle_actual_5"
+        , "upper_moldcore_section_dutycycle_actual_6"
+        , "upper_moldcore_section_dutycycle_actual_7"
+        , "upper_moldcore_section_dutycycle_actual_8"
+        , "upper_moldcore_section_dutycycle_actual_9"
+        , "upper_moldcore_section_temp_actual_0"
+        , "upper_moldcore_section_temp_actual_1"
+        , "upper_moldcore_section_temp_actual_2"
+        , "upper_moldcore_section_temp_actual_3"
+        , "upper_moldcore_section_temp_actual_4"
+        , "upper_moldcore_section_temp_actual_5"
+        , "upper_moldcore_section_temp_actual_6"
+        , "upper_moldcore_section_temp_actual_7"
+        , "upper_moldcore_section_temp_actual_8"
+        , "upper_moldcore_section_temp_actual_9"
+        , "upper_moldcore_temp_control_enabled"
+        , "upper_moldcore_temp_control_setpoint"
+        , "vacuumhead_heater_dutycycle_actual"
+        , "vacuumhead_temp_actual"
+        , "vacuumhead_temp_control_enabled"
+        , "vacuumhead_temp_control_setpoint_actual"
       ],
       //paramValueArray:[],
       selectLoading: false,
@@ -415,10 +426,51 @@ export default {
     getMoldingAnalysisData() {
       const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      getAnalysisData({machineName: this.formParam.machineName, paramNames: this.paramNames, startTime: startTime, endTime: endTime}).then((response) => {
+      getAnalysisData({
+        machineName: this.formParam.machineName,
+        paramNames: this.paramNames,
+        startTime: startTime,
+        endTime: endTime
+      }).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.analysisData = responseData.data
+          const legendInfo = []
+          const serialAvgDataArray = []
+          const serialStdDataArray = []
+          const xAxisInfo = []
+          let tempParam = ''
+          let serialAvgData = {data: []}
+          let serialStdData = {data: []}
+          this.analysisData.forEach(item => {
+            if (item.paramName !== tempParam) {
+              legendInfo.push(item.paramName)
+              if (serialAvgData.data.length > 0)
+                serialAvgDataArray.push(serialAvgData)
+              if (serialStdData.data.length > 0)
+                serialStdDataArray.push(serialStdData)
+              serialAvgData = {
+                name: item.paramName,
+                data: [],
+                type: 'line',
+                smooth: true
+              }
+
+              serialStdData = {
+                name: item.paramName,
+                data: [],
+                type: 'line',
+                smooth: true
+              }
+              tempParam = item.paramName;
+            }
+            if (xAxisInfo.indexOf(item.waferId) === -1)
+              xAxisInfo.push(item.waferId)
+            serialAvgData.data.push(item.avgValue)
+            serialStdData.data.push(item.stdValue)
+          })
+          this.drawAvgLineChart(xAxisInfo, legendInfo, serialAvgDataArray)
+          this.drawStdLineChart(xAxisInfo, legendInfo, serialStdDataArray)
         }
       })
     },
@@ -800,6 +852,70 @@ export default {
         };
         myChart.setOption(option, true);
       }
+
+      option && myChart.setOption(option, true);
+    },
+
+    drawAvgLineChart(xAxisInfo, legendInfo, serialAvgDataArray) {
+      const chartDom = document.getElementById('avgLineChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        xAxis: {
+          type: 'category',
+          data: xAxisInfo
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        legend: {
+          data: legendInfo
+        },
+
+        tooltip: {
+          order: 'valueDesc',
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          },
+          confine: true,
+        },
+        series: serialAvgDataArray
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    drawStdLineChart(xAxisInfo, legendInfo, serialStdDataArray) {
+      const chartDom = document.getElementById('stdLineChart');
+      const myChart = echarts.init(chartDom);
+      let option;
+
+      option = {
+        xAxis: {
+          type: 'category',
+          data: xAxisInfo
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        legend: {
+          data: legendInfo
+        },
+
+        tooltip: {
+          order: 'valueDesc',
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          },
+          confine: true,
+        },
+        series: serialStdDataArray
+      };
 
       option && myChart.setOption(option, true);
     }

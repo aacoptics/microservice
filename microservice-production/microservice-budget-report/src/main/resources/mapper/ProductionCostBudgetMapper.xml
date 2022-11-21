@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.budget.report.mapper.ProductionCostBudgetMapper">
+
+    <select id="findProductionCostBudgetAllYearByUploadLogId" resultType="integer">
+        select distinct year
+        from fb_production_cost_budget
+        where 1=1
+        AND upload_log_id = #{uploadLogId}
+        order by year
+    </select>
+
+
+    <select id="findProductionCostBudgetAllYearByCondition" resultType="integer">
+        select distinct year
+        from fb_production_cost_budget
+        where 1=1
+        <if test="businessDivision != '' and businessDivision != null">
+            AND business_division = #{businessDivision}
+        </if>
+        <if test="productLineList != null and productLineList.size() > 0">
+            AND product_line in
+            <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                #{productLine}
+            </foreach>
+        </if>
+        order by year
+    </select>
+
+
+    <select id="findByBusinessDivisionAndProductLine" resultType="com.aacoptics.budget.report.entity.po.ProductionCostBudget">
+        select top 1 *
+        from fb_production_cost_budget
+        where 1=1
+        AND business_division = #{businessDivision}
+        AND product_line = #{productLine}
+        order by item_seq
+    </select>
+
+
+    <select id="findProductionCostBudgetByUploadLogId" resultType="map">
+    with temp_year_1 as (
+        select *
+        from fb_production_cost_budget
+        where year = #{firstYear}
+          and upload_log_id = #{uploadLogId}),
+        temp_year_2 as (
+             select *
+             from fb_production_cost_budget
+             where year = #{secondYear}
+               and upload_log_id = #{uploadLogId})
+        select
+            temp_year_1.business_division businessDivision,
+            temp_year_1.product_line productLine,
+            temp_year_1.data_version dataVersion,
+            temp_year_1.item_seq itemSeq,
+            temp_year_1.category_1 category1,
+            temp_year_1.category_2 category2,
+            temp_year_1.category_3 category3,
+            temp_year_1.unit unit,
+            temp_year_1.validation validation
+            ${selectColumn}
+        from temp_year_1
+            left join temp_year_2 on temp_year_1.business_division = temp_year_2.business_division
+            and temp_year_1.product_line = temp_year_2.product_line
+            and temp_year_1.data_version = temp_year_2.data_version
+            and temp_year_1.item_seq = temp_year_2.item_seq
+        order by temp_year_1.item_seq
+    </select>
+
+
+
+    <select id="findProductionCostBudgetByCondition" resultType="map">
+    with temp_year_1 as (
+        select *
+        from fb_production_cost_budget
+        where year = #{firstYear}
+            and unit != '%'
+            <if test="verificationPermission == true">
+                AND exists (
+                select 1 from fb_product_line_permission
+                where user_code= #{userCode}
+                and fb_product_line_permission.business_division=fb_production_cost_budget.business_division
+                and fb_product_line_permission.product_line=fb_production_cost_budget.product_line )
+            </if>
+            <if test="businessDivision != '' and businessDivision != null">
+                AND business_division = #{businessDivision}
+            </if>
+            <if test="productLineList != null and productLineList.size() > 0">
+                AND product_line in
+                <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                    #{productLine}
+                </foreach>
+            </if>),
+        temp_year_2 as (
+             select *
+             from fb_production_cost_budget
+             where year = #{secondYear}
+            and unit != '%'
+            <if test="verificationPermission == true">
+                AND exists (
+                select 1 from fb_product_line_permission
+                where user_code= #{userCode}
+                and fb_product_line_permission.business_division=fb_production_cost_budget.business_division
+                and fb_product_line_permission.product_line=fb_production_cost_budget.product_line )
+            </if>
+            <if test="businessDivision != '' and businessDivision != null">
+                AND business_division = #{businessDivision}
+            </if>
+            <if test="productLineList != null and productLineList.size() > 0">
+                AND product_line in
+                <foreach collection="productLineList" separator="," open="(" close=")" item="productLine">
+                    #{productLine}
+                </foreach>
+            </if>),
+            temp_sum as (
+        select
+            temp_year_1.item_seq itemSeq,
+            temp_year_1.category_1 category1,
+            temp_year_1.category_2 category2,
+            temp_year_1.category_3 category3,
+            temp_year_1.unit unit,
+            temp_year_1.validation validation
+            ${selectColumn}
+        from temp_year_1
+            left join temp_year_2 on temp_year_1.business_division = temp_year_2.business_division
+            and temp_year_1.product_line = temp_year_2.product_line
+            and temp_year_1.data_version = temp_year_2.data_version
+            and temp_year_1.item_seq = temp_year_2.item_seq
+            group by temp_year_1.item_seq,
+                    temp_year_1.category_1,
+                    temp_year_1.category_2,
+                    temp_year_1.category_3,
+                    temp_year_1.unit,
+                    temp_year_1.validation)
+        select *
+        from temp_sum
+        union all
+            select 5          itemSeq,
+            '汇总(KRMB)' category1,
+            '毛利率'      category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${grossProfitRateSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 6) b on 1 = 1
+        union all
+            select 8          itemSeq,
+            '汇总(KRMB)' category1,
+            '料成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 7) b on 1 = 1
+        union all
+            select 11         itemSeq,
+            '汇总(KRMB)' category1,
+            '工成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 9) b on 1 = 1
+        union all
+            select 13         itemSeq,
+            '汇总(KRMB)' category1,
+            '费成本占产值比%' category2,
+            ''         category3,
+            '%'        unit,
+            ''         validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 12) b on 1 = 1
+        union all
+            select 15                itemSeq,
+            '汇总(KRMB)'        category1,
+            '租赁/折旧/摊销费用占产值比%' category2,
+            ''                category3,
+            '%'               unit,
+            ''                validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 14) b on 1 = 1
+        union all
+            select 17            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '工装模具摊销占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 16) b on 1 = 1
+        union all
+            select 19             itemSeq,
+            '其中主要费成本构成项目'  category1,
+            '维修与维护成本占产值比%' category2,
+            ''             category3,
+            '%'            unit,
+            ''             validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 18) b on 1 = 1
+        union all
+            select 21            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '耗材成本占产值比%'   category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 20) b on 1 = 1
+        union all
+            select 23              itemSeq,
+            '其中主要费成本构成项目'   category1,
+            '水电气等能源成本占产值比%' category2,
+            ''              category3,
+            '%'             unit,
+            ''              validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 22) b on 1 = 1
+        union all
+            select 26            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '间接人工成本占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 24) b on 1 = 1
+        union all
+            select 28            itemSeq,
+            '其中主要费成本构成项目' category1,
+            '辅助部门费用占产值比%' category2,
+            ''            category3,
+            '%'           unit,
+            ''            validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 27) b on 1 = 1
+        union all
+            select 30                     itemSeq,
+            '其中主要费成本构成项目'          category1,
+            '车间管理费/物流费用/其他成本占产值比%' category2,
+            ''                     category3,
+            '%'                    unit,
+            ''                     validation
+            ${percentSelectColumn}
+            from (
+            select *
+            from temp_sum
+            where itemSeq = 3) a
+            join
+            (select * from temp_sum where itemSeq = 29) b on 1 = 1
+        order by itemSeq
+    </select>
+
+</mapper>

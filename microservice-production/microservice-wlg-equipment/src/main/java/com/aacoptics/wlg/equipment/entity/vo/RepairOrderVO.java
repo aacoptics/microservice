@@ -87,4 +87,9 @@ public class RepairOrderVO extends BasePo {
      */
     private String sourceType;
 
+    /**
+     * 设备编号
+     */
+    private String equipNumber;
+
 }

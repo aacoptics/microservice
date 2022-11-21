@@ -12,6 +12,18 @@ export function findMaintenanceOrderPage(conditions) {
     })
 }
 
+
+export function findMaintenanceOrderDetailPage(conditions) {
+    return request({
+        url: '/wlg-equipment/maintenanceOrder/queryDetail',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
 export function findMaintenanceOrderById(maintenanceId) {
     return request({
         url: '/wlg-equipment/maintenanceOrder/' + maintenanceId,

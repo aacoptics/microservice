@@ -43,6 +43,40 @@ export function getMachineEvents(machineName, startTime, endTime, current, size)
     })
 }
 
+export function getMachineErrors(machineName, startTime, endTime, current, size) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineErrors',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            machineName: machineName,
+            startTime: startTime,
+            endTime: endTime,
+            current: current,
+            size: size
+        }
+    })
+}
+
+export function getMachineAbnormalData(machineName, startTime, endTime, current, size) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineAbnormalData',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            machineName: machineName,
+            startTime: startTime,
+            endTime: endTime,
+            current: current,
+            size: size
+        }
+    })
+}
+
 export function getMoldParamName(params) {
     return request({
         url: '/wlg-iot-dashboard/moldingMachineParam/getMoldParamName',
@@ -168,5 +202,39 @@ export function handleUpdateFeedingAlarm(updateForm) {
             'Content-Type': 'application/json'
         },
         data: updateForm
+    })
+}
+
+export function handleCycleDetailUpdate(updateForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/' + updateForm.id,
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: updateForm
+    })
+}
+
+export function getCycleDetail(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/conditions',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm
+    })
+}
+
+export function downloadExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/downloadExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
     })
 }

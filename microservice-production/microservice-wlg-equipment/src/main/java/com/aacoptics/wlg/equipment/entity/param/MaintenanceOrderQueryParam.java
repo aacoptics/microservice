@@ -46,4 +46,15 @@ public class MaintenanceOrderQueryParam extends BaseParam<MaintenanceOrder> {
      */
     private String status;
 
+    /**
+     * 设备编号
+     */
+    private String equipNumber;
+
+
+    /**
+     * 保养项
+     */
+    private String maintenanceItem;
+
 }

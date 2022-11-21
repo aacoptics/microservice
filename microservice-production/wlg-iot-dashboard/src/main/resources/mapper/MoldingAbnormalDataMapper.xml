@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingAbnormalDataMapper">
+
+    <select id="getMachineAbnormalData" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData">
+        SELECT [id]
+             ,[wafer_id]
+             ,[material_name]
+             ,[project_name]
+             ,[model_name]
+             ,[machine_name]
+             ,[abnormal_param_name]
+             ,[abnormal_type]
+             ,[avg_value]
+             ,[abnormal_value]
+             ,[create_time]
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_abnormal_data]
+        where machine_name = #{machineName}
+          and create_time between #{startTime} and #{endTime}
+        order by id
+    </select>
+</mapper>

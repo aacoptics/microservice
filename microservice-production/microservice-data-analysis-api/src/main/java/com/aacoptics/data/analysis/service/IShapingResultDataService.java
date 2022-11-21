@@ -39,7 +39,10 @@ public interface IShapingResultDataService extends IService<ShapingResultData> {
                                                     String project,
                                                     String partName,
                                                     String material,
-                                                    String moldNo);
+                                                    String moldNo,
+                                                    String searchType,
+                                                    String startValue,
+                                                    String endValue);
 
     /**
      * 根据查询条件获取所有数据
@@ -63,4 +66,34 @@ public interface IShapingResultDataService extends IService<ShapingResultData> {
      * @return
      */
     boolean update(ShapingResultData shapingResultData);
+
+    /**
+     *  获取类别
+     * @return
+     */
+    List<ShapingResultData> getCategory();
+
+    /**
+     *  获取项目
+     * @return
+     */
+    List<ShapingResultData> getProject();
+
+    /**
+     *  获取零件名称
+     * @return
+     */
+    List<ShapingResultData> getPartName();
+
+    /**
+     *  获取材料
+     * @return
+     */
+    List<ShapingResultData> getMaterial();
+
+    /**
+     *  获取模具序号
+     * @return
+     */
+    List<ShapingResultData> getMoldNo();
 }

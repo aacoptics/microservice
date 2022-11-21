@@ -27,4 +27,10 @@ public class InspectionOrderQueryForm extends BaseQueryForm<InspectionOrderQuery
 
     @ApiModelProperty(value = "工单状态")
     private String status;
+
+    @ApiModelProperty(value = "设备编号")
+    private String equipNumber;
+
+    @ApiModelProperty(value = "点检项")
+    private String checkItem;
 }

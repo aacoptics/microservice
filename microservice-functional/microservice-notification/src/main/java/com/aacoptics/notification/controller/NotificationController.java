@@ -1,11 +1,16 @@
 package com.aacoptics.notification.controller;
 
+import com.aacoptics.common.core.exception.ErrorType;
+import com.aacoptics.common.core.exception.SystemErrorType;
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.notification.entity.form.EmailSendForm;
-import com.aacoptics.notification.entity.form.TriggerJobForm;
-import com.aacoptics.notification.entity.form.XxlJobInfoQueryForm;
+import com.aacoptics.notification.entity.form.*;
+import com.aacoptics.notification.entity.param.RobotQueryParam;
+import com.aacoptics.notification.entity.param.UmsContentFeishuMsgHistoryQueryParam;
+import com.aacoptics.notification.entity.po.UmsContentFeishuMsgHistory;
 import com.aacoptics.notification.entity.po.XxlJobInfo;
 import com.aacoptics.notification.entity.vo.FeishuMessage;
+import com.aacoptics.notification.exception.BusinessException;
+import com.aacoptics.notification.exception.CommonErrorType;
 import com.aacoptics.notification.service.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +30,12 @@ public class NotificationController {
     XxlGroupInfoService xxlGroupInfoService;
     @Resource
     SendMessageService sendMessageService;
+
+    @Resource
+    FeishuService feishuService;
+
+    @Resource
+    UmsContentFeishuMsgHistoryService umsContentFeishuMsgHistoryService;
 
     @Resource
     MailService mailService;
@@ -121,5 +132,35 @@ public class NotificationController {
     @PostMapping(value = "/stopNotificationJob/{id}")
     public Result stopNotificationJob(@PathVariable Integer id) {
         return xxlJobInfoService.stop(id);
+    }
+
+    @ApiOperation(value = "查询消息历史记录", notes = "查询消息历史记录")
+    @ApiImplicitParam(name = "id", value = "消息推送计划ID", required = true, dataType = "Integer")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/queryMessageHistory")
+    public Result queryMessageHistory(@Valid @RequestBody UmsContentFeishuMsgHistoryQueryForm umsContentFeishuMsgHistoryQueryForm) {
+        return Result.success(umsContentFeishuMsgHistoryService.query(umsContentFeishuMsgHistoryQueryForm.getPage(), umsContentFeishuMsgHistoryQueryForm.toParam(UmsContentFeishuMsgHistoryQueryParam.class)));
+    }
+
+    @ApiOperation(value = "撤回对应的消息", notes = "撤回对应的消息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "batchId", value = "消息批次ID", required = true, dataType = "String"),
+    })
+    @DeleteMapping(value = "/deleteMessage/{id}")
+    public Result deleteMessage(@PathVariable Long id, @RequestBody UmsContentFeishuMsgHistory umsContentFeishuMsgHistory) {
+        umsContentFeishuMsgHistory.setId(id);
+        try{
+            boolean res = umsContentFeishuMsgHistoryService.deleteMessageByBatchId(umsContentFeishuMsgHistory);
+            if (res)
+                return Result.success();
+            else
+                return Result.fail("撤回失败！");
+        }catch(BusinessException err){
+            return Result.fail(err.getMessage());
+        }
+
+
     }
 }

@@ -88,7 +88,9 @@ export function parseTime(time, pattern) {
     const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
         let value = formatObj[key]
         // Note: getDay() returns 0 on Sunday
-        if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+        if (key === 'a') {
+            return ['日', '一', '二', '三', '四', '五', '六'][value]
+        }
         if (result.length > 0 && value < 10) {
             value = '0' + value
         }
@@ -205,6 +207,7 @@ export function handleTree(data, id, parentId, children) {
             }
         }
     }
+
     return tree;
 }
 
@@ -239,7 +242,8 @@ export function tansParams(params) {
 export function getNormalPath(p) {
     if (p.length === 0 || !p || p == 'undefined') {
         return p
-    };
+    }
+    ;
     let res = p.replace('//', '/')
     if (res[res.length - 1] === '/') {
         return res.slice(0, res.length - 1)

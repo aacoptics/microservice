@@ -1,8 +1,8 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.dashboard.entity.MoldingAnalysisDataParam;
-import com.aacoptics.wlg.dashboard.entity.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingAnalysisDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingDataParam;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -55,6 +55,32 @@ public class MoldingParamController {
                                    @RequestParam Long size) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return Result.success(moldingEventDataService.getMachineEvents(machineName,
+                LocalDateTime.parse(startTime, df),
+                LocalDateTime.parse(endTime, df), new Page(current, size)));
+    }
+
+    @ApiOperation(value = "获取这段时间的错误事件", notes = "获取这段时间的错误事件")
+    @GetMapping(value = "/getMachineErrors")
+    public Result getMachineErrors(@RequestParam String machineName,
+                                   @RequestParam String startTime,
+                                   @RequestParam String endTime,
+                                   @RequestParam Long current,
+                                   @RequestParam Long size) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return Result.success(moldingEventDataService.getMachineErrors(machineName,
+                LocalDateTime.parse(startTime, df),
+                LocalDateTime.parse(endTime, df), new Page(current, size)));
+    }
+
+    @ApiOperation(value = "获取这段时间的异常数据", notes = "获取这段时间的异常数据")
+    @GetMapping(value = "/getMachineAbnormalData")
+    public Result getMachineAbnormalData(@RequestParam String machineName,
+                                   @RequestParam String startTime,
+                                   @RequestParam String endTime,
+                                   @RequestParam Long current,
+                                   @RequestParam Long size) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return Result.success(moldingEventDataService.getMachineAbnormalData(machineName,
                 LocalDateTime.parse(startTime, df),
                 LocalDateTime.parse(endTime, df), new Page(current, size)));
     }

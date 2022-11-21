@@ -42,8 +42,8 @@
 
       </el-row>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
-                :stripe="false" :show-operation="false"
+                :height="400" :highlightCurrentRow="true" :show-operation="false"
+                :showBatchDelete="false" :stripe="false"
                 @findPage="findPage">
       </SysTable>
 
@@ -65,8 +65,8 @@ export default {
         {prop: "machineName", label: "机台号", minWidth: 110},
         {prop: "eventInfo", label: "事件信息", minWidth: 100},
         {prop: "alarmInfo", label: "报警信息", minWidth: 120},
-        {prop: "startTime", label: "开始时间", minWidth: 120},
-        {prop: "endTime", label: "结束时间", minWidth: 100}
+        {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "endTime", label: "结束时间", minWidth: 100, formatter: this.dateTimeFormat}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -108,6 +108,9 @@ export default {
           this.machineNameArray = responseData.data
         }
       })
+    },
+    dateTimeFormat: function (row, column) {
+      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
     },
   },
   mounted() {

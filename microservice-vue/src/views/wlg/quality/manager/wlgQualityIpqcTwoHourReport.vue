@@ -43,10 +43,10 @@
         </el-form>
       </div>
 
-      <SysTable id="condDataTable" ref="sysTable" :columns="columns" :data="pageResult"
-                :height="400" :highlightCurrentRow="true" :pageSize="100000000" :pageSizes="[100000000]"
-                :show-operation="false" :showBatchDelete="false"
-                :cellStyle="changeCellStyle"
+      <SysTable id="condDataTable" ref="sysTable" :cellStyle="changeCellStyle" :columns="columns"
+                :data="pageResult" :height="400" :highlightCurrentRow="true" :pageSize="100000000"
+                :pageSizes="[100000000]" :show-operation="false"
+                :showBatchDelete="false"
                 :showPagination="false"
                 :stripe="false" @findPage="findPage">
       </SysTable>

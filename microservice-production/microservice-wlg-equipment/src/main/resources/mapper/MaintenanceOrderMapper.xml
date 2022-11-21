@@ -15,6 +15,7 @@
         <result property="periodUnit" column="PERIOD_UNIT" />
         <result property="dutyPersonId" column="DUTY_PERSON_ID" />
         <result property="status" column="STATUS" />
+        <result property="equipNumber" column="EQUIP_NUMBER" />
         <result property="createdTime" column="CREATED_TIME"/>
         <result property="createdBy" column="CREATED_BY"/>
         <result property="updatedTime" column="UPDATED_TIME"/>
@@ -62,7 +63,8 @@
                    B.MCH_NAME,
                    B.SPEC,
                    B.TYPE_VERSION,
-                   B.FACTORY_NO
+                   B.FACTORY_NO,
+                   B.EQUIP_NUMBER
             FROM EM_MAINTENANCE_ORDER A
                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
             WHERE 1=1
@@ -81,9 +83,71 @@
             <if test="maintenanceOrderQueryParam.typeVersion != null and maintenanceOrderQueryParam.typeVersion!=''">
                 AND B.TYPE_VERSION = #{maintenanceOrderQueryParam.typeVersion}
             </if>
+            <if test="maintenanceOrderQueryParam.equipNumber != null and maintenanceOrderQueryParam.equipNumber!=''">
+                AND B.EQUIP_NUMBER = #{maintenanceOrderQueryParam.equipNumber}
+            </if>
              ORDER BY A.ORDER_NUMBER
     </select>
 
+
+
+    <select id="findMaintenanceOrderDetailList" resultType="com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderDetailVO">
+        SELECT A.ID,
+        A.ORDER_NUMBER,
+        A.MCH_CODE,
+        A.MAINTENANCE_DATE,
+        A.MAINTENANCE_PERIOD,
+        A.PERIOD_UNIT,
+        A.DUTY_PERSON_ID,
+        A.STATUS,
+        B.MCH_NAME,
+        B.SPEC,
+        B.TYPE_VERSION,
+        B.FACTORY_NO,
+        B.EQUIP_NUMBER,
+        C.MAINTENANCE_ITEM,
+        C.MAINTENANCE_ITEM_STANDARD,
+        C.MIN_VALUE,
+        C.MAX_VALUE,
+        C.ACTUAL_VALUE,
+        C.MAINTENANCE_RESULT,
+        C.IS_EXCEPTION,
+        C.IS_FINISH,
+        C.IS_FAULT,
+        C.FAULT_DESC,
+        C.FAULT_IMAGE_ID,
+        C.IS_REPAIR,
+        C.CREATED_TIME,
+        C.CREATED_BY,
+        C.UPDATED_TIME,
+        C.UPDATED_BY
+        FROM EM_MAINTENANCE_ORDER A
+        LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        LEFT JOIN EM_MAINTENANCE_ORDER_ITEM C ON A.ID = C.MAINTENANCE_ORDER_ID
+        WHERE 1=1
+        <if test="maintenanceOrderQueryParam.mchCode != null and maintenanceOrderQueryParam.mchCode!=''">
+            AND A.MCH_CODE = #{maintenanceOrderQueryParam.mchCode}
+        </if>
+        <if test="maintenanceOrderQueryParam.status != null and maintenanceOrderQueryParam.status!=''">
+            AND A.STATUS = #{maintenanceOrderQueryParam.status}
+        </if>
+        <if test="maintenanceOrderQueryParam.mchName != null and maintenanceOrderQueryParam.mchName!=''">
+            AND B.MCH_NAME = #{maintenanceOrderQueryParam.mchName}
+        </if>
+        <if test="maintenanceOrderQueryParam.spec != null and maintenanceOrderQueryParam.spec!=''">
+            AND B.SPEC = #{maintenanceOrderQueryParam.spec}
+        </if>
+        <if test="maintenanceOrderQueryParam.typeVersion != null and maintenanceOrderQueryParam.typeVersion!=''">
+            AND B.TYPE_VERSION = #{maintenanceOrderQueryParam.typeVersion}
+        </if>
+        <if test="maintenanceOrderQueryParam.equipNumber != null and maintenanceOrderQueryParam.equipNumber!=''">
+            AND B.EQUIP_NUMBER = #{maintenanceOrderQueryParam.equipNumber}
+        </if>
+        <if test="maintenanceOrderQueryParam.maintenanceItem != null and maintenanceOrderQueryParam.maintenanceItem!=''">
+            AND C.MAINTENANCE_ITEM = #{maintenanceOrderQueryParam.maintenanceItem}
+        </if>
+        ORDER BY A.ORDER_NUMBER
+    </select>
 
 
     <select id="findMaintenanceOrderAndItemList" resultMap="MaintenanceOrderAndItemVO">
@@ -103,6 +167,7 @@
         B.SPEC,
         B.TYPE_VERSION,
         B.FACTORY_NO,
+        B.EQUIP_NUMBER,
         C.ID ITEM_ID,
         C.MAINTENANCE_ITEM,
         C.MAINTENANCE_ITEM_STANDARD,
@@ -138,12 +203,15 @@
         <if test="maintenanceOrderQueryParam.typeVersion != null and maintenanceOrderQueryParam.typeVersion!=''">
             AND B.TYPE_VERSION = #{maintenanceOrderQueryParam.typeVersion}
         </if>
+        <if test="maintenanceOrderQueryParam.maintenanceItem != null and maintenanceOrderQueryParam.maintenanceItem!=''">
+            AND C.MAINTENANCE_ITEM = #{maintenanceOrderQueryParam.maintenanceItem}
+        </if>
         ORDER BY A.ORDER_NUMBER
     </select>
 
 
-    <select id="findOrderByMchCode" resultType="com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO">
-        SELECT TOP 1 A.ID,
+    <select id="findOrderByMchCode" resultMap="MaintenanceOrderAndItemVO">
+        SELECT A.ID,
         A.ORDER_NUMBER,
         A.MCH_CODE,
         A.MAINTENANCE_DATE,
@@ -158,13 +226,42 @@
         B.MCH_NAME,
         B.SPEC,
         B.TYPE_VERSION,
-        B.FACTORY_NO
+        B.FACTORY_NO,
+        B.EQUIP_NUMBER,
+        C.ID ITEM_ID,
+        C.MAINTENANCE_ITEM,
+        C.MAINTENANCE_ITEM_STANDARD,
+        C.MIN_VALUE,
+        C.MAX_VALUE,
+        C.ACTUAL_VALUE,
+        C.MAINTENANCE_RESULT,
+        C.IS_EXCEPTION,
+        C.IS_FINISH,
+        C.IS_FAULT,
+        C.FAULT_DESC,
+        C.IS_REPAIR,
+        C.CREATED_TIME ITEM_CREATED_TIME,
+        C.CREATED_BY ITEM_CREATED_BY,
+        C.UPDATED_TIME ITEM_UPDATED_TIME,
+        C.UPDATED_BY ITEM_UPDATED_BY
         FROM EM_MAINTENANCE_ORDER A
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+        LEFT JOIN EM_MAINTENANCE_ORDER_ITEM C ON A.ID = C.MAINTENANCE_ORDER_ID
         WHERE 1=1
-        AND A.MCH_CODE = #{mchCode}
+        AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
         AND A.STATUS IN ('0', '1')
-        ORDER BY A.MAINTENANCE_DATE
+        ORDER BY A.ORDER_NUMBER, A.MAINTENANCE_DATE, C.MAINTENANCE_ITEM
+    </select>
+
+
+    <select id="findMaintenanceTimeoutOrderDutyPersonIdList" resultType="string">
+        SELECT DISTINCT DUTY_PERSON_ID
+        FROM EM_MAINTENANCE_ORDER A
+        WHERE 1 = 1
+        AND A.TIMEOUT_NOTIFICATION = 0
+        AND A.STATUS = 0
+        AND dateadd(m, maintenance_period, maintenance_date) &lt; getdate()
+        ORDER BY A.DUTY_PERSON_ID
     </select>
 
 </mapper>

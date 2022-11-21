@@ -212,6 +212,12 @@ public class Equipment extends BasePo {
     private String equipStateDb;
 
     /**
+     * 设备编号
+     */
+    @TableField(value = "equip_number")
+    private String equipNumber;
+
+    /**
      * 最后点检时间
      */
     @TableField(value = "last_inspection_datetime")
@@ -222,5 +228,23 @@ public class Equipment extends BasePo {
      */
     @TableField(value = "last_maintenance_datetime")
     private LocalDateTime lastMaintenanceDatetime;
+
+    /**
+     * 设备负责人
+     */
+    @TableField(value = "equip_duty")
+    private String equipDuty;
+
+    /**
+     * 设备负责人经理
+     */
+    @TableField(value = "equip_duty_manager")
+    private String equipDutyManager;
+
+    /**
+     * 设备属性（厂务固资、厂务设备、生产固资、生产设备、其他）
+     */
+    @TableField(value = "equip_category")
+    private String equipCategory;
 
 }

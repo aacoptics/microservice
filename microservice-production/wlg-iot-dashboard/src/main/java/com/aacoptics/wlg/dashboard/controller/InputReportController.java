@@ -1,20 +1,14 @@
 package com.aacoptics.wlg.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.wlg.dashboard.entity.InputReport;
-import com.aacoptics.wlg.dashboard.entity.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.entity.po.InputReport;
 import com.aacoptics.wlg.dashboard.service.InputReportService;
-import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @RestController
 @RequestMapping("/InputReport")
