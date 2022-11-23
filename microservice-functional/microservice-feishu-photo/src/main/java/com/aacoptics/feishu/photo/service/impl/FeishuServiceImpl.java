@@ -150,7 +150,8 @@ public class FeishuServiceImpl implements FeishuService {
                 } catch (Exception e)
                 {
                     failEmployeeNo.add(employeeNo);
-                    log.error(i + " 工号【" + employeePhoto + "】, exception:", e);
+                    log.error(i + " 工号【" + employeeNo + "】, exception:" + e.getLocalizedMessage());
+                    log.error(i + " 工号【" + employeeNo + "】, exception:", e);
                     continue;
                 }
                 log.info(i + "工号【" + employeeNo + "】, result:" + result);
