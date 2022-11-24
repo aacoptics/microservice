@@ -265,13 +265,13 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                     markdownGroupMessage.addBlobContent(productType);
                     if (!StringUtils.isEmpty(dayTabProductType)) {
                         if ("-".equals(dayShipPlanQty)) {
-                            markdownGroupMessage.addBlobContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty);
+                            //markdownGroupMessage.addBlobContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty);
                         } else {
                             markdownGroupMessage.addBlobContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty + " K");
                         }
 
                         if ("-".equals(dayShipQty)) {
-                            markdownGroupMessage.addBlobContent(dayTabProductType + "实际出货数量：" + dayShipQty);
+                            //markdownGroupMessage.addBlobContent(dayTabProductType + "实际出货数量：" + dayShipQty);
                         } else {
                             markdownGroupMessage.addBlobContent(dayTabProductType + "实际出货数量：" + dayShipQty + " K");
                         }
@@ -295,7 +295,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                     {
                         if("-".equals(mtdShipPlanQty))
                         {
-                            markdownGroupMessage.addBlobContent(mtdTabProductType + "预测目标出货数量：" + mtdShipPlanQty);
+                            //markdownGroupMessage.addBlobContent(mtdTabProductType + "预测目标出货数量：" + mtdShipPlanQty);
                         }
                         else
                         {
@@ -303,7 +303,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         }
                         if("-".equals(mtdShipQty))
                         {
-                            markdownGroupMessage.addBlobContent(mtdTabProductType + "实际出货数量：" + mtdShipQty);
+                            //markdownGroupMessage.addBlobContent(mtdTabProductType + "实际出货数量：" + mtdShipQty);
                         }
                         else
                         {
@@ -366,13 +366,13 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                     if(!StringUtils.isEmpty(dayTabProductType)) {
                         if("-".equals(dayShipPlanQty))
                         {
-                            markdownGroupMessage.addContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty);
+                            //markdownGroupMessage.addContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty);
                         } else {
                             markdownGroupMessage.addContent(dayTabProductType + "预测出货数量：" + dayShipPlanQty + " K");
                             voiceStr += dayTabProductType + "预测出货数量：" + dayShipPlanQty + " K\n";
                         }
                         if ("-".equals(dayShipQty)) {
-                            markdownGroupMessage.addContent(dayTabProductType + "实际出货数量：" + dayShipQty);
+                            //markdownGroupMessage.addContent(dayTabProductType + "实际出货数量：" + dayShipQty);
                         } else {
                             markdownGroupMessage.addContent(dayTabProductType + "实际出货数量：" + dayShipQty + " K");
                             voiceStr += dayTabProductType + "实际出货数量：" + dayShipQty + " K\n";
@@ -398,7 +398,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                     {
                         if("-".equals(mtdShipPlanQty))
                         {
-                            markdownGroupMessage.addContent(mtdTabProductType + "预测目标出货数量：" + mtdShipPlanQty);
+                            //markdownGroupMessage.addContent(mtdTabProductType + "预测目标出货数量：" + mtdShipPlanQty);
                         }
                         else
                         {
@@ -406,7 +406,7 @@ public class SendSalesDataServiceImpl implements SendSalesDataService {
                         }
                         if("-".equals(mtdShipQty))
                         {
-                            markdownGroupMessage.addContent(mtdTabProductType + "实际出货数量：" + mtdShipQty);
+                            //markdownGroupMessage.addContent(mtdTabProductType + "实际出货数量：" + mtdShipQty);
                         }
                         else
                         {
