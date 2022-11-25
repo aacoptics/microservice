@@ -119,24 +119,30 @@ public class MoldDataController {
                     if (row == null) {
                         row = sheet.createRow(i + 3);
                     }
-                    row.createCell(0).setCellValue(p.getCategory());
-                    row.createCell(1).setCellValue(p.getProject());
-                    row.createCell(2).setCellValue(p.getPartName());
-                    row.createCell(3).setCellValue(p.getMaterial());
-                    row.createCell(4).setCellValue(p.getMoldType());
-                    row.createCell(5).setCellValue(p.getMoldCorePassivation());
-                    row.createCell(6).setCellValue(p.getRunnerType());
-                    row.createCell(7).setCellValue(p.getFirstRunner());
-                    row.createCell(8).setCellValue(p.getSecondRunner());
-                    row.createCell(9).setCellValue(p.getThirdRunner());
-                    row.createCell(10).setCellValue(p.getPartingSurface());
-                    row.createCell(11).setCellValue(p.getSplitPosition());
-                    row.createCell(12).setCellValue(p.getGateType());
-                    row.createCell(13).setCellValue(p.getGateWidth());
-                    row.createCell(14).setCellValue(p.getGateThickness());
-                    row.createCell(15).setCellValue(p.getGateR1Thickness());
-                    row.createCell(16).setCellValue(p.getGateR2Thickness());
-                    row.createCell(17).setCellValue(p.getMoldOpeningType());
+                    row.createCell(0).setCellValue(p.getDepartment());
+                    row.createCell(1).setCellValue(p.getCategory());
+                    row.createCell(2).setCellValue(p.getLensNumber());
+                    row.createCell(3).setCellValue(p.getProject());
+                    row.createCell(4).setCellValue(p.getPartName());
+                    row.createCell(5).setCellValue(p.getMaterial());
+                    row.createCell(6).setCellValue(p.getMoldNo());
+                    row.createCell(7).setCellValue(p.getMoldType());
+                    row.createCell(8).setCellValue(p.getMoldCorePassivation());
+                    row.createCell(9).setCellValue(p.getRunnerType());
+                    row.createCell(10).setCellValue(p.getCavityInnerDiameter());
+                    row.createCell(11).setCellValue(p.getCavityInnerDiameterRange());
+                    row.createCell(12).setCellValue(p.getFirstRunner());
+                    row.createCell(13).setCellValue(p.getSecondRunner());
+                    row.createCell(14).setCellValue(p.getThirdRunner());
+                    row.createCell(15).setCellValue(p.getPartingSurface());
+                    row.createCell(16).setCellValue(p.getSplitPositionR1());
+                    row.createCell(17).setCellValue(p.getSplitPositionR2());
+                    row.createCell(18).setCellValue(p.getGateType());
+                    row.createCell(19).setCellValue(p.getGateWidth());
+                    row.createCell(20).setCellValue(p.getGateThickness());
+                    row.createCell(21).setCellValue(p.getGateR1Thickness());
+                    row.createCell(22).setCellValue(p.getGateR2Thickness());
+                    row.createCell(23).setCellValue(p.getMoldOpeningType());
                 }
             }
 

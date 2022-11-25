@@ -50,13 +50,21 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
                 break;
             }
 
-            String category = dataArray[0];
-            String project = dataArray[1];
-            String partName = dataArray[2];
-            String material = dataArray[3];
+            String department = dataArray[0];
+            String category = dataArray[1];
+            String lensNumber = dataArray[2];
+            String project = dataArray[3];
+            String partName = dataArray[4];
+            String material = dataArray[5];
 
+            if (StringUtils.isEmpty(department)) {
+                throw new BusinessException("第" + (i + 1) + "行，事业部不能为空");
+            }
             if (StringUtils.isEmpty(category)) {
                 throw new BusinessException("第" + (i + 1) + "行，类别不能为空");
+            }
+            if (StringUtils.isEmpty(lensNumber)) {
+                throw new BusinessException("第" + (i + 1) + "行，镜片数不能为空");
             }
             if (StringUtils.isEmpty(project)) {
                 throw new BusinessException("第" + (i + 1) + "行，项目名不能为空");
@@ -74,32 +82,44 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             }
 
 
-            String moldType = dataArray[4];
-            String moldDiameterRate = ExcelUtil.handleDecimal(dataArray[5],2);
-            String flowFrontTemperature = ExcelUtil.handleDecimal(dataArray[6],2);
-            String vpChangePressure = ExcelUtil.handleDecimal(dataArray[7],2);
-            String simulateWireLength = ExcelUtil.handleDecimal(dataArray[8],2);
-            String wholePercent = ExcelUtil.handleDecimal(dataArray[9],2);
-            String effectiveR1 = ExcelUtil.handleDecimal(dataArray[10],2);
-            String effectiveR2 = ExcelUtil.handleDecimal(dataArray[11],2);
-            String ridgeR1 = ExcelUtil.handleDecimal(dataArray[12],2);
-            String ridgeR2 = ExcelUtil.handleDecimal(dataArray[13],2);
-            String refractiveR1 = ExcelUtil.handleDecimal(dataArray[14],0);
-            String refractiveR2 = ExcelUtil.handleDecimal(dataArray[15],0);
-            String competitorName = dataArray[16];
-            String competitorLink = dataArray[17];
-            String assemblyDrawing = pathsMap.get(i + "_" + 18); // 图片路径
+            String moldType = dataArray[6];
+            String runnerType = dataArray[7];
+            String moldDiameterRate = ExcelUtil.handleDecimal(dataArray[8],2);
+            String flowFrontTemperature = ExcelUtil.handleDecimal(dataArray[9],2);
+            String vpChangePressure = ExcelUtil.handleDecimal(dataArray[10],2);
+            String simulateWireLength = ExcelUtil.handleDecimal(dataArray[11],2);
+            String wholePercent = ExcelUtil.handleDecimal(dataArray[12],2);
+            String effectiveR1 = ExcelUtil.handleDecimal(dataArray[13],2);
+            String effectiveR2 = ExcelUtil.handleDecimal(dataArray[14],2);
+            String ridgeR1 = ExcelUtil.handleDecimal(dataArray[15],2);
+            String ridgeR2 = ExcelUtil.handleDecimal(dataArray[16],2);
+            String refractiveR1 = ExcelUtil.handleDecimal(dataArray[17],0);
+            String refractiveR2 = ExcelUtil.handleDecimal(dataArray[18],0);
+            String refractivePicR1 =  pathsMap.get(i + "_" + 19);
+            if(refractivePicR1 == null){
+                refractivePicR1 = "";
+            }
+            String refractivePicR2 =  pathsMap.get(i + "_" + 20);
+            if(refractivePicR2 == null){
+                refractivePicR2 = "";
+            }
+            String competitorName = dataArray[21];
+            String competitorLink = dataArray[22];
+            String assemblyDrawing = pathsMap.get(i + "_" + 23); // 图片路径
             if (assemblyDrawing == null) {
                 assemblyDrawing = "";
             }
 
             // 设置参数
 
+            moldFlowData.setDepartment(department);
             moldFlowData.setCategory(category);
+            moldFlowData.setLensNumber(lensNumber);
             moldFlowData.setProject(project);
             moldFlowData.setPartName(partName);
             moldFlowData.setMaterial(material);
             moldFlowData.setMoldType(moldType);
+            moldFlowData.setRunnerType(runnerType);
             moldFlowData.setMoldDiameterRate(moldDiameterRate);
             moldFlowData.setFlowFrontTemperature(flowFrontTemperature);
             moldFlowData.setVpChangePressure(vpChangePressure);
@@ -111,6 +131,8 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             moldFlowData.setRidgeR2(ridgeR2);
             moldFlowData.setRefractiveR1(refractiveR1);
             moldFlowData.setRefractiveR2(refractiveR2);
+            moldFlowData.setRefractivePicR1(refractivePicR1);
+            moldFlowData.setRefractivePicR2(refractivePicR2);
             moldFlowData.setCompetitorName(competitorName);
             moldFlowData.setCompetitorLink(competitorLink);
             moldFlowData.setAssemblyDrawing(assemblyDrawing);

@@ -153,10 +153,23 @@
           </el-form-item>
           <el-row>
             <el-col :span="8">
+              <el-form-item label="事业部" prop="department">
+                <el-input v-model="dataForm.department" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="类别" prop="category">
                 <el-input v-model="dataForm.category" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-input v-model="dataForm.lensNumber" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="dataForm.project" auto-complete="off" clearable type="textarea"></el-input>
@@ -167,13 +180,14 @@
                 <el-input v-model="dataForm.partName" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="材料" prop="material">
                 <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="光学芯厚(um)" prop="coreThicknessLens">
                 <el-input v-model="dataForm.coreThicknessLens" auto-complete="off" clearable type="textarea"></el-input>
@@ -184,13 +198,14 @@
                 <el-input v-model="dataForm.maxWallThickness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="光学最薄壁厚(um)" prop="minWallThickness">
                 <el-input v-model="dataForm.minWallThickness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="光学最厚/芯厚" prop="maxCoreRatio">
                 <el-input v-model="dataForm.maxCoreRatio" auto-complete="off" clearable type="textarea"></el-input>
@@ -201,8 +216,19 @@
                 <el-input v-model="dataForm.maxMinRatio" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="光学最大角度R1(°)" prop="opticsMaxAngleR1">
+                <el-input v-model="dataForm.opticsMaxAngleR1" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
+
           <el-row>
+            <el-col :span="8">
+              <el-form-item label="光学最大角度R2(°)" prop="opticsMaxAngleR2">
+                <el-input v-model="dataForm.opticsMaxAngleR2" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="8">
               <el-form-item label="整体外径(um)" prop="outerDiameter">
                 <el-input v-model="dataForm.outerDiameter" auto-complete="off" clearable type="textarea"></el-input>
@@ -213,14 +239,15 @@
                 <el-input v-model="dataForm.edgeThickness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="整体最薄壁厚(um)" prop="wholeMinWallThickness">
                 <el-input v-model="dataForm.wholeMinWallThickness" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="整体最厚壁厚(um)" prop="wholeMaxWallThickness">
                 <el-input v-model="dataForm.wholeMaxWallThickness" auto-complete="off" clearable
@@ -232,14 +259,15 @@
                 <el-input v-model="dataForm.wholeMaxMinRatio" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="整体径厚比" prop="wholeDiameterThicknessRatio">
                 <el-input v-model="dataForm.wholeDiameterThicknessRatio" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="整体最大角度R1(°)" prop="maxAngleR1">
                 <el-input v-model="dataForm.maxAngleR1" auto-complete="off" clearable type="textarea"></el-input>
@@ -250,14 +278,15 @@
                 <el-input v-model="dataForm.maxAngleR2" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="整体R1最大高度差(um)" prop="r1MaxHeightDifference">
                 <el-input v-model="dataForm.r1MaxHeightDifference" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="整体R2最大高度差(um)" prop="r2MaxHeightDifference">
                 <el-input v-model="dataForm.r2MaxHeightDifference" auto-complete="off" clearable
@@ -269,14 +298,15 @@
                 <el-input v-model="dataForm.r1R2Distance" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="机构中间部分厚度(um)" prop="middlePartThickness">
                 <el-input v-model="dataForm.middlePartThickness" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="坎合底部到外径距离(um)" prop="bottomDiameterDistance">
                 <el-input v-model="dataForm.bottomDiameterDistance" auto-complete="off" clearable
@@ -289,13 +319,14 @@
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="R1坎合角度(°)" prop="r1KanheAngle">
                 <el-input v-model="dataForm.r1KanheAngle" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="R1坎合高度(um)" prop="r1KanheHeight">
                 <el-input v-model="dataForm.r1KanheHeight" auto-complete="off" clearable type="textarea"></el-input>
@@ -306,13 +337,14 @@
                 <el-input v-model="dataForm.r2KanheAngle" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="R2坎合高度(um)" prop="r2KanheHeight">
                 <el-input v-model="dataForm.r2KanheHeight" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="R1消光位置(粗糙度SRTM)" prop="r1Srtm">
                 <el-input v-model="dataForm.r1Srtm" auto-complete="off" clearable type="textarea"></el-input>
@@ -323,12 +355,39 @@
                 <el-input v-model="dataForm.r2Srtm" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="外径消光位置(粗糙度SRTM)" prop="outerDiameterSrtm">
                 <el-input v-model="dataForm.outerDiameterSrtm" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="R1分割位位置" prop="r1SplitPosition">
+                <el-input v-model="dataForm.r1SplitPosition" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="R2分割位位置" prop="r2SplitPosition">
+                <el-input v-model="dataForm.r2SplitPosition" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="分型面上抬比例" prop="partSurfaceLiftRatio">
+                <el-input v-model="dataForm.partSurfaceLiftRatio" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="机构逃肉" prop="mechanismTrou">
+                <el-input v-model="dataForm.mechanismTrou" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -337,12 +396,13 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" :width="dialogWidth"
+      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" width="340px"
                  @close="closeImg">
         <el-image
-            :fit="contain"
+            style="width: 300px; height: 300px"
+            :fit="fill"
             :src="codeImg"
-            :width="imgWidth" @load="onLoadImg">
+            :preview-src-list="srcList">
         </el-image>
       </el-dialog>
     </div>
@@ -384,7 +444,9 @@ export default {
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
@@ -393,6 +455,8 @@ export default {
         {prop: "minWallThickness", label: "光学最薄壁厚(um)", minWidth: 100},
         {prop: "maxCoreRatio", label: "光学最厚/芯厚", minWidth: 100},
         {prop: "maxMinRatio", label: "光学厚薄比", minWidth: 100},
+        {prop: "opticsMaxAngleR1", label: "最大光学角度R1", minWidth: 100},
+        {prop: "opticsMaxAngleR2", label: "最大光学角度R2", minWidth: 100},
         {prop: "outerDiameter", label: "整体外径(um)", minWidth: 100},
         {prop: "edgeThickness", label: "整体边厚(um)", minWidth: 100},
         {prop: "wholeMinWallThickness", label: "整体最薄壁厚(um)", minWidth: 100},
@@ -413,7 +477,11 @@ export default {
         {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100},
         {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
-        {prop: "outerDiameterSrtm", label: "外径消光位置(粗糙度SRTM)", minWidth: 100, sortable: false}
+        {prop: "r1SplitPosition", label: "R1分割位位置", minWidth: 100, sortable: false},
+        {prop: "r2SplitPosition", label: "R2分割位位置", minWidth: 100, sortable: false},
+        {prop: "outerDiameterSrtm", label: "外径消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
+        {prop: "partSurfaceLiftRatio", label: "分型面上抬比例", minWidth: 100, sortable: false},
+        {prop: "mechanismTrou", label: "机构逃肉", minWidth: 100, sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -425,7 +493,9 @@ export default {
       // 编辑界面数据
       dataForm: {
         id: "0",
+        department: "",
         category: "",
+        lensNumber: "",
         project: "",
         partName: "",
         material: "",
@@ -434,6 +504,8 @@ export default {
         minWallThickness: "",
         maxCoreRatio: "",
         maxMinRatio: "",
+        opticsMaxAngleR1: "",
+        opticsMaxAngleR2: "",
         outerDiameter: "",
         edgeThickness: "",
         wholeMinWallThickness: "",
@@ -454,7 +526,11 @@ export default {
         r2KanheHeight: "",
         r1Srtm: "",
         r2Srtm: "",
+        r1SplitPosition: "",
+        r2SplitPosition: "",
         outerDiameterSrtm: "",
+        partSurfaceLiftRatio: "",
+        mechanismTrou: "",
         assemblyDrawing: "",
         createdBy: "",
         updatedBy: "",
@@ -488,12 +564,15 @@ export default {
         {value: "r1_kanhe_angle", label: "R1坎合角度(°)"},
         {value: "r1_kanhe_height", label: "R1坎合高度(um)"},
         {value: "r2_kanhe_angle", label: "R2坎合角度(°)"},
-        {value: "r2_kanhe_height", label: "R2坎合高度(um)"}
+        {value: "r2_kanhe_height", label: "R2坎合高度(um)"},
+        {value: "optics_max_angle_r1", label: "光学最大角度R1(°)"},
+        {value: "optics_max_angle_r2", label: "光学最大角度R2(°)"}
       ],
       picDialogVisible: false,
       codeImg: "",
       imgWidth: "500px",
-      dialogWidth: "600px"
+      dialogWidth: "600px",
+      srcList: []
     };
   },
   mounted() {
@@ -728,6 +807,7 @@ export default {
           this.picDialogVisible = true
           const url = window.URL.createObjectURL(res.data)
           this.codeImg = url
+          this.srcList.push(url)
         } else {
           ElMessageBox.alert('无相应图片', {
             dangerouslyUseHTMLString: true,
@@ -755,6 +835,7 @@ export default {
     // 关闭图片对话框
     closeImg() {
       this.codeImg = ""
+      this.srcList = []
     }
   }
 };
