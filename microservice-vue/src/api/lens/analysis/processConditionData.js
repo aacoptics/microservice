@@ -126,3 +126,25 @@ export function getMoldNo() {
         }
     })
 }
+
+// 获取事业部
+export function getDepartment() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getDepartment',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+// 获取镜片数
+export function getLensNumber() {
+    return request({
+        url: '/moldflow-data-analysis/processConditionData/getLensNumber',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

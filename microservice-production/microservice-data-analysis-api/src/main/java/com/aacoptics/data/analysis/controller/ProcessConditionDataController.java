@@ -91,7 +91,8 @@ public class ProcessConditionDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
-                queryParams.getMoldNo());
+                queryParams.getDepartment(),
+                queryParams.getLensNumber());
         if (res.getTotal() == 0) {
             return Result.fail(WlgReportErrorType.BUSINESS_EXCEPTION, "查询数据为空！");
         }
@@ -215,10 +216,16 @@ public class ProcessConditionDataController {
         return Result.success(processConditionDataService.getMaterial());
     }
 
-    @ApiOperation(value = "获取模具序号", notes = "获取模具序号")
-    @GetMapping(value = "/getMoldNo")
-    public Result getMoldNo() {
-        return Result.success(processConditionDataService.getMoldNo());
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(processConditionDataService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取事业部")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(processConditionDataService.getLensNumber());
     }
 
 }

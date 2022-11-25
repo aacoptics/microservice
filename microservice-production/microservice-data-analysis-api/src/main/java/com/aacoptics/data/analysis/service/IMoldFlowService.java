@@ -34,10 +34,12 @@ public interface IMoldFlowService extends IService<MoldFlowData> {
      * @return
      */
     IPage<MoldFlowData> getDataByConditions(Page<MoldFlowData> iPage,
-                                             String category,
-                                             String project,
-                                             String partName,
-                                             String material);
+                                            String category,
+                                            String project,
+                                            String partName,
+                                            String material,
+                                            String department,
+                                            String lensNumber);
 
     /**
      * 根据查询条件获取所有数据
@@ -49,7 +51,8 @@ public interface IMoldFlowService extends IService<MoldFlowData> {
 
 
     /**
-     *  根据id删除指定对象
+     * 根据id删除指定对象
+     *
      * @param id
      */
     boolean delete(Long id);
@@ -57,34 +60,55 @@ public interface IMoldFlowService extends IService<MoldFlowData> {
 
     /**
      * 更新数据
+     *
      * @param moldFlowData
      * @return
      */
     boolean update(MoldFlowData moldFlowData);
 
     /**
-     *  获取类别
+     * 获取类别
+     *
      * @return
      */
     List<MoldFlowData> getCategory();
 
     /**
-     *  获取项目
+     * 获取项目
+     *
      * @return
      */
     List<MoldFlowData> getProject();
 
     /**
-     *  获取零件名称
+     * 获取零件名称
+     *
      * @return
      */
     List<MoldFlowData> getPartName();
 
     /**
-     *  获取材料
+     * 获取材料
+     *
      * @return
      */
     List<MoldFlowData> getMaterial();
+
+
+    /**
+     * 获取事业部
+     *
+     * @return
+     */
+    List<MoldFlowData> getDepartment();
+
+
+    /**
+     * 获取镜片数
+     *
+     * @return
+     */
+    List<MoldFlowData> getLensNumber();
 
 
 }

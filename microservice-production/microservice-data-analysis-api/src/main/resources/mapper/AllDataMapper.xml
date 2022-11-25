@@ -219,6 +219,12 @@
         <if test="material != '' and material != null">
             AND pcd.material=#{material}
         </if>
+        <if test="department != '' and department != null">
+            AND pcd.department=#{department}
+        </if>
+        <if test="lensNumber != '' and lensNumber != null">
+            AND pcd.lens_number=#{lensNumber}
+        </if>
     </select>
 
     <select id="getAllDataByConditions" resultType="com.aacoptics.data.analysis.entity.po.AllData">
@@ -438,6 +444,12 @@
         </if>
         <if test="material != '' and material != null">
             AND pcd.material=#{material}
+        </if>
+        <if test="department != '' and department != null">
+            AND pcd.department=#{department}
+        </if>
+        <if test="lensNumber != '' and lensNumber != null">
+            AND pcd.lens_number=#{lensNumber}
         </if>
     </select>
 

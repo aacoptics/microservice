@@ -72,7 +72,7 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
 
-            MoldData moldData = this.getMoldData(category, project, partName, material);
+            MoldData moldData = this.getMoldData(category, project, partName, material, department, lensNumber);
             if (moldData == null) {
                 moldData = new MoldData();
             }
@@ -130,12 +130,15 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
     }
 
     @Override
-    public IPage<MoldData> getDataByConditions(Page<MoldData> iPage, String category, String project, String partName, String material) {
+    public IPage<MoldData> getDataByConditions(Page<MoldData> iPage, String category, String project,
+                                               String partName, String material, String department, String lensNumber) {
         QueryWrapper<MoldData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
         IPage<MoldData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -146,7 +149,9 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
         queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
                 .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
                 .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
+                .eq(StringUtils.isNotBlank(queryParams.getDepartment()), "department", queryParams.getDepartment())
+                .eq(StringUtils.isNotBlank(queryParams.getLensNumber()), "lens_number", queryParams.getLensNumber());
         List<MoldData> moldDatas = moldDataMapper.selectList(queryWrapper);
         return moldDatas;
     }
@@ -193,13 +198,31 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
         return moldDatas;
     }
 
-    private MoldData getMoldData(String category, String project, String partName, String material) {
+    @Override
+    public List<MoldData> getDepartment() {
+        QueryWrapper<MoldData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("department").select("department");
+        List<MoldData> moldDatas = moldDataMapper.selectList(queryWrapper);
+        return moldDatas;
+    }
+
+    @Override
+    public List<MoldData> getLensNumber() {
+        QueryWrapper<MoldData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("lens_number").select("lens_number");
+        List<MoldData> moldDatas = moldDataMapper.selectList(queryWrapper);
+        return moldDatas;
+    }
+
+    private MoldData getMoldData(String category, String project, String partName, String material, String department, String lensNumber) {
 
         QueryWrapper<MoldData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
 
         List<MoldData> moldDataList = moldDataMapper.selectList(queryWrapper);
         if (moldDataList != null && moldDataList.size() > 0) {

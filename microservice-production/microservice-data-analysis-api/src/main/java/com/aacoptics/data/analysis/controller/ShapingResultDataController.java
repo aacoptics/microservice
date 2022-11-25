@@ -94,7 +94,8 @@ public class ShapingResultDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
-                queryParams.getMoldNo(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber(),
                 queryParams.getSearchType(),
                 queryParams.getStartValue(),
                 queryParams.getEndValue());
@@ -276,6 +277,18 @@ public class ShapingResultDataController {
     @GetMapping(value = "/getMoldNo")
     public Result getMoldNo() {
         return Result.success(shapingResultDataService.getMoldNo());
+    }
+
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(shapingResultDataService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取镜片数")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(shapingResultDataService.getLensNumber());
     }
 
 }

@@ -13,13 +13,17 @@ import java.util.List;
 @Mapper
 public interface AllDataMapper extends BaseMapper<AllData> {
     Page<AllData> getAllDataByConditionsWithPage(Page<AllData> page,
-                                         @Param("category") String category,
-                                         @Param("project") String project,
-                                         @Param("partName") String partName,
-                                         @Param("material") String material);
+                                                 @Param("category") String category,
+                                                 @Param("project") String project,
+                                                 @Param("partName") String partName,
+                                                 @Param("material") String material,
+                                                 @Param("department") String department,
+                                                 @Param("lensNumber") String lensNumber);
 
     List<AllData> getAllDataByConditions(@Param("category") String category,
-                             @Param("project") String project,
-                             @Param("partName") String partName,
-                             @Param("material") String material);
+                                         @Param("project") String project,
+                                         @Param("partName") String partName,
+                                         @Param("material") String material,
+                                         @Param("department") String department,
+                                         @Param("lensNumber") String lensNumber);
 }
