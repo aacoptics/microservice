@@ -1,7 +1,6 @@
 package com.aacoptics.data.analysis.service.impl;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
-import com.aacoptics.data.analysis.entity.po.ProcessConditionData;
 import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.exception.BusinessException;
 import com.aacoptics.data.analysis.mapper.ShapingResultDataMapper;
@@ -49,20 +48,26 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 break;
             }
 
-            String category = dataArray[0];
-            String project = dataArray[1];
-            String moldNo = dataArray[2];
-            String partName = dataArray[3];
-            String material = dataArray[4];
+            String department = dataArray[0];
+            String category = dataArray[1];
+            String lensNumber = dataArray[2];
+            String project = dataArray[3];
+            String partName = dataArray[4];
+            String material = dataArray[5];
+            String moldNo = dataArray[6];
+            String moldType = dataArray[7];
 
+            if (StringUtils.isEmpty(department)) {
+                throw new BusinessException("第" + (i + 1) + "行，事业部不能为空");
+            }
             if (StringUtils.isEmpty(category)) {
                 throw new BusinessException("第" + (i + 1) + "行，类别不能为空");
             }
+            if (StringUtils.isEmpty(lensNumber)) {
+                throw new BusinessException("第" + (i + 1) + "行，镜片数不能为空");
+            }
             if (StringUtils.isEmpty(project)) {
                 throw new BusinessException("第" + (i + 1) + "行，项目名不能为空");
-            }
-            if (StringUtils.isEmpty(moldNo)) {
-                throw new BusinessException("第" + (i + 1) + "行，模具序号不能为空");
             }
             if (StringUtils.isEmpty(partName)) {
                 throw new BusinessException("第" + (i + 1) + "行，零件名称不能为空");
@@ -76,65 +81,101 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 shapingResultData = new ShapingResultData();
             }
 
-            String coreThickness = ExcelUtil.handleDecimal(dataArray[5], 1);
-            String coreThicknessRange = ExcelUtil.handleDecimal(dataArray[6], 1);
-            String r1VectorHeight = ExcelUtil.handleDecimal(dataArray[7], 1);
-            String r1VectorHeightRange = ExcelUtil.handleDecimal(dataArray[8], 1);
-            String r2VectorHeight = ExcelUtil.handleDecimal(dataArray[9], 1);
-            String r2VectorHeightRange = ExcelUtil.handleDecimal(dataArray[10], 1);
-            String outerDiameterEcc = ExcelUtil.handleDecimal(dataArray[11], 1);
-            String kanheEcc = ExcelUtil.handleDecimal(dataArray[12], 1);
-            String faceEcc = ExcelUtil.handleDecimal(dataArray[13], 1);
-            String annealingProcess = ExcelUtil.handleDecimal(dataArray[14], 0);
-            String bpKanheRoundness = ExcelUtil.handleDecimal(dataArray[15], 1);
-            String dmpKanheRoundness = ExcelUtil.handleDecimal(dataArray[16], 1);
-            String outerDiameterAverage = ExcelUtil.handleDecimal(dataArray[17], 1);
-            String outerDiameterRange = ExcelUtil.handleDecimal(dataArray[18], 1);
-            String outerDiameterRoundness = ExcelUtil.handleDecimal(dataArray[19], 1);
-            String outerDiameterShrinkage = ExcelUtil.handleDecimal(dataArray[20], 1);
-            String outerDiameterRoughness = ExcelUtil.handleDecimal(dataArray[21], 1);
-            String r1Flatness = ExcelUtil.handleDecimal(dataArray[22], 1);
-            String r2Flatness = ExcelUtil.handleDecimal(dataArray[23], 1);
-            String r1SplitAverage = ExcelUtil.handleDecimal(dataArray[24], 1);
-            String r2SplitAverage = ExcelUtil.handleDecimal(dataArray[25], 1);
-            String wftR1 = ExcelUtil.handleDecimal(dataArray[26], 0);
-            String wftR2 = ExcelUtil.handleDecimal(dataArray[27], 0);
-            String wftConsistency = ExcelUtil.handleDecimal(dataArray[28], 0);
-            String wftMaxAs = ExcelUtil.handleDecimal(dataArray[29], 0);
-            String wftStability = ExcelUtil.handleDecimal(dataArray[30], 0);
-            String cftR1 = ExcelUtil.handleDecimal(dataArray[31], 0);
-            String cftR2 = ExcelUtil.handleDecimal(dataArray[32], 0);
-            String cftConsistency = ExcelUtil.handleDecimal(dataArray[33], 0);
-            String cftMaxAs = ExcelUtil.handleDecimal(dataArray[34], 0);
-            String coatingTrend = pathsMap.get(i + "_" + 35); // 图片路径
+            String coreThickness = ExcelUtil.handleDecimal(dataArray[8], 1);
+            String coreThicknessRange = ExcelUtil.handleDecimal(dataArray[9], 1);
+            String r1VectorHeight = ExcelUtil.handleDecimal(dataArray[10], 1);
+            String r1VectorHeightRange = ExcelUtil.handleDecimal(dataArray[11], 1);
+            String r2VectorHeight = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String r2VectorHeightRange = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String outerDiameterEcc = ExcelUtil.handleDecimal(dataArray[14], 1);
+            String kanheEcc = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String faceEcc = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String annealingProcess = ExcelUtil.handleDecimal(dataArray[17], 0);
+            String bpKanheRoundness = ExcelUtil.handleDecimal(dataArray[18], 1);
+            String dmpKanheRoundness = ExcelUtil.handleDecimal(dataArray[19], 1);
+            String outerDiameterAverage = ExcelUtil.handleDecimal(dataArray[20], 1);
+            String outerDiameterRange = ExcelUtil.handleDecimal(dataArray[21], 1);
+            String outerDiameterRoundness = ExcelUtil.handleDecimal(dataArray[22], 1);
+            String outerDiameterShrinkage = ExcelUtil.handleDecimal(dataArray[23], 1);
+            String outerDiameterRoughness = ExcelUtil.handleDecimal(dataArray[24], 1);
+            String r1Flatness = ExcelUtil.handleDecimal(dataArray[25], 1);
+            String r2Flatness = ExcelUtil.handleDecimal(dataArray[26], 1);
+            String r1SplitAverage = ExcelUtil.handleDecimal(dataArray[27], 1);
+            String r2SplitAverage = ExcelUtil.handleDecimal(dataArray[28], 1);
+            String wftR1 = ExcelUtil.handleDecimal(dataArray[29], 0);
+            String wftR2 = ExcelUtil.handleDecimal(dataArray[30], 0);
+
+            String wftR1Pic = pathsMap.get(i + "_" + 31);
+            if (wftR1Pic == null) {
+                wftR1Pic = "";
+            }
+            String wftR2Pic = pathsMap.get(i + "_" + 32);
+            if (wftR2Pic == null) {
+                wftR2Pic = "";
+            }
+
+            String wftConsistency = ExcelUtil.handleDecimal(dataArray[33], 0);
+            String wftMaxAs = ExcelUtil.handleDecimal(dataArray[34], 0);
+            String wftStability = ExcelUtil.handleDecimal(dataArray[35], 0);
+            String cftR1 = ExcelUtil.handleDecimal(dataArray[36], 0);
+            String cftR2 = ExcelUtil.handleDecimal(dataArray[37], 0);
+
+            String cftR1Pic = pathsMap.get(i + "_" + 38);
+            if (cftR1Pic == null) {
+                cftR1Pic = "";
+            }
+            String cftR2Pic = pathsMap.get(i + "_" + 39);
+            if (cftR2Pic == null) {
+                cftR2Pic = "";
+            }
+
+            String cftConsistency = ExcelUtil.handleDecimal(dataArray[40], 0);
+            String cftMaxAs = ExcelUtil.handleDecimal(dataArray[41], 0);
+            String coatingTrend = pathsMap.get(i + "_" + 42); // 图片路径
             if (coatingTrend == null) {
                 coatingTrend = "";
             }
-            String cfsrR1 = pathsMap.get(i + "_" + 36); // 图片路径
+            String cfsrR1 = pathsMap.get(i + "_" + 43); // 图片路径
             if (cfsrR1 == null) {
                 cfsrR1 = "";
             }
-            String cfsrR2 = pathsMap.get(i + "_" + 37); // 图片路径
+            String cfsrR2 = pathsMap.get(i + "_" + 44); // 图片路径
             if (cfsrR2 == null) {
                 cfsrR2 = "";
             }
-            String cfsrR1R2 = pathsMap.get(i + "_" + 38); // 图片路径
+            String cfsrR1R2 = pathsMap.get(i + "_" + 45); // 图片路径
             if (cfsrR1R2 == null) {
                 cfsrR1R2 = "";
             }
-            String burr = ExcelUtil.handleDecimal(dataArray[39], 1);
-            String weldline = dataArray[40];
-            String appearanceProblem = dataArray[41];
-            String appearanceImg = pathsMap.get(i + "_" + 42); // 图片路径
+            String burr = ExcelUtil.handleDecimal(dataArray[46], 1);
+            String weldline = dataArray[47];
+            String appearanceProblem = dataArray[48];
+            String appearanceImg = pathsMap.get(i + "_" + 49); // 图片路径
             if (appearanceImg == null) {
                 appearanceImg = "";
             }
-            String remarks = dataArray[43];
+            String remarks = dataArray[50];
+
+            String abcFilesNo = dataArray[51];
+            String structureNo = dataArray[52];
+            String moldTypeNo = dataArray[53];
+            String moldCost = dataArray[54];
+            String evtTime = dataArray[55];
+            String dvtTime = dataArray[56];
+            String evtDvtTime = dataArray[57];
+            String evtCost = dataArray[58];
+            String dvtCost = dataArray[59];
+            String evtDvtCost = dataArray[60];
+            String projectMassProduction = dataArray[61];
+
 
             // 设置参数
+            shapingResultData.setDepartment(department);
             shapingResultData.setCategory(category);
+            shapingResultData.setLensNumber(lensNumber);
             shapingResultData.setProject(project);
             shapingResultData.setMoldNo(moldNo);
+            shapingResultData.setMoldType(moldType);
             shapingResultData.setPartName(partName);
             shapingResultData.setMaterial(material);
             shapingResultData.setCoreThickness(coreThickness);
@@ -160,11 +201,15 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
             shapingResultData.setR2SplitAverage(r2SplitAverage);
             shapingResultData.setWftR1(wftR1);
             shapingResultData.setWftR2(wftR2);
+            shapingResultData.setWftR1Pic(wftR1Pic);
+            shapingResultData.setWftR2Pic(wftR2Pic);
             shapingResultData.setWftStability(wftStability);
             shapingResultData.setWftConsistency(wftConsistency);
             shapingResultData.setWftMaxAs(wftMaxAs);
             shapingResultData.setCftR1(cftR1);
             shapingResultData.setCftR2(cftR2);
+            shapingResultData.setCftR1Pic(cftR1Pic);
+            shapingResultData.setCftR2Pic(cftR2Pic);
             shapingResultData.setCftConsistency(cftConsistency);
             shapingResultData.setCftMaxAs(cftMaxAs);
             shapingResultData.setCoatingTrend(coatingTrend);
@@ -176,6 +221,17 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
             shapingResultData.setAppearanceImg(appearanceImg);
             shapingResultData.setAppearanceProblem(appearanceProblem);
             shapingResultData.setRemarks(remarks);
+            shapingResultData.setAbcFilesNo(abcFilesNo);
+            shapingResultData.setStructureNo(structureNo);
+            shapingResultData.setMoldTypeNo(moldTypeNo);
+            shapingResultData.setMoldCost(moldCost);
+            shapingResultData.setEvtTime(evtTime);
+            shapingResultData.setDvtTime(dvtTime);
+            shapingResultData.setEvtDvtTime(evtDvtTime);
+            shapingResultData.setEvtCost(evtCost);
+            shapingResultData.setDvtCost(dvtCost);
+            shapingResultData.setEvtDvtCost(evtDvtCost);
+            shapingResultData.setProjectMassProduction(projectMassProduction);
 
             this.saveOrUpdate(shapingResultData);
 

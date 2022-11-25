@@ -152,6 +152,10 @@ public class FeishuServiceImpl implements FeishuService {
                     failEmployeeNo.add(employeeNo);
                     log.error(i + " 工号【" + employeeNo + "】, exception:" + e.getLocalizedMessage());
                     log.error(i + " 工号【" + employeeNo + "】, exception:", e);
+
+                    //异常时保存照片到本地
+                    this.savePhoto(employeePhoto, employeeNo + ".jpg");
+
                     continue;
                 }
                 log.info(i + "工号【" + employeeNo + "】, result:" + result);
@@ -164,5 +168,31 @@ public class FeishuServiceImpl implements FeishuService {
         } catch (Exception e) {
             log.error("上传照片到飞书异常", e);
         }
+    }
+
+
+
+    /**
+     * 获取图片大小
+     */
+    public void savePhoto(byte[] fileContent, String fileName) throws IOException {
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String photoPath = tempDir + "/feishuPhoto/";
+        File photoDir = new File(photoPath);
+        if (!photoDir.exists()) {
+            photoDir.mkdir();
+        }
+
+        OutputStream sos = Files.newOutputStream(Paths.get(photoPath + fileName));
+        sos.write(fileContent, 0, fileContent.length);
+        sos.flush();
+        sos.close();
+        File image = new File(photoPath + fileName);
+
+        Float size = Float.parseFloat(String.format("%.1f",
+                image.length() / 1024.0 ));
+
+        log.info(fileName + " 图片大小:" + size + "KB");
+
     }
 }

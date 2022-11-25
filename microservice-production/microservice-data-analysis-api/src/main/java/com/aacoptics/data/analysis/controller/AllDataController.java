@@ -83,178 +83,243 @@ public class AllDataController {
                     if (row == null) {
                         row = sheet.createRow(i + 5);
                     }
-                    row.createCell(0).setCellValue(p.getCategory());
-                    row.createCell(1).setCellValue(p.getProject());
-                    row.createCell(2).setCellValue(p.getMoldNo());
-                    row.createCell(3).setCellValue(p.getPartName());
-                    row.createCell(4).setCellValue(p.getMaterial());
-                    row.createCell(5).setCellValue(p.getMfMoldTemp());
-                    row.createCell(6).setCellValue(p.getMfMaterialTemp());
-                    row.createCell(7).setCellValue(p.getMfJetVelocity());
-                    row.createCell(8).setCellValue(p.getMfVpSwitch());
-                    row.createCell(9).setCellValue(p.getMfHoldPressure1());
-                    row.createCell(10).setCellValue(p.getMfHoldTime1());
-                    row.createCell(11).setCellValue(p.getMfHoldPressure2());
-                    row.createCell(12).setCellValue(p.getMfHoldTime2());
-                    row.createCell(13).setCellValue(p.getMfHoldPressure3());
-                    row.createCell(14).setCellValue(p.getMfHoldTime3());
-                    row.createCell(15).setCellValue(p.getMfHoldPressure4());
-                    row.createCell(16).setCellValue(p.getMfHoldTime4());
-                    row.createCell(17).setCellValue(p.getMfHoldPressure5());
-                    row.createCell(18).setCellValue(p.getMfHoldTime5());
-                    row.createCell(19).setCellValue(p.getMfHoldPressure6());
-                    row.createCell(20).setCellValue(p.getMfHoldTime6());
-                    row.createCell(21).setCellValue(p.getMoldTemp());
-                    row.createCell(22).setCellValue(p.getMaterialTemp());
-                    row.createCell(23).setCellValue(p.getJetVelocity());
-                    row.createCell(24).setCellValue(p.getVpSwitch());
-                    row.createCell(25).setCellValue(p.getHoldPressure1());
-                    row.createCell(26).setCellValue(p.getHoldTime1());
-                    row.createCell(27).setCellValue(p.getHoldPressure2());
-                    row.createCell(28).setCellValue(p.getHoldTime2());
-                    row.createCell(29).setCellValue(p.getHoldPressure3());
-                    row.createCell(30).setCellValue(p.getHoldTime3());
-                    row.createCell(31).setCellValue(p.getHoldPressure4());
-                    row.createCell(32).setCellValue(p.getHoldTime4());
-                    row.createCell(33).setCellValue(p.getHoldPressure5());
-                    row.createCell(34).setCellValue(p.getHoldTime5());
-                    row.createCell(35).setCellValue(p.getHoldPressure6());
-                    row.createCell(36).setCellValue(p.getHoldTime6());
-                    row.createCell(37).setCellValue(p.getHoldPressureVelocity());
-                    row.createCell(38).setCellValue(p.getPlatenPosition());
-                    row.createCell(39).setCellValue(p.getOpeningSpeed());
-                    row.createCell(40).setCellValue(p.getEjectionSpeed());
-                    row.createCell(41).setCellValue(p.getCoolingTime());
-                    row.createCell(42).setCellValue(p.getClampingForce());
-                    row.createCell(43).setCellValue(p.getPassivation());
+                    row.createCell(0).setCellValue(p.getDepartment());
+                    row.createCell(1).setCellValue(p.getCategory());
+                    row.createCell(2).setCellValue(p.getLensNumber());
+                    row.createCell(3).setCellValue(p.getProject());
+                    row.createCell(4).setCellValue(p.getPartName());
+                    row.createCell(5).setCellValue(p.getMaterial());
 
-                    row.createCell(44).setCellValue(p.getCoreThickness());
-                    row.createCell(45).setCellValue(p.getCoreThicknessRange());
-                    row.createCell(46).setCellValue(p.getR1VectorHeight());
-                    row.createCell(47).setCellValue(p.getR1VectorHeightRange());
-                    row.createCell(48).setCellValue(p.getR2VectorHeight());
-                    row.createCell(49).setCellValue(p.getR2VectorHeightRange());
-                    row.createCell(50).setCellValue(p.getOuterDiameterEcc());
-                    row.createCell(51).setCellValue(p.getKanheEcc());
-                    row.createCell(52).setCellValue(p.getFaceEcc());
-                    row.createCell(53).setCellValue(p.getAnnealingProcess());
-                    row.createCell(54).setCellValue(p.getBpKanheRoundness());
-                    row.createCell(55).setCellValue(p.getDmpKanheRoundness());
-                    row.createCell(56).setCellValue(p.getOuterDiameterAverage());
-                    row.createCell(57).setCellValue(p.getOuterDiameterRange());
-                    row.createCell(58).setCellValue(p.getOuterDiameterRoundness());
-                    row.createCell(59).setCellValue(p.getOuterDiameterShrinkage());
-                    row.createCell(60).setCellValue(p.getOuterDiameterRoughness());
-                    row.createCell(61).setCellValue(p.getR1Flatness());
-                    row.createCell(62).setCellValue(p.getR2Flatness());
-                    row.createCell(63).setCellValue(p.getR1SplitAverage());
-                    row.createCell(64).setCellValue(p.getR2SplitAverage());
-                    row.createCell(65).setCellValue(p.getWftR1());
-                    row.createCell(66).setCellValue(p.getWftR2());
-                    row.createCell(67).setCellValue(p.getWftConsistency());
-                    row.createCell(68).setCellValue(p.getWftMaxAs());
-                    row.createCell(69).setCellValue(p.getWftStability());
-                    row.createCell(70).setCellValue(p.getCftR1());
-                    row.createCell(71).setCellValue(p.getCftR2());
-                    row.createCell(72).setCellValue(p.getCftConsistency());
-                    row.createCell(73).setCellValue(p.getCftMaxAs());
-                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                    row.createCell(6).setCellValue(p.getPcMoldNo());
+                    row.createCell(7).setCellValue(p.getPcMoldType());
+                    row.createCell(8).setCellValue(p.getMfMoldTemp());
+                    row.createCell(9).setCellValue(p.getMfMaterialTemp());
+                    row.createCell(10).setCellValue(p.getMfJetVelocity());
+                    row.createCell(11).setCellValue(p.getMfVpSwitch());
+                    row.createCell(12).setCellValue(p.getMfHoldPressure1());
+                    row.createCell(13).setCellValue(p.getMfHoldTime1());
+                    row.createCell(14).setCellValue(p.getMfHoldPressure2());
+                    row.createCell(15).setCellValue(p.getMfHoldTime2());
+                    row.createCell(16).setCellValue(p.getMfHoldPressure3());
+                    row.createCell(17).setCellValue(p.getMfHoldTime3());
+                    row.createCell(18).setCellValue(p.getMfHoldPressure4());
+                    row.createCell(19).setCellValue(p.getMfHoldTime4());
+                    row.createCell(20).setCellValue(p.getMfHoldPressure5());
+                    row.createCell(21).setCellValue(p.getMfHoldTime5());
+                    row.createCell(22).setCellValue(p.getMfHoldPressure6());
+                    row.createCell(23).setCellValue(p.getMfHoldTime6());
+                    row.createCell(24).setCellValue(p.getMfCoolingTime()); // 模流冷却时间
+                    row.createCell(25).setCellValue(p.getMoldTemp());
+                    row.createCell(26).setCellValue(p.getMaterialTemp());
+                    row.createCell(27).setCellValue(p.getJetVelocity());
+                    row.createCell(28).setCellValue(p.getVpSwitch());
+                    row.createCell(29).setCellValue(p.getHoldPressure1());
+                    row.createCell(30).setCellValue(p.getHoldTime1());
+                    row.createCell(31).setCellValue(p.getHoldPressure2());
+                    row.createCell(32).setCellValue(p.getHoldTime2());
+                    row.createCell(33).setCellValue(p.getHoldPressure3());
+                    row.createCell(34).setCellValue(p.getHoldTime3());
+                    row.createCell(35).setCellValue(p.getHoldPressure4());
+                    row.createCell(36).setCellValue(p.getHoldTime4());
+                    row.createCell(37).setCellValue(p.getHoldPressure5());
+                    row.createCell(38).setCellValue(p.getHoldTime5());
+                    row.createCell(39).setCellValue(p.getHoldPressure6());
+                    row.createCell(40).setCellValue(p.getHoldTime6());
+                    row.createCell(41).setCellValue(p.getHoldPressureVelocity());
+                    row.createCell(42).setCellValue(p.getPlatenPosition());
+                    row.createCell(43).setCellValue(p.getOpeningSpeed());
+                    row.createCell(44).setCellValue(p.getEjectionSpeed());
+                    row.createCell(45).setCellValue(p.getCoolingTime());
+                    row.createCell(46).setCellValue(p.getClampingForce());
+                    row.createCell(47).setCellValue(p.getPassivation());
+
+
+                    row.createCell(48).setCellValue(p.getSrMoldNo());
+                    row.createCell(49).setCellValue(p.getSrMoldType());
+                    row.createCell(50).setCellValue(p.getCoreThickness());
+                    row.createCell(51).setCellValue(p.getCoreThicknessRange());
+                    row.createCell(52).setCellValue(p.getR1VectorHeight());
+                    row.createCell(53).setCellValue(p.getR1VectorHeightRange());
+                    row.createCell(54).setCellValue(p.getR2VectorHeight());
+                    row.createCell(55).setCellValue(p.getR2VectorHeightRange());
+                    row.createCell(56).setCellValue(p.getOuterDiameterEcc());
+                    row.createCell(57).setCellValue(p.getKanheEcc());
+                    row.createCell(58).setCellValue(p.getFaceEcc());
+                    row.createCell(59).setCellValue(p.getAnnealingProcess());
+                    row.createCell(60).setCellValue(p.getBpKanheRoundness());
+                    row.createCell(61).setCellValue(p.getDmpKanheRoundness());
+                    row.createCell(62).setCellValue(p.getOuterDiameterAverage());
+                    row.createCell(63).setCellValue(p.getOuterDiameterRange());
+                    row.createCell(64).setCellValue(p.getOuterDiameterRoundness());
+                    row.createCell(65).setCellValue(p.getOuterDiameterShrinkage());
+                    row.createCell(66).setCellValue(p.getOuterDiameterRoughness());
+                    row.createCell(67).setCellValue(p.getR1Flatness());
+                    row.createCell(68).setCellValue(p.getR2Flatness());
+                    row.createCell(69).setCellValue(p.getR1SplitAverage());
+                    row.createCell(70).setCellValue(p.getR2SplitAverage());
+                    row.createCell(71).setCellValue(p.getWftR1());
+                    row.createCell(72).setCellValue(p.getWftR2());
+                    if (StringUtils.isEmpty(p.getWftR1Pic())) {
+                        row.createCell(73).setCellValue("");
+                    } else {
+                        row.createCell(73).setCellValue(picPath + "shapingResultData/" + p.getWftR1Pic().substring(0, p.getWftR1Pic().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getWftR2Pic())) {
                         row.createCell(74).setCellValue("");
                     } else {
-                        row.createCell(74).setCellValue(picPath + "shapingResultData/" + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                        row.createCell(74).setCellValue(picPath + "shapingResultData/" + p.getWftR2Pic().substring(0, p.getWftR2Pic().indexOf(".")));
                     }
-                    if (StringUtils.isEmpty(p.getCfsrR1())) {
-                        row.createCell(75).setCellValue("");
+                    row.createCell(75).setCellValue(p.getWftConsistency());
+                    row.createCell(76).setCellValue(p.getWftMaxAs());
+                    row.createCell(77).setCellValue(p.getWftStability());
+                    row.createCell(78).setCellValue(p.getCftR1());
+                    row.createCell(79).setCellValue(p.getCftR2());
+                    if (StringUtils.isEmpty(p.getCftR1Pic())) {
+                        row.createCell(80).setCellValue("");
                     } else {
-                        row.createCell(75).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                        row.createCell(80).setCellValue(picPath + "shapingResultData/" + p.getCftR1Pic().substring(0, p.getCftR1Pic().indexOf(".")));
                     }
-                    if (StringUtils.isEmpty(p.getCfsrR2())) {
-                        row.createCell(76).setCellValue("");
-                    } else {
-                        row.createCell(76).setCellValue(picPath + "shapingResultData/" + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
-                    }
-                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
-                        row.createCell(77).setCellValue("");
-                    } else {
-                        row.createCell(77).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
-                    }
-                    row.createCell(78).setCellValue(p.getBurr());
-                    row.createCell(79).setCellValue(p.getWeldline());
-                    row.createCell(80).setCellValue(p.getAppearanceProblem());
-                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                    if (StringUtils.isEmpty(p.getCftR2Pic())) {
                         row.createCell(81).setCellValue("");
                     } else {
-                        row.createCell(81).setCellValue(picPath + "shapingResultData/" + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                        row.createCell(81).setCellValue(picPath + "shapingResultData/" + p.getCftR2Pic().substring(0, p.getCftR2Pic().indexOf(".")));
                     }
-                    row.createCell(82).setCellValue(p.getRemarks());
+                    row.createCell(82).setCellValue(p.getCftConsistency());
+                    row.createCell(83).setCellValue(p.getCftMaxAs());
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
+                        row.createCell(84).setCellValue("");
+                    } else {
+                        row.createCell(84).setCellValue(picPath + "shapingResultData/" + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(85).setCellValue("");
+                    } else {
+                        row.createCell(85).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(86).setCellValue("");
+                    } else {
+                        row.createCell(86).setCellValue(picPath + "shapingResultData/" + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(87).setCellValue("");
+                    } else {
+                        row.createCell(87).setCellValue(picPath + "shapingResultData/" + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
+                    row.createCell(88).setCellValue(p.getBurr());
+                    row.createCell(89).setCellValue(p.getWeldline());
+                    row.createCell(90).setCellValue(p.getAppearanceProblem());
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(91).setCellValue("");
+                    } else {
+                        row.createCell(91).setCellValue(picPath + "shapingResultData/" + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
+                    row.createCell(92).setCellValue(p.getRemarks());
+                    row.createCell(93).setCellValue(p.getAbcFilesNo());
+                    row.createCell(94).setCellValue(p.getStructureNo());
+                    row.createCell(95).setCellValue(p.getMoldTypeNo());
+                    row.createCell(96).setCellValue(p.getMoldCost());
+                    row.createCell(97).setCellValue(p.getEvtTime());
+                    row.createCell(98).setCellValue(p.getDvtTime());
+                    row.createCell(99).setCellValue(p.getEvtDvtTime());
+                    row.createCell(100).setCellValue(p.getEvtCost());
+                    row.createCell(101).setCellValue(p.getDvtCost());
+                    row.createCell(102).setCellValue(p.getEvtDvtCost());
+                    row.createCell(103).setCellValue(p.getProjectMassProduction());
 
-                    row.createCell(83).setCellValue(p.getCoreThicknessLens());
-                    row.createCell(84).setCellValue(p.getMaxWallThickness());
-                    row.createCell(85).setCellValue(p.getMinWallThickness());
-                    row.createCell(86).setCellValue(p.getMaxCoreRatio());
-                    row.createCell(87).setCellValue(p.getMaxMinRatio());
-                    row.createCell(88).setCellValue(p.getOuterDiameter());
-                    row.createCell(89).setCellValue(p.getEdgeThickness());
-                    row.createCell(90).setCellValue(p.getWholeMinWallThickness());
-                    row.createCell(91).setCellValue(p.getWholeMaxWallThickness());
-                    row.createCell(92).setCellValue(p.getWholeMaxMinRatio());
-                    row.createCell(93).setCellValue(p.getWholeDiameterThicknessRatio());
-                    row.createCell(94).setCellValue(p.getMaxAngleR1());
-                    row.createCell(95).setCellValue(p.getMaxAngleR2());
-                    row.createCell(96).setCellValue(p.getR1MaxHeightDifference());
-                    row.createCell(97).setCellValue(p.getR2MaxHeightDifference());
-                    row.createCell(98).setCellValue(p.getR1R2Distance());
-                    row.createCell(99).setCellValue(p.getMiddlePartThickness());
-                    row.createCell(100).setCellValue(p.getBottomDiameterDistance());
-                    row.createCell(101).setCellValue(p.getMechanismDiameterThicknessRatio());
-                    row.createCell(102).setCellValue(p.getR1KanheAngle());
-                    row.createCell(103).setCellValue(p.getR1KanheHeight());
-                    row.createCell(104).setCellValue(p.getR2KanheAngle());
-                    row.createCell(105).setCellValue(p.getR2KanheHeight());
-                    row.createCell(106).setCellValue(p.getR1Srtm());
-                    row.createCell(107).setCellValue(p.getR2Srtm());
-                    row.createCell(108).setCellValue(p.getOuterDiameterSrtm());
+
+                    row.createCell(104).setCellValue(p.getCoreThicknessLens());
+                    row.createCell(105).setCellValue(p.getMaxWallThickness());
+                    row.createCell(106).setCellValue(p.getMinWallThickness());
+                    row.createCell(107).setCellValue(p.getMaxCoreRatio());
+                    row.createCell(108).setCellValue(p.getMaxMinRatio());
+                    row.createCell(109).setCellValue(p.getOpticsMaxAngleR1());
+                    row.createCell(110).setCellValue(p.getOpticsMaxAngleR2());
+                    row.createCell(111).setCellValue(p.getOuterDiameter());
+                    row.createCell(112).setCellValue(p.getEdgeThickness());
+                    row.createCell(113).setCellValue(p.getWholeMinWallThickness());
+                    row.createCell(114).setCellValue(p.getWholeMaxWallThickness());
+                    row.createCell(115).setCellValue(p.getWholeMaxMinRatio());
+                    row.createCell(116).setCellValue(p.getWholeDiameterThicknessRatio());
+                    row.createCell(117).setCellValue(p.getMaxAngleR1());
+                    row.createCell(118).setCellValue(p.getMaxAngleR2());
+                    row.createCell(119).setCellValue(p.getR1MaxHeightDifference());
+                    row.createCell(120).setCellValue(p.getR2MaxHeightDifference());
+                    row.createCell(121).setCellValue(p.getR1R2Distance());
+                    row.createCell(122).setCellValue(p.getMiddlePartThickness());
+                    row.createCell(123).setCellValue(p.getBottomDiameterDistance());
+                    row.createCell(124).setCellValue(p.getMechanismDiameterThicknessRatio());
+                    row.createCell(125).setCellValue(p.getR1KanheAngle());
+                    row.createCell(126).setCellValue(p.getR1KanheHeight());
+                    row.createCell(127).setCellValue(p.getR2KanheAngle());
+                    row.createCell(128).setCellValue(p.getR2KanheHeight());
+                    row.createCell(129).setCellValue(p.getR1Srtm());
+                    row.createCell(130).setCellValue(p.getR2Srtm());
+                    row.createCell(131).setCellValue(p.getR1SplitPosition());
+                    row.createCell(132).setCellValue(p.getR2SplitPosition());
+                    row.createCell(133).setCellValue(p.getOuterDiameterSrtm());
+                    row.createCell(134).setCellValue(p.getPartSurfaceLiftRatio());
+                    row.createCell(135).setCellValue(p.getMechanismTrou());
                     if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
-                        row.createCell(109).setCellValue("");
+                        row.createCell(136).setCellValue("");
                     } else {
-                        row.createCell(109).setCellValue(picPath + "structureData/" + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                        row.createCell(136).setCellValue(picPath + "structureData/" + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
                     }
 
-                    row.createCell(110).setCellValue(p.getMoldType());
-                    row.createCell(111).setCellValue(p.getMoldDiameterRate());
-                    row.createCell(112).setCellValue(p.getFlowFrontTemperature());
-                    row.createCell(113).setCellValue(p.getVpChangePressure());
-                    row.createCell(114).setCellValue(p.getSimulateWireLength());
-                    row.createCell(115).setCellValue(p.getWholePercent());
-                    row.createCell(116).setCellValue(p.getEffectiveR1());
-                    row.createCell(117).setCellValue(p.getEffectiveR2());
-                    row.createCell(118).setCellValue(p.getRidgeR1());
-                    row.createCell(119).setCellValue(p.getRidgeR2());
-                    row.createCell(120).setCellValue(p.getRefractiveR1());
-                    row.createCell(121).setCellValue(p.getRefractiveR2());
-                    row.createCell(122).setCellValue(p.getCompetitorName());
-                    row.createCell(123).setCellValue(p.getCompetitorLink());
+                    row.createCell(137).setCellValue(p.getMfMoldType());
+                    row.createCell(138).setCellValue(p.getMfRunnerType());
+                    row.createCell(139).setCellValue(p.getMoldDiameterRate());
+                    row.createCell(140).setCellValue(p.getFlowFrontTemperature());
+                    row.createCell(141).setCellValue(p.getVpChangePressure());
+                    row.createCell(142).setCellValue(p.getSimulateWireLength());
+                    row.createCell(143).setCellValue(p.getWholePercent());
+                    row.createCell(144).setCellValue(p.getEffectiveR1());
+                    row.createCell(145).setCellValue(p.getEffectiveR2());
+                    row.createCell(146).setCellValue(p.getRidgeR1());
+                    row.createCell(147).setCellValue(p.getRidgeR2());
+                    row.createCell(148).setCellValue(p.getRefractiveR1());
+                    row.createCell(149).setCellValue(p.getRefractiveR2());
+                    if (StringUtils.isEmpty(p.getRefractivePicR1())) {
+                        row.createCell(150).setCellValue("");
+
+                    } else {
+                        row.createCell(150).setCellValue(picPath + "moldFlowData/" + p.getRefractivePicR1().substring(0, p.getRefractivePicR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getRefractivePicR2())) {
+                        row.createCell(151).setCellValue("");
+
+                    } else {
+                        row.createCell(151).setCellValue(picPath + "moldFlowData/" + p.getRefractivePicR2().substring(0, p.getRefractivePicR2().indexOf(".")));
+                    }
+                    row.createCell(152).setCellValue(p.getCompetitorName());
+                    row.createCell(153).setCellValue(p.getCompetitorLink());
                     if (StringUtils.isEmpty(p.getCompetitorAssemblyDrawing())) {
-                        row.createCell(124).setCellValue("");
+                        row.createCell(154).setCellValue("");
 
                     } else {
-                        row.createCell(124).setCellValue(picPath + "moldFlowData/" + p.getCompetitorAssemblyDrawing().substring(0, p.getCompetitorAssemblyDrawing().indexOf(".")));
+                        row.createCell(154).setCellValue(picPath + "moldFlowData/" + p.getCompetitorAssemblyDrawing().substring(0, p.getCompetitorAssemblyDrawing().indexOf(".")));
 
                     }
 
-                    row.createCell(125).setCellValue(p.getMoldCorePassivation());
-                    row.createCell(126).setCellValue(p.getRunnerType());
-                    row.createCell(127).setCellValue(p.getFirstRunner());
-                    row.createCell(128).setCellValue(p.getSecondRunner());
-                    row.createCell(129).setCellValue(p.getThirdRunner());
-                    row.createCell(130).setCellValue(p.getPartingSurface());
-                    row.createCell(131).setCellValue(p.getSplitPosition());
-                    row.createCell(132).setCellValue(p.getGateType());
-                    row.createCell(133).setCellValue(p.getGateWidth());
-                    row.createCell(134).setCellValue(p.getGateThickness());
-                    row.createCell(135).setCellValue(p.getGateR1Thickness());
-                    row.createCell(136).setCellValue(p.getGateR2Thickness());
-                    row.createCell(137).setCellValue(p.getMoldOpeningType());
+
+                    row.createCell(155).setCellValue(p.getMdMoldNo());
+                    row.createCell(156).setCellValue(p.getMdMoldType());
+                    row.createCell(157).setCellValue(p.getMoldCorePassivation());
+                    row.createCell(158).setCellValue(p.getMdRunnerType());
+                    row.createCell(159).setCellValue(p.getCavityInnerDiameter());
+                    row.createCell(160).setCellValue(p.getCavityInnerDiameterRange());
+                    row.createCell(161).setCellValue(p.getFirstRunner());
+                    row.createCell(162).setCellValue(p.getSecondRunner());
+                    row.createCell(163).setCellValue(p.getThirdRunner());
+                    row.createCell(164).setCellValue(p.getPartingSurface());
+                    row.createCell(165).setCellValue(p.getSplitPositionR1());
+                    row.createCell(166).setCellValue(p.getSplitPositionR2());
+                    row.createCell(167).setCellValue(p.getGateType());
+                    row.createCell(168).setCellValue(p.getGateWidth());
+                    row.createCell(169).setCellValue(p.getGateThickness());
+                    row.createCell(170).setCellValue(p.getGateR1Thickness());
+                    row.createCell(171).setCellValue(p.getGateR2Thickness());
+                    row.createCell(172).setCellValue(p.getMoldOpeningType());
                 }
             }
         } catch (Exception e) {

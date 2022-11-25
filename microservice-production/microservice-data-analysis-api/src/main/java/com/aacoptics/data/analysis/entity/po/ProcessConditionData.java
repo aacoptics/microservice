@@ -13,12 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("t_process_condition_data")
 public class ProcessConditionData extends BasePo {
+    private String department; //事业部
+    private String lensNumber; // 镜片数
     private String category;
     private String project;
     private String partName;
     private String material;
     private String moldNo;
-
+    private String moldType; //模具类型
     private String mfMoldTemp;
     private String mfMaterialTemp;
     private String mfJetVelocity;
@@ -35,7 +37,7 @@ public class ProcessConditionData extends BasePo {
     private String mfHoldTime5;
     private String mfHoldPressure6;
     private String mfHoldTime6;
-
+    private String mfCoolingTime; //模流冷却时间
     private String moldTemp;
     private String materialTemp;
     private String jetVelocity;
@@ -52,7 +54,6 @@ public class ProcessConditionData extends BasePo {
     private String holdTime5;
     private String holdPressure6;
     private String holdTime6;
-
     private String holdPressureVelocity;
     private String platenPosition;
     private String openingSpeed;

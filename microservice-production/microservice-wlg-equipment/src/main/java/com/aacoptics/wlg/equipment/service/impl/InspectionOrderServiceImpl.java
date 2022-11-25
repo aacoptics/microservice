@@ -207,7 +207,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 
                     LocalDateTime shiftStartTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getStartTime(), dateTimeFormatter);
-                    LocalDateTime shiftEndTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getStartTime(), dateTimeFormatter);
+                    LocalDateTime shiftEndTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getEndTime(), dateTimeFormatter);
                     //班次结束时间小于开始时间，说明跨天，结束时间需要加一天
                     if(shiftStartTime.isAfter(shiftEndTime))
                     {

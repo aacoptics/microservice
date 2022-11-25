@@ -124,10 +124,23 @@
           </el-form-item>
           <el-row>
             <el-col :span="8">
+              <el-form-item label="事业部" prop="department">
+                <el-input v-model="dataForm.department" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="类别" prop="category">
                 <el-input v-model="dataForm.category" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-input v-model="dataForm.lensNumber" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="dataForm.project" auto-complete="off" clearable type="textarea"></el-input>
@@ -138,12 +151,17 @@
                 <el-input v-model="dataForm.partName" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="材料" prop="material">
+                <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="材料" prop="material">
-                <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
+              <el-form-item label="模具序号" prop="moldNo">
+                <el-input v-model="dataForm.moldNo" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -166,6 +184,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
+              <el-form-item label="型腔内径" prop="cavityInnerDiameter">
+                <el-input v-model="dataForm.cavityInnerDiameter" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="型腔内径极差" prop="cavityInnerDiameterRange">
+                <el-input v-model="dataForm.cavityInnerDiameterRange" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
               <el-form-item label="一级分流道(mm)" prop="firstRunner">
                 <el-input v-model="dataForm.firstRunner" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
@@ -175,22 +206,27 @@
                 <el-input v-model="dataForm.secondRunner" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="8">
               <el-form-item label="三级分流道(mm) " prop="thirdRunner">
                 <el-input v-model="dataForm.thirdRunner" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
-              <el-form-item label="分型面(um)" prop="partingSurface">
+              <el-form-item label="分型面排气(um)" prop="partingSurface">
                 <el-input v-model="dataForm.partingSurface" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="分割位(um)" prop="splitPosition">
-                <el-input v-model="dataForm.splitPosition" auto-complete="off" clearable type="textarea"></el-input>
+              <el-form-item label="R1分割位排气(um)" prop="splitPositionR1">
+                <el-input v-model="dataForm.splitPositionR1" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="R2分割位排气(um)" prop="splitPositionR2">
+                <el-input v-model="dataForm.splitPositionR2" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -273,18 +309,24 @@ export default {
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
+        {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
         {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100, sortable: false},
         {prop: "runnerType", label: "流道类型", minWidth: 100, sortable: false},
+        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100},
+        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100},
         {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
         {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
         {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
-        {prop: "partingSurface", label: "分型面(um)", minWidth: 100},
-        {prop: "splitPosition", label: "分割位(um)", minWidth: 100},
+        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100},
+        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100},
+        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100},
         {prop: "gateType", label: "浇口类型", minWidth: 100, sortable: false},
         {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
         {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
@@ -306,14 +348,18 @@ export default {
         project: "",
         partName: "",
         material: "",
+        moldNo: "",
         moldType: "",
         moldCorePassivation: "",
         runnerType: "",
+        cavityInnerDiameter: "",
+        cavityInnerDiameterRange: "",
         firstRunner: "",
         secondRunner: "",
         thirdRunner: "",
         partingSurface: "",
-        splitPosition: "",
+        splitPositionR1: "",
+        splitPositionR2: "",
         gateType: "",
         gateWidth: "",
         gateThickness: "",
@@ -399,8 +445,9 @@ export default {
               responseData.data.records.map((value) => {
                 for (let key in value) {
                   if (key === 'firstRunner' || key === 'secondRunner' || key === 'thirdRunner' ||
-                      key === 'partingSurface' || key === 'splitPosition' || key === 'gateWidth' ||
-                      key === 'gateThickness' || key === 'gateR1Thickness' || key === 'gateR2Thickness') {
+                      key === 'partingSurface' || key === 'splitPositionR1' || key === 'gateWidth' ||
+                      key === 'gateThickness' || key === 'gateR1Thickness' || key === 'gateR2Thickness' ||
+                      key === 'cavityInnerDiameter' || key === 'cavityInnerDiameterRange' || key === 'splitPositionR2') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])
