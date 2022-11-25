@@ -1,5 +1,6 @@
 package com.aacoptics.okr.core.service;
 
+import cn.hutool.json.JSONObject;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class FeishuServiceTest {
 
     @Test
     public void getFeishuUsers() {
+        String auth  = feishuService.getUserAuth("a57u2a8b207841dbb13fdbc6657e962f");
         //List<TreeModel> res = objectiveDetailService.getUserObjectiveTree("60054916", 2L);
         //List<FeishuUser> feishuUsers = feishuService.getFeishuUsers("60054916");
         String asd = "";

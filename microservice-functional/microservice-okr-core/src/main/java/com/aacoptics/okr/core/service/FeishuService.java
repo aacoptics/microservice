@@ -58,6 +58,10 @@ public interface FeishuService {
 
     String fetchChatIdByRobot(String chatName);
 
+    String getUserAuth(String authCode);
+
+    FeishuUser getFeishuUserByAuthCode(String authCode);
+
     JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
     boolean deleteMessage(String messageId);
