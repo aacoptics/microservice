@@ -42,20 +42,24 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
                 break;
             }
 
-            String category = dataArray[0];
-            String project = dataArray[1];
-            String moldNo = dataArray[2];
-            String partName = dataArray[3];
-            String material = dataArray[4];
+            String department = dataArray[0];
+            String category = dataArray[1];
+            String lensNumber = dataArray[2];
+            String project = dataArray[3];
+            String partName = dataArray[4];
+            String material = dataArray[5];
 
+            if (StringUtils.isEmpty(department)) {
+                throw new BusinessException("第" + (i + 1) + "行，事业部不能为空");
+            }
             if (StringUtils.isEmpty(category)) {
                 throw new BusinessException("第" + (i + 1) + "行，类别不能为空");
             }
+            if (StringUtils.isEmpty(lensNumber)) {
+                throw new BusinessException("第" + (i + 1) + "行，镜片数不能为空");
+            }
             if (StringUtils.isEmpty(project)) {
                 throw new BusinessException("第" + (i + 1) + "行，项目名不能为空");
-            }
-            if (StringUtils.isEmpty(moldNo)) {
-                throw new BusinessException("第" + (i + 1) + "行，模具序号不能为空");
             }
             if (StringUtils.isEmpty(partName)) {
                 throw new BusinessException("第" + (i + 1) + "行，零件名称不能为空");
@@ -63,59 +67,63 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             if (StringUtils.isEmpty(material)) {
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
-
+            String moldNo = dataArray[6];
             ProcessConditionData processConditionData = this.getProcessConditionData(category, project, partName, material, moldNo);
             if (processConditionData == null) {
                 processConditionData = new ProcessConditionData();
             }
 
-            String mfMoldTemp = ExcelUtil.handleDecimal(dataArray[5],0);
-            String mfMaterialTemp = ExcelUtil.handleDecimal(dataArray[6],0);
-            String mfJetVelocity = ExcelUtil.handleDecimal(dataArray[7],0);
-            String mfVpSwitch = ExcelUtil.handleDecimal(dataArray[8],0);
-            String mfHoldPressure1 = ExcelUtil.handleDecimal(dataArray[9],0);
-            String mfHoldTime1 = ExcelUtil.handleDecimal(dataArray[10],0);
-            String mfHoldPressure2 = ExcelUtil.handleDecimal(dataArray[11],0);
-            String mfHoldTime2 = ExcelUtil.handleDecimal(dataArray[12],0);
-            String mfHoldPressure3 = ExcelUtil.handleDecimal(dataArray[13],0);
-            String mfHoldTime3 = ExcelUtil.handleDecimal(dataArray[14],0);
-            String mfHoldPressure4 = ExcelUtil.handleDecimal(dataArray[15],0);
-            String mfHoldTime4 = ExcelUtil.handleDecimal(dataArray[16],0);
-            String mfHoldPressure5 = ExcelUtil.handleDecimal(dataArray[17],0);
-            String mfHoldTime5 = ExcelUtil.handleDecimal(dataArray[18],0);
-            String mfHoldPressure6 = ExcelUtil.handleDecimal(dataArray[19],0);
-            String mfHoldTime6 = ExcelUtil.handleDecimal(dataArray[20],0);
-            String moldTemp = ExcelUtil.handleDecimal(dataArray[21],0);
-            String materialTemp = ExcelUtil.handleDecimal(dataArray[22],0);
-            String jetVelocity = ExcelUtil.handleDecimal(dataArray[23],0);
-            String vpSwitch = ExcelUtil.handleDecimal(dataArray[24],0);
-            String holdPressure1 = ExcelUtil.handleDecimal(dataArray[25],0);
-            String holdTime1 = ExcelUtil.handleDecimal(dataArray[26],0);
-            String holdPressure2 = ExcelUtil.handleDecimal(dataArray[27],0);
-            String holdTime2 = ExcelUtil.handleDecimal(dataArray[28],0);
-            String holdPressure3 = ExcelUtil.handleDecimal(dataArray[29],0);
-            String holdTime3 = ExcelUtil.handleDecimal(dataArray[30],0);
-            String holdPressure4 = ExcelUtil.handleDecimal(dataArray[31],0);
-            String holdTime4 = ExcelUtil.handleDecimal(dataArray[32],0);
-            String holdPressure5 = ExcelUtil.handleDecimal(dataArray[33],0);
-            String holdTime5 = ExcelUtil.handleDecimal(dataArray[34],0);
-            String holdPressure6 = ExcelUtil.handleDecimal(dataArray[35],0);
-            String holdTime6 = ExcelUtil.handleDecimal(dataArray[36],0);
-            String holdPressureVelocity = ExcelUtil.handleDecimal(dataArray[37],0);
-            String platenPosition = ExcelUtil.handleDecimal(dataArray[38],0);
-            String openingSpeed = ExcelUtil.handleDecimal(dataArray[39],0);
-            String ejectionSpeed = ExcelUtil.handleDecimal(dataArray[40],0);
-            String coolingTime = ExcelUtil.handleDecimal(dataArray[41],0);
-            String clampingForce = ExcelUtil.handleDecimal(dataArray[42],0);
-            String passivation = dataArray[43];
+            String moldType = dataArray[7];
+            String mfMoldTemp = ExcelUtil.handleDecimal(dataArray[8], 0);
+            String mfMaterialTemp = ExcelUtil.handleDecimal(dataArray[9], 0);
+            String mfJetVelocity = ExcelUtil.handleDecimal(dataArray[10], 0);
+            String mfVpSwitch = ExcelUtil.handleDecimal(dataArray[11], 0);
+            String mfHoldPressure1 = ExcelUtil.handleDecimal(dataArray[12], 0);
+            String mfHoldTime1 = ExcelUtil.handleDecimal(dataArray[13], 0);
+            String mfHoldPressure2 = ExcelUtil.handleDecimal(dataArray[14], 0);
+            String mfHoldTime2 = ExcelUtil.handleDecimal(dataArray[15], 0);
+            String mfHoldPressure3 = ExcelUtil.handleDecimal(dataArray[16], 0);
+            String mfHoldTime3 = ExcelUtil.handleDecimal(dataArray[17], 0);
+            String mfHoldPressure4 = ExcelUtil.handleDecimal(dataArray[18], 0);
+            String mfHoldTime4 = ExcelUtil.handleDecimal(dataArray[19], 0);
+            String mfHoldPressure5 = ExcelUtil.handleDecimal(dataArray[20], 0);
+            String mfHoldTime5 = ExcelUtil.handleDecimal(dataArray[21], 0);
+            String mfHoldPressure6 = ExcelUtil.handleDecimal(dataArray[22], 0);
+            String mfHoldTime6 = ExcelUtil.handleDecimal(dataArray[23], 0);
+            String mfCoolingTime = ExcelUtil.handleDecimal(dataArray[24], 0);
+            String moldTemp = ExcelUtil.handleDecimal(dataArray[25], 0);
+            String materialTemp = ExcelUtil.handleDecimal(dataArray[26], 0);
+            String jetVelocity = ExcelUtil.handleDecimal(dataArray[27], 0);
+            String vpSwitch = ExcelUtil.handleDecimal(dataArray[28], 0);
+            String holdPressure1 = ExcelUtil.handleDecimal(dataArray[29], 0);
+            String holdTime1 = ExcelUtil.handleDecimal(dataArray[30], 0);
+            String holdPressure2 = ExcelUtil.handleDecimal(dataArray[31], 0);
+            String holdTime2 = ExcelUtil.handleDecimal(dataArray[32], 0);
+            String holdPressure3 = ExcelUtil.handleDecimal(dataArray[33], 0);
+            String holdTime3 = ExcelUtil.handleDecimal(dataArray[34], 0);
+            String holdPressure4 = ExcelUtil.handleDecimal(dataArray[35], 0);
+            String holdTime4 = ExcelUtil.handleDecimal(dataArray[36], 0);
+            String holdPressure5 = ExcelUtil.handleDecimal(dataArray[37], 0);
+            String holdTime5 = ExcelUtil.handleDecimal(dataArray[38], 0);
+            String holdPressure6 = ExcelUtil.handleDecimal(dataArray[39], 0);
+            String holdTime6 = ExcelUtil.handleDecimal(dataArray[40], 0);
+            String holdPressureVelocity = ExcelUtil.handleDecimal(dataArray[41], 0);
+            String platenPosition = ExcelUtil.handleDecimal(dataArray[42], 0);
+            String openingSpeed = ExcelUtil.handleDecimal(dataArray[43], 0);
+            String ejectionSpeed = ExcelUtil.handleDecimal(dataArray[44], 0);
+            String coolingTime = ExcelUtil.handleDecimal(dataArray[45], 0);
+            String clampingForce = ExcelUtil.handleDecimal(dataArray[46], 0);
+            String passivation = dataArray[47];
 
             // 设置参数
+            processConditionData.setDepartment(department);
             processConditionData.setCategory(category);
+            processConditionData.setLensNumber(lensNumber);
             processConditionData.setProject(project);
-            processConditionData.setMoldNo(moldNo);
             processConditionData.setPartName(partName);
             processConditionData.setMaterial(material);
-
+            processConditionData.setMoldNo(moldNo);
+            processConditionData.setMoldType(moldType);
             processConditionData.setMfMoldTemp(mfMoldTemp);
             processConditionData.setMfMaterialTemp(mfMaterialTemp);
             processConditionData.setMfJetVelocity(mfJetVelocity);
@@ -132,7 +140,7 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             processConditionData.setMfHoldTime4(mfHoldTime4);
             processConditionData.setMfHoldTime5(mfHoldTime5);
             processConditionData.setMfHoldTime6(mfHoldTime6);
-
+            processConditionData.setMfCoolingTime(mfCoolingTime);
             processConditionData.setMoldTemp(moldTemp);
             processConditionData.setMaterialTemp(materialTemp);
             processConditionData.setJetVelocity(jetVelocity);
@@ -253,8 +261,6 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
         }
         return null;
     }
-
-
 
 
 }

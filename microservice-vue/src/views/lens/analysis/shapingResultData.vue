@@ -149,6 +149,42 @@
               </el-button>
             </template>
           </el-table-column>
+          <el-table-column align="center" header-align="center" label="白片面R1图片" prop="wftR1Pic" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.wftR1Pic)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" header-align="center" label="白片面R2图片" prop="wftR2Pic" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.wftR2Pic)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" header-align="center" label="镀膜片R1图片" prop="cftR1Pic" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.cftR1Pic)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" header-align="center" label="镀膜片R2图片" prop="cftR2Pic" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.cftR2Pic)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="操作"
                            width="120">
             <template v-slot="scope">
@@ -195,10 +231,23 @@
           </el-form-item>
           <el-row>
             <el-col :span="8">
+              <el-form-item label="事业部" prop="department">
+                <el-input v-model="dataForm.department" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="类别" prop="category">
                 <el-input v-model="dataForm.category" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-input v-model="dataForm.lensNumber" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="dataForm.project" auto-complete="off" clearable type="textarea"></el-input>
@@ -207,6 +256,11 @@
             <el-col :span="8">
               <el-form-item label="零件名称" prop="partName">
                 <el-input v-model="dataForm.partName" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="材料" prop="material">
+                <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -218,8 +272,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="材料" prop="material">
-                <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
+              <el-form-item label="模具类型" prop="moldType">
+                <el-input v-model="dataForm.moldType" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -313,7 +367,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="外径圆度(um)" prop="outerDiameterRoundness">
+              <el-form-item label="白片外径圆度(um)" prop="outerDiameterRoundness">
                 <el-input v-model="dataForm.outerDiameterRoundness" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
@@ -334,12 +388,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R1平面度(um)" prop="r1Flatness">
+              <el-form-item label="白片平面度R1(um)" prop="r1Flatness">
                 <el-input v-model="dataForm.r1Flatness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R2平面度(um)" prop="r2Flatness">
+              <el-form-item label="白片平面度R2(um)" prop="r2Flatness">
                 <el-input v-model="dataForm.r2Flatness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -347,12 +401,12 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="R1分割位均值(um)" prop="r1SplitAverage">
+              <el-form-item label="R1分割位台阶均值(um)" prop="r1SplitAverage">
                 <el-input v-model="dataForm.r1SplitAverage" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R2分割位均值(um)" prop="r2SplitAverage">
+              <el-form-item label="R2分割位台阶均值(um)" prop="r2SplitAverage">
                 <el-input v-model="dataForm.r2SplitAverage" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -411,11 +465,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="毛边" prop="burr">
+              <el-form-item label="分型面毛边(um)" prop="burr">
                 <el-input v-model="dataForm.burr" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="熔接线" prop="weldline">
@@ -441,12 +496,13 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" :width="dialogWidth"
+      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" width="340px"
                  @close="closeImg">
         <el-image
-            :fit="contain"
+            style="width: 300px; height: 300px"
+            :fit="fill"
             :src="codeImg"
-            :width="imgWidth" @load="onLoadImg">
+            :preview-src-list="srcList">
         </el-image>
       </el-dialog>
     </div>
@@ -490,11 +546,14 @@ export default {
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
+        {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
         {prop: "coreThickness", label: "芯厚(um)", minWidth: 100},
         {prop: "coreThicknessRange", label: "芯厚极差(um)", minWidth: 100},
         {prop: "r1VectorHeight", label: "R1矢高(um)", minWidth: 100},
@@ -509,13 +568,13 @@ export default {
         {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)", minWidth: 100},
         {prop: "outerDiameterAverage", label: "白片外径均值(um)", minWidth: 100},
         {prop: "outerDiameterRange", label: "白片外径极差(um)", minWidth: 100},
-        {prop: "outerDiameterRoundness", label: "外径圆度(um)", minWidth: 100},
+        {prop: "outerDiameterRoundness", label: "白片外径圆度(um)", minWidth: 100},
         {prop: "outerDiameterShrinkage", label: "白片外径收缩率(‰)", minWidth: 100},
         {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100},
-        {prop: "r1Flatness", label: "R1平面度(um)", minWidth: 100},
-        {prop: "r2Flatness", label: "R2平面度(um)", minWidth: 100},
-        {prop: "r1SplitAverage", label: "R1分割位均值(um)", minWidth: 100},
-        {prop: "r2SplitAverage", label: "R2分割位均值(um)", minWidth: 100},
+        {prop: "r1Flatness", label: "白片平面度R1(um)", minWidth: 100},
+        {prop: "r2Flatness", label: "白片平面度R2(um)", minWidth: 100},
+        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100},
+        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100},
         {prop: "wftR1", label: "R1(白片面型nm)", minWidth: 100},
         {prop: "wftR2", label: "R2(白片面型nm)", minWidth: 100},
         {prop: "wftConsistency", label: "全穴一致性(白片面型nm)", minWidth: 100},
@@ -525,10 +584,21 @@ export default {
         {prop: "cftR2", label: "R2(镀膜片面型nm)", minWidth: 100},
         {prop: "cftConsistency", label: "全穴一致性(镀膜片面型nm)", minWidth: 100},
         {prop: "cftMaxAs", label: "最大AS(镀膜片面型nm)", minWidth: 100},
-        {prop: "burr", label: "毛边(um)", minWidth: 100},
+        {prop: "burr", label: "分型面毛边(um)", minWidth: 100},
         {prop: "weldline", label: "熔接线", minWidth: 100, sortable: false},
         {prop: "remarks", label: "备注", minWidth: 100, sortable: false},
-        {prop: "appearanceProblem", label: "外观问题", minWidth: 100, sortable: false}
+        {prop: "appearanceProblem", label: "外观问题", minWidth: 100, sortable: false},
+        {prop: "abcFilesNo", label: "ABC档合格数分布", minWidth: 100, sortable: false},
+        {prop: "structureNo", label: "结构方案总数", minWidth: 100},
+        {prop: "moldTypeNo", label: "模具类型总数", minWidth: 100},
+        {prop: "moldCost", label: "模具费用", minWidth: 100},
+        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100},
+        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100},
+        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100},
+        {prop: "evtCost", label: "项目EVT费用", minWidth: 100},
+        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100},
+        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100},
+        {prop: "projectMassProduction", label: "项目量产", minWidth: 100, sortable: false}
 
       ],
       pageRequest: {current: 1, size: 10},
@@ -541,11 +611,14 @@ export default {
       // 编辑界面数据
       dataForm: {
         id: "0",
+        department: "",
         category: "",
+        lensNumber: "",
         project: "",
         partName: "",
         material: "",
         moldNo: "",
+        moldType: "",
         coreThickness: "",
         coreThicknessRange: "",
         r1VectorHeight: "",
@@ -585,6 +658,17 @@ export default {
         appearanceProblem: "",
         appearanceImg: "",
         remarks: "",
+        abcFilesNo: "",
+        structureNo: "",
+        moldTypeNo: "",
+        moldCost: "",
+        evtTime: "",
+        dvtTime: "",
+        evtDvtTime: "",
+        evtCost: "",
+        dvtCost: "",
+        evtDvtCost: "",
+        projectMassProduction: "",
         createdBy: "",
         updatedBy: "",
         createdTime: "",
@@ -626,12 +710,22 @@ export default {
         {value: "cft_r2", label: "R2(镀膜片面型nm)"},
         {value: "cft_consistency", label: "全穴一致性(镀膜片面型nm)"},
         {value: "cft_max_as", label: "最大AS(镀膜片面型nm)"},
-        {value: "burr", label: "毛边(um)"}
+        {value: "burr", label: "分型面毛边(um)"},
+        {value: "structure_no", label: "结构方案总数"},
+        {value: "mold_type_no", label: "模具类型总数"},
+        {value: "mold_cost", label: "模具费用"},
+        {value: "evt_time", label: "项目EVT耗时"},
+        {value: "dvt_time", label: "项目DVT耗时"},
+        {value: "evt_dvt_time", label: "项目(EVT+DVT)耗时"},
+        {value: "evt_cost", label: "项目EVT费用"},
+        {value: "dvt_cost", label: "项目DVT费用"},
+        {value: "evt_dvt_cost", label: "项目(EVT+DVT)费用"}
       ],
       picDialogVisible: false,
       codeImg: "",
       imgWidth: "500px",
-      dialogWidth: "600px"
+      dialogWidth: "600px",
+      srcList: []
     };
   },
   mounted() {
@@ -726,7 +820,10 @@ export default {
                       key === 'outerDiameterRoughness' || key === 'r1Flatness' || key === 'r2Flatness' ||
                       key === 'r1SplitAverage' || key === 'r2SplitAverage' || key === 'burr' || key === 'wftR1' ||
                       key === 'wftR2' || key === 'wftConsistency' || key === 'wftMaxAs' || key === 'wftStability' ||
-                      key === 'cftR1' || key === 'cftR2' || key === 'cftConsistency' || key === 'cftMaxAs' || key === 'annealingProcess') {
+                      key === 'cftR1' || key === 'cftR2' || key === 'cftConsistency' || key === 'cftMaxAs' || 
+                      key === 'annealingProcess' || key === 'structureNo' || key === 'moldTypeNo' ||
+                      key === 'moldCost' || key === 'evtTime' || key === 'dvtTime' || key === 'evtDvtTime' ||
+                      key === 'evtCost' || key === 'dvtCost' || key === 'evtDvtCost' ) {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])
@@ -880,6 +977,7 @@ export default {
           this.picDialogVisible = true
           const url = window.URL.createObjectURL(res.data)
           this.codeImg = url
+          this.srcList.push(url)
         } else {
           ElMessageBox.alert('无相应图片', {
             dangerouslyUseHTMLString: true,
@@ -907,6 +1005,7 @@ export default {
     // 关闭图片对话框
     closeImg() {
       this.codeImg = ""
+      this.srcList = []
     }
   }
 };

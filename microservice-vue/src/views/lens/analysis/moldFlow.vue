@@ -85,6 +85,24 @@
               </el-button>
             </template>
           </el-table-column>
+          <el-table-column align="center" header-align="center" label="模拟面型图R1" prop="refractivePicR1" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.refractivePicR1)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" header-align="center" label="模拟面型图R2" prop="refractivePicR2" width="100">
+            <template v-slot="imgScope">
+              <el-button type="primary" @click="preview(imgScope.row.refractivePicR2)">预览
+                <template #icon>
+                  <font-awesome-icon icon="fa-solid fa-image"/>
+                </template>
+              </el-button>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="操作"
                            width="120">
             <template v-slot="scope">
@@ -133,10 +151,23 @@
           </el-form-item>
           <el-row>
             <el-col :span="8">
+              <el-form-item label="事业部" prop="department">
+                <el-input v-model="dataForm.department" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="类别" prop="category">
                 <el-input v-model="dataForm.category" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-input v-model="dataForm.lensNumber" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="dataForm.project" auto-complete="off" clearable type="textarea"></el-input>
@@ -147,16 +178,22 @@
                 <el-input v-model="dataForm.partName" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="材料" prop="material">
                 <el-input v-model="dataForm.material" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="模具类型" prop="moldType">
                 <el-input v-model="dataForm.moldType" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="流道类型" prop="runnerType">
+                <el-input v-model="dataForm.runnerType" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -165,6 +202,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="流动前沿温度(℃)" prop="flowFrontTemperature">
@@ -184,46 +222,49 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
-              <el-form-item label="整体(%)" prop="wholePercent">
+              <el-form-item label="整体平均体积收缩率差值(%)" prop="wholePercent">
                 <el-input v-model="dataForm.wholePercent" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R1有效径(%)" prop="effectiveR1">
+              <el-form-item label="R1有效径四点极差(%)" prop="effectiveR1">
                 <el-input v-model="dataForm.effectiveR1" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R2有效径(%)" prop="effectiveR2">
+              <el-form-item label="R2有效径四点极差(%)" prop="effectiveR2">
                 <el-input v-model="dataForm.effectiveR2" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
-              <el-form-item label="R1坎合(%)" prop="ridgeR1">
+              <el-form-item label="R1坎合四点极差(%)" prop="ridgeR1">
                 <el-input v-model="dataForm.ridgeR1" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R2坎合(%)" prop="ridgeR2">
+              <el-form-item label="R2坎合四点极差(%)" prop="ridgeR2">
                 <el-input v-model="dataForm.ridgeR2" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="R1(nm)" prop="refractiveR1">
+              <el-form-item label="模拟面型R1(nm)" prop="refractiveR1">
                 <el-input v-model="dataForm.refractiveR1" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
-              <el-form-item label="R2(nm)" prop="refractiveR2">
+              <el-form-item label="模拟面型R2(nm)" prop="refractiveR2">
                 <el-input v-model="dataForm.refractiveR2" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -246,12 +287,13 @@
           </slot>
         </div>
       </el-dialog>
-      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" :width="dialogWidth"
+      <el-dialog v-model="picDialogVisible" :close-on-click-modal="false" :title="图片展示" width="340px"
                  @close="closeImg">
         <el-image
-            :fit="contain"
+            style="width: 300px; height: 300px"
+            :fit="fill"
             :src="codeImg"
-            :width="imgWidth" @load="onLoadImg">
+            :preview-src-list="srcList">
         </el-image>
       </el-dialog>
     </div>
@@ -290,22 +332,25 @@ export default {
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
+        {prop: "runnerType", label: "流道类型", minWidth: 100, sortable: false},
         {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100},
         {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100},
         {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100},
         {prop: "simulateWireLength", label: "模拟熔接线长度(mm)", minWidth: 100},
-        {prop: "wholePercent", label: "整体(%)", minWidth: 100},
-        {prop: "effectiveR1", label: "R1有效径(%)", minWidth: 100},
-        {prop: "effectiveR2", label: "R2有效径(%)", minWidth: 100},
-        {prop: "ridgeR1", label: "R1坎合(%)", minWidth: 100},
-        {prop: "ridgeR2", label: "R2坎合(%)", minWidth: 100},
-        {prop: "refractiveR1", label: "R1(nm)", minWidth: 100},
-        {prop: "refractiveR2", label: "R2(nm)", minWidth: 100},
+        {prop: "wholePercent", label: "整体平均体积收缩率差值(%)", minWidth: 100},
+        {prop: "effectiveR1", label: "R1有效径四点极差(%)", minWidth: 100},
+        {prop: "effectiveR2", label: "R2有效径四点极差(%)", minWidth: 100},
+        {prop: "ridgeR1", label: "R1坎合四点极差(%)", minWidth: 100},
+        {prop: "ridgeR2", label: "R2坎合四点极差(%)", minWidth: 100},
+        {prop: "refractiveR1", label: "模拟面型R1(nm)", minWidth: 100},
+        {prop: "refractiveR2", label: "模拟面型R2(nm)", minWidth: 100},
         {prop: "competitorName", label: "竞品名称", minWidth: 100, sortable: false},
         {prop: "competitorLink", label: "竞品链接", minWidth: 100, sortable: false}
       ],
@@ -319,11 +364,14 @@ export default {
       // 编辑界面数据
       dataForm: {
         id: "0",
+        department: "",
         category: "",
+        lensNumber: "",
         project: "",
         partName: "",
         material: "",
         moldType: "",
+        runnerType: "",
         moldDiameterRate: "",
         flowFrontTemperature: "",
         vpChangePressure: "",
@@ -350,7 +398,8 @@ export default {
       picDialogVisible: false,
       codeImg: "",
       imgWidth: "500px",
-      dialogWidth: "600px"
+      dialogWidth: "600px",
+      srcList: []
     };
   },
   mounted() {
@@ -573,6 +622,7 @@ export default {
           this.picDialogVisible = true
           const url = window.URL.createObjectURL(res.data)
           this.codeImg = url
+          this.srcList.push(url)
         } else {
           ElMessageBox.alert('无相应图片', {
             dangerouslyUseHTMLString: true,
@@ -600,6 +650,7 @@ export default {
     // 关闭图片对话框
     closeImg() {
       this.codeImg = ""
+      this.srcList = []
     }
   }
 };

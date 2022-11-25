@@ -46,13 +46,21 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
                 break;
             }
 
-            String category = dataArray[0];
-            String project = dataArray[1];
-            String partName = dataArray[2];
-            String material = dataArray[3];
+            String department = dataArray[0];
+            String category = dataArray[1];
+            String lensNumber = dataArray[2];
+            String project = dataArray[3];
+            String partName = dataArray[4];
+            String material = dataArray[5];
 
+            if (StringUtils.isEmpty(department)) {
+                throw new BusinessException("第" + (i + 1) + "行，事业部不能为空");
+            }
             if (StringUtils.isEmpty(category)) {
                 throw new BusinessException("第" + (i + 1) + "行，类别不能为空");
+            }
+            if (StringUtils.isEmpty(lensNumber)) {
+                throw new BusinessException("第" + (i + 1) + "行，镜片数不能为空");
             }
             if (StringUtils.isEmpty(project)) {
                 throw new BusinessException("第" + (i + 1) + "行，项目名不能为空");
@@ -70,34 +78,44 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
             }
 
 
-            String moldType = dataArray[4];
-            String moldCorePassivation = dataArray[5];
-            String runnerType = dataArray[6];
-            String firstRunner = ExcelUtil.handleDecimal(dataArray[7],1);
-            String secondRunner = ExcelUtil.handleDecimal(dataArray[8],1);
-            String thirdRunner = ExcelUtil.handleDecimal(dataArray[9],1);
-            String partingSurface = ExcelUtil.handleDecimal(dataArray[10],1);
-            String splitPosition = ExcelUtil.handleDecimal(dataArray[11],1);
-            String gateType = dataArray[12];
-            String gateWidth = ExcelUtil.handleDecimal(dataArray[13],2);
-            String gateThickness = ExcelUtil.handleDecimal(dataArray[14],2);
-            String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[15],2);
-            String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[16],2);
-            String moldOpeningType = dataArray[17];
+            String moldNo = dataArray[6];
+            String moldType = dataArray[7];
+            String moldCorePassivation = dataArray[8];
+            String runnerType = dataArray[9];
+            String cavityInnerDiameter = dataArray[10];
+            String cavityInnerDiameterRange = dataArray[11];
+            String firstRunner = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String secondRunner = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String thirdRunner = ExcelUtil.handleDecimal(dataArray[14], 1);
+            String partingSurface = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String splitPositionR1 = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String splitPositionR2 = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String gateType = dataArray[18];
+            String gateWidth = ExcelUtil.handleDecimal(dataArray[19], 2);
+            String gateThickness = ExcelUtil.handleDecimal(dataArray[20], 2);
+            String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[21], 2);
+            String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[22], 2);
+            String moldOpeningType = dataArray[23];
 
             // 设置参数
+            moldData.setDepartment(department);
             moldData.setCategory(category);
+            moldData.setLensNumber(lensNumber);
             moldData.setProject(project);
             moldData.setPartName(partName);
             moldData.setMaterial(material);
+            moldData.setMoldNo(moldNo);
             moldData.setMoldType(moldType);
             moldData.setMoldCorePassivation(moldCorePassivation);
             moldData.setRunnerType(runnerType);
+            moldData.setCavityInnerDiameter(cavityInnerDiameter);
+            moldData.setCavityInnerDiameterRange(cavityInnerDiameterRange);
             moldData.setFirstRunner(firstRunner);
             moldData.setSecondRunner(secondRunner);
             moldData.setThirdRunner(thirdRunner);
             moldData.setPartingSurface(partingSurface);
-            moldData.setSplitPosition(splitPosition);
+            moldData.setSplitPositionR1(splitPositionR1);
+            moldData.setSplitPositionR2(splitPositionR2);
             moldData.setGateType(gateType);
             moldData.setGateWidth(gateWidth);
             moldData.setGateThickness(gateThickness);
