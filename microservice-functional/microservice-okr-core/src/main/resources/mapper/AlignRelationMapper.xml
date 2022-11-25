@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.okr.core.mapper.AlignRelationMapper">
+    <select id="getAlignCountInfo" resultType="com.aacoptics.okr.core.entity.po.AlignRelation">
+        select count(*) as count_num, owner_username, owner_real_name
+        from t_okr_align_relation
+        where objective_id = #{objectiveId}
+        group by owner_username, owner_real_name
+    </select>
+
+</mapper>

@@ -25,8 +25,6 @@
               <p>监控号：{{ singleMachineInfo.CncBaseInfo.monitorNo }}</p>
               <p>程序名：{{ singleMachineInfo.CncBaseInfo.progName }}</p>
             </template>
-
-
             <div
                 v-if="getMaintainStatus(singleMachineInfo.CncBaseInfo.monitorNo, singleMachineInfo.CncNode.State) && !singleMachineInfo.CncBaseInfo.isMicroProg"
                 style="height:30px;line-height:40px;text-align: center;font-weight: bold">
