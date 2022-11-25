@@ -1,7 +1,7 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
-import com.aacoptics.wlg.dashboard.entity.MoldingMachineParamData;
-import com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMachineParamData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingParamAnalysisData;
 import com.aacoptics.wlg.dashboard.mapper.MoldingMachineParamDataMapper;
 import com.aacoptics.wlg.dashboard.mapper.MoldingParamAnalysisDataMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;

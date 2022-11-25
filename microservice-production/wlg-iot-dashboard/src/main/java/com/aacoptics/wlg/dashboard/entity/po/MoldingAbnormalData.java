@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -16,23 +16,29 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_wlg_molding_machine_event_data")
-public class MoldingEventData implements Serializable {
+@TableName("t_wlg_molding_machine_abnormal_data")
+public class MoldingAbnormalData implements Serializable {
 
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String site;
-
     private String machineName;
 
-    private String eventInfo;
+    private String waferId;
 
-    private String alarmInfo;
+    private String materialName;
 
-    private LocalDateTime startTime;
+    private String projectName;
 
-    private LocalDateTime endTime;
+    private String modelName;
+
+    private String abnormalParamName;
+
+    private String abnormalType;
+
+    private String avgValue;
+
+    private String abnormalValue;
 
     private LocalDateTime createTime;
 }

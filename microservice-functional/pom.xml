@@ -16,6 +16,7 @@
         <module>microservice-feishu-photo</module>
         <module>microservice-hikvision-api</module>
         <module>microservice-ldap-sync</module>
+        <module>microservice-okr-core</module>
     </modules>
 
     <packaging>pom</packaging>

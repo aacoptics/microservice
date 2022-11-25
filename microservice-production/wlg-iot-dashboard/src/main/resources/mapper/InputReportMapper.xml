@@ -3,7 +3,7 @@
 <mapper namespace="com.aacoptics.wlg.dashboard.mapper.InputReportMapper">
 
 
-    <select id="getByDateAndMachineName" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
+    <select id="getByDateAndMachineName" resultType="com.aacoptics.wlg.dashboard.entity.po.InputReport">
         SELECT a.[id]
         ,a.[machine_name]
         ,a.[material_name]
@@ -39,7 +39,7 @@
         order by a.start_time, a.machine_name
     </select>
 
-    <select id="getTwoHourSum" resultType="com.aacoptics.wlg.dashboard.entity.InputReport">
+    <select id="getTwoHourSum" resultType="com.aacoptics.wlg.dashboard.entity.po.InputReport">
         SELECT isnull(sum(input_qty),0) as input_qty, isnull(sum(output_qty),0) as output_qty
         FROM t_wlg_molding_machine_input_per_six_hour
         where end_time &gt; Dateadd(Hour, -2, getdate())

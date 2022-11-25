@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

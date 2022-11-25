@@ -204,3 +204,37 @@ export function handleUpdateFeedingAlarm(updateForm) {
         data: updateForm
     })
 }
+
+export function handleCycleDetailUpdate(updateForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/' + updateForm.id,
+        method: 'put',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: updateForm
+    })
+}
+
+export function getCycleDetail(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/conditions',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm
+    })
+}
+
+export function downloadExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/CycleDetail/downloadExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
+    })
+}

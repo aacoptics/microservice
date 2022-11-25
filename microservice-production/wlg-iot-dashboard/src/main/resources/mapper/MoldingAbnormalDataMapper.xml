@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingAbnormalDataMapper">
 
-    <select id="getMachineAbnormalData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingAbnormalData">
+    <select id="getMachineAbnormalData" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData">
         SELECT [id]
              ,[wafer_id]
              ,[material_name]

@@ -3,7 +3,7 @@
 <mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingParamAnalysisDataMapper">
 
 
-    <select id="getAnalysisData" resultType="com.aacoptics.wlg.dashboard.entity.MoldingParamAnalysisData">
+    <select id="getAnalysisData" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingParamAnalysisData">
         SELECT a.id,machine_name, wafer_id, recipe_phase, recipe_name,
         case when a.array_id > 0
         then  param_name + '_'+ convert(varchar, (array_id - 1))

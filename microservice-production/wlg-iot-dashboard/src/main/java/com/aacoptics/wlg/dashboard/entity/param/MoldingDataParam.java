@@ -1,4 +1,4 @@
-package com.aacoptics.wlg.dashboard.entity;
+package com.aacoptics.wlg.dashboard.entity.param;
 
 import lombok.Data;
 

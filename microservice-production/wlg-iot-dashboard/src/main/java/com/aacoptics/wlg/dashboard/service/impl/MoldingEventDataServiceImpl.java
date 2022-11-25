@@ -1,7 +1,7 @@
 package com.aacoptics.wlg.dashboard.service.impl;
 
-import com.aacoptics.wlg.dashboard.entity.MoldingAbnormalData;
-import com.aacoptics.wlg.dashboard.entity.MoldingEventData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingEventData;
 import com.aacoptics.wlg.dashboard.mapper.MoldingAbnormalDataMapper;
 import com.aacoptics.wlg.dashboard.mapper.MoldingEventDataMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Slf4j
