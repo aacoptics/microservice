@@ -25,4 +25,13 @@ public interface FeishuService {
 
 
     void uploadUserPhotoFromSAP(int idFlag);
+
+    /**
+     * 保存照片到本地
+     *
+     * @param fileContent
+     * @param fileName
+     * @throws IOException
+     */
+    public void savePhoto(byte[] fileContent, String fileName) throws IOException;
 }
