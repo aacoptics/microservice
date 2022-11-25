@@ -76,7 +76,7 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
 
-            MoldFlowData moldFlowData = this.getMoldFlowData(category, project, partName, material);
+            MoldFlowData moldFlowData = this.getMoldFlowData(category, project, partName, material, department, lensNumber);
             if (moldFlowData == null) {
                 moldFlowData = new MoldFlowData();
             }
@@ -84,23 +84,23 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
 
             String moldType = dataArray[6];
             String runnerType = dataArray[7];
-            String moldDiameterRate = ExcelUtil.handleDecimal(dataArray[8],2);
-            String flowFrontTemperature = ExcelUtil.handleDecimal(dataArray[9],2);
-            String vpChangePressure = ExcelUtil.handleDecimal(dataArray[10],2);
-            String simulateWireLength = ExcelUtil.handleDecimal(dataArray[11],2);
-            String wholePercent = ExcelUtil.handleDecimal(dataArray[12],2);
-            String effectiveR1 = ExcelUtil.handleDecimal(dataArray[13],2);
-            String effectiveR2 = ExcelUtil.handleDecimal(dataArray[14],2);
-            String ridgeR1 = ExcelUtil.handleDecimal(dataArray[15],2);
-            String ridgeR2 = ExcelUtil.handleDecimal(dataArray[16],2);
-            String refractiveR1 = ExcelUtil.handleDecimal(dataArray[17],0);
-            String refractiveR2 = ExcelUtil.handleDecimal(dataArray[18],0);
-            String refractivePicR1 =  pathsMap.get(i + "_" + 19);
-            if(refractivePicR1 == null){
+            String moldDiameterRate = ExcelUtil.handleDecimal(dataArray[8], 2);
+            String flowFrontTemperature = ExcelUtil.handleDecimal(dataArray[9], 2);
+            String vpChangePressure = ExcelUtil.handleDecimal(dataArray[10], 2);
+            String simulateWireLength = ExcelUtil.handleDecimal(dataArray[11], 2);
+            String wholePercent = ExcelUtil.handleDecimal(dataArray[12], 2);
+            String effectiveR1 = ExcelUtil.handleDecimal(dataArray[13], 2);
+            String effectiveR2 = ExcelUtil.handleDecimal(dataArray[14], 2);
+            String ridgeR1 = ExcelUtil.handleDecimal(dataArray[15], 2);
+            String ridgeR2 = ExcelUtil.handleDecimal(dataArray[16], 2);
+            String refractiveR1 = ExcelUtil.handleDecimal(dataArray[17], 0);
+            String refractiveR2 = ExcelUtil.handleDecimal(dataArray[18], 0);
+            String refractivePicR1 = pathsMap.get(i + "_" + 19);
+            if (refractivePicR1 == null) {
                 refractivePicR1 = "";
             }
-            String refractivePicR2 =  pathsMap.get(i + "_" + 20);
-            if(refractivePicR2 == null){
+            String refractivePicR2 = pathsMap.get(i + "_" + 20);
+            if (refractivePicR2 == null) {
                 refractivePicR2 = "";
             }
             String competitorName = dataArray[21];
@@ -144,12 +144,15 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
     }
 
     @Override
-    public IPage<MoldFlowData> getDataByConditions(Page<MoldFlowData> iPage, String category, String project, String partName, String material) {
+    public IPage<MoldFlowData> getDataByConditions(Page<MoldFlowData> iPage, String category, String project,
+                                                   String partName, String material, String department, String lensNumber) {
         QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
         IPage<MoldFlowData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -160,7 +163,9 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
         queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
                 .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
                 .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
+                .eq(StringUtils.isNotBlank(queryParams.getDepartment()), "department", queryParams.getDepartment())
+                .eq(StringUtils.isNotBlank(queryParams.getLensNumber()), "lens_number", queryParams.getLensNumber());
         List<MoldFlowData> structureDatas = moldFlowMapper.selectList(queryWrapper);
         return structureDatas;
     }
@@ -207,13 +212,32 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
         return moldFlowDatas;
     }
 
-    private MoldFlowData getMoldFlowData(String category, String project, String partName, String material) {
+    @Override
+    public List<MoldFlowData> getDepartment() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("department").select("department");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
+    }
+
+    @Override
+    public List<MoldFlowData> getLensNumber() {
+        QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("lens_number").select("lens_number");
+        List<MoldFlowData> moldFlowDatas = moldFlowMapper.selectList(queryWrapper);
+        return moldFlowDatas;
+    }
+
+    private MoldFlowData getMoldFlowData(String category, String project, String partName,
+                                         String material, String department, String lensNumber) {
 
         QueryWrapper<MoldFlowData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
 
         List<MoldFlowData> moldFlowDataList = moldFlowMapper.selectList(queryWrapper);
         if (moldFlowDataList != null && moldFlowDataList.size() > 0) {

@@ -39,7 +39,8 @@ public interface IProcessConditionDataService extends IService<ProcessConditionD
                                                     String project,
                                                     String partName,
                                                     String material,
-                                                    String moldNo);
+                                                    String department,
+                                                    String lensNumber);
 
     /**
      * 根据查询条件获取所有数据
@@ -93,5 +94,21 @@ public interface IProcessConditionDataService extends IService<ProcessConditionD
      * @return
      */
     List<ProcessConditionData> getMoldNo();
+
+
+    /**
+     * 获取事业部
+     *
+     * @return
+     */
+    List<ProcessConditionData> getDepartment();
+
+
+    /**
+     * 获取镜片数
+     *
+     * @return
+     */
+    List<ProcessConditionData> getLensNumber();
 
 }

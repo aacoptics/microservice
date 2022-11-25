@@ -94,6 +94,8 @@ public class StructureDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber(),
                 queryParams.getSearchType(),
                 queryParams.getStartValue(),
                 queryParams.getEndValue());
@@ -164,9 +166,9 @@ public class StructureDataController {
                     row.createCell(35).setCellValue(p.getOuterDiameterSrtm());
                     row.createCell(36).setCellValue(p.getPartSurfaceLiftRatio());
                     row.createCell(37).setCellValue(p.getMechanismTrou());
-                    if(StringUtils.isEmpty(p.getAssemblyDrawing())){
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
                         row.createCell(38).setCellValue("");
-                    }else{
+                    } else {
                         row.createCell(38).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
                     }
                 }
@@ -216,6 +218,18 @@ public class StructureDataController {
     @GetMapping(value = "/getMaterial")
     public Result getMaterial() {
         return Result.success(structureDataService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(structureDataService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取镜片数")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(structureDataService.getLensNumber());
     }
 
 

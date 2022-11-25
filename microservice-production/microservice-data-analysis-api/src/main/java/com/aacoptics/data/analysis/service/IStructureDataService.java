@@ -1,8 +1,6 @@
 package com.aacoptics.data.analysis.service;
 
 import com.aacoptics.data.analysis.entity.form.QueryParams;
-import com.aacoptics.data.analysis.entity.po.ProcessConditionData;
-import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -39,6 +37,8 @@ public interface IStructureDataService extends IService<StructureData> {
                                                     String project,
                                                     String partName,
                                                     String material,
+                                                    String department,
+                                                    String lensNumber,
                                                     String searchType,
                                                     String startValue,
                                                     String endValue);
@@ -89,5 +89,20 @@ public interface IStructureDataService extends IService<StructureData> {
      * @return
      */
     List<StructureData> getMaterial();
+
+    /**
+     * 获取事业部
+     *
+     * @return
+     */
+    List<StructureData> getDepartment();
+
+
+    /**
+     * 获取镜片数
+     *
+     * @return
+     */
+    List<StructureData> getLensNumber();
 
 }

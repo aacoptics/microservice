@@ -53,7 +53,9 @@ public class AllDataController {
                 queryParams.getCategory(),
                 queryParams.getProject(),
                 queryParams.getPartName(),
-                queryParams.getMaterial());
+                queryParams.getMaterial(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber());
         if (res.getTotal() == 0) {
             return Result.fail(WlgReportErrorType.BUSINESS_EXCEPTION, "查询数据为空！");
         }

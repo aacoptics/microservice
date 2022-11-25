@@ -75,7 +75,7 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
 
-            StructureData structureData = this.getStructureData(category, project, partName, material);
+            StructureData structureData = this.getStructureData(category, project, partName, material, department, lensNumber);
             if (structureData == null) {
                 structureData = new StructureData();
             }
@@ -166,13 +166,15 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
 
     @Override
     public IPage<StructureData> getDataByConditions(Page<StructureData> iPage, String category, String project,
-                                                    String partName, String material, String searchType,
-                                                    String startValue, String endValue) {
+                                                    String partName, String material, String department, String lensNumber,
+                                                    String searchType, String startValue, String endValue) {
         QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
         if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(startValue) && StringUtils.isNotBlank(endValue)) {
             queryWrapper.between(searchType, Float.valueOf(startValue), Float.valueOf(endValue));
         }
@@ -186,7 +188,9 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
         queryWrapper.eq(StringUtils.isNotBlank(queryParams.getCategory()), "category", queryParams.getCategory())
                 .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
                 .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
-                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial());
+                .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
+                .eq(StringUtils.isNotBlank(queryParams.getDepartment()), "department", queryParams.getDepartment())
+                .eq(StringUtils.isNotBlank(queryParams.getLensNumber()), "lens_number", queryParams.getLensNumber());
         if (StringUtils.isNotBlank(queryParams.getSearchType())
                 && StringUtils.isNotBlank(queryParams.getStartValue())
                 && StringUtils.isNotBlank(queryParams.getEndValue())) {
@@ -238,13 +242,32 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
         return structureDatas;
     }
 
-    private StructureData getStructureData(String category, String project, String partName, String material) {
+    @Override
+    public List<StructureData> getDepartment() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("department").select("department");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
+    }
+
+    @Override
+    public List<StructureData> getLensNumber() {
+        QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("lens_number").select("lens_number");
+        List<StructureData> structureDatas = structureDataMapper.selectList(queryWrapper);
+        return structureDatas;
+    }
+
+    private StructureData getStructureData(String category, String project, String partName,
+                                           String material, String department, String lensNumber) {
 
         QueryWrapper<StructureData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material);
+                .eq(StringUtils.isNotBlank(material), "material", material)
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
 
         List<StructureData> structureDataList = structureDataMapper.selectList(queryWrapper);
         if (structureDataList != null && structureDataList.size() > 0) {

@@ -76,7 +76,7 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
 
-            ShapingResultData shapingResultData = this.getShapingResultData(category, project, partName, material, moldNo);
+            ShapingResultData shapingResultData = this.getShapingResultData(category, project, partName, material, department, lensNumber);
             if (shapingResultData == null) {
                 shapingResultData = new ShapingResultData();
             }
@@ -240,14 +240,15 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
 
     @Override
     public IPage<ShapingResultData> getDataByConditions(Page<ShapingResultData> iPage, String category, String project,
-                                                        String partName, String material, String moldNo, String searchType,
-                                                        String startValue, String endValue) {
+                                                        String partName, String material, String department, String lensNumber,
+                                                        String searchType, String startValue, String endValue) {
         QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
                 .eq(StringUtils.isNotBlank(material), "material", material)
-                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
         if (StringUtils.isNotBlank(searchType) && StringUtils.isNotBlank(startValue) && StringUtils.isNotBlank(endValue)) {
             queryWrapper.between(searchType, Float.valueOf(startValue), Float.valueOf(endValue));
         }
@@ -262,7 +263,8 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
                 .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
                 .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
                 .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
-                .eq(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
+                .eq(StringUtils.isNotBlank(queryParams.getDepartment()), "department", queryParams.getDepartment())
+                .eq(StringUtils.isNotBlank(queryParams.getLensNumber()), "lens_number", queryParams.getLensNumber());
         if (StringUtils.isNotBlank(queryParams.getSearchType())
                 && StringUtils.isNotBlank(queryParams.getStartValue())
                 && StringUtils.isNotBlank(queryParams.getEndValue())) {
@@ -322,13 +324,31 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
         return shapingResultDatas;
     }
 
-    private ShapingResultData getShapingResultData(String category, String project, String partName, String material, String moldNo) {
+    @Override
+    public List<ShapingResultData> getDepartment() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("department").select("department");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    @Override
+    public List<ShapingResultData> getLensNumber() {
+        QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("lens_number").select("lens_number");
+        List<ShapingResultData> shapingResultDatas = shapingResultDataMapper.selectList(queryWrapper);
+        return shapingResultDatas;
+    }
+
+    private ShapingResultData getShapingResultData(String category, String project, String partName, String material,
+                                                   String department, String lensNumber) {
         QueryWrapper<ShapingResultData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
                 .eq(StringUtils.isNotBlank(material), "material", material)
-                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
 
         List<ShapingResultData> shapingResultDataList = shapingResultDataMapper.selectList(queryWrapper);
         if (shapingResultDataList != null && shapingResultDataList.size() > 0) {

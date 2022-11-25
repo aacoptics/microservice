@@ -4,33 +4,49 @@
       <div class="toolbar w-full" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :model="filters" :size="size">
           <el-row>
-            <el-col :span="5">
+            <el-col :span="4">
+              <el-form-item label="事业部" prop="department">
+                <el-select v-model.trim="filters.department" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in departmentList" :key="item.department" :label="item.department"
+                             :value="item.department"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-select v-model.trim="filters.lensNumber" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in lensNumberList" :key="item.lensNumber" :label="item.lensNumber"
+                             :value="item.lensNumber"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
               <el-form-item label="类别" prop="category">
-                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in categoryList" :key="item.category" :label="item.category"
                              :value="item.category"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="项目" prop="project">
-                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in projectList" :key="item.project" :label="item.project"
                              :value="item.project"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="零件名称" prop="partName">
-                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in partNameList" :key="item.partName" :label="item.partName"
                              :value="item.partName"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="材料" prop="material">
-                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in materialList" :key="item.material" :label="item.material"
                              :value="item.material"></el-option>
                 </el-select>
@@ -292,6 +308,8 @@ import {
   handleDelete,
   handleUpdate,
   uploadExcel,
+  getDepartment,
+  getLensNumber
 } from "@/api/lens/analysis/moldData";
 import {ElMessageBox} from "element-plus";
 
@@ -305,7 +323,9 @@ export default {
         category: "",
         project: "",
         partName: "",
-        material: ""
+        material: "",
+        department: "",
+        lensNumber: ""
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
@@ -375,6 +395,8 @@ export default {
       projectList: [],
       partNameList: [],
       materialList: [],
+      departmentList: [],
+      lensNumberList: []
     };
   },
   mounted() {
@@ -388,6 +410,8 @@ export default {
       this.projectList = await this.getProject();
       this.partNameList = await this.getPartName();
       this.materialList = await this.getMaterial();
+      this.departmentList = await this.getDepartment();
+      this.lensNumberList = await this.getLensNumber();
     },
     getCategory() {
       return new Promise((resolve, reject) => {
@@ -429,6 +453,26 @@ export default {
         })
       })
     },
+    getDepartment() {
+      return new Promise((resolve, reject) => {
+        getDepartment().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
+    getLensNumber() {
+      return new Promise((resolve, reject) => {
+        getLensNumber().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -438,6 +482,8 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
       getDataByConditions(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
@@ -543,6 +589,8 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
 
       this.exportDataLoading = true;
       exportExcel(this.pageRequest).then(res => {

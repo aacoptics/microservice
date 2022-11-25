@@ -19,6 +19,10 @@ public class QueryParams {
     private String partName;
     @ApiModelProperty(value = "材料")
     private String material;
+    @ApiModelProperty(value = "事业部")
+    private String department;
+    @ApiModelProperty(value = "镜片数")
+    private String lensNumber;
     @ApiModelProperty(value = "模具序号")
     private String moldNo;
     @ApiModelProperty(value = "搜索类型")

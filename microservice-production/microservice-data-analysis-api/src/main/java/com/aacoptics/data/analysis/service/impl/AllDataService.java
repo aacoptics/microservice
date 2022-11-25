@@ -19,12 +19,14 @@ public class AllDataService implements IAllDataService {
     AllDataMapper allDataMapper;
 
     @Override
-    public Page<AllData> getAllDataByConditionsWithPage(Page<AllData> page, String category, String project, String partName, String material) {
-        return allDataMapper.getAllDataByConditionsWithPage(page, category, project, partName, material);
+    public Page<AllData> getAllDataByConditionsWithPage(Page<AllData> page, String category, String project, String partName,
+                                                        String material, String department, String lensNumber) {
+        return allDataMapper.getAllDataByConditionsWithPage(page, category, project, partName, material, department, lensNumber);
     }
 
     @Override
     public List<AllData> getAllDataByConditions(QueryParams queryParams) {
-        return allDataMapper.getAllDataByConditions(queryParams.getCategory(), queryParams.getProject(), queryParams.getPartName(), queryParams.getMaterial());
+        return allDataMapper.getAllDataByConditions(queryParams.getCategory(), queryParams.getProject(), queryParams.getPartName(),
+                queryParams.getMaterial(),queryParams.getDepartment(),queryParams.getLensNumber());
     }
 }

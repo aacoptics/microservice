@@ -93,7 +93,9 @@ public class MoldFlowController {
                 queryParams.getCategory(),
                 queryParams.getProject(),
                 queryParams.getPartName(),
-                queryParams.getMaterial());
+                queryParams.getMaterial(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber());
         if (res.getTotal() == 0) {
             return Result.fail(WlgReportErrorType.BUSINESS_EXCEPTION, "查询数据为空！");
         }
@@ -214,6 +216,18 @@ public class MoldFlowController {
     @GetMapping(value = "/getMaterial")
     public Result getMaterial() {
         return Result.success(moldFlowService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(moldFlowService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取镜片数")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(moldFlowService.getLensNumber());
     }
 
 }

@@ -38,7 +38,9 @@ public interface IMoldDataService extends IService<MoldData> {
                                         String category,
                                         String project,
                                         String partName,
-                                        String material);
+                                        String material,
+                                        String department,
+                                        String lensNumber);
 
     /**
      * 根据查询条件获取所有数据
@@ -88,5 +90,19 @@ public interface IMoldDataService extends IService<MoldData> {
      * @return
      */
     List<MoldData> getMaterial();
+
+
+    /**
+     * 获取事业部
+     * @return
+     */
+    List<MoldData> getDepartment();
+
+
+    /**
+     *  获取镜片数
+     * @return
+     */
+    List<MoldData> getLensNumber();
 
 }

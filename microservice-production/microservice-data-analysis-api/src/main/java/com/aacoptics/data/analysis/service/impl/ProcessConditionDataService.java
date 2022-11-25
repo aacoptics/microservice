@@ -68,7 +68,7 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
                 throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
             }
             String moldNo = dataArray[6];
-            ProcessConditionData processConditionData = this.getProcessConditionData(category, project, partName, material, moldNo);
+            ProcessConditionData processConditionData = this.getProcessConditionData(category, project, partName, material, department, lensNumber);
             if (processConditionData == null) {
                 processConditionData = new ProcessConditionData();
             }
@@ -172,13 +172,15 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
     }
 
     @Override
-    public IPage<ProcessConditionData> getDataByConditions(Page<ProcessConditionData> iPage, String category, String project, String partName, String material, String moldNo) {
+    public IPage<ProcessConditionData> getDataByConditions(Page<ProcessConditionData> iPage, String category, String project,
+                                                           String partName, String material, String department, String lensNumber) {
         QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
                 .eq(StringUtils.isNotBlank(material), "material", material)
-                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
         IPage<ProcessConditionData> page = this.page(iPage, queryWrapper);
         return page;
     }
@@ -190,7 +192,8 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
                 .eq(StringUtils.isNotBlank(queryParams.getProject()), "project", queryParams.getProject())
                 .eq(StringUtils.isNotBlank(queryParams.getPartName()), "part_name", queryParams.getPartName())
                 .eq(StringUtils.isNotBlank(queryParams.getMaterial()), "material", queryParams.getMaterial())
-                .eq(StringUtils.isNotBlank(queryParams.getMoldNo()), "mold_no", queryParams.getMoldNo());
+                .eq(StringUtils.isNotBlank(queryParams.getDepartment()), "department", queryParams.getDepartment())
+                .eq(StringUtils.isNotBlank(queryParams.getLensNumber()), "lens_number", queryParams.getLensNumber());
         List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
         return processConditionDatas;
     }
@@ -245,15 +248,32 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
         return processConditionDatas;
     }
 
+    @Override
+    public List<ProcessConditionData> getDepartment() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("department").select("department");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
 
-    private ProcessConditionData getProcessConditionData(String category, String project, String partName, String material, String moldNo) {
+    @Override
+    public List<ProcessConditionData> getLensNumber() {
+        QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
+        queryWrapper.groupBy("lens_number").select("lens_number");
+        List<ProcessConditionData> processConditionDatas = processConditionDataMapper.selectList(queryWrapper);
+        return processConditionDatas;
+    }
+
+    private ProcessConditionData getProcessConditionData(String category, String project, String partName,
+                                                         String material, String department, String lensNumber) {
 
         QueryWrapper<ProcessConditionData> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
                 .eq(StringUtils.isNotBlank(project), "project", project)
                 .eq(StringUtils.isNotBlank(partName), "part_name", partName)
                 .eq(StringUtils.isNotBlank(material), "material", material)
-                .eq(StringUtils.isNotBlank(moldNo), "mold_no", moldNo);
+                .eq(StringUtils.isNotBlank(department), "department", department)
+                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
 
         List<ProcessConditionData> processConditionDataList = processConditionDataMapper.selectList(queryWrapper);
         if (processConditionDataList != null && processConditionDataList.size() > 0) {
