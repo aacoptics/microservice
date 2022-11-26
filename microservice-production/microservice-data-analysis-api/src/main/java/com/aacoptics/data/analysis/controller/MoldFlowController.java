@@ -183,7 +183,15 @@ public class MoldFlowController {
     @ApiImplicitParam(paramType = "path", name = "id", value = "模流数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(moldFlowService.delete(id));
+        MoldFlowData mfd = moldFlowService.getById(id);
+        boolean flag = moldFlowService.delete(id);
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory("moldFlowData");
+        FtpUtil.deleteFile(mfd.getRefractivePicR1().substring(0,mfd.getRefractivePicR1().indexOf(".")));
+        FtpUtil.deleteFile(mfd.getRefractivePicR2().substring(0,mfd.getRefractivePicR2().indexOf(".")));
+        FtpUtil.deleteFile(mfd.getAssemblyDrawing().substring(0,mfd.getAssemblyDrawing().indexOf(".")));
+        System.out.println("删除成功！");
+        return Result.success(flag);
     }
 
 
