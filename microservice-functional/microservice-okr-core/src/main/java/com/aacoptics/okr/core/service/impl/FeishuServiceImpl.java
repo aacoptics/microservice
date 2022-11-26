@@ -52,6 +52,16 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
+    public FeishuUser getFeishuUserByAuthCode(String authCode) {
+        String unionId = getUserAuth(authCode);
+        if(StrUtil.isBlank(unionId))
+            return null;
+
+        return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getUnionId, unionId));
+    }
+
+
+    @Override
     public List<FeishuUser> getFeishuUsers(String userInfo, String currentUsername) {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
                 .like(FeishuUser::getName, userInfo)
@@ -78,6 +88,22 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public String fetchUploadMessageImageKey(String filePath) throws IOException {
         return fetchUploadImageKey(FeishuService.IMAGE_TYPE_MESSAGE, filePath);
+    }
+
+    @Override
+    public String getUserAuth(String authCode) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken)) return null;
+
+        JSONObject body = JSONUtil.createObj();
+        body.set("grant_type", "authorization_code");
+        body.set("code", authCode);
+
+        final JSONObject result = feishuApiProvider.fetchGetUserAuth(accessToken, body);
+
+        return result.get("code", Integer.class) == 0
+                ? result.get("data", JSONObject.class).getStr("union_id")
+                : null;
     }
 
     @Override

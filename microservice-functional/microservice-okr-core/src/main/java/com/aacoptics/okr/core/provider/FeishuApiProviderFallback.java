@@ -6,6 +6,8 @@ import com.aacoptics.okr.core.config.FeishuAppKeyConfig;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -24,6 +26,12 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
                 return JSONUtil.createObj().set("Throwable", throwable.toString());
             }
 
+            @Override
+            public JSONObject fetchGetUserAuth(@RequestHeader("Authorization") String authorization,
+                                        @RequestBody JSONObject message){
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
             @Override
             public JSONObject fetchUploadImageKey(String authorization, String imageType, MultipartFile file) {
                 throwable.printStackTrace();

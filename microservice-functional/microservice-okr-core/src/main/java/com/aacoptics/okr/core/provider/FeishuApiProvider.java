@@ -36,6 +36,10 @@ public interface FeishuApiProvider {
                                    @RequestParam("receive_id_type") String receiveIdType,
                                    @RequestBody JSONObject message);
 
+    @PostMapping(value = "/authen/v1/access_token", headers = {"Content-Type=application/json;charset=UTF-8"})
+    JSONObject fetchGetUserAuth(@RequestHeader("Authorization") String authorization,
+                                   @RequestBody JSONObject message);
+
     @GetMapping(value = "/im/v1/chats",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
     JSONObject fetchChats(@RequestHeader("Authorization") String authorization,
