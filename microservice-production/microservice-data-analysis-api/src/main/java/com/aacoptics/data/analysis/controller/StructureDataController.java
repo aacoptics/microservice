@@ -186,7 +186,13 @@ public class StructureDataController {
     @ApiImplicitParam(paramType = "path", name = "id", value = "结构数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(structureDataService.delete(id));
+        StructureData sd = structureDataService.getById(id);
+        boolean flag = structureDataService.delete(id);
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory("structureData");
+        FtpUtil.deleteFile(sd.getAssemblyDrawing().substring(0,sd.getAssemblyDrawing().indexOf(".")));
+        System.out.println("删除成功！");
+        return Result.success(flag);
     }
 
 

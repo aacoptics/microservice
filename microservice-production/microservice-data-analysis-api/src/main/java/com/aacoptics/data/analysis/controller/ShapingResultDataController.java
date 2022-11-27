@@ -240,7 +240,23 @@ public class ShapingResultDataController {
     @ApiImplicitParam(paramType = "path", name = "id", value = "成型结果数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(shapingResultDataService.delete(id));
+        // 删除图片
+        ShapingResultData srd = shapingResultDataService.getById(id);
+        boolean flag = shapingResultDataService.delete(id);
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory("shapingResultData");
+        FtpUtil.deleteFile(srd.getWftR1Pic().substring(0, srd.getWftR1Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getWftR2Pic().substring(0, srd.getWftR2Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCftR1Pic().substring(0, srd.getCftR1Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCftR2Pic().substring(0, srd.getCftR2Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCoatingTrend().substring(0, srd.getCoatingTrend().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR1().substring(0, srd.getCfsrR1().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR2().substring(0, srd.getCfsrR2().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR1R2().substring(0, srd.getCfsrR1R2().indexOf(".")));
+        FtpUtil.deleteFile(srd.getAppearanceImg().substring(0, srd.getAppearanceImg().indexOf(".")));
+        System.out.println(srd.getAppearanceImg());
+        System.out.println("删除成功。。。");
+        return Result.success(flag);
     }
 
     @ApiOperation(value = "更新成型结果数据", notes = "修改指定位置的数据")
