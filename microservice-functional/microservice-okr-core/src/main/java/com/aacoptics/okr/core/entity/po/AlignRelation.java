@@ -34,6 +34,10 @@ public class AlignRelation implements Serializable {
 
     private String ownerUsername;
 
+    private String objectiveRealName;
+
+    private String objectiveUsername;
+
     private LocalDateTime createdTime;
 
     @TableField(exist = false)

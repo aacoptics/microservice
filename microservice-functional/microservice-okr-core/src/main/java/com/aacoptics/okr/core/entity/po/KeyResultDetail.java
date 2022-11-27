@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,6 +32,10 @@ public class KeyResultDetail implements Serializable {
     private String deleted = "N";
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+    private String atUsers;
+
+    @TableField(exist = false)
+    private List<FeishuUser> users;
 
     @TableField(exist = false)
     private Boolean alreadyAlign;

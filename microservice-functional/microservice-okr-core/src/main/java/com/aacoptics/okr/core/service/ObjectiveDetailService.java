@@ -11,7 +11,7 @@ public interface ObjectiveDetailService {
     boolean update(ObjectiveDetail objectiveDetail);
     List<ObjectiveDetail> listAllByUsername(String username, Long periodId);
 
-    List<ObjectiveDetail> listAllByUsername(String username, Long periodId, Long objectiveId);
+    List<ObjectiveDetail> listAllByUsername(String username, Long periodId, Long objectiveId, Boolean isAligned);
 
     ObjectiveDetail listById(Long id);
 

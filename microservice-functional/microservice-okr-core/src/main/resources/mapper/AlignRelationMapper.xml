@@ -9,4 +9,11 @@
         group by owner_username, owner_real_name
     </select>
 
+    <select id="getAlignedCountInfo" resultType="com.aacoptics.okr.core.entity.po.AlignRelation">
+        select count(*) as count_num, objective_username, objective_real_name
+        from t_okr_align_relation
+        where align_id = #{objectiveId}
+        group by objective_username, objective_real_name
+    </select>
+
 </mapper>

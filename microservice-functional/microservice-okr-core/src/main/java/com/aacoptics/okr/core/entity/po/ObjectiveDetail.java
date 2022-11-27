@@ -34,12 +34,19 @@ public class ObjectiveDetail implements Serializable {
     private String createdBy;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+    private String atUsers;
+
+    @TableField(exist = false)
+    private List<FeishuUser> users;
 
     @TableField(exist = false)
     private List<KeyResultDetail> keyResultDetails;
 
     @TableField(exist = false)
     private List<AlignRelation> AlignRelations;
+
+    @TableField(exist = false)
+    private List<AlignRelation> AlignedRelations;
 
     @TableField(exist = false)
     private Boolean alreadyAlign;

@@ -52,9 +52,21 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
+    public List<FeishuUser> getFeishuUsers(List<String> employeeNos) {
+        return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>().in(FeishuUser::getEmployeeNo, employeeNos));
+    }
+
+    @Override
+    public List<FeishuUser> listAllUsers() {
+        return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
+                .eq(FeishuUser::getIsFrozen, '0')
+                .eq(FeishuUser::getIsResigned, '0'));
+    }
+
+    @Override
     public FeishuUser getFeishuUserByAuthCode(String authCode) {
         String unionId = getUserAuth(authCode);
-        if(StrUtil.isBlank(unionId))
+        if (StrUtil.isBlank(unionId))
             return null;
 
         return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getUnionId, unionId));
@@ -66,6 +78,12 @@ public class FeishuServiceImpl implements FeishuService {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
                 .like(FeishuUser::getName, userInfo)
                 .ne(FeishuUser::getEmployeeNo, currentUsername));
+    }
+
+    @Override
+    public List<FeishuUser> getFeishuUsers(String userInfo) {
+        return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
+                .like(FeishuUser::getName, userInfo));
     }
 
     @Override
@@ -217,7 +235,7 @@ public class FeishuServiceImpl implements FeishuService {
 
     @Override
     public JSONObject createTask(String userIdType,
-                              JSONObject jsonObject) {
+                                 JSONObject jsonObject) {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken))
             throw new BusinessException("获取access token失败！");
@@ -242,7 +260,7 @@ public class FeishuServiceImpl implements FeishuService {
 
     @Override
     public JSONObject getTaskCommentsInfo(String taskId,
-                                       String CommentId) {
+                                          String CommentId) {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken))
             throw new BusinessException("获取access token报错");

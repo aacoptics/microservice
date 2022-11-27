@@ -27,4 +27,17 @@ public class OkrFeishuController {
         FeishuUser feishuUser = feishuService.getFeishuUserByAuthCode(authCode);
         return feishuUser == null ? Result.fail() : Result.success(feishuUser);
     }
+
+    @ApiOperation(value = "搜索飞书人员", notes = "搜索飞书人员")
+    @ApiImplicitParam(name = "userInfo", required = true, dataType = "String")
+    @GetMapping("/getFeishuUsers")
+    public Result getFeishuUsers(@Valid @RequestParam String userInfo) {
+        return Result.success(feishuService.getFeishuUsers(userInfo));
+    }
+
+    @ApiOperation(value = "搜索所有飞书人员", notes = "搜索所有飞书人员")
+    @GetMapping("/getAllFeishuUsers")
+    public Result getAllFeishuUsers() {
+        return Result.success(feishuService.listAllUsers());
+    }
 }

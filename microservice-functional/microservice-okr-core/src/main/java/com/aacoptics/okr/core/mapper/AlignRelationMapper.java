@@ -15,4 +15,6 @@ public interface AlignRelationMapper extends BaseMapper<AlignRelation> {
 
     List<AlignRelation> getAlignCountInfo(@Param("objectiveId") Long objectiveId);
 
+    List<AlignRelation> getAlignedCountInfo(@Param("objectiveId") Long objectiveId);
+
 }

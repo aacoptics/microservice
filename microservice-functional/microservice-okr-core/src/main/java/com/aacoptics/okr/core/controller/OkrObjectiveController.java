@@ -71,8 +71,11 @@ public class OkrObjectiveController {
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
     @GetMapping(value = "/listAllByUsernameIncludeAlignInfo")
-    public Result listAllByUsernameIncludeAlignInfo(@RequestParam Long periodId, @RequestParam String username, @RequestParam Long objectiveId) {
-        return Result.success(objectiveDetailService.listAllByUsername(username, periodId, objectiveId));
+    public Result listAllByUsernameIncludeAlignInfo(@RequestParam Long periodId,
+                                                    @RequestParam String username,
+                                                    @RequestParam Long objectiveId,
+                                                    @RequestParam Boolean isAligned) {
+        return Result.success(objectiveDetailService.listAllByUsername(username, periodId, objectiveId, isAligned));
     }
 
     @ApiOperation(value = "更新O状态，分值", notes = "更新O状态，分值")

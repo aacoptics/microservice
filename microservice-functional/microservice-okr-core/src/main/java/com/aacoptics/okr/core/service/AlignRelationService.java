@@ -16,5 +16,9 @@ public interface AlignRelationService {
 
     List<AlignRelation> listAllByOId(Long id);
 
+    List<AlignRelation> listAlignedByOId(Long id);
+
     List<AlignRelation> getAlignCountInfo(Long id);
+
+    List<AlignRelation> getAlignedCountInfo(Long id);
 }

@@ -1,5 +1,6 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.aacoptics.okr.core.entity.po.*;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
@@ -58,30 +59,49 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
         for (ObjectiveDetail o : res) {
             o.setKeyResultDetails(keyResultDetailService.listAllByOId(o.getId()));
             o.setAlignRelations(alignRelationService.getAlignCountInfo(o.getId()));
+            o.setAlignedRelations(alignRelationService.getAlignedCountInfo(o.getId()));
         }
         return res;
     }
 
     @Override
-    public List<ObjectiveDetail> listAllByUsername(String username, Long periodId, Long objectiveId) {
-        List<AlignRelation> alignRelations = alignRelationService.listAllByOId(objectiveId);
+    public List<ObjectiveDetail> listAllByUsername(String username, Long periodId, Long objectiveId, Boolean isAligned) {
         QueryWrapper<ObjectiveDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("created_by", username)
                 .eq("period_id", periodId)
                 .eq("deleted", "N");
 
         List<ObjectiveDetail> res = this.list(queryWrapper);
+        List<AlignRelation> alignRelations;
+        if (isAligned) {
+            alignRelations = alignRelationService.listAlignedByOId(objectiveId);
+        } else {
+            alignRelations = alignRelationService.listAllByOId(objectiveId);
+        }
 
         for (ObjectiveDetail o : res) {
-            if(alignRelations.stream().anyMatch(item -> item.getAlignType() == 2
-                    && Objects.equals(item.getAlignId(), o.getId())))
-                o.setAlreadyAlign(true);
-            o.setKeyResultDetails(keyResultDetailService.listAllByOId(o.getId()));
+            if (isAligned) {
+                if (alignRelations.stream().anyMatch(item -> item.getAlignType() == 2
+                        && Objects.equals(item.getObjectiveId(), o.getId())))
+                    o.setAlreadyAlign(true);
+                o.setKeyResultDetails(keyResultDetailService.listAllByOId(o.getId()));
+            } else {
+                if (alignRelations.stream().anyMatch(item -> item.getAlignType() == 2
+                        && Objects.equals(item.getAlignId(), o.getId())))
+                    o.setAlreadyAlign(true);
+                o.setKeyResultDetails(keyResultDetailService.listAllByOId(o.getId()));
+            }
 
             for (KeyResultDetail keyResultDetail : o.getKeyResultDetails()) {
-                if(alignRelations.stream().anyMatch(item -> item.getAlignType() == 3
-                        && Objects.equals(item.getAlignId(), keyResultDetail.getId())))
-                    keyResultDetail.setAlreadyAlign(true);
+                if (isAligned) {
+                    if (alignRelations.stream().anyMatch(item -> item.getAlignType() == 3
+                            && Objects.equals(item.getObjectiveId(), keyResultDetail.getId())))
+                        keyResultDetail.setAlreadyAlign(true);
+                } else {
+                    if (alignRelations.stream().anyMatch(item -> item.getAlignType() == 3
+                            && Objects.equals(item.getAlignId(), keyResultDetail.getId())))
+                        keyResultDetail.setAlreadyAlign(true);
+                }
             }
         }
         return res;
@@ -135,16 +155,21 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
     @Transactional
     public boolean addOrUpdateObjective(ObjectiveDetail objectiveDetail) {
         if (objectiveDetail.getId() != null) {
+            this.updateById(objectiveDetail);
             if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
+                    if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
+                        continue;
                     keyResultDetail.setObjectiveId(objectiveDetail.getId());
                     keyResultDetailService.addOrUpdateKeyResult(keyResultDetail);
                 }
             }
-        } else{
+        } else {
             this.add(objectiveDetail);
-            if(objectiveDetail.getKeyResultDetails().size() > 0){
+            if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
+                    if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
+                        continue;
                     keyResultDetail.setObjectiveId(objectiveDetail.getId());
                     keyResultDetailService.addOrUpdateKeyResult(keyResultDetail);
                 }
@@ -155,13 +180,13 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
     }
 
     @Override
-    public List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId){
+    public List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId) {
         List<FeishuUser> users = feishuService.getFeishuUsers(userInfo, currentUsername);
         List<TreeModel> res = new ArrayList<>();
-        if(users.size() > 0){
+        if (users.size() > 0) {
             for (FeishuUser user : users) {
                 TreeModel treeModel = new TreeModel();
-                String uuid = UUID.randomUUID().toString().replaceAll("-","");
+                String uuid = UUID.randomUUID().toString().replaceAll("-", "");
                 treeModel.setId(uuid)
                         .setLabelName(user.getName())
                         .setRemark(user.getJobTitle())
@@ -169,14 +194,14 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                         .setNodeType(1);
 
                 List<ObjectiveDetail> objectiveDetails = listAllByUsername(user.getEmployeeNo(), periodId);
-                if(objectiveDetails.size() > 0){
+                if (objectiveDetails.size() > 0) {
                     List<TreeModel> objectiveRes = new ArrayList<>();
                     for (int i = 0; i < objectiveDetails.size(); i++) {
-                        if(alignRelationService.checkAlignStatus(2, objectiveId, objectiveDetails.get(i).getId()))
+                        if (alignRelationService.checkAlignStatus(2, objectiveId, objectiveDetails.get(i).getId()))
                             continue;
 
                         TreeModel oTreeModel = new TreeModel();
-                        String oUuid = UUID.randomUUID().toString().replaceAll("-","");
+                        String oUuid = UUID.randomUUID().toString().replaceAll("-", "");
                         oTreeModel.setId(oUuid)
                                 .setLabelName(objectiveDetails.get(i).getObjectiveName())
                                 .setRemark(String.valueOf(i + 1))
@@ -185,14 +210,14 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
                         List<KeyResultDetail> keyResultDetails = keyResultDetailService.listAllByOId(objectiveDetails.get(i).getId());
 
-                        if(keyResultDetails.size() > 0){
+                        if (keyResultDetails.size() > 0) {
                             List<TreeModel> keyResultRes = new ArrayList<>();
                             for (int j = 0; j < keyResultDetails.size(); j++) {
-                                if(alignRelationService.checkAlignStatus(3, objectiveId, keyResultDetails.get(j).getId()))
+                                if (alignRelationService.checkAlignStatus(3, objectiveId, keyResultDetails.get(j).getId()))
                                     continue;
 
                                 TreeModel krTreeModel = new TreeModel();
-                                String krUuid = UUID.randomUUID().toString().replaceAll("-","");
+                                String krUuid = UUID.randomUUID().toString().replaceAll("-", "");
                                 krTreeModel.setId(krUuid)
                                         .setLabelName(keyResultDetails.get(j).getKeyResultName())
                                         .setRemark(String.valueOf(j + 1))

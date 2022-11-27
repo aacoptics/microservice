@@ -43,7 +43,7 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
     }
 
     @Override
-    public boolean checkAlignStatus(Integer alignType, Long ObjectiveId, Long alignId){
+    public boolean checkAlignStatus(Integer alignType, Long ObjectiveId, Long alignId) {
         QueryWrapper<AlignRelation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("align_type", alignType)
                 .eq("align_id", alignId)
@@ -59,7 +59,19 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
     }
 
     @Override
+    public List<AlignRelation> listAlignedByOId(Long id) {
+        QueryWrapper<AlignRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("align_id", id);
+        return this.list(queryWrapper);
+    }
+
+    @Override
     public List<AlignRelation> getAlignCountInfo(Long id) {
         return alignRelationMapper.getAlignCountInfo(id);
+    }
+
+    @Override
+    public List<AlignRelation> getAlignedCountInfo(Long id) {
+        return alignRelationMapper.getAlignedCountInfo(id);
     }
 }

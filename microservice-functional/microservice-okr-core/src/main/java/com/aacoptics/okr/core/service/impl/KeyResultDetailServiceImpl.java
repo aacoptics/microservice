@@ -59,7 +59,7 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
 
     @Override
     public boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail) {
-        if(keyResultDetail.getId() != null)
+        if (keyResultDetail.getId() != null)
             return this.updateById(keyResultDetail);
         else
             return this.add(keyResultDetail);

@@ -46,7 +46,11 @@ public interface FeishuService {
 
     FeishuUser getFeishuUser(String employeeNo);
 
+    List<FeishuUser> getFeishuUsers(List<String> employeeNos);
+
     List<FeishuUser> getFeishuUsers(String userInfo, String currentUsername);
+
+    List<FeishuUser> getFeishuUsers(String userInfo);
 
     String fetchAccessToken();
 
@@ -63,6 +67,8 @@ public interface FeishuService {
     FeishuUser getFeishuUserByAuthCode(String authCode);
 
     JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
+
+    List<FeishuUser> listAllUsers();
 
     boolean deleteMessage(String messageId);
 
