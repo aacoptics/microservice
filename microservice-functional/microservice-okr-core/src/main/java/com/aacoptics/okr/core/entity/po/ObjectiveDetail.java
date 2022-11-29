@@ -28,7 +28,7 @@ public class ObjectiveDetail implements Serializable {
     private String objectiveName;
     private String remark;
     private Integer statusInfo;
-    private float score;
+    private Integer score;
     @TableLogic
     private String deleted = "N";
     private String createdBy;
