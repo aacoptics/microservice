@@ -4,6 +4,7 @@ import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
+import com.aacoptics.okr.core.service.ActionDetailService;
 import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.aacoptics.okr.core.service.ObjectiveDetailService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,11 +13,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 @Slf4j
 public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMapper, KeyResultDetail> implements KeyResultDetailService {
+
+    @Resource
+    ActionDetailService actionDetailService;
+
     @Override
     public boolean add(KeyResultDetail keyResultDetail) {
         return this.save(keyResultDetail);
@@ -37,7 +43,11 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
         QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("objective_id", id)
                 .eq("deleted", "N");
-        return this.list(queryWrapper);
+        List<KeyResultDetail> res = this.list(queryWrapper);
+        for (KeyResultDetail o : res) {
+            o.setActionDetails(actionDetailService.listAllByKrId(o.getId()));
+        }
+        return res;
     }
 
     @Override

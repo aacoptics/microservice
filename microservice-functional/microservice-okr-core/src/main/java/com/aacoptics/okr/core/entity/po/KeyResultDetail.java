@@ -38,5 +38,8 @@ public class KeyResultDetail implements Serializable {
     private List<FeishuUser> users;
 
     @TableField(exist = false)
+    private List<ActionDetail> actionDetails;
+
+    @TableField(exist = false)
     private Boolean alreadyAlign;
 }
