@@ -98,7 +98,6 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    @Async
     public void sendPersonalMessage(FeishuUser feishuUser, JSONObject cardJson) {
 
         JSONObject resultBySendMsg = sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);

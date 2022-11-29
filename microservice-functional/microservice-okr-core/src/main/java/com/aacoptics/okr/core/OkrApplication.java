@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 @EnableFeignClients
-@EnableAsync
 public class OkrApplication {
     public static void main(String[] args) {
         SpringApplication.run(OkrApplication.class, args);
