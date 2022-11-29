@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -25,7 +26,25 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
 
     @Override
     public boolean add(AlignRelation alignRelation) {
-        return this.save(alignRelation);
+        if (checkCycleAlign(alignRelation, alignRelation.getAlignId()))
+            return this.save(alignRelation);
+        else
+            return false;
+    }
+
+    public boolean checkCycleAlign(AlignRelation alignRelation, Long alignId) {
+        Long myObjectiveId = alignRelation.getObjectiveId();
+        List<AlignRelation> alignRelations = listAlignedByOId(myObjectiveId);
+        if (alignRelations.size() > 0) {
+            if (alignRelations.stream().anyMatch(item -> Objects.equals(item.getObjectiveId(), alignId)))
+                return false;
+            else {
+                for (AlignRelation relation : alignRelations) {
+                    return checkCycleAlign(relation, alignId);
+                }
+            }
+        }
+        return true;
     }
 
     @Override

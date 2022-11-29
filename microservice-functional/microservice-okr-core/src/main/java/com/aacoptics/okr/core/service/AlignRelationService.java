@@ -8,6 +8,8 @@ import java.util.List;
 public interface AlignRelationService {
     boolean add(AlignRelation alignRelation);
 
+    boolean checkCycleAlign(AlignRelation alignRelation, Long alignId);
+
     boolean deleteAlignInfo(Integer alignType, Long ObjectiveId, Long alignId);
 
     boolean update(AlignRelation alignRelation);
