@@ -318,6 +318,13 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         boolean isRepairBoolean = false;
         for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
         {
+            //更新保养项值
+            InspectionOrderItem existsOrderItem = inspectionOrderItemService.get(inspectionOrderItem.getId());
+            inspectionOrderItem.setCheckItem(existsOrderItem.getCheckItem());
+            inspectionOrderItem.setCheckItemStandard(existsOrderItem.getCheckItemStandard());
+            inspectionOrderItem.setMinValue(existsOrderItem.getMinValue());
+            inspectionOrderItem.setMaxValue(existsOrderItem.getMaxValue());
+
             //判断是否需要维修
             Integer isRepair = inspectionOrderItem.getIsRepair();
             if(isRepair == 1 && InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))

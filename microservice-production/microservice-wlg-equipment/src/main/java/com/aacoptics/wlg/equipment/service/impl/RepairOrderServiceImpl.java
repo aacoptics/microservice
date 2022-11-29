@@ -8,6 +8,7 @@ import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.RepairOrderMapper;
 import com.aacoptics.wlg.equipment.service.EquipmentService;
+import com.aacoptics.wlg.equipment.service.MessageService;
 import com.aacoptics.wlg.equipment.service.RepairOrderService;
 import com.aacoptics.wlg.equipment.service.SequenceService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -37,6 +38,9 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
     @Resource
     SequenceService sequenceService;
+
+    @Resource
+    MessageService messageService;
 
     @Override
     public IPage<RepairOrderVO> query(Page page, RepairOrderQueryParam repairOrderQueryParam) {
@@ -82,6 +86,8 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         if (isSuccess == false) {
             throw new BusinessException("新增维修工单失败");
         }
+        //新增成功，推送飞书消息
+        messageService.sendRepairMessage(repairOrder);
 
         return isSuccess;
     }
@@ -188,6 +194,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         targetRepairOrder.setRepairDesc(repairOrder.getRepairDesc());
         targetRepairOrder.setRepairDatetime(LocalDateTime.now());
         boolean isSuccess = this.updateById(targetRepairOrder);
+
         return isSuccess;
     }
 
@@ -214,6 +221,9 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
 
         this.save(repairOrder);
 
+        //新增成功，推送飞书消息
+        messageService.sendRepairMessage(repairOrder);
+
         return repairOrder;
     }
 
@@ -239,6 +249,9 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         repairOrder.setFaultImageId(maintenanceOrderItem.getFaultImageId());
 
         this.save(repairOrder);
+
+        //新增成功，推送飞书消息
+        messageService.sendRepairMessage(repairOrder);
 
         return repairOrder;
     }
