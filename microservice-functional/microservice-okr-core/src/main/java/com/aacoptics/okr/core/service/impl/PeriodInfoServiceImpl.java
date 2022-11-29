@@ -35,4 +35,12 @@ public class PeriodInfoServiceImpl extends ServiceImpl<PeriodInfoMapper, PeriodI
                 .orderByDesc("start_time");
         return this.list(queryWrapper);
     }
+
+    @Override
+    public PeriodInfo getById(Long id) {
+        QueryWrapper<PeriodInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ge("period_status", 0)
+                .eq("id", id);
+        return this.getOne(queryWrapper);
+    }
 }

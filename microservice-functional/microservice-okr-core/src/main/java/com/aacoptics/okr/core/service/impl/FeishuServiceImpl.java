@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -61,6 +62,52 @@ public class FeishuServiceImpl implements FeishuService {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
                 .eq(FeishuUser::getIsFrozen, '0')
                 .eq(FeishuUser::getIsResigned, '0'));
+    }
+
+    @Override
+    public JSONObject getMarkdownMessage(String content, String imageKey){
+        //config
+        JSONObject config = new JSONObject();
+        config.set("wide_screen_mode", true);
+        config.set("enable_forward", true);
+
+        //elements
+        JSONArray elements = new JSONArray();
+
+        JSONObject text = new JSONObject();
+        text.set("content", content);
+        text.set("tag", "markdown");
+        elements.add(text);
+
+        if(StrUtil.isNotEmpty(imageKey)){
+            JSONObject textContent = new JSONObject();
+            textContent.set("tag","plain_text");
+            textContent.set("content","");
+            JSONObject elementImg = new JSONObject();
+            elementImg.set("tag", "img");
+            elementImg.set("img_key", imageKey);
+            elementImg.set("mode", "fit_horizontal");
+            elementImg.set("alt", textContent);
+            elements.add(elementImg);
+        }
+
+        JSONObject card = new JSONObject();
+        card.set("config", config);
+        card.set("elements", elements);
+        return card;
+    }
+
+    @Override
+    @Async
+    public void sendPersonalMessage(FeishuUser feishuUser, JSONObject cardJson) {
+
+        JSONObject resultBySendMsg = sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+
+        if (resultBySendMsg.get("code", Integer.class) == 0) {
+            log.info("推送消息成功！用户：{" + feishuUser.getName() + "}");
+        } else {
+            throw new BusinessException("推送消息失败！用户：{" + feishuUser.getName() + "}");
+        }
     }
 
     @Override

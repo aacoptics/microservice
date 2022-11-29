@@ -21,6 +21,8 @@ public interface ObjectiveDetailService {
 
     boolean deleteObjective(Long id);
 
+    String getMarkDownMessage(ObjectiveDetail objectiveDetail, String periodName);
+
     boolean addOrUpdateObjective(ObjectiveDetail objectiveDetail);
 
     List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId);

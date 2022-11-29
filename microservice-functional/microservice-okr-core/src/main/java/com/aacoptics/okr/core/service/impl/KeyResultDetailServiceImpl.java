@@ -1,10 +1,14 @@
 package com.aacoptics.okr.core.service.impl;
 
+import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
+import com.aacoptics.okr.core.entity.po.PeriodInfo;
+import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.service.ActionDetailService;
+import com.aacoptics.okr.core.service.FeishuService;
 import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.aacoptics.okr.core.service.ObjectiveDetailService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,6 +27,9 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
 
     @Resource
     ActionDetailService actionDetailService;
+
+    @Resource
+    FeishuService feishuService;
 
     @Override
     public boolean add(KeyResultDetail keyResultDetail) {
@@ -68,10 +76,28 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
-    public boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail) {
+    public boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail, String periodName) {
         if (keyResultDetail.getId() != null)
             return this.updateById(keyResultDetail);
-        else
+        else{
+            if(keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null){
+                for (FeishuUser user : keyResultDetail.getUsers()) {
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
+                }
+            }
             return this.add(keyResultDetail);
+        }
+
+    }
+
+    @Override
+    public String getMarkDownMessage(KeyResultDetail keyResultDetail, String periodName) {
+        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+        markdownGroupMessage.setTitle("有一条Key Result提及到您：");
+        markdownGroupMessage.addBlobContent("周期：" + periodName);
+        markdownGroupMessage.addContent("Key Result内容：" + keyResultDetail.getKeyResultName());
+        String atUsers = keyResultDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
+        markdownGroupMessage.addContent("提及人员：" + atUsers);
+        return markdownGroupMessage.toString();
     }
 }

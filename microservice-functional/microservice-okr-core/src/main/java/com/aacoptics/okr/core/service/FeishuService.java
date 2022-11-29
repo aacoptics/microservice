@@ -48,6 +48,10 @@ public interface FeishuService {
 
     List<FeishuUser> getFeishuUsers(List<String> employeeNos);
 
+    void sendPersonalMessage(FeishuUser feishuUser, JSONObject cardJson);
+
+    JSONObject getMarkdownMessage(String content, String imageKey);
+
     List<FeishuUser> getFeishuUsers(String userInfo, String currentUsername);
 
     List<FeishuUser> getFeishuUsers(String userInfo);

@@ -14,9 +14,11 @@ public interface KeyResultDetailService {
 
     List<KeyResultDetail> listAllByOId(Long id);
 
+    String getMarkDownMessage(KeyResultDetail keyResultDetail, String periodName);
+
     boolean updateStatusAndScore(KeyResultDetail keyResultDetail);
 
     boolean deleteKeyResult(Long id);
 
-    boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail);
+    boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail, String periodName);
 }

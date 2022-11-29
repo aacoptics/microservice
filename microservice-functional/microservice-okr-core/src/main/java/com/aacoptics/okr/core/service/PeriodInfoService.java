@@ -10,4 +10,6 @@ public interface PeriodInfoService {
     boolean update(PeriodInfo periodInfo);
 
     List<PeriodInfo> listAll();
+
+    PeriodInfo getById(Long id);
 }

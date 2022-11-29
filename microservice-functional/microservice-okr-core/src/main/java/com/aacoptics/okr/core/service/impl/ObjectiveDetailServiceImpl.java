@@ -1,7 +1,9 @@
 package com.aacoptics.okr.core.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.aacoptics.okr.core.entity.po.*;
+import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.mapper.PeriodInfoMapper;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,6 +28,9 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
     @Resource
     KeyResultDetailService keyResultDetailService;
+
+    @Resource
+    PeriodInfoService periodInfoService;
 
     @Resource
     AlignRelationService alignRelationService;
@@ -161,23 +167,49 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
                         continue;
                     keyResultDetail.setObjectiveId(objectiveDetail.getId());
-                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail);
+                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, null);
                 }
             }
         } else {
             this.add(objectiveDetail);
+            PeriodInfo periodInfo = periodInfoService.getById(objectiveDetail.getPeriodId());
+
+            if (periodInfo == null) {
+                log.error("找不到该周期！");
+            }
+
+            if(objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null){
+                for (FeishuUser user : objectiveDetail.getUsers()) {
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
+                }
+            }
+
             if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
                     if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
                         continue;
                     keyResultDetail.setObjectiveId(objectiveDetail.getId());
-                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail);
+                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, periodInfo.getPeriodName());
                 }
             }
         }
 
         return true;
     }
+
+
+
+    @Override
+    public String getMarkDownMessage(ObjectiveDetail objectiveDetail, String periodName) {
+        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+        markdownGroupMessage.setTitle("有一条Objective提及到您：");
+        markdownGroupMessage.addBlobContent("周期：" + periodName);
+        markdownGroupMessage.addContent("Objective内容：" + objectiveDetail.getObjectiveName());
+        String atUsers = objectiveDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
+        markdownGroupMessage.addContent("提及人员：" + atUsers);
+        return markdownGroupMessage.toString();
+    }
+
 
     @Override
     public List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId) {
