@@ -322,6 +322,13 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
         for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
         {
+            //更新保养项值
+            MaintenanceOrderItem existsOrderItem = maintenanceOrderItemService.get(maintenanceOrderItem.getId());
+            maintenanceOrderItem.setMaintenanceItem(existsOrderItem.getMaintenanceItem());
+            maintenanceOrderItem.setMaintenanceItemStandard(existsOrderItem.getMaintenanceItemStandard());
+            maintenanceOrderItem.setMinValue(existsOrderItem.getMinValue());
+            maintenanceOrderItem.setMaxValue(existsOrderItem.getMaxValue());
+
             //判断是否需要维修
             Integer isRepair = maintenanceOrderItem.getIsRepair();
             if(isRepair == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))

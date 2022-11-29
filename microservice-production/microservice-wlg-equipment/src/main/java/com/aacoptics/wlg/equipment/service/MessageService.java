@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service;
 
 import com.aacoptics.wlg.equipment.entity.po.MessageHistory;
+import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
 
 public interface MessageService {
 
@@ -20,6 +21,12 @@ public interface MessageService {
      * @return
      */
     boolean sendMaintenanceExceptionMessage();
+
+    /**
+     * 推送维修工单
+     *
+     */
+    boolean sendRepairMessage(RepairOrder repairOrder);
 
 
     /**
