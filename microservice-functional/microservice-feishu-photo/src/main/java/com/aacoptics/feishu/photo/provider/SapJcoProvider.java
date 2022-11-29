@@ -97,8 +97,8 @@ public class SapJcoProvider {
      * @throws Exception
      */
     public JSONArray getEmployeeInfoList(int idFlag) throws Exception {
-        LocalDate currentDate = LocalDate.now();
-        String currentDateStr = currentDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        LocalDate handleDate = LocalDate.now().plusDays(-1);
+        String handleDateStr = handleDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
         JCoDestination destination = this.getDestination();
         JCoFunction function = destination.getRepository().getFunction("ZHRPAFM069");
@@ -109,7 +109,7 @@ public class SapJcoProvider {
         4：全量zhrdc026-中间表获取
         5：全量-无照片*/
         param.setValue("ID_FLAG", idFlag);
-        param.setValue("ID_DATE", currentDateStr);
+        param.setValue("ID_DATE", handleDateStr);
         // param.setValue("ID_DATE", "20220902");//    日期
         function.execute(destination);
 
