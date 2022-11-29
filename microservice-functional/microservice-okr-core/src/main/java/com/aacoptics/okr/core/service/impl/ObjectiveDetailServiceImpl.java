@@ -1,12 +1,12 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import com.aacoptics.okr.core.entity.po.*;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
+import com.aacoptics.okr.core.entity.vo.OkrChatTreeModel;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
-import com.aacoptics.okr.core.mapper.PeriodInfoMapper;
 import com.aacoptics.okr.core.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMapper, ObjectiveDetail> implements ObjectiveDetailService {
+
+    @Resource
+    ObjectiveDetailMapper mapper;
 
     @Resource
     KeyResultDetailService keyResultDetailService;
@@ -178,7 +183,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                 log.error("找不到该周期！");
             }
 
-            if(objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null){
+            if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
                 for (FeishuUser user : objectiveDetail.getUsers()) {
                     feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
@@ -196,7 +201,6 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
         return true;
     }
-
 
 
     @Override
@@ -266,6 +270,66 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     res.add(treeModel);
                 }
             }
+        }
+        return res;
+    }
+
+    @Override
+    public List<Tuple2<OkrChatTreeModel, OkrChatTreeModel>> okrAlignChat(String employNo, Long periodId) {
+        List<Tuple2<OkrChatTreeModel, OkrChatTreeModel>> res = new ArrayList<>();
+        final List<ObjectiveDetail> objectiveDetails = mapper.selectByEmployNoAndPeriod(employNo, periodId);
+        for (ObjectiveDetail objectiveDetail : objectiveDetails) {
+            OkrChatTreeModel alignOkrChatTreeModel = new OkrChatTreeModel();
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            alignOkrChatTreeModel.setId(uuid)
+                    .setUserName(objectiveDetail.getCreatedBy())
+                    .setLabelName(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            OkrChatTreeModel alignedOkrChatTreeModel = new OkrChatTreeModel();
+            alignedOkrChatTreeModel.setId(uuid)
+                    .setUserName(objectiveDetail.getCreatedBy())
+                    .setLabelName(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setChildren(alignedChildren(objectiveDetail.getAlignedRelations()));
+
+            res.add(Tuples.of(alignOkrChatTreeModel, alignedOkrChatTreeModel));
+        }
+        return res;
+    }
+
+    private List<OkrChatTreeModel> alignChildren(List<AlignRelation> alignRelations) {
+        List<OkrChatTreeModel> res = new ArrayList<>();
+        if (CollUtil.isEmpty(alignRelations)) return res;
+        for (AlignRelation alignRelation : alignRelations) {
+            OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            ObjectiveDetail objectiveDetail = alignRelation.getAlignType() == 2
+                    ? mapper.listAlignByOId(alignRelation.getAlignId())
+                    : mapper.listAlignByKId(alignRelation.getAlignId());
+            okrChatTreeModel.setId(uuid)
+                    .setUserName(objectiveDetail.getCreatedBy())
+                    .setLabelName(objectiveDetail.getObjectiveName())
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            res.add(okrChatTreeModel);
+        }
+        return res;
+    }
+
+    private List<OkrChatTreeModel> alignedChildren(List<AlignRelation> alignedRelations) {
+        List<OkrChatTreeModel> res = new ArrayList<>();
+        if (CollUtil.isEmpty(alignedRelations)) return res;
+        for (AlignRelation alignedRelation : alignedRelations) {
+            OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            ObjectiveDetail objectiveDetail = alignedRelation.getAlignType() == 2
+                    ? mapper.listAlignedByOId(alignedRelation.getObjectiveId())
+                    : mapper.listAlignedByKId(alignedRelation.getObjectiveId());
+            okrChatTreeModel.setId(uuid)
+                    .setUserName(objectiveDetail.getCreatedBy())
+                    .setLabelName(objectiveDetail.getObjectiveName())
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            res.add(okrChatTreeModel);
         }
         return res;
     }

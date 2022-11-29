@@ -34,4 +34,9 @@ public class FeishuServiceTest {
         //List<FeishuUser> feishuUsers = feishuService.getFeishuUsers("60054916");
         String asd = "";
     }
+
+    @Test
+    public void Test1() {
+        objectiveDetailService.okrAlignChat("60054916", 2L);
+    }
 }
