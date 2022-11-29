@@ -100,13 +100,19 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public void sendPersonalMessage(FeishuUser feishuUser, JSONObject cardJson) {
 
-        JSONObject resultBySendMsg = sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+        try{
+            JSONObject resultBySendMsg = sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
 
-        if (resultBySendMsg.get("code", Integer.class) == 0) {
-            log.info("推送消息成功！用户：{" + feishuUser.getName() + "}");
-        } else {
-            throw new BusinessException("推送消息失败！用户：{" + feishuUser.getName() + "}");
+            if (resultBySendMsg.get("code", Integer.class) == 0) {
+                log.info("推送消息成功！用户：{" + feishuUser.getName() + "}");
+            } else {
+                log.error("推送消息失败！用户：{" + feishuUser.getName() + "}");
+            }
         }
+        catch(Exception err){
+            log.error("推送消息失败！用户：{" + feishuUser.getName() + "}" + err.getMessage());
+        }
+
     }
 
     @Override
