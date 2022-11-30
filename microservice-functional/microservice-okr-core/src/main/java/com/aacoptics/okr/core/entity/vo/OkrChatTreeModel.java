@@ -1,6 +1,8 @@
 package com.aacoptics.okr.core.entity.vo;
 
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,11 +22,15 @@ import java.util.List;
 @Accessors(chain = true)
 public class OkrChatTreeModel implements Serializable {
 
-    private String id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
 
-    private String userName;
+    private String label;
 
-    private String labelName;
+    private String content;
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Integer index;
 
     private List<KeyResultDetail> keyResultDetails = new ArrayList<>();
 

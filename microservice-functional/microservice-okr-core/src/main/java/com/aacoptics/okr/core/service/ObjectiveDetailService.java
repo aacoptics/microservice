@@ -29,5 +29,5 @@ public interface ObjectiveDetailService {
 
     List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId);
 
-    List<Tuple2<OkrChatTreeModel, OkrChatTreeModel>> okrAlignChat(String employNo, Long periodId);
+    List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> okrAlignChat(String employNo, Long periodId);
 }

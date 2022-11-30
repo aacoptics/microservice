@@ -152,7 +152,7 @@ public class OkrObjectiveController {
         return Result.success(alignRelationService.deleteAlignInfo(alignType, ObjectiveId, alignId));
     }
 
-    @ApiOperation(value = "获取okr图标", notes = "获取okr图标")
+    @ApiOperation(value = "获取okr图表", notes = "获取okr图表")
     @ApiResponses(
             @ApiResponse(code = 200, message = "处理成功", response = Result.class)
     )
