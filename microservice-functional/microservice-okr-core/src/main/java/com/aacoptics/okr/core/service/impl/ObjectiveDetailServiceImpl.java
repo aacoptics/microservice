@@ -164,6 +164,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                 keyResultDetailService.deleteKeyResult(keyResultDetail.getId());
             }
         }
+        alignRelationService.deleteAlignInfo(id);
         return removeById(id);
     }
 

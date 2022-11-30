@@ -12,6 +12,8 @@ public interface AlignRelationService {
 
     boolean deleteAlignInfo(Integer alignType, Long ObjectiveId, Long alignId);
 
+    boolean deleteAlignInfo(Long ObjectiveId);
+
     boolean update(AlignRelation alignRelation);
 
     boolean checkAlignStatus(Integer alignType, Long ObjectiveId, Long alignId);

@@ -57,6 +57,14 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
     }
 
     @Override
+    public boolean deleteAlignInfo(Long ObjectiveId) {
+        QueryWrapper<AlignRelation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("align_id", ObjectiveId)
+                .or().eq("objective_id", ObjectiveId);
+        return remove(queryWrapper);
+    }
+
+    @Override
     public boolean update(AlignRelation alignRelation) {
         return this.updateById(alignRelation);
     }

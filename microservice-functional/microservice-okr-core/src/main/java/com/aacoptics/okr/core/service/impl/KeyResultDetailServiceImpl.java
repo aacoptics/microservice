@@ -7,15 +7,13 @@ import com.aacoptics.okr.core.entity.po.PeriodInfo;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
-import com.aacoptics.okr.core.service.ActionDetailService;
-import com.aacoptics.okr.core.service.FeishuService;
-import com.aacoptics.okr.core.service.KeyResultDetailService;
-import com.aacoptics.okr.core.service.ObjectiveDetailService;
+import com.aacoptics.okr.core.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +25,9 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
 
     @Resource
     ActionDetailService actionDetailService;
+
+    @Resource
+    AlignRelationService alignRelationService;
 
     @Resource
     FeishuService feishuService;
@@ -78,6 +79,7 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
 
     @Override
     public boolean deleteKeyResult(Long id) {
+        alignRelationService.deleteAlignInfo(id);
         QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(KeyResultDetail::getId, id);
         return remove(queryWrapper);
