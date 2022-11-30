@@ -186,14 +186,6 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                         feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
             }
-            if (objectiveDetail.getKeyResultDetails().size() > 0) {
-                for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
-                    if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
-                        continue;
-                    keyResultDetail.setObjectiveId(objectiveDetail.getId());
-                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, null);
-                }
-            }
         } else {
             this.add(objectiveDetail);
             if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
@@ -201,16 +193,16 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
             }
-            if (objectiveDetail.getKeyResultDetails().size() > 0) {
-                for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
-                    if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
-                        continue;
-                    keyResultDetail.setObjectiveId(objectiveDetail.getId());
-                    keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, periodInfo.getPeriodName());
-                }
-            }
         }
 
+        if (objectiveDetail.getKeyResultDetails().size() > 0) {
+            for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
+                if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
+                    continue;
+                keyResultDetail.setObjectiveId(objectiveDetail.getId());
+                keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, periodInfo.getPeriodName());
+            }
+        }
         return true;
     }
 
