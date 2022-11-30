@@ -32,7 +32,8 @@ public class PeriodInfoServiceImpl extends ServiceImpl<PeriodInfoMapper, PeriodI
     public List<PeriodInfo> listAll() {
         QueryWrapper<PeriodInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.ge("period_status", 0)
-                .orderByDesc("start_time");
+                .orderByDesc("start_time")
+                .orderByDesc("period_status");
         return this.list(queryWrapper);
     }
 
