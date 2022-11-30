@@ -344,9 +344,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
         if (CollUtil.isEmpty(alignedRelations)) return res;
         for (AlignRelation alignedRelation : alignedRelations) {
             OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
-            ObjectiveDetail objectiveDetail = alignedRelation.getAlignType() == 2
-                    ? mapper.listAlignedByOId(alignedRelation.getObjectiveId())
-                    : mapper.listAlignedByKId(alignedRelation.getObjectiveId());
+            ObjectiveDetail objectiveDetail = mapper.listAlignedByOId(alignedRelation.getObjectiveId());
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignedRelation.getObjectiveRealName())
                     .setContent(objectiveDetail.getObjectiveName())
