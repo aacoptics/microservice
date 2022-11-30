@@ -320,6 +320,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignRelation.getOwnerRealName())
                     .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
                     .setIndex(1)
                     .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
             res.add(okrChatTreeModel);
@@ -338,6 +339,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignedRelation.getObjectiveRealName())
                     .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
                     .setIndex(1)
                     .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
             res.add(okrChatTreeModel);
