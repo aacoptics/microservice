@@ -1,6 +1,7 @@
 package com.aacoptics.okr.core.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.aacoptics.okr.core.entity.po.*;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
@@ -288,8 +289,11 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
     @Override
     public List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> okrAlignChat(String employNo, Long periodId) {
-        final FeishuUser feishuUser = feishuService.getFeishuUser(employNo);
         List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> res = new ArrayList<>();
+        if (StrUtil.isEmpty(employNo) || periodId == null || periodId <= 0) return res;
+        final FeishuUser feishuUser = feishuService.getFeishuUser(employNo);
+        if (ObjectUtil.isNull(feishuUser)) return res;
+
         final List<ObjectiveDetail> objectiveDetails = mapper.selectByEmployNoAndPeriod(employNo, periodId);
         for (ObjectiveDetail objectiveDetail : objectiveDetails) {
             if (CollUtil.isEmpty(objectiveDetail.getAlignRelations()) && CollUtil.isEmpty(objectiveDetail.getAlignedRelations()))

@@ -227,6 +227,16 @@
                o.created_time              as o_created_time,
                o.updated_time              as o_updated_time,
                o.at_users                  as o_at_users,
+               k.id                        as k_id,
+               k.objective_id              as k_objective_id,
+               k.key_result_name           as k_key_result_name,
+               k.remark                    as k_remark,
+               k.status_info               as k_status_info,
+               k.score                     as k_score,
+               k.deleted                   as k_deleted,
+               k.created_time              as k_created_time,
+               k.updated_time              as k_updated_time,
+               k.at_users                  as k_at_users,
                aligned.id                  as aligned_id,
                aligned.align_type          as aligned_align_type,
                aligned.align_id            as aligned_align_id,
@@ -237,6 +247,7 @@
                aligned.objective_real_name as aligned_objective_real_name,
                aligned.created_time        as aligned_created_time
         from dbo.t_okr_objective_detail o
+                 left join t_okr_key_result_detail k on k.objective_id = o.id
                  left join t_okr_align_relation aligned on aligned.align_id = o.id
         where o.id = #{id,jdbcType=BIGINT}
         order by o.objective_name
