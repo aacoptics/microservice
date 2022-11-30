@@ -48,6 +48,7 @@ public class OkrObjectiveController {
     public Result deleteKeyResult(@PathVariable Long id) {
         return Result.success(keyResultDetailService.deleteKeyResult(id));
     }
+
     @ApiOperation(value = "修改OKR", notes = "修改指定OKR")
     @ApiImplicitParams({@ApiImplicitParam(name = "id", value = "OKRID", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "objectiveDetail", value = "OKR实体", required = true, dataType = "ObjectiveDetail")})
@@ -86,7 +87,7 @@ public class OkrObjectiveController {
     @PutMapping(value = "/updateObjectiveStatusAndScore")
     public Result updateObjectiveStatusAndScore(@RequestBody ObjectiveDetail objectiveDetail) {
         Boolean res = objectiveDetailService.updateStatusAndScore(objectiveDetail);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
     @ApiOperation(value = "更新备注", notes = "更新备注")
@@ -97,7 +98,7 @@ public class OkrObjectiveController {
     @PutMapping(value = "/updateObjectiveRemark")
     public Result updateObjectiveRemark(@RequestBody ObjectiveDetail objectiveDetail) {
         Boolean res = objectiveDetailService.updateRemark(objectiveDetail);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
     @ApiOperation(value = "更新KR状态，分值", notes = "更新KR状态，分值")
@@ -108,7 +109,7 @@ public class OkrObjectiveController {
     @PutMapping(value = "/updateKrStatusAndScore")
     public Result updateKrStatusAndScore(@RequestBody KeyResultDetail keyResultDetail) {
         Boolean res = keyResultDetailService.updateStatusAndScore(keyResultDetail);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
     @ApiOperation(value = "更新或插入Objective", notes = "更新或插入Objective")
@@ -119,7 +120,7 @@ public class OkrObjectiveController {
     @PutMapping(value = "/addOrUpdateObjective")
     public Result addOrUpdateObjective(@RequestBody ObjectiveDetail objectiveDetail) {
         Boolean res = objectiveDetailService.addOrUpdateObjective(objectiveDetail);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
     @ApiOperation(value = "获取人员OKRTree", notes = "获取人员OKRTree")
@@ -149,5 +150,15 @@ public class OkrObjectiveController {
                                   @RequestParam Long ObjectiveId,
                                   @RequestParam Long alignId) {
         return Result.success(alignRelationService.deleteAlignInfo(alignType, ObjectiveId, alignId));
+    }
+
+    @ApiOperation(value = "获取okr图表", notes = "获取okr图表")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @GetMapping(value = "/okrAlignChat")
+    public Result okrAlignChat(@RequestParam String employNo,
+                               @RequestParam Long periodId) {
+        return Result.success(objectiveDetailService.okrAlignChat(employNo, periodId));
     }
 }

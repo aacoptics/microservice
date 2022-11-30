@@ -1,4 +1,5 @@
 package com.aacoptics.okr.core.mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;

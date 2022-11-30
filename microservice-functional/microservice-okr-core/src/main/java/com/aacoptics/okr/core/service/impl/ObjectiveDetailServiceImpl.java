@@ -115,19 +115,16 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
     @Override
     public ObjectiveDetail listById(Long id) {
-        ObjectiveDetail res = getOneById(id);
+        QueryWrapper<ObjectiveDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id)
+                .eq("deleted", "N");
+
+        ObjectiveDetail res = this.getOne(queryWrapper);
+
         if (res != null) {
             res.setKeyResultDetails(keyResultDetailService.listAllByOId(res.getId()));
         }
         return res;
-    }
-
-    @Override
-    public ObjectiveDetail getOneById(Long id) {
-        QueryWrapper<ObjectiveDetail> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", id)
-                .eq("deleted", "N");
-        return this.getOne(queryWrapper);
     }
 
     @Override
@@ -163,21 +160,8 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
     @Override
     @Transactional
     public boolean addOrUpdateObjective(ObjectiveDetail objectiveDetail) {
-        PeriodInfo periodInfo = periodInfoService.getById(objectiveDetail.getPeriodId());
-
-        if (periodInfo == null) {
-            log.error("找不到该周期！");
-        }
         if (objectiveDetail.getId() != null) {
-            ObjectiveDetail previousObjectiveDetail = getOneById(objectiveDetail.getId());
-            String previousAtUsers = previousObjectiveDetail.getAtUsers();
             this.updateById(objectiveDetail);
-            if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
-                for (FeishuUser user : objectiveDetail.getUsers()) {
-                    if (!previousAtUsers.contains(user.getEmployeeNo()))
-                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
-                }
-            }
             if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
                     if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
@@ -188,7 +172,13 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             }
         } else {
             this.add(objectiveDetail);
-            if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
+            PeriodInfo periodInfo = periodInfoService.getById(objectiveDetail.getPeriodId());
+
+            if (periodInfo == null) {
+                log.error("找不到该周期！");
+            }
+
+            if(objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null){
                 for (FeishuUser user : objectiveDetail.getUsers()) {
                     feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
@@ -206,6 +196,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
         return true;
     }
+
 
 
     @Override
