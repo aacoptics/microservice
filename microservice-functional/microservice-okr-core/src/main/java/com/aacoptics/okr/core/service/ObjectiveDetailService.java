@@ -1,7 +1,9 @@
 package com.aacoptics.okr.core.service;
 
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
+import com.aacoptics.okr.core.entity.vo.OkrChatTreeModel;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
+import reactor.util.function.Tuple2;
 
 import java.util.List;
 
@@ -26,4 +28,6 @@ public interface ObjectiveDetailService {
     boolean addOrUpdateObjective(ObjectiveDetail objectiveDetail);
 
     List<TreeModel> getUserObjectiveTree(String userInfo, Long periodId, String currentUsername, Long objectiveId);
+
+    List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> okrAlignChat(String employNo, Long periodId);
 }

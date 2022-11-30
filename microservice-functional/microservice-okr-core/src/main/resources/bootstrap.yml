@@ -15,3 +15,6 @@ spring:
     sentinel:
       transport:
         dashboard: k8s.aacoptics.com:30844
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

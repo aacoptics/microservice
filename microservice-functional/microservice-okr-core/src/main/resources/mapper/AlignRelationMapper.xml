@@ -66,5 +66,4 @@
         where align_id in (select id from t_okr_key_result_detail where objective_id = #{objectiveId})
           and align_type = 3
     </select>
-
 </mapper>
