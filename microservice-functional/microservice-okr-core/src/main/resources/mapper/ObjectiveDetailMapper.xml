@@ -99,7 +99,6 @@
         where o.created_by = #{employNo,jdbcType=VARCHAR}
           and o.period_id = #{period,jdbcType=BIGINT}
           and o.deleted = 'N'
-          and k.deleted = 'N'
         union all
         select o.id                        as o_id,
                o.period_id                 as o_period_id,
@@ -175,7 +174,6 @@
         from dbo.t_okr_objective_detail o
                  left join t_okr_align_relation align on align.objective_id = o.id
         where o.id = #{id,jdbcType=BIGINT}
-          and o.deleted = 'N'
         order by o.objective_name
     </select>
 
@@ -214,8 +212,6 @@
                  left join t_okr_key_result_detail k on k.objective_id = o.id
                  left join t_okr_align_relation align on align.objective_id = o.id
         where k.id = #{id,jdbcType=BIGINT}
-          and o.deleted = 'N'
-          and k.deleted = 'N'
         order by o.objective_name
     </select>
 
@@ -243,7 +239,6 @@
         from dbo.t_okr_objective_detail o
                  left join t_okr_align_relation aligned on aligned.align_id = o.id
         where o.id = #{id,jdbcType=BIGINT}
-          and o.deleted = 'N'
         order by o.objective_name
     </select>
 
@@ -282,8 +277,6 @@
                  left join t_okr_key_result_detail k on k.objective_id = o.id
                  left join t_okr_align_relation aligned on aligned.align_id = o.id
         where k.id = #{id,jdbcType=BIGINT}
-          and o.deleted = 'N'
-          and k.deleted = 'N'
         order by o.objective_name
     </select>
 </mapper>
