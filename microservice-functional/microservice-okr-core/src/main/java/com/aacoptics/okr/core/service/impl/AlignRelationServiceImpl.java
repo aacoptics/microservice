@@ -79,9 +79,7 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
 
     @Override
     public List<AlignRelation> listAlignedByOId(Long id) {
-        QueryWrapper<AlignRelation> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("align_id", id);
-        return this.list(queryWrapper);
+        return alignRelationMapper.listAlignedByOId(id);
     }
 
     @Override
