@@ -1,12 +1,12 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
 import com.aacoptics.okr.core.entity.po.*;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
+import com.aacoptics.okr.core.entity.vo.OkrChatTreeModel;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
-import com.aacoptics.okr.core.mapper.PeriodInfoMapper;
 import com.aacoptics.okr.core.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -21,10 +23,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Slf4j
 public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMapper, ObjectiveDetail> implements ObjectiveDetailService {
+
+    @Resource
+    ObjectiveDetailMapper mapper;
 
     @Resource
     KeyResultDetailService keyResultDetailService;
@@ -115,16 +121,20 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
     @Override
     public ObjectiveDetail listById(Long id) {
-        QueryWrapper<ObjectiveDetail> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", id)
-                .eq("deleted", "N");
-
-        ObjectiveDetail res = this.getOne(queryWrapper);
+        ObjectiveDetail res = getOneById(id);
 
         if (res != null) {
             res.setKeyResultDetails(keyResultDetailService.listAllByOId(res.getId()));
         }
         return res;
+    }
+
+    @Override
+    public ObjectiveDetail getOneById(Long id) {
+        QueryWrapper<ObjectiveDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id)
+                .eq("deleted", "N");
+        return this.getOne(queryWrapper);
     }
 
     @Override
@@ -160,8 +170,21 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
     @Override
     @Transactional
     public boolean addOrUpdateObjective(ObjectiveDetail objectiveDetail) {
+        PeriodInfo periodInfo = periodInfoService.getById(objectiveDetail.getPeriodId());
+
+        if (periodInfo == null) {
+            log.error("找不到该周期！");
+        }
         if (objectiveDetail.getId() != null) {
+            ObjectiveDetail previousObjectiveDetail = getOneById(objectiveDetail.getId());
+            String previousAtUsers = previousObjectiveDetail.getAtUsers();
             this.updateById(objectiveDetail);
+            if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
+                for (FeishuUser user : objectiveDetail.getUsers()) {
+                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
+                }
+            }
             if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
                     if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
@@ -172,18 +195,11 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             }
         } else {
             this.add(objectiveDetail);
-            PeriodInfo periodInfo = periodInfoService.getById(objectiveDetail.getPeriodId());
-
-            if (periodInfo == null) {
-                log.error("找不到该周期！");
-            }
-
-            if(objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null){
+            if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
                 for (FeishuUser user : objectiveDetail.getUsers()) {
                     feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
             }
-
             if (objectiveDetail.getKeyResultDetails().size() > 0) {
                 for (KeyResultDetail keyResultDetail : objectiveDetail.getKeyResultDetails()) {
                     if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
@@ -196,7 +212,6 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
 
         return true;
     }
-
 
 
     @Override
@@ -266,6 +281,78 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     res.add(treeModel);
                 }
             }
+        }
+        return res;
+    }
+
+    @Override
+    public List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> okrAlignChat(String employNo, Long periodId) {
+        final FeishuUser feishuUser = feishuService.getFeishuUser(employNo);
+        List<Tuple2<List<OkrChatTreeModel>, List<OkrChatTreeModel>>> res = new ArrayList<>();
+        final List<ObjectiveDetail> objectiveDetails = mapper.selectByEmployNoAndPeriod(employNo, periodId);
+        for (ObjectiveDetail objectiveDetail : objectiveDetails) {
+            if (CollUtil.isEmpty(objectiveDetail.getAlignRelations()) && CollUtil.isEmpty(objectiveDetail.getAlignedRelations()))
+                continue;
+            OkrChatTreeModel alignOkrChatTreeModel = new OkrChatTreeModel();
+            alignOkrChatTreeModel.setId(objectiveDetail.getId())
+                    .setLabel(feishuUser.getName())
+                    .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            List<OkrChatTreeModel> alignOkrChatTreeModels = new ArrayList<>();
+            alignOkrChatTreeModels.add(alignOkrChatTreeModel);
+            OkrChatTreeModel alignedOkrChatTreeModel = new OkrChatTreeModel();
+            alignedOkrChatTreeModel.setId(objectiveDetail.getId())
+                    .setLabel(feishuUser.getName())
+                    .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setChildren(alignedChildren(objectiveDetail.getAlignedRelations()));
+            List<OkrChatTreeModel> alignedOkrChatTreeModels = new ArrayList<>();
+            alignedOkrChatTreeModels.add(alignedOkrChatTreeModel);
+            res.add(Tuples.of(alignOkrChatTreeModels, alignedOkrChatTreeModels));
+        }
+
+        IntStream.range(0, res.size()).forEach(i -> {
+            res.get(i).getT1().get(0).setIndex(i + 1);
+            res.get(i).getT2().get(0).setIndex(i + 1);
+        });
+        return res;
+    }
+
+    private List<OkrChatTreeModel> alignChildren(List<AlignRelation> alignRelations) {
+        List<OkrChatTreeModel> res = new ArrayList<>();
+        if (CollUtil.isEmpty(alignRelations)) return res;
+        for (AlignRelation alignRelation : alignRelations) {
+            OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
+            ObjectiveDetail objectiveDetail = alignRelation.getAlignType() == 2
+                    ? mapper.listAlignByOId(alignRelation.getAlignId())
+                    : mapper.listAlignByKId(alignRelation.getAlignId());
+            okrChatTreeModel.setId(objectiveDetail.getId())
+                    .setLabel(alignRelation.getOwnerRealName())
+                    .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setIndex(1)
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            res.add(okrChatTreeModel);
+        }
+        return res;
+    }
+
+    private List<OkrChatTreeModel> alignedChildren(List<AlignRelation> alignedRelations) {
+        List<OkrChatTreeModel> res = new ArrayList<>();
+        if (CollUtil.isEmpty(alignedRelations)) return res;
+        for (AlignRelation alignedRelation : alignedRelations) {
+            OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
+            ObjectiveDetail objectiveDetail = alignedRelation.getAlignType() == 2
+                    ? mapper.listAlignedByOId(alignedRelation.getObjectiveId())
+                    : mapper.listAlignedByKId(alignedRelation.getObjectiveId());
+            okrChatTreeModel.setId(objectiveDetail.getId())
+                    .setLabel(alignedRelation.getObjectiveRealName())
+                    .setContent(objectiveDetail.getObjectiveName())
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
+                    .setIndex(1)
+                    .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
+            res.add(okrChatTreeModel);
         }
         return res;
     }
