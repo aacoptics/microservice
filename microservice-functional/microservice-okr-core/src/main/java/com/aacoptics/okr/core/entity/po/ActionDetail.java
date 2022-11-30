@@ -28,7 +28,7 @@ public class ActionDetail implements Serializable {
     private String actionName;
     private String actionType;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime dueTime;
     private String supportDetail;
     private String atUsers;
