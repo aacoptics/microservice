@@ -18,5 +18,7 @@ public interface ActionDetailService {
 
     boolean deleteAction(Long id);
 
+    String getMarkDownMessage(ActionDetail actionDetail);
+
     boolean addOrUpdateAction(ActionDetail actionDetail);
 }

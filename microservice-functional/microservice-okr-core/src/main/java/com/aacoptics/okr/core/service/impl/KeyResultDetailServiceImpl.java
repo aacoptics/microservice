@@ -59,6 +59,14 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
+    public KeyResultDetail listById(Long id) {
+        QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id)
+                .eq("deleted", "N");
+        return this.getOne(queryWrapper);
+    }
+
+    @Override
     public boolean updateStatusAndScore(KeyResultDetail keyResultDetail) {
         UpdateWrapper<KeyResultDetail> updateWrapper = new UpdateWrapper<>();
         updateWrapper.set("status_info", keyResultDetail.getStatusInfo())
@@ -77,10 +85,19 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
 
     @Override
     public boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail, String periodName) {
-        if (keyResultDetail.getId() != null)
-            return this.updateById(keyResultDetail);
-        else{
-            if(keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null){
+        if (keyResultDetail.getId() != null) {
+            KeyResultDetail previousKeyResultDetail = listById(keyResultDetail.getId());
+            String previousAtUsers = previousKeyResultDetail.getAtUsers();
+            boolean res = this.updateById(keyResultDetail);
+            if (keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null) {
+                for (FeishuUser user : keyResultDetail.getUsers()) {
+                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
+                }
+            }
+            return res;
+        } else {
+            if (keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null) {
                 for (FeishuUser user : keyResultDetail.getUsers()) {
                     feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
                 }

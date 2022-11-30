@@ -1,10 +1,13 @@
 package com.aacoptics.okr.core.service.impl;
 
 import com.aacoptics.okr.core.entity.po.ActionDetail;
+import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
+import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.ActionDetailMapper;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.service.ActionDetailService;
+import com.aacoptics.okr.core.service.FeishuService;
 import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -12,11 +15,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, ActionDetail> implements ActionDetailService {
+
+    @Resource
+    FeishuService feishuService;
+
     @Override
     public boolean add(ActionDetail actionDetail) {
         return this.save(actionDetail);
@@ -57,9 +66,38 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
 
     @Override
     public boolean addOrUpdateAction(ActionDetail actionDetail) {
-        if (actionDetail.getId() != null)
-            return this.updateById(actionDetail);
-        else
+        if (actionDetail.getId() != null) {
+            ActionDetail previousActionDetail = getById(actionDetail.getId());
+            String previousAtUsers = previousActionDetail.getAtUsers();
+            boolean res = this.updateById(actionDetail);
+            if (actionDetail.getUsers() != null && actionDetail.getUsers().size() > 0) {
+                for (FeishuUser user : actionDetail.getUsers()) {
+                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(actionDetail), null));
+                }
+            }
+            return res;
+        } else {
+            if (actionDetail.getUsers() != null && actionDetail.getUsers().size() > 0) {
+                for (FeishuUser user : actionDetail.getUsers()) {
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(actionDetail), null));
+                }
+            }
             return this.add(actionDetail);
+        }
+    }
+
+    @Override
+    public String getMarkDownMessage(ActionDetail actionDetail) {
+        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+        markdownGroupMessage.setTitle("有一条行动项提及到您：");
+        markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
+        markdownGroupMessage.addContent("所需支持：" + actionDetail.getSupportDetail());
+        markdownGroupMessage.addContent("截止日期：" + actionDetail.getDueTime().toLocalDate().toString());
+        markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
+        String atUsers = actionDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
+        markdownGroupMessage.addContent("提及人员：" + atUsers);
+        markdownGroupMessage.addContent("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrFill)");
+        return markdownGroupMessage.toString();
     }
 }

@@ -15,6 +15,8 @@ public interface ObjectiveDetailService {
 
     ObjectiveDetail listById(Long id);
 
+    ObjectiveDetail getOneById(Long id);
+
     boolean updateStatusAndScore(ObjectiveDetail objectiveDetail);
 
     boolean updateRemark(ObjectiveDetail objectiveDetail);
