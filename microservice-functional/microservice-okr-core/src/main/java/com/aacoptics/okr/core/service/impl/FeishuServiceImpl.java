@@ -135,7 +135,9 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public List<FeishuUser> getFeishuUsers(String userInfo) {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
-                .like(FeishuUser::getName, userInfo));
+                .like(FeishuUser::getName, userInfo)
+                .eq(FeishuUser::getIsFrozen, '0')
+                .eq(FeishuUser::getIsResigned, '0'));
     }
 
     @Override
