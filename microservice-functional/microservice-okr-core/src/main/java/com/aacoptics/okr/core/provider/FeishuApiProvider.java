@@ -38,7 +38,7 @@ public interface FeishuApiProvider {
 
     @PostMapping(value = "/authen/v1/access_token", headers = {"Content-Type=application/json;charset=UTF-8"})
     JSONObject fetchGetUserAuth(@RequestHeader("Authorization") String authorization,
-                                   @RequestBody JSONObject message);
+                                @RequestBody JSONObject message);
 
     @GetMapping(value = "/im/v1/chats",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
@@ -56,7 +56,7 @@ public interface FeishuApiProvider {
     @DeleteMapping(value = "/im/v1/messages/{messageId}",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
     JSONObject fetchDeleteMessage(@RequestHeader("Authorization") String authorization,
-                          @PathVariable("messageId") String messageId);
+                                  @PathVariable("messageId") String messageId);
 
     @GetMapping(value = "/task/v1/tasks/{taskId}",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})

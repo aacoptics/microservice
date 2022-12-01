@@ -1,7 +1,6 @@
 package com.aacoptics.okr.core.service;
 
 import com.aacoptics.okr.core.entity.po.AlignRelation;
-import com.aacoptics.okr.core.entity.po.PeriodInfo;
 
 import java.util.List;
 

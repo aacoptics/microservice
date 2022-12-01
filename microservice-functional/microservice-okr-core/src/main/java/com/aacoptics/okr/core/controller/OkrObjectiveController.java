@@ -21,13 +21,11 @@ import javax.validation.Valid;
 @Slf4j
 public class OkrObjectiveController {
     @Resource
+    AlignRelationService alignRelationService;
+    @Resource
     private ObjectiveDetailService objectiveDetailService;
-
     @Resource
     private KeyResultDetailService keyResultDetailService;
-
-    @Resource
-    AlignRelationService alignRelationService;
 
     @ApiOperation(value = "新增OKR", notes = "新增OKR")
     @ApiImplicitParam(name = "objectiveDetail", value = "新增OKR表单", required = true, dataType = "ObjectiveDetail")
@@ -143,9 +141,9 @@ public class OkrObjectiveController {
     @PostMapping(value = "/alignOkr")
     public Result alignOkr(@RequestBody AlignRelation alignRelation) {
         boolean res;
-        try{
+        try {
             res = alignRelationService.add(alignRelation);
-        }catch (BusinessException err){
+        } catch (BusinessException err) {
             return Result.fail(err.getMessage());
         }
         return res ? Result.success() : Result.fail("对齐失败，请联系管理员！");

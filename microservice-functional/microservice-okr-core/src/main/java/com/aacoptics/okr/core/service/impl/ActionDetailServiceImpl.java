@@ -2,15 +2,11 @@ package com.aacoptics.okr.core.service.impl;
 
 import com.aacoptics.okr.core.entity.po.ActionDetail;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
-import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.ActionDetailMapper;
-import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.service.ActionDetailService;
 import com.aacoptics.okr.core.service.FeishuService;
-import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

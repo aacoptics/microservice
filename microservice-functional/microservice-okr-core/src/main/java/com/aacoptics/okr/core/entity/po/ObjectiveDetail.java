@@ -1,6 +1,5 @@
 package com.aacoptics.okr.core.entity.po;
 
-import com.aacoptics.common.web.entity.po.BasePo;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

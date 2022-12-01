@@ -2,13 +2,7 @@ package com.aacoptics.okr.core.controller;
 
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.okr.core.entity.po.ActionDetail;
-import com.aacoptics.okr.core.entity.po.AlignRelation;
-import com.aacoptics.okr.core.entity.po.KeyResultDetail;
-import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.service.ActionDetailService;
-import com.aacoptics.okr.core.service.AlignRelationService;
-import com.aacoptics.okr.core.service.KeyResultDetailService;
-import com.aacoptics.okr.core.service.ObjectiveDetailService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +40,7 @@ public class OkrActionController {
     @PutMapping(value = "/addOrUpdateAction")
     public Result addOrUpdateAction(@RequestBody ActionDetail actionDetail) {
         Boolean res = actionDetailService.addOrUpdateAction(actionDetail);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
 

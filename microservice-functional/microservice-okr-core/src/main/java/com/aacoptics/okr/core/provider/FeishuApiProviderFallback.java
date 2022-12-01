@@ -28,10 +28,11 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
 
             @Override
             public JSONObject fetchGetUserAuth(@RequestHeader("Authorization") String authorization,
-                                        @RequestBody JSONObject message){
+                                               @RequestBody JSONObject message) {
                 throwable.printStackTrace();
                 return JSONUtil.createObj().set("Throwable", throwable.toString());
             }
+
             @Override
             public JSONObject fetchUploadImageKey(String authorization, String imageType, MultipartFile file) {
                 throwable.printStackTrace();

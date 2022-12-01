@@ -1,7 +1,6 @@
 package com.aacoptics.okr.core.service;
 
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
-import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ public interface KeyResultDetailService {
     boolean checkValid(Long id, Long ObjectiveId);
 
     KeyResultDetail listById(Long id);
+
     String getMarkDownMessage(KeyResultDetail keyResultDetail, String periodName);
 
     boolean updateStatusAndScore(KeyResultDetail keyResultDetail);

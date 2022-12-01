@@ -2,18 +2,17 @@ package com.aacoptics.okr.core.service.impl;
 
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
-import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
-import com.aacoptics.okr.core.entity.po.PeriodInfo;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
-import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
-import com.aacoptics.okr.core.service.*;
+import com.aacoptics.okr.core.service.ActionDetailService;
+import com.aacoptics.okr.core.service.AlignRelationService;
+import com.aacoptics.okr.core.service.FeishuService;
+import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -60,7 +59,7 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
-    public boolean checkValid(Long id, Long ObjectiveId){
+    public boolean checkValid(Long id, Long ObjectiveId) {
         QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id)
                 .eq("objective_id", ObjectiveId)
