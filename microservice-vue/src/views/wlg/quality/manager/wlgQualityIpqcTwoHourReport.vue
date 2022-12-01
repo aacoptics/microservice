@@ -5,17 +5,17 @@
         <el-form :inline="true" :size="size">
           <el-row>
             <el-col :span="4">
-              <el-form-item label="项目" prop="projectName">
-                <el-input v-model="filters.projectName" clearable placeholder="项目"></el-input>
+              <el-form-item label="项目(project)" prop="projectName">
+                <el-input v-model="filters.projectName" clearable placeholder="项目(project)"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="4">
-              <el-form-item label="模具" prop="moldName">
-                <el-input v-model="filters.moldName" clearable placeholder="模具"></el-input>
+              <el-form-item label="模具(mold)" prop="moldName">
+                <el-input v-model="filters.moldName" clearable placeholder="模具(mold)"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="5">
-              <el-form-item label="日期" prop="currentDate">
+              <el-form-item label="日期(date)" prop="currentDate">
                 <el-date-picker v-model="filters.currentDate" auto-complete="off"
                 ></el-date-picker>
               </el-form-item>
@@ -24,7 +24,7 @@
         </el-form>
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-button :loading="findPageLoading" type="primary" @click="findPage(null)">查询
+            <el-button :loading="findPageLoading" type="primary" @click="findPage(null)">查询(select)
               <template #icon>
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
               </template>
@@ -33,7 +33,7 @@
           <el-row align="middle" class="float-right" justify="center">
             <el-form-item>
               <el-button :loading="exportReportLoading" type="success"
-                         @click="exportReportExcelData('WLG-IPQC-2H-报表')">导出报表
+                         @click="exportReportExcelData('WLG-IPQC-2H-报表(WLG-IPQC-2H-report)')">导出报表(export)
                 <template #icon>
                   <font-awesome-icon :icon="['fas', 'download']"/>
                 </template>
@@ -87,7 +87,7 @@ export default {
       if (this.errorResults.filter(e => e["t1"] === row.row["id"] && e["t2"] === row.column.label).length > 0) {
         return {'background': 'red'} //修改的样式
       } else if (this.errorResults.filter(e => e["t1"] === row.row['id'] && e["t2"] === "两小时内未送测同一模次面型和芯厚").length > 0
-          && ["项目号", "模具", "周期", "班序"].includes(row.column.label)) {
+          && ["项目号(project)", "模具(mold)", "周期(cycle)", "班序(Class order)"].includes(row.column.label)) {
         return {'background': 'yellow'} //修改的样式
       } else {
         return {}
