@@ -9,7 +9,7 @@ public enum CommonErrorType implements ErrorType {
     BUSINESS_DELETE_EXCEPTION("100003", "删除异常"),
     BUSINESS_ADD_EXCEPTION("100004", "添加异常"),
     SYNC_EXCEPTION("100005", "同步失败"),
-    ALIGN_CYCLE_EXCEPTION("100006", "对齐失败，请检查是否存在循环对齐！");
+    ALIGN_CYCLE_EXCEPTION("100006", "对齐目标不能选择已有关联关系的目标！");
 
     /**
      * 错误类型码
