@@ -250,6 +250,7 @@
                  left join t_okr_key_result_detail k on k.objective_id = o.id
                  left join t_okr_align_relation aligned on aligned.align_id = o.id or aligned.align_id = k.id
         where o.id = #{id,jdbcType=BIGINT}
+          and k.deleted = 'N'
         order by o.objective_name
     </select>
 
@@ -286,7 +287,7 @@
                aligned.created_time        as aligned_created_time
         from dbo.t_okr_objective_detail o
                  left join t_okr_key_result_detail k on k.objective_id = o.id
-                 left join t_okr_align_relation aligned on aligned.align_id = o.id
+                 left join t_okr_align_relation aligned on aligned.align_id = o.id or aligned.align_id = k.id
         where k.id = #{id,jdbcType=BIGINT}
         order by o.objective_name
     </select>

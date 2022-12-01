@@ -291,7 +291,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             alignOkrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(feishuUser.getName())
                     .setContent(objectiveDetail.getObjectiveName())
-                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().filter(k -> "N".equals(k.getDeleted())).sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
                     .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
             List<OkrChatTreeModel> alignOkrChatTreeModels = new ArrayList<>();
             alignOkrChatTreeModels.add(alignOkrChatTreeModel);
@@ -299,7 +299,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             alignedOkrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(feishuUser.getName())
                     .setContent(objectiveDetail.getObjectiveName())
-                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().filter(k -> "N".equals(k.getDeleted())).sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
                     .setChildren(alignedChildren(objectiveDetail.getAlignedRelations()));
             List<OkrChatTreeModel> alignedOkrChatTreeModels = new ArrayList<>();
             alignedOkrChatTreeModels.add(alignedOkrChatTreeModel);
@@ -325,7 +325,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignRelation.getOwnerRealName())
                     .setContent(objectiveDetail.getObjectiveName())
-                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().filter(k -> "N".equals(k.getDeleted())).sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails())
                     .setIndex(1)
                     .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
             res.add(okrChatTreeModel);
@@ -343,7 +343,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignedRelation.getObjectiveRealName())
                     .setContent(objectiveDetail.getObjectiveName())
-                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().filter(k -> "N".equals(k.getDeleted())).sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
+                    .setKeyResultDetails(objectiveDetail.getKeyResultDetails().stream().sorted(Comparator.comparing(KeyResultDetail::getCreatedTime)).collect(Collectors.toList()))
                     .setIndex(1)
                     .setChildren(alignedChildren(objectiveDetail.getAlignedRelations()));
             res.add(okrChatTreeModel);
