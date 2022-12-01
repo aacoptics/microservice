@@ -1,6 +1,7 @@
 package com.aacoptics.okr.core.service;
 
 import cn.hutool.json.JSONObject;
+import com.aacoptics.okr.core.entity.po.AlignRelation;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.vo.TreeModel;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,9 @@ public class FeishuServiceTest {
     FeishuService feishuService;
 
     @Resource
+    AlignRelationService alignRelationService;
+
+    @Resource
     ObjectiveDetailService objectiveDetailService;
 
     @Test
@@ -37,6 +41,11 @@ public class FeishuServiceTest {
 
     @Test
     public void Test1() {
+        AlignRelation alignRelation = new AlignRelation();
+        alignRelation.setAlignType(3);
+        alignRelation.setObjectiveId(1597489578710495234L);
+        alignRelation.setAlignId(1597503141966442497L);
+        alignRelationService.checkCycleAlign(alignRelation, 1597503141966442497L);
         objectiveDetailService.okrAlignChat("60054916", 2L);
     }
 }

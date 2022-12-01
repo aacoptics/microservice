@@ -14,6 +14,8 @@ public interface KeyResultDetailService {
 
     List<KeyResultDetail> listAllByOId(Long id);
 
+    boolean checkValid(Long id, Long ObjectiveId);
+
     KeyResultDetail listById(Long id);
     String getMarkDownMessage(KeyResultDetail keyResultDetail, String periodName);
 

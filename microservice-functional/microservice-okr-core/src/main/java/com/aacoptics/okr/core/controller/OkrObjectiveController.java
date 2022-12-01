@@ -4,6 +4,7 @@ import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.okr.core.entity.po.AlignRelation;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
+import com.aacoptics.okr.core.exception.BusinessException;
 import com.aacoptics.okr.core.service.AlignRelationService;
 import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.aacoptics.okr.core.service.ObjectiveDetailService;
@@ -141,7 +142,13 @@ public class OkrObjectiveController {
     )
     @PostMapping(value = "/alignOkr")
     public Result alignOkr(@RequestBody AlignRelation alignRelation) {
-        return Result.success(alignRelationService.add(alignRelation));
+        boolean res;
+        try{
+            res = alignRelationService.add(alignRelation);
+        }catch (BusinessException err){
+            return Result.fail(err.getMessage());
+        }
+        return res ? Result.success() : Result.fail("对齐失败，请联系管理员！");
     }
 
     @ApiOperation(value = "取消对齐", notes = "取消对齐")

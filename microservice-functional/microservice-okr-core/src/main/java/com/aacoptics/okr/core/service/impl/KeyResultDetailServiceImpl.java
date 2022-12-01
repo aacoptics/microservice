@@ -60,6 +60,15 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
+    public boolean checkValid(Long id, Long ObjectiveId){
+        QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id)
+                .eq("objective_id", ObjectiveId)
+                .eq("deleted", "N");
+        return this.count(queryWrapper) <= 0;
+    }
+
+    @Override
     public KeyResultDetail listById(Long id) {
         QueryWrapper<KeyResultDetail> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id)

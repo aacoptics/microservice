@@ -4,9 +4,12 @@ import com.aacoptics.okr.core.entity.po.AlignRelation;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.entity.po.PeriodInfo;
+import com.aacoptics.okr.core.exception.BusinessException;
+import com.aacoptics.okr.core.exception.CommonErrorType;
 import com.aacoptics.okr.core.mapper.AlignRelationMapper;
 import com.aacoptics.okr.core.mapper.PeriodInfoMapper;
 import com.aacoptics.okr.core.service.AlignRelationService;
+import com.aacoptics.okr.core.service.KeyResultDetailService;
 import com.aacoptics.okr.core.service.PeriodInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,24 +27,30 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
     @Resource
     AlignRelationMapper alignRelationMapper;
 
+    @Resource
+    KeyResultDetailService keyResultDetailService;
+
     @Override
     public boolean add(AlignRelation alignRelation) {
         if (checkCycleAlign(alignRelation, alignRelation.getAlignId()))
             return this.save(alignRelation);
         else
-            return false;
+            throw new BusinessException(CommonErrorType.ALIGN_CYCLE_EXCEPTION);
     }
 
     public boolean checkCycleAlign(AlignRelation alignRelation, Long alignId) {
         Long myObjectiveId = alignRelation.getObjectiveId();
         List<AlignRelation> alignRelations = listAlignedByOId(myObjectiveId);
         if (alignRelations.size() > 0) {
-            if (alignRelations.stream().anyMatch(item -> Objects.equals(item.getObjectiveId(), alignId)))
-                return false;
-            else {
-                for (AlignRelation relation : alignRelations) {
-                    return checkCycleAlign(relation, alignId);
-                }
+            for (AlignRelation relation : alignRelations){
+                if(Objects.equals(relation.getObjectiveId(), alignId))
+                    return false;
+
+                if(!keyResultDetailService.checkValid(alignId, relation.getObjectiveId()))
+                    return false;
+
+                if(!checkCycleAlign(relation, alignId))
+                    return false;
             }
         }
         return true;
