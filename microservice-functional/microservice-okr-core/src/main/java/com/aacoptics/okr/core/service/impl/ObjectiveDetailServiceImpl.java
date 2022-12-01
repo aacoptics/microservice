@@ -316,12 +316,12 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
     private List<OkrChatTreeModel> alignChildren(List<AlignRelation> alignRelations) {
         List<OkrChatTreeModel> res = new ArrayList<>();
         if (CollUtil.isEmpty(alignRelations)) return res;
-        for (AlignRelation alignRelation : alignRelations) {
+        alignRelations.stream().sorted(Comparator.comparing(AlignRelation::getCreatedTime)).forEach(alignRelation -> {
             OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
             ObjectiveDetail objectiveDetail = alignRelation.getAlignType() == 2
                     ? mapper.listAlignByOId(alignRelation.getAlignId())
                     : mapper.listAlignByKId(alignRelation.getAlignId());
-            if (ObjectUtil.isNull(objectiveDetail)) continue;
+            if (ObjectUtil.isNull(objectiveDetail)) return;
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignRelation.getOwnerRealName())
                     .setContent(objectiveDetail.getObjectiveName())
@@ -329,17 +329,17 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     .setIndex(1)
                     .setChildren(alignChildren(objectiveDetail.getAlignRelations()));
             res.add(okrChatTreeModel);
-        }
+        });
         return res;
     }
 
     private List<OkrChatTreeModel> alignedChildren(List<AlignRelation> alignedRelations) {
         List<OkrChatTreeModel> res = new ArrayList<>();
         if (CollUtil.isEmpty(alignedRelations)) return res;
-        for (AlignRelation alignedRelation : alignedRelations) {
+        alignedRelations.stream().sorted(Comparator.comparing(AlignRelation::getCreatedTime)).forEach(alignedRelation -> {
             OkrChatTreeModel okrChatTreeModel = new OkrChatTreeModel();
             ObjectiveDetail objectiveDetail = mapper.listAlignedByOId(alignedRelation.getObjectiveId());
-            if (ObjectUtil.isNull(objectiveDetail)) continue;
+            if (ObjectUtil.isNull(objectiveDetail)) return;
             okrChatTreeModel.setId(objectiveDetail.getId())
                     .setLabel(alignedRelation.getObjectiveRealName())
                     .setContent(objectiveDetail.getObjectiveName())
@@ -347,7 +347,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                     .setIndex(1)
                     .setChildren(alignedChildren(objectiveDetail.getAlignedRelations()));
             res.add(okrChatTreeModel);
-        }
+        });
         return res;
     }
 }
