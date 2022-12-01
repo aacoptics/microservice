@@ -72,7 +72,7 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
             boolean res = this.updateById(actionDetail);
             if (actionDetail.getUsers() != null && actionDetail.getUsers().size() > 0) {
                 for (FeishuUser user : actionDetail.getUsers()) {
-                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                    if (previousAtUsers == null || !previousAtUsers.contains(user.getEmployeeNo()))
                         feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(actionDetail), null));
                 }
             }

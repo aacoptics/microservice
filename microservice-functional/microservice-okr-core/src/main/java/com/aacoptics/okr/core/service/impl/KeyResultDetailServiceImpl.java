@@ -102,7 +102,7 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
             boolean res = this.updateById(keyResultDetail);
             if (keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null) {
                 for (FeishuUser user : keyResultDetail.getUsers()) {
-                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                    if (previousAtUsers == null || !previousAtUsers.contains(user.getEmployeeNo()))
                         feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
                 }
             }

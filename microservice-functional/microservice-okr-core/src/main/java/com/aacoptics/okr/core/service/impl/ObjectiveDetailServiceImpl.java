@@ -183,7 +183,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
             this.updateById(objectiveDetail);
             if (objectiveDetail.getUsers() != null && objectiveDetail.getUsers().size() > 0 && periodInfo != null) {
                 for (FeishuUser user : objectiveDetail.getUsers()) {
-                    if (!previousAtUsers.contains(user.getEmployeeNo()))
+                    if (previousAtUsers == null || !previousAtUsers.contains(user.getEmployeeNo()))
                         feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, periodInfo.getPeriodName()), null));
                 }
             }
