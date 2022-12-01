@@ -1,7 +1,6 @@
 package com.aacoptics.okr.core.service;
 
 import com.aacoptics.okr.core.entity.po.ActionDetail;
-import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 
 import java.util.List;
 

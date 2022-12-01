@@ -1,9 +1,7 @@
 package com.aacoptics.okr.core.controller;
 
 import com.aacoptics.common.core.vo.Result;
-import com.aacoptics.okr.core.entity.po.ActionDetail;
 import com.aacoptics.okr.core.entity.po.ProcessRecord;
-import com.aacoptics.okr.core.service.ActionDetailService;
 import com.aacoptics.okr.core.service.ProcessRecordService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +40,7 @@ public class OkrRecordController {
     @PutMapping(value = "/addOrUpdateAction")
     public Result addOrUpdateAction(@RequestBody ProcessRecord processRecord) {
         boolean res = processRecordService.addOrUpdateAction(processRecord);
-        return res? Result.success() : Result.fail("更新失败！");
+        return res ? Result.success() : Result.fail("更新失败！");
     }
 
 

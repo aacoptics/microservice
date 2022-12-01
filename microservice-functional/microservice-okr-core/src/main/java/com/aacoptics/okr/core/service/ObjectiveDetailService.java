@@ -9,8 +9,11 @@ import java.util.List;
 
 public interface ObjectiveDetailService {
     boolean add(ObjectiveDetail objectiveDetail);
+
     boolean delete(Long id);
+
     boolean update(ObjectiveDetail objectiveDetail);
+
     List<ObjectiveDetail> listAllByUsername(String username, Long periodId);
 
     List<ObjectiveDetail> listAllByUsername(String username, Long periodId, Long objectiveId, Boolean isAligned);

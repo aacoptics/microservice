@@ -30,17 +30,15 @@ public class MarkdownGroupMessage {
         this.contents = contents;
     }
 
-    public void addContent(String content)
-    {
+    public void addContent(String content) {
         this.contents.add(content + "  \n");
     }
 
-    public void addBlobContent(String content)
-    {
+    public void addBlobContent(String content) {
         this.contents.add("**" + content + "**  \n");
     }
 
-    public void addBlankLine(){
+    public void addBlankLine() {
         this.contents.add("&nbsp;  \n");
     }
 

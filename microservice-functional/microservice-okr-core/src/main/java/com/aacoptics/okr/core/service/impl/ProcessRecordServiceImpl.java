@@ -1,10 +1,7 @@
 package com.aacoptics.okr.core.service.impl;
 
-import com.aacoptics.okr.core.entity.po.ActionDetail;
 import com.aacoptics.okr.core.entity.po.ProcessRecord;
-import com.aacoptics.okr.core.mapper.ActionDetailMapper;
 import com.aacoptics.okr.core.mapper.ProcessRecordMapper;
-import com.aacoptics.okr.core.service.ActionDetailService;
 import com.aacoptics.okr.core.service.ProcessRecordService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

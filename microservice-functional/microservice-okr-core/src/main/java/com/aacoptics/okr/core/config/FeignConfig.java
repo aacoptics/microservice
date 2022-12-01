@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Bean;
 public class FeignConfig {
 
     @Bean
-    public Contract feignContract(){
+    public Contract feignContract() {
         return new feign.Contract.Default();
     }
 
     @Bean
-    Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converts){
+    Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> converts) {
         return new SpringFormEncoder(new SpringEncoder(converts));
     }
 }

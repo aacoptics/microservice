@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -65,7 +64,7 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    public JSONObject getMarkdownMessage(String content, String imageKey){
+    public JSONObject getMarkdownMessage(String content, String imageKey) {
         //config
         JSONObject config = new JSONObject();
         config.set("wide_screen_mode", true);
@@ -79,10 +78,10 @@ public class FeishuServiceImpl implements FeishuService {
         text.set("tag", "markdown");
         elements.add(text);
 
-        if(StrUtil.isNotEmpty(imageKey)){
+        if (StrUtil.isNotEmpty(imageKey)) {
             JSONObject textContent = new JSONObject();
-            textContent.set("tag","plain_text");
-            textContent.set("content","");
+            textContent.set("tag", "plain_text");
+            textContent.set("content", "");
             JSONObject elementImg = new JSONObject();
             elementImg.set("tag", "img");
             elementImg.set("img_key", imageKey);
@@ -100,7 +99,7 @@ public class FeishuServiceImpl implements FeishuService {
     @Override
     public void sendPersonalMessage(FeishuUser feishuUser, JSONObject cardJson) {
 
-        try{
+        try {
             JSONObject resultBySendMsg = sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
 
             if (resultBySendMsg.get("code", Integer.class) == 0) {
@@ -108,8 +107,7 @@ public class FeishuServiceImpl implements FeishuService {
             } else {
                 log.error("推送消息失败！用户：{" + feishuUser.getName() + "}");
             }
-        }
-        catch(Exception err){
+        } catch (Exception err) {
             log.error("推送消息失败！用户：{" + feishuUser.getName() + "}" + err.getMessage());
         }
 

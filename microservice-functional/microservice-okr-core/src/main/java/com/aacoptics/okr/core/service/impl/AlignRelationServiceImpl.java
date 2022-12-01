@@ -1,16 +1,11 @@
 package com.aacoptics.okr.core.service.impl;
 
 import com.aacoptics.okr.core.entity.po.AlignRelation;
-import com.aacoptics.okr.core.entity.po.KeyResultDetail;
-import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
-import com.aacoptics.okr.core.entity.po.PeriodInfo;
 import com.aacoptics.okr.core.exception.BusinessException;
 import com.aacoptics.okr.core.exception.CommonErrorType;
 import com.aacoptics.okr.core.mapper.AlignRelationMapper;
-import com.aacoptics.okr.core.mapper.PeriodInfoMapper;
 import com.aacoptics.okr.core.service.AlignRelationService;
 import com.aacoptics.okr.core.service.KeyResultDetailService;
-import com.aacoptics.okr.core.service.PeriodInfoService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -42,14 +37,14 @@ public class AlignRelationServiceImpl extends ServiceImpl<AlignRelationMapper, A
         Long myObjectiveId = alignRelation.getObjectiveId();
         List<AlignRelation> alignRelations = listAlignedByOId(myObjectiveId);
         if (alignRelations.size() > 0) {
-            for (AlignRelation relation : alignRelations){
-                if(Objects.equals(relation.getObjectiveId(), alignId))
+            for (AlignRelation relation : alignRelations) {
+                if (Objects.equals(relation.getObjectiveId(), alignId))
                     return false;
 
-                if(!keyResultDetailService.checkValid(alignId, relation.getObjectiveId()))
+                if (!keyResultDetailService.checkValid(alignId, relation.getObjectiveId()))
                     return false;
 
-                if(!checkCycleAlign(relation, alignId))
+                if (!checkCycleAlign(relation, alignId))
                     return false;
             }
         }
