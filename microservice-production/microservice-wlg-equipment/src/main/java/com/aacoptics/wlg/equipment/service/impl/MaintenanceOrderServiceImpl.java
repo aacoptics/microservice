@@ -344,9 +344,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         //更新设备状态
         String mchCode = targetMaintenanceOrder.getMchCode();
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
-        if(isRepairBoolean) {
-            equipment.setStatus(EquipmentStatusConstants.REPAIR);
-        }
+//        if(isRepairBoolean) {
+//            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+//        }
         equipment.setLastMaintenanceDatetime(LocalDateTime.now());
         equipmentService.update(equipment);
 
