@@ -204,6 +204,9 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipNumber()), "equip_number", equipmentQueryParam.getEquipNumber());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipCategory()), "equip_category", equipmentQueryParam.getEquipCategory());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getStatus()), "status", equipmentQueryParam.getStatus());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getSectionType()), "section_type", equipmentQueryParam.getSectionType());
+
 
         queryWrapper.orderByAsc("mch_code");
         return this.page(page, queryWrapper);
@@ -224,6 +227,8 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getDutyPersonId()), "duty_person_id", equipmentQueryParam.getDutyPersonId());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipNumber()), "equip_number", equipmentQueryParam.getEquipNumber());
         queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getEquipCategory()), "equip_category", equipmentQueryParam.getEquipCategory());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getStatus()), "status", equipmentQueryParam.getStatus());
+        queryWrapper.eq(StringUtils.isNotBlank(equipmentQueryParam.getSectionType()), "section_type", equipmentQueryParam.getSectionType());
 
         queryWrapper.orderByAsc("mch_code");
         return this.baseMapper.selectList(queryWrapper);

@@ -247,4 +247,11 @@ public class Equipment extends BasePo {
     @TableField(value = "equip_category")
     private String equipCategory;
 
+
+    /**
+     * 工段类型(制备、模造、激光、镀膜、测量、自动化)
+     */
+    @TableField(value = "section_type")
+    private String sectionType;
+
 }

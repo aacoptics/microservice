@@ -222,4 +222,7 @@ public class EquipmentForm extends BaseForm<Equipment> {
      */
     @ApiModelProperty(value = "设备属性")
     private String equipCategory;
+
+    @ApiModelProperty(value = "工段类型")
+    private String sectionType;
 }

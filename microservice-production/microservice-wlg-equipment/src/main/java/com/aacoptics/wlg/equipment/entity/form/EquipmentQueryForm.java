@@ -43,4 +43,10 @@ public class EquipmentQueryForm extends BaseQueryForm<EquipmentQueryParam> {
     @ApiModelProperty(value = "设备属性分类")
     private String equipCategory;
 
+    @ApiModelProperty(value = "设备状态")
+    private String status;
+
+    @ApiModelProperty(value = "工段类型")
+    private String sectionType;
+
 }
