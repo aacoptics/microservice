@@ -339,9 +339,9 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
 
         //更新设备状态
-        if(isRepairBoolean) {
-            equipment.setStatus(EquipmentStatusConstants.REPAIR);
-        }
+//        if(isRepairBoolean) {
+//            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+//        }
         equipment.setLastInspectionDatetime(LocalDateTime.now());
         equipmentService.update(equipment);
 
