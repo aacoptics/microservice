@@ -143,7 +143,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="20">
-              <el-form-item label="保养周期（月）" prop="maintenancePeriod">
+              <el-form-item label="保养周期（周）" prop="maintenancePeriod">
                 <el-input-number v-model="dataForm.maintenancePeriod" auto-complete="off" clearable
                                  style="width:100%"></el-input-number>
               </el-form-item>
@@ -292,7 +292,7 @@ export default {
         {prop: "mchName", label: "设备名称", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 150},
         {prop: "typeVersion", label: "型号", minWidth: 150},
-        {prop: "maintenancePeriod", label: "保养周期（月）", minWidth: 130},
+        {prop: "maintenancePeriod", label: "保养周期（周）", minWidth: 130},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "createdBy", label: "创建人", minWidth: 120},
