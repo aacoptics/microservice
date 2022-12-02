@@ -21,7 +21,7 @@ public class ExceptionSubClassForm extends BaseForm<ExceptionSubClass> {
 
     @NotBlank(message = "异常子类不能为空")
     @ApiModelProperty(value = "异常子类")
-    private String exceptionSubType;
+    private String subClass;
 
 
 }

@@ -105,8 +105,8 @@
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="subClassDataForm.id" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item v-if="false" label="exceptionTypeMainId" prop="exceptionTypeMainId">
-            <el-input v-model="subClassDataForm.exceptionTypeMainId" auto-complete="off"></el-input>
+          <el-form-item v-if="false" label="exceptionTypeId" prop="exceptionTypeId">
+            <el-input v-model="subClassDataForm.exceptionTypeId" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="20">
@@ -120,7 +120,7 @@
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
-            <el-button :size="size" type="info" @click="cancelInsubClasstionItem">取消</el-button>
+            <el-button :size="size" type="info" @click="cancelSubClass">取消</el-button>
             <el-button :loading="editLoading" :size="size" type="primary" @click="submitSubClass">提交</el-button>
           </slot>
         </div>
@@ -184,7 +184,7 @@ export default {
         exceptionType: '',
       },
       subClassDataForm: {
-        exceptionTypeMainId: null,
+        exceptionTypeId: null,
         id: 0,
         subClass: '',
       },
@@ -287,7 +287,7 @@ export default {
       this.subClassDialogVisible = true;
       this.isSubClassAddOperation = true;
       this.subClassDataForm = {
-        exceptionTypeMainId: null,
+        exceptionTypeId: this.currentSelectExceptionTypeMainRowId,
         id: 0,
         subClass: '',
       }
@@ -354,21 +354,21 @@ export default {
    
     // 提交
     submitSubClass: function () {
-      this.$refs.insubClasstionItemDataForm.validate((valid) => {
+      this.$refs.subClassDataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             this.editLoading = true;
-            let params = Object.assign({}, this.insubClasstionItemDataForm);
-            if (this.isInsubClasstionItemAddOperation) {
-              addInsubClasstionItem(params).then((res) => {
+            let params = Object.assign({}, this.subClassDataForm);
+            if (this.isSubClassAddOperation) {
+              addExceptionSubClass(params).then((res) => {
                 const responseData = res.data;
                 this.editLoading = false;
                 if (responseData.code === "000000") {
                   this.$message({message: "操作成功", type: "success"});
-                  this.insubClasstionItemDialogVisible = false;
-                  this.$refs["insubClasstionItemDataForm"].resetFields();
+                  this.subClassDialogVisible = false;
+                  this.$refs["subClassDataForm"].resetFields();
 
-                  this.findInsubClasstionDetail(this.currentSelectExceptionTypeMainRowId);
+                  this.findExceptionTypeDetail(this.currentSelectExceptionTypeMainRowId);
                 } else {
                   this.$message({
                     message:
@@ -384,9 +384,9 @@ export default {
                 if (responseData.code === "000000") {
                   this.$message({message: "操作成功", type: "success"});
                   this.insubClasstionItemDialogVisible = false;
-                  this.$refs["insubClasstionItemDataForm"].resetFields();
+                  this.$refs["subClassDataForm"].resetFields();
 
-                  this.findInsubClasstionDetail(this.currentSelectExceptionTypeMainRowId);
+                  this.findExceptionTypeDetail(this.currentSelectExceptionTypeMainRowId);
                 } else {
                   this.$message({
                     message:
@@ -405,8 +405,8 @@ export default {
     cancel() {
       this.dialogVisible = false;
     },
-    cancelInsubClasstionItem() {
-      this.insubClasstionItemDialogVisible = false;
+    cancelSubClass() {
+      this.subClassDialogVisible = false;
     },
 
 

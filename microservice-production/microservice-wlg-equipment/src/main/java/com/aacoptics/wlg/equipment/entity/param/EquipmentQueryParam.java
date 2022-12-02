@@ -66,4 +66,17 @@ public class EquipmentQueryParam extends BaseParam<Equipment> {
      * 设备属性分类
      */
     private String equipCategory;
+
+
+    /**
+     * 设备状态
+     */
+    private String status;
+
+
+    /**
+     * 工段类型
+     */
+    private String sectionType;
+
 }

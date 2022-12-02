@@ -173,7 +173,7 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             throw new BusinessException("相同记录已存在，请确认！");
         }
 
-        maintenanceMain.setPeriodUnit(PeriodUnitConstants.MONTH);
+        maintenanceMain.setPeriodUnit(PeriodUnitConstants.WEEK);
         boolean isSuccess = this.save(maintenanceMain);
         return isSuccess;
     }
