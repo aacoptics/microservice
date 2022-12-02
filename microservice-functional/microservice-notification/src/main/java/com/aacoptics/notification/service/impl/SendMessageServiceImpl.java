@@ -83,14 +83,26 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                 String imageKey = null;
                 String fileKey = null;
+                String tempDir = System.getProperty("java.io.tmpdir");
+                long currentTimeMillis = System.currentTimeMillis();
                 if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
                     try {
-                        String tempDir = System.getProperty("java.io.tmpdir");
-                        long currentTimeMillis = System.currentTimeMillis();
+
                         String excelFileName1 = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
                                 messageBatch.getConTypeDesc()
                                 : messageBatch.getSendFileName())
                                 + "-" + currentTimeMillis + ".xlsx";
+                        URL url = new URL(messageBatch.getSendFilePath());
+                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
+                        fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
+                    } catch (IOException err) {
+                        String msg = "解析http文件异常！{" + err.getMessage() + "}";
+                        log.error(msg);
+                        throw new BusinessException(msg);
+                    }
+                }
+                if (!StrUtil.isBlank(messageBatch.getSendPicturePath())) {
+                    try {
                         String pngExcelFileName = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
                                 messageBatch.getConTypeDesc()
                                 : messageBatch.getSendFileName())
@@ -99,31 +111,13 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageBatch.getConTypeDesc()
                                 : messageBatch.getSendFileName())
                                 + "-" + currentTimeMillis + ".png";
-                        URL url = new URL(messageBatch.getSendFilePath());
-                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
-
-                        if (StrUtil.isNotEmpty(messageBatch.getSendPicturePath())) {
-                            url = new URL(messageBatch.getSendPicturePath());
-                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
-                            com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
-                            spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
-                            Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
-                            worksheet.saveToImage(tempDir + "/" + pngFileName);
-                            imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
-                        }
-
-                        fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
-//                        String chatName = "每日毛利率飞书测试";
-//                        switch (messageBatch.getConType()) {
-//                            case "ums_sop_ri_cost_gp_qas":
-//                            case "ums_sop_ri_cost_lens_qas":
-//                                chatName = "每日毛利率飞书测试";
-//                                break;
-//                            case "ums_sop_ri_cost_lens_prd":
-//                            case "ums_sop_ri_cost_gp_prd":
-//                                chatName = "Lens每日运营指标达成汇报";
-//                                break;
-//                        }
+                        URL url = new URL(messageBatch.getSendPicturePath());
+                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
+                        com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
+                        spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
+                        Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
+                        worksheet.saveToImage(tempDir + "/" + pngFileName);
+                        imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
                     } catch (IOException err) {
                         String msg = "解析http文件异常！{" + err.getMessage() + "}";
                         log.error(msg);
@@ -243,7 +237,7 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
 
 
-    private void logFeishuMsg(JSONObject result, UmsContent umsContent){
+    private void logFeishuMsg(JSONObject result, UmsContent umsContent) {
         JSONObject data = result.getJSONObject("data");
         String chatId = data.getStr("chat_id");
         String messageId = data.getStr("message_id");
