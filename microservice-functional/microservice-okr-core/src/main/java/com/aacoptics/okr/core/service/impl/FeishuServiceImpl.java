@@ -1,5 +1,6 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -27,7 +28,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Kaizhi Xuan
@@ -61,6 +64,13 @@ public class FeishuServiceImpl implements FeishuService {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
                 .eq(FeishuUser::getIsFrozen, '0')
                 .eq(FeishuUser::getIsResigned, '0'));
+    }
+
+    @Override
+    public Map<String, List<FeishuUser>> menuByEmployeeNo(String employeeNo) {
+        return MapUtil.builder(new HashMap<String, List<FeishuUser>>())
+                .put("lead", feishuUserMapper.employeeNoToLead(employeeNo))
+                .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo)).build();
     }
 
     @Override
