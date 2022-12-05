@@ -11,10 +11,20 @@ export function findExceptionTypePage(conditions) {
         data: conditions
     })
 }
-
-export function findExceptionTypeById(inspectionId) {
+export function findExceptionTypeList() {
     return request({
-        url: '/wlg-equipment/exceptionTypeManagement/' + inspectionId,
+        url: '/wlg-equipment/exceptionTypeManagement/findExceptionTypeList',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+
+export function findExceptionTypeById(exceptionTypeId) {
+    return request({
+        url: '/wlg-equipment/exceptionTypeManagement/' + exceptionTypeId,
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

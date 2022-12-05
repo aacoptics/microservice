@@ -100,6 +100,16 @@ public class InspectionOrderDetailVO extends BasePo {
     private String checkItemStandard;
 
     /**
+     * 点检项类型
+     */
+    private String itemType;
+
+    /**
+     * 理论值
+     */
+    private String theoreticalValue;
+
+    /**
      * 最小值
      */
     private BigDecimal minValue;

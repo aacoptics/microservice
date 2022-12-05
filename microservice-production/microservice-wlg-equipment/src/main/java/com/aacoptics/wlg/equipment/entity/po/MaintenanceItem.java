@@ -51,4 +51,17 @@ public class MaintenanceItem extends BasePo {
     @TableField(value = "max_value")
     private BigDecimal maxValue;
 
+
+    /**
+     * 保养项类型
+     */
+    @TableField(value = "item_type")
+    private String itemType;
+
+    /**
+     * 理论值
+     */
+    @TableField(value = "theoretical_value")
+    private String theoreticalValue;
+
 }

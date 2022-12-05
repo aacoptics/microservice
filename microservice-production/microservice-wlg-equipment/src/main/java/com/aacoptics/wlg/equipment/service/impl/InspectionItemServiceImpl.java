@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.wlg.equipment.constant.ItemTypeConstants;
 import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionItemMapper;
@@ -8,6 +9,7 @@ import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,9 +36,16 @@ public class InspectionItemServiceImpl extends ServiceImpl<InspectionItemMapper,
             throw new BusinessException("相同记录已存在，请确认！");
         }
 
-        if(inspectionItem.getMinValue().compareTo(inspectionItem.getMaxValue()) > 0)
-        {
-            throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
+        if(ItemTypeConstants.RANGE.equals(inspectionItem.getItemType())) {
+            if (inspectionItem.getMinValue().compareTo(inspectionItem.getMaxValue()) > 0) {
+                throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
+            }
+        }
+        else {
+            if(StringUtils.isEmpty(inspectionItem.getTheoreticalValue()))
+            {
+                throw new BusinessException("理论值不能为空！");
+            }
         }
 
         boolean isSuccess = this.save(inspectionItem);
@@ -62,9 +71,17 @@ public class InspectionItemServiceImpl extends ServiceImpl<InspectionItemMapper,
             throw new BusinessException("相同记录已存在，请确认！");
         }
 
-        if(inspectionItem.getMinValue().compareTo(inspectionItem.getMaxValue()) > 0)
+        if(ItemTypeConstants.RANGE.equals(inspectionItem.getItemType())) {
+            if (inspectionItem.getMinValue().compareTo(inspectionItem.getMaxValue()) > 0) {
+                throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
+            }
+        }
+        else
         {
-            throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
+            if(StringUtils.isEmpty(inspectionItem.getTheoreticalValue()))
+            {
+                throw new BusinessException("理论值不能为空！");
+            }
         }
         boolean isSuccess = this.updateById(inspectionItem);
         return isSuccess;

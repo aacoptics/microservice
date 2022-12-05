@@ -62,6 +62,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
             String equipDuty = dataArray[3]; //设备负责人
             String equipDutyManager = dataArray[4]; //设备负责人经理
             String equipCategory = dataArray[5]; //设备属性
+            String sectionType = dataArray[6]; //工段类型
 
             if (StringUtils.isEmpty(mchCode)) {
                 throw new BusinessException("第" + (i + 1) + "行资产编码不能为空");
@@ -78,6 +79,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
                 equipment.setEquipDuty(equipDuty);
                 equipment.setEquipDutyManager(equipDutyManager);
                 equipment.setEquipCategory(equipCategory);
+                equipment.setSectionType(sectionType);
 
                 this.updateById(equipment);
 
@@ -288,6 +290,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq("mch_name", mchName);
         queryWrapper.eq("spec",spec);
         queryWrapper.eq("type_version", typeVersion);
+        queryWrapper.eq("status", EquipmentStatusConstants.NORMAL);
         queryWrapper.and(wq -> {
             return wq.eq("equip_category", "厂务设备")
             .or()
