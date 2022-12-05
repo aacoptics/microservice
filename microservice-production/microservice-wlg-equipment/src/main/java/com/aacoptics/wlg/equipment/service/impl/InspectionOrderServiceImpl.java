@@ -207,7 +207,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                     inspectionOrder.setInspectionShift(inspectionShift.getShift());
 
                     LocalDateTime shiftStartTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getStartTime(), dateTimeFormatter);
-                    LocalDateTime shiftEndTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getStartTime(), dateTimeFormatter);
+                    LocalDateTime shiftEndTime = LocalDateTime.parse(currentDateStr + " " + inspectionShift.getEndTime(), dateTimeFormatter);
                     //班次结束时间小于开始时间，说明跨天，结束时间需要加一天
                     if(shiftStartTime.isAfter(shiftEndTime))
                     {
@@ -318,6 +318,13 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         boolean isRepairBoolean = false;
         for(InspectionOrderItem inspectionOrderItem : inspectionOrderItemList)
         {
+            //更新保养项值
+            InspectionOrderItem existsOrderItem = inspectionOrderItemService.get(inspectionOrderItem.getId());
+            inspectionOrderItem.setCheckItem(existsOrderItem.getCheckItem());
+            inspectionOrderItem.setCheckItemStandard(existsOrderItem.getCheckItemStandard());
+            inspectionOrderItem.setMinValue(existsOrderItem.getMinValue());
+            inspectionOrderItem.setMaxValue(existsOrderItem.getMaxValue());
+
             //判断是否需要维修
             Integer isRepair = inspectionOrderItem.getIsRepair();
             if(isRepair == 1 && InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))
@@ -332,9 +339,9 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
 
 
         //更新设备状态
-        if(isRepairBoolean) {
-            equipment.setStatus(EquipmentStatusConstants.REPAIR);
-        }
+//        if(isRepairBoolean) {
+//            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+//        }
         equipment.setLastInspectionDatetime(LocalDateTime.now());
         equipmentService.update(equipment);
 

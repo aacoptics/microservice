@@ -4,33 +4,49 @@
       <div class="toolbar w-full" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :model="filters" :size="size">
           <el-row>
-            <el-col :span="5">
+            <el-col :span="4">
+              <el-form-item label="事业部" prop="department">
+                <el-select v-model.trim="filters.department" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in departmentList" :key="item.department" :label="item.department"
+                             :value="item.department"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-select v-model.trim="filters.lensNumber" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in lensNumberList" :key="item.lensNumber" :label="item.lensNumber"
+                             :value="item.lensNumber"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
               <el-form-item label="类别" prop="category">
-                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in categoryList" :key="item.category" :label="item.category"
                              :value="item.category"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="项目" prop="project">
-                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in projectList" :key="item.project" :label="item.project"
                              :value="item.project"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="零件名称" prop="partName">
-                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in partNameList" :key="item.partName" :label="item.partName"
                              :value="item.partName"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="4">
               <el-form-item label="材料" prop="material">
-                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 180px;">
+                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in materialList" :key="item.material" :label="item.material"
                              :value="item.material"></el-option>
                 </el-select>
@@ -76,6 +92,8 @@ import {
   getMaterial,
   getPartName,
   getProject,
+  getDepartment,
+  getLensNumber
 } from "@/api/lens/analysis/allData";
 
 export default {
@@ -88,16 +106,21 @@ export default {
         category: "",
         project: "",
         partName: "",
-        material: ""
+        material: "",
+        department: "",
+        lensNumber: ""
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
-        {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
 
+        {prop: "pcMoldNo", label: "模具序号(工艺条件)", minWidth: 100, sortable: false},
+        {prop: "pcMoldType", label: "模具类型(工艺条件)", minWidth: 100, sortable: false},
         {prop: "mfMoldTemp", label: "模流-模温(℃)", minWidth: 100},
         {prop: "mfMaterialTemp", label: "模流-料温(℃)", minWidth: 100},
         {prop: "mfJetVelocity", label: "模流-射速(mm/s)", minWidth: 100},
@@ -114,6 +137,7 @@ export default {
         {prop: "mfHoldTime5", label: "模流-保压5时间(s)", minWidth: 100},
         {prop: "mfHoldPressure6", label: "模流-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "mfHoldTime6", label: "模流-保压6时间(s)", minWidth: 100},
+        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100},
         {prop: "moldTemp", label: "实际-模温(℃)", minWidth: 100},
         {prop: "materialTemp", label: "实际-料温(℃)", minWidth: 100},
         {prop: "jetVelocity", label: "实际-射速(mm/s)", minWidth: 100},
@@ -134,10 +158,12 @@ export default {
         {prop: "platenPosition", label: "压板位置(mm)", minWidth: 100},
         {prop: "openingSpeed", label: "开模速度(mm/s)", minWidth: 100},
         {prop: "ejectionSpeed", label: "顶出速度(mm/s)", minWidth: 100},
-        {prop: "coolingTime", label: "冷却时间(s)", minWidth: 100},
+        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100},
         {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100},
         {prop: "passivation", label: "钝化工艺", minWidth: 100, sortable: false},
 
+        {prop: "srMoldNo", label: "模具序号(成型结果)", minWidth: 100, sortable: false},
+        {prop: "srMoldType", label: "模具类型(成型结果)", minWidth: 100, sortable: false},
         {prop: "coreThickness", label: "芯厚(um)", minWidth: 100},
         {prop: "coreThicknessRange", label: "芯厚极差(um)", minWidth: 100},
         {prop: "r1VectorHeight", label: "R1矢高(um)", minWidth: 100},
@@ -152,13 +178,13 @@ export default {
         {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)", minWidth: 100},
         {prop: "outerDiameterAverage", label: "白片外径均值(um)", minWidth: 100},
         {prop: "outerDiameterRange", label: "白片外径极差(um)", minWidth: 100},
-        {prop: "outerDiameterRoundness", label: "外径圆度(um)", minWidth: 100},
+        {prop: "outerDiameterRoundness", label: "白片外径圆度(um)", minWidth: 100},
         {prop: "outerDiameterShrinkage", label: "白片外径收缩率(‰)", minWidth: 100},
         {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100},
-        {prop: "r1Flatness", label: "R1平面度(um)", minWidth: 100},
-        {prop: "r2Flatness", label: "R2平面度(um)", minWidth: 100},
-        {prop: "r1SplitAverage", label: "R1分割位均值(um)", minWidth: 100},
-        {prop: "r2SplitAverage", label: "R2分割位均值(um)", minWidth: 100},
+        {prop: "r1Flatness", label: "白片平面度R1(um)", minWidth: 100},
+        {prop: "r2Flatness", label: "白片平面度R2(um)", minWidth: 100},
+        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100},
+        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100},
         {prop: "wftR1", label: "R1(白片面型nm)", minWidth: 100},
         {prop: "wftR2", label: "R2(白片面型nm)", minWidth: 100},
         {prop: "wftConsistency", label: "全穴一致性(白片面型nm)", minWidth: 100},
@@ -168,21 +194,29 @@ export default {
         {prop: "cftR2", label: "R2(镀膜片面型nm)", minWidth: 100},
         {prop: "cftConsistency", label: "全穴一致性(镀膜片面型nm)", minWidth: 100},
         {prop: "cftMaxAs", label: "最大AS(镀膜片面型nm)", minWidth: 100},
-        {prop: "coatingTrend", label: "镀膜趋势", minWidth: 100, sortable: false},
-        {prop: "cfsrR1", label: "R1镀膜片模拟结果", minWidth: 100, sortable: false},
-        {prop: "cfsrR2", label: "R2镀膜片模拟结果", minWidth: 100, sortable: false},
-        {prop: "cfsrR1R2", label: "R1&R2镀膜片模拟结果", minWidth: 100, sortable: false},
-        {prop: "burr", label: "毛边(um)", minWidth: 100},
+        {prop: "burr", label: "分型面毛边(um)", minWidth: 100},
         {prop: "weldline", label: "熔接线", minWidth: 100, sortable: false},
         {prop: "appearanceProblem", label: "外观问题", minWidth: 100, sortable: false},
-        {prop: "appearanceImg", label: "外观问题图片", minWidth: 100, sortable: false},
         {prop: "remarks", label: "备注", minWidth: 100, sortable: false},
+        {prop: "abcFilesNo", label: "ABC档合格数分布", minWidth: 100, sortable: false},
+        {prop: "structureNo", label: "结构方案总数", minWidth: 100},
+        {prop: "moldTypeNo", label: "模具类型总数", minWidth: 100},
+        {prop: "moldCost", label: "模具费用", minWidth: 100},
+        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100},
+        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100},
+        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100},
+        {prop: "evtCost", label: "项目EVT费用", minWidth: 100},
+        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100},
+        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100},
+        {prop: "projectMassProduction", label: "项目量产", minWidth: 100, sortable: false},
 
         {prop: "coreThicknessLens", label: "光学芯厚(um)", minWidth: 100},
         {prop: "maxWallThickness", label: "光学最厚壁厚(um)", minWidth: 100},
         {prop: "minWallThickness", label: "光学最薄壁厚(um)", minWidth: 100},
         {prop: "maxCoreRatio", label: "光学最厚/芯厚", minWidth: 100},
         {prop: "maxMinRatio", label: "光学厚薄比", minWidth: 100},
+        {prop: "opticsMaxAngleR1", label: "最大光学角度R1", minWidth: 100},
+        {prop: "opticsMaxAngleR2", label: "最大光学角度R2", minWidth: 100},
         {prop: "outerDiameter", label: "整体外径(um)", minWidth: 100},
         {prop: "edgeThickness", label: "整体边厚(um)", minWidth: 100},
         {prop: "wholeMinWallThickness", label: "整体最薄壁厚(um)", minWidth: 100},
@@ -203,32 +237,41 @@ export default {
         {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100},
         {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
+        {prop: "r1SplitPosition", label: "R1分割位位置", minWidth: 100, sortable: false},
+        {prop: "r2SplitPosition", label: "R2分割位位置", minWidth: 100, sortable: false},
         {prop: "outerDiameterSrtm", label: "外径消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
-        {prop: "assemblyDrawing", label: "组立图", minWidth: 100, sortable: false},
+        {prop: "partSurfaceLiftRatio", label: "分型面上抬比例", minWidth: 100, sortable: false},
+        {prop: "mechanismTrou", label: "机构逃肉", minWidth: 100, sortable: false},
 
-        {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
+
+        {prop: "mfMoldType", label: "模具类型(模流)", minWidth: 100, sortable: false},
+        {prop: "mfRunnerType", label: "流道类型(模流)", minWidth: 100, sortable: false},
         {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100},
         {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100},
         {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100},
         {prop: "simulateWireLength", label: "模拟熔接线长度(mm)", minWidth: 100},
-        {prop: "wholePercent", label: "整体(%)", minWidth: 100},
-        {prop: "effectiveR1", label: "R1有效径(%)", minWidth: 100},
-        {prop: "effectiveR2", label: "R2有效径(%)", minWidth: 100},
-        {prop: "ridgeR1", label: "R1坎合(%)", minWidth: 100},
-        {prop: "ridgeR2", label: "R2坎合(%)", minWidth: 100},
-        {prop: "refractiveR1", label: "R1(nm)", minWidth: 100},
-        {prop: "refractiveR2", label: "R2(nm)", minWidth: 100},
+        {prop: "wholePercent", label: "整体平均体积收缩率差值(%)", minWidth: 100},
+        {prop: "effectiveR1", label: "R1有效径四点极差(%)", minWidth: 100},
+        {prop: "effectiveR2", label: "R2有效径四点极差(%)", minWidth: 100},
+        {prop: "ridgeR1", label: "R1坎合四点极差(%)", minWidth: 100},
+        {prop: "ridgeR2", label: "R2坎合四点极差(%)", minWidth: 100},
+        {prop: "refractiveR1", label: "模拟面型R1(nm)", minWidth: 100},
+        {prop: "refractiveR2", label: "模拟面型R2(nm)", minWidth: 100},
         {prop: "competitorName", label: "竞品名称", minWidth: 100, sortable: false},
         {prop: "competitorLink", label: "竞品链接", minWidth: 100, sortable: false},
-        {prop: "competitorAssemblyDrawing", label: "竞品组立图", minWidth: 100, sortable: false},
 
+        {prop: "mdMoldNo", label: "模具序号(模具)", minWidth: 100, sortable: false},
+        {prop: "mdMoldType", label: "模具类型(模具)", minWidth: 100, sortable: false},
         {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100, sortable: false},
-        {prop: "runnerType", label: "流道类型", minWidth: 100, sortable: false},
+        {prop: "mdRunnerType", label: "流道类型(模具)", minWidth: 100, sortable: false},
+        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100},
+        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100},
         {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
         {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
         {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
-        {prop: "partingSurface", label: "分型面(um)", minWidth: 100},
-        {prop: "splitPosition", label: "分割位(um)", minWidth: 100},
+        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100},
+        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100},
+        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100},
         {prop: "gateType", label: "浇口类型", minWidth: 100, sortable: false},
         {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
         {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
@@ -241,7 +284,9 @@ export default {
       categoryList: [],
       projectList: [],
       partNameList: [],
-      materialList: []
+      materialList: [],
+      departmentList: [],
+      lensNumberList: []
     };
   },
   mounted() {
@@ -255,6 +300,8 @@ export default {
       this.projectList = await this.getProject();
       this.partNameList = await this.getPartName();
       this.materialList = await this.getMaterial();
+      this.departmentList = await this.getDepartment();
+      this.lensNumberList = await this.getLensNumber();
     },
     getCategory() {
       return new Promise((resolve, reject) => {
@@ -296,6 +343,26 @@ export default {
         })
       })
     },
+    getDepartment() {
+      return new Promise((resolve, reject) => {
+        getDepartment().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
+    getLensNumber() {
+      return new Promise((resolve, reject) => {
+        getLensNumber().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -305,6 +372,8 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
       getDataByConditions(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
@@ -317,10 +386,14 @@ export default {
                       key !== 'updatedTime' && key !== 'passivation' && key !== 'coatingTrend' &&
                       key !== 'cfsrR1' && key !== 'cfsrR2' && key !== 'cfsrR1R2' &&
                       key !== 'weldline' && key !== 'appearanceProblem' && key !== 'appearanceImg' &&
-                      key !== 'remarks' && key !== 'r1Srtm' && key !== 'r2Srtm' &&
-                      key !== 'outerDiameterSrtm' && key !== 'assemblyDrawing' && key !== 'moldType' &&
+                      key !== 'remarks' && key !== 'r1Srtm' && key !== 'r2Srtm' &&  key !== 'mdMoldNo' &&
+                      key !== 'outerDiameterSrtm' && key !== 'assemblyDrawing'  &&
                       key !== 'competitorName' && key !== 'competitorLink' && key !== 'competitorAssemblyDrawing' &&
-                      key !== 'moldCorePassivation' && key !== 'runnerType' && key !== 'gateType' && key !== 'moldOpeningType') {
+                      key !== 'moldCorePassivation' && key !== 'mdRunnerType' && key !== 'gateType' && key !== 'moldOpeningType' &&
+                      key !== 'department' && key !== 'lensNumber' && key !== 'pcMoldNo' && key !== 'pcMoldType' &&
+                      key !== 'srMoldNo' && key !== 'srMoldType' && key !== 'abcFilesNo' && key !== 'projectMassProduction' &&
+                      key !== 'r1SplitPosition' && key !== 'r2SplitPosition' && key !== 'partSurfaceLiftRatio' && key !== 'mechanismTrou' &&
+                      key !== 'mfMoldType' && key !== 'mfRunnerType' && key !== 'mdMoldType') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])
@@ -339,6 +412,8 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
 
       this.exportDataLoading = true;
       exportExcel(this.pageRequest).then(res => {

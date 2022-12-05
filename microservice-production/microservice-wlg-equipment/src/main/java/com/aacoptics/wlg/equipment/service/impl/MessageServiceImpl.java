@@ -39,13 +39,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean sendInspectionExceptionMessage() {
         List<InspectionOrder> inspectionOrderList = inspectionOrderService.findInspectionExceptionOrder();
-        if (inspectionOrderList == null || inspectionOrderList.size() == 0)
-        {
+        if (inspectionOrderList == null || inspectionOrderList.size() == 0) {
             log.warn("没有需要推送的点检异常工单");
             return true;
         }
-        for(int i=0; i<inspectionOrderList.size(); i++)
-        {
+        for (int i = 0; i < inspectionOrderList.size(); i++) {
             InspectionOrder inspectionOrder = inspectionOrderList.get(i);
             inspectionOrder = inspectionOrderService.get(inspectionOrder.getId());
             String dutyPersonId = inspectionOrder.getDutyPersonId();
@@ -58,27 +56,25 @@ public class MessageServiceImpl implements MessageService {
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG点检设备异常通知**  \n");
-            contentStringBuffer.append("工单号：" +orderNumber + "  \n");
-            contentStringBuffer.append("资产编码：" +mchCode + "  \n");
-            contentStringBuffer.append("设备编号：" +equipNumber + "  \n");
-            contentStringBuffer.append("设备名称：" +mchName + "  \n");
+            contentStringBuffer.append("工单号：" + orderNumber + "  \n");
+            contentStringBuffer.append("资产编码：" + mchCode + "  \n");
+            contentStringBuffer.append("设备编号：" + equipNumber + "  \n");
+            contentStringBuffer.append("设备名称：" + mchName + "  \n");
             contentStringBuffer.append("存在点检项异常：  \n");
 
             List<InspectionOrderItem> inspectionOrderItemList = inspectionOrder.getInspectionOrderItemList();
 
 
-            for(int j=0; j<inspectionOrderItemList.size(); j++)
-            {
+            for (int j = 0; j < inspectionOrderItemList.size(); j++) {
                 InspectionOrderItem inspectionOrderItem = inspectionOrderItemList.get(j);
-                if(inspectionOrderItem.getIsException() != null && inspectionOrderItem.getIsException() == 1)
-                {
+                if (inspectionOrderItem.getIsException() != null && inspectionOrderItem.getIsException() == 1) {
                     BigDecimal minValue = inspectionOrderItem.getMinValue();
                     BigDecimal maxValue = inspectionOrderItem.getMaxValue();
                     BigDecimal actualValue = inspectionOrderItem.getActualValue();
                     contentStringBuffer.append(inspectionOrderItem.getCheckItem() +
                             "：参数范围值为" + minValue.stripTrailingZeros().toPlainString()
                             + "到" + maxValue.stripTrailingZeros().toPlainString() +
-                            "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "")  + "  \n");
+                            "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "") + "  \n");
                 }
             }
             contentStringBuffer.append("请注意处理！");
@@ -91,7 +87,7 @@ public class MessageServiceImpl implements MessageService {
             feishuMessage.setContent(content);
 
             Result result = notificationProvider.sendFeishuNotification(feishuMessage);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 MessageHistory messageHistory = new MessageHistory();
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
@@ -106,8 +102,7 @@ public class MessageServiceImpl implements MessageService {
                 inspectionOrder.setExceptionNotification(NotificationStatusConstants.YES);
                 inspectionOrderService.updateById(inspectionOrder);
 
-            }
-            else{
+            } else {
                 log.error("推送点检异常消息到飞书失败，工单号：" + orderNumber + "，" + result.getMsg());
             }
         }
@@ -118,13 +113,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean sendMaintenanceExceptionMessage() {
         List<MaintenanceOrder> maintenanceOrderList = maintenanceOrderService.findMaintenanceExceptionOrder();
-        if (maintenanceOrderList == null || maintenanceOrderList.size() == 0)
-        {
+        if (maintenanceOrderList == null || maintenanceOrderList.size() == 0) {
             log.warn("没有需要推送的保养异常工单");
             return true;
         }
-        for(int i=0; i<maintenanceOrderList.size(); i++)
-        {
+        for (int i = 0; i < maintenanceOrderList.size(); i++) {
             MaintenanceOrder maintenanceOrder = maintenanceOrderList.get(i);
             maintenanceOrder = maintenanceOrderService.get(maintenanceOrder.getId());
             String dutyPersonId = maintenanceOrder.getDutyPersonId();
@@ -138,26 +131,24 @@ public class MessageServiceImpl implements MessageService {
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG保养设备异常通知**  \n");
-            contentStringBuffer.append("工单号：" +orderNumber + "  \n");
-            contentStringBuffer.append("资产编码：" +mchCode + "  \n");
-            contentStringBuffer.append("设备编号：" +equipNumber + "  \n");
-            contentStringBuffer.append("设备名称：" +mchName + "  \n");
+            contentStringBuffer.append("工单号：" + orderNumber + "  \n");
+            contentStringBuffer.append("资产编码：" + mchCode + "  \n");
+            contentStringBuffer.append("设备编号：" + equipNumber + "  \n");
+            contentStringBuffer.append("设备名称：" + mchName + "  \n");
             contentStringBuffer.append("存在保养项异常：  \n");
 
             List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
 
-            for(int j=0; j<maintenanceOrderItemList.size(); j++)
-            {
+            for (int j = 0; j < maintenanceOrderItemList.size(); j++) {
                 MaintenanceOrderItem maintenanceOrderItem = maintenanceOrderItemList.get(j);
-                if(maintenanceOrderItem.getIsException() != null && maintenanceOrderItem.getIsException() == 1)
-                {
+                if (maintenanceOrderItem.getIsException() != null && maintenanceOrderItem.getIsException() == 1) {
                     BigDecimal minValue = maintenanceOrderItem.getMinValue();
                     BigDecimal maxValue = maintenanceOrderItem.getMaxValue();
                     BigDecimal actualValue = maintenanceOrderItem.getActualValue();
                     contentStringBuffer.append(maintenanceOrderItem.getMaintenanceItem() +
                             "：参数范围值为" + minValue.stripTrailingZeros().toPlainString()
                             + "到" + maxValue.stripTrailingZeros().toPlainString() +
-                            "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "")  + "  \n");
+                            "，实际值为" + (actualValue != null ? actualValue.stripTrailingZeros().toPlainString() : "") + "  \n");
                 }
             }
             contentStringBuffer.append("请注意处理！");
@@ -170,7 +161,7 @@ public class MessageServiceImpl implements MessageService {
             feishuMessage.setContent(content);
 
             Result result = notificationProvider.sendFeishuNotification(feishuMessage);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 MessageHistory messageHistory = new MessageHistory();
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
@@ -185,8 +176,7 @@ public class MessageServiceImpl implements MessageService {
                 maintenanceOrder.setExceptionNotification(NotificationStatusConstants.YES);
                 maintenanceOrderService.updateById(maintenanceOrder);
 
-            }
-            else{
+            } else {
                 log.error("推送保养异常消息到飞书失败，工单号：" + orderNumber + "，" + result.getMsg());
             }
         }
@@ -196,25 +186,21 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean sendInspectionTimeoutMessage() {
         List<String> dutyPersonIdList = inspectionOrderService.findInspectionTimeoutOrderDutyPersonIdList();
-        if (dutyPersonIdList == null || dutyPersonIdList.size() == 0)
-        {
+        if (dutyPersonIdList == null || dutyPersonIdList.size() == 0) {
             log.warn("没有需要推送的点检超时工单");
             return true;
         }
 
-        for(int i=0; i<dutyPersonIdList.size(); i++)
-        {
+        for (int i = 0; i < dutyPersonIdList.size(); i++) {
             String dutyPersonId = dutyPersonIdList.get(i);
             List<InspectionOrder> inspectionOrderList = inspectionOrderService.findInspectionTimeoutOrderByDutyPersonId(dutyPersonId);
-            if(inspectionOrderList == null || inspectionOrderList.size() == 0)
-            {
+            if (inspectionOrderList == null || inspectionOrderList.size() == 0) {
                 continue;
             }
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG设备点检超时通知**  \n");
-            for(int j=0; j<inspectionOrderList.size(); j++)
-            {
+            for (int j = 0; j < inspectionOrderList.size(); j++) {
                 InspectionOrder inspectionOrder = inspectionOrderList.get(j);
                 String mchCode = inspectionOrder.getMchCode();
                 String orderNumber = inspectionOrder.getOrderNumber();
@@ -223,7 +209,7 @@ public class MessageServiceImpl implements MessageService {
                 String equipNumber = equipment.getEquipNumber();
                 String mchName = equipment.getMchName();
 
-                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "，设备编号：" + equipNumber + "  \n");
+                contentStringBuffer.append("工单号：" + orderNumber + "，资产编码：" + mchCode + "，设备编号：" + equipNumber + "  \n");
             }
 
             contentStringBuffer.append("未在班次内按时进行点检，请注意处理！");
@@ -236,9 +222,8 @@ public class MessageServiceImpl implements MessageService {
             feishuMessage.setContent(content);
 
             Result result = notificationProvider.sendFeishuNotification(feishuMessage);
-            if(result.isSuccess()){
-                for(InspectionOrder inspectionOrder : inspectionOrderList)
-                {
+            if (result.isSuccess()) {
+                for (InspectionOrder inspectionOrder : inspectionOrderList) {
                     String mchCode = inspectionOrder.getMchCode();
                     String orderNumber = inspectionOrder.getOrderNumber();
 
@@ -257,8 +242,7 @@ public class MessageServiceImpl implements MessageService {
                     inspectionOrderService.updateById(inspectionOrder);
                 }
 
-            }
-            else{
+            } else {
                 log.error("推送点检超时消息到飞书失败，责任人：" + dutyPersonId + "，" + result.getMsg());
             }
         }
@@ -268,25 +252,21 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public boolean sendMaintenanceTimeoutMessage() {
         List<String> dutyPersonIdList = maintenanceOrderService.findMaintenanceTimeoutOrderDutyPersonIdList();
-        if (dutyPersonIdList == null || dutyPersonIdList.size() == 0)
-        {
+        if (dutyPersonIdList == null || dutyPersonIdList.size() == 0) {
             log.warn("没有需要推送的保养超时工单");
             return true;
         }
-        for(int i=0; i<dutyPersonIdList.size(); i++)
-        {
+        for (int i = 0; i < dutyPersonIdList.size(); i++) {
             String dutyPersonId = dutyPersonIdList.get(i);
             List<MaintenanceOrder> maintenanceOrderList = maintenanceOrderService.findMaintenanceTimeoutOrderByDutyPersonId(dutyPersonId);
-            if(maintenanceOrderList == null || maintenanceOrderList.size() == 0)
-            {
+            if (maintenanceOrderList == null || maintenanceOrderList.size() == 0) {
                 continue;
             }
 
             StringBuffer contentStringBuffer = new StringBuffer();
             contentStringBuffer.append("**WLG设备保养超时通知**  \n");
 
-            for(MaintenanceOrder maintenanceOrder : maintenanceOrderList)
-            {
+            for (MaintenanceOrder maintenanceOrder : maintenanceOrderList) {
                 String mchCode = maintenanceOrder.getMchCode();
                 String orderNumber = maintenanceOrder.getOrderNumber();
 
@@ -295,7 +275,7 @@ public class MessageServiceImpl implements MessageService {
                 String equipNumber = equipment.getEquipNumber();
                 String mchName = equipment.getMchName();
 
-                contentStringBuffer.append("工单号：" +orderNumber + "，资产编码：" +mchCode + "，设备编号：" + equipNumber + "  \n");
+                contentStringBuffer.append("工单号：" + orderNumber + "，资产编码：" + mchCode + "，设备编号：" + equipNumber + "  \n");
             }
 
             contentStringBuffer.append("未按时保养，请注意处理！");
@@ -308,8 +288,8 @@ public class MessageServiceImpl implements MessageService {
             feishuMessage.setContent(content);
 
             Result result = notificationProvider.sendFeishuNotification(feishuMessage);
-            if(result.isSuccess()){
-                for(MaintenanceOrder maintenanceOrder : maintenanceOrderList) {
+            if (result.isSuccess()) {
+                for (MaintenanceOrder maintenanceOrder : maintenanceOrderList) {
                     String mchCode = maintenanceOrder.getMchCode();
                     String orderNumber = maintenanceOrder.getOrderNumber();
 
@@ -328,10 +308,54 @@ public class MessageServiceImpl implements MessageService {
                     maintenanceOrderService.updateById(maintenanceOrder);
                 }
 
-            }
-            else{
+            } else {
                 log.error("推送保养超时消息到飞书失败，责任人：" + dutyPersonId + "，" + result.getMsg());
             }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sendRepairMessage(RepairOrder repairOrder) {
+        if (repairOrder == null) {
+            log.warn("维修工单不能为空");
+            return true;
+        }
+        String orderNumber = repairOrder.getOrderNumber();
+        String mchCode = repairOrder.getMchCode();
+        String dutyPersonId = repairOrder.getDutyPersonId();
+
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+
+        StringBuffer contentStringBuffer = new StringBuffer();
+        contentStringBuffer.append("**WLG设备维修工单通知**  \n");
+        contentStringBuffer.append("工单号：" + orderNumber + "  \n");
+        contentStringBuffer.append("资产编码：" + repairOrder.getMchCode() + "  \n");
+        contentStringBuffer.append("设备编号：" + equipment.getEquipNumber() + "  \n");
+        contentStringBuffer.append("设备名称：" + equipment.getMchName() + "  \n");
+        contentStringBuffer.append("故障描述：" + repairOrder.getFaultDesc() + "  \n");
+        contentStringBuffer.append("请注意处理！");
+
+        String content = contentStringBuffer.toString();
+
+        FeishuMessage feishuMessage = new FeishuMessage();
+        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendId(dutyPersonId);
+        feishuMessage.setContent(content);
+
+        Result result = notificationProvider.sendFeishuNotification(feishuMessage);
+        if (result.isSuccess()) {
+            MessageHistory messageHistory = new MessageHistory();
+            messageHistory.setMchCode(mchCode);
+            messageHistory.setOrderNumber(orderNumber);
+            messageHistory.setReceiveId(dutyPersonId);
+            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
+            messageHistory.setMessage(content);
+
+            messageHistoryService.add(messageHistory);
+        } else {
+            log.error("推送维修工单消息到飞书失败，工单号：" + orderNumber + "，" + result.getMsg());
         }
         return true;
     }

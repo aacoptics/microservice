@@ -207,7 +207,7 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 {
                     continue;
                 }
-                LocalDate maintenanceDate = lastMaintenanceDatetime.toLocalDate().plusMonths(maintenancePeriod);
+                LocalDate maintenanceDate = lastMaintenanceDatetime.toLocalDate().plusWeeks(maintenancePeriod);
 
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
@@ -322,6 +322,13 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         List<MaintenanceOrderItem> maintenanceOrderItemList = maintenanceOrder.getMaintenanceOrderItemList();
         for(MaintenanceOrderItem maintenanceOrderItem : maintenanceOrderItemList)
         {
+            //更新保养项值
+            MaintenanceOrderItem existsOrderItem = maintenanceOrderItemService.get(maintenanceOrderItem.getId());
+            maintenanceOrderItem.setMaintenanceItem(existsOrderItem.getMaintenanceItem());
+            maintenanceOrderItem.setMaintenanceItemStandard(existsOrderItem.getMaintenanceItemStandard());
+            maintenanceOrderItem.setMinValue(existsOrderItem.getMinValue());
+            maintenanceOrderItem.setMaxValue(existsOrderItem.getMaxValue());
+
             //判断是否需要维修
             Integer isRepair = maintenanceOrderItem.getIsRepair();
             if(isRepair == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
@@ -337,9 +344,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         //更新设备状态
         String mchCode = targetMaintenanceOrder.getMchCode();
         Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
-        if(isRepairBoolean) {
-            equipment.setStatus(EquipmentStatusConstants.REPAIR);
-        }
+//        if(isRepairBoolean) {
+//            equipment.setStatus(EquipmentStatusConstants.REPAIR);
+//        }
         equipment.setLastMaintenanceDatetime(LocalDateTime.now());
         equipmentService.update(equipment);
 

@@ -94,7 +94,8 @@ public class ShapingResultDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
-                queryParams.getMoldNo(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber(),
                 queryParams.getSearchType(),
                 queryParams.getStartValue(),
                 queryParams.getEndValue());
@@ -127,70 +128,104 @@ public class ShapingResultDataController {
                     if (row == null) {
                         row = sheet.createRow(i + 3);
                     }
-                    row.createCell(0).setCellValue(p.getCategory());
-                    row.createCell(1).setCellValue(p.getProject());
-                    row.createCell(2).setCellValue(p.getMoldNo());
-                    row.createCell(3).setCellValue(p.getPartName());
-                    row.createCell(4).setCellValue(p.getMaterial());
-                    row.createCell(5).setCellValue(p.getCoreThickness());
-                    row.createCell(6).setCellValue(p.getCoreThicknessRange());
-                    row.createCell(7).setCellValue(p.getR1VectorHeight());
-                    row.createCell(8).setCellValue(p.getR1VectorHeightRange());
-                    row.createCell(9).setCellValue(p.getR2VectorHeight());
-                    row.createCell(10).setCellValue(p.getR2VectorHeightRange());
-                    row.createCell(11).setCellValue(p.getOuterDiameterEcc());
-                    row.createCell(12).setCellValue(p.getKanheEcc());
-                    row.createCell(13).setCellValue(p.getFaceEcc());
-                    row.createCell(14).setCellValue(p.getAnnealingProcess());
-                    row.createCell(15).setCellValue(p.getBpKanheRoundness());
-                    row.createCell(16).setCellValue(p.getDmpKanheRoundness());
-                    row.createCell(17).setCellValue(p.getOuterDiameterAverage());
-                    row.createCell(18).setCellValue(p.getOuterDiameterRange());
-                    row.createCell(19).setCellValue(p.getOuterDiameterRoundness());
-                    row.createCell(20).setCellValue(p.getOuterDiameterShrinkage());
-                    row.createCell(21).setCellValue(p.getOuterDiameterRoughness());
-                    row.createCell(22).setCellValue(p.getR1Flatness());
-                    row.createCell(23).setCellValue(p.getR2Flatness());
-                    row.createCell(24).setCellValue(p.getR1SplitAverage());
-                    row.createCell(25).setCellValue(p.getR2SplitAverage());
-                    row.createCell(26).setCellValue(p.getWftR1());
-                    row.createCell(27).setCellValue(p.getWftR2());
-                    row.createCell(28).setCellValue(p.getWftConsistency());
-                    row.createCell(29).setCellValue(p.getWftMaxAs());
-                    row.createCell(30).setCellValue(p.getWftStability());
-                    row.createCell(31).setCellValue(p.getCftR1());
-                    row.createCell(32).setCellValue(p.getCftR2());
-                    row.createCell(33).setCellValue(p.getCftConsistency());
-                    row.createCell(34).setCellValue(p.getCftMaxAs());
-                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
-                        row.createCell(35).setCellValue("");
+                    row.createCell(0).setCellValue(p.getDepartment());
+                    row.createCell(1).setCellValue(p.getCategory());
+                    row.createCell(2).setCellValue(p.getLensNumber());
+                    row.createCell(3).setCellValue(p.getProject());
+                    row.createCell(4).setCellValue(p.getPartName());
+                    row.createCell(5).setCellValue(p.getMaterial());
+                    row.createCell(6).setCellValue(p.getMoldNo());
+                    row.createCell(7).setCellValue(p.getMoldType());
+                    row.createCell(8).setCellValue(p.getCoreThickness());
+                    row.createCell(9).setCellValue(p.getCoreThicknessRange());
+                    row.createCell(10).setCellValue(p.getR1VectorHeight());
+                    row.createCell(11).setCellValue(p.getR1VectorHeightRange());
+                    row.createCell(12).setCellValue(p.getR2VectorHeight());
+                    row.createCell(13).setCellValue(p.getR2VectorHeightRange());
+                    row.createCell(14).setCellValue(p.getOuterDiameterEcc());
+                    row.createCell(15).setCellValue(p.getKanheEcc());
+                    row.createCell(16).setCellValue(p.getFaceEcc());
+                    row.createCell(17).setCellValue(p.getAnnealingProcess());
+                    row.createCell(18).setCellValue(p.getBpKanheRoundness());
+                    row.createCell(19).setCellValue(p.getDmpKanheRoundness());
+                    row.createCell(20).setCellValue(p.getOuterDiameterAverage());
+                    row.createCell(21).setCellValue(p.getOuterDiameterRange());
+                    row.createCell(22).setCellValue(p.getOuterDiameterRoundness());
+                    row.createCell(23).setCellValue(p.getOuterDiameterShrinkage());
+                    row.createCell(24).setCellValue(p.getOuterDiameterRoughness());
+                    row.createCell(25).setCellValue(p.getR1Flatness());
+                    row.createCell(26).setCellValue(p.getR2Flatness());
+                    row.createCell(27).setCellValue(p.getR1SplitAverage());
+                    row.createCell(28).setCellValue(p.getR2SplitAverage());
+                    row.createCell(29).setCellValue(p.getWftR1());
+                    row.createCell(30).setCellValue(p.getWftR2());
+                    if (StringUtils.isEmpty(p.getWftR1Pic())) {
+                        row.createCell(31).setCellValue("");
                     } else {
-                        row.createCell(35).setCellValue(picPath + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
+                        row.createCell(31).setCellValue(picPath + p.getWftR1Pic().substring(0, p.getWftR1Pic().indexOf(".")));
                     }
-                    if (StringUtils.isEmpty(p.getCfsrR1())) {
-                        row.createCell(36).setCellValue("");
+                    if (StringUtils.isEmpty(p.getWftR2Pic())) {
+                        row.createCell(32).setCellValue("");
                     } else {
-                        row.createCell(36).setCellValue(picPath + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                        row.createCell(32).setCellValue(picPath + p.getWftR2Pic().substring(0, p.getWftR2Pic().indexOf(".")));
                     }
-                    if (StringUtils.isEmpty(p.getCfsrR2())) {
-                        row.createCell(37).setCellValue("");
-                    } else {
-                        row.createCell(37).setCellValue(picPath + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
-                    }
-                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                    row.createCell(33).setCellValue(p.getWftConsistency());
+                    row.createCell(34).setCellValue(p.getWftMaxAs());
+                    row.createCell(35).setCellValue(p.getWftStability());
+                    row.createCell(36).setCellValue(p.getCftR1());
+                    row.createCell(37).setCellValue(p.getCftR2());
+                    if (StringUtils.isEmpty(p.getCftR1Pic())) {
                         row.createCell(38).setCellValue("");
                     } else {
-                        row.createCell(38).setCellValue(picPath + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                        row.createCell(38).setCellValue(picPath + p.getCftR1Pic().substring(0, p.getCftR1Pic().indexOf(".")));
                     }
-                    row.createCell(39).setCellValue(p.getBurr());
-                    row.createCell(40).setCellValue(p.getWeldline());
-                    row.createCell(41).setCellValue(p.getAppearanceProblem());
-                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                    if (StringUtils.isEmpty(p.getCftR2Pic())) {
+                        row.createCell(39).setCellValue("");
+                    } else {
+                        row.createCell(39).setCellValue(picPath + p.getCftR2Pic().substring(0, p.getCftR2Pic().indexOf(".")));
+                    }
+                    row.createCell(40).setCellValue(p.getCftConsistency());
+                    row.createCell(41).setCellValue(p.getCftMaxAs());
+                    if (StringUtils.isEmpty(p.getCoatingTrend())) {
                         row.createCell(42).setCellValue("");
                     } else {
-                        row.createCell(42).setCellValue(picPath + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                        row.createCell(42).setCellValue(picPath + p.getCoatingTrend().substring(0, p.getCoatingTrend().indexOf(".")));
                     }
-                    row.createCell(43).setCellValue(p.getRemarks());
+                    if (StringUtils.isEmpty(p.getCfsrR1())) {
+                        row.createCell(43).setCellValue("");
+                    } else {
+                        row.createCell(43).setCellValue(picPath + p.getCfsrR1().substring(0, p.getCfsrR1().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR2())) {
+                        row.createCell(44).setCellValue("");
+                    } else {
+                        row.createCell(44).setCellValue(picPath + p.getCfsrR2().substring(0, p.getCfsrR2().indexOf(".")));
+                    }
+                    if (StringUtils.isEmpty(p.getCfsrR1R2())) {
+                        row.createCell(45).setCellValue("");
+                    } else {
+                        row.createCell(45).setCellValue(picPath + p.getCfsrR1R2().substring(0, p.getCfsrR1R2().indexOf(".")));
+                    }
+                    row.createCell(46).setCellValue(p.getBurr());
+                    row.createCell(47).setCellValue(p.getWeldline());
+                    row.createCell(48).setCellValue(p.getAppearanceProblem());
+                    if (StringUtils.isEmpty(p.getAppearanceImg())) {
+                        row.createCell(49).setCellValue("");
+                    } else {
+                        row.createCell(49).setCellValue(picPath + p.getAppearanceImg().substring(0, p.getAppearanceImg().indexOf(".")));
+                    }
+                    row.createCell(50).setCellValue(p.getRemarks());
+                    row.createCell(51).setCellValue(p.getAbcFilesNo());
+                    row.createCell(52).setCellValue(p.getStructureNo());
+                    row.createCell(53).setCellValue(p.getMoldTypeNo());
+                    row.createCell(54).setCellValue(p.getMoldCost());
+                    row.createCell(55).setCellValue(p.getEvtTime());
+                    row.createCell(56).setCellValue(p.getDvtTime());
+                    row.createCell(57).setCellValue(p.getEvtDvtTime());
+                    row.createCell(58).setCellValue(p.getEvtCost());
+                    row.createCell(59).setCellValue(p.getDvtCost());
+                    row.createCell(60).setCellValue(p.getEvtDvtCost());
+                    row.createCell(61).setCellValue(p.getProjectMassProduction());
                 }
             }
 
@@ -205,7 +240,23 @@ public class ShapingResultDataController {
     @ApiImplicitParam(paramType = "path", name = "id", value = "成型结果数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(shapingResultDataService.delete(id));
+        // 删除图片
+        ShapingResultData srd = shapingResultDataService.getById(id);
+        boolean flag = shapingResultDataService.delete(id);
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory("shapingResultData");
+        FtpUtil.deleteFile(srd.getWftR1Pic().substring(0, srd.getWftR1Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getWftR2Pic().substring(0, srd.getWftR2Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCftR1Pic().substring(0, srd.getCftR1Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCftR2Pic().substring(0, srd.getCftR2Pic().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCoatingTrend().substring(0, srd.getCoatingTrend().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR1().substring(0, srd.getCfsrR1().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR2().substring(0, srd.getCfsrR2().indexOf(".")));
+        FtpUtil.deleteFile(srd.getCfsrR1R2().substring(0, srd.getCfsrR1R2().indexOf(".")));
+        FtpUtil.deleteFile(srd.getAppearanceImg().substring(0, srd.getAppearanceImg().indexOf(".")));
+        System.out.println(srd.getAppearanceImg());
+        System.out.println("删除成功。。。");
+        return Result.success(flag);
     }
 
     @ApiOperation(value = "更新成型结果数据", notes = "修改指定位置的数据")
@@ -242,6 +293,18 @@ public class ShapingResultDataController {
     @GetMapping(value = "/getMoldNo")
     public Result getMoldNo() {
         return Result.success(shapingResultDataService.getMoldNo());
+    }
+
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(shapingResultDataService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取镜片数")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(shapingResultDataService.getLensNumber());
     }
 
 }

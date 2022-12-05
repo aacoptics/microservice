@@ -569,8 +569,33 @@ public class ExcelUtil {
                     XSSFPicture picture = (XSSFPicture) shape;
                     XSSFClientAnchor anchor = picture.getPreferredSize();
                     CTMarker from = anchor.getFrom();
-                    // int rowNum = from.getRow();
-                    // int colNum = from.getCol();
+//                    int rowNum = from.getRow();
+//                    int colNum = from.getCol();
+//                    XSSFRow row = sheet.getRow(rowNum);
+//                    XSSFCell cell0 = row.getCell(0);
+//                    XSSFCell cell1 = row.getCell(1);
+//                    XSSFCell cell2 = row.getCell(2);
+//                    XSSFCell cell3 = row.getCell(3);
+//                    XSSFCell cell4 = row.getCell(4);
+//                    XSSFCell cell5 = row.getCell(5);
+//                    String departname = getCellValue(cell0);
+//                    String category = getCellValue(cell1);
+//                    String lensNumber = getCellValue(cell2);
+//                    String project = getCellValue(cell3);
+//                    String partName = getCellValue(cell4);
+//                    String material = getCellValue(cell5);
+                    // System.out.println(departname + "_" + category + "_" + lensNumber + "_" + project + "_" + partName + "_" + material);
+
+//                    XSSFRow row1 = sheet.getRow(2);
+//                    XSSFCell cell6 = row1.getCell(colNum);
+//                    String title = getCellValue(cell6);
+//                    if(StringUtils.isEmpty(title)){
+//                        XSSFRow row2 = sheet.getRow(1);
+//                        XSSFCell cell7 = row2.getCell(colNum);
+//                        title = getCellValue(cell7);
+//                    }
+                    // System.out.println(title);
+
                     String key = from.getRow() + "_" + from.getCol();
                     // System.out.println(rowNum + "-------" + colNum);
                     map.put(key, picture.getPictureData());

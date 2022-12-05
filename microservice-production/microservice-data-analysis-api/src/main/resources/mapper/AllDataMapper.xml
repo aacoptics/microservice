@@ -2,11 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.data.analysis.mapper.AllDataMapper">
     <select id="getAllDataByConditionsWithPage" resultType="com.aacoptics.data.analysis.entity.po.AllData">
-        select pcd.category,
+        select
+        pcd.department,
+        pcd.category,
+        pcd.lens_number,
         pcd.project,
         pcd.part_name,
         pcd.material,
-        pcd.mold_no,
+
+        pcd.mold_no as pc_mold_no,
+        pcd.mold_type as pc_mold_type,
         pcd.mf_mold_temp,
         pcd.mf_material_temp,
         pcd.mf_jet_velocity,
@@ -23,6 +28,7 @@
         pcd.mf_hold_time4,
         pcd.mf_hold_time5,
         pcd.mf_hold_time6,
+        pcd.mf_cooling_time,
         pcd.mold_temp,
         pcd.material_temp,
         pcd.jet_velocity,
@@ -47,6 +53,8 @@
         pcd.clamping_force,
         pcd.passivation,
 
+        srd.mold_no as sr_mold_no,
+        srd.mold_type as sr_mold_type,
         srd.core_thickness,
         srd.core_thickness_range,
         srd.r1_vector_height,
@@ -70,11 +78,15 @@
         srd.r2_split_average,
         srd.wft_r1,
         srd.wft_r2,
+        srd.wft_r1_pic,
+        srd.wft_r2_pic,
         srd.wft_stability,
         srd.wft_consistency,
         srd.wft_max_as,
         srd.cft_r1,
         srd.cft_r2,
+        srd.cft_r1_pic,
+        srd.cft_r2_pic,
         srd.cft_consistency,
         srd.cft_max_as,
         srd.coating_trend,
@@ -86,12 +98,25 @@
         srd.appearance_problem,
         srd.appearance_img,
         srd.remarks,
+        srd.abc_files_no,
+        srd.structure_no,
+        srd.mold_type_no,
+        srd.mold_cost,
+        srd.evt_time,
+        srd.dvt_time,
+        srd.evt_dvt_time,
+        srd.evt_cost,
+        srd.dvt_cost,
+        srd.evt_dvt_cost,
+        srd.project_mass_production,
 
         sd.core_thickness_lens,
         sd.max_wall_thickness,
         sd.min_wall_thickness,
         sd.max_core_ratio,
         sd.max_min_ratio,
+        sd.optics_max_angle_r1,
+        sd.optics_max_angle_r2,
         sd.outer_diameter,
         sd.edge_thickness,
         sd.whole_min_wall_thickness,
@@ -112,10 +137,15 @@
         sd.r2_kanhe_height,
         sd.r1_srtm,
         sd.r2_srtm,
+        sd.r1_split_position,
+        sd.r2_split_position,
         sd.outer_diameter_srtm,
+        sd.part_surface_lift_ratio,
+        sd.mechanism_trou,
         sd.assembly_drawing,
 
-        tmf.mold_type,
+        tmf.mold_type as mf_mold_type,
+        tmf.runner_type as mf_runner_type,
         tmf.mold_diameter_rate,
         tmf.flow_front_temperature,
         tmf.vp_change_pressure,
@@ -127,17 +157,24 @@
         tmf.ridge_r2,
         tmf.refractive_r1,
         tmf.refractive_r2,
+        tmf.refractive_pic_r1,
+        tmf.refractive_pic_r2,
         tmf.competitor_name,
         tmf.competitor_link,
         tmf.assembly_drawing as competitor_assembly_drawing,
 
+        tmd.mold_no as md_mold_no,
+        tmd.mold_type as md_mold_type,
         tmd.mold_core_passivation,
-        tmd.runner_type,
+        tmd.runner_type as md_runner_type,
+        tmd.cavity_inner_diameter,
+        tmd.cavity_inner_diameter_range,
         tmd.first_runner,
         tmd.second_runner,
         tmd.third_runner,
         tmd.parting_surface,
-        tmd.split_position,
+        tmd.split_position_r1,
+        tmd.split_position_r2,
         tmd.gate_type,
         tmd.gate_width,
         tmd.gate_thickness,
@@ -149,18 +186,26 @@
         and pcd.project = srd.project
         and pcd.part_name = srd.part_name
         and pcd.material = srd.material
+        and pcd.department = srd.department
+        and pcd.lens_number = srd.lens_number
         inner join t_structure_data sd on pcd.category = sd.category
         and pcd.project = sd.project
         and pcd.part_name = sd.part_name
         and pcd.material = sd.material
+        and pcd.department = sd.department
+        and pcd.lens_number = sd.lens_number
         inner join t_mold_flow tmf on pcd.category = tmf.category
         and pcd.project = tmf.project
         and pcd.part_name = tmf.part_name
         and pcd.material = tmf.material
+        and pcd.department = tmf.department
+        and pcd.lens_number = tmf.lens_number
         inner join t_mold_data tmd on pcd.category = tmd.category
         and pcd.project = tmd.project
         and pcd.part_name = tmd.part_name
         and pcd.material = tmd.material
+        and pcd.department = tmd.department
+        and pcd.lens_number = tmd.lens_number
         where 1=1
         <if test="category != '' and category != null">
             AND pcd.category=#{category}
@@ -173,15 +218,26 @@
         </if>
         <if test="material != '' and material != null">
             AND pcd.material=#{material}
+        </if>
+        <if test="department != '' and department != null">
+            AND pcd.department=#{department}
+        </if>
+        <if test="lensNumber != '' and lensNumber != null">
+            AND pcd.lens_number=#{lensNumber}
         </if>
     </select>
 
     <select id="getAllDataByConditions" resultType="com.aacoptics.data.analysis.entity.po.AllData">
-        select pcd.category,
+        select
+        pcd.department,
+        pcd.category,
+        pcd.lens_number,
         pcd.project,
         pcd.part_name,
         pcd.material,
-        pcd.mold_no,
+
+        pcd.mold_no as pc_mold_no,
+        pcd.mold_type as pc_mold_type,
         pcd.mf_mold_temp,
         pcd.mf_material_temp,
         pcd.mf_jet_velocity,
@@ -198,6 +254,7 @@
         pcd.mf_hold_time4,
         pcd.mf_hold_time5,
         pcd.mf_hold_time6,
+        pcd.mf_cooling_time,
         pcd.mold_temp,
         pcd.material_temp,
         pcd.jet_velocity,
@@ -222,6 +279,8 @@
         pcd.clamping_force,
         pcd.passivation,
 
+        srd.mold_no as sr_mold_no,
+        srd.mold_type as sr_mold_type,
         srd.core_thickness,
         srd.core_thickness_range,
         srd.r1_vector_height,
@@ -245,11 +304,15 @@
         srd.r2_split_average,
         srd.wft_r1,
         srd.wft_r2,
+        srd.wft_r1_pic,
+        srd.wft_r2_pic,
         srd.wft_stability,
         srd.wft_consistency,
         srd.wft_max_as,
         srd.cft_r1,
         srd.cft_r2,
+        srd.cft_r1_pic,
+        srd.cft_r2_pic,
         srd.cft_consistency,
         srd.cft_max_as,
         srd.coating_trend,
@@ -261,12 +324,25 @@
         srd.appearance_problem,
         srd.appearance_img,
         srd.remarks,
+        srd.abc_files_no,
+        srd.structure_no,
+        srd.mold_type_no,
+        srd.mold_cost,
+        srd.evt_time,
+        srd.dvt_time,
+        srd.evt_dvt_time,
+        srd.evt_cost,
+        srd.dvt_cost,
+        srd.evt_dvt_cost,
+        srd.project_mass_production,
 
         sd.core_thickness_lens,
         sd.max_wall_thickness,
         sd.min_wall_thickness,
         sd.max_core_ratio,
         sd.max_min_ratio,
+        sd.optics_max_angle_r1,
+        sd.optics_max_angle_r2,
         sd.outer_diameter,
         sd.edge_thickness,
         sd.whole_min_wall_thickness,
@@ -287,10 +363,15 @@
         sd.r2_kanhe_height,
         sd.r1_srtm,
         sd.r2_srtm,
+        sd.r1_split_position,
+        sd.r2_split_position,
         sd.outer_diameter_srtm,
+        sd.part_surface_lift_ratio,
+        sd.mechanism_trou,
         sd.assembly_drawing,
 
-        tmf.mold_type,
+        tmf.mold_type as mf_mold_type,
+        tmf.runner_type as mf_runner_type,
         tmf.mold_diameter_rate,
         tmf.flow_front_temperature,
         tmf.vp_change_pressure,
@@ -302,17 +383,24 @@
         tmf.ridge_r2,
         tmf.refractive_r1,
         tmf.refractive_r2,
+        tmf.refractive_pic_r1,
+        tmf.refractive_pic_r2,
         tmf.competitor_name,
         tmf.competitor_link,
         tmf.assembly_drawing as competitor_assembly_drawing,
 
+        tmd.mold_no as md_mold_no,
+        tmd.mold_type as md_mold_type,
         tmd.mold_core_passivation,
-        tmd.runner_type,
+        tmd.runner_type as md_runner_type,
+        tmd.cavity_inner_diameter,
+        tmd.cavity_inner_diameter_range,
         tmd.first_runner,
         tmd.second_runner,
         tmd.third_runner,
         tmd.parting_surface,
-        tmd.split_position,
+        tmd.split_position_r1,
+        tmd.split_position_r2,
         tmd.gate_type,
         tmd.gate_width,
         tmd.gate_thickness,
@@ -324,18 +412,26 @@
         and pcd.project = srd.project
         and pcd.part_name = srd.part_name
         and pcd.material = srd.material
+        and pcd.department = srd.department
+        and pcd.lens_number = srd.lens_number
         inner join t_structure_data sd on pcd.category = sd.category
         and pcd.project = sd.project
         and pcd.part_name = sd.part_name
         and pcd.material = sd.material
+        and pcd.department = sd.department
+        and pcd.lens_number = sd.lens_number
         inner join t_mold_flow tmf on pcd.category = tmf.category
         and pcd.project = tmf.project
         and pcd.part_name = tmf.part_name
         and pcd.material = tmf.material
+        and pcd.department = tmf.department
+        and pcd.lens_number = tmf.lens_number
         inner join t_mold_data tmd on pcd.category = tmd.category
         and pcd.project = tmd.project
         and pcd.part_name = tmd.part_name
         and pcd.material = tmd.material
+        and pcd.department = tmd.department
+        and pcd.lens_number = tmd.lens_number
         where 1=1
         <if test="category != '' and category != null">
             AND pcd.category=#{category}
@@ -348,6 +444,12 @@
         </if>
         <if test="material != '' and material != null">
             AND pcd.material=#{material}
+        </if>
+        <if test="department != '' and department != null">
+            AND pcd.department=#{department}
+        </if>
+        <if test="lensNumber != '' and lensNumber != null">
+            AND pcd.lens_number=#{lensNumber}
         </if>
     </select>
 

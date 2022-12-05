@@ -130,6 +130,8 @@ public class EquipmentController {
         equipmentTarget.setEquipDuty(equipDuty);
         equipmentTarget.setEquipDutyManager(equipDutyManager);
         equipmentTarget.setEquipCategory(equipmentForm.getEquipCategory());
+        equipmentTarget.setStatus(equipmentForm.getStatus());
+        equipmentTarget.setSectionType(equipmentForm.getSectionType());
 
         return Result.success(equipmentService.update(equipmentTarget));
     }

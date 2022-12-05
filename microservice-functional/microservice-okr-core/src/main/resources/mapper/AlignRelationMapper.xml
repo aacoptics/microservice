@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.okr.core.mapper.AlignRelationMapper">
+    <select id="getAlignCountInfo" resultType="com.aacoptics.okr.core.entity.po.AlignRelation">
+        select count(*) as count_num, owner_username, owner_real_name
+        from t_okr_align_relation
+        where objective_id = #{objectiveId}
+        group by owner_username, owner_real_name
+    </select>
+
+    <select id="getAlignedCountInfo" resultType="com.aacoptics.okr.core.entity.po.AlignRelation">
+        select count(*) as count_num, objective_username, objective_real_name
+        from (SELECT [id]
+                   , [align_type]
+                   , [align_id]
+                   , [objective_id]
+                   , [owner_username]
+                   , [owner_real_name]
+                   , [objective_username]
+                   , [objective_real_name]
+                   , [created_time]
+              FROM t_okr_align_relation
+              where align_id = #{objectiveId}
+                and align_type = 2
+              union all
+              SELECT [id]
+                   , [align_type]
+                   , [align_id]
+                   , [objective_id]
+                   , [owner_username]
+                   , [owner_real_name]
+                   , [objective_username]
+                   , [objective_real_name]
+                   , [created_time]
+              FROM t_okr_align_relation
+              where align_id in (select id from t_okr_key_result_detail where objective_id = #{objectiveId})
+                and align_type = 3) t
+        group by objective_username, objective_real_name
+    </select>
+
+    <select id="listAlignedByOId" resultType="com.aacoptics.okr.core.entity.po.AlignRelation">
+        SELECT [id]
+             , [align_type]
+             , [align_id]
+             , [objective_id]
+             , [owner_username]
+             , [owner_real_name]
+             , [objective_username]
+             , [objective_real_name]
+             , [created_time]
+        FROM t_okr_align_relation
+        where align_id = #{objectiveId}
+          and align_type = 2
+        union all
+        SELECT [id]
+             , [align_type]
+             , [align_id]
+             , [objective_id]
+             , [owner_username]
+             , [owner_real_name]
+             , [objective_username]
+             , [objective_real_name]
+             , [created_time]
+        FROM t_okr_align_relation
+        where align_id in (select id from t_okr_key_result_detail where objective_id = #{objectiveId})
+          and align_type = 3
+    </select>
+</mapper>

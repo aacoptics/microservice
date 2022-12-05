@@ -14,11 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("t_shaping_result_data")
 public class ShapingResultData extends BasePo {
+    private String department; //事业部
+    private String lensNumber; //镜片数
     private String category;
     private String project;
     private String partName;
     private String material;
     private String moldNo;
+    private String moldType; //模具类型
     private String coreThickness;
     private String coreThicknessRange;
     private String r1VectorHeight;
@@ -29,10 +32,8 @@ public class ShapingResultData extends BasePo {
     private String kanheEcc;
     private String faceEcc;
     private String annealingProcess;
-
     private String bpKanheRoundness;
     private String dmpKanheRoundness;
-
     private String outerDiameterAverage;
     private String outerDiameterRange;
     private String outerDiameterRoundness;
@@ -42,16 +43,17 @@ public class ShapingResultData extends BasePo {
     private String r2Flatness;
     private String r1SplitAverage;
     private String r2SplitAverage;
-
     private String wftR1;
     private String wftR2;
-
+    private String wftR1Pic; //白片面R1图片
+    private String wftR2Pic; //白片面R2图片
     private String wftStability;
     private String wftConsistency;
     private String wftMaxAs;
-
     private String cftR1;
     private String cftR2;
+    private String cftR1Pic; //镀膜片R1图片
+    private String cftR2Pic; //镀膜片R2图片
     private String cftConsistency;
     private String cftMaxAs;
     private String coatingTrend;
@@ -63,4 +65,15 @@ public class ShapingResultData extends BasePo {
     private String appearanceProblem;
     private String appearanceImg;
     private String remarks;
+    private String abcFilesNo; //ABC档合格数分布
+    private String structureNo; //结构方案总数
+    private String moldTypeNo; //模具类型总数
+    private String moldCost; //模具费用
+    private String evtTime; //项目EVT耗时
+    private String dvtTime; //项目DVT耗时
+    private String evtDvtTime; //项目(EVT+DVT)耗时
+    private String evtCost; //项目EVT费用
+    private String dvtCost; //项目DVT费用
+    private String evtDvtCost; //项目(EVT+DVT)费用
+    private String projectMassProduction; //项目量产
 }

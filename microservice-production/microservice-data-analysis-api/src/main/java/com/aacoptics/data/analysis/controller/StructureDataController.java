@@ -94,6 +94,8 @@ public class StructureDataController {
                 queryParams.getProject(),
                 queryParams.getPartName(),
                 queryParams.getMaterial(),
+                queryParams.getDepartment(),
+                queryParams.getLensNumber(),
                 queryParams.getSearchType(),
                 queryParams.getStartValue(),
                 queryParams.getEndValue());
@@ -126,40 +128,48 @@ public class StructureDataController {
                     if (row == null) {
                         row = sheet.createRow(i + 3);
                     }
-                    row.createCell(0).setCellValue(p.getCategory());
-                    row.createCell(1).setCellValue(p.getProject());
-                    row.createCell(2).setCellValue(p.getPartName());
-                    row.createCell(3).setCellValue(p.getMaterial());
-                    row.createCell(4).setCellValue(p.getCoreThicknessLens());
-                    row.createCell(5).setCellValue(p.getMaxWallThickness());
-                    row.createCell(6).setCellValue(p.getMinWallThickness());
-                    row.createCell(7).setCellValue(p.getMaxCoreRatio());
-                    row.createCell(8).setCellValue(p.getMaxMinRatio());
-                    row.createCell(9).setCellValue(p.getOuterDiameter());
-                    row.createCell(10).setCellValue(p.getEdgeThickness());
-                    row.createCell(11).setCellValue(p.getWholeMinWallThickness());
-                    row.createCell(12).setCellValue(p.getWholeMaxWallThickness());
-                    row.createCell(13).setCellValue(p.getWholeMaxMinRatio());
-                    row.createCell(14).setCellValue(p.getWholeDiameterThicknessRatio());
-                    row.createCell(15).setCellValue(p.getMaxAngleR1());
-                    row.createCell(16).setCellValue(p.getMaxAngleR2());
-                    row.createCell(17).setCellValue(p.getR1MaxHeightDifference());
-                    row.createCell(18).setCellValue(p.getR2MaxHeightDifference());
-                    row.createCell(19).setCellValue(p.getR1R2Distance());
-                    row.createCell(20).setCellValue(p.getMiddlePartThickness());
-                    row.createCell(21).setCellValue(p.getBottomDiameterDistance());
-                    row.createCell(22).setCellValue(p.getMechanismDiameterThicknessRatio());
-                    row.createCell(23).setCellValue(p.getR1KanheAngle());
-                    row.createCell(24).setCellValue(p.getR1KanheHeight());
-                    row.createCell(25).setCellValue(p.getR2KanheAngle());
-                    row.createCell(26).setCellValue(p.getR2KanheHeight());
-                    row.createCell(27).setCellValue(p.getR1Srtm());
-                    row.createCell(28).setCellValue(p.getR2Srtm());
-                    row.createCell(29).setCellValue(p.getOuterDiameterSrtm());
-                    if(StringUtils.isEmpty(p.getAssemblyDrawing())){
-                        row.createCell(30).setCellValue("");
-                    }else{
-                        row.createCell(30).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    row.createCell(0).setCellValue(p.getDepartment());
+                    row.createCell(1).setCellValue(p.getCategory());
+                    row.createCell(2).setCellValue(p.getLensNumber());
+                    row.createCell(3).setCellValue(p.getProject());
+                    row.createCell(4).setCellValue(p.getPartName());
+                    row.createCell(5).setCellValue(p.getMaterial());
+                    row.createCell(6).setCellValue(p.getCoreThicknessLens());
+                    row.createCell(7).setCellValue(p.getMaxWallThickness());
+                    row.createCell(8).setCellValue(p.getMinWallThickness());
+                    row.createCell(9).setCellValue(p.getMaxCoreRatio());
+                    row.createCell(10).setCellValue(p.getMaxMinRatio());
+                    row.createCell(11).setCellValue(p.getOpticsMaxAngleR1());
+                    row.createCell(12).setCellValue(p.getOpticsMaxAngleR2());
+                    row.createCell(13).setCellValue(p.getOuterDiameter());
+                    row.createCell(14).setCellValue(p.getEdgeThickness());
+                    row.createCell(15).setCellValue(p.getWholeMinWallThickness());
+                    row.createCell(16).setCellValue(p.getWholeMaxWallThickness());
+                    row.createCell(17).setCellValue(p.getWholeMaxMinRatio());
+                    row.createCell(18).setCellValue(p.getWholeDiameterThicknessRatio());
+                    row.createCell(19).setCellValue(p.getMaxAngleR1());
+                    row.createCell(20).setCellValue(p.getMaxAngleR2());
+                    row.createCell(21).setCellValue(p.getR1MaxHeightDifference());
+                    row.createCell(22).setCellValue(p.getR2MaxHeightDifference());
+                    row.createCell(23).setCellValue(p.getR1R2Distance());
+                    row.createCell(24).setCellValue(p.getMiddlePartThickness());
+                    row.createCell(25).setCellValue(p.getBottomDiameterDistance());
+                    row.createCell(26).setCellValue(p.getMechanismDiameterThicknessRatio());
+                    row.createCell(27).setCellValue(p.getR1KanheAngle());
+                    row.createCell(28).setCellValue(p.getR1KanheHeight());
+                    row.createCell(29).setCellValue(p.getR2KanheAngle());
+                    row.createCell(30).setCellValue(p.getR2KanheHeight());
+                    row.createCell(31).setCellValue(p.getR1Srtm());
+                    row.createCell(32).setCellValue(p.getR2Srtm());
+                    row.createCell(33).setCellValue(p.getR1SplitPosition());
+                    row.createCell(34).setCellValue(p.getR2SplitPosition());
+                    row.createCell(35).setCellValue(p.getOuterDiameterSrtm());
+                    row.createCell(36).setCellValue(p.getPartSurfaceLiftRatio());
+                    row.createCell(37).setCellValue(p.getMechanismTrou());
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
+                        row.createCell(38).setCellValue("");
+                    } else {
+                        row.createCell(38).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
                     }
                 }
             }
@@ -176,7 +186,13 @@ public class StructureDataController {
     @ApiImplicitParam(paramType = "path", name = "id", value = "结构数据ID", required = true, dataType = "Long")
     @DeleteMapping(value = "/delete/{id}")
     public Result delete(@PathVariable Long id) {
-        return Result.success(structureDataService.delete(id));
+        StructureData sd = structureDataService.getById(id);
+        boolean flag = structureDataService.delete(id);
+        FtpUtil.connect();
+        FtpUtil.changeWorkingDirectory("structureData");
+        FtpUtil.deleteFile(sd.getAssemblyDrawing().substring(0,sd.getAssemblyDrawing().indexOf(".")));
+        System.out.println("删除成功！");
+        return Result.success(flag);
     }
 
 
@@ -208,6 +224,18 @@ public class StructureDataController {
     @GetMapping(value = "/getMaterial")
     public Result getMaterial() {
         return Result.success(structureDataService.getMaterial());
+    }
+
+    @ApiOperation(value = "获取事业部", notes = "获取事业部")
+    @GetMapping(value = "/getDepartment")
+    public Result getDepartment() {
+        return Result.success(structureDataService.getDepartment());
+    }
+
+    @ApiOperation(value = "获取镜片数", notes = "获取镜片数")
+    @GetMapping(value = "/getLensNumber")
+    public Result getLensNumber() {
+        return Result.success(structureDataService.getLensNumber());
     }
 
 

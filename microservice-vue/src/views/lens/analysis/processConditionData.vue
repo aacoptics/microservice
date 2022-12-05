@@ -5,8 +5,24 @@
         <el-form :inline="true" :model="filters" :size="size">
           <el-row>
             <el-col :span="4">
+              <el-form-item label="事业部" prop="department">
+                <el-select v-model.trim="filters.department" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in departmentList" :key="item.department" :label="item.department"
+                             :value="item.department"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-select v-model.trim="filters.lensNumber" clearable placeholder="" style="width: 130px;">
+                  <el-option v-for="item in lensNumberList" :key="item.lensNumber" :label="item.lensNumber"
+                             :value="item.lensNumber"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
               <el-form-item label="类别" prop="category">
-                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 150px;">
+                <el-select v-model.trim="filters.category" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in categoryList" :key="item.category" :label="item.category"
                              :value="item.category"></el-option>
                 </el-select>
@@ -14,7 +30,7 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="项目" prop="project">
-                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 150px;">
+                <el-select v-model.trim="filters.project" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in projectList" :key="item.project" :label="item.project"
                              :value="item.project"></el-option>
                 </el-select>
@@ -22,7 +38,7 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="零件名称" prop="partName">
-                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 150px;">
+                <el-select v-model.trim="filters.partName" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in partNameList" :key="item.partName" :label="item.partName"
                              :value="item.partName"></el-option>
                 </el-select>
@@ -30,17 +46,9 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="材料" prop="material">
-                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 150px;">
+                <el-select v-model.trim="filters.material" clearable placeholder="" style="width: 130px;">
                   <el-option v-for="item in materialList" :key="item.material" :label="item.material"
                              :value="item.material"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item label="模具序号" prop="moldNo">
-                <el-select v-model.trim="filters.moldNo" clearable placeholder="" style="width: 150px;">
-                  <el-option v-for="item in moldNoList" :key="item.moldNo" :label="item.moldNo"
-                             :value="item.moldNo"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -130,10 +138,23 @@
           </el-form-item>
           <el-row>
             <el-col :span="8">
+              <el-form-item label="事业部" prop="department">
+                <el-input v-model="dataForm.department" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="类别" prop="category">
                 <el-input v-model="dataForm.category" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="镜片数" prop="lensNumber">
+                <el-input v-model="dataForm.lensNumber" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="项目" prop="project">
                 <el-input v-model="dataForm.project" auto-complete="off" clearable type="textarea"></el-input>
@@ -144,11 +165,17 @@
                 <el-input v-model="dataForm.partName" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="模具序号" prop="moldNo">
                 <el-input v-model="dataForm.moldNo" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="模具类型" prop="moldType">
+                <el-input v-model="dataForm.moldType" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -162,6 +189,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="模流-料温(℃)" prop="mfMaterialTemp">
@@ -179,6 +207,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="模流-保压1(Kgf/cm2)" prop="mfHoldPressure1">
@@ -196,6 +225,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="模流-保压2时间(s)" prop="mfHoldTime2">
@@ -213,6 +243,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="模流-保压4(Kgf/cm2)" prop="mfHoldPressure4">
@@ -230,6 +261,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="模流-保压5时间(s)" prop="mfHoldTime5">
@@ -250,6 +282,11 @@
 
           <el-row>
             <el-col :span="8">
+              <el-form-item label="模流冷却时间(s)" prop="mfCoolingTime">
+                <el-input v-model="dataForm.mfCoolingTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
               <el-form-item label="实际-模温(℃)" prop="moldTemp">
                 <el-input v-model="dataForm.moldTemp" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
@@ -259,13 +296,14 @@
                 <el-input v-model="dataForm.materialTemp" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-射速(mm/s)" prop="jetVelocity">
                 <el-input v-model="dataForm.jetVelocity" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-VP压力(Kgf/cm2)" prop="vpSwitch">
                 <el-input v-model="dataForm.vpSwitch" auto-complete="off" clearable type="textarea"></el-input>
@@ -276,14 +314,14 @@
                 <el-input v-model="dataForm.holdPressure1" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压1时间(s)" prop="holdTime1">
                 <el-input v-model="dataForm.holdTime1" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压2(Kgf/cm2)" prop="holdPressure2">
                 <el-input v-model="dataForm.holdPressure2" auto-complete="off" clearable type="textarea"></el-input>
@@ -294,14 +332,14 @@
                 <el-input v-model="dataForm.holdTime2" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压3(Kgf/cm2)" prop="holdPressure3">
                 <el-input v-model="dataForm.holdPressure3" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压3时间(s)" prop="holdTime3">
                 <el-input v-model="dataForm.holdTime3" auto-complete="off" clearable type="textarea"></el-input>
@@ -312,14 +350,14 @@
                 <el-input v-model="dataForm.holdPressure4" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压4时间(s)" prop="holdTime4">
                 <el-input v-model="dataForm.holdTime4" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压5(Kgf/cm2)" prop="holdPressure5">
                 <el-input v-model="dataForm.holdPressure5" auto-complete="off" clearable type="textarea"></el-input>
@@ -330,13 +368,14 @@
                 <el-input v-model="dataForm.holdTime5" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压6(Kgf/cm2)" prop="holdPressure6">
                 <el-input v-model="dataForm.holdPressure6" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="实际-保压6时间(s)" prop="holdTime6">
                 <el-input v-model="dataForm.holdTime6" auto-complete="off" clearable type="textarea"></el-input>
@@ -348,13 +387,14 @@
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="压板位置(mm)" prop="platenPosition">
                 <el-input v-model="dataForm.platenPosition" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="开模速度(mm/s)" prop="openingSpeed">
                 <el-input v-model="dataForm.openingSpeed" auto-complete="off" clearable type="textarea"></el-input>
@@ -365,13 +405,14 @@
                 <el-input v-model="dataForm.ejectionSpeed" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
-              <el-form-item label="冷却时间(s)" prop="coolingTime">
+              <el-form-item label="工艺冷却时间(s)" prop="coolingTime">
                 <el-input v-model="dataForm.coolingTime" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="8">
               <el-form-item label="锁模力(Ton)" prop="clampingForce">
                 <el-input v-model="dataForm.clampingForce" auto-complete="off" clearable type="textarea"></el-input>
@@ -409,7 +450,9 @@ import {
   getProject,
   handleDelete,
   handleUpdate,
-  uploadExcel
+  uploadExcel,
+  getDepartment,
+  getLensNumber
 } from "@/api/lens/analysis/processConditionData";
 import {ElMessageBox} from "element-plus";
 
@@ -424,15 +467,19 @@ export default {
         project: "",
         partName: "",
         material: "",
-        moldNo: ""
+        department: "",
+        lensNumber: ""
       },
       columns: [
         {type: "index", label: "序号", minWidth: 50},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
         {prop: "category", label: "类别", minWidth: 100, sortable: false},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
         {prop: "project", label: "项目", minWidth: 100, sortable: false},
         {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
+        {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
         {prop: "mfMoldTemp", label: "模流-模温(℃)", minWidth: 100},
         {prop: "mfMaterialTemp", label: "模流-料温(℃)", minWidth: 100},
         {prop: "mfJetVelocity", label: "模流-射速(mm/s)", minWidth: 100},
@@ -449,6 +496,7 @@ export default {
         {prop: "mfHoldTime5", label: "模流-保压5时间(s)", minWidth: 100},
         {prop: "mfHoldPressure6", label: "模流-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "mfHoldTime6", label: "模流-保压6时间(s)", minWidth: 100},
+        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100},
         {prop: "moldTemp", label: "实际-模温(℃)", minWidth: 100},
         {prop: "materialTemp", label: "实际-料温(℃)", minWidth: 100},
         {prop: "jetVelocity", label: "实际-射速(mm/s)", minWidth: 100},
@@ -469,7 +517,7 @@ export default {
         {prop: "platenPosition", label: "压板位置(mm)", minWidth: 100},
         {prop: "openingSpeed", label: "开模速度(mm/s)", minWidth: 100},
         {prop: "ejectionSpeed", label: "顶出速度(mm/s)", minWidth: 100},
-        {prop: "coolingTime", label: "冷却时间(s)", minWidth: 100},
+        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100},
         {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100},
         {prop: "passivation", label: "钝化工艺", minWidth: 100, sortable: false},
       ],
@@ -483,11 +531,14 @@ export default {
       // 编辑界面数据
       dataForm: {
         id: "0",
+        department: "",
         category: "",
+        lensNumber: "",
         project: "",
         partName: "",
         material: "",
         moldNo: "",
+        moldType: "",
         mfMoldTemp: "",
         mfMaterialTemp: "",
         mfJetVelocity: "",
@@ -504,6 +555,7 @@ export default {
         mfHoldTime5: "",
         mfHoldPressure6: "",
         mfHoldTime6: "",
+        mfCoolingTime: "",
         moldTemp: "",
         materialTemp: "",
         jetVelocity: "",
@@ -536,7 +588,8 @@ export default {
       projectList: [],
       partNameList: [],
       materialList: [],
-      moldNoList: []
+      departmentList: [],
+      lensNumberList: [],
     };
   },
   created() {
@@ -550,7 +603,8 @@ export default {
       this.projectList = await this.getProject();
       this.partNameList = await this.getPartName();
       this.materialList = await this.getMaterial();
-      this.moldNoList = await this.getMoldNo();
+      this.departmentList = await this.getDepartment();
+      this.lensNumberList = await this.getLensNumber();
     },
     getCategory() {
       return new Promise((resolve, reject) => {
@@ -602,6 +656,26 @@ export default {
         })
       })
     },
+    getDepartment() {
+      return new Promise((resolve, reject) => {
+        getDepartment().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
+    getLensNumber() {
+      return new Promise((resolve, reject) => {
+        getLensNumber().then(res => {
+          if (res.data.code !== "000000") {
+            resolve([])
+          }
+          resolve(res.data.data)
+        })
+      })
+    },
     // 获取分页数据
     findPage: function (data) {
       if (data !== null) {
@@ -611,7 +685,9 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
-      this.pageRequest.moldNo = this.filters.moldNo;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
+
       getDataByConditions(this.pageRequest)
           .then((res) => {
             const responseData = res.data;
@@ -621,7 +697,8 @@ export default {
                   if (key !== 'category' && key !== 'project' && key !== 'partName' &&
                       key !== 'material' && key !== 'moldNo' && key !== 'id' &&
                       key !== 'createdBy' && key !== 'createdTime' && key !== 'updatedBy' &&
-                      key !== 'updatedTime' && key !== 'passivation') {
+                      key !== 'updatedTime' && key !== 'passivation' && key !== 'department' &&
+                      key !== 'lensNumber' && key !== 'moldType') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])
@@ -717,7 +794,8 @@ export default {
       this.pageRequest.project = this.filters.project;
       this.pageRequest.partName = this.filters.partName;
       this.pageRequest.material = this.filters.material;
-      this.pageRequest.moldNo = this.filters.moldNo;
+      this.pageRequest.department = this.filters.department;
+      this.pageRequest.lensNumber = this.filters.lensNumber;
 
       this.exportDataLoading = true;
       exportExcel(this.pageRequest).then(res => {

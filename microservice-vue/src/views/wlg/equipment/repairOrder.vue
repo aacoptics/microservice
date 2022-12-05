@@ -78,13 +78,13 @@
 
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="isRepairOrderAddOperation?'新增':'编辑'"
                  destroy-on-close width="40%">
-        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="100px">
+        <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="150px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="设备编码" prop="mchCode">
+              <el-form-item label="设备编码/设备编号" prop="mchCode">
                 <el-input v-model="dataForm.mchCode" :disabled="!isRepairOrderAddOperation"
                           auto-complete="off" clearable @blur="findEquipmentByMchCode"></el-input>
               </el-form-item>
@@ -112,6 +112,16 @@
             <el-col :span="12">
               <el-form-item label="责任人" prop="dutyPersonId">
                 <el-input v-model="dataForm.dutyPersonId" :disabled="true" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="设备负责人" prop="equipDuty">
+                <el-input v-model="dataForm.equipDuty" :disabled="true" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="设备负责人经理" prop="equipDutyManager">
+                <el-input v-model="dataForm.equipDutyManager" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -278,7 +288,7 @@ export default {
       exportLoading: false,
 
       dataFormRules: {
-        mchCode: [{required: true, message: "请输入设备编码", trigger: "blur"}],
+        mchCode: [{required: true, message: "请输入设备编码/设备编号", trigger: "blur"}],
         faultDesc: [{required: true, message: "请输入故障描述", trigger: "blur"}],
       },
 
@@ -291,6 +301,8 @@ export default {
         typeVersion: "",
         factoryNo: '',
         dutyPersonId: '',
+        equipDuty: '',
+        equipDutyManager: '',
         faultDesc: '',
         faultImageId: null
       },
@@ -395,6 +407,8 @@ export default {
           this.dataForm.typeVersion = responseData.data.typeVersion;
           this.dataForm.factoryNo = responseData.data.factoryNo;
           this.dataForm.dutyPersonId = responseData.data.dutyPersonId;
+          this.dataForm.equipDuty = responseData.data.equipDuty;
+          this.dataForm.equipDutyManager = responseData.data.equipDutyManager;
         } else {
           this.$message({
             message:
