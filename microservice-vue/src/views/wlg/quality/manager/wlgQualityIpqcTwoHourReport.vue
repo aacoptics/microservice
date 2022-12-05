@@ -87,7 +87,7 @@ export default {
       if (this.errorResults.filter(e => e["t1"] === row.row["id"] && e["t2"] === row.column.label).length > 0) {
         return {'background': 'red'} //修改的样式
       } else if (this.errorResults.filter(e => e["t1"] === row.row['id'] && e["t2"] === "两小时内未送测同一模次面型和芯厚").length > 0
-          && ["项目号(project)", "模具(mold)", "周期(cycle)", "班序(Class order)"].includes(row.column.label)) {
+          && ["项目号\n(project)", "模具\n(mold)", "周期\n(cycle)", "班序\n(Class order)"].includes(row.column.label)) {
         return {'background': 'yellow'} //修改的样式
       } else {
         return {}
