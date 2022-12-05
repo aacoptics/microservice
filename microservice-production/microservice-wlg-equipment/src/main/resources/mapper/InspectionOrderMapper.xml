@@ -25,8 +25,10 @@
             <id property="id" column="ITEM_ID" jdbcType="BIGINT"/>
             <result property="checkItem" column="CHECK_ITEM"/>
             <result property="checkItemStandard"  column="CHECK_ITEM_STANDARD"/>
+            <result property="itemType"  column="ITEM_TYPE"/>
             <result property="minValue" column="MIN_VALUE"/>
             <result property="maxValue" column="MAX_VALUE"/>
+            <result property="theoreticalValue"  column="THEORETICAL_VALUE"/>
             <result property="actualValue" column="ACTUAL_VALUE"/>
             <result property="checkResult" column="CHECK_RESULT"/>
             <result property="isException" column="IS_EXCEPTION"/>
@@ -112,8 +114,10 @@
         B.EQUIP_NUMBER,
         C.CHECK_ITEM,
         C.CHECK_ITEM_STANDARD,
+        C.ITEM_TYPE,
         C.MIN_VALUE,
         C.MAX_VALUE,
+        C.THEORETICAL_VALUE,
         C.ACTUAL_VALUE,
         C.CHECK_RESULT,
         C.IS_EXCEPTION,
@@ -177,8 +181,10 @@
         C.ID ITEM_ID,
         C.CHECK_ITEM,
         C.CHECK_ITEM_STANDARD,
+        C.ITEM_TYPE,
         C.MIN_VALUE,
         C.MAX_VALUE,
+        C.THEORETICAL_VALUE,
         C.ACTUAL_VALUE,
         C.CHECK_RESULT,
         C.IS_EXCEPTION,
@@ -237,8 +243,10 @@
             C.ID ITEM_ID,
             C.CHECK_ITEM,
             C.CHECK_ITEM_STANDARD,
+            C.ITEM_TYPE,
             C.MIN_VALUE,
             C.MAX_VALUE,
+            C.THEORETICAL_VALUE,
             C.ACTUAL_VALUE,
             C.CHECK_RESULT,
             C.IS_EXCEPTION,

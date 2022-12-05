@@ -100,4 +100,13 @@ public class ExceptionTypeController {
     }
 
 
+    @ApiOperation(value = "获取异常分类", notes = "获取异常分类")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/findExceptionTypeList")
+    public Result findExceptionTypeList() {
+        return Result.success(exceptionTypeService.findExceptionTypeList());
+    }
+
 }

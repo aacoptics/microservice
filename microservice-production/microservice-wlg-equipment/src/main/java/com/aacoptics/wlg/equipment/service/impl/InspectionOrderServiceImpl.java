@@ -226,8 +226,10 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
                         InspectionOrderItem inspectionOrderItem = new InspectionOrderItem();
                         inspectionOrderItem.setCheckItem(inspectionItem.getCheckItem());
                         inspectionOrderItem.setCheckItemStandard(inspectionItem.getCheckItemStandard());
+                        inspectionOrderItem.setItemType(inspectionItem.getItemType());
                         inspectionOrderItem.setMinValue(inspectionItem.getMinValue());
                         inspectionOrderItem.setMaxValue(inspectionItem.getMaxValue());
+                        inspectionOrderItem.setTheoreticalValue(inspectionItem.getTheoreticalValue());
 
                         inspectionOrderItemList.add(inspectionOrderItem);
                     }

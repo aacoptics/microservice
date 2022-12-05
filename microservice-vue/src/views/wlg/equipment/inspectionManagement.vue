@@ -60,9 +60,11 @@
                     :header-cell-style="{'text-align':'center'}"
                     border size="small">
             <el-table-column label="点检项" prop="checkItem" width="180"/>
+            <el-table-column label="点检项类型" prop="itemValue" width="180" :formatter="itemTypeFormat"/>
             <el-table-column label="点检项判断标准" prop="checkItemStandard" width="180"/>
             <el-table-column label="起始范围值" prop="minValue"/>
             <el-table-column label="截至范围值" prop="maxValue"/>
+            <el-table-column label="理论值" prop="theoreticalValue"/>
             <el-table-column label="更新人" prop="updatedBy"/>
             <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime"/>
             <el-table-column label="创建人" prop="createdBy"/>
@@ -217,15 +219,34 @@
               </el-form-item>
             </el-col>
             <el-col :span="20">
+              <el-form-item label="点检项类型" prop="itemType">
+                <el-select v-model="inspectionItemDataForm.itemType" filterable placeholder="点检项类型"
+                           style="width:100%">
+                  <el-option
+                      v-for="item in itemTypeOptions"
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20" v-if="inspectionItemDataForm.itemType !== '1'">
               <el-form-item label="起始范围值" prop="minValue">
                 <el-input-number v-model="inspectionItemDataForm.minValue" auto-complete="off" clearable
                                  style="width:100%"></el-input-number>
               </el-form-item>
             </el-col>
-            <el-col :span="20">
+            <el-col :span="20" v-if="inspectionItemDataForm.itemType !== '1'">
               <el-form-item label="截至范围值" prop="maxValue">
                 <el-input-number v-model="inspectionItemDataForm.maxValue" auto-complete="off" clearable
                                  style="width:100%"></el-input-number>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20" v-if="inspectionItemDataForm.itemType === '1'">
+              <el-form-item label="理论值" prop="theoreticalValue">
+                <el-input v-model="inspectionItemDataForm.theoreticalValue" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -349,6 +370,7 @@ import {
   findTypeVersionListByMchNameAndSpec
 } from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
+import {getDict, selectDictLabel} from "@/api/system/dictData";
 
 export default {
   name: "inspection",
@@ -406,8 +428,9 @@ export default {
       inspectionItemDataFormRules: {
         checkItem: [{required: true, message: "请输入点检项", trigger: "blur"}],
         checkItemStandard: [{required: true, message: "请输入点检项判断标准", trigger: "blur"}],
-        minValue: [{required: true, message: "请输入起始范围值", trigger: "blur"}],
-        maxValue: [{required: true, message: "请输入截止范围值", trigger: "blur"}],
+        itemType: [{required: true, message: "请选择点检项类型", trigger: "blur"}],
+        // minValue: [{required: true, message: "请输入起始范围值", trigger: "blur"}],
+        // maxValue: [{required: true, message: "请输入截止范围值", trigger: "blur"}],
       },
       inspectionShiftDataFormRules: {
         shift: [{required: true, message: "请输入班次", trigger: "blur"}],
@@ -417,6 +440,7 @@ export default {
       mchNameOptions: [],
       specOptions: [],
       typeVersionOptions: [],
+      itemTypeOptions:[],
       // 新增编辑界面数据
       dataForm: {
         id: 0,
@@ -431,6 +455,8 @@ export default {
         checkItemStandard: '',
         minValue: null,
         maxValue: null,
+        itemType: '',
+        theoreticalValue:'',
       },
       inspectionShiftDataForm: {
         inspectionMainId: null,
@@ -447,6 +473,9 @@ export default {
       if (response.data.data.length > 0) {
         this.mchNameOptions = response.data.data
       }
+    }),
+    getDict("wlg_em_item_type").then(response => {
+      this.itemTypeOptions = response.data.data
     })
   },
   methods: {
@@ -888,7 +917,9 @@ export default {
     cancelInspectionShift() {
       this.inspectionShiftDialogVisible = false;
     },
-
+    itemTypeFormat: function (row) {
+      return selectDictLabel(this.itemTypeOptions, row.itemType);
+    },
     // 时间格式化
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");

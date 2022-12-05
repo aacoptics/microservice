@@ -52,6 +52,19 @@ public class InspectionOrderItem extends BasePo {
     private BigDecimal maxValue;
 
     /**
+     * 点检项类型
+     */
+    @TableField(value = "item_type")
+    private String itemType;
+
+    /**
+     * 理论值
+     */
+    @TableField(value = "theoretical_value")
+    private String theoreticalValue;
+
+
+    /**
      * 实际值
      */
     @TableField(value = "actual_value")

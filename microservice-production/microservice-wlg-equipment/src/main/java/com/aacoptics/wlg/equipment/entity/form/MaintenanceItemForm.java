@@ -26,12 +26,17 @@ public class MaintenanceItemForm extends BaseForm<MaintenanceItem> {
     @ApiModelProperty(value = "保养项目判断标准")
     private String maintenanceItemStandard;
 
-    @NotNull(message = "起始范围值不能为空")
     @ApiModelProperty(value = "起始范围值")
     private BigDecimal minValue;
 
-    @NotNull(message = "截止范围值不能为空")
     @ApiModelProperty(value = "截止范围值")
     private BigDecimal maxValue;
+
+    @NotNull(message = "保养项类型不能为空")
+    @ApiModelProperty(value = "点检项类型")
+    private String itemType;
+
+    @ApiModelProperty(value = "理论值")
+    private String theoreticalValue;
 
 }

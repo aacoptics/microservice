@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 public interface ExceptionTypeService extends IService<ExceptionType> {
 
     /**
@@ -47,6 +49,14 @@ public interface ExceptionTypeService extends IService<ExceptionType> {
      * @return
      */
     ExceptionType get(Long id);
+
+
+    /**
+     * 获取异常分类
+     *
+     * @return
+     */
+    List<ExceptionType> findExceptionTypeList();
 
 
 }

@@ -24,8 +24,10 @@
             <id property="id" column="ITEM_ID" jdbcType="BIGINT"/>
             <result property="maintenanceItem" column="MAINTENANCE_ITEM"/>
             <result property="maintenanceItemStandard"  column="MAINTENANCE_ITEM_STANDARD"/>
+            <result property="itemType"  column="ITEM_TYPE"/>
             <result property="minValue" column="MIN_VALUE"/>
             <result property="maxValue" column="MAX_VALUE"/>
+            <result property="theoreticalValue"  column="THEORETICAL_VALUE"/>
             <result property="actualValue" column="ACTUAL_VALUE"/>
             <result property="maintenanceResult" column="MAINTENANCE_RESULT"/>
             <result property="isException" column="IS_EXCEPTION"/>
@@ -107,8 +109,10 @@
         B.EQUIP_NUMBER,
         C.MAINTENANCE_ITEM,
         C.MAINTENANCE_ITEM_STANDARD,
+        C.ITEM_TYPE,
         C.MIN_VALUE,
         C.MAX_VALUE,
+        C.THEORETICAL_VALUE,
         C.ACTUAL_VALUE,
         C.MAINTENANCE_RESULT,
         C.IS_EXCEPTION,
@@ -171,8 +175,10 @@
         C.ID ITEM_ID,
         C.MAINTENANCE_ITEM,
         C.MAINTENANCE_ITEM_STANDARD,
+        C.ITEM_TYPE,
         C.MIN_VALUE,
         C.MAX_VALUE,
+        C.THEORETICAL_VALUE,
         C.ACTUAL_VALUE,
         C.MAINTENANCE_RESULT,
         C.IS_EXCEPTION,
@@ -231,8 +237,10 @@
         C.ID ITEM_ID,
         C.MAINTENANCE_ITEM,
         C.MAINTENANCE_ITEM_STANDARD,
+        C.ITEM_TYPE,
         C.MIN_VALUE,
         C.MAX_VALUE,
+        C.THEORETICAL_VALUE,
         C.ACTUAL_VALUE,
         C.MAINTENANCE_RESULT,
         C.IS_EXCEPTION,

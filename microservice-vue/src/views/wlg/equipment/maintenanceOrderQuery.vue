@@ -109,9 +109,11 @@ export default {
         {prop: "maintenanceDate", label: "保养日期", minWidth: 100},
 
         {prop: "maintenanceItem", label: "保养项", minWidth: 150},
+        {prop: "itemType", label: "保养项类型", minWidth: 100, formatter: this.itemTypeFormat},
         {prop: "maintenanceItemStandard", label: "保养项判断标准", minWidth: 150},
         {prop: "minValue", label: "起始范围值", minWidth: 150},
         {prop: "maxValue", label: "截至范围值", minWidth: 150},
+        {prop: "theoreticalValue", label: "理论值", minWidth: 150},
         {prop: "actualValue", label: "实际值", minWidth: 150},
         {prop: "isFinish", label: "是否完成", minWidth: 150, formatter: this.yesNoFormat},
         {prop: "maintenanceResult", label: "保养结果", minWidth: 150},
@@ -147,6 +149,7 @@ export default {
       orderStatusOptions: [],
       yesNoOptions: [],
       userOptions: [],
+      itemTypeOptions: []
     };
   },
   mounted() {
@@ -155,11 +158,14 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-        getDict("wlg_em_maintenance_order_status").then(response => {
-          this.orderStatusOptions = response.data.data
-        })
+    getDict("wlg_em_maintenance_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
+    })
     getDict("wlg_em_yes_no").then(response => {
       this.yesNoOptions = response.data.data
+    }),
+    getDict("wlg_em_item_type").then(response => {
+      this.itemTypeOptions = response.data.data
     })
     getAllUser().then(response => {
       this.userOptions = response.data.data
@@ -254,6 +260,9 @@ export default {
     },
     yesNoFormat: function (row, column, cellValue) {
       return selectDictLabel(this.yesNoOptions, cellValue);
+    },
+    itemTypeFormat: function (row) {
+      return selectDictLabel(this.itemTypeOptions, row.itemType);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {

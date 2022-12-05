@@ -40,7 +40,6 @@ public class ExceptionTypeServiceImpl extends ServiceImpl<ExceptionTypeMapper, E
         return this.page(page, queryWrapper);
     }
 
-
     @Override
     public boolean add(ExceptionType exceptionType) {
         //校验是否存在
@@ -112,6 +111,11 @@ public class ExceptionTypeServiceImpl extends ServiceImpl<ExceptionTypeMapper, E
         return exceptionType;
     }
 
+    @Override
+    public List<ExceptionType> findExceptionTypeList() {
+        QueryWrapper<ExceptionType> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByAsc("exception_type");
 
-
+        return exceptionTypeMapper.selectList(queryWrapper);
+    }
 }

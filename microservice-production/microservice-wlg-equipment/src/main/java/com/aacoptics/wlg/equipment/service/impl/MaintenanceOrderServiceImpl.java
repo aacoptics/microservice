@@ -230,8 +230,10 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                     MaintenanceOrderItem maintenanceOrderItem = new MaintenanceOrderItem();
                     maintenanceOrderItem.setMaintenanceItem(maintenanceItem.getMaintenanceItem());
                     maintenanceOrderItem.setMaintenanceItemStandard(maintenanceItem.getMaintenanceItemStandard());
+                    maintenanceOrderItem.setItemType(maintenanceItem.getItemType());
                     maintenanceOrderItem.setMinValue(maintenanceItem.getMinValue());
                     maintenanceOrderItem.setMaxValue(maintenanceItem.getMaxValue());
+                    maintenanceOrderItem.setTheoreticalValue(maintenanceItem.getTheoreticalValue());
 
                     maintenanceOrderItemList.add(maintenanceOrderItem);
                 }
