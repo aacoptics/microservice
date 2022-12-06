@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.aacoptics.wlg.equipment.constant.EquipmentStatusConstants;
 import com.aacoptics.wlg.equipment.constant.InspectionOrderStatusConstants;
 import com.aacoptics.wlg.equipment.constant.MaintenanceOrderStatusConstants;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -295,8 +297,9 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
-
-        List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderMapper.findOrderByMchCode(mchCode);
+        HashMap<String, String> conditionMap = new HashMap<>();
+        conditionMap.put("mchCode", mchCode);
+        List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderMapper.findOrderByCondition(conditionMap);
         if(maintenanceOrderAndItemVOList == null || maintenanceOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要保养的工单，请确认！");
@@ -305,6 +308,23 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
         return maintenanceOrderAndItemVOList;
     }
 
+
+    @Override
+    public List<MaintenanceOrderAndItemVO> findOrderByUser(String user) {
+        HashMap<String, String> conditionMap = new HashMap<>();
+        if(StringUtils.isEmpty(user))
+        {
+            conditionMap.put("user", UserContextHolder.getInstance().getUsername());
+        }
+        else
+        {
+            conditionMap.put("user", user);
+        }
+
+        List<MaintenanceOrderAndItemVO> maintenanceOrderAndItemVOList = maintenanceOrderMapper.findOrderByCondition(conditionMap);
+
+        return maintenanceOrderAndItemVOList;
+    }
 
 
     @Transactional

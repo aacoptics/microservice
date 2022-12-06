@@ -1,6 +1,8 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.InspectionShiftForm;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
@@ -9,10 +11,12 @@ import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.InspectionItemMapper;
 import com.aacoptics.wlg.equipment.mapper.InspectionMainMapper;
 import com.aacoptics.wlg.equipment.mapper.InspectionShiftMapper;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.EquipmentService;
 import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.aacoptics.wlg.equipment.service.InspectionMainService;
 import com.aacoptics.wlg.equipment.service.InspectionShiftService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,8 +32,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -52,6 +55,9 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
 
     @Resource
     InspectionShiftService inspectionShiftService;
+
+    @Resource
+    DataDictProvider dataDictProvider;
 
     @Override
     public IPage<InspectionMain> query(Page page, InspectionQueryParam inspectionQueryParam) {
@@ -98,6 +104,16 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
      */
     private void importInspectionItem(List<String[]> excelDataList)
     {
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
 
         String[] titleArray = excelDataList.get(0);//标题行
 
@@ -119,9 +135,11 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
             String spec = dataArray[2]; //规格
             String typeVersion = dataArray[3]; //型号
             String checkItem = dataArray[4]; //点检项
-            String checkItemStandard = dataArray[5]; //点检项判断标准
-            String minValue = dataArray[6]; //起始范围值
-            String maxValue = dataArray[7]; //截至范围值
+            String itemTypeDesc = dataArray[5]; //点检项类型
+            String checkItemStandard = dataArray[6]; //点检项判断标准
+            String minValue = dataArray[7]; //起始范围值
+            String maxValue = dataArray[8]; //截至范围值
+            String theoreticalValue = dataArray[9]; //理论值
 
             if (StringUtils.isEmpty(mchName)) {
                 throw new BusinessException("第" + (i + 1) + "行设备名称不能为空");
@@ -135,15 +153,34 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
             if (StringUtils.isEmpty(checkItem)) {
                 throw new BusinessException("第" + (i + 1) + "行点检项不能为空");
             }
+            if(StringUtils.isEmpty(itemTypeDesc))
+            {
+                throw new BusinessException("第" + (i + 1) + "行点检项类型不能为空");
+            }
+            if(itemTypeMap != null && !itemTypeMap.containsValue(itemTypeDesc))
+            {
+                throw new BusinessException("第" + (i + 1) + "行点检项类型【" + itemTypeDesc + "】不存在");
+            }
+            String itemType = "";
+            Set<String> keys = itemTypeMap.keySet();
+            for(String key : keys)
+            {
+                String value = itemTypeMap.get(key);
+                if(itemTypeDesc.equals(value))
+                {
+                    itemType = key;
+                }
+            }
+
             if (StringUtils.isEmpty(checkItemStandard)) {
                 throw new BusinessException("第" + (i + 1) + "行点检项判断标准不能为空");
             }
-            if (StringUtils.isEmpty(minValue)) {
-                throw new BusinessException("第" + (i + 1) + "行起始范围值不能为空");
-            }
-            if (StringUtils.isEmpty(maxValue)) {
-                throw new BusinessException("第" + (i + 1) + "行截至范围值不能为空");
-            }
+//            if (StringUtils.isEmpty(minValue)) {
+//                throw new BusinessException("第" + (i + 1) + "行起始范围值不能为空");
+//            }
+//            if (StringUtils.isEmpty(maxValue)) {
+//                throw new BusinessException("第" + (i + 1) + "行截至范围值不能为空");
+//            }
 
 
             try {
@@ -173,9 +210,11 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
                     inspectionItem.setInspectionMainId(inspectionMainId);
                 }
                 inspectionItem.setCheckItem(checkItem);
+                inspectionItem.setItemType(itemType);
                 inspectionItem.setCheckItemStandard(checkItemStandard);
                 inspectionItem.setMinValue(new BigDecimal(minValue));
                 inspectionItem.setMaxValue(new BigDecimal(maxValue));
+                inspectionItem.setTheoreticalValue(theoreticalValue);
 
                 inspectionItemService.saveOrUpdate(inspectionItem);
 

@@ -152,6 +152,23 @@ public class MaintenanceOrderController {
         return Result.success(maintenanceOrderService.findOrderByMchCode(mchCode));
     }
 
+    @ApiOperation(value = "根据设用户查询保养工单", notes = "根据设用户查询保养工单")
+    @ApiImplicitParam(name = "requestBody", value = "用户", required = true, dataType = "String")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/findOrderByUser")
+    public Result findOrderByUser(@RequestBody String requestBody) {
+        log.debug("query with name:{}", requestBody);
+        String user = "";
+        if(StringUtils.isNotEmpty(requestBody)) {
+            JSONObject jsonObject = JSON.parseObject(requestBody);
+            user = jsonObject.getString("user");
+        }
+        return Result.success(maintenanceOrderService.findOrderByUser(user));
+    }
+
+
     @ApiOperation(value = "修改保养工单", notes = "修改指定保养工单信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "保养工单ID", required = true, example = "0", dataType = "Long"),
@@ -195,6 +212,17 @@ public class MaintenanceOrderController {
         else {
             log.error("获取" + DataDictConstants.YES_NO + "数据字典失败，" + yesNoResult.getMsg());
         }
+        //保养项类型
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
 
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -213,20 +241,22 @@ public class MaintenanceOrderController {
         titleRow.createCell(8).setCellValue("状态");
         titleRow.createCell(9).setCellValue("保养日期");
         titleRow.createCell(10).setCellValue("保养项");
-        titleRow.createCell(11).setCellValue("保养项判断标准");
-        titleRow.createCell(12).setCellValue("起始范围值");
-        titleRow.createCell(13).setCellValue("截至范围值");
-        titleRow.createCell(14).setCellValue("实际值");
-        titleRow.createCell(15).setCellValue("是否完成");
-        titleRow.createCell(16).setCellValue("保养结果");
-        titleRow.createCell(17).setCellValue("是否存在异常");
-        titleRow.createCell(18).setCellValue("是否存在故障");
-        titleRow.createCell(19).setCellValue("是否需要维修");
-        titleRow.createCell(20).setCellValue("故障描述");
-        titleRow.createCell(21).setCellValue("更新人");
-        titleRow.createCell(22).setCellValue("更新时间");
-        titleRow.createCell(23).setCellValue("创建人");
-        titleRow.createCell(24).setCellValue("创建时间");
+        titleRow.createCell(11).setCellValue("保养项类型");
+        titleRow.createCell(12).setCellValue("保养项判断标准");
+        titleRow.createCell(13).setCellValue("起始范围值");
+        titleRow.createCell(14).setCellValue("截至范围值");
+        titleRow.createCell(15).setCellValue("理论值");
+        titleRow.createCell(16).setCellValue("实际值");
+        titleRow.createCell(17).setCellValue("是否完成");
+        titleRow.createCell(18).setCellValue("保养结果");
+        titleRow.createCell(19).setCellValue("是否存在异常");
+        titleRow.createCell(20).setCellValue("是否存在故障");
+        titleRow.createCell(21).setCellValue("是否需要维修");
+        titleRow.createCell(22).setCellValue("故障描述");
+        titleRow.createCell(23).setCellValue("更新人");
+        titleRow.createCell(24).setCellValue("更新时间");
+        titleRow.createCell(25).setCellValue("创建人");
+        titleRow.createCell(26).setCellValue("创建时间");
 
         try {
             if (maintenanceOrderAndItemVOList != null && maintenanceOrderAndItemVOList.size() > 0) {
@@ -269,21 +299,35 @@ public class MaintenanceOrderController {
                             dataRow.createCell(0).setCellValue(rowNumber - 1);
                         }
                         dataRow.createCell(10).setCellValue(maintenanceOrderItem.getMaintenanceItem() != null ? maintenanceOrderItem.getMaintenanceItem() + "" : "");
-                        dataRow.createCell(11).setCellValue(maintenanceOrderItem.getMaintenanceItemStandard() != null ? maintenanceOrderItem.getMaintenanceItemStandard() + "" : "");
-                        if(maintenanceOrderItem.getMinValue() != null) {
-                            dataRow.createCell(12).setCellValue(Double.valueOf(maintenanceOrderItem.getMinValue() + ""));
-                        }else{
-                            dataRow.createCell(12).setCellType(CellType.BLANK);
+
+                        //保养项类型通过数据字典翻译
+                        String itemType = maintenanceOrderItem.getItemType() != null ? maintenanceOrderItem.getItemType() + "" : "";
+                        if(StringUtils.isNotEmpty(itemType))
+                        {
+                            if(itemTypeMap.containsKey(itemType))
+                            {
+                                itemType = itemTypeMap.get(itemType);
+                            }
                         }
-                        if(maintenanceOrderItem.getMaxValue() != null) {
-                            dataRow.createCell(13).setCellValue(Double.valueOf(maintenanceOrderItem.getMaxValue() + ""));
+                        dataRow.createCell(11).setCellValue(itemType);
+
+                        dataRow.createCell(12).setCellValue(maintenanceOrderItem.getMaintenanceItemStandard() != null ? maintenanceOrderItem.getMaintenanceItemStandard() + "" : "");
+                        if(maintenanceOrderItem.getMinValue() != null) {
+                            dataRow.createCell(13).setCellValue(Double.valueOf(maintenanceOrderItem.getMinValue() + ""));
                         }else{
                             dataRow.createCell(13).setCellType(CellType.BLANK);
                         }
-                        if(maintenanceOrderItem.getActualValue() != null) {
-                            dataRow.createCell(14).setCellValue(Double.valueOf(maintenanceOrderItem.getActualValue() + ""));
+                        if(maintenanceOrderItem.getMaxValue() != null) {
+                            dataRow.createCell(14).setCellValue(Double.valueOf(maintenanceOrderItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(14).setCellType(CellType.BLANK);
+                        }
+                        dataRow.createCell(15).setCellValue(maintenanceOrderItem.getTheoreticalValue() != null ? maintenanceOrderItem.getTheoreticalValue() + "" : "");
+
+                        if(maintenanceOrderItem.getActualValue() != null) {
+                            dataRow.createCell(16).setCellValue(Double.valueOf(maintenanceOrderItem.getActualValue() + ""));
+                        }else{
+                            dataRow.createCell(16).setCellType(CellType.BLANK);
                         }
 
                         String isFinish = maintenanceOrderItem.getIsFinish() != null ? maintenanceOrderItem.getIsFinish() + "" : "";
@@ -294,8 +338,8 @@ public class MaintenanceOrderController {
                                 isFinish = yesNoMap.get(isFinish);
                             }
                         }
-                        dataRow.createCell(15).setCellValue(isFinish);
-                        dataRow.createCell(16).setCellValue(maintenanceOrderItem.getMaintenanceResult() != null ? maintenanceOrderItem.getMaintenanceResult() + "" : "");
+                        dataRow.createCell(17).setCellValue(isFinish);
+                        dataRow.createCell(18).setCellValue(maintenanceOrderItem.getMaintenanceResult() != null ? maintenanceOrderItem.getMaintenanceResult() + "" : "");
 
                         String isException = maintenanceOrderItem.getIsException() != null ? maintenanceOrderItem.getIsException() + "" : "";
                         if(StringUtils.isNotEmpty(isException))
@@ -305,7 +349,7 @@ public class MaintenanceOrderController {
                                 isException = yesNoMap.get(isException);
                             }
                         }
-                        dataRow.createCell(17).setCellValue(isException);
+                        dataRow.createCell(19).setCellValue(isException);
 
                         String isFault = maintenanceOrderItem.getIsFault() != null ? maintenanceOrderItem.getIsFault() + "" : "";
                         if(StringUtils.isNotEmpty(isFault))
@@ -315,7 +359,7 @@ public class MaintenanceOrderController {
                                 isFault = yesNoMap.get(isFault);
                             }
                         }
-                        dataRow.createCell(18).setCellValue(isFault);
+                        dataRow.createCell(20).setCellValue(isFault);
 
                         String isRepair = maintenanceOrderItem.getIsRepair() != null ? maintenanceOrderItem.getIsRepair() + "" : "";
                         if(StringUtils.isNotEmpty(isRepair))
@@ -325,12 +369,12 @@ public class MaintenanceOrderController {
                                 isRepair = yesNoMap.get(isRepair);
                             }
                         }
-                        dataRow.createCell(19).setCellValue(isRepair);
-                        dataRow.createCell(20).setCellValue(maintenanceOrderItem.getFaultDesc() != null ? maintenanceOrderItem.getFaultDesc() + "" : "");
-                        dataRow.createCell(21).setCellValue(maintenanceOrderItem.getUpdatedBy() != null ? maintenanceOrderItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(22).setCellValue(maintenanceOrderItem.getUpdatedTime() != null ? maintenanceOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(23).setCellValue(maintenanceOrderItem.getCreatedBy() != null ? maintenanceOrderItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(24).setCellValue(maintenanceOrderItem.getCreatedTime() != null ? maintenanceOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(21).setCellValue(isRepair);
+                        dataRow.createCell(22).setCellValue(maintenanceOrderItem.getFaultDesc() != null ? maintenanceOrderItem.getFaultDesc() + "" : "");
+                        dataRow.createCell(23).setCellValue(maintenanceOrderItem.getUpdatedBy() != null ? maintenanceOrderItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(24).setCellValue(maintenanceOrderItem.getUpdatedTime() != null ? maintenanceOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(25).setCellValue(maintenanceOrderItem.getCreatedBy() != null ? maintenanceOrderItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(26).setCellValue(maintenanceOrderItem.getCreatedTime() != null ? maintenanceOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格

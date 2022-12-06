@@ -92,4 +92,52 @@ public class RepairOrder extends BasePo {
      */
     @TableField(value = "source_order_item_id")
     private Long sourceOrderItemId;
+
+    /**
+     * 第一次暂存时间
+     */
+    @TableField(value = "stage_datetime")
+    private LocalDateTime stageDatetime;
+
+    /**
+     * 异常分类
+     */
+    @TableField(value = "exception_type")
+    private String exceptionType;
+
+    /**
+     * 异常子类
+     */
+    @TableField(value = "exception_subclass")
+    private String exceptionSubclass;
+
+    /**
+     * 模具
+     */
+    @TableField(value = "mould")
+    private String mould;
+
+    /**
+     * 原因分析
+     */
+    @TableField(value = "reason")
+    private String reason;
+
+    /**
+     * 处理方法
+     */
+    @TableField(value = "handle_method")
+    private String handleMethod;
+
+    /**
+     * 是否结案
+     */
+    @TableField(value = "is_closed")
+    private Integer isClosed;
+
+    /**
+     * 长期措施
+     */
+    @TableField(value = "long_term_measure")
+    private String longTermMeasure;
 }

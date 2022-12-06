@@ -110,6 +110,15 @@ public interface MaintenanceOrderService {
      */
     List<MaintenanceOrderAndItemVO> findOrderByMchCode(String mchCode);
 
+
+    /**
+     * 通过用户查询保养工单
+     *
+     * @param user 用户
+     * @return
+     */
+    List<MaintenanceOrderAndItemVO> findOrderByUser(String user);
+
     /**
      * 提交保养结果
      *

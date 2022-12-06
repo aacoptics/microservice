@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -91,5 +92,56 @@ public class RepairOrderVO extends BasePo {
      * 设备编号
      */
     private String equipNumber;
+
+
+    /**
+     * 第一次暂存时间
+     */
+    private LocalDateTime stageDatetime;
+
+
+    /**
+     * 异常分类
+     */
+    private String exceptionType;
+
+
+    /**
+     * 异常子类
+     */
+    private String exceptionSubclass;
+
+
+
+    /**
+     * 模具
+     */
+    private String mould;
+
+
+
+    /**
+     * 原因分析
+     */
+    private String reason;
+
+
+
+    /**
+     * 处理方法
+     */
+    private String handleMethod;
+
+
+    /**
+     * 是否结案
+     */
+    private Integer isClosed;
+
+
+    /**
+     * 长期措施
+     */
+    private String longTermMeasure;
 
 }

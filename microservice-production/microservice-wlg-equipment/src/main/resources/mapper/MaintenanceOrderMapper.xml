@@ -216,7 +216,7 @@
     </select>
 
 
-    <select id="findOrderByMchCode" resultMap="MaintenanceOrderAndItemVO">
+    <select id="findOrderByCondition" parameterType="Map" resultMap="MaintenanceOrderAndItemVO">
         SELECT A.ID,
         A.ORDER_NUMBER,
         A.MCH_CODE,
@@ -256,7 +256,12 @@
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
         LEFT JOIN EM_MAINTENANCE_ORDER_ITEM C ON A.ID = C.MAINTENANCE_ORDER_ID
         WHERE 1=1
-        AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
+        <if test="mchCode != null and mchCode != ''">
+            AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
+        </if>
+        <if test="user != null and user != ''">
+            AND A.DUTY_PERSON_ID = #{user}
+        </if>
         AND A.STATUS IN ('0', '1')
         ORDER BY A.ORDER_NUMBER, A.MAINTENANCE_DATE, C.MAINTENANCE_ITEM
     </select>

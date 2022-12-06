@@ -115,6 +115,15 @@ public interface InspectionOrderService {
 
 
     /**
+     * 通过用户查询点检工单
+     *
+     * @param user 设备编码
+     * @return
+     */
+    List<InspectionOrderAndItemVO> findOrderByUser(String user);
+
+
+    /**
      * 提交保养结果
      *
      * @param inspectionOrder

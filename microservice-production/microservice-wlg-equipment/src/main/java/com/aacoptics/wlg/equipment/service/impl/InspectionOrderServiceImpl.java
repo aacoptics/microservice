@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
@@ -27,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -293,7 +295,9 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
 
-        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findOrderByMchCode(mchCode);
+        HashMap<String, String> conditionMap = new HashMap<>();
+        conditionMap.put("mchCode", mchCode);
+        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findOrderByCondition(conditionMap);
         if(inspectionOrderAndItemVOList == null || inspectionOrderAndItemVOList.size() == 0)
         {
             throw new BusinessException("设备【" + mchCode + "】不存在需要点检的工单，请确认！");
@@ -301,6 +305,21 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         return inspectionOrderAndItemVOList;
     }
 
+
+    @Override
+    public List<InspectionOrderAndItemVO> findOrderByUser(String user) {
+        HashMap<String, String> conditionMap = new HashMap<>();
+        if(StringUtils.isEmpty(user))
+        {
+            conditionMap.put("user", UserContextHolder.getInstance().getUsername());
+        }
+        else
+        {
+            conditionMap.put("user", user);
+        }
+        List<InspectionOrderAndItemVO> inspectionOrderAndItemVOList = inspectionOrderMapper.findOrderByCondition(conditionMap);
+        return inspectionOrderAndItemVOList;
+    }
 
     @Transactional
     @Override

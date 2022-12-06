@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceItemForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceMainForm;
 import com.aacoptics.wlg.equipment.entity.form.MaintenanceOrderQueryForm;
@@ -12,11 +13,14 @@ import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.entity.po.MaintenanceOrderItem;
 import com.aacoptics.wlg.equipment.entity.vo.MaintenanceOrderAndItemVO;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
 import com.aacoptics.wlg.equipment.service.MaintenanceMainService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -32,6 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -46,6 +51,8 @@ public class MaintenanceController {
     @Autowired
     MaintenanceItemService maintenanceItemService;
 
+    @Autowired
+    DataDictProvider dataDictProvider;
 
     @ApiOperation(value = "搜索保养", notes = "根据条件搜索保养信息")
     @ApiImplicitParam(name = "projectMapQueryForm", value = "保养查询参数", required = true, dataType = "ProjectMapQueryForm")
@@ -127,6 +134,19 @@ public class MaintenanceController {
     @PostMapping(value = "/exportMaintenanceExcel")
     public void exportMaintenanceExcel(@Valid @RequestBody MaintenanceQueryForm maintenanceQueryForm, HttpServletResponse response) throws Exception {
         log.debug("query with name:{}", maintenanceQueryForm);
+
+        //保养项类型
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
+
         List<MaintenanceMain> maintenanceMainList = maintenanceMainService.queryMaintenanceDataByCondition(maintenanceQueryForm.toParam(MaintenanceQueryParam.class));
 
         //创建工作簿
@@ -139,15 +159,17 @@ public class MaintenanceController {
         titleRow.createCell(1).setCellValue("设备名称");
         titleRow.createCell(2).setCellValue("规格");
         titleRow.createCell(3).setCellValue("型号");
-        titleRow.createCell(4).setCellValue("保养周期(月)");
+        titleRow.createCell(4).setCellValue("保养周期(周)");
         titleRow.createCell(5).setCellValue("保养项");
-        titleRow.createCell(6).setCellValue("保养项判断标准");
-        titleRow.createCell(7).setCellValue("起始范围值");
-        titleRow.createCell(8).setCellValue("截至范围值");
-        titleRow.createCell(9).setCellValue("更新人");
-        titleRow.createCell(10).setCellValue("更新时间");
-        titleRow.createCell(11).setCellValue("创建人");
-        titleRow.createCell(12).setCellValue("创建时间");
+        titleRow.createCell(6).setCellValue("保养项类型");
+        titleRow.createCell(7).setCellValue("保养项判断标准");
+        titleRow.createCell(8).setCellValue("起始范围值");
+        titleRow.createCell(9).setCellValue("截至范围值");
+        titleRow.createCell(10).setCellValue("理论值");
+        titleRow.createCell(11).setCellValue("更新人");
+        titleRow.createCell(12).setCellValue("更新时间");
+        titleRow.createCell(13).setCellValue("创建人");
+        titleRow.createCell(14).setCellValue("创建时间");
 
         try {
             if (maintenanceMainList != null && maintenanceMainList.size() > 0) {
@@ -175,21 +197,33 @@ public class MaintenanceController {
                             dataRow.createCell(0).setCellValue(rowNumber - 1);
                         }
                         dataRow.createCell(5).setCellValue(maintenanceItem.getMaintenanceItem() != null ? maintenanceItem.getMaintenanceItem() + "" : "");
-                        dataRow.createCell(6).setCellValue(maintenanceItem.getMaintenanceItemStandard() != null ? maintenanceItem.getMaintenanceItemStandard() + "" : "");
-                        if(maintenanceItem.getMinValue() != null) {
-                            dataRow.createCell(7).setCellValue(Double.valueOf(maintenanceItem.getMinValue() + ""));
-                        }else{
-                            dataRow.createCell(7).setCellType(CellType.BLANK);
+
+                        String itemType = maintenanceItem.getItemType() != null ? maintenanceItem.getItemType() + "" : "";
+                        if(StringUtils.isNotEmpty(itemType))
+                        {
+                            if(itemTypeMap.containsKey(itemType))
+                            {
+                                itemType = itemTypeMap.get(itemType);
+                            }
                         }
-                        if(maintenanceItem.getMaxValue() != null) {
-                            dataRow.createCell(8).setCellValue(Double.valueOf(maintenanceItem.getMaxValue() + ""));
+                        dataRow.createCell(6).setCellValue(itemType);
+
+                        dataRow.createCell(7).setCellValue(maintenanceItem.getMaintenanceItemStandard() != null ? maintenanceItem.getMaintenanceItemStandard() + "" : "");
+                        if(maintenanceItem.getMinValue() != null) {
+                            dataRow.createCell(8).setCellValue(Double.valueOf(maintenanceItem.getMinValue() + ""));
                         }else{
                             dataRow.createCell(8).setCellType(CellType.BLANK);
                         }
-                        dataRow.createCell(9).setCellValue(maintenanceItem.getUpdatedBy() != null ? maintenanceItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(10).setCellValue(maintenanceItem.getUpdatedTime() != null ? maintenanceItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(11).setCellValue(maintenanceItem.getCreatedBy() != null ? maintenanceItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(12).setCellValue(maintenanceItem.getCreatedTime() != null ? maintenanceItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                        if(maintenanceItem.getMaxValue() != null) {
+                            dataRow.createCell(9).setCellValue(Double.valueOf(maintenanceItem.getMaxValue() + ""));
+                        }else{
+                            dataRow.createCell(9).setCellType(CellType.BLANK);
+                        }
+                        dataRow.createCell(10).setCellValue(maintenanceItem.getTheoreticalValue() != null ? maintenanceItem.getTheoreticalValue() + "" : "");
+                        dataRow.createCell(11).setCellValue(maintenanceItem.getUpdatedBy() != null ? maintenanceItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(12).setCellValue(maintenanceItem.getUpdatedTime() != null ? maintenanceItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(13).setCellValue(maintenanceItem.getCreatedBy() != null ? maintenanceItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(14).setCellValue(maintenanceItem.getCreatedTime() != null ? maintenanceItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格
@@ -203,7 +237,7 @@ public class MaintenanceController {
                 }
             }
 
-            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*15, 256*20, 256*20, 256*15, 256*15, 256*15,
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*15, 256*15,
                     256*20, 256*15, 256*20});
 
         } catch (Exception exception)
