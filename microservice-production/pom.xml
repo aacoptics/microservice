@@ -16,6 +16,7 @@
         <module>iot-fanuc-dashboard</module>
         <module>microservice-bi-sso</module>
         <module>iot-czech</module>
+        <module>iot-temphumidity</module>
         <module>iot-lenspacker-dashboard</module>
         <module>iot-coating-dashboard</module>
         <module>iot-general-dashboard</module>
