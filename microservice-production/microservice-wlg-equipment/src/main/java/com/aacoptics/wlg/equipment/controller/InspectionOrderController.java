@@ -157,6 +157,23 @@ public class InspectionOrderController {
         return Result.success(inspectionOrderService.findOrderByMchCode(mchCode));
     }
 
+    @ApiOperation(value = "根据设备编码查询点检工单", notes = "根据设备编码查询点检工单")
+    @ApiImplicitParam(name = "mchCode", value = "设备编码", required = true, dataType = "String")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/findOrderByUser")
+    public Result findOrderByUser(@RequestBody String requestBody) {
+        log.debug("query with name:{}", requestBody);
+        String user = "";
+        if(StringUtils.isNotEmpty(requestBody)) {
+            JSONObject jsonObject = JSON.parseObject(requestBody);
+            user = jsonObject.getString("user");
+        }
+        return Result.success(inspectionOrderService.findOrderByUser(user));
+    }
+
+
     @ApiOperation(value = "修改点检工单", notes = "修改指定点检工单信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "点检工单ID", required = true, example = "0", dataType = "Long"),
@@ -202,6 +219,18 @@ public class InspectionOrderController {
             log.error("获取" + DataDictConstants.YES_NO + "数据字典失败，" + yesNoResult.getMsg());
         }
 
+        //点检项类型
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
+
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
         //创建工作表
@@ -222,20 +251,22 @@ public class InspectionOrderController {
         titleRow.createCell(11).setCellValue("班次开始时间");
         titleRow.createCell(12).setCellValue("班次结束时间");
         titleRow.createCell(13).setCellValue("点检项");
-        titleRow.createCell(14).setCellValue("点检项判断标准");
-        titleRow.createCell(15).setCellValue("起始范围值");
-        titleRow.createCell(16).setCellValue("截至范围值");
-        titleRow.createCell(17).setCellValue("实际值");
-        titleRow.createCell(18).setCellValue("是否完成");
-        titleRow.createCell(19).setCellValue("点检结果");
-        titleRow.createCell(20).setCellValue("是否存在异常");
-        titleRow.createCell(21).setCellValue("是否存在故障");
-        titleRow.createCell(22).setCellValue("是否需要维修");
-        titleRow.createCell(23).setCellValue("故障描述");
-        titleRow.createCell(24).setCellValue("更新人");
-        titleRow.createCell(25).setCellValue("更新时间");
-        titleRow.createCell(26).setCellValue("创建人");
-        titleRow.createCell(27).setCellValue("创建时间");
+        titleRow.createCell(14).setCellValue("点检项类型");
+        titleRow.createCell(15).setCellValue("点检项判断标准");
+        titleRow.createCell(16).setCellValue("起始范围值");
+        titleRow.createCell(17).setCellValue("截至范围值");
+        titleRow.createCell(18).setCellValue("理论值");
+        titleRow.createCell(19).setCellValue("实际值");
+        titleRow.createCell(20).setCellValue("是否完成");
+        titleRow.createCell(21).setCellValue("点检结果");
+        titleRow.createCell(22).setCellValue("是否存在异常");
+        titleRow.createCell(23).setCellValue("是否存在故障");
+        titleRow.createCell(24).setCellValue("是否需要维修");
+        titleRow.createCell(25).setCellValue("故障描述");
+        titleRow.createCell(26).setCellValue("更新人");
+        titleRow.createCell(27).setCellValue("更新时间");
+        titleRow.createCell(28).setCellValue("创建人");
+        titleRow.createCell(29).setCellValue("创建时间");
 
         try {
             if (inspectionOrderAndItemVOList != null && inspectionOrderAndItemVOList.size() > 0) {
@@ -280,22 +311,36 @@ public class InspectionOrderController {
                             dataRow.createCell(0).setCellValue(rowNumber - 1);
                         }
                         dataRow.createCell(13).setCellValue(inspectionOrderItem.getCheckItem() != null ? inspectionOrderItem.getCheckItem() + "" : "");
-                        dataRow.createCell(14).setCellValue(inspectionOrderItem.getCheckItemStandard() != null ? inspectionOrderItem.getCheckItemStandard() + "" : "");
-                        if(inspectionOrderItem.getMinValue() != null) {
-                            dataRow.createCell(15).setCellValue(Double.valueOf(inspectionOrderItem.getMinValue() + ""));
-                        }else{
-                            dataRow.createCell(15).setCellType(CellType.BLANK);
+
+                        //点检项类型通过数据字典翻译
+                        String itemType = inspectionOrderItem.getItemType() != null ? inspectionOrderItem.getItemType() + "" : "";
+                        if(StringUtils.isNotEmpty(itemType))
+                        {
+                            if(itemTypeMap.containsKey(itemType))
+                            {
+                                itemType = itemTypeMap.get(itemType);
+                            }
                         }
-                        if(inspectionOrderItem.getMaxValue() != null) {
-                            dataRow.createCell(16).setCellValue(Double.valueOf(inspectionOrderItem.getMaxValue() + ""));
+                        dataRow.createCell(14).setCellValue(itemType);
+                        dataRow.createCell(15).setCellValue(inspectionOrderItem.getCheckItemStandard() != null ? inspectionOrderItem.getCheckItemStandard() + "" : "");
+                        if(inspectionOrderItem.getMinValue() != null) {
+                            dataRow.createCell(16).setCellValue(Double.valueOf(inspectionOrderItem.getMinValue() + ""));
                         }else{
                             dataRow.createCell(16).setCellType(CellType.BLANK);
                         }
-                        if(inspectionOrderItem.getActualValue() != null) {
-                            dataRow.createCell(17).setCellValue(Double.valueOf(inspectionOrderItem.getActualValue() + ""));
+                        if(inspectionOrderItem.getMaxValue() != null) {
+                            dataRow.createCell(17).setCellValue(Double.valueOf(inspectionOrderItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(17).setCellType(CellType.BLANK);
                         }
+                        dataRow.createCell(18).setCellValue(inspectionOrderItem.getTheoreticalValue() != null ? inspectionOrderItem.getTheoreticalValue() + "" : "");
+
+                        if(inspectionOrderItem.getActualValue() != null) {
+                            dataRow.createCell(19).setCellValue(Double.valueOf(inspectionOrderItem.getActualValue() + ""));
+                        }else{
+                            dataRow.createCell(19).setCellType(CellType.BLANK);
+                        }
+
 
                         String isFinish = inspectionOrderItem.getIsFinish() != null ? inspectionOrderItem.getIsFinish() + "" : "";
                         if(StringUtils.isNotEmpty(isFinish))
@@ -305,8 +350,8 @@ public class InspectionOrderController {
                                 isFinish = yesNoMap.get(isFinish);
                             }
                         }
-                        dataRow.createCell(18).setCellValue(isFinish);
-                        dataRow.createCell(19).setCellValue(inspectionOrderItem.getCheckResult() != null ? inspectionOrderItem.getCheckResult() + "" : "");
+                        dataRow.createCell(20).setCellValue(isFinish);
+                        dataRow.createCell(21).setCellValue(inspectionOrderItem.getCheckResult() != null ? inspectionOrderItem.getCheckResult() + "" : "");
 
                         String isException = inspectionOrderItem.getIsException() != null ? inspectionOrderItem.getIsException() + "" : "";
                         if(StringUtils.isNotEmpty(isException))
@@ -316,7 +361,7 @@ public class InspectionOrderController {
                                 isException = yesNoMap.get(isException);
                             }
                         }
-                        dataRow.createCell(20).setCellValue(isException);
+                        dataRow.createCell(22).setCellValue(isException);
 
                         String isFault = inspectionOrderItem.getIsFault() != null ? inspectionOrderItem.getIsFault() + "" : "";
                         if(StringUtils.isNotEmpty(isFault))
@@ -326,7 +371,7 @@ public class InspectionOrderController {
                                 isFault = yesNoMap.get(isFault);
                             }
                         }
-                        dataRow.createCell(21).setCellValue(isFault);
+                        dataRow.createCell(23).setCellValue(isFault);
 
                         String isRepair = inspectionOrderItem.getIsRepair() != null ? inspectionOrderItem.getIsRepair() + "" : "";
                         if(StringUtils.isNotEmpty(isRepair))
@@ -336,12 +381,12 @@ public class InspectionOrderController {
                                 isRepair = yesNoMap.get(isRepair);
                             }
                         }
-                        dataRow.createCell(22).setCellValue(isRepair);
-                        dataRow.createCell(23).setCellValue(inspectionOrderItem.getFaultDesc() != null ? inspectionOrderItem.getFaultDesc() + "" : "");
-                        dataRow.createCell(24).setCellValue(inspectionOrderItem.getUpdatedBy() != null ? inspectionOrderItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(25).setCellValue(inspectionOrderItem.getUpdatedTime() != null ? inspectionOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(26).setCellValue(inspectionOrderItem.getCreatedBy() != null ? inspectionOrderItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(27).setCellValue(inspectionOrderItem.getCreatedTime() != null ? inspectionOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(24).setCellValue(isRepair);
+                        dataRow.createCell(25).setCellValue(inspectionOrderItem.getFaultDesc() != null ? inspectionOrderItem.getFaultDesc() + "" : "");
+                        dataRow.createCell(26).setCellValue(inspectionOrderItem.getUpdatedBy() != null ? inspectionOrderItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(27).setCellValue(inspectionOrderItem.getUpdatedTime() != null ? inspectionOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(28).setCellValue(inspectionOrderItem.getCreatedBy() != null ? inspectionOrderItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(29).setCellValue(inspectionOrderItem.getCreatedTime() != null ? inspectionOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格
@@ -356,7 +401,7 @@ public class InspectionOrderController {
             }
 
             ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*10, 256*15,
-                                                              256*10, 256*20, 256*20, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
+                                                              256*10, 256*20, 256*20, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
                                                               256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*20, 256*15, 256*20});
 
         } catch (Exception exception)

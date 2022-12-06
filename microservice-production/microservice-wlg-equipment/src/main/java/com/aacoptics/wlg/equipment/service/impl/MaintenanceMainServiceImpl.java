@@ -1,6 +1,8 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.constant.PeriodUnitConstants;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.InspectionItem;
@@ -9,8 +11,10 @@ import com.aacoptics.wlg.equipment.entity.po.MaintenanceMain;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceItemMapper;
 import com.aacoptics.wlg.equipment.mapper.MaintenanceMainMapper;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.MaintenanceItemService;
 import com.aacoptics.wlg.equipment.service.MaintenanceMainService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -26,8 +30,10 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -44,6 +50,9 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
     @Resource
     EquipmentServiceImpl equipmentService;
+
+    @Resource
+    DataDictProvider dataDictProvider;
 
     @Override
     public IPage<MaintenanceMain> query(Page page, MaintenanceQueryParam maintenanceQueryParam) {
@@ -73,6 +82,17 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
 
         String[] titleArray = excelDataList.get(0);//标题行
 
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
+
         String mchNameTitle = titleArray[1];
         String specTitle = titleArray[2];
         String typeVersionTitle = titleArray[3];
@@ -92,9 +112,11 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             String typeVersion = dataArray[3]; //型号
             String maintenancePeriodStr = dataArray[4]; //保养周期
             String maintenanceItem = dataArray[5]; //保养项
-            String maintenanceItemStandard = dataArray[6]; //保养项判断标准
-            String minValue = dataArray[7]; //起始范围值
-            String maxValue = dataArray[8]; //截至范围值
+            String itemTypeDesc = dataArray[6]; //保养项类型
+            String maintenanceItemStandard = dataArray[7]; //保养项判断标准
+            String minValue = dataArray[8]; //起始范围值
+            String maxValue = dataArray[9]; //截至范围值
+            String theoreticalValue = dataArray[10]; //理论值
 
             if (StringUtils.isEmpty(mchName)) {
                 throw new BusinessException("第" + (i + 1) + "行设备名称不能为空");
@@ -105,12 +127,26 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
             if (StringUtils.isEmpty(typeVersion)) {
                 throw new BusinessException("第" + (i + 1) + "行型号不能为空");
             }
+            if(StringUtils.isEmpty(itemTypeDesc))
+            {
+                throw new BusinessException("第" + (i + 1) + "行保养项类型不能为空");
+            }
+
             Long maintenancePeriod = Long.valueOf(maintenancePeriodStr);
             if(maintenancePeriod < 1)
             {
                 throw new BusinessException("第" + (i + 1) + "行保养周期必须大于等于1");
             }
-
+            String itemType = "";
+            Set<String> keys = itemTypeMap.keySet();
+            for(String key : keys)
+            {
+                String value = itemTypeMap.get(key);
+                if(itemTypeDesc.equals(value))
+                {
+                    itemType = key;
+                }
+            }
             try {
                 //判断是否存在是否
                 Integer equipmentCount = equipmentService.findEquipmentCountList(mchName, spec, typeVersion);
@@ -139,9 +175,11 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
                     maintenanceItemObject.setMaintenanceMainId(maintenanceMainId);
                 }
                 maintenanceItemObject.setMaintenanceItem(maintenanceItem);
+                maintenanceItemObject.setItemType(itemType);
                 maintenanceItemObject.setMaintenanceItemStandard(maintenanceItemStandard);
                 maintenanceItemObject.setMinValue(new BigDecimal(minValue));
                 maintenanceItemObject.setMaxValue(new BigDecimal(maxValue));
+                maintenanceItemObject.setTheoreticalValue(theoreticalValue);
 
                 maintenanceItemService.saveOrUpdate(maintenanceItemObject);
 

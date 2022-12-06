@@ -93,6 +93,13 @@ public interface RepairOrderService {
      */
     List<RepairOrderVO> findOrderByMchCode(String mchCode);
 
+    /**
+     * 通过用户查询维修工单
+     *
+     * @param user 用户
+     * @return
+     */
+    List<RepairOrderVO> findOrderByUser(String user);
 
     /**
      * 提交维修工单信息

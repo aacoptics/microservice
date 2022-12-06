@@ -221,7 +221,7 @@
         ORDER BY A.ORDER_NUMBER
     </select>
 
-    <select id="findOrderByMchCode" resultMap="InspectionOrderAndItemVO">
+    <select id="findOrderByCondition" parameterType="Map" resultMap="InspectionOrderAndItemVO">
         SELECT A.ID,
             A.ORDER_NUMBER,
             A.MCH_CODE,
@@ -262,7 +262,12 @@
         LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
         LEFT JOIN EM_INSPECTION_ORDER_ITEM C ON A.ID = C.INSPECTION_ORDER_ID
         WHERE 1=1
-        AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
+        <if test="mchCode != null and mchCode != ''">
+            AND (A.MCH_CODE = #{mchCode} OR B.EQUIP_NUMBER=#{mchCode})
+        </if>
+        <if test="user != null and user != ''">
+            AND A.DUTY_PERSON_ID = #{user}
+        </if>
         AND A.STATUS IN ('0', '1')
         AND A.INSPECTION_DATE >= CONVERT(DATETIME,CONVERT(VARCHAR(10),GETDATE()-1,120))
         ORDER BY A.ORDER_NUMBER, A.INSPECTION_DATE, A.SHIFT_START_TIME, C.CHECK_ITEM

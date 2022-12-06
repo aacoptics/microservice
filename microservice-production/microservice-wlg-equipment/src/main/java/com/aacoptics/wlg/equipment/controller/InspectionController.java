@@ -1,17 +1,21 @@
 package com.aacoptics.wlg.equipment.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.wlg.equipment.constant.DataDictConstants;
 import com.aacoptics.wlg.equipment.entity.form.*;
 import com.aacoptics.wlg.equipment.entity.param.InspectionQueryParam;
 import com.aacoptics.wlg.equipment.entity.param.MaintenanceQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.exception.BusinessException;
+import com.aacoptics.wlg.equipment.provider.DataDictProvider;
 import com.aacoptics.wlg.equipment.service.InspectionItemService;
 import com.aacoptics.wlg.equipment.service.InspectionMainService;
 import com.aacoptics.wlg.equipment.service.InspectionShiftService;
+import com.aacoptics.wlg.equipment.util.DataDictUtil;
 import com.aacoptics.wlg.equipment.util.ExcelUtil;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -27,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -43,6 +48,9 @@ public class InspectionController {
 
     @Autowired
     InspectionShiftService inspectionShiftService;
+
+    @Autowired
+    DataDictProvider dataDictProvider;
 
     @ApiOperation(value = "搜索点检", notes = "根据条件搜索点检信息")
     @ApiImplicitParam(name = "projectMapQueryForm", value = "点检查询参数", required = true, dataType = "ProjectMapQueryForm")
@@ -151,6 +159,18 @@ public class InspectionController {
     @PostMapping(value = "/exportInspectionExcel")
     public void exportInspectionExcel(@Valid @RequestBody InspectionQueryForm inspectionQueryForm, HttpServletResponse response) throws Exception {
         log.debug("query with name:{}", inspectionQueryForm);
+        //点检项类型
+        Result itemTypeResult = dataDictProvider.getDataDictList(DataDictConstants.ITEM_TYPE);
+        HashMap<String, String> itemTypeMap = new HashMap<String, String>();
+        if(itemTypeResult.isSuccess())
+        {
+            List<HashMap<String, Object>> dataDictList =  (List<HashMap<String, Object>>)itemTypeResult.getData();
+            itemTypeMap = DataDictUtil.convertDataDictListToMap(dataDictList);
+        }
+        else {
+            log.error("获取" + DataDictConstants.ITEM_TYPE + "数据字典失败，" + itemTypeResult.getMsg());
+        }
+
         List<InspectionMain> inspectionMainList = inspectionMainService.queryInspectionDataByCondition(inspectionQueryForm.toParam(InspectionQueryParam.class));
         //创建工作簿
         XSSFWorkbook workbook = new XSSFWorkbook();
@@ -162,13 +182,15 @@ public class InspectionController {
         titleRow.createCell(2).setCellValue("规格");
         titleRow.createCell(3).setCellValue("型号");
         titleRow.createCell(4).setCellValue("点检项");
-        titleRow.createCell(5).setCellValue("点检项判断标准");
-        titleRow.createCell(6).setCellValue("起始范围值");
-        titleRow.createCell(7).setCellValue("截至范围值");
-        titleRow.createCell(8).setCellValue("更新人");
-        titleRow.createCell(9).setCellValue("更新时间");
-        titleRow.createCell(10).setCellValue("创建人");
-        titleRow.createCell(11).setCellValue("创建时间");
+        titleRow.createCell(5).setCellValue("点检项类型");
+        titleRow.createCell(6).setCellValue("点检项判断标准");
+        titleRow.createCell(7).setCellValue("起始范围值");
+        titleRow.createCell(8).setCellValue("截至范围值");
+        titleRow.createCell(9).setCellValue("理论值");
+        titleRow.createCell(10).setCellValue("更新人");
+        titleRow.createCell(11).setCellValue("更新时间");
+        titleRow.createCell(12).setCellValue("创建人");
+        titleRow.createCell(13).setCellValue("创建时间");
 
         //创建工作表
         XSSFSheet wbShiftSheet = workbook.createSheet("点检班次维护数据");
@@ -210,21 +232,32 @@ public class InspectionController {
                             dataRow.createCell(0).setCellValue(rowNumber - 1);
                         }
                         dataRow.createCell(4).setCellValue(inspectionItem.getCheckItem() != null ? inspectionItem.getCheckItem() + "" : "");
-                        dataRow.createCell(5).setCellValue(inspectionItem.getCheckItemStandard() != null ? inspectionItem.getCheckItemStandard() + "" : "");
-                        if(inspectionItem.getMinValue() != null) {
-                            dataRow.createCell(6).setCellValue(Double.valueOf(inspectionItem.getMinValue() + ""));
-                        }else{
-                            dataRow.createCell(6).setCellType(CellType.BLANK);
+
+                        String itemType = inspectionItem.getItemType() != null ? inspectionItem.getItemType() + "" : "";
+                        if(StringUtils.isNotEmpty(itemType))
+                        {
+                            if(itemTypeMap.containsKey(itemType))
+                            {
+                                itemType = itemTypeMap.get(itemType);
+                            }
                         }
-                        if(inspectionItem.getMaxValue() != null) {
-                            dataRow.createCell(7).setCellValue(Double.valueOf(inspectionItem.getMaxValue() + ""));
+                        dataRow.createCell(5).setCellValue(itemType);
+                        dataRow.createCell(6).setCellValue(inspectionItem.getCheckItemStandard() != null ? inspectionItem.getCheckItemStandard() + "" : "");
+                        if(inspectionItem.getMinValue() != null) {
+                            dataRow.createCell(7).setCellValue(Double.valueOf(inspectionItem.getMinValue() + ""));
                         }else{
                             dataRow.createCell(7).setCellType(CellType.BLANK);
                         }
-                        dataRow.createCell(8).setCellValue(inspectionItem.getUpdatedBy() != null ? inspectionItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(9).setCellValue(inspectionItem.getUpdatedTime() != null ? inspectionItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(10).setCellValue(inspectionItem.getCreatedBy() != null ? inspectionItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(11).setCellValue(inspectionItem.getCreatedTime() != null ? inspectionItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                        if(inspectionItem.getMaxValue() != null) {
+                            dataRow.createCell(8).setCellValue(Double.valueOf(inspectionItem.getMaxValue() + ""));
+                        }else{
+                            dataRow.createCell(8).setCellType(CellType.BLANK);
+                        }
+                        dataRow.createCell(9).setCellValue(inspectionItem.getTheoreticalValue() != null ? inspectionItem.getTheoreticalValue() + "" : "");
+                        dataRow.createCell(10).setCellValue(inspectionItem.getUpdatedBy() != null ? inspectionItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(11).setCellValue(inspectionItem.getUpdatedTime() != null ? inspectionItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(12).setCellValue(inspectionItem.getCreatedBy() != null ? inspectionItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(13).setCellValue(inspectionItem.getCreatedTime() != null ? inspectionItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格
@@ -238,7 +271,7 @@ public class InspectionController {
                 }
             }
 
-            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*20, 256*20, 256*15, 256*15, 256*15,
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*20, 256*15, 256*20, 256*20, 256*15, 256*20, 256*15, 256*15, 256*15, 256*15,
                     256*20, 256*15, 256*20});
 
 

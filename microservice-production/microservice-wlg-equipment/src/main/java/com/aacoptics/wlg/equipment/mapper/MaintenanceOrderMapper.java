@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -38,7 +39,7 @@ public interface MaintenanceOrderMapper extends BaseMapper<MaintenanceOrder> {
     List<MaintenanceOrderAndItemVO> findMaintenanceOrderAndItemList(@Param("maintenanceOrderQueryParam")  MaintenanceOrderQueryParam maintenanceOrderQueryParam);
 
     @DS("WLGIOT")
-    List<MaintenanceOrderAndItemVO> findOrderByMchCode(@Param("mchCode")  String mchCode);
+    List<MaintenanceOrderAndItemVO> findOrderByCondition(Map<String, String> conditionMap);
 
     @DS("WLGIOT")
     List<String> findMaintenanceTimeoutOrderDutyPersonIdList();
