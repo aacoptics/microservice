@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.temphumidity.mapper.TemphumidityMapper">
+    <select id="getTemphumidityInfoByDate" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.TemphumidityInfo">
+        select JSON_VALUE(data_str, '$.Sensor_number') as sensorNumber, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
+        JSON_VALUE(data_str, '$.dev_template_unique_id') as devTemplateUniqueId, JSON_VALUE(data_str, '$.device_id') as deviceId,
+        JSON_VALUE(data_str, '$.that_moment_program_version_id') as thatMomentProgramVersionId, JSON_VALUE(data_str, '$.temperature') as temperature,
+        JSON_VALUE(data_str, '$.humidity') as humidity, JSON_VALUE(data_str, '$.data_col_time') as dataColTime, JSON_VALUE(data_str, '$.client_id') as clientId,
+        JSON_VALUE(data_str, '$.CncStatus') as cncStatus from device_original_data where data_date_str = #{date}
+    </select>
+</mapper>
