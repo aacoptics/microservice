@@ -28,6 +28,12 @@ public interface MessageService {
      */
     boolean sendRepairMessage(RepairOrder repairOrder);
 
+    /**
+     * 推送当前设备所有需要维修工单
+     *
+     */
+    boolean sendEquipmentAllRepairMessage(RepairOrder repairOrder);
+
 
     /**
      * 推送点检超时工单

@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @ApiModel
 @Data
@@ -33,5 +32,28 @@ public class RepairOrderForm extends BaseForm<RepairOrder> {
 
     @ApiModelProperty(value = "状态")
     private String status;
+
+    @ApiModelProperty(value = "异常分类")
+    private String exceptionType;
+
+    @ApiModelProperty(value = "异常子类")
+    private String exceptionSubclass;
+
+    @ApiModelProperty(value = "模具")
+    private String mould;
+
+    @ApiModelProperty(value = "原因分析")
+    private String reason;
+
+    @ApiModelProperty(value = "处理方法")
+    private String handleMethod;
+
+    @ApiModelProperty(value = "是否结案")
+    private Integer isClosed;
+
+
+    @ApiModelProperty(value = "长期措施")
+    private String longTermMeasure;
+
 
 }

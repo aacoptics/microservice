@@ -212,8 +212,12 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
                 inspectionItem.setCheckItem(checkItem);
                 inspectionItem.setItemType(itemType);
                 inspectionItem.setCheckItemStandard(checkItemStandard);
-                inspectionItem.setMinValue(new BigDecimal(minValue));
-                inspectionItem.setMaxValue(new BigDecimal(maxValue));
+                if(StringUtils.isNotEmpty(minValue)) {
+                    inspectionItem.setMinValue(new BigDecimal(minValue));
+                }
+                if(StringUtils.isNotEmpty(maxValue)) {
+                    inspectionItem.setMaxValue(new BigDecimal(maxValue));
+                }
                 inspectionItem.setTheoreticalValue(theoreticalValue);
 
                 inspectionItemService.saveOrUpdate(inspectionItem);
