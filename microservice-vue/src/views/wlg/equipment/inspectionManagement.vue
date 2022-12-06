@@ -303,7 +303,7 @@
       </el-dialog>
 
 
-      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'设备保养Excel导入'"
+      <el-dialog v-model="excelUploadDialogVisible" :close-on-click-modal="false" :title="'设备点检Excel导入'"
 
                  width="400px">
         <el-upload
@@ -897,7 +897,7 @@ export default {
         let link = document.createElement('a');
         link.style.display = 'none';
         link.href = url;
-        link.setAttribute('download', '设备保养导入模板' + "-" + new Date().getTime() + ".xlsx");
+        link.setAttribute('download', '设备点检导入模板' + "-" + new Date().getTime() + ".xlsx");
         document.body.appendChild(link);
         link.click();
 

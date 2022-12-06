@@ -39,6 +39,7 @@ public class MaintenanceItemServiceImpl extends ServiceImpl<MaintenanceItemMappe
             if (maintenanceItem.getMinValue().compareTo(maintenanceItem.getMaxValue()) > 0) {
                 throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
             }
+            maintenanceItem.setTheoreticalValue(null);
         }
         else
         {
@@ -46,6 +47,8 @@ public class MaintenanceItemServiceImpl extends ServiceImpl<MaintenanceItemMappe
             {
                 throw new BusinessException("理论值不能为空！");
             }
+            maintenanceItem.setMinValue(null);
+            maintenanceItem.setMaxValue(null);
         }
 
         boolean isSuccess = this.save(maintenanceItem);
@@ -75,6 +78,7 @@ public class MaintenanceItemServiceImpl extends ServiceImpl<MaintenanceItemMappe
             if (maintenanceItem.getMinValue().compareTo(maintenanceItem.getMaxValue()) > 0) {
                 throw new BusinessException("起始范围值必须小于或等于截至值，请确认！");
             }
+            maintenanceItem.setTheoreticalValue(null);
         }
         else
         {
@@ -82,6 +86,8 @@ public class MaintenanceItemServiceImpl extends ServiceImpl<MaintenanceItemMappe
             {
                 throw new BusinessException("理论值不能为空！");
             }
+            maintenanceItem.setMinValue(null);
+            maintenanceItem.setMaxValue(null);
         }
         boolean isSuccess = this.updateById(maintenanceItem);
         return isSuccess;

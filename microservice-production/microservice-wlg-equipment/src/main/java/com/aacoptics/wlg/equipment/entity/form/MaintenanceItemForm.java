@@ -33,7 +33,7 @@ public class MaintenanceItemForm extends BaseForm<MaintenanceItem> {
     private BigDecimal maxValue;
 
     @NotNull(message = "保养项类型不能为空")
-    @ApiModelProperty(value = "点检项类型")
+    @ApiModelProperty(value = "保养项类型")
     private String itemType;
 
     @ApiModelProperty(value = "理论值")

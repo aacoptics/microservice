@@ -177,8 +177,12 @@ public class MaintenanceMainServiceImpl extends ServiceImpl<MaintenanceMainMappe
                 maintenanceItemObject.setMaintenanceItem(maintenanceItem);
                 maintenanceItemObject.setItemType(itemType);
                 maintenanceItemObject.setMaintenanceItemStandard(maintenanceItemStandard);
-                maintenanceItemObject.setMinValue(new BigDecimal(minValue));
-                maintenanceItemObject.setMaxValue(new BigDecimal(maxValue));
+                if(StringUtils.isNotEmpty(minValue)) {
+                    maintenanceItemObject.setMinValue(new BigDecimal(minValue));
+                }
+                if(StringUtils.isNotEmpty(maxValue)) {
+                    maintenanceItemObject.setMaxValue(new BigDecimal(maxValue));
+                }
                 maintenanceItemObject.setTheoreticalValue(theoreticalValue);
 
                 maintenanceItemService.saveOrUpdate(maintenanceItemObject);

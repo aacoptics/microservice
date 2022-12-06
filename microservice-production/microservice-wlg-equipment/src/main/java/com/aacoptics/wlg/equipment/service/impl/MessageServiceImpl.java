@@ -5,13 +5,16 @@ import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.MessageTypeConstants;
 import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
 import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
 import com.aacoptics.wlg.equipment.provider.NotificationProvider;
 import com.aacoptics.wlg.equipment.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -28,6 +31,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private MaintenanceOrderService maintenanceOrderService;
+
+    @Resource
+    private RepairOrderService repairOrderService;
 
     @Resource
     private MessageHistoryService messageHistoryService;
@@ -357,6 +363,76 @@ public class MessageServiceImpl implements MessageService {
         } else {
             log.error("推送维修工单消息到飞书失败，工单号：" + orderNumber + "，" + result.getMsg());
         }
+        return true;
+    }
+
+    @Override
+    public boolean sendEquipmentAllRepairMessage(RepairOrder repairOrder) {
+        if (repairOrder == null) {
+            log.warn("维修工单不能为空");
+            return true;
+        }
+        String mchCode = repairOrder.getMchCode();
+        String dutyPersonId = repairOrder.getDutyPersonId();
+
+        List<RepairOrderVO> repairOrderVOList = repairOrderService.findOrderByMchCode(mchCode);
+
+        Equipment equipment = equipmentService.findEquipmentByMchCode(mchCode);
+        String equipDutyManager = equipment.getEquipDutyManager(); //设备负责人经理
+
+        StringBuffer contentStringBuffer = new StringBuffer();
+        contentStringBuffer.append("**WLG设备维修工单通知**  \n");
+        contentStringBuffer.append("资产编码：" + repairOrder.getMchCode() + ",设备编号：" + equipment.getEquipNumber() + ",设备名称：" + equipment.getMchName() + "  \n");
+        for(RepairOrderVO repairOrderVO : repairOrderVOList) {
+            String orderNumber = repairOrderVO.getOrderNumber();
+            String faultDesc = repairOrderVO.getFaultDesc();
+            String faultTime = repairOrderVO.getCreatedTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            contentStringBuffer.append("工单号：" + orderNumber + ",报修时间：" + faultTime + ",故障描述：" + faultDesc + "  \n");
+        }
+        contentStringBuffer.append("请注意处理！");
+
+        String content = contentStringBuffer.toString();
+
+        FeishuMessage feishuMessage = new FeishuMessage();
+        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendId(dutyPersonId);
+        feishuMessage.setContent(content);
+
+        Result result = notificationProvider.sendFeishuNotification(feishuMessage);
+        if (result.isSuccess()) {
+            MessageHistory messageHistory = new MessageHistory();
+            messageHistory.setMchCode(mchCode);
+            messageHistory.setOrderNumber(repairOrder.getOrderNumber());
+            messageHistory.setReceiveId(dutyPersonId);
+            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
+            messageHistory.setMessage(content);
+
+            messageHistoryService.add(messageHistory);
+        } else {
+            log.error("推送维修工单消息到飞书失败，工单号：" + repairOrder.getOrderNumber() + "，" + result.getMsg());
+        }
+
+        //推送给设备负责人经理
+        if(StringUtils.isNotEmpty(equipDutyManager) && !dutyPersonId.equals(equipDutyManager))
+        {
+            feishuMessage.setSendId(equipDutyManager);
+            Result sendResult = notificationProvider.sendFeishuNotification(feishuMessage);
+            if (sendResult.isSuccess()) {
+                MessageHistory messageHistory = new MessageHistory();
+                messageHistory.setMchCode(mchCode);
+                messageHistory.setOrderNumber(repairOrder.getOrderNumber());
+                messageHistory.setReceiveId(equipDutyManager);
+                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
+                messageHistory.setMessage(content);
+
+                messageHistoryService.add(messageHistory);
+            } else {
+                log.error("推送维修工单消息到飞书失败，工单号：" + repairOrder.getOrderNumber() + "，" + sendResult.getMsg());
+            }
+        }
+
         return true;
     }
 }

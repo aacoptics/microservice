@@ -309,7 +309,7 @@ export default {
         {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 120},
         {prop: "typeVersion", label: "型号", minWidth: 150},
-        {prop: "factoryNo", label: "出厂编码", minWidth: 130},
+        // {prop: "factoryNo", label: "出厂编码", minWidth: 130},
         {prop: "dutyPersonId", label: "接单人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
         {prop: "exceptionType", label: "异常分类", minWidth: 130},
@@ -536,9 +536,9 @@ export default {
     },
     selectExceptionType(val)
     {
-      if (this.dataForm.exceptionTypeId == null) {
+      if (this.dataForm.exceptionTypeId == null || this.dataForm.exceptionTypeId == '') {
         this.exceptionSubclassOptions = [];
-        this.dataForm.subClass = '';
+        this.dataForm.exceptionSubclass = '';
         return;
       }
 

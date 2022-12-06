@@ -90,7 +90,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
             throw new BusinessException("新增维修工单失败");
         }
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return isSuccess;
     }
@@ -210,9 +210,18 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         {
             throw new BusinessException("ID为【" + repairOrder.getId() + "】的工单不存在，请确认");
         }
-
+        LocalDateTime currentTime = LocalDateTime.now();
         targetRepairOrder.setRepairDesc(repairOrder.getRepairDesc());
-        targetRepairOrder.setRepairDatetime(LocalDateTime.now());
+        targetRepairOrder.setRepairDatetime(currentTime);
+        //首次暂存时间
+        if(targetRepairOrder.getStageDatetime() == null) {
+            targetRepairOrder.setStageDatetime(currentTime);
+        }
+        targetRepairOrder.setHandleMethod(repairOrder.getHandleMethod());
+        targetRepairOrder.setReason(repairOrder.getReason());
+        targetRepairOrder.setIsClosed(repairOrder.getIsClosed());
+        targetRepairOrder.setLongTermMeasure(repairOrder.getLongTermMeasure());
+
         boolean isSuccess = this.updateById(targetRepairOrder);
 
         return isSuccess;
@@ -242,7 +251,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         this.save(repairOrder);
 
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return repairOrder;
     }
@@ -271,7 +280,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         this.save(repairOrder);
 
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return repairOrder;
     }
