@@ -83,10 +83,22 @@
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
           </el-form-item>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="设备编码/设备编号" prop="mchCode">
-                <el-input v-model="dataForm.mchCode" :disabled="!isRepairOrderAddOperation"
+            <el-col :span="24">
+              <el-form-item label="设备编码/设备编号" prop="code">
+                <el-input v-model="dataForm.code" :disabled="!isRepairOrderAddOperation"
                           auto-complete="off" clearable @blur="findEquipmentByMchCode"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="设备编码" prop="mchCode">
+                <el-input v-model="dataForm.mchCode" :disabled="true"
+                          auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="设备编号" prop="equipNumber">
+                <el-input v-model="dataForm.equipNumber" :disabled="true"
+                          auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -109,11 +121,16 @@
                 <el-input v-model="dataForm.factoryNo" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
+              <el-form-item label="工段类型" prop="sectionType">
+                <el-input v-model="dataForm.sectionType" :disabled="true" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col> -->
+            <!-- <el-col :span="12">
               <el-form-item label="责任人" prop="dutyPersonId">
                 <el-input v-model="dataForm.dutyPersonId" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="12">
               <el-form-item label="设备负责人" prop="equipDuty">
                 <el-input v-model="dataForm.equipDuty" :disabled="true" auto-complete="off" clearable></el-input>
@@ -124,7 +141,40 @@
                 <el-input v-model="dataForm.equipDutyManager" :disabled="true" auto-complete="off" clearable></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="12">
+              <el-form-item label="异常分类" prop="exceptionTypeId">
+                <el-select v-model="dataForm.exceptionTypeId" clearable filterable placeholder="请选择异常分类"
+                           style="width:100%" @change="selectExceptionType">
+                  <el-option
+                      v-for="item in exceptionTypeOptions"
+                      :key="item.id"
+                      :label="item.exceptionType"
+                      :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="异常子类" prop="exceptionSubclass">
+                <el-select v-model="dataForm.exceptionSubclass" clearable filterable placeholder="请选择异常子类"
+                           style="width:100%">
+                  <el-option
+                      v-for="item in exceptionSubclassOptions"
+                      :key="item.subClass"
+                      :label="item.subClass"
+                      :value="item.subClass"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="模具" prop="mould">
+                <el-input v-model="dataForm.mould" auto-complete="off" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item label="故障描述" prop="faultDesc">
                 <el-input v-model="dataForm.faultDesc" auto-complete="off" clearable></el-input>
               </el-form-item>
@@ -165,7 +215,7 @@
           </el-form-item>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="工单号" prop="mchName">
+              <el-form-item label="工单号" prop="orderNumber">
                 <el-input v-model="dataForm.orderNumber" clearable disabled placeholder="工单号"></el-input>
               </el-form-item>
             </el-col>
@@ -224,6 +274,10 @@ import {
   handleBatchConfirm,
   handleUpdate
 } from "@/api/wlg/equipment/repairOrder";
+import {
+  findExceptionTypeList,
+  findExceptionTypeById,
+} from "@/api/wlg/equipment/exceptionTypeManagement";
 import {convertUser, findEquipmentByMchCode} from "@/api/wlg/equipment/equipmentManagement";
 import {getResponseDataMessage} from "@/utils/commonUtils";
 import {getDict, selectDictLabel} from "@/api/system/dictData";
@@ -255,13 +309,20 @@ export default {
         {prop: "equipNumber", label: "设备编号", minWidth: 150},
         {prop: "spec", label: "规格", minWidth: 120},
         {prop: "typeVersion", label: "型号", minWidth: 150},
-        {prop: "factoryNo", label: "出厂编码", minWidth: 130},
+        // {prop: "factoryNo", label: "出厂编码", minWidth: 130},
         {prop: "dutyPersonId", label: "接单人", minWidth: 150, formatter: this.userFormat},
         {prop: "status", label: "状态", minWidth: 100, formatter: this.statusFormat},
+        {prop: "exceptionType", label: "异常分类", minWidth: 130},
+        {prop: "exceptionSubclass", label: "异常子类", minWidth: 130},
         {prop: "faultDesc", label: "故障描述", minWidth: 200},
+        {prop: "mould", label: "模具", minWidth: 130},
+        {prop: "reason", label: "原因分析", minWidth: 200},
+        {prop: "handleMethod", label: "处理方法", minWidth: 200},
+        {prop: "isClosed", label: "是否结案", minWidth: 200, formatter: this.yesNoFormat},
+        {prop: "longTermMeasure", label: "长期措施", minWidth: 200},        
         // {prop: "faultPhoto", label: "故障照片", minWidth: 100},
         {prop: "repairDesc", label: "维修说明", minWidth: 200},
-        {prop: "repairDatetime", label: "维修时间", minWidth: 100},
+        {prop: "repairDatetime", label: "提交时间", minWidth: 100},
         {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
         {prop: "updatedBy", label: "操作人", minWidth: 150, formatter: this.userFormat},
         {prop: "updatedTime", label: "操作时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -288,19 +349,26 @@ export default {
       exportLoading: false,
 
       dataFormRules: {
-        mchCode: [{required: true, message: "请输入设备编码/设备编号", trigger: "blur"}],
+        mchCode: [{required: true, message: "请输入设备编码", trigger: "blur"}],
+        equipNumber: [{required: true, message: "请输入设备编号", trigger: "blur"}],
         faultDesc: [{required: true, message: "请输入故障描述", trigger: "blur"}],
       },
 
       // 新增编辑界面数据
       dataForm: {
         id: 0,
+        code: '',
         mchCode: '',
+        equipNumber: '',
         mchName: '',
         spec: "",
         typeVersion: "",
         factoryNo: '',
         dutyPersonId: '',
+        exceptionType:'',
+        exceptionTypeId: null,
+        mould: '',
+        exceptionSubclass: '',
         equipDuty: '',
         equipDutyManager: '',
         faultDesc: '',
@@ -310,15 +378,26 @@ export default {
       orderStatusOptions: [],
       orderSourceOptions: [],
       userOptions: [],
+      exceptionTypeOptions: [],
+      exceptionSubclassOptions: [],
+      yesNoOptions: [],
     };
   },
   mounted() {
+    findExceptionTypeList().then(response => {
+      if (response.data.data.length > 0) {
+        this.exceptionTypeOptions = response.data.data
+      }
+    }),
     getDict("wlg_em_repair_order_status").then(response => {
       this.orderStatusOptions = response.data.data
     });
     getDict("wlg_em_repair_order_source").then(response => {
       this.orderSourceOptions = response.data.data
     });
+    getDict("wlg_em_yes_no").then(response => {
+      this.yesNoOptions = response.data.data
+    }),
     getAllUser().then(response => {
       this.userOptions = response.data.data
     })
@@ -388,20 +467,25 @@ export default {
         typeVersion: "",
         factoryNo: '',
         dutyPersonId: '',
+        exceptionType: '',
+        exceptionSubclass: '',
+        module: '',
         faultDesc: '',
         faultPhoto: null
       };
       this.imageUrl = '';
     },
     findEquipmentByMchCode: function () {
-      if (this.dataForm.mchCode == null || this.dataForm.mchCode == "") {
+      if (this.dataForm.code == null || this.dataForm.code == "") {
         return;
       }
       let params = {};
-      params.mchCode = this.dataForm.mchCode;
+      params.mchCode = this.dataForm.code;
       findEquipmentByMchCode(params).then(response => {
         const responseData = response.data;
         if (responseData.code === "000000") {
+          this.dataForm.mchCode = responseData.data.mchCode;
+          this.dataForm.equipNumber = responseData.data.equipNumber;
           this.dataForm.mchName = responseData.data.mchName;
           this.dataForm.spec = responseData.data.spec;
           this.dataForm.typeVersion = responseData.data.typeVersion;
@@ -450,7 +534,24 @@ export default {
     cancelEditPerson() {
       this.dialogEditDutyPersonVisible = false;
     },
+    selectExceptionType(val)
+    {
+      if (this.dataForm.exceptionTypeId == null || this.dataForm.exceptionTypeId == '') {
+        this.exceptionSubclassOptions = [];
+        this.dataForm.exceptionSubclass = '';
+        return;
+      }
 
+      findExceptionTypeById(this.dataForm.exceptionTypeId)
+          .then((res) => {
+            const responseData = res.data;
+            if (responseData.code === "000000") {
+              if (responseData.data != null) {
+                this.exceptionSubclassOptions = responseData.data.exceptionSubClassList;
+              }
+            }
+          });
+    },
     //处理批量确认
     handleBatchConfirm: function () {
       if (this.multipleSelection == null || this.multipleSelection.length == 0) {
@@ -487,12 +588,19 @@ export default {
       });
     },
 
-    // 编辑
+    
     submitRepairOrderMain: function () {
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             this.editLoading = true;
+            for (let item of this.exceptionTypeOptions) {
+                if (item.id == this.dataForm.exceptionTypeId) {
+                  this.dataForm.exceptionType = item.exceptionType;
+                  break;
+                }
+            }
+
             let params = Object.assign({}, this.dataForm);
             if (this.isRepairOrderAddOperation) {
               handleAdd(params).then((res) => {
@@ -562,6 +670,9 @@ export default {
     },
     orderSourceFormat: function (row) {
       return selectDictLabel(this.orderSourceOptions, row.sourceType);
+    },
+    yesNoFormat: function (row, column, cellValue) {
+      return selectDictLabel(this.yesNoOptions, cellValue);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {

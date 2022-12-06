@@ -164,11 +164,13 @@ export default {
         {prop: "shiftStartTime", label: "班次开始时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "shiftEndTime", label: "班次结束时间", minWidth: 120, formatter: this.dateTimeFormat},
 
-        {prop: "checkItem", label: "点检项", minWidth: 100},
+        {prop: "checkItem", label: "点检项", minWidth: 150},
+        {prop: "itemType", label: "点检项类型", minWidth: 150, formatter: this.itemTypeFormat},
         {prop: "checkItemStandard", label: "点检项判断标准", minWidth: 150},
-        {prop: "minValue", label: "起始范围值", minWidth: 120},
-        {prop: "maxValue", label: "截至范围值", minWidth: 120},
-        {prop: "actualValue", label: "实际值", minWidth: 100},
+        {prop: "minValue", label: "起始范围值", minWidth: 150},
+        {prop: "maxValue", label: "截至范围值", minWidth: 150},
+        {prop: "theoreticalValue", label: "理论值", minWidth: 150},
+        {prop: "actualValue", label: "实际值", minWidth: 150},
         {prop: "isFinish", label: "是否完成", minWidth: 100, formatter: this.yesNoFormat},
         {prop: "checkResult", label: "点检结果", minWidth: 100},
         {prop: "isException", label: "是否存在异常", minWidth: 120, formatter: this.yesNoFormat},
@@ -215,7 +217,7 @@ export default {
         maxValue: null,
       },
       orderStatusOptions: [],
-
+      itemTypeOptions: [],
     };
   },
   mounted() {
@@ -224,11 +226,14 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-        getDict("wlg_em_inspection_order_status").then(response => {
-          this.orderStatusOptions = response.data.data
-        })
+    getDict("wlg_em_inspection_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
+    })
     getDict("wlg_em_yes_no").then(response => {
       this.yesNoOptions = response.data.data
+    }),
+    getDict("wlg_em_item_type").then(response => {
+      this.itemTypeOptions = response.data.data
     })
     getAllUser().then(response => {
       this.userOptions = response.data.data
@@ -323,6 +328,9 @@ export default {
     },
     yesNoFormat: function (row, column, cellValue) {
       return selectDictLabel(this.yesNoOptions, cellValue);
+    },
+    itemTypeFormat: function (row) {
+      return selectDictLabel(this.itemTypeOptions, row.itemType);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {

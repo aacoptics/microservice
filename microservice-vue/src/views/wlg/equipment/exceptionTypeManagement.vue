@@ -40,7 +40,7 @@
           <el-table v-loading="findDetailLoading" :cell-style="{'text-align':'left'}" :data="subClassTableData"
                     :header-cell-style="{'text-align':'center'}"
                     border size="small">
-            <el-table-column label="异常子类" prop="checkItem" width="180"/>
+            <el-table-column label="异常子类" prop="subClass" width="180"/>
             <el-table-column label="更新人" prop="updatedBy"/>
             <el-table-column :formatter="dateTimeFormat" label="更新时间" prop="updatedTime"/>
             <el-table-column label="创建人" prop="createdBy"/>
@@ -221,7 +221,7 @@ export default {
             const responseData = res.data;
             if (responseData.code === "000000") {
               if (responseData.data != null) {
-                this.subClassTableData = responseData.data.subClassList;
+                this.subClassTableData = responseData.data.exceptionSubClassList;
               }
             }
           });
@@ -300,9 +300,9 @@ export default {
       this.dataForm = Object.assign({}, params.row);
     },
     handleSubClassEdit: function (index, row) {
-      this.insubClasstionItemDialogVisible = true;
-      this.isInsubClasstionItemAddOperation = false;
-      this.insubClasstionItemDataForm = Object.assign({}, row);
+      this.subClassDialogVisible = true;
+      this.isSubClassAddOperation = false;
+      this.subClassDataForm = Object.assign({}, row);
     },
     
     // 编辑
@@ -383,7 +383,7 @@ export default {
                 this.editLoading = false;
                 if (responseData.code === "000000") {
                   this.$message({message: "操作成功", type: "success"});
-                  this.insubClasstionItemDialogVisible = false;
+                  this.subClassDialogVisible = false;
                   this.$refs["subClassDataForm"].resetFields();
 
                   this.findExceptionTypeDetail(this.currentSelectExceptionTypeMainRowId);

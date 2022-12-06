@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import com.aacoptics.common.core.util.UserContextHolder;
 import com.aacoptics.wlg.equipment.constant.*;
 import com.aacoptics.wlg.equipment.entity.param.RepairOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
@@ -16,6 +17,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,7 +90,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
             throw new BusinessException("新增维修工单失败");
         }
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return isSuccess;
     }
@@ -169,14 +172,31 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         if (equipment == null) {
             throw new BusinessException("设备【" + mchCode + "】不存在，请确认！");
         }
-
-        List<RepairOrderVO> repairOrderVOList = repairOrderMapper.findOrderByMchCode(mchCode);
+        HashMap<String, String> conditionMap = new HashMap<>();
+        conditionMap.put("mchCode", mchCode);
+        List<RepairOrderVO> repairOrderVOList = repairOrderMapper.findOrderByCondition(conditionMap);
         if (repairOrderVOList == null || repairOrderVOList.size() == 0) {
             throw new BusinessException("设备【" + mchCode + "】不存在需要维修的工单，请确认！");
         }
 
         return repairOrderVOList;
     }
+
+    @Override
+    public List<RepairOrderVO> findOrderByUser(String user) {
+        HashMap<String, String> conditionMap = new HashMap<>();
+        if(StringUtils.isEmpty(user))
+        {
+            conditionMap.put("user", UserContextHolder.getInstance().getUsername());
+        }
+        else
+        {
+            conditionMap.put("user", user);
+        }
+        List<RepairOrderVO> repairOrderVOList = repairOrderMapper.findOrderByCondition(conditionMap);
+        return repairOrderVOList;
+    }
+
 
     @Override
     public boolean submitOrder(RepairOrder repairOrder) {
@@ -190,9 +210,18 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         {
             throw new BusinessException("ID为【" + repairOrder.getId() + "】的工单不存在，请确认");
         }
-
+        LocalDateTime currentTime = LocalDateTime.now();
         targetRepairOrder.setRepairDesc(repairOrder.getRepairDesc());
-        targetRepairOrder.setRepairDatetime(LocalDateTime.now());
+        targetRepairOrder.setRepairDatetime(currentTime);
+        //首次暂存时间
+        if(targetRepairOrder.getStageDatetime() == null) {
+            targetRepairOrder.setStageDatetime(currentTime);
+        }
+        targetRepairOrder.setHandleMethod(repairOrder.getHandleMethod());
+        targetRepairOrder.setReason(repairOrder.getReason());
+        targetRepairOrder.setIsClosed(repairOrder.getIsClosed());
+        targetRepairOrder.setLongTermMeasure(repairOrder.getLongTermMeasure());
+
         boolean isSuccess = this.updateById(targetRepairOrder);
 
         return isSuccess;
@@ -222,7 +251,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         this.save(repairOrder);
 
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return repairOrder;
     }
@@ -251,7 +280,7 @@ public class RepairOrderServiceImpl extends ServiceImpl<RepairOrderMapper, Repai
         this.save(repairOrder);
 
         //新增成功，推送飞书消息
-        messageService.sendRepairMessage(repairOrder);
+        messageService.sendEquipmentAllRepairMessage(repairOrder);
 
         return repairOrder;
     }

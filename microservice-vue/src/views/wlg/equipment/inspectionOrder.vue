@@ -70,9 +70,11 @@
                     :header-cell-style="{'text-align':'center'}" border
                     size="small">
             <el-table-column label="点检项" prop="checkItem" width="180"/>
+            <el-table-column label="点检项类型" :formatter="itemTypeFormat" prop="itemType" width="180"/>
             <el-table-column label="点检项判断标准" prop="checkItemStandard" width="180"/>
             <el-table-column label="起始范围值" prop="minValue"/>
             <el-table-column label="截至范围值" prop="maxValue"/>
+            <el-table-column label="理论值" prop="theoreticalValue"/>
             <el-table-column label="实际值" prop="actualValue"/>
             <el-table-column :formatter="yesNoFormat" label="是否完成" prop="isFinish"/>
             <el-table-column label="点检结果" prop="checkResult"/>
@@ -326,7 +328,7 @@ export default {
       currentSelectInspectionOrderMainRowId: null,
       multipleSelection: [],
       orderStatusOptions: [],
-
+      itemTypeOptions: [],
     };
   },
   mounted() {
@@ -335,11 +337,14 @@ export default {
         this.mchNameOptions = response.data.data
       }
     }),
-        getDict("wlg_em_inspection_order_status").then(response => {
-          this.orderStatusOptions = response.data.data
-        })
+    getDict("wlg_em_inspection_order_status").then(response => {
+      this.orderStatusOptions = response.data.data
+    })
     getDict("wlg_em_yes_no").then(response => {
       this.yesNoOptions = response.data.data
+    }),
+    getDict("wlg_em_item_type").then(response => {
+      this.itemTypeOptions = response.data.data
     })
     getAllUser().then(response => {
       this.userOptions = response.data.data
@@ -591,6 +596,9 @@ export default {
     },
     yesNoFormat: function (row, column, cellValue) {
       return selectDictLabel(this.yesNoOptions, cellValue);
+    },
+    itemTypeFormat: function (row) {
+      return selectDictLabel(this.itemTypeOptions, row.itemType);
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {
