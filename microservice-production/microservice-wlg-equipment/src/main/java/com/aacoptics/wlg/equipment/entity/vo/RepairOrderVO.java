@@ -144,4 +144,19 @@ public class RepairOrderVO extends BasePo {
      */
     private String longTermMeasure;
 
+    /**
+     * 接单时长（Min）：从创建日期到第一次点击暂存的时间点
+     */
+    private Integer receiveOrderTime;
+
+    /**
+     * 维修时长（Min）：从第一次点击暂存的时间点到提交的时间点
+     */
+    private Integer repairOrderTime;
+
+    /**
+     * 累计时长（Min）：从创建日期到提交的时间点
+     */
+    private Integer consumptionTime;
+
 }
