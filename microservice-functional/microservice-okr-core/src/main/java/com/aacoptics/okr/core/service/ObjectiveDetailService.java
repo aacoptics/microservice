@@ -1,6 +1,5 @@
 package com.aacoptics.okr.core.service;
 
-import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.entity.vo.OkrChatTreeModel;
 import com.aacoptics.okr.core.entity.vo.TreeModel;

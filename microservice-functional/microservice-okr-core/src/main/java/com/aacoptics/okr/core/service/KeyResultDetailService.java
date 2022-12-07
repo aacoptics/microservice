@@ -1,6 +1,5 @@
 package com.aacoptics.okr.core.service;
 
-import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
 import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 
