@@ -12,6 +12,7 @@ import com.aacoptics.okr.core.mapper.FeishuUserMapper;
 import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.provider.FeishuApiProvider;
 import com.aacoptics.okr.core.service.FeishuService;
+import com.aacoptics.okr.core.service.StarService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,9 @@ public class FeishuServiceImpl implements FeishuService {
     @Resource
     private ObjectiveDetailMapper objectiveDetailMapper;
 
+    @Resource
+    private StarService starService;
+
     @Override
     public FeishuUser getFeishuUser(String employeeNo) {
         return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getEmployeeNo, employeeNo));
@@ -76,6 +80,7 @@ public class FeishuServiceImpl implements FeishuService {
                 .put("lead", feishuUserMapper.employeeNoToLead(employeeNo))
                 .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo))
                 .put("atUser", objectiveDetailMapper.employeeNoToAtUser(employeeNo))
+                .put("starUser", starService.employeeNoToStarUser(employeeNo))
                 .build();
     }
 
