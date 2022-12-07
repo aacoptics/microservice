@@ -35,7 +35,7 @@ public class StarServiceImpl extends ServiceImpl<StarMapper, Star> implements St
 
     @Override
     public List<String> employeeNoToStarUser(String employeeNo) {
-        return this.list(new LambdaQueryWrapper<Star>().eq(Star::getUserName, employeeNo).select(Star::getStartUserName))
+        return this.list(new LambdaQueryWrapper<Star>().eq(Star::getUserName, employeeNo).orderByDesc(Star::getCreatedTime).select(Star::getStartUserName))
                 .stream().map(Star::getStartUserName).collect(Collectors.toList());
     }
 }

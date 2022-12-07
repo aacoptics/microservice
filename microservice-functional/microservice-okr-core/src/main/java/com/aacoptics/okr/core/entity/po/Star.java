@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author Kaizhi Xuan
@@ -30,5 +31,7 @@ public class Star implements Serializable {
     private String userName;
 
     private String startUserName;
+
+    private LocalDateTime createdTime;
 
 }
