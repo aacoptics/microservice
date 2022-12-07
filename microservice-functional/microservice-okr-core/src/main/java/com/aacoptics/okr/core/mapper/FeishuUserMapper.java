@@ -13,8 +13,8 @@ import java.util.List;
 @DS("user_db")
 public interface FeishuUserMapper extends BaseMapper<FeishuUser> {
 
-    List<FeishuUser> employeeNoToLead(String employeeNo);
+    List<String> employeeNoToLead(String employeeNo);
 
-    List<FeishuUser> employeeNoToSameLevel(String employeeNo);
+    List<String> employeeNoToSameLevel(String employeeNo);
 
 }

@@ -244,4 +244,16 @@
         where k.id = #{id,jdbcType=BIGINT}
         order by o.objective_name
     </select>
+
+    <select id="employeeNoToAtUser" resultType="java.lang.String">
+        select distinct o.created_by
+        from dbo.t_okr_objective_detail o
+                 left join t_okr_key_result_detail k on k.objective_id = o.id
+        where (o.at_users like CONCAT('%', #{employeeNo,jdbcType=VARCHAR}, '%')
+            or k.at_users like CONCAT('%', #{employeeNo,jdbcType=VARCHAR}, '%'))
+          and o.deleted = 'N'
+          and k.deleted = 'N'
+          and o.created_by != #{employeeNo,jdbcType=VARCHAR}
+        order by o.created_by
+    </select>
 </mapper>

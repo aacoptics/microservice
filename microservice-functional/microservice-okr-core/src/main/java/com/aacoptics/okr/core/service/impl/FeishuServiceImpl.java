@@ -9,6 +9,7 @@ import com.aacoptics.okr.core.config.FeishuAppKeyConfig;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.exception.BusinessException;
 import com.aacoptics.okr.core.mapper.FeishuUserMapper;
+import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.provider.FeishuApiProvider;
 import com.aacoptics.okr.core.service.FeishuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -49,6 +50,9 @@ public class FeishuServiceImpl implements FeishuService {
     @Resource
     private FeishuUserMapper feishuUserMapper;
 
+    @Resource
+    private ObjectiveDetailMapper objectiveDetailMapper;
+
     @Override
     public FeishuUser getFeishuUser(String employeeNo) {
         return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getEmployeeNo, employeeNo));
@@ -67,10 +71,12 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
-    public Map<String, List<FeishuUser>> menuByEmployeeNo(String employeeNo) {
-        return MapUtil.builder(new HashMap<String, List<FeishuUser>>())
+    public Map<String, List<String>> menuByEmployeeNo(String employeeNo) {
+        return MapUtil.builder(new HashMap<String, List<String>>())
                 .put("lead", feishuUserMapper.employeeNoToLead(employeeNo))
-                .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo)).build();
+                .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo))
+                .put("atUser", objectiveDetailMapper.employeeNoToAtUser(employeeNo))
+                .build();
     }
 
     @Override

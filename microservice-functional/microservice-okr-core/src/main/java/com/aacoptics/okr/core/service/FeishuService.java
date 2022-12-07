@@ -75,7 +75,7 @@ public interface FeishuService {
 
     List<FeishuUser> listAllUsers();
 
-    Map<String, List<FeishuUser>> menuByEmployeeNo(String employeeNo);
+    Map<String, List<String>> menuByEmployeeNo(String employeeNo);
 
     boolean deleteMessage(String messageId);
 

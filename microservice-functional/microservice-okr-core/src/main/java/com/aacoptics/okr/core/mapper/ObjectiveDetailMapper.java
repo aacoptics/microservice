@@ -20,4 +20,6 @@ public interface ObjectiveDetailMapper extends BaseMapper<ObjectiveDetail> {
     ObjectiveDetail listAlignedByOId(@Param("id") Long id);
 
     ObjectiveDetail listAlignedByKId(@Param("id") Long id);
+
+    List<String> employeeNoToAtUser(String employeeNo);
 }

@@ -2,65 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.okr.core.mapper.FeishuUserMapper">
-    <select id="employeeNoToLead" resultType="com.aacoptics.okr.core.entity.po.FeishuUser">
-        select COUNTRY,
-               WORK_STATION,
-               GENDER,
-               CITY,
-               OPEN_ID,
-               MOBILE,
-               DESCRIPTION,
-               EMPLOYEE_NO,
-               DEPARTMENT_IDS,
-               JOIN_TIME,
-               EMPLOYEE_TYPE,
-               USER_ID,
-               NAME,
-               UNION_ID,
-               EN_NAME,
-               IS_TENANT_MANAGER,
-               JOB_TITLE,
-               EMAIL,
-               MOBILE_VISIBLE,
-               IS_ACTIVATED,
-               IS_FROZEN,
-               IS_RESIGNED,
-               IS_UNJOIN,
-               IS_EXITED,
-               LEADER_USER_ID
+    <select id="employeeNoToLead" resultType="java.lang.String">
+        select EMPLOYEE_NO
         from FEISHU_USER
         where USER_ID in (select LEADER_USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
     </select>
 
-    <select id="employeeNoToSameLevel" resultType="com.aacoptics.okr.core.entity.po.FeishuUser">
-        select COUNTRY,
-               WORK_STATION,
-               GENDER,
-               CITY,
-               OPEN_ID,
-               MOBILE,
-               DESCRIPTION,
-               EMPLOYEE_NO,
-               DEPARTMENT_IDS,
-               JOIN_TIME,
-               EMPLOYEE_TYPE,
-               USER_ID,
-               NAME,
-               UNION_ID,
-               EN_NAME,
-               IS_TENANT_MANAGER,
-               JOB_TITLE,
-               EMAIL,
-               MOBILE_VISIBLE,
-               IS_ACTIVATED,
-               IS_FROZEN,
-               IS_RESIGNED,
-               IS_UNJOIN,
-               IS_EXITED,
-               LEADER_USER_ID
+    <select id="employeeNoToSameLevel" resultType="java.lang.String">
+        select EMPLOYEE_NO
         from FEISHU_USER
         where LEADER_USER_ID in
               (select LEADER_USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
           and EMPLOYEE_NO != #{employeeNo,jdbcType=VARCHAR}
+          and IS_FROZEN = '0'
+          and IS_RESIGNED = '0'
     </select>
 </mapper>
