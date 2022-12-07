@@ -236,13 +236,17 @@ public class RepairOrderController {
         titleRow.createCell(14).setCellValue("处理方法");
         titleRow.createCell(15).setCellValue("是否结案");
         titleRow.createCell(16).setCellValue("长期措施");
-        titleRow.createCell(17).setCellValue("维修说明");
-        titleRow.createCell(18).setCellValue("维修时间");
-        titleRow.createCell(19).setCellValue("工单来源");
-        titleRow.createCell(20).setCellValue("更新人");
-        titleRow.createCell(21).setCellValue("更新时间");
-        titleRow.createCell(22).setCellValue("创建人");
-        titleRow.createCell(23).setCellValue("创建时间");
+        titleRow.createCell(17).setCellValue("备注");
+        titleRow.createCell(18).setCellValue("接单时间");
+        titleRow.createCell(19).setCellValue("提交时间");
+        titleRow.createCell(20).setCellValue("接单时长（Min）");
+        titleRow.createCell(21).setCellValue("维修时长（Min）");
+        titleRow.createCell(22).setCellValue("累计时长（Min）");
+        titleRow.createCell(23).setCellValue("工单来源");
+        titleRow.createCell(24).setCellValue("更新人");
+        titleRow.createCell(25).setCellValue("更新时间");
+        titleRow.createCell(26).setCellValue("创建人");
+        titleRow.createCell(27).setCellValue("创建时间");
 
         try {
             if (repairOrderVOList != null && repairOrderVOList.size() > 0) {
@@ -290,7 +294,25 @@ public class RepairOrderController {
                     dataRow.createCell(15).setCellValue(isClosed);
                     dataRow.createCell(16).setCellValue(repairOrderVO.getLongTermMeasure() != null ? repairOrderVO.getLongTermMeasure() + "" : "");
                     dataRow.createCell(17).setCellValue(repairOrderVO.getRepairDesc() != null ? repairOrderVO.getRepairDesc() + "" : "");
-                    dataRow.createCell(18).setCellValue(repairOrderVO.getRepairDatetime() != null ? repairOrderVO.getRepairDatetime().format(dateTimeFormatter) : "");
+                    dataRow.createCell(18).setCellValue(repairOrderVO.getStageDatetime() != null ? repairOrderVO.getStageDatetime().format(dateTimeFormatter) : "");
+                    dataRow.createCell(19).setCellValue(repairOrderVO.getRepairDatetime() != null ? repairOrderVO.getRepairDatetime().format(dateTimeFormatter) : "");
+
+                    if(repairOrderVO.getReceiveOrderTime() != null) {
+                        dataRow.createCell(20).setCellValue(Double.valueOf(repairOrderVO.getReceiveOrderTime() + ""));
+                    }else{
+                        dataRow.createCell(20).setCellType(CellType.BLANK);
+                    }
+                    if(repairOrderVO.getRepairOrderTime() != null) {
+                        dataRow.createCell(21).setCellValue(Double.valueOf(repairOrderVO.getRepairOrderTime() + ""));
+                    }else{
+                        dataRow.createCell(21).setCellType(CellType.BLANK);
+                    }
+                    if(repairOrderVO.getConsumptionTime() != null) {
+                        dataRow.createCell(22).setCellValue(Double.valueOf(repairOrderVO.getConsumptionTime() + ""));
+                    }else{
+                        dataRow.createCell(22).setCellType(CellType.BLANK);
+                    }
+
                     //来源通过数据字典翻译
                     String sourceType = repairOrderVO.getSourceType() != null ? repairOrderVO.getSourceType() + "" : "";
                     if(StringUtils.isNotEmpty(sourceType))
@@ -300,16 +322,16 @@ public class RepairOrderController {
                             sourceType = orderSourceMap.get(sourceType);
                         }
                     }
-                    dataRow.createCell(19).setCellValue(sourceType);
-                    dataRow.createCell(20).setCellValue(repairOrderVO.getUpdatedBy() != null ? repairOrderVO.getUpdatedBy() + "" : "");
-                    dataRow.createCell(21).setCellValue(repairOrderVO.getUpdatedTime() != null ? repairOrderVO.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                    dataRow.createCell(22).setCellValue(repairOrderVO.getCreatedBy() != null ? repairOrderVO.getCreatedBy() + "" : "");
-                    dataRow.createCell(23).setCellValue(repairOrderVO.getCreatedTime() != null ? repairOrderVO.getCreatedTime().format(dateTimeFormatter) + "" : "");
+                    dataRow.createCell(23).setCellValue(sourceType);
+                    dataRow.createCell(24).setCellValue(repairOrderVO.getUpdatedBy() != null ? repairOrderVO.getUpdatedBy() + "" : "");
+                    dataRow.createCell(25).setCellValue(repairOrderVO.getUpdatedTime() != null ? repairOrderVO.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                    dataRow.createCell(26).setCellValue(repairOrderVO.getCreatedBy() != null ? repairOrderVO.getCreatedBy() + "" : "");
+                    dataRow.createCell(27).setCellValue(repairOrderVO.getCreatedTime() != null ? repairOrderVO.getCreatedTime().format(dateTimeFormatter) + "" : "");
                 }
             }
 
             ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*10, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,256*15, 256*15,
-                    256*15, 256*20, 256*15, 256*15, 256*20, 256*15, 256*20});
+                    256*15, 256*15, 256*20, 256*20, 256*20, 256*20, 256*15, 256*15, 256*20, 256*15, 256*20});
 
         } catch (Exception exception)
         {

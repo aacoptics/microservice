@@ -109,7 +109,7 @@ export default {
         {prop: "maintenanceDate", label: "保养日期", minWidth: 100},
 
         {prop: "maintenanceItem", label: "保养项", minWidth: 150},
-        {prop: "itemType", label: "保养项类型", minWidth: 100, formatter: this.itemTypeFormat},
+        {prop: "itemType", label: "保养项类型", minWidth: 120, formatter: this.itemTypeFormat},
         {prop: "maintenanceItemStandard", label: "保养项判断标准", minWidth: 150},
         {prop: "minValue", label: "起始范围值", minWidth: 150},
         {prop: "maxValue", label: "截至范围值", minWidth: 150},

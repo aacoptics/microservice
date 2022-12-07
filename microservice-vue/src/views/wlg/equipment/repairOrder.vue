@@ -321,8 +321,12 @@ export default {
         {prop: "isClosed", label: "是否结案", minWidth: 200, formatter: this.yesNoFormat},
         {prop: "longTermMeasure", label: "长期措施", minWidth: 200},        
         // {prop: "faultPhoto", label: "故障照片", minWidth: 100},
-        {prop: "repairDesc", label: "维修说明", minWidth: 200},
-        {prop: "repairDatetime", label: "提交时间", minWidth: 100},
+        {prop: "repairDesc", label: "备注", minWidth: 200},
+        {prop: "stageDatetime", label: "接单时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "repairDatetime", label: "提交时间", minWidth: 120},
+        {prop: "receiveOrderTime", label: "接单时长（Min）", minWidth: 140},
+        {prop: "repairOrderTime", label: "维修时长（Min）", minWidth: 140},
+        {prop: "consumptionTime", label: "累计时长（Min）", minWidth: 140},        
         {prop: "sourceType", label: "工单来源", minWidth: 100, formatter: this.orderSourceFormat},
         {prop: "updatedBy", label: "操作人", minWidth: 150, formatter: this.userFormat},
         {prop: "updatedTime", label: "操作时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -676,6 +680,10 @@ export default {
     },
     // 时间格式化
     dateTimeFormat: function (row, column) {
+      if(row[column.property] == null)
+      {
+        return null;
+      }
       return this.$moment(row[column.property]).format("YYYY-MM-DD HH:mm");
     },
     dateFormat: function (dateValue) {
