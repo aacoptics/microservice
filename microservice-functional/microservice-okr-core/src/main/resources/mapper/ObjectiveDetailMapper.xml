@@ -253,7 +253,6 @@
             or k.at_users like CONCAT('%', #{employeeNo,jdbcType=VARCHAR}, '%'))
           and o.deleted = 'N'
           and k.deleted = 'N'
-          and o.created_by != #{employeeNo,jdbcType=VARCHAR}
         order by o.created_by
     </select>
 </mapper>
