@@ -6,6 +6,7 @@ import reactor.util.function.Tuple2;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Kaizhi Xuan
@@ -73,6 +74,8 @@ public interface FeishuService {
     JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
     List<FeishuUser> listAllUsers();
+
+    Map<String, List<String>> menuByEmployeeNo(String employeeNo);
 
     boolean deleteMessage(String messageId);
 

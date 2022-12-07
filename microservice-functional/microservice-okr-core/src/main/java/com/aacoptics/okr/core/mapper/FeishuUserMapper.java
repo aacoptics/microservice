@@ -4,7 +4,6 @@ import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +13,8 @@ import java.util.List;
 @DS("user_db")
 public interface FeishuUserMapper extends BaseMapper<FeishuUser> {
 
-    @DS("user_db")
-    List<String> getFeishuUserIds(@Param("employeeNos") List<String> employeeNos);
+    List<String> employeeNoToLead(String employeeNo);
+
+    List<String> employeeNoToSameLevel(String employeeNo);
 
 }
