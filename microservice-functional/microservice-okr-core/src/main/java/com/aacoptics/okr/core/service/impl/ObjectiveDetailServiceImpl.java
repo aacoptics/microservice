@@ -198,7 +198,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
                 if (StrUtil.isBlank(keyResultDetail.getKeyResultName()))
                     continue;
                 keyResultDetail.setObjectiveId(objectiveDetail.getId());
-                keyResultDetailService.addOrUpdateKeyResult(keyResultDetail, periodInfo.getPeriodName());
+                keyResultDetailService.addOrUpdateKeyResult(objectiveDetail, keyResultDetail, periodInfo.getPeriodName());
             }
         }
         return true;
@@ -213,7 +213,8 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
         markdownGroupMessage.addContent("Objective内容：" + objectiveDetail.getObjectiveName());
         String atUsers = objectiveDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("提及人员：" + atUsers);
-        markdownGroupMessage.addContent("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrFill)");
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrAtUser?username={}&objectiveDetailId={})",
+                objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }
 

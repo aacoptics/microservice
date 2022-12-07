@@ -1,7 +1,9 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.entity.po.KeyResultDetail;
+import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.KeyResultDetailMapper;
 import com.aacoptics.okr.core.service.ActionDetailService;
@@ -94,7 +96,7 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
-    public boolean addOrUpdateKeyResult(KeyResultDetail keyResultDetail, String periodName) {
+    public boolean addOrUpdateKeyResult(ObjectiveDetail objectiveDetail, KeyResultDetail keyResultDetail, String periodName) {
         if (keyResultDetail.getId() != null) {
             KeyResultDetail previousKeyResultDetail = listById(keyResultDetail.getId());
             String previousAtUsers = previousKeyResultDetail.getAtUsers();
@@ -102,14 +104,14 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
             if (keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null) {
                 for (FeishuUser user : keyResultDetail.getUsers()) {
                     if (previousAtUsers == null || !previousAtUsers.contains(user.getEmployeeNo()))
-                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, keyResultDetail, periodName), null));
                 }
             }
             return res;
         } else {
             if (keyResultDetail.getUsers() != null && keyResultDetail.getUsers().size() > 0 && periodName != null) {
                 for (FeishuUser user : keyResultDetail.getUsers()) {
-                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(keyResultDetail, periodName), null));
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(objectiveDetail, keyResultDetail, periodName), null));
                 }
             }
             return this.add(keyResultDetail);
@@ -118,14 +120,15 @@ public class KeyResultDetailServiceImpl extends ServiceImpl<KeyResultDetailMappe
     }
 
     @Override
-    public String getMarkDownMessage(KeyResultDetail keyResultDetail, String periodName) {
+    public String getMarkDownMessage(ObjectiveDetail objectiveDetail, KeyResultDetail keyResultDetail, String periodName) {
         MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
         markdownGroupMessage.setTitle("有一条Key Result提及到您：");
         markdownGroupMessage.addBlobContent("周期：" + periodName);
         markdownGroupMessage.addContent("Key Result内容：" + keyResultDetail.getKeyResultName());
         String atUsers = keyResultDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("提及人员：" + atUsers);
-        markdownGroupMessage.addContent("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrFill)");
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrAtUser?username={}&objectiveDetailId={})",
+                objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }
 }
