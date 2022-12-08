@@ -1,9 +1,12 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.aacoptics.okr.core.entity.po.ActionDetail;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
+import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 import com.aacoptics.okr.core.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.okr.core.mapper.ActionDetailMapper;
+import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.service.ActionDetailService;
 import com.aacoptics.okr.core.service.FeishuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -21,6 +24,9 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
 
     @Resource
     FeishuService feishuService;
+
+    @Resource
+    ObjectiveDetailMapper objectiveDetailMapper;
 
     @Override
     public boolean add(ActionDetail actionDetail) {
@@ -62,21 +68,37 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
 
     @Override
     public boolean addOrUpdateAction(ActionDetail actionDetail) {
+        ObjectiveDetail byActionId = objectiveDetailMapper.getByKId(actionDetail.getKeyResultId());
+        if (byActionId == null) return false;
+
         if (actionDetail.getId() != null) {
             ActionDetail previousActionDetail = getById(actionDetail.getId());
             String previousAtUsers = previousActionDetail.getAtUsers();
+            String previousResourceProvideUsers = previousActionDetail.getResourceProvideUsers();
             boolean res = this.updateById(actionDetail);
             if (actionDetail.getUsers() != null && actionDetail.getUsers().size() > 0) {
                 for (FeishuUser user : actionDetail.getUsers()) {
                     if (previousAtUsers == null || !previousAtUsers.contains(user.getEmployeeNo()))
-                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(actionDetail), null));
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(byActionId, actionDetail), null));
+                }
+            }
+
+            if (actionDetail.getResourceUsers() != null && actionDetail.getResourceUsers().size() > 0) {
+                for (FeishuUser user : actionDetail.getResourceUsers()) {
+                    if (previousResourceProvideUsers == null || !previousResourceProvideUsers.contains(user.getEmployeeNo()))
+                        feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownResourceMessage(byActionId, actionDetail), null));
                 }
             }
             return res;
         } else {
             if (actionDetail.getUsers() != null && actionDetail.getUsers().size() > 0) {
                 for (FeishuUser user : actionDetail.getUsers()) {
-                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(actionDetail), null));
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownMessage(byActionId, actionDetail), null));
+                }
+            }
+            if (actionDetail.getResourceUsers() != null && actionDetail.getResourceUsers().size() > 0) {
+                for (FeishuUser user : actionDetail.getResourceUsers()) {
+                    feishuService.sendPersonalMessage(user, feishuService.getMarkdownMessage(getMarkDownResourceMessage(byActionId, actionDetail), null));
                 }
             }
             return this.add(actionDetail);
@@ -84,16 +106,34 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
     }
 
     @Override
-    public String getMarkDownMessage(ActionDetail actionDetail) {
+    public String getMarkDownMessage(ObjectiveDetail objectiveDetail, ActionDetail actionDetail) {
         MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
         markdownGroupMessage.setTitle("有一条行动项提及到您：");
+        markdownGroupMessage.addContent("Objective内容：" + objectiveDetail.getObjectiveName());
         markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
         markdownGroupMessage.addContent("所需支持：" + actionDetail.getSupportDetail());
         markdownGroupMessage.addContent("截止日期：" + actionDetail.getDueTime().toLocalDate().toString());
         markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
         String atUsers = actionDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("提及人员：" + atUsers);
-        markdownGroupMessage.addContent("[查看详情](https://open.feishu.cn/open-apis/authen/v1/index?app_id=cli_a3f634b596a3100c&redirect_uri=http://udsapi.aacoptics.com/okrFill)");
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com/okrAtUser/?username={}&objectiveDetailId={})",
+                objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
+        return markdownGroupMessage.toString();
+    }
+
+    @Override
+    public String getMarkDownResourceMessage(ObjectiveDetail objectiveDetail, ActionDetail actionDetail) {
+        MarkdownGroupMessage markdownGroupMessage = new MarkdownGroupMessage();
+        markdownGroupMessage.setTitle("有一条行动项资源方提及到您：");
+        markdownGroupMessage.addContent("Objective内容：" + objectiveDetail.getObjectiveName());
+        markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
+        markdownGroupMessage.addContent("所需支持：" + actionDetail.getSupportDetail());
+        markdownGroupMessage.addContent("截止日期：" + actionDetail.getDueTime().toLocalDate().toString());
+        markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
+        String resourceUsers = actionDetail.getResourceUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
+        markdownGroupMessage.addContent("资源方：" + resourceUsers);
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com/okrAtUser/?username={}&objectiveDetailId={})",
+                objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }
 }
