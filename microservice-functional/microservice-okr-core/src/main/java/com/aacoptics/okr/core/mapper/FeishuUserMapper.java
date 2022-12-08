@@ -17,4 +17,6 @@ public interface FeishuUserMapper extends BaseMapper<FeishuUser> {
 
     List<String> employeeNoToSameLevel(String employeeNo);
 
+    List<String> employeeNoToNextLevel(String employeeNo);
+
 }

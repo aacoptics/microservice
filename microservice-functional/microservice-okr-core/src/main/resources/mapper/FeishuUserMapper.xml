@@ -17,4 +17,14 @@
           and IS_FROZEN = '0'
           and IS_RESIGNED = '0'
     </select>
+
+    <select id="employeeNoToNextLevel" resultType="java.lang.String">
+        select EMPLOYEE_NO
+        from FEISHU_USER
+        where LEADER_USER_ID in
+              (select USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
+          and EMPLOYEE_NO != #{employeeNo,jdbcType=VARCHAR}
+          and IS_FROZEN = '0'
+          and IS_RESIGNED = '0'
+    </select>
 </mapper>

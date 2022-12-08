@@ -79,6 +79,7 @@ public class FeishuServiceImpl implements FeishuService {
         return MapUtil.builder(new HashMap<String, List<String>>())
                 .put("lead", feishuUserMapper.employeeNoToLead(employeeNo))
                 .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo))
+                .put("nextLevel", feishuUserMapper.employeeNoToNextLevel(employeeNo))
                 .put("atUser", objectiveDetailMapper.employeeNoToAtUser(employeeNo))
                 .put("starUser", starService.employeeNoToStarUser(employeeNo))
                 .build();
