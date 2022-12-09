@@ -182,12 +182,6 @@
               </el-form-item>
             </el-col>
             <el-col :span="20">
-              <el-form-item label="保养项判断标准" prop="maintenanceItemStandard">
-                <el-input v-model="maintenanceItemDataForm.maintenanceItemStandard" auto-complete="off"
-                          clearable></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="20">
               <el-form-item label="保养项类型" prop="itemType">
                 <el-select v-model="maintenanceItemDataForm.itemType" filterable placeholder="保养项类型"
                            style="width:100%">
@@ -199,6 +193,12 @@
                   >
                   </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="20" v-if="maintenanceItemDataForm.itemType === '1'">
+              <el-form-item label="保养项判断标准" prop="maintenanceItemStandard">
+                <el-input v-model="maintenanceItemDataForm.maintenanceItemStandard" auto-complete="off"
+                          clearable></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="20" v-if="maintenanceItemDataForm.itemType !== '1'">
@@ -354,7 +354,7 @@ export default {
       },
       maintenanceItemDataFormRules: {
         maintenanceItem: [{required: true, message: "请输入保养项", trigger: "blur"}],
-        maintenanceItemStandard: [{required: true, message: "请输入保养项判断标准", trigger: "blur"}],
+        // maintenanceItemStandard: [{required: true, message: "请输入保养项判断标准", trigger: "blur"}],
         itemType: [{required: true, message: "请选择保养项类型", trigger: "blur"}],
         // minValue: [{required: true, message: "请输入起始范围值", trigger: "blur"}],
         // maxValue: [{required: true, message: "请输入截止范围值", trigger: "blur"}],

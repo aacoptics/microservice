@@ -242,16 +242,16 @@ public class MaintenanceOrderController {
         titleRow.createCell(9).setCellValue("保养日期");
         titleRow.createCell(10).setCellValue("保养项");
         titleRow.createCell(11).setCellValue("保养项类型");
-        titleRow.createCell(12).setCellValue("保养项判断标准");
-        titleRow.createCell(13).setCellValue("起始范围值");
-        titleRow.createCell(14).setCellValue("截至范围值");
+        titleRow.createCell(12).setCellValue("起始范围值");
+        titleRow.createCell(13).setCellValue("截至范围值");
+        titleRow.createCell(14).setCellValue("保养项判断标准");
         titleRow.createCell(15).setCellValue("理论值");
         titleRow.createCell(16).setCellValue("实际值");
         titleRow.createCell(17).setCellValue("是否完成");
         titleRow.createCell(18).setCellValue("保养结果");
         titleRow.createCell(19).setCellValue("是否存在异常");
         titleRow.createCell(20).setCellValue("是否存在故障");
-        titleRow.createCell(21).setCellValue("是否需要维修");
+//        titleRow.createCell(21).setCellValue("是否需要维修");
         titleRow.createCell(22).setCellValue("故障描述");
         titleRow.createCell(23).setCellValue("更新人");
         titleRow.createCell(24).setCellValue("更新时间");
@@ -311,17 +311,18 @@ public class MaintenanceOrderController {
                         }
                         dataRow.createCell(11).setCellValue(itemType);
 
-                        dataRow.createCell(12).setCellValue(maintenanceOrderItem.getMaintenanceItemStandard() != null ? maintenanceOrderItem.getMaintenanceItemStandard() + "" : "");
                         if(maintenanceOrderItem.getMinValue() != null) {
-                            dataRow.createCell(13).setCellValue(Double.valueOf(maintenanceOrderItem.getMinValue() + ""));
+                            dataRow.createCell(12).setCellValue(Double.valueOf(maintenanceOrderItem.getMinValue() + ""));
+                        }else{
+                            dataRow.createCell(12).setCellType(CellType.BLANK);
+                        }
+                        if(maintenanceOrderItem.getMaxValue() != null) {
+                            dataRow.createCell(13).setCellValue(Double.valueOf(maintenanceOrderItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(13).setCellType(CellType.BLANK);
                         }
-                        if(maintenanceOrderItem.getMaxValue() != null) {
-                            dataRow.createCell(14).setCellValue(Double.valueOf(maintenanceOrderItem.getMaxValue() + ""));
-                        }else{
-                            dataRow.createCell(14).setCellType(CellType.BLANK);
-                        }
+                        dataRow.createCell(14).setCellValue(maintenanceOrderItem.getMaintenanceItemStandard() != null ? maintenanceOrderItem.getMaintenanceItemStandard() + "" : "");
+
                         dataRow.createCell(15).setCellValue(maintenanceOrderItem.getTheoreticalValue() != null ? maintenanceOrderItem.getTheoreticalValue() + "" : "");
 
                         if(maintenanceOrderItem.getActualValue() != null) {
@@ -361,20 +362,20 @@ public class MaintenanceOrderController {
                         }
                         dataRow.createCell(20).setCellValue(isFault);
 
-                        String isRepair = maintenanceOrderItem.getIsRepair() != null ? maintenanceOrderItem.getIsRepair() + "" : "";
-                        if(StringUtils.isNotEmpty(isRepair))
-                        {
-                            if(yesNoMap.containsKey(isRepair))
-                            {
-                                isRepair = yesNoMap.get(isRepair);
-                            }
-                        }
-                        dataRow.createCell(21).setCellValue(isRepair);
-                        dataRow.createCell(22).setCellValue(maintenanceOrderItem.getFaultDesc() != null ? maintenanceOrderItem.getFaultDesc() + "" : "");
-                        dataRow.createCell(23).setCellValue(maintenanceOrderItem.getUpdatedBy() != null ? maintenanceOrderItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(24).setCellValue(maintenanceOrderItem.getUpdatedTime() != null ? maintenanceOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(25).setCellValue(maintenanceOrderItem.getCreatedBy() != null ? maintenanceOrderItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(26).setCellValue(maintenanceOrderItem.getCreatedTime() != null ? maintenanceOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+//                        String isRepair = maintenanceOrderItem.getIsRepair() != null ? maintenanceOrderItem.getIsRepair() + "" : "";
+//                        if(StringUtils.isNotEmpty(isRepair))
+//                        {
+//                            if(yesNoMap.containsKey(isRepair))
+//                            {
+//                                isRepair = yesNoMap.get(isRepair);
+//                            }
+//                        }
+//                        dataRow.createCell(21).setCellValue(isRepair);
+                        dataRow.createCell(21).setCellValue(maintenanceOrderItem.getFaultDesc() != null ? maintenanceOrderItem.getFaultDesc() + "" : "");
+                        dataRow.createCell(22).setCellValue(maintenanceOrderItem.getUpdatedBy() != null ? maintenanceOrderItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(23).setCellValue(maintenanceOrderItem.getUpdatedTime() != null ? maintenanceOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(24).setCellValue(maintenanceOrderItem.getCreatedBy() != null ? maintenanceOrderItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(25).setCellValue(maintenanceOrderItem.getCreatedTime() != null ? maintenanceOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格
@@ -389,7 +390,7 @@ public class MaintenanceOrderController {
             }
 
             ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*10, 256*15,
-                    256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
+                    256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
                     256*15, 256*15, 256*20, 256*15, 256*20});
 
         } catch (Exception exception)

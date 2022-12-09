@@ -252,16 +252,16 @@ public class InspectionOrderController {
         titleRow.createCell(12).setCellValue("班次结束时间");
         titleRow.createCell(13).setCellValue("点检项");
         titleRow.createCell(14).setCellValue("点检项类型");
-        titleRow.createCell(15).setCellValue("点检项判断标准");
-        titleRow.createCell(16).setCellValue("起始范围值");
-        titleRow.createCell(17).setCellValue("截至范围值");
+        titleRow.createCell(15).setCellValue("起始范围值");
+        titleRow.createCell(16).setCellValue("截至范围值");
+        titleRow.createCell(17).setCellValue("点检项判断标准");
         titleRow.createCell(18).setCellValue("理论值");
         titleRow.createCell(19).setCellValue("实际值");
         titleRow.createCell(20).setCellValue("是否完成");
         titleRow.createCell(21).setCellValue("点检结果");
         titleRow.createCell(22).setCellValue("是否存在异常");
         titleRow.createCell(23).setCellValue("是否存在故障");
-        titleRow.createCell(24).setCellValue("是否需要维修");
+//        titleRow.createCell(24).setCellValue("是否需要维修");
         titleRow.createCell(25).setCellValue("故障描述");
         titleRow.createCell(26).setCellValue("更新人");
         titleRow.createCell(27).setCellValue("更新时间");
@@ -322,17 +322,17 @@ public class InspectionOrderController {
                             }
                         }
                         dataRow.createCell(14).setCellValue(itemType);
-                        dataRow.createCell(15).setCellValue(inspectionOrderItem.getCheckItemStandard() != null ? inspectionOrderItem.getCheckItemStandard() + "" : "");
                         if(inspectionOrderItem.getMinValue() != null) {
-                            dataRow.createCell(16).setCellValue(Double.valueOf(inspectionOrderItem.getMinValue() + ""));
+                            dataRow.createCell(15).setCellValue(Double.valueOf(inspectionOrderItem.getMinValue() + ""));
+                        }else{
+                            dataRow.createCell(15).setCellType(CellType.BLANK);
+                        }
+                        if(inspectionOrderItem.getMaxValue() != null) {
+                            dataRow.createCell(16).setCellValue(Double.valueOf(inspectionOrderItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(16).setCellType(CellType.BLANK);
                         }
-                        if(inspectionOrderItem.getMaxValue() != null) {
-                            dataRow.createCell(17).setCellValue(Double.valueOf(inspectionOrderItem.getMaxValue() + ""));
-                        }else{
-                            dataRow.createCell(17).setCellType(CellType.BLANK);
-                        }
+                        dataRow.createCell(17).setCellValue(inspectionOrderItem.getCheckItemStandard() != null ? inspectionOrderItem.getCheckItemStandard() + "" : "");
                         dataRow.createCell(18).setCellValue(inspectionOrderItem.getTheoreticalValue() != null ? inspectionOrderItem.getTheoreticalValue() + "" : "");
 
                         if(inspectionOrderItem.getActualValue() != null) {
@@ -373,20 +373,20 @@ public class InspectionOrderController {
                         }
                         dataRow.createCell(23).setCellValue(isFault);
 
-                        String isRepair = inspectionOrderItem.getIsRepair() != null ? inspectionOrderItem.getIsRepair() + "" : "";
-                        if(StringUtils.isNotEmpty(isRepair))
-                        {
-                            if(yesNoMap.containsKey(isRepair))
-                            {
-                                isRepair = yesNoMap.get(isRepair);
-                            }
-                        }
-                        dataRow.createCell(24).setCellValue(isRepair);
-                        dataRow.createCell(25).setCellValue(inspectionOrderItem.getFaultDesc() != null ? inspectionOrderItem.getFaultDesc() + "" : "");
-                        dataRow.createCell(26).setCellValue(inspectionOrderItem.getUpdatedBy() != null ? inspectionOrderItem.getUpdatedBy() + "" : "");
-                        dataRow.createCell(27).setCellValue(inspectionOrderItem.getUpdatedTime() != null ? inspectionOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
-                        dataRow.createCell(28).setCellValue(inspectionOrderItem.getCreatedBy() != null ? inspectionOrderItem.getCreatedBy() + "" : "");
-                        dataRow.createCell(29).setCellValue(inspectionOrderItem.getCreatedTime() != null ? inspectionOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
+//                        String isRepair = inspectionOrderItem.getIsRepair() != null ? inspectionOrderItem.getIsRepair() + "" : "";
+//                        if(StringUtils.isNotEmpty(isRepair))
+//                        {
+//                            if(yesNoMap.containsKey(isRepair))
+//                            {
+//                                isRepair = yesNoMap.get(isRepair);
+//                            }
+//                        }
+//                        dataRow.createCell(24).setCellValue(isRepair);
+                        dataRow.createCell(24).setCellValue(inspectionOrderItem.getFaultDesc() != null ? inspectionOrderItem.getFaultDesc() + "" : "");
+                        dataRow.createCell(25).setCellValue(inspectionOrderItem.getUpdatedBy() != null ? inspectionOrderItem.getUpdatedBy() + "" : "");
+                        dataRow.createCell(26).setCellValue(inspectionOrderItem.getUpdatedTime() != null ? inspectionOrderItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");
+                        dataRow.createCell(27).setCellValue(inspectionOrderItem.getCreatedBy() != null ? inspectionOrderItem.getCreatedBy() + "" : "");
+                        dataRow.createCell(28).setCellValue(inspectionOrderItem.getCreatedTime() != null ? inspectionOrderItem.getCreatedTime().format(dateTimeFormatter) + "" : "");
                     }
 
                     //合并主表单元格
@@ -402,7 +402,7 @@ public class InspectionOrderController {
 
             ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*20, 256*15, 256*20, 256*15, 256*15, 256*10, 256*15,
                                                               256*10, 256*20, 256*20, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*15,
-                                                              256*15, 256*15, 256*15, 256*15, 256*15, 256*15, 256*20, 256*15, 256*20});
+                                                              256*15, 256*15, 256*15, 256*15, 256*15, 256*20, 256*15, 256*20});
 
         } catch (Exception exception)
         {

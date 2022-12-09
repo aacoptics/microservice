@@ -183,9 +183,9 @@ public class InspectionController {
         titleRow.createCell(3).setCellValue("型号");
         titleRow.createCell(4).setCellValue("点检项");
         titleRow.createCell(5).setCellValue("点检项类型");
-        titleRow.createCell(6).setCellValue("点检项判断标准");
-        titleRow.createCell(7).setCellValue("起始范围值");
-        titleRow.createCell(8).setCellValue("截至范围值");
+        titleRow.createCell(6).setCellValue("起始范围值");
+        titleRow.createCell(7).setCellValue("截至范围值");
+        titleRow.createCell(8).setCellValue("点检项判断标准");
         titleRow.createCell(9).setCellValue("理论值");
         titleRow.createCell(10).setCellValue("更新人");
         titleRow.createCell(11).setCellValue("更新时间");
@@ -242,17 +242,17 @@ public class InspectionController {
                             }
                         }
                         dataRow.createCell(5).setCellValue(itemType);
-                        dataRow.createCell(6).setCellValue(inspectionItem.getCheckItemStandard() != null ? inspectionItem.getCheckItemStandard() + "" : "");
                         if(inspectionItem.getMinValue() != null) {
-                            dataRow.createCell(7).setCellValue(Double.valueOf(inspectionItem.getMinValue() + ""));
+                            dataRow.createCell(6).setCellValue(Double.valueOf(inspectionItem.getMinValue() + ""));
+                        }else{
+                            dataRow.createCell(6).setCellType(CellType.BLANK);
+                        }
+                        if(inspectionItem.getMaxValue() != null) {
+                            dataRow.createCell(7).setCellValue(Double.valueOf(inspectionItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(7).setCellType(CellType.BLANK);
                         }
-                        if(inspectionItem.getMaxValue() != null) {
-                            dataRow.createCell(8).setCellValue(Double.valueOf(inspectionItem.getMaxValue() + ""));
-                        }else{
-                            dataRow.createCell(8).setCellType(CellType.BLANK);
-                        }
+                        dataRow.createCell(8).setCellValue(inspectionItem.getCheckItemStandard() != null ? inspectionItem.getCheckItemStandard() + "" : "");
                         dataRow.createCell(9).setCellValue(inspectionItem.getTheoreticalValue() != null ? inspectionItem.getTheoreticalValue() + "" : "");
                         dataRow.createCell(10).setCellValue(inspectionItem.getUpdatedBy() != null ? inspectionItem.getUpdatedBy() + "" : "");
                         dataRow.createCell(11).setCellValue(inspectionItem.getUpdatedTime() != null ? inspectionItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");

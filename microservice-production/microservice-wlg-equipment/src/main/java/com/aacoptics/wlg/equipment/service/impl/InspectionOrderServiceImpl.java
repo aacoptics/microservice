@@ -347,8 +347,8 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
             inspectionOrderItem.setMaxValue(existsOrderItem.getMaxValue());
 
             //判断是否需要维修
-            Integer isRepair = inspectionOrderItem.getIsRepair();
-            if(isRepair == 1 && InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))
+            Integer isFault = inspectionOrderItem.getIsFault();
+            if(isFault == 1 && InspectionOrderStatusConstants.COMMITTED.equals(orderStatus))
             {
                 isRepairBoolean = true;
                 repairOrderService.createRepairOrderByInspection(targetInspectionOrder, inspectionOrderItem);
