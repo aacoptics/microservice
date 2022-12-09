@@ -32,6 +32,7 @@ public class ActionDetail implements Serializable {
     private LocalDateTime dueTime;
     private String supportDetail;
     private String atUsers;
+    private String resourceProvideUsers;
     @TableLogic
     private String deleted = "N";
     private LocalDateTime createdTime;
@@ -39,4 +40,7 @@ public class ActionDetail implements Serializable {
 
     @TableField(exist = false)
     private List<FeishuUser> users;
+
+    @TableField(exist = false)
+    private List<FeishuUser> resourceUsers;
 }

@@ -81,7 +81,7 @@ class FeishuAppKeyConfigTest {
     @Test
     void test2() {
         try {
-            JSONArray employeeInfoList = sapJcoProvider.getEmployeeInfoList(4);
+            JSONArray employeeInfoList = sapJcoProvider.getEmployeeInfoList(2);
 
             List<String> failEmployeeNo = new ArrayList<>();
             List<String> nullPhotoEmployeeNo = new ArrayList<>();
@@ -116,7 +116,7 @@ class FeishuAppKeyConfigTest {
                 } catch (Exception e)
                 {
                     failEmployeeNo.add(employeeNo);
-                    log.error(i + " employeeNo:" + employeePhoto + ", exception:", e);
+                    log.error(i + " employeeNo:" + employeeNo + ", exception:", e);
                     continue;
                 }
                 if(result == true)

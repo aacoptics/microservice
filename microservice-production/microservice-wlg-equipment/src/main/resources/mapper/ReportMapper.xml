@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.ReportMapper">
+
+
+    <select id="findSectionOrderCount" resultType="com.aacoptics.wlg.equipment.entity.vo.SectionSummaryOrderVO">
+        WITH TEMP_SECTION_TYPE AS (
+        SELECT DISTINCT ISNULL(SECTION_TYPE, '') SECTION_TYPE
+        FROM EM_EQUIPMENT),
+         TEMP_EM_INSPECTION_ORDER AS (
+             SELECT A.*, ISNULL(B.SECTION_TYPE, '') SECTION_TYPE
+             FROM EM_INSPECTION_ORDER A
+                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            WHERE 1=1
+            <if test="sectionSummaryOrderQueryParam.createDateStart != null">
+                AND A.CREATED_TIME >= #{sectionSummaryOrderQueryParam.createDateStart}
+            </if>
+            <if test="sectionSummaryOrderQueryParam.createDateEnd != null">
+                AND A.CREATED_TIME &lt;= #{sectionSummaryOrderQueryParam.createDateEnd}
+            </if>
+         ),
+         TEMP_EM_MAINTENANCE_ORDER AS (
+             SELECT A.*, ISNULL(B.SECTION_TYPE, '') SECTION_TYPE
+             FROM EM_MAINTENANCE_ORDER A
+                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            WHERE 1=1
+            <if test="sectionSummaryOrderQueryParam.createDateStart != null">
+                AND A.CREATED_TIME >= #{sectionSummaryOrderQueryParam.createDateStart}
+            </if>
+            <if test="sectionSummaryOrderQueryParam.createDateEnd != null">
+                AND A.CREATED_TIME &lt;= #{sectionSummaryOrderQueryParam.createDateEnd}
+            </if>
+         ),
+         TEMP_EM_REPAIR_ORDER AS (
+             SELECT A.*, ISNULL(B.SECTION_TYPE, '') SECTION_TYPE
+             FROM EM_REPAIR_ORDER A
+                      LEFT JOIN EM_EQUIPMENT B ON A.MCH_CODE = B.MCH_CODE
+            WHERE 1=1
+            <if test="sectionSummaryOrderQueryParam.createDateStart != null">
+                AND A.CREATED_TIME >= #{sectionSummaryOrderQueryParam.createDateStart}
+            </if>
+            <if test="sectionSummaryOrderQueryParam.createDateEnd != null">
+                AND A.CREATED_TIME &lt;= #{sectionSummaryOrderQueryParam.createDateEnd}
+            </if>
+         )
+    SELECT B.SECTION_TYPE,
+           (SELECT COUNT(1) FROM TEMP_EM_INSPECTION_ORDER A WHERE A.SECTION_TYPE = B.SECTION_TYPE)  INSPECTION_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_INSPECTION_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 2)                                                                     COMMITTED_INSPECTION_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_INSPECTION_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 3)                                                                     CONFIRMED_INSPECTION_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_INSPECTION_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS IN (0, 1))                                                               UNFINISHED_INSPECTION_ORDER_COUNT,
+           (SELECT COUNT(1) FROM TEMP_EM_MAINTENANCE_ORDER A WHERE A.SECTION_TYPE = B.SECTION_TYPE) MAINTENANCE_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_MAINTENANCE_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 2)                                                                     COMMITTED_MAINTENANCE_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_MAINTENANCE_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 3)                                                                     CONFIRMED_MAINTENANCE_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_MAINTENANCE_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS IN (0, 1))                                                               UNFINISHED_MAINTENANCE_ORDER_COUNT,
+           (SELECT COUNT(1) FROM TEMP_EM_REPAIR_ORDER A WHERE A.SECTION_TYPE = B.SECTION_TYPE)      REPAIR_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_REPAIR_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 2)                                                                     COMMITTED_REPAIR_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_REPAIR_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS = 3)                                                                     CONFIRMED_REPAIR_ORDER_COUNT,
+           (SELECT COUNT(1)
+            FROM TEMP_EM_REPAIR_ORDER A
+            WHERE A.SECTION_TYPE = B.SECTION_TYPE
+              AND A.STATUS IN (0, 1))                                                               UNFINISHED_REPAIR_ORDER_COUNT
+    FROM TEMP_SECTION_TYPE B
+    ORDER BY B.SECTION_TYPE
+    </select>
+</mapper>

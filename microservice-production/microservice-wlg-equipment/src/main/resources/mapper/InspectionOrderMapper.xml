@@ -35,7 +35,6 @@
             <result property="isFinish" column="IS_FINISH"/>
             <result property="isFault" column="IS_FAULT"/>
             <result property="faultDesc" column="FAULT_DESC"/>
-            <result property="isRepair" column="IS_REPAIR"/>
             <result property="createdTime" column="ITEM_CREATED_TIME"/>
             <result property="createdBy" column="ITEM_CREATED_BY"/>
             <result property="updatedTime" column="ITEM_UPDATED_TIME"/>
@@ -125,7 +124,6 @@
         C.IS_FAULT,
         C.FAULT_DESC,
         C.FAULT_IMAGE_ID,
-        C.IS_REPAIR,
         C.CREATED_TIME,
         C.CREATED_BY,
         C.UPDATED_TIME,
@@ -191,7 +189,6 @@
         C.IS_FINISH,
         C.IS_FAULT,
         C.FAULT_DESC,
-        C.IS_REPAIR,
         C.CREATED_TIME ITEM_CREATED_TIME,
         C.CREATED_BY ITEM_CREATED_BY,
         C.UPDATED_TIME ITEM_UPDATED_TIME,
@@ -253,7 +250,6 @@
             C.IS_FINISH,
             C.IS_FAULT,
             C.FAULT_DESC,
-            C.IS_REPAIR,
             C.CREATED_TIME ITEM_CREATED_TIME,
             C.CREATED_BY ITEM_CREATED_BY,
             C.UPDATED_TIME ITEM_UPDATED_TIME,

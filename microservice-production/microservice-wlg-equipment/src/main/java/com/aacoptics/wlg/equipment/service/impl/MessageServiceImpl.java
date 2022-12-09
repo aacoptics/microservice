@@ -4,24 +4,42 @@ package com.aacoptics.wlg.equipment.service.impl;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.MessageTypeConstants;
 import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
+import com.aacoptics.wlg.equipment.entity.param.SectionSummaryOrderQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
 import com.aacoptics.wlg.equipment.entity.vo.RepairOrderVO;
+import com.aacoptics.wlg.equipment.entity.vo.SectionSummaryOrderVO;
+import com.aacoptics.wlg.equipment.provider.FeishuApi;
 import com.aacoptics.wlg.equipment.provider.NotificationProvider;
 import com.aacoptics.wlg.equipment.service.*;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
 @Slf4j
 public class MessageServiceImpl implements MessageService {
 
-    private static final String RECEIVE_TYPE = "user_id";
+    private static final String RECEIVE_ID_TYPE_USER_ID = "user_id";
+
+    private static final String RECEIVE_ID_TYPE_CHAT_ID = "chat_id";
 
     @Resource
     private NotificationProvider notificationProvider;
@@ -40,6 +58,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private EquipmentService equipmentService;
+
+    @Resource
+    private ReportService reportService;
+
+    @Resource
+    private FeishuService feishuService;
+
+    @Resource
+    private FeishuApi feishuApi;
 
 
     @Override
@@ -88,7 +115,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -98,7 +125,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
                 messageHistory.setReceiveId(dutyPersonId);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.INSPECTION_EXCEPTION);
                 messageHistory.setMessage(content);
 
@@ -162,7 +189,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -172,7 +199,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
                 messageHistory.setReceiveId(dutyPersonId);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.MAINTENANCE_EXCEPTION);
                 messageHistory.setMessage(content);
 
@@ -223,7 +250,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -237,7 +264,7 @@ public class MessageServiceImpl implements MessageService {
                     messageHistory.setMchCode(mchCode);
                     messageHistory.setOrderNumber(orderNumber);
                     messageHistory.setReceiveId(dutyPersonId);
-                    messageHistory.setReceiveType(RECEIVE_TYPE);
+                    messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                     messageHistory.setType(MessageTypeConstants.INSPECTION_TIME_OUT);
                     messageHistory.setMessage(content);
 
@@ -289,7 +316,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -303,7 +330,7 @@ public class MessageServiceImpl implements MessageService {
                     messageHistory.setMchCode(mchCode);
                     messageHistory.setOrderNumber(orderNumber);
                     messageHistory.setReceiveId(dutyPersonId);
-                    messageHistory.setReceiveType(RECEIVE_TYPE);
+                    messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                     messageHistory.setType(MessageTypeConstants.MAINTENANCE_TIME_OUT);
                     messageHistory.setMessage(content);
 
@@ -345,7 +372,7 @@ public class MessageServiceImpl implements MessageService {
         String content = contentStringBuffer.toString();
 
         FeishuMessage feishuMessage = new FeishuMessage();
-        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
         feishuMessage.setSendId(dutyPersonId);
         feishuMessage.setContent(content);
 
@@ -355,7 +382,7 @@ public class MessageServiceImpl implements MessageService {
             messageHistory.setMchCode(mchCode);
             messageHistory.setOrderNumber(orderNumber);
             messageHistory.setReceiveId(dutyPersonId);
-            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
             messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
             messageHistory.setMessage(content);
 
@@ -394,7 +421,7 @@ public class MessageServiceImpl implements MessageService {
         String content = contentStringBuffer.toString();
 
         FeishuMessage feishuMessage = new FeishuMessage();
-        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
         feishuMessage.setSendId(dutyPersonId);
         feishuMessage.setContent(content);
 
@@ -404,7 +431,7 @@ public class MessageServiceImpl implements MessageService {
             messageHistory.setMchCode(mchCode);
             messageHistory.setOrderNumber(repairOrder.getOrderNumber());
             messageHistory.setReceiveId(dutyPersonId);
-            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
             messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
             messageHistory.setMessage(content);
 
@@ -423,7 +450,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(repairOrder.getOrderNumber());
                 messageHistory.setReceiveId(equipDutyManager);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
                 messageHistory.setMessage(content);
 
@@ -434,5 +461,132 @@ public class MessageServiceImpl implements MessageService {
         }
 
         return true;
+    }
+
+
+    @Override
+    public boolean sendSectionOrderCountMessage() {
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        LocalDateTime monthStart = LocalDateTime.of(LocalDate.from(currentTime.with(TemporalAdjusters.firstDayOfMonth())), LocalTime.MIN);
+        LocalDateTime monthEnd = LocalDateTime.of(LocalDate.from(currentTime.with(TemporalAdjusters.lastDayOfMonth())), LocalTime.MAX);
+
+        int year = currentTime.getYear();
+        int month = currentTime.getMonthValue();
+
+
+        //获取需要推送的数据
+        SectionSummaryOrderQueryParam sectionSummaryOrderQueryParam = new SectionSummaryOrderQueryParam();
+        sectionSummaryOrderQueryParam.setCreateDateStart(monthStart);
+        sectionSummaryOrderQueryParam.setCreateDateEnd(monthEnd);
+
+        List<SectionSummaryOrderVO> sectionSummaryOrderVOList = reportService.findSectionOrderCount(sectionSummaryOrderQueryParam);
+        //excel模板路径
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("excelTemplate/sectionOrderCount.xlsx");
+
+        String tempDir = System.getProperty("java.io.tmpdir");
+        long currentTimeMillis = System.currentTimeMillis();
+        String fileName = "sectionOrderCount-" + currentTimeMillis + ".xlsx";
+        String imageFileName = "sectionOrderCount-" + currentTimeMillis + ".png";
+
+        //读取excel模板
+        XSSFWorkbook xssfWorkbook = null;
+        try {
+            xssfWorkbook = new XSSFWorkbook(inputStream);
+
+            //读取了模板内所有sheet内容
+            XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
+            //替换表头中的日期
+            XSSFRow titleRow = sheet.getRow(0);
+
+            XSSFCell titleCell = titleRow.getCell(0);
+            String cellValue = titleCell.getStringCellValue();
+            String resultCellValue = cellValue.replace("当月", year + "年" + month+"月");
+            titleCell.setCellValue(resultCellValue);
+
+            if(sectionSummaryOrderVOList != null && sectionSummaryOrderVOList.size() > 0)
+            {
+                for(int i=0; i<sectionSummaryOrderVOList.size(); i++)
+                {
+                    SectionSummaryOrderVO sectionSummaryOrderVO = sectionSummaryOrderVOList.get(i);
+
+                    XSSFRow dataRow = sheet.createRow(i + 2);
+
+                    this.createCell(xssfWorkbook, dataRow, 0).setCellValue(sectionSummaryOrderVO.getSectionType());
+                    this.createCell(xssfWorkbook, dataRow, 1).setCellValue(sectionSummaryOrderVO.getInspectionOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 2).setCellValue(sectionSummaryOrderVO.getCommittedInspectionOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 3).setCellValue(sectionSummaryOrderVO.getConfirmedInspectionOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 4).setCellValue(sectionSummaryOrderVO.getUnfinishedInspectionOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 5).setCellValue(sectionSummaryOrderVO.getMaintenanceOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 6).setCellValue(sectionSummaryOrderVO.getCommittedMaintenanceOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 7).setCellValue(sectionSummaryOrderVO.getConfirmedMaintenanceOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 8).setCellValue(sectionSummaryOrderVO.getUnfinishedMaintenanceOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 9).setCellValue(sectionSummaryOrderVO.getRepairOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 10).setCellValue(sectionSummaryOrderVO.getCommittedRepairOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 11).setCellValue(sectionSummaryOrderVO.getConfirmedRepairOrderCount());
+                    this.createCell(xssfWorkbook, dataRow, 12).setCellValue(sectionSummaryOrderVO.getUnfinishedRepairOrderCount());
+                }
+            }
+
+            //修改模板内容后导出
+            FileOutputStream out = new FileOutputStream(tempDir + "/" + fileName);
+            xssfWorkbook.write(out);
+            out.close();
+
+        } catch (IOException e) {
+            log.error("创建Excel异常" + e.getLocalizedMessage());
+            log.error("创建Excel异常", e);
+            return false;
+        }
+        //4 Excel转图片
+        Workbook spireXlsWorkbook = new Workbook();
+        spireXlsWorkbook.loadFromFile(tempDir + "/" + fileName);
+        Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
+        // Excel转为图片
+        worksheet.saveToImage(tempDir + "/" + imageFileName);
+
+        //图片上传到飞书
+        String imageKey = null;
+        try {
+            imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + imageFileName);
+        } catch (IOException e) {
+            log.error("图片上传到飞书异常" + e.getLocalizedMessage());
+            log.error("图片上传到飞书异常", e);
+            return false;
+        }
+        log.info("上传图片到飞书成功，image_key=" + imageKey);
+
+        StringBuffer contentStringBuffer = new StringBuffer();
+        contentStringBuffer.append("WLG设备管理工单执行情况统计(测试)");
+
+        String content = contentStringBuffer.toString();
+
+
+        //推送到飞书群
+        FeishuMessage feishuMessage = new FeishuMessage();
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_CHAT_ID);
+        feishuMessage.setSendId("oc_293de902a64272a74e76b7eb9f4d28a7");
+        feishuMessage.setContent(content);
+        Result result = notificationProvider.sendFeishuNotification(feishuMessage);
+        log.info(result.getCode() + result.getMsg());
+        return true;
+    }
+
+
+    private XSSFCell createCell(XSSFWorkbook xssfWorkbook, XSSFRow dataRow, int columnIndex)
+    {
+        //设置单元格样式
+        XSSFCellStyle xssfContentCellStyle = xssfWorkbook.createCellStyle();
+        xssfContentCellStyle.setBorderTop(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderBottom(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderLeft(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderRight(BorderStyle.THIN);
+        xssfContentCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+        xssfContentCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        XSSFCell dataCell = dataRow.createCell(columnIndex);
+        dataCell.setCellStyle(xssfContentCellStyle);
+
+        return dataCell;
     }
 }

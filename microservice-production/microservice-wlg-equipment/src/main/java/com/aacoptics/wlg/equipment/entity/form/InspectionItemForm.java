@@ -23,7 +23,7 @@ public class InspectionItemForm extends BaseForm<InspectionItem> {
     @ApiModelProperty(value = "点检项")
     private String checkItem;
 
-    @NotBlank(message = "点检项目判断标准不能为空")
+//    @NotBlank(message = "点检项目判断标准不能为空")
     @ApiModelProperty(value = "点检项目判断标准")
     private String checkItemStandard;
 

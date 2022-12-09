@@ -109,10 +109,10 @@ public class InspectionOrderItem extends BasePo {
     @TableField(value = "fault_image_id")
     private Long faultImageId;
 
-    /**
-     * 是否返修
-     */
-    @TableField(value = "is_repair")
-    private Integer isRepair;
+//    /**
+//     * 是否返修
+//     */
+//    @TableField(value = "is_repair")
+//    private Integer isRepair;
 
 }

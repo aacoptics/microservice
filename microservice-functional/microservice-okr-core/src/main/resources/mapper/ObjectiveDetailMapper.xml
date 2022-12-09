@@ -244,4 +244,32 @@
         where k.id = #{id,jdbcType=BIGINT}
         order by o.objective_name
     </select>
+
+    <select id="employeeNoToAtUser" resultType="java.lang.String">
+        select distinct o.created_by
+        from dbo.t_okr_objective_detail o
+                 left join t_okr_key_result_detail k on k.objective_id = o.id
+        where (o.at_users like CONCAT('%', #{employeeNo,jdbcType=VARCHAR}, '%')
+            or k.at_users like CONCAT('%', #{employeeNo,jdbcType=VARCHAR}, '%'))
+          and o.deleted = 'N'
+          and k.deleted = 'N'
+        order by o.created_by
+    </select>
+
+    <select id="getByKId" resultType="com.aacoptics.okr.core.entity.po.ObjectiveDetail">
+        select o.id,
+               o.period_id,
+               o.objective_name,
+               o.remark,
+               o.status_info,
+               o.score,
+               o.deleted,
+               o.created_by,
+               o.created_time,
+               o.updated_time,
+               o.at_users
+        from t_okr_objective_detail o
+                 left join t_okr_key_result_detail k on k.objective_id = o.id
+        where k.id = #{id,jdbcType=BIGINT}
+    </select>
 </mapper>

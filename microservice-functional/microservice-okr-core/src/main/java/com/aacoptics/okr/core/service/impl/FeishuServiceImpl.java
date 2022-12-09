@@ -1,5 +1,6 @@
 package com.aacoptics.okr.core.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -8,8 +9,10 @@ import com.aacoptics.okr.core.config.FeishuAppKeyConfig;
 import com.aacoptics.okr.core.entity.po.FeishuUser;
 import com.aacoptics.okr.core.exception.BusinessException;
 import com.aacoptics.okr.core.mapper.FeishuUserMapper;
+import com.aacoptics.okr.core.mapper.ObjectiveDetailMapper;
 import com.aacoptics.okr.core.provider.FeishuApiProvider;
 import com.aacoptics.okr.core.service.FeishuService;
+import com.aacoptics.okr.core.service.StarService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +30,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Kaizhi Xuan
@@ -46,6 +51,12 @@ public class FeishuServiceImpl implements FeishuService {
     @Resource
     private FeishuUserMapper feishuUserMapper;
 
+    @Resource
+    private ObjectiveDetailMapper objectiveDetailMapper;
+
+    @Resource
+    private StarService starService;
+
     @Override
     public FeishuUser getFeishuUser(String employeeNo) {
         return feishuUserMapper.selectOne(new LambdaQueryWrapper<FeishuUser>().eq(FeishuUser::getEmployeeNo, employeeNo));
@@ -61,6 +72,17 @@ public class FeishuServiceImpl implements FeishuService {
         return feishuUserMapper.selectList(new LambdaQueryWrapper<FeishuUser>()
                 .eq(FeishuUser::getIsFrozen, '0')
                 .eq(FeishuUser::getIsResigned, '0'));
+    }
+
+    @Override
+    public Map<String, List<String>> menuByEmployeeNo(String employeeNo) {
+        return MapUtil.builder(new HashMap<String, List<String>>())
+                .put("lead", feishuUserMapper.employeeNoToLead(employeeNo))
+                .put("sameLevel", feishuUserMapper.employeeNoToSameLevel(employeeNo))
+                .put("nextLevel", feishuUserMapper.employeeNoToNextLevel(employeeNo))
+                .put("atUser", objectiveDetailMapper.employeeNoToAtUser(employeeNo))
+                .put("starUser", starService.employeeNoToStarUser(employeeNo))
+                .build();
     }
 
     @Override
