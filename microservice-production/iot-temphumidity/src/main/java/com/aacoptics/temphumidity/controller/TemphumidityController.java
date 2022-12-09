@@ -24,4 +24,10 @@ public class TemphumidityController {
     public Result getTemphumidityInfoByDate(@RequestParam String date) {
         return Result.success(temphumidityService.getTemphumidityInfoByDate(date));
     }
+
+    @ApiOperation(value = "根据日期查询智能电表信息", notes = "根据日期查询智能电表信息")
+    @GetMapping("/getSmartMeterInfoByDate")
+    public Result getSmartMeterInfoByDate(@RequestParam String date) {
+        return Result.success(temphumidityService.getSmartMeterInfoByDate(date));
+    }
 }
