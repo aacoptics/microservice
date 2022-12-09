@@ -352,8 +352,8 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
             maintenanceOrderItem.setMaxValue(existsOrderItem.getMaxValue());
 
             //判断是否需要维修
-            Integer isRepair = maintenanceOrderItem.getIsRepair();
-            if(isRepair == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
+            Integer isFault = maintenanceOrderItem.getIsFault();
+            if(isFault == 1 && MaintenanceOrderStatusConstants.COMMITTED.equals(orderStatus))
             {
                 isRepairBoolean = true;
                 repairOrderService.createRepairOrderByMaintenance(targetMaintenanceOrder, maintenanceOrderItem);

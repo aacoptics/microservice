@@ -22,7 +22,7 @@ public class MaintenanceItemForm extends BaseForm<MaintenanceItem> {
     @ApiModelProperty(value = "保养项")
     private String maintenanceItem;
 
-    @NotBlank(message = "保养项目判断标准不能为空")
+//    @NotBlank(message = "保养项目判断标准不能为空")
     @ApiModelProperty(value = "保养项目判断标准")
     private String maintenanceItemStandard;
 

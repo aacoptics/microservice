@@ -162,9 +162,9 @@ public class MaintenanceController {
         titleRow.createCell(4).setCellValue("保养周期(周)");
         titleRow.createCell(5).setCellValue("保养项");
         titleRow.createCell(6).setCellValue("保养项类型");
-        titleRow.createCell(7).setCellValue("保养项判断标准");
-        titleRow.createCell(8).setCellValue("起始范围值");
-        titleRow.createCell(9).setCellValue("截至范围值");
+        titleRow.createCell(7).setCellValue("起始范围值");
+        titleRow.createCell(8).setCellValue("截至范围值");
+        titleRow.createCell(9).setCellValue("保养项判断标准");
         titleRow.createCell(10).setCellValue("理论值");
         titleRow.createCell(11).setCellValue("更新人");
         titleRow.createCell(12).setCellValue("更新时间");
@@ -208,17 +208,17 @@ public class MaintenanceController {
                         }
                         dataRow.createCell(6).setCellValue(itemType);
 
-                        dataRow.createCell(7).setCellValue(maintenanceItem.getMaintenanceItemStandard() != null ? maintenanceItem.getMaintenanceItemStandard() + "" : "");
                         if(maintenanceItem.getMinValue() != null) {
-                            dataRow.createCell(8).setCellValue(Double.valueOf(maintenanceItem.getMinValue() + ""));
+                            dataRow.createCell(7).setCellValue(Double.valueOf(maintenanceItem.getMinValue() + ""));
+                        }else{
+                            dataRow.createCell(7).setCellType(CellType.BLANK);
+                        }
+                        if(maintenanceItem.getMaxValue() != null) {
+                            dataRow.createCell(8).setCellValue(Double.valueOf(maintenanceItem.getMaxValue() + ""));
                         }else{
                             dataRow.createCell(8).setCellType(CellType.BLANK);
                         }
-                        if(maintenanceItem.getMaxValue() != null) {
-                            dataRow.createCell(9).setCellValue(Double.valueOf(maintenanceItem.getMaxValue() + ""));
-                        }else{
-                            dataRow.createCell(9).setCellType(CellType.BLANK);
-                        }
+                        dataRow.createCell(9).setCellValue(maintenanceItem.getMaintenanceItemStandard() != null ? maintenanceItem.getMaintenanceItemStandard() + "" : "");
                         dataRow.createCell(10).setCellValue(maintenanceItem.getTheoreticalValue() != null ? maintenanceItem.getTheoreticalValue() + "" : "");
                         dataRow.createCell(11).setCellValue(maintenanceItem.getUpdatedBy() != null ? maintenanceItem.getUpdatedBy() + "" : "");
                         dataRow.createCell(12).setCellValue(maintenanceItem.getUpdatedTime() != null ? maintenanceItem.getUpdatedTime().format(dateTimeFormatter) + "" : "");

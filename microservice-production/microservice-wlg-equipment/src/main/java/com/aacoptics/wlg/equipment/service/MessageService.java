@@ -3,6 +3,8 @@ package com.aacoptics.wlg.equipment.service;
 import com.aacoptics.wlg.equipment.entity.po.MessageHistory;
 import com.aacoptics.wlg.equipment.entity.po.RepairOrder;
 
+import java.io.IOException;
+
 public interface MessageService {
 
 
@@ -50,5 +52,14 @@ public interface MessageService {
      * @return
      */
     boolean sendMaintenanceTimeoutMessage();
+
+
+
+    /**
+     * 推送工段工单数统计群消息
+     *
+     * @return
+     */
+    boolean sendSectionOrderCountMessage();
 
 }

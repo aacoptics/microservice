@@ -540,9 +540,10 @@ export default {
     },
     selectExceptionType(val)
     {
+      this.exceptionSubclassOptions = [];
+      this.dataForm.exceptionSubclass = '';
+      
       if (this.dataForm.exceptionTypeId == null || this.dataForm.exceptionTypeId == '') {
-        this.exceptionSubclassOptions = [];
-        this.dataForm.exceptionSubclass = '';
         return;
       }
 
