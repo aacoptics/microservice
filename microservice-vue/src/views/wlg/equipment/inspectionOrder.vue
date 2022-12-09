@@ -71,16 +71,16 @@
                     size="small">
             <el-table-column label="点检项" prop="checkItem" width="180"/>
             <el-table-column label="点检项类型" :formatter="itemTypeFormat" prop="itemType" width="180"/>
-            <el-table-column label="点检项判断标准" prop="checkItemStandard" width="180"/>
             <el-table-column label="起始范围值" prop="minValue"/>
             <el-table-column label="截至范围值" prop="maxValue"/>
+            <el-table-column label="点检项判断标准" prop="checkItemStandard" width="180"/>
             <el-table-column label="理论值" prop="theoreticalValue"/>
             <el-table-column label="实际值" prop="actualValue"/>
             <el-table-column :formatter="yesNoFormat" label="是否完成" prop="isFinish"/>
             <el-table-column label="点检结果" prop="checkResult"/>
             <el-table-column :formatter="yesNoFormat" label="是否存在异常" prop="isException" width="130"/>
             <el-table-column :formatter="yesNoFormat" label="是否存在故障" prop="isFault" width="130"/>
-            <el-table-column :formatter="yesNoFormat" label="是否需要维修" prop="isRepair" width="130"/>
+            <!-- <el-table-column :formatter="yesNoFormat" label="是否需要维修" prop="isRepair" width="130"/> -->
             <el-table-column label="故障描述" prop="faultDesc"/>
             <!-- <el-table-column prop="faultPhoto" label="故障照片" /> -->
             <el-table-column :formatter="userFormat" label="操作人" prop="updatedBy" width="150"/>
