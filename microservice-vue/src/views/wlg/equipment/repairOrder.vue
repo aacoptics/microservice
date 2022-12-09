@@ -62,10 +62,10 @@
       </div>
       <orderTable id="condDataTable" ref="sysTable" :cell-style="{'text-align':'left'}" :columns="columns"
                   :data="pageResult" :header-cell-style="{'text-align':'center'}" :height="400"
-                  :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="false"
+                  :highlightCurrentRow="true" :show-batch-operation="true" :show-operation="true"
                   :showBatchDelete="false" :showOperationDel="false"
                   :stripe="true" border @findPage="findPage"
-                  @handlePreview="handlePreview"
+                  @handlePreview="handlePreview" @handleEdit="handleEdit"
                   @selection-change="handleSelectionChange">
       </orderTable>
 
@@ -542,7 +542,7 @@ export default {
     {
       this.exceptionSubclassOptions = [];
       this.dataForm.exceptionSubclass = '';
-      
+
       if (this.dataForm.exceptionTypeId == null || this.dataForm.exceptionTypeId == '') {
         return;
       }

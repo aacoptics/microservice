@@ -15,7 +15,6 @@ import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -38,7 +37,9 @@ import java.util.List;
 @Slf4j
 public class MessageServiceImpl implements MessageService {
 
-    private static final String RECEIVE_TYPE = "user_id";
+    private static final String RECEIVE_ID_TYPE_USER_ID = "user_id";
+
+    private static final String RECEIVE_ID_TYPE_CHAT_ID = "chat_id";
 
     @Resource
     private NotificationProvider notificationProvider;
@@ -114,7 +115,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -124,7 +125,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
                 messageHistory.setReceiveId(dutyPersonId);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.INSPECTION_EXCEPTION);
                 messageHistory.setMessage(content);
 
@@ -188,7 +189,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -198,7 +199,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(orderNumber);
                 messageHistory.setReceiveId(dutyPersonId);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.MAINTENANCE_EXCEPTION);
                 messageHistory.setMessage(content);
 
@@ -249,7 +250,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -263,7 +264,7 @@ public class MessageServiceImpl implements MessageService {
                     messageHistory.setMchCode(mchCode);
                     messageHistory.setOrderNumber(orderNumber);
                     messageHistory.setReceiveId(dutyPersonId);
-                    messageHistory.setReceiveType(RECEIVE_TYPE);
+                    messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                     messageHistory.setType(MessageTypeConstants.INSPECTION_TIME_OUT);
                     messageHistory.setMessage(content);
 
@@ -315,7 +316,7 @@ public class MessageServiceImpl implements MessageService {
             String content = contentStringBuffer.toString();
 
             FeishuMessage feishuMessage = new FeishuMessage();
-            feishuMessage.setSendType(RECEIVE_TYPE);
+            feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
             feishuMessage.setSendId(dutyPersonId);
             feishuMessage.setContent(content);
 
@@ -329,7 +330,7 @@ public class MessageServiceImpl implements MessageService {
                     messageHistory.setMchCode(mchCode);
                     messageHistory.setOrderNumber(orderNumber);
                     messageHistory.setReceiveId(dutyPersonId);
-                    messageHistory.setReceiveType(RECEIVE_TYPE);
+                    messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                     messageHistory.setType(MessageTypeConstants.MAINTENANCE_TIME_OUT);
                     messageHistory.setMessage(content);
 
@@ -371,7 +372,7 @@ public class MessageServiceImpl implements MessageService {
         String content = contentStringBuffer.toString();
 
         FeishuMessage feishuMessage = new FeishuMessage();
-        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
         feishuMessage.setSendId(dutyPersonId);
         feishuMessage.setContent(content);
 
@@ -381,7 +382,7 @@ public class MessageServiceImpl implements MessageService {
             messageHistory.setMchCode(mchCode);
             messageHistory.setOrderNumber(orderNumber);
             messageHistory.setReceiveId(dutyPersonId);
-            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
             messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
             messageHistory.setMessage(content);
 
@@ -420,7 +421,7 @@ public class MessageServiceImpl implements MessageService {
         String content = contentStringBuffer.toString();
 
         FeishuMessage feishuMessage = new FeishuMessage();
-        feishuMessage.setSendType(RECEIVE_TYPE);
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_USER_ID);
         feishuMessage.setSendId(dutyPersonId);
         feishuMessage.setContent(content);
 
@@ -430,7 +431,7 @@ public class MessageServiceImpl implements MessageService {
             messageHistory.setMchCode(mchCode);
             messageHistory.setOrderNumber(repairOrder.getOrderNumber());
             messageHistory.setReceiveId(dutyPersonId);
-            messageHistory.setReceiveType(RECEIVE_TYPE);
+            messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
             messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
             messageHistory.setMessage(content);
 
@@ -449,7 +450,7 @@ public class MessageServiceImpl implements MessageService {
                 messageHistory.setMchCode(mchCode);
                 messageHistory.setOrderNumber(repairOrder.getOrderNumber());
                 messageHistory.setReceiveId(equipDutyManager);
-                messageHistory.setReceiveType(RECEIVE_TYPE);
+                messageHistory.setReceiveType(RECEIVE_ID_TYPE_USER_ID);
                 messageHistory.setType(MessageTypeConstants.REPAIR_ORDER);
                 messageHistory.setMessage(content);
 
@@ -555,9 +556,19 @@ public class MessageServiceImpl implements MessageService {
         }
         log.info("上传图片到飞书成功，image_key=" + imageKey);
 
-        //推送到飞书群
-//        feishuApi.sendGroupMessage();
+        StringBuffer contentStringBuffer = new StringBuffer();
+        contentStringBuffer.append("WLG设备管理工单执行情况统计(测试)");
 
+        String content = contentStringBuffer.toString();
+
+
+        //推送到飞书群
+        FeishuMessage feishuMessage = new FeishuMessage();
+        feishuMessage.setSendType(RECEIVE_ID_TYPE_CHAT_ID);
+        feishuMessage.setSendId("oc_293de902a64272a74e76b7eb9f4d28a7");
+        feishuMessage.setContent(content);
+        Result result = notificationProvider.sendFeishuNotification(feishuMessage);
+        log.info(result.getCode() + result.getMsg());
         return true;
     }
 
