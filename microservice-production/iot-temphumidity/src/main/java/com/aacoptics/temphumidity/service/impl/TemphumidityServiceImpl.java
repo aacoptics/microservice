@@ -1,5 +1,6 @@
 package com.aacoptics.temphumidity.service.impl;
 
+import com.aacoptics.temphumidity.entity.SmartMeterInfo;
 import com.aacoptics.temphumidity.entity.TemphumidityInfo;
 import com.aacoptics.temphumidity.mapper.TemphumidityMapper;
 import com.aacoptics.temphumidity.service.TemphumidityService;
@@ -20,5 +21,10 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
     @Override
     public List<TemphumidityInfo> getTemphumidityInfoByDate(String date) {
         return temphumidityMapper.getTemphumidityInfoByDate(date);
+    }
+
+    @Override
+    public List<SmartMeterInfo> getSmartMeterInfoByDate(String date) {
+        return temphumidityMapper.getSmartMeterInfoByDate(date);
     }
 }

@@ -1,5 +1,6 @@
 package com.aacoptics.temphumidity.service;
 
+import com.aacoptics.temphumidity.entity.SmartMeterInfo;
 import com.aacoptics.temphumidity.entity.TemphumidityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,4 +13,6 @@ public interface TemphumidityService extends IService<TemphumidityInfo> {
      * @return 该日期所有温湿度信息
      */
     List<TemphumidityInfo> getTemphumidityInfoByDate(String date);
+
+    List<SmartMeterInfo> getSmartMeterInfoByDate(String date);
 }

@@ -12,3 +12,16 @@ export function getTemphumidityInfoByDate(date) {
         }
     })
 }
+
+export function getSmartMeterInfoByDate(date) {
+    return request({
+        url: '/temphumidity-iot/temphumidity/getSmartMeterInfoByDate',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            date: date
+        }
+    })
+}
