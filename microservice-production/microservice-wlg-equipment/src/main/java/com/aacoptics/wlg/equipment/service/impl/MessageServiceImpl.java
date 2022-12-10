@@ -1,6 +1,7 @@
 package com.aacoptics.wlg.equipment.service.impl;
 
 
+import cn.hutool.json.JSONObject;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.constant.MessageTypeConstants;
 import com.aacoptics.wlg.equipment.constant.NotificationStatusConstants;
@@ -40,6 +41,10 @@ public class MessageServiceImpl implements MessageService {
     private static final String RECEIVE_ID_TYPE_USER_ID = "user_id";
 
     private static final String RECEIVE_ID_TYPE_CHAT_ID = "chat_id";
+
+    private static  final String CHAT_ID = "oc_293de902a64272a74e76b7eb9f4d28a7"; //WLG设备管理消息通知
+
+    String MSG_TYPE_INTERACTIVE = "interactive";
 
     @Resource
     private NotificationProvider notificationProvider;
@@ -512,7 +517,7 @@ public class MessageServiceImpl implements MessageService {
 
                     XSSFRow dataRow = sheet.createRow(i + 2);
 
-                    this.createCell(xssfWorkbook, dataRow, 0).setCellValue(sectionSummaryOrderVO.getSectionType());
+                    this.createCell(xssfWorkbook, dataRow, 0, HorizontalAlignment.CENTER).setCellValue(sectionSummaryOrderVO.getSectionType());
                     this.createCell(xssfWorkbook, dataRow, 1).setCellValue(sectionSummaryOrderVO.getInspectionOrderCount());
                     this.createCell(xssfWorkbook, dataRow, 2).setCellValue(sectionSummaryOrderVO.getCommittedInspectionOrderCount());
                     this.createCell(xssfWorkbook, dataRow, 3).setCellValue(sectionSummaryOrderVO.getConfirmedInspectionOrderCount());
@@ -557,19 +562,41 @@ public class MessageServiceImpl implements MessageService {
         log.info("上传图片到飞书成功，image_key=" + imageKey);
 
         StringBuffer contentStringBuffer = new StringBuffer();
-        contentStringBuffer.append("WLG设备管理工单执行情况统计(测试)");
+        contentStringBuffer.append("**WLG设备管理工单执行情况统计**");
 
         String content = contentStringBuffer.toString();
 
+//        String chatId = "oc_293de902a64272a74e76b7eb9f4d28a7"; //WLG设备管理消息通知
 
-        //推送到飞书群
-        FeishuMessage feishuMessage = new FeishuMessage();
-        feishuMessage.setSendType(RECEIVE_ID_TYPE_CHAT_ID);
-        feishuMessage.setSendId("oc_293de902a64272a74e76b7eb9f4d28a7");
-        feishuMessage.setContent(content);
-        Result result = notificationProvider.sendFeishuNotification(feishuMessage);
-        log.info(result.getCode() + result.getMsg());
+        JSONObject cardJson = feishuApi.getMarkdownMessage(content, imageKey);
+
+        JSONObject jsonObject = feishuService.sendMessage(RECEIVE_ID_TYPE_CHAT_ID, CHAT_ID, MSG_TYPE_INTERACTIVE, cardJson);
+        log.info("WLG设备管理工单数飞书群推送结果：" + jsonObject.toString());
+
         return true;
+    }
+
+    private XSSFCell createCell(XSSFWorkbook xssfWorkbook, XSSFRow dataRow, int columnIndex, HorizontalAlignment horizontalAlignment)
+    {
+        //设置单元格样式
+        XSSFCellStyle xssfContentCellStyle = xssfWorkbook.createCellStyle();
+        xssfContentCellStyle.setBorderTop(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderBottom(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderLeft(BorderStyle.THIN);
+        xssfContentCellStyle.setBorderRight(BorderStyle.THIN);
+        xssfContentCellStyle.setAlignment(horizontalAlignment);
+        xssfContentCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        XSSFFont xssfTitleFont = xssfWorkbook.createFont();
+        xssfTitleFont.setFontName("微软雅黑");
+//        xssfTitleFont.setBold(true);
+        xssfTitleFont.setFontHeightInPoints((short) 12);
+        xssfContentCellStyle.setFont(xssfTitleFont);
+
+        XSSFCell dataCell = dataRow.createCell(columnIndex);
+        dataCell.setCellStyle(xssfContentCellStyle);
+
+        return dataCell;
     }
 
 
@@ -583,6 +610,12 @@ public class MessageServiceImpl implements MessageService {
         xssfContentCellStyle.setBorderRight(BorderStyle.THIN);
         xssfContentCellStyle.setAlignment(HorizontalAlignment.RIGHT);
         xssfContentCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        XSSFFont xssfTitleFont = xssfWorkbook.createFont();
+        xssfTitleFont.setFontName("微软雅黑");
+//        xssfTitleFont.setBold(true);
+        xssfTitleFont.setFontHeightInPoints((short) 12);
+        xssfContentCellStyle.setFont(xssfTitleFont);
 
         XSSFCell dataCell = dataRow.createCell(columnIndex);
         dataCell.setCellStyle(xssfContentCellStyle);
