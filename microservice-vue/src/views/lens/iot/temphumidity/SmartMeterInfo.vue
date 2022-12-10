@@ -19,15 +19,15 @@
 
     <div style="margin-top:10px">
       <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" style="width: 100%">
-        <el-table-column prop="deviceId" label="设备编号" align="center"></el-table-column>
-        <el-table-column prop="time" label="时间" align="center"></el-table-column>
-        <el-table-column prop="receiveDate" label="接收日期" align="center"></el-table-column>
-        <el-table-column prop="devTemplateUniqueId" label="模板唯一编号" align="center"></el-table-column>
-        <el-table-column prop="thatMomentProgramVersionId" label="程序版本编号" align="center"></el-table-column>
-        <el-table-column prop="programVersion" label="程序版本" align="center"></el-table-column>
-        <el-table-column prop="clientId" label="客户端编号" align="center"></el-table-column>
-        <el-table-column prop="dataColTime" label="数据收集时间" align="center"></el-table-column>
-        <el-table-column prop="cncStatus" label="CNC状态" align="center"></el-table-column>
+        <el-table-column prop="deviceId" label="设备编号" width="100px" align="center"></el-table-column>
+        <el-table-column prop="time" label="时间" width="100px" align="center"></el-table-column>
+        <el-table-column prop="receiveDate" label="接收日期" width="100px" align="center"></el-table-column>
+        <el-table-column prop="devTemplateUniqueId" label="模板唯一编号" width="150px" align="center"></el-table-column>
+        <el-table-column prop="thatMomentProgramVersionId" label="程序版本编号" width="150px" align="center"></el-table-column>
+        <el-table-column prop="programVersion" label="程序版本" width="100px" align="center"></el-table-column>
+        <el-table-column prop="clientId" label="客户端编号" width="100px" align="center"></el-table-column>
+        <el-table-column prop="dataColTime" label="数据收集时间" width="120px" align="center"></el-table-column>
+        <el-table-column prop="cncStatus" label="CNC状态" width="100px" align="center"></el-table-column>
         <el-table-column prop="uan" label="Uan" align="center"></el-table-column>
         <el-table-column prop="ubn" label="Ubn" align="center"></el-table-column>
         <el-table-column prop="ucn" label="Ucn" align="center"></el-table-column>
@@ -57,8 +57,8 @@
         <el-table-column prop="epe" label="EPE" align="center"></el-table-column>
         <el-table-column prop="eql" label="EQL" align="center"></el-table-column>
         <el-table-column prop="eqc" label="EQC" align="center"></el-table-column>
-        <el-table-column prop="currentTr" label="Current_tr" align="center"></el-table-column>
-        <el-table-column prop="voltageTr" label="Voltage_tr" align="center"></el-table-column>
+        <el-table-column prop="currentTr" label="Current_tr" width="100px" align="center"></el-table-column>
+        <el-table-column prop="voltageTr" label="Voltage_tr" width="100px" align="center"></el-table-column>
       </el-table>
     </div>
 
