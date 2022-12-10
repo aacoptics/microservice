@@ -1,6 +1,7 @@
 package com.aacoptics.okr.core.service;
 
 import com.aacoptics.okr.core.entity.po.ActionDetail;
+import com.aacoptics.okr.core.entity.po.ObjectiveDetail;
 
 import java.util.List;
 
@@ -17,7 +18,9 @@ public interface ActionDetailService {
 
     boolean deleteAction(Long id);
 
-    String getMarkDownMessage(ActionDetail actionDetail);
+    String getMarkDownMessage(ObjectiveDetail objectiveDetail, ActionDetail actionDetail);
+
+    String getMarkDownResourceMessage(ObjectiveDetail objectiveDetail, ActionDetail actionDetail);
 
     boolean addOrUpdateAction(ActionDetail actionDetail);
 }

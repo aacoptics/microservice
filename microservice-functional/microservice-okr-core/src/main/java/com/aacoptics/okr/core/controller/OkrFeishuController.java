@@ -43,4 +43,10 @@ public class OkrFeishuController {
     public Result getAllFeishuUsers() {
         return Result.success(feishuService.listAllUsers());
     }
+
+    @ApiOperation(value = "根据用户获取菜单栏", notes = "根据用户获取菜单栏")
+    @GetMapping("/getMenuByEmployeeNo")
+    public Result getMenuByEmployeeNo(@RequestParam String employNo) {
+        return Result.success(feishuService.menuByEmployeeNo(employNo));
+    }
 }

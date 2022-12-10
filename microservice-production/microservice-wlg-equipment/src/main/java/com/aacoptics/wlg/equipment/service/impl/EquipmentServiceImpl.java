@@ -95,9 +95,9 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
     @Override
     public List<Map<String, Object>> findWlgEquipmentByEAM() {
 
-        //1 资产使用性质为1（生产测试类设备）
+        //1 资产使用性质为1（生产测试类设备）,20221208取消该限制
         //2 资产位置信息所在城市为重庆
-        List<Map<String, Object>> wlgEquipmentList = equipmentMapper.findEquipmentByEAM("1", "CQ");
+        List<Map<String, Object>> wlgEquipmentList = equipmentMapper.findEquipmentByEAM(null, "CQ");
 
         return wlgEquipmentList;
     }
@@ -291,11 +291,12 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper, Equipment
         queryWrapper.eq("spec",spec);
         queryWrapper.eq("type_version", typeVersion);
         queryWrapper.eq("status", EquipmentStatusConstants.NORMAL);
-        queryWrapper.and(wq -> {
-            return wq.eq("equip_category", "厂务设备")
-            .or()
-            .eq("equip_category","生产设备");
-                });
+        queryWrapper.eq("equip_category", "生产设备");
+//        queryWrapper.and(wq -> {
+//            return wq.eq("equip_category", "厂务设备")
+//            .or()
+//            .eq("equip_category","生产设备");
+//                });
         queryWrapper.orderByAsc("mch_code");
 
        return equipmentMapper.selectList(queryWrapper);

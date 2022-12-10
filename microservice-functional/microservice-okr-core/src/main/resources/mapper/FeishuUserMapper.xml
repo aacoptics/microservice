@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.okr.core.mapper.FeishuUserMapper">
+    <select id="employeeNoToLead" resultType="java.lang.String">
+        select EMPLOYEE_NO
+        from FEISHU_USER
+        where USER_ID in (select LEADER_USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
+    </select>
+
+    <select id="employeeNoToSameLevel" resultType="java.lang.String">
+        select EMPLOYEE_NO
+        from FEISHU_USER
+        where LEADER_USER_ID in
+              (select LEADER_USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
+          and EMPLOYEE_NO != #{employeeNo,jdbcType=VARCHAR}
+          and IS_FROZEN = '0'
+          and IS_RESIGNED = '0'
+    </select>
+
+    <select id="employeeNoToNextLevel" resultType="java.lang.String">
+        select EMPLOYEE_NO
+        from FEISHU_USER
+        where LEADER_USER_ID in
+              (select USER_ID from FEISHU_USER where EMPLOYEE_NO = #{employeeNo,jdbcType=VARCHAR})
+          and EMPLOYEE_NO != #{employeeNo,jdbcType=VARCHAR}
+          and IS_FROZEN = '0'
+          and IS_RESIGNED = '0'
+    </select>
+</mapper>

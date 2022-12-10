@@ -25,4 +25,10 @@ class MessageServiceImplTest {
 
         messageService.sendInspectionExceptionMessage();
     }
+
+
+    @Test
+    void sendSectionOrderCountMessage() {
+        messageService.sendSectionOrderCountMessage();
+    }
 }

@@ -130,4 +130,20 @@ public class SchedulerHandle {
             XxlJobHelper.handleFail(e.getMessage());
         }
     }
+
+
+    /**
+     * 推送工段工单数统计群消息
+     */
+    @XxlJob("sendSectionOrderCountMessage")
+    public void sendSectionOrderCountMessage()
+    {
+        try {
+            messageService.sendSectionOrderCountMessage();
+            XxlJobHelper.handleSuccess();
+        } catch (Exception e) {
+            XxlJobHelper.log(e);
+            XxlJobHelper.handleFail(e.getMessage());
+        }
+    }
 }
