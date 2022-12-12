@@ -99,7 +99,7 @@ public class ExceptionTypeServiceImpl extends ServiceImpl<ExceptionTypeMapper, E
             throw new BusinessException("ID为" + id + "的记录已不存在");
         }
 
-        //查询点检项
+        //查询异常子类
         QueryWrapper<ExceptionSubClass> exceptionSubClassQueryWrapper = new QueryWrapper<ExceptionSubClass>();
         exceptionSubClassQueryWrapper.eq( "exception_type_id", id);
 

@@ -4,9 +4,11 @@ import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.equipment.entity.form.*;
 import com.aacoptics.wlg.equipment.entity.param.ExceptionTypeQueryParam;
 import com.aacoptics.wlg.equipment.entity.po.*;
+import com.aacoptics.wlg.equipment.exception.BusinessException;
 import com.aacoptics.wlg.equipment.service.*;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,6 +73,17 @@ public class ExceptionTypeController {
         return Result.success(exceptionTypeService.get(id));
     }
 
+    @ApiOperation(value = "获取异常类型", notes = "获取指定异常类型信息")
+    @ApiImplicitParam(paramType = "path", name = "id", value = "异常类型ID", example = "0", required = true, dataType = "Long")
+    @PostMapping(value = "/findById")
+    public Result findById(@Valid @RequestBody ExceptionTypeQueryForm exceptionTypeQueryForm) {
+        log.debug("get with exceptionTypeQueryForm:{}", exceptionTypeQueryForm);
+        if(exceptionTypeQueryForm.getId() == null)
+        {
+            throw new BusinessException("ID不能为空");
+        }
+        return Result.success(exceptionTypeService.get(exceptionTypeQueryForm.getId()));
+    }
 
     @ApiOperation(value = "新增异常类型项", notes = "新增一个异常类型项信息")
     @ApiImplicitParam(name = "exceptionSubClassForm", value = "新增异常类型form表单", required = true, dataType = "ExceptionSubClassForm")
