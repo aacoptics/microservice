@@ -53,14 +53,14 @@
       </div>
       <el-table id="inputReportTable" :data="tableData" :size="size" :summary-method="getSummaries" show-summary stripe
                 style="width: 100%">
-        <el-table-column fixed="left" label="日期" prop="dateStr" width="70">
+        <el-table-column :filter-method="filterDate" :filters="dateStr" fixed="left" label="日期" prop="dateStr" width="70">
           <template v-slot="scope">
             <span style="font-weight: bold;color: black">{{
                 this.$moment(scope.row.startTime).format("YY/MM/DD")
               }}</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="left" label="时间" prop="timeStr" width="85">
+        <el-table-column :filter-method="filterTime" :filters="timeStr" fixed="left" label="时间" prop="timeStr" width="85">
           <template v-slot="scope">
             <span
                 style="font-weight: bold;color: black">{{
@@ -68,8 +68,8 @@
               }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="机台号" prop="machineName" width="70"/>
-        <el-table-column label="材料号" prop="materialName" width="60"/>
+        <el-table-column :filter-method="filterEquip" :filters="equipFilterList" label="机台号" prop="machineName" width="70"/>
+        <el-table-column  label="材料号" prop="materialName" width="60"/>
         <el-table-column :filter-method="filterProjectName" :filters="projectName"
                          label="项目"
                          prop="projectName" width="80"/>
@@ -241,6 +241,41 @@ export default {
       })
       return res
     },
+    dateStr() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if (resArray.indexOf(this.$moment(item.startTime).format("YY/MM/DD")) === -1) {
+          resArray.push(this.$moment(item.startTime).format("YY/MM/DD"))
+          res.push({text: this.$moment(item.startTime).format("YY/MM/DD"), value: this.$moment(item.startTime).format("YY/MM/DD")})
+        }
+      })
+      return res
+    },
+
+    timeStr() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if (resArray.indexOf(this.$moment(item.startTime).format("HH:mm") + '-' + this.$moment(item.endTime).format("HH:mm")) === -1) {
+          resArray.push(this.$moment(item.startTime).format("HH:mm") + '-' + this.$moment(item.endTime).format("HH:mm"))
+          res.push({text: this.$moment(item.startTime).format("HH:mm") + '-' + this.$moment(item.endTime).format("HH:mm"),
+            value: this.$moment(item.startTime).format("HH:mm") + '-' + this.$moment(item.endTime).format("HH:mm")})
+        }
+      })
+      return res
+    },
+    equipFilterList() {
+      const resArray = []
+      const res = []
+      this.tableData.forEach(item => {
+        if (resArray.indexOf(item.machineName) === -1) {
+          resArray.push(item.machineName)
+          res.push({text: item.machineName, value: item.machineName})
+        }
+      })
+      return res
+    },
     operatorName() {
       const resArray = []
       const res = []
@@ -288,6 +323,15 @@ export default {
 
     filterProjectName(value, row) {
       return row.projectName === value
+    },
+    filterDate(value, row) {
+      return this.$moment(row.startTime).format("YY/MM/DD") === value
+    },
+    filterTime(value, row) {
+      return this.$moment(row.startTime).format("HH:mm") + '-' + this.$moment(row.endTime).format("HH:mm") === value
+    },
+    filterEquip(value, row) {
+      return row.machineName === value
     },
     filterOperatorName(value, row) {
       return row.updateUser === value
