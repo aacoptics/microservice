@@ -1,5 +1,7 @@
 package com.aacoptics.wlg.equipment.service;
 
+import cn.hutool.json.JSONObject;
+
 import java.io.IOException;
 
 /**
@@ -18,5 +20,7 @@ public interface FeishuService {
     String fetchUploadAvatarImageKey(String filePath) throws IOException;
 
     String fetchUploadMessageImageKey(String filePath) throws IOException;
+
+    JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
 }
