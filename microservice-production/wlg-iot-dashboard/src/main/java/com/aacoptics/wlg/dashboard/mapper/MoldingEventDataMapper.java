@@ -22,4 +22,8 @@ public interface MoldingEventDataMapper extends BaseMapper<MoldingEventData> {
     IPage<MoldingEventData> getMachineErrors(Page page, @Param("machineName") String machineName,
                                              @Param("startTime") LocalDateTime startTime,
                                              @Param("endTime") LocalDateTime endTime);
+
+    IPage<MoldingEventData> getMachineStatus(Page page, @Param("machineName") String machineName,
+                                             @Param("startTime") LocalDateTime startTime,
+                                             @Param("endTime") LocalDateTime endTime);
 }

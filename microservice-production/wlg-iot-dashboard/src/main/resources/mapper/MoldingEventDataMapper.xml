@@ -35,4 +35,22 @@
         order by start_time
     </select>
 
+    <select id="getMachineStatus" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingEventData">
+        SELECT [id]
+             , [site]
+             , [machine_name]
+             , [status_id]                                 as event_info
+             , [status_value]                              as alarm_info
+             , [start_time]
+             , [end_time]
+             , [create_time]
+             , datediff(millisecond, start_time, end_time) as duration
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
+        where machine_name = #{machineName}
+          and start_time between #{startTime} and #{endTime}
+          and end_time is not null
+          and [status_id] = 5
+        order by start_time
+    </select>
+
 </mapper>
