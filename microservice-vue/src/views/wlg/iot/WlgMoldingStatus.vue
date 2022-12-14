@@ -53,7 +53,7 @@
 
 <script>
 
-import {getMachineErrors, getMachineName} from "@/api/wlg/iot/moldingMachineParamData";
+import {getMachineStatus, getMachineName} from "@/api/wlg/iot/moldingMachineParamData";
 import SysTable from "@/components/SysTable";
 
 export default {
@@ -65,7 +65,8 @@ export default {
         {prop: "machineName", label: "机台号", minWidth: 110},
         {prop: "alarmInfo", label: "状态", minWidth: 100},
         {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat}
+        {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "duration", label: "持续时间", minWidth: 120, formatter: this.formatSeconds}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -87,9 +88,9 @@ export default {
     }
   },
   methods: {
-    formatSeconds(value) {
+    formatSeconds: function (row, column) {
       //  秒
-      let second = parseInt(value)
+      let second = parseInt(row[column.property])
       //  分
       let minute = 0
       //  小时
@@ -127,7 +128,6 @@ export default {
       //  if (day > 0) {
       //    result = '' + parseInt(day) + '天' + result
       //  }
-      console.log('result：', result)
       return result
     },
     findPage: function (data) {
@@ -136,7 +136,7 @@ export default {
       }
       const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      getMachineErrors(this.formParam.machineName, startTime, endTime, this.pageRequest.current, this.pageRequest.size).then((res) => {
+      getMachineStatus(this.formParam.machineName, startTime, endTime, this.pageRequest.current, this.pageRequest.size).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
