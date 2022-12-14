@@ -44,7 +44,7 @@
              , [start_time]
              , [end_time]
              , [create_time]
-             , datediff(millisecond, start_time, end_time) as duration
+             , datediff(second , start_time, end_time) as duration
         FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
         where machine_name = #{machineName}
           and start_time between #{startTime} and #{endTime}
