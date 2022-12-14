@@ -65,12 +65,16 @@ public class InputReportServiceImpl extends ServiceImpl<InputReportMapper, Input
         updateWrapper.eq("id", inputReport.getId());
         this.update(updateWrapper);
 
-        UpdateWrapper<InputReport> updateWrapperNext = new UpdateWrapper<>();
-        updateWrapperNext.set("start_cycle_no", Integer.parseInt(inputReport.getEndCycleNo()) + 1 );
-        updateWrapperNext.eq("machine_name", inputReport.getMachineName());
-        updateWrapperNext.eq("start_time", inputReport.getEndTime());
-        updateWrapperNext.eq("end_wafer_id", null);
-        this.update(updateWrapperNext);
+        QueryWrapper<InputReport> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("machine_name", inputReport.getMachineName());
+        queryWrapper.eq("start_time", inputReport.getEndTime());
+        queryWrapper.isNull("end_wafer_id");
+        InputReport inputReportForUpdate = this.getOne(queryWrapper);
+
+        if(inputReportForUpdate != null){
+            inputReportForUpdate.setStartCycleNo(String.valueOf(Integer.parseInt(inputReport.getEndCycleNo()) + 1));
+            this.updateById(inputReportForUpdate);
+        }
     }
 
     @Override
