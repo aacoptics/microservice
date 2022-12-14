@@ -60,6 +60,23 @@ export function getMachineErrors(machineName, startTime, endTime, current, size)
     })
 }
 
+export function getMachineStatus(machineName, startTime, endTime, current, size) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineStatus',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            machineName: machineName,
+            startTime: startTime,
+            endTime: endTime,
+            current: current,
+            size: size
+        }
+    })
+}
+
 export function getMachineAbnormalData(machineName, startTime, endTime, current, size) {
     return request({
         url: '/wlg-iot-dashboard/moldingMachineParam/getMachineAbnormalData',
