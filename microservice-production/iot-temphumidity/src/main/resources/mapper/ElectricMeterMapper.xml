@@ -21,7 +21,7 @@
     </select>
 
     <select id="getElectricMeterBuildingNoInfo" resultType="java.lang.String">
-        select distinct building_no from z_electric_data
+        select distinct building_no from z_eletric_data
     </select>
 
     <select id="getElectricMeterFloorNoInfo" resultType="java.lang.String">
@@ -33,7 +33,7 @@
     </select>
 
     <select id="getElectricMeterNoInfo" resultType="java.lang.String">
-        select distinct meter_no from z_electric_data
+        select distinct meter_no from z_eletric_data
     </select>
 
     <select id="getPowerQty" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.ElectricMeterPowerQty">
