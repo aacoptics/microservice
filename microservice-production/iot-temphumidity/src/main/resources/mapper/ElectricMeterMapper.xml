@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.temphumidity.mapper.ElectricMeterMapper">
+    <select id="getElectricMeterInfo" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.ElectricMeterInfo">
+        select building_no buildingNo, floor_no floorNo, room_no roomNo, meter_no meterNo,
+               power_qty powerQty, power_total_qty powerTotalQty, sensor_number sensorNumber,
+               work_date workDate, collect_time collectTime, data_id dataId from
+               (select ROW_NUMBER() over (partition by building_no,floor_no,room_no,meter_no,work_date order by work_date desc) as rowNum, building_no,floor_no,room_no,meter_no,power_qty,power_total_qty, work_date, sensor_number, collect_time,data_id
+               from z_eletric_data) temp
+        where temp.rowNum=1 and temp.building_no = #{buildingNo} and temp.work_date between #{startDate}
+        and #{endDate}
+        <if test="floorNo != ''">
+            and temp.floor_no = #{floorNo}
+        </if>
+        <if test="roomNo != ''">
+            and temp.room_no = #{roomNo}
+        </if>
+        <if test="meterNo != ''">
+            and temp.meter_no = #{meterNo}
+        </if>
+    </select>
+
+    <select id="getElectricMeterBuildingNoInfo" resultType="java.lang.String">
+        select distinct building_no from z_electric_data
+    </select>
+
+    <select id="getElectricMeterFloorNoInfo" resultType="java.lang.String">
+        select distinct floor_no from z_eletric_data
+    </select>
+
+    <select id="getElectricMeterRoomNoInfo" resultType="java.lang.String">
+        select distinct room_no from z_eletric_data
+    </select>
+
+    <select id="getElectricMeterNoInfo" resultType="java.lang.String">
+        select distinct meter_no from z_electric_data
+    </select>
+
+    <select id="getPowerQty" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.ElectricMeterPowerQty">
+        select sum(temp.power_total_qty) powerTotalQty, temp.work_date workDate from (select ROW_NUMBER() over (partition by building_no,floor_no,room_no,meter_no,work_date order by work_date desc) as rowNum, building_no,floor_no,room_no,meter_no,power_qty,power_total_qty, work_date, sensor_number, collect_time,data_id
+                                                                                      from z_eletric_data) temp where temp.rowNum=1 and temp.work_date between #{startDate} and #{endDate} group by temp.work_date
+    </select>
+</mapper>
