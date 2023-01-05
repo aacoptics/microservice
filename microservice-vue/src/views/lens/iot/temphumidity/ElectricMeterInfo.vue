@@ -179,16 +179,16 @@ export default {
   },
   mounted() {
     getElectricMeterQueryDataList('buildingNo').then(response => {
-      this.buildingNoOptions = response.data
+      this.buildingNoOptions = response.data.data
     })
     getElectricMeterQueryDataList('floorNo').then(response => {
-      this.floorNoOptions = response.data
+      this.floorNoOptions = response.data.data
     })
     getElectricMeterQueryDataList('roomNo').then(response => {
-      this.roomNoOptions = response.data
+      this.roomNoOptions = response.data.data
     })
     getElectricMeterQueryDataList('meterNo').then(response => {
-      this.meterNoOptions = response.data
+      this.meterNoOptions = response.data.data
     })
   }
 }
