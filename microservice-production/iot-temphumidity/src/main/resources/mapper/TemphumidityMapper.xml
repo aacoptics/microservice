@@ -112,6 +112,7 @@
         where 1=1
         and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data )
         and dev_id in (select dev_id from device_mapping where device_name like '温湿度%')
+        and create_time > GETDATE() - 1  
         order by id asc
     </select>
 
