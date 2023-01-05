@@ -284,7 +284,12 @@ public class SendMessageServiceImpl implements SendMessageService {
                 } else if (!StrUtil.isBlank(messageValue.getIsList()) && messageValue.getIsList().equals("Y")) {
                     msgContent = markdownGroupMessage.addList(msgContent);
                 }
-                markdownGroupMessage.addContent(msgContent);
+
+                if (!StrUtil.isBlank(messageValue.getIsUrl()) && messageValue.getIsUrl().equals("Y")) {
+                    markdownGroupMessage.addContent("[查看详情](" + msgContent + ")");
+                }else{
+                    markdownGroupMessage.addContent(msgContent);
+                }
             }
             if (!StrUtil.isBlank(messageBatch.getLinkUrl())) {
                 markdownGroupMessage.addContent("[查看详情](" + messageBatch.getLinkUrl() + ")");

@@ -48,6 +48,8 @@ public class UmsContentSub implements Serializable {
 
     private String isList;
 
+    private String isUrl;
+
     private String isColour;
 
     private String isTypeface;
