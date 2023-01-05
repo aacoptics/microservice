@@ -10,6 +10,9 @@ import java.io.Serializable;
 @EqualsAndHashCode()
 @Accessors(chain = true)
 public class TemphumidityInfo implements Serializable {
+
+    private int id;
+
     private String sensorNumber;
 
     private String time;
