@@ -72,7 +72,7 @@
                      :total="tableData.length"></el-pagination>
     </div>
 
-    <div style="margin-top:10px" id="powerQtyPlot"></div>
+    <div style="height:600px;width:100%" id="powerQtyPlot" ></div>
 
   </div>
 </template>
@@ -115,7 +115,7 @@ export default {
         this.$message.warning('日期不能为空');
         return
       }
-      getElectricMeterInfo(this.param).then((response) => {
+      getElectricMeterInfo(this.param.buildingNo, this.param.floorNo, this.param.roomNo, this.param.meterNo, this.param.startDate, this.param.endDate).then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
           this.tableData = responseData.data;
@@ -127,7 +127,7 @@ export default {
         if (responseData.code === '000000') {
           responseData.data.forEach(item => {
             this.workDate.push(item.workDate);
-            this.powerQty.push(item.powerQty);
+            this.powerQty.push(item.powerTotalQty);
           })
           this.drawPowerQtyPlot();
         }
