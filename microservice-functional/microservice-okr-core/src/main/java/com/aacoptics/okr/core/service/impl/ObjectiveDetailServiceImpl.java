@@ -213,7 +213,7 @@ public class ObjectiveDetailServiceImpl extends ServiceImpl<ObjectiveDetailMappe
         markdownGroupMessage.addContent("Objective内容：" + objectiveDetail.getObjectiveName());
         String atUsers = objectiveDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("提及人员：" + atUsers);
-        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com/okrAtUser/?username={}&objectiveDetailId={})",
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com:30445/okrAtUser/?username={}&objectiveDetailId={})",
                 objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }

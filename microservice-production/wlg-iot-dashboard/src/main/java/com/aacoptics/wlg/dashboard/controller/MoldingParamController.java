@@ -72,6 +72,19 @@ public class MoldingParamController {
                 LocalDateTime.parse(endTime, df), new Page(current, size)));
     }
 
+    @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
+    @GetMapping(value = "/getMachineStatus")
+    public Result getMachineStatus(@RequestParam String machineName,
+                                   @RequestParam String startTime,
+                                   @RequestParam String endTime,
+                                   @RequestParam Long current,
+                                   @RequestParam Long size) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return Result.success(moldingEventDataService.getMachineStatus(machineName,
+                LocalDateTime.parse(startTime, df),
+                LocalDateTime.parse(endTime, df), new Page(current, size)));
+    }
+
     @ApiOperation(value = "获取这段时间的异常数据", notes = "获取这段时间的异常数据")
     @GetMapping(value = "/getMachineAbnormalData")
     public Result getMachineAbnormalData(@RequestParam String machineName,

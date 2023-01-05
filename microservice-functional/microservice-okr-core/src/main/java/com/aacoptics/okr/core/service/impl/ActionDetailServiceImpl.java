@@ -116,7 +116,7 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
         markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
         String atUsers = actionDetail.getUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("提及人员：" + atUsers);
-        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com/okrAtUser/?username={}&objectiveDetailId={})",
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com:30445/okrAtUser/?username={}&objectiveDetailId={})",
                 objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }
@@ -132,7 +132,7 @@ public class ActionDetailServiceImpl extends ServiceImpl<ActionDetailMapper, Act
         markdownGroupMessage.addContent("行动项：" + actionDetail.getActionName());
         String resourceUsers = actionDetail.getResourceUsers().stream().map(FeishuUser::getName).collect(Collectors.joining(","));
         markdownGroupMessage.addContent("资源方：" + resourceUsers);
-        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com/okrAtUser/?username={}&objectiveDetailId={})",
+        markdownGroupMessage.addContent(StrUtil.format("[查看详情](http://udsapi.aacoptics.com:30445/okrAtUser/?username={}&objectiveDetailId={})",
                 objectiveDetail.getCreatedBy(), objectiveDetail.getId()));
         return markdownGroupMessage.toString();
     }

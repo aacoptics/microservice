@@ -22,4 +22,9 @@ public interface MoldingEventDataService {
                                                 LocalDateTime startTime,
                                                 LocalDateTime endTime,
                                                 Page page);
+
+    IPage<MoldingEventData> getMachineStatus(String machineName,
+                                             LocalDateTime startTime,
+                                             LocalDateTime endTime,
+                                             Page page);
 }
