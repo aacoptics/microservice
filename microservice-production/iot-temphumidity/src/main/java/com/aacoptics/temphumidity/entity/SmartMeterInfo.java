@@ -10,6 +10,9 @@ import java.io.Serializable;
 @EqualsAndHashCode()
 @Accessors(chain = true)
 public class SmartMeterInfo implements Serializable {
+
+    private int id;
+
     private String deviceId;
 
     private String time;

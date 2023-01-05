@@ -10,7 +10,7 @@
     </select>
 
     <select id="getSmartMeterInfoByDate" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.SmartMeterInfo">
-        select JSON_VALUE(data_str, '$.device_id') as deviceId, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
+        select id, JSON_VALUE(data_str, '$.device_id') as deviceId, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
         JSON_VALUE(data_str, '$.dev_template_unique_id') as devTemplateUniqueId, JSON_VALUE(data_str, '$.that_moment_program_version_id') as thatMomentProgramVersionId,
         JSON_VALUE(data_str, '$.program_version') as programVersion, JSON_VALUE(data_str, '$.client_id') as clientId, JSON_VALUE(data_str, '$.data_col_time') as dataColTime,
         JSON_VALUE(data_str, '$.CncStatus') as cncStatus, JSON_VALUE(data_str, '$.Uan') as uan, JSON_VALUE(data_str, '$.Ubn') as ubn,
@@ -22,5 +22,154 @@
         JSON_VALUE(data_str, '$.Fa') as fa, JSON_VALUE(data_str, '$.Fb') as fb, JSON_VALUE(data_str, '$.Fc') as fc, JSON_VALUE(data_str, '$.Ftotal') as fTotal,
         JSON_VALUE(data_str, '$.EPI') as epi, JSON_VALUE(data_str, '$.EPE') as epe, JSON_VALUE(data_str, '$.EQL') as eql, JSON_VALUE(data_str, '$.EQC') as eqc,
         JSON_VALUE(data_str, '$.Current_tr') as currentTr, JSON_VALUE(data_str, '$.Voltage_tr') as voltageTr from device_original_data where data_date_str = #{date} and dev_id in (select dev_id from device_mapping where device_name like '智能电表%')
+    </select>
+
+    <select id="getRawEletricData" parameterType="Map" resultType="com.aacoptics.temphumidity.entity.SmartMeterInfo">
+        select TOP 1 id, JSON_VALUE(data_str, '$.device_id') as deviceId, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
+        JSON_VALUE(data_str, '$.dev_template_unique_id') as devTemplateUniqueId, JSON_VALUE(data_str, '$.that_moment_program_version_id') as thatMomentProgramVersionId,
+        JSON_VALUE(data_str, '$.program_version') as programVersion, JSON_VALUE(data_str, '$.client_id') as clientId, JSON_VALUE(data_str, '$.data_col_time') as dataColTime,
+        JSON_VALUE(data_str, '$.CncStatus') as cncStatus, JSON_VALUE(data_str, '$.Uan') as uan, JSON_VALUE(data_str, '$.Ubn') as ubn,
+        JSON_VALUE(data_str, '$.Ucn') as ucn, JSON_VALUE(data_str, '$.Uab') as uab, JSON_VALUE(data_str, '$.Ubc') as ubc, JSON_VALUE(data_str, '$.Uca') as uca,
+        JSON_VALUE(data_str, '$.Ia') as ia, JSON_VALUE(data_str, '$.Ib') as ib, JSON_VALUE(data_str, '$.Ic') as ic,
+        JSON_VALUE(data_str, '$.Pa') as pa, JSON_VALUE(data_str, '$.Pb') as pb, JSON_VALUE(data_str, '$.Pc') as pc, JSON_VALUE(data_str, '$.Ptotal') as pTotal,
+        JSON_VALUE(data_str, '$.Qa') as qa, JSON_VALUE(data_str, '$.Qb') as qb, JSON_VALUE(data_str, '$.Qc') as qc, JSON_VALUE(data_str, '$.Qtotal') as qTotal,
+        JSON_VALUE(data_str, '$.Sa') as sa, JSON_VALUE(data_str, '$.Sb') as sb, JSON_VALUE(data_str, '$.Sc') as sc, JSON_VALUE(data_str, '$.Stotal') as sTotal,
+        JSON_VALUE(data_str, '$.Fa') as fa, JSON_VALUE(data_str, '$.Fb') as fb, JSON_VALUE(data_str, '$.Fc') as fc, JSON_VALUE(data_str, '$.Ftotal') as fTotal,
+        JSON_VALUE(data_str, '$.EPI') as epi, JSON_VALUE(data_str, '$.EPE') as epe, JSON_VALUE(data_str, '$.EQL') as eql, JSON_VALUE(data_str, '$.EQC') as eqc,
+        JSON_VALUE(data_str, '$.Current_tr') as currentTr, JSON_VALUE(data_str, '$.Voltage_tr') as voltageTr from device_original_data
+        where 1=1
+        and id > (SELECT ISNULL(max(data_id),0) from z_eletric_data )
+        and dev_id in (select dev_id from device_mapping where device_name like '智能电表%')
+        and create_time > GETDATE() - 30
+        order by id asc
+    </select>
+
+    <select id="getLastRawEletricData" parameterType="Map" resultType="com.aacoptics.temphumidity.entity.SmartMeterInfo">
+        select TOP 1 id, JSON_VALUE(data_str, '$.device_id') as deviceId, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
+        JSON_VALUE(data_str, '$.dev_template_unique_id') as devTemplateUniqueId, JSON_VALUE(data_str, '$.that_moment_program_version_id') as thatMomentProgramVersionId,
+        JSON_VALUE(data_str, '$.program_version') as programVersion, JSON_VALUE(data_str, '$.client_id') as clientId, JSON_VALUE(data_str, '$.data_col_time') as dataColTime,
+        JSON_VALUE(data_str, '$.CncStatus') as cncStatus, JSON_VALUE(data_str, '$.Uan') as uan, JSON_VALUE(data_str, '$.Ubn') as ubn,
+        JSON_VALUE(data_str, '$.Ucn') as ucn, JSON_VALUE(data_str, '$.Uab') as uab, JSON_VALUE(data_str, '$.Ubc') as ubc, JSON_VALUE(data_str, '$.Uca') as uca,
+        JSON_VALUE(data_str, '$.Ia') as ia, JSON_VALUE(data_str, '$.Ib') as ib, JSON_VALUE(data_str, '$.Ic') as ic,
+        JSON_VALUE(data_str, '$.Pa') as pa, JSON_VALUE(data_str, '$.Pb') as pb, JSON_VALUE(data_str, '$.Pc') as pc, JSON_VALUE(data_str, '$.Ptotal') as pTotal,
+        JSON_VALUE(data_str, '$.Qa') as qa, JSON_VALUE(data_str, '$.Qb') as qb, JSON_VALUE(data_str, '$.Qc') as qc, JSON_VALUE(data_str, '$.Qtotal') as qTotal,
+        JSON_VALUE(data_str, '$.Sa') as sa, JSON_VALUE(data_str, '$.Sb') as sb, JSON_VALUE(data_str, '$.Sc') as sc, JSON_VALUE(data_str, '$.Stotal') as sTotal,
+        JSON_VALUE(data_str, '$.Fa') as fa, JSON_VALUE(data_str, '$.Fb') as fb, JSON_VALUE(data_str, '$.Fc') as fc, JSON_VALUE(data_str, '$.Ftotal') as fTotal,
+        JSON_VALUE(data_str, '$.EPI') as epi, JSON_VALUE(data_str, '$.EPE') as epe, JSON_VALUE(data_str, '$.EQL') as eql, JSON_VALUE(data_str, '$.EQC') as eqc,
+        JSON_VALUE(data_str, '$.Current_tr') as currentTr, JSON_VALUE(data_str, '$.Voltage_tr') as voltageTr from device_original_data
+        where 1=1
+        and JSON_VALUE(data_str, '$.data_col_time')  <![CDATA[ < ]]> #{dataColTime}
+        and dev_id = #{deviceId}
+        order by JSON_VALUE(data_str, '$.data_col_time') desc
+    </select>
+
+    <select id="getTop1ElectricData" parameterType="java.lang.Integer" resultType="com.aacoptics.temphumidity.entity.ElectricData">
+        select TOP 1 building_no as buildingNo,
+                     floor_no as floorNo,
+                     room_no as roomNo,
+                     meter_no as meterNo,
+                     power_qty as powerQty,
+                     power_total_qty as powerTotalQty,
+                     sensor_number as sensorNumber,
+                     work_date as workDate,
+                     collect_time as collectTime
+        from z_eletric_data
+        where 1=1
+        and dev_id = #{deviceId}
+        order by collect_time desc
+    </select>
+
+    <select id="getDeviceNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select TOP 1 device_name as deviceName
+        from device_mapping
+        where 1=1
+        and dev_id = #{deviceId}
+    </select>
+
+    <insert id="insertElectricData" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO z_eletric_data([building_no]
+                                  ,[floor_no]
+                                  ,[room_no]
+                                  ,[meter_no]
+                                  ,[power_qty]
+                                  ,[power_total_qty]
+                                  ,[sensor_number]
+                                  ,[work_date]
+                                  ,[collect_time]
+                                  ,[data_id]
+                                  ,[dev_id])
+  		VALUES(#{buildingNo}, #{floorNo}, #{roomNo}, #{meterNo}, #{powerQty}, #{powerTotalQty}
+  		       , #{sensorNumber}, #{workDate}, #{dataColTime}, #{dataId}, #{deviceId})
+	</insert>
+
+    <select id="getRawTempHumidityData" parameterType="java.lang.String" resultType="com.aacoptics.temphumidity.entity.TemphumidityInfo">
+        select TOP 1 id, JSON_VALUE(data_str, '$.Sensor_number') as sensorNumber, JSON_VALUE(data_str, '$.__time') as time, JSON_VALUE(data_str, '$.receive_date') as receiveDate,
+        JSON_VALUE(data_str, '$.dev_template_unique_id') as devTemplateUniqueId, JSON_VALUE(data_str, '$.device_id') as deviceId,
+        JSON_VALUE(data_str, '$.that_moment_program_version_id') as thatMomentProgramVersionId, JSON_VALUE(data_str, '$.temperature') as temperature,
+        JSON_VALUE(data_str, '$.humidity') as humidity, JSON_VALUE(data_str, '$.data_col_time') as dataColTime, JSON_VALUE(data_str, '$.client_id') as clientId,
+        JSON_VALUE(data_str, '$.CncStatus') as cncStatus
+        from device_original_data
+        where 1=1
+        and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data )
+        and dev_id in (select dev_id from device_mapping where device_name like '温湿度%')
+        order by id asc
+    </select>
+
+    <insert id="insertTempHumidityData" parameterType="Map" useGeneratedKeys="true" keyProperty="id">
+  		INSERT INTO z_temphumidity_data([building_no]
+                                  ,[floor_no]
+                                  ,[temperature]
+                                  ,[humidity]
+                                  ,[sensor_number]
+                                  ,[work_date]
+                                  ,[collect_time]
+                                  ,[data_id]
+                                  ,[dev_id])
+  		VALUES(#{buildingNo}, #{floorNo}, #{temperature}, #{humidity}, #{sensorNumber}, #{workDate}, #{dataColTime}, #{dataId}, #{deviceId})
+	</insert>
+
+    <select id="getTemphumidityInfoDisplay" parameterType="Map" resultType="Map">
+        select A.building_no as buildingNo, A.floor_no as floorNo, A.work_date as workDate
+              ,  B.temp1, C.temp2, D.temp3, E.temp4
+              ,  B.humidity1, C.humidity2, D.humidity3, E.humidity4
+        FROM z_temphumidity_data A
+        LEFT JOIN
+         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp1, humidity as humidity1
+            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '01:30'
+            AND A.building_no = #{buildingNo}
+            AND A.floor_no = #{floorNo}
+            AND A.work_date >= #{startDate}
+            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+        order by collect_time desc) B ON A.building_no = B.building_no AND A.floor_no = B.floor_no AND A.work_date = B.work_date
+        LEFT JOIN
+         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp2, humidity as humidity2
+            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '07:30'
+            AND A.building_no = #{buildingNo}
+            AND A.floor_no = #{floorNo}
+            AND A.work_date >= #{startDate}
+            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+        order by collect_time desc) C ON A.building_no = C.building_no AND A.floor_no = C.floor_no AND A.work_date = C.work_date
+        LEFT JOIN
+         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp3, humidity as humidity3
+            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '13:30'
+            AND A.building_no = #{buildingNo}
+            AND A.floor_no = #{floorNo}
+            AND A.work_date >= #{startDate}
+            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+        order by collect_time desc) D ON A.building_no = D.building_no AND A.floor_no = D.floor_no AND A.work_date = D.work_date
+        LEFT JOIN
+         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp4, humidity as humidity4
+            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '19:30'
+            AND A.building_no = #{buildingNo}
+            AND A.floor_no = #{floorNo}
+            AND A.work_date >= #{startDate}
+            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+        order by collect_time desc) E ON A.building_no = E.building_no AND A.floor_no = E.floor_no AND A.work_date = E.work_date
+        WHERE 1=1
+        AND A.building_no = #{buildingNo}
+        AND A.floor_no = #{floorNo}
+        AND A.work_date >= #{startDate}
+        AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+        ORDER BY A.work_date ASC, dev_id ASC
     </select>
 </mapper>
