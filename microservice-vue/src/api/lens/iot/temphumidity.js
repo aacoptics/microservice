@@ -41,3 +41,41 @@ export function getTemphumidityInfoDisplay(buildingNo, floorNo, startDate, endDa
         }
     })
 }
+
+export function getElectricMeterInfo(param) {
+    return request({
+        url: '/temphumidity-iot/electricMeter/getElectricMeterInfo',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: param
+    })
+}
+
+export function getElectricMeterQueryDataList(type) {
+    return request({
+        url: '/temphumidity-iot/electricMeter/getElectricMeterQueryDataList',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            type: type
+        }
+    })
+}
+
+export function getElectricMeterPowerQty(startDate, endDate) {
+    return request({
+        url: '/temphumidity-iot/electricMeter/getPowerQty',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            startDate: startDate,
+            endDate: endDate
+        }
+    })
+}
