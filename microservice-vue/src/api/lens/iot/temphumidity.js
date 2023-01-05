@@ -42,14 +42,21 @@ export function getTemphumidityInfoDisplay(buildingNo, floorNo, startDate, endDa
     })
 }
 
-export function getElectricMeterInfo(param) {
+export function getElectricMeterInfo(buildingNo, floorNo, roomNo, meterNo, startDate, endDate) {
     return request({
         url: '/temphumidity-iot/electricMeter/getElectricMeterInfo',
-        method: 'post',
+        method: 'get',
         headers: {
             'Content-Type': 'application/json'
         },
-        data: param
+        params: {
+            buildingNo: buildingNo,
+            floorNo: floorNo,
+            roomNo: roomNo,
+            meterNo: meterNo,
+            startDate: startDate,
+            endDate: endDate
+        }
     })
 }
 

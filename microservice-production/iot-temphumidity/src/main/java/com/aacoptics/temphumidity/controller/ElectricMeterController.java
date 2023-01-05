@@ -17,7 +17,7 @@ public class ElectricMeterController {
     ElectricMeterService electricMeterService;
 
     @ApiOperation(value = "查询智能电表信息", notes = "查询智能电表信息")
-    @PostMapping("/getElectricMeterInfo")
+    @GetMapping("/getElectricMeterInfo")
     public Result getElectricMeterInfo(@RequestParam String buildingNo, @RequestParam String floorNo,
                                        @RequestParam String roomNo, @RequestParam String meterNo,
                                        @RequestParam String startDate, @RequestParam String endDate) {
