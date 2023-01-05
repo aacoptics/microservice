@@ -5,6 +5,7 @@ import com.aacoptics.temphumidity.entity.TemphumidityInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TemphumidityService extends IService<TemphumidityInfo> {
     /**
@@ -15,4 +16,11 @@ public interface TemphumidityService extends IService<TemphumidityInfo> {
     List<TemphumidityInfo> getTemphumidityInfoByDate(String date);
 
     List<SmartMeterInfo> getSmartMeterInfoByDate(String date);
+
+    void updateElectricData();
+
+    void updateTempHumidityData();
+
+    List<Map<String, Object>> getTemphumidityInfoDisplay(String buildingNo, String floorNo, String startDate, String endDate);
+
 }

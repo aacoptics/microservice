@@ -30,4 +30,10 @@ public class TemphumidityController {
     public Result getSmartMeterInfoByDate(@RequestParam String date) {
         return Result.success(temphumidityService.getSmartMeterInfoByDate(date));
     }
+
+    @ApiOperation(value = "根据条件查询温湿度信息", notes = "根据条件查询温湿度信息")
+    @GetMapping("/getTemphumidityInfoDisplay")
+    public Result getTemphumidityInfoDisplay(@RequestParam String buildingNo, @RequestParam String floorNo, @RequestParam String startDate, @RequestParam String endDate) {
+        return Result.success(temphumidityService.getTemphumidityInfoDisplay(buildingNo, floorNo, startDate, endDate));
+    }
 }
