@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -203,10 +201,14 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 }
             }
 
-            String contactMemberListTxt = memberMap.get("7");
+            String contactMemberListTxt = memberMap.get(floorNo);
             String[] contactMemberArray = contactMemberListTxt.split(",");
 
-            if(!"".equals(item) && i == 0)
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String currentDate = sdf.format(new Date());
+
+            String sendFlag = memberConfig.getSendFlag();
+            if(!"".equals(item) && "1".equals(sendFlag) && currentDate.equals(dataColTime.substring(0, 10)))
             {
                 StringBuffer contentStringBuffer = new StringBuffer();
                 contentStringBuffer.append("**" + item + "报警**  \n");
