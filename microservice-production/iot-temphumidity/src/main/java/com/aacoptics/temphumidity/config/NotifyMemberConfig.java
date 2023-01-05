@@ -35,4 +35,10 @@ public class NotifyMemberConfig implements Serializable {
 
     @JsonProperty("seven")
     private String seven;
+
+    @JsonProperty("timer1")
+    private String timer1;
+
+    @JsonProperty("timer2")
+    private String timer2;
 }
