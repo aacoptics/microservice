@@ -130,46 +130,46 @@
 
     <select id="getTemphumidityInfoDisplay" parameterType="Map" resultType="Map">
         select A.building_no as buildingNo, A.floor_no as floorNo, A.work_date as workDate
-              ,  B.temp1, C.temp2, D.temp3, E.temp4
-              ,  B.humidity1, C.humidity2, D.humidity3, E.humidity4
+              ,  B.temp1, CC.temp2, D.temp3, E.temp4
+              ,  B.humidity1, CC.humidity2, D.humidity3, E.humidity4
         FROM z_temphumidity_data A
-        LEFT JOIN
+        INNER JOIN
          (  SELECT top 1 building_no, floor_no, work_date, temperature as temp1, humidity as humidity1
-            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '01:30'
-            AND A.building_no = #{buildingNo}
-            AND A.floor_no = #{floorNo}
-            AND A.work_date >= #{startDate}
-            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+            FROM z_temphumidity_data WHERE substring(collect_time,11,16) = '01:30'
+            AND building_no = #{buildingNo}
+            AND floor_no = #{floorNo}
+            AND work_date >= #{startDate}
+            AND work_date <![CDATA[ <= ]]>  #{endDate}
         order by collect_time desc) B ON A.building_no = B.building_no AND A.floor_no = B.floor_no AND A.work_date = B.work_date
-        LEFT JOIN
+        INNER JOIN
          (  SELECT top 1 building_no, floor_no, work_date, temperature as temp2, humidity as humidity2
-            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '07:30'
-            AND A.building_no = #{buildingNo}
-            AND A.floor_no = #{floorNo}
-            AND A.work_date >= #{startDate}
-            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
-        order by collect_time desc) C ON A.building_no = C.building_no AND A.floor_no = C.floor_no AND A.work_date = C.work_date
-        LEFT JOIN
+            FROM z_temphumidity_data WHERE substring(collect_time,11,16) = '07:30'
+            AND building_no = #{buildingNo}
+            AND floor_no = #{floorNo}
+            AND work_date >= #{startDate}
+            AND work_date <![CDATA[ <= ]]>  #{endDate}
+        order by collect_time desc) CC ON A.building_no = CC.building_no AND A.floor_no = CC.floor_no AND A.work_date = CC.work_date
+        INNER JOIN
          (  SELECT top 1 building_no, floor_no, work_date, temperature as temp3, humidity as humidity3
-            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '13:30'
-            AND A.building_no = #{buildingNo}
-            AND A.floor_no = #{floorNo}
-            AND A.work_date >= #{startDate}
-            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+            FROM z_temphumidity_data WHERE substring(collect_time,11,16) = '13:30'
+            AND building_no = #{buildingNo}
+            AND floor_no = #{floorNo}
+            AND work_date >= #{startDate}
+            AND work_date <![CDATA[ <= ]]>  #{endDate}
         order by collect_time desc) D ON A.building_no = D.building_no AND A.floor_no = D.floor_no AND A.work_date = D.work_date
-        LEFT JOIN
+        INNER JOIN
          (  SELECT top 1 building_no, floor_no, work_date, temperature as temp4, humidity as humidity4
-            FROM z_temphumidity_data WHERE substr(collect_time,11,16) = '19:30'
-            AND A.building_no = #{buildingNo}
-            AND A.floor_no = #{floorNo}
-            AND A.work_date >= #{startDate}
-            AND A.work_date <![CDATA[ <= ]]>  #{endDate}
+            FROM z_temphumidity_data WHERE substring(collect_time,11,16) = '19:30'
+            AND building_no = #{buildingNo}
+            AND floor_no = #{foorNo}
+            AND work_date >= #{startDate}
+            AND work_date <![CDATA[ <= ]]>  #{endDate}
         order by collect_time desc) E ON A.building_no = E.building_no AND A.floor_no = E.floor_no AND A.work_date = E.work_date
         WHERE 1=1
         AND A.building_no = #{buildingNo}
         AND A.floor_no = #{floorNo}
         AND A.work_date >= #{startDate}
         AND A.work_date <![CDATA[ <= ]]>  #{endDate}
-        ORDER BY A.work_date ASC, dev_id ASC
+        ORDER BY A.work_date ASC, A.dev_id ASC
     </select>
 </mapper>
