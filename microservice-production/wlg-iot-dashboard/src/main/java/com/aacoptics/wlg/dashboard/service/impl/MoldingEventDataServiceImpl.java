@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -45,7 +46,7 @@ public class MoldingEventDataServiceImpl extends ServiceImpl<MoldingEventDataMap
 
     }
 
-    public IPage<MoldingEventData> getMachineStatus(String machineName,
+    public IPage<MoldingEventData> getMachineStatus(List<String> machineName,
                                                     LocalDateTime startTime,
                                                     LocalDateTime endTime,
                                                     Page page) {

@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.ImmutableMap;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -156,5 +157,19 @@ public class ExcelUtil {
         cellStyle.setAlignment(HorizontalAlignment.LEFT); // 水平居中
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER); // 上下居中
         cellStyle.setWrapText(true); // 设置自动换行
+    }
+
+    /**
+     * 设置表格列宽度
+     *
+     * @param sheet
+     * @param columnWidthArray
+     */
+    public static void setSheetColumnWidth(XSSFSheet sheet, int[] columnWidthArray)
+    {
+        for(int i=0; i<columnWidthArray.length; i++)
+        {
+            sheet.setColumnWidth(i, columnWidthArray[i]);
+        }
     }
 }

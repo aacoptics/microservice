@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @Mapper
@@ -23,7 +24,7 @@ public interface MoldingEventDataMapper extends BaseMapper<MoldingEventData> {
                                              @Param("startTime") LocalDateTime startTime,
                                              @Param("endTime") LocalDateTime endTime);
 
-    IPage<MoldingEventData> getMachineStatus(Page page, @Param("machineName") String machineName,
+    IPage<MoldingEventData> getMachineStatus(Page page, @Param("machineName") List<String> machineName,
                                              @Param("startTime") LocalDateTime startTime,
                                              @Param("endTime") LocalDateTime endTime);
 }

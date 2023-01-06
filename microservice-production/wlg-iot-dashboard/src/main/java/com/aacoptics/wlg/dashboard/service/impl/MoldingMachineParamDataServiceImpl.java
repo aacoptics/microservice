@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -117,5 +118,10 @@ public class MoldingMachineParamDataServiceImpl extends ServiceImpl<MoldingMachi
                                                           LocalDateTime startTime,
                                                           LocalDateTime endTime) {
         return moldingParamAnalysisDataMapper.getAnalysisData(startTime, endTime, machineName, paramNames);
+    }
+
+    @Override
+    public List<Map<String, Object>> getMoldingStatusData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime) {
+        return moldingMachineParamDataMapper.getMoldingStatusData(machineName, startTime, endTime);
     }
 }

@@ -3,17 +3,26 @@ package com.aacoptics.wlg.dashboard.controller;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.dashboard.entity.param.MoldingAnalysisDataParam;
 import com.aacoptics.wlg.dashboard.entity.param.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingStatusDataParam;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
+import com.aacoptics.wlg.dashboard.util.DateUtil;
+import com.aacoptics.wlg.dashboard.util.ExcelUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/moldingMachineParam")
@@ -74,7 +83,7 @@ public class MoldingParamController {
 
     @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
     @GetMapping(value = "/getMachineStatus")
-    public Result getMachineStatus(@RequestParam String machineName,
+    public Result getMachineStatus(@RequestParam List<String> machineName,
                                    @RequestParam String startTime,
                                    @RequestParam String endTime,
                                    @RequestParam Long current,
@@ -123,5 +132,34 @@ public class MoldingParamController {
                 moldingAnalysisDataParam.getParamNames(),
                 moldingAnalysisDataParam.getStartTime(),
                 moldingAnalysisDataParam.getEndTime()));
+    }
+
+    @ApiOperation(value = "导出Excel", notes = "导出Excel")
+    @PostMapping(value = "/exportExcel")
+    public void exportExcel(@RequestBody MoldingStatusDataParam moldingStatusDataParam, HttpServletResponse response) throws Exception{
+        List<Map<String, Object>> data = moldingMachineParamDataService.getMoldingStatusData(moldingStatusDataParam.getMachineName(), moldingStatusDataParam.getStartTime(), moldingStatusDataParam.getEndTime());
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("模造机状态报表");
+        XSSFRow titleRow = wbSheet.createRow(0);
+        titleRow.createCell(0).setCellValue("机台号");
+        titleRow.createCell(1).setCellValue("状态");
+        titleRow.createCell(2).setCellValue("持续时间");
+        try {
+            if(data != null && data.size() > 0) {
+                for(int i = 0; i < data.size(); i++) {
+                    Map<String, Object> dataMap = data.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(i + 1);
+                    dataRow.createCell(0).setCellValue(dataMap.get("machine_name") + "");
+                    dataRow.createCell(1).setCellValue(dataMap.get("alarm_info") + "");
+                    dataRow.createCell(2).setCellValue(DateUtil.formatSeconds(Integer.parseInt(String.valueOf(dataMap.get("duration")))));
+                }
+            }
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15});
+        } catch(Exception e) {
+            throw e;
+        }
+        ExcelUtil.exportXlsx(response, workbook, "模造机状态报表.xlsx");
     }
 }

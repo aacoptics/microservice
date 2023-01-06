@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface MoldingMachineParamDataService {
 
@@ -30,4 +31,6 @@ public interface MoldingMachineParamDataService {
                                                    List<String> paramNames,
                                                    LocalDateTime startTime,
                                                    LocalDateTime endTime);
+
+    List<Map<String, Object>> getMoldingStatusData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime);
 }
