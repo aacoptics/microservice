@@ -9,7 +9,8 @@
 
                 <el-select v-model="formParam.machineName"
                            :size="size"
-                           placeholder="请选择机台号" clearable collapse-tags collapse-tags-tooltip filterable multiple>
+                           placeholder="请选择机台号" clearable filterable multiple
+                            style="width:300px">
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item.machineName"
@@ -144,7 +145,14 @@ export default {
       }
       const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      getMachineStatus(this.formParam.machineName, startTime, endTime, this.pageRequest.current, this.pageRequest.size).then((res) => {
+      console.log(this.formParam.machineName)
+      let params = {};
+      params.machineName = this.formParam.machineName;
+      params.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      params.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      params.current = this.pageRequest.current;
+      params.size = this.pageRequest.size;
+      getMachineStatus(params).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
