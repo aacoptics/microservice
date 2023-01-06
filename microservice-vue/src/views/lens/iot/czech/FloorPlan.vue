@@ -39,6 +39,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -58,6 +59,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -102,6 +104,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -121,6 +124,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -166,6 +170,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -185,6 +190,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -228,6 +234,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -247,6 +254,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -292,6 +300,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -311,6 +320,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -383,6 +393,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -402,6 +413,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -444,6 +456,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -463,6 +476,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -508,6 +522,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -527,6 +542,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -571,6 +587,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -590,6 +607,7 @@
                   <template #content>
                     <p>Mold: {{ machineInfo.mold }}</p>
                     <p>Side: {{ machineInfo.side }}</p>
+                    <p>Cavity: {{ machineInfo.cavity }}</p>
                     <p>Process: {{ machineInfo.process }}</p>
                     <p>ML: {{ machineInfo.ml }}</p>
                     <p>HMI version: {{ machineInfo.hmiVersion }}</p>
