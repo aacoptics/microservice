@@ -281,7 +281,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 String temp3Txt = resultData.get("temp3") + "";
                 String temp4Txt = resultData.get("temp3") + "";
 
-                if(!"-100".equals(temp1Txt))
+                if(!"-100.0".equals(temp1Txt))
                 {
                     double temp1 = Double.parseDouble(resultData.get("temp1") + "");
                     if(temp1 < 21 || temp1 > 25)
@@ -293,7 +293,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("temp1", "");
                 }
-                if(!"-100".equals(temp2Txt))
+                if(!"-100.0".equals(temp2Txt))
                 {
                     double temp2 = Double.parseDouble(resultData.get("temp2") + "");
                     if(temp2 < 21 || temp2 > 25)
@@ -305,7 +305,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("temp2", "");
                 }
-                if(!"-100".equals(temp3Txt))
+                if(!"-100.0".equals(temp3Txt))
                 {
                     double temp3 = Double.parseDouble(resultData.get("temp3") + "");
                     if(temp3 < 21 || temp3 > 25)
@@ -317,7 +317,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("temp3", "");
                 }
-                if(!"-100".equals(temp4Txt))
+                if(!"-100.0".equals(temp4Txt))
                 {
                     double temp4 = Double.parseDouble(resultData.get("temp4") + "");
                     if(temp4 < 21 || temp4 > 25)
@@ -334,7 +334,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 String humidity3Txt = resultData.get("humidity3") + "";
                 String humidity4Txt = resultData.get("humidity4") + "";
 
-                if(!"-100".equals(humidity1Txt))
+                if(!"-100.0".equals(humidity1Txt))
                 {
                     double humidity1 = Double.parseDouble(resultData.get("humidity1") + "");
                     if(humidity1 < 40 || humidity1 > 60)
@@ -346,7 +346,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("humidity1", "");
                 }
-                if(!"-100".equals(humidity2Txt))
+                if(!"-100.0".equals(humidity2Txt))
                 {
                     double humidity2 = Double.parseDouble(resultData.get("humidity2") + "");
                     if(humidity2 < 40 || humidity2 > 60)
@@ -358,7 +358,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("humidity2", "");
                 }
-                if(!"-100".equals(humidity3Txt))
+                if(!"-100.0".equals(humidity3Txt))
                 {
                     double humidity3 = Double.parseDouble(resultData.get("humidity3") + "");
                     if(humidity3 < 40 || humidity3 > 60)
@@ -370,7 +370,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
                 {
                     resultData.put("humidity3", "");
                 }
-                if(!"-100".equals(humidity4Txt))
+                if(!"-100.0".equals(humidity4Txt))
                 {
                     double humidity4 = Double.parseDouble(resultData.get("humidity4") + "");
                     if(humidity4 < 40 || humidity4 > 60)
