@@ -4,12 +4,12 @@
 
 
     <select id="findUserByName" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT (FD_NO + '-' FD_NAME) as userName
+        SELECT (FD_NO||'-'||FD_NAME) as userName
         FROM sys_org_ELEMENT
         WHERE 1=1
         and fd_org_type = 8
         and fd_is_available = 1
-        and FD_NAME like '%' + #{userNameInput} + '%'
+        and FD_NAME like ('%'||#{userNameInput}||'%')
     </select>
 
 
