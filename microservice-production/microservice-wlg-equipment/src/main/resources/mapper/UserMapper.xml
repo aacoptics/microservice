@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.equipment.mapper.UserMapper">
+
+
+    <select id="findUserByName" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT (FD_NO||'-'||FD_NAME) as userName
+        FROM sys_org_ELEMENT
+        WHERE 1=1
+        and fd_org_type = 8
+        and fd_is_available = 1
+        and FD_NAME like ('%'||#{userNameInput}||'%')
+    </select>
+
+
+</mapper>
