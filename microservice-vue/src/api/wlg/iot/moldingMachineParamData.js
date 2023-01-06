@@ -60,22 +60,22 @@ export function getMachineErrors(machineName, startTime, endTime, current, size)
     })
 }
 
-export function getMachineStatus(machineName, startTime, endTime, current, size) {
-    return request({
-        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineStatus',
-        method: 'get',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        params: {
-            machineName: machineName,
-            startTime: startTime,
-            endTime: endTime,
-            current: current,
-            size: size
-        }
-    })
-}
+// export function getMachineStatus(machineName, startTime, endTime, current, size) {
+//     return request({
+//         url: '/wlg-iot-dashboard/moldingMachineParam/getMachineStatus',
+//         method: 'get',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         params: {
+//             machineName: machineName,
+//             startTime: startTime,
+//             endTime: endTime,
+//             current: current,
+//             size: size
+//         }
+//     })
+// }
 
 export function getMachineAbnormalData(machineName, startTime, endTime, current, size) {
     return request({
@@ -265,5 +265,16 @@ export function exportMoldingStatusExcel(queryForm) {
         },
         data: queryForm,
         responseType: 'blob'
+    })
+}
+
+export function getMachineStatus(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineStatus',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
     })
 }

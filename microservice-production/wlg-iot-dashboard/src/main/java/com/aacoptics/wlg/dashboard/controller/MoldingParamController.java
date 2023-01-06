@@ -3,6 +3,7 @@ package com.aacoptics.wlg.dashboard.controller;
 import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.wlg.dashboard.entity.param.MoldingAnalysisDataParam;
 import com.aacoptics.wlg.dashboard.entity.param.MoldingDataParam;
+import com.aacoptics.wlg.dashboard.entity.param.MoldingStatusDataPageParam;
 import com.aacoptics.wlg.dashboard.entity.param.MoldingStatusDataParam;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
 import com.aacoptics.wlg.dashboard.service.MoldingMachineParamDataService;
@@ -81,18 +82,18 @@ public class MoldingParamController {
                 LocalDateTime.parse(endTime, df), new Page(current, size)));
     }
 
-    @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
-    @GetMapping(value = "/getMachineStatus")
-    public Result getMachineStatus(@RequestParam List<String> machineName,
-                                   @RequestParam String startTime,
-                                   @RequestParam String endTime,
-                                   @RequestParam Long current,
-                                   @RequestParam Long size) {
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return Result.success(moldingEventDataService.getMachineStatus(machineName,
-                LocalDateTime.parse(startTime, df),
-                LocalDateTime.parse(endTime, df), new Page(current, size)));
-    }
+//    @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
+//    @GetMapping(value = "/getMachineStatus")
+//    public Result getMachineStatus(@RequestParam List<String> machineName,
+//                                   @RequestParam String startTime,
+//                                   @RequestParam String endTime,
+//                                   @RequestParam Long current,
+//                                   @RequestParam Long size) {
+//        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        return Result.success(moldingEventDataService.getMachineStatus(machineName,
+//                LocalDateTime.parse(startTime, df),
+//                LocalDateTime.parse(endTime, df), new Page(current, size)));
+//    }
 
     @ApiOperation(value = "获取这段时间的异常数据", notes = "获取这段时间的异常数据")
     @GetMapping(value = "/getMachineAbnormalData")
@@ -161,5 +162,13 @@ public class MoldingParamController {
             throw e;
         }
         ExcelUtil.exportXlsx(response, workbook, "模造机状态报表.xlsx");
+    }
+
+    @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
+    @PostMapping(value = "/getMachineStatus")
+    public Result getMachineStatus(@RequestBody MoldingStatusDataPageParam moldingStatusDataPageParam) {
+        return Result.success(moldingEventDataService.getMachineStatus(moldingStatusDataPageParam.getMachineName(),
+                moldingStatusDataPageParam.getStartTime(),
+                moldingStatusDataPageParam.getEndTime(), new Page(moldingStatusDataPageParam.getCurrent(), moldingStatusDataPageParam.getSize())));
     }
 }
