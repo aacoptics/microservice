@@ -52,7 +52,7 @@
         <el-table-column prop="humidity2" label="湿度值2(7:30)" width="150px" align="center"></el-table-column>
         <el-table-column prop="humidity3" label="湿度值3(13:30)" width="150px" align="center"></el-table-column>
         <el-table-column prop="humidity4" label="湿度值4(19:30)" width="150px" align="center"></el-table-column>
-        <el-table-column prop="remark" label="备注" width="100px" align="center"></el-table-column>
+        <el-table-column prop="remark" label="备注" width="300px" align="center"></el-table-column>
       </el-table>
     </div>
 
