@@ -5,14 +5,14 @@
         WITH fgInfo AS(
             select *,row_number() over (partition by fGNumber order by lastupdate desc) r from fGLiveStatus
         )
-        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  a.lensDesign as ML, a.HMIVersion as hmiVersion from fgInfo a  where a.r=1 and a.fGNumber between #{startNumber} and #{endNumber} order by a.fGNumber desc
+        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  a.lensDesign as ML, a.HMIVersion as hmiVersion, a.cavity from fgInfo a  where a.r=1 and a.fGNumber between #{startNumber} and #{endNumber} order by a.fGNumber desc
     </select>
 
     <select id="getAllMachineInfo" resultType="com.aacoptics.czech.entity.FloorPlanMachineInfo">
         WITH fgInfo AS(
             select *,row_number() over (partition by fGNumber order by lastupdate desc) r from fGLiveStatus
         )
-        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  a.lensDesign as ML, a.HMIVersion as hmiVersion from fgInfo a  where a.r=1  order by a.fGNumber desc
+        select a.fGNumber as machineNo,a.mold,a.project,a.surface as side,a.processCategory as process, a.waitCat as status,  a.lensDesign as ML, a.HMIVersion as hmiVersion, a.cavity from fgInfo a  where a.r=1  order by a.fGNumber desc
     </select>
 
     <select id="getTemperatureByMachineNo" parameterType="java.lang.String" resultType="float">

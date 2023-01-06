@@ -86,6 +86,7 @@
                 <p style="margin-top: 5px;margin-left: 5px">Project: {{ machineInfo.project }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Mold: {{ machineInfo.mold }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Side: {{ machineInfo.side }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Cavity: {{ machineInfo.cavity }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Process: {{ machineInfo.process }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">ML: {{ machineInfo.ml }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">HMI version: {{ machineInfo.hmiVersion }}</p>
@@ -134,6 +135,7 @@
                 <p style="margin-top: 5px;margin-left: 5px">Project: {{ machineInfo.project }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Mold: {{ machineInfo.mold }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Side: {{ machineInfo.side }}</p>
+                <p style="margin-top: 5px;margin-left: 5px">Cavity: {{ machineInfo.cavity }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">Process: {{ machineInfo.process }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">ML: {{ machineInfo.ml }}</p>
                 <p style="margin-top: 5px;margin-left: 5px">HMI version: {{ machineInfo.hmiVersion }}</p>
