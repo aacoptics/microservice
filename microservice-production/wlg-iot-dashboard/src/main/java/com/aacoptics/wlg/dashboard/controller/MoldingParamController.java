@@ -167,7 +167,11 @@ public class MoldingParamController {
     @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")
     @PostMapping(value = "/getMachineStatus")
     public Result getMachineStatus(@RequestBody MoldingStatusDataPageParam moldingStatusDataPageParam) {
-        return Result.success(moldingEventDataService.getMachineStatus(moldingStatusDataPageParam.getMachineName(),
+        List<String> machineNameList = moldingStatusDataPageParam.getMachineName();
+        if(machineNameList == null || machineNameList.size() == 0) {
+            machineNameList.add("");
+        }
+        return Result.success(moldingEventDataService.getMachineStatus(machineNameList,
                 moldingStatusDataPageParam.getStartTime(),
                 moldingStatusDataPageParam.getEndTime(), new Page(moldingStatusDataPageParam.getCurrent(), moldingStatusDataPageParam.getSize())));
     }

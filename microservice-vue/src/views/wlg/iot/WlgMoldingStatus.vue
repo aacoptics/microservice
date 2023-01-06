@@ -143,9 +143,9 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest
       }
-      const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
-      const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      console.log(this.formParam.machineName)
+      // const startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      // const endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      // console.log(this.formParam.machineName.length)
       let params = {};
       params.machineName = this.formParam.machineName;
       params.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
