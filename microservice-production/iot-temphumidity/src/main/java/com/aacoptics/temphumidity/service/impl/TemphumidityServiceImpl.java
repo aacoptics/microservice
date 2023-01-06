@@ -276,48 +276,111 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
 
                 Map<String, Object> resultData = resultList.get(i);
 
-                double temp1 = Double.parseDouble(resultData.get("temp1") + "");
-                double temp2 = Double.parseDouble(resultData.get("temp2") + "");
-                double temp3 = Double.parseDouble(resultData.get("temp3") + "");
-                double temp4 = Double.parseDouble(resultData.get("temp4") + "");
+                String temp1Txt = resultData.get("temp1") + "";
+                String temp2Txt = resultData.get("temp2") + "";
+                String temp3Txt = resultData.get("temp3") + "";
+                String temp4Txt = resultData.get("temp3") + "";
 
-                double humidity1 = Double.parseDouble(resultData.get("humidity1") + "");
-                double humidity2 = Double.parseDouble(resultData.get("humidity2") + "");
-                double humidity3 = Double.parseDouble(resultData.get("humidity3") + "");
-                double humidity4 = Double.parseDouble(resultData.get("humidity4") + "");
+                if(!"-100".equals(temp1Txt))
+                {
+                    double temp1 = Double.parseDouble(resultData.get("temp1") + "");
+                    if(temp1 < 21 || temp1 > 25)
+                    {
+                        remark += "温度值1(1:30)超出范围";
+                    }
+                }
+                else
+                {
+                    resultData.put("temp1", "");
+                }
+                if(!"-100".equals(temp2Txt))
+                {
+                    double temp2 = Double.parseDouble(resultData.get("temp2") + "");
+                    if(temp2 < 21 || temp2 > 25)
+                    {
+                        remark += "温度值2(7:30)超出范围";
+                    }
+                }
+                else
+                {
+                    resultData.put("temp2", "");
+                }
+                if(!"-100".equals(temp3Txt))
+                {
+                    double temp3 = Double.parseDouble(resultData.get("temp3") + "");
+                    if(temp3 < 21 || temp3 > 25)
+                    {
+                        remark += "温度值3(13:30)超出范围";
+                    }
+                }
+                else
+                {
+                    resultData.put("temp3", "");
+                }
+                if(!"-100".equals(temp4Txt))
+                {
+                    double temp4 = Double.parseDouble(resultData.get("temp4") + "");
+                    if(temp4 < 21 || temp4 > 25)
+                    {
+                        remark += "温度值4(19:30)超出范围";
+                    }
+                }
+                else
+                {
+                    resultData.put("temp4", "");
+                }
+                String humidity1Txt = resultData.get("humidity1") + "";
+                String humidity2Txt = resultData.get("humidity2") + "";
+                String humidity3Txt = resultData.get("humidity3") + "";
+                String humidity4Txt = resultData.get("humidity4") + "";
 
-                if(temp1 < 21 || temp1 > 25)
+                if(!"-100".equals(humidity1Txt))
                 {
-                    remark += "温度值1(1:30)超出范围";
+                    double humidity1 = Double.parseDouble(resultData.get("humidity1") + "");
+                    if(humidity1 < 40 || humidity1 > 60)
+                    {
+                        remark += "湿度值1(1:30)超出范围";
+                    }
                 }
-                if(temp2 < 21 || temp2 > 25)
+                else
                 {
-                    remark += "温度值2(7:30)超出范围";
+                    resultData.put("humidity1", "");
                 }
-                if(temp3 < 21 || temp3 > 25)
+                if(!"-100".equals(humidity2Txt))
                 {
-                    remark += "温度值3(13:30)超出范围";
+                    double humidity2 = Double.parseDouble(resultData.get("humidity2") + "");
+                    if(humidity2 < 40 || humidity2 > 60)
+                    {
+                        remark += "湿度值2(7:30)超出范围";
+                    }
                 }
-                if(temp4 < 21 || temp4 > 25)
+                else
                 {
-                    remark += "温度值4(19:30)超出范围";
+                    resultData.put("humidity2", "");
                 }
-
-                if(humidity1 < 40 || humidity1 > 60)
+                if(!"-100".equals(humidity3Txt))
                 {
-                    remark += "湿度值1(1:30)超出范围";
+                    double humidity3 = Double.parseDouble(resultData.get("humidity3") + "");
+                    if(humidity3 < 40 || humidity3 > 60)
+                    {
+                        remark += "湿度值3(13:30)超出范围";
+                    }
                 }
-                if(humidity2 < 40 || humidity2 > 60)
+                else
                 {
-                    remark += "湿度值2(7:30)超出范围";
+                    resultData.put("humidity3", "");
                 }
-                if(humidity3 < 40 || humidity3 > 60)
+                if(!"-100".equals(humidity4Txt))
                 {
-                    remark += "湿度值3(13:30)超出范围";
+                    double humidity4 = Double.parseDouble(resultData.get("humidity4") + "");
+                    if(humidity4 < 40 || humidity4 > 60)
+                    {
+                        remark += "湿度值4(19:30)超出范围";
+                    }
                 }
-                if(humidity4 < 40 || humidity4 > 60)
+                else
                 {
-                    remark += "湿度值4(19:30)超出范围";
+                    resultData.put("humidity4", "");
                 }
 
                 resultData.put("seq", i+1);
