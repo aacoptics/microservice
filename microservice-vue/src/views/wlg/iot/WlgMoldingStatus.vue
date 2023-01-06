@@ -9,7 +9,7 @@
 
                 <el-select v-model="formParam.machineName"
                            :size="size"
-                           placeholder="请选择机台号">
+                           placeholder="请选择机台号" clearable collapse-tags collapse-tags-tooltip filterable multiple>
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item.machineName"
@@ -36,6 +36,14 @@
                   </template>
                 </el-button>
               </el-form-item>
+              <el-form-item>
+                <el-button type="success"
+                           @click="exportExcel()">导出
+                  <template #icon>
+                    <font-awesome-icon :icon="['fas','download']"/>
+                  </template>
+                </el-button>
+              </el-form-item>
             </el-row>
           </el-form>
         </div>
@@ -53,7 +61,7 @@
 
 <script>
 
-import {getMachineStatus, getMachineName} from "@/api/wlg/iot/moldingMachineParamData";
+import {getMachineStatus, getMachineName, exportMoldingStatusExcel} from "@/api/wlg/iot/moldingMachineParamData";
 import SysTable from "@/components/SysTable";
 
 export default {
@@ -64,8 +72,8 @@ export default {
       columns: [
         {prop: "machineName", label: "机台号", minWidth: 110},
         {prop: "alarmInfo", label: "状态", minWidth: 100},
-        {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
-        {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat},
+        // {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
+        // {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "duration", label: "持续时间", minWidth: 120, formatter: this.formatSeconds}
       ],
       pageRequest: {current: 1, size: 10},
@@ -73,7 +81,7 @@ export default {
       size: 'small',
       machineNameArray: [],
       formParam: {
-        machineName: ''
+        machineName: []
       },
       dateTimePickerValue: [],
       shortcuts: [{
@@ -154,6 +162,21 @@ export default {
     dateTimeFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
     },
+    exportExcel() {
+      let params = {};
+      params.machineName = this.formParam.machineName;
+      params.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
+      params.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
+      exportMoldingStatusExcel(params).then(res => {
+        let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', "模造机状态报表-" + new Date().getTime() + ".xlsx");
+        document.body.appendChild(link);
+        link.click();
+      });
+    }
   },
   mounted() {
     this.getMachineName();

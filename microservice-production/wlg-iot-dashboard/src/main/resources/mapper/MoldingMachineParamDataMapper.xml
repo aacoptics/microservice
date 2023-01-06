@@ -47,4 +47,17 @@
         order by param_name, array_id
     </select>
 
+    <select id="getMoldingStatusData" resultType="Map">
+        select machine_name, status_value as alarm_info, sum(datediff(second , start_time, end_time)) as duration
+        FROM t_wlg_molding_machine_status_data
+        where machine_name in
+        <foreach collection="machineName" separator="," open="(" close=")" item="machine">
+            #{machine}
+        </foreach>
+        and start_time between #{startTime} and #{endTime}
+        and end_time is not null
+        and status_id = 5
+        group by machine_name, status_value
+    </select>
+
 </mapper>

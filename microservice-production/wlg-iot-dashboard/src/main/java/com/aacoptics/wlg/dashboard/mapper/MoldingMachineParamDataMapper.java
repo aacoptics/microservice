@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -25,4 +26,6 @@ public interface MoldingMachineParamDataMapper extends BaseMapper<MoldingMachine
 
     List<MoldingMachineParamData> getMoldingParamName(@Param("machineName") String machineName,
                                                       @Param("waferIds") List<String> waferIds);
+
+    List<Map<String, Object>> getMoldingStatusData(@Param("machineName") List<String> machineName, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 }

@@ -255,3 +255,15 @@ export function downloadExcel(queryForm) {
         responseType: 'blob'
     })
 }
+
+export function exportMoldingStatusExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/exportExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
+    })
+}

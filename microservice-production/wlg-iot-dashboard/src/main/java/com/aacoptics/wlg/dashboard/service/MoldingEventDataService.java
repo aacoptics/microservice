@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface MoldingEventDataService {
     IPage<MoldingEventData> getMachineEvents(String machineName,
@@ -23,7 +24,7 @@ public interface MoldingEventDataService {
                                                 LocalDateTime endTime,
                                                 Page page);
 
-    IPage<MoldingEventData> getMachineStatus(String machineName,
+    IPage<MoldingEventData> getMachineStatus(List<String> machineName,
                                              LocalDateTime startTime,
                                              LocalDateTime endTime,
                                              Page page);
