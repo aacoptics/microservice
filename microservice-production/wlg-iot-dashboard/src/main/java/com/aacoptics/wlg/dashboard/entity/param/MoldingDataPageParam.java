@@ -6,9 +6,8 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Data
-public class MoldingStatusDataParam implements Serializable {
+public class MoldingDataPageParam implements Serializable {
     private List<String> machineName;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -16,4 +15,9 @@ public class MoldingStatusDataParam implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
+
+    private Long current;
+
+    private Long size;
+
 }

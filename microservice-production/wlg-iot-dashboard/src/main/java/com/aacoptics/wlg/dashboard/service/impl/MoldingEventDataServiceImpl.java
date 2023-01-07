@@ -2,6 +2,7 @@ package com.aacoptics.wlg.dashboard.service.impl;
 
 import com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData;
 import com.aacoptics.wlg.dashboard.entity.po.MoldingEventData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMK4Data;
 import com.aacoptics.wlg.dashboard.mapper.MoldingAbnormalDataMapper;
 import com.aacoptics.wlg.dashboard.mapper.MoldingEventDataMapper;
 import com.aacoptics.wlg.dashboard.service.MoldingEventDataService;
@@ -51,6 +52,11 @@ public class MoldingEventDataServiceImpl extends ServiceImpl<MoldingEventDataMap
                                                     LocalDateTime endTime,
                                                     Page page) {
         return moldingEventDataMapper.getMachineStatus(page, machineName, startTime, endTime);
+    }
+
+    @Override
+    public IPage<MoldingMK4Data> getMoldingMK4Data(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime, Page page) {
+        return moldingEventDataMapper.getMoldingMK4Data(page, machineName, startTime, endTime);
     }
 
 

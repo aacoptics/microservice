@@ -2,6 +2,7 @@ package com.aacoptics.wlg.dashboard.mapper;
 
 
 import com.aacoptics.wlg.dashboard.entity.po.MoldingEventData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMK4Data;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,4 +28,8 @@ public interface MoldingEventDataMapper extends BaseMapper<MoldingEventData> {
     IPage<MoldingEventData> getMachineStatus(Page page, @Param("machineName") List<String> machineName,
                                              @Param("startTime") LocalDateTime startTime,
                                              @Param("endTime") LocalDateTime endTime);
+
+    IPage<MoldingMK4Data> getMoldingMK4Data(Page page, @Param("machineName") List<String> machineName,
+                                            @Param("startTime") LocalDateTime startTime,
+                                            @Param("endTime") LocalDateTime endTime);
 }

@@ -66,4 +66,36 @@
         group by status_value, machine_name
     </select>
 
+    <select id="getMoldingMK4Data" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingMK4Data">
+        select EquipmentName equipmentName, BatchId batchId, RecipeName recipeName, WaferType waferType, LogFileStartTime logFileStartTime,
+               Ph1_UpHeatingRateSetpoint ph1UpHeatingRateSetPoint, Ph1_LowHeatingRateSetpoint ph1LowHeatingRateSetPoint, Ph1_LowHeatingRateSetpoint ph1LowHeatingRateSetPoint,
+               Ph1_Position ph1Position, Ph1_Pressure ph1Pressure, Ph2_TempUpSetpoint ph2TempUpSetPoint, Ph2_TempLowSetpoint ph2TempLowSetPoint,
+               Ph2_Position ph2Position, Ph2_ForceMax ph2ForceMax, Ph2_ForceMin ph2ForceMin, Ph3_TempUpSetpoint ph3TempUpSetPoint,
+               Ph3_TempLowSetpoint ph3TempLowSetPoint, Ph3_Pressure ph3Pressure, Ph3_PumpTime ph3PumpTime, Ph3_TempUpActual ph3TempUpActual,
+               Ph3_TempLowActual ph3TempLowActual, Ph4_Pressure ph4Pressure, Ph4_TempUpSetpoint ph4TempUpSetPoint, Ph4_TempLowSetpoint ph4TempLowSetPoint,
+               Ph4_TempUpActualMax ph4TempUpActualMax, Ph4_TempUpActualMin ph4TempUpActualMin, Ph4_TempLowActualMax ph4TempLowActualMax,
+               Ph4_TempLowActualMin ph4TempLowActualMin, Ph4_SoakingTime ph4SoakingTime, Ph5_Position ph5Position, Ph5_ForceMax ph5ForceMax,
+               Ph5_ForceMin ph5ForceMin, Ph6_TempUpSetpoint ph6TempUpSetPoint, Ph6_TempLowSetpoint ph6TempLowSetPoint, Ph6_FRaisingRate ph6FRaisingRate,
+               Ph7_TempUpSetpoint ph7TempUpSetPoint, Ph7_TempLowSetpoint ph7TempLowSetPoint, Ph7_TempUpActualMax ph7TempUpActualMax,
+               Ph7_TempUpActualMin ph7TempUpActualMin, Ph7_TempLowActualMax ph7TempLowActualMax, Ph7_TempLowActualMin ph7TempLowActualMin,
+               Ph7_Force ph7Force, Ph7_Position ph7Position, Ph7_Pressure ph7Pressure, Ph7_MoldingTime ph7MoldingTime,
+               Ph8_UpCoolingRateSetpoint ph8UpCoolingRateSetPoint, Ph8_LowCoolingRateSetpoint ph8LowCoolingRateSetPoint,
+               Ph8_Force ph8Force, Ph8_Pressure ph8Pressure, Ph8_TempUpActual ph8TempUpActual, Ph8_TempLowActual ph8TempLowActual,
+               Ph8_TempUpLow ph8TempUpLow, Ph9_UpCoolingRateSetpoint ph9UpCoolingRateSetPoint, Ph9_LowCoolingRateSetpoint ph9LowCoolingRateSetPoint,
+               Ph9_TempUpActual ph9TempUpActual, Ph9_TempLowActual ph9TempLowActual, Ph9_TempUpLow ph9TempUpLow, Ph10_TempUpActual_30N ph10TempUpActual30N,
+               Ph10_TempLowActual_30N ph10TempLowActual30N, Ph10_TempUpLow_30N ph10TempUpLow30N, Ph10_ForceNegative ph10ForceNegative, Ph10_TimeNegative ph10TimeNegative,
+               Ph10_TempUpActual_Negative ph10TempUpActualNegative, Ph10_TempLowActual_Negative ph10TempLowActualNegative, Ph10_TempUpLow_Negative ph10TempUpLowNegative,
+               Ph11_Position ph11Position, Ph12_UpCoolingRateSetpoint p12UpCoolingRateSetPoint, Ph12_LowCoolingRateSetpoint p12LowCoolingRateSetPoint,
+               Ph12_TempLowActual p12TempLowActual, Ph12_PickPlaceTempActual ph12PickPlaceTempActual, Ph12_ExchangeTempActual ph12ExchangeTempActual,
+               TempUpActual_Fp1 tempUpActualFp1, TempLowActual_Fp1 tempLowActualFp1, TempUpLow_Fp1 tempUpLowFp1, TempUpheatbedAverage_Fp1 tempUpHeatBedAverageFp1,
+               TempLowheatbedAverage_Fp1 tempLowHeatBedAverageFp1, TempUpActual_Fp2 tempUpActualFp2, TempLowActual_Fp2 tempLowActualFp2, TempUpLow_Fp2 tempUpLowFp2,
+               TempUpheatbedAverage_Fp2 tempUpHeatBedAverageFp2, TempLowheatbedAverage_Fp2 tempLowHeatBedAverageFp2, TempUpActual_Fp3 tempUpActualFp3,
+               TempLowActual_Fp3 tempLowActualFp3, TempUpLow_Fp3 tempUpLowFp3, TempUpheatbedAverage_Fp3 tempUpHeatBedAverageFp3, TempLowheatbedAverage_Fp3 tempLowHeatBedAverageFp3
+        from t_wlg_molding_mk4_detail_data where EquipmentName in
+        <foreach collection="machineName" separator="," open="(" close=")" item="machine">
+            #{machine}
+        </foreach>
+        and LogFileStartTime between #{startTime} and #{endTime}
+    </select>
+
 </mapper>
