@@ -278,3 +278,26 @@ export function getMachineStatus(queryForm) {
         data: queryForm,
     })
 }
+
+export function getMoldingMK4Data(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMoldingMK4Data',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+    })
+}
+
+export function exportMoldingMK4DataExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/exportMoldingMK4DataExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
+    })
+}

@@ -28,4 +28,6 @@ public interface MoldingMachineParamDataMapper extends BaseMapper<MoldingMachine
                                                       @Param("waferIds") List<String> waferIds);
 
     List<Map<String, Object>> getMoldingStatusData(@Param("machineName") List<String> machineName, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+
+    List<Map<String, Object>> getMoldingMk4ExportData(@Param("machineName") List<String> machineName, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
 }

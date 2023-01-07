@@ -2,6 +2,7 @@ package com.aacoptics.wlg.dashboard.service;
 
 import com.aacoptics.wlg.dashboard.entity.po.MoldingAbnormalData;
 import com.aacoptics.wlg.dashboard.entity.po.MoldingEventData;
+import com.aacoptics.wlg.dashboard.entity.po.MoldingMK4Data;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -28,4 +29,6 @@ public interface MoldingEventDataService {
                                              LocalDateTime startTime,
                                              LocalDateTime endTime,
                                              Page page);
+
+    IPage<MoldingMK4Data> getMoldingMK4Data(List<String> machineNameList, LocalDateTime startTime, LocalDateTime endTime, Page page);
 }
