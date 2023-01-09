@@ -154,7 +154,7 @@ public class TemphumidityServiceImpl extends ServiceImpl<TemphumidityMapper, Tem
         memberMap.put("6", memberConfig.getSix());
         memberMap.put("7", memberConfig.getSeven());
 
-        for(int i=0;i<100;i++)
+        for(int i=0;i<200;i++)
         {
             List<TemphumidityInfo> rawDataList = temphumidityMapper.getRawTempHumidityData();
             if(rawDataList == null || rawDataList.isEmpty())
