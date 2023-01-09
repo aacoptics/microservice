@@ -51,7 +51,7 @@ public class FeishuEventController {
         JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
         JSONObject msgJson = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), JSONObject.class);
 
-        if(msgJson.containsKey("event") && msgJson.getJSONObject("event").getString("eventType").equals("approval_instance")){
+        if(msgJson.containsKey("event") && msgJson.getJSONObject("event").getString("type").equals("approval_instance")){
             log.info(JSONObject.toJSONString(msgJson));
             return Result.success();
         }
