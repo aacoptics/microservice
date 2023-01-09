@@ -62,7 +62,7 @@
 
     <select id="getMoldingMk4ExportData" resultType="Map">
         select EquipmentName equipmentName, BatchId batchId, RecipeName recipeName, WaferType waferType, LogFileStartTime logFileStartTime,
-        Ph1_UpHeatingRateSetpoint ph1UpHeatingRateSetPoint, Ph1_LowHeatingRateSetpoint ph1LowHeatingRateSetPoint, Ph1_LowHeatingRateSetpoint ph1LowHeatingRateSetPoint,
+        Ph1_UpHeatingRateSetpoint ph1UpHeatingRateSetPoint, Ph1_LowHeatingRateSetpoint ph1LowHeatingRateSetPoint,
         Ph1_Position ph1Position, Ph1_Pressure ph1Pressure, Ph2_TempUpSetpoint ph2TempUpSetPoint, Ph2_TempLowSetpoint ph2TempLowSetPoint,
         Ph2_Position ph2Position, Ph2_ForceMax ph2ForceMax, Ph2_ForceMin ph2ForceMin, Ph3_TempUpSetpoint ph3TempUpSetPoint,
         Ph3_TempLowSetpoint ph3TempLowSetPoint, Ph3_Pressure ph3Pressure, Ph3_PumpTime ph3PumpTime, Ph3_TempUpActual ph3TempUpActual,
