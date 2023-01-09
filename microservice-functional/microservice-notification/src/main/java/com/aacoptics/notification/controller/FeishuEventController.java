@@ -50,34 +50,12 @@ public class FeishuEventController {
             throw new RuntimeException("签名不一致！");
         JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
         JSONObject msgJson = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), JSONObject.class);
-        FeishuTaskEvent feishuTaskEvent = JSONObject.parseObject(msgJson.toJSONString(), FeishuTaskEvent.class);
 
-        boolean res;
-        if (StrUtil.isBlank(feishuTaskEvent.getEvent().getComment_id())) {
-            res = feishuTaskInfoService.updateOrInsert(feishuTaskEvent);
-        } else {
-            res = feishuTaskCommentInfoService.add(feishuTaskEvent);
+        if(msgJson.containsKey("event") && msgJson.getJSONObject("event").getString("eventType").equals("approval_instance")){
+            log.info(JSONObject.toJSONString(msgJson));
+            return Result.success();
         }
 
-        if (!res)
-            throw new RuntimeException("保存失败！");
-        log.info(JSONObject.toJSONString(feishuTaskEvent));
-        return Result.success();
-    }
-
-    @ApiOperation(value = "接收飞书任务信息", notes = "接收飞书任务信息")
-    @ApiImplicitParam(name = "jsonObject", value = "消息JSON", required = true)
-    @PostMapping(value = "/receiveTaskInfo")
-    public Result receiveApproveInfo(@RequestBody String bodyString,
-                                  @RequestHeader("X-Lark-Request-Timestamp") String timeStamp,
-                                  @RequestHeader("X-Lark-Request-Nonce") String nonce,
-                                  @RequestHeader("X-Lark-Signature") String sign) throws Exception {
-        Decrypt d = new Decrypt(feishuAppKeyConfig.getEncryptKey());
-        String signature = d.calculateSignature(timeStamp, nonce, feishuAppKeyConfig.getEncryptKey(), bodyString);
-        if (!signature.equals(sign))
-            throw new RuntimeException("签名不一致！");
-        JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
-        JSONObject msgJson = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), JSONObject.class);
         FeishuTaskEvent feishuTaskEvent = JSONObject.parseObject(msgJson.toJSONString(), FeishuTaskEvent.class);
 
         boolean res;
