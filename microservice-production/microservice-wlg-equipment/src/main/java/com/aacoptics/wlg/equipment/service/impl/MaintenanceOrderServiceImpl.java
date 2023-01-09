@@ -243,6 +243,8 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
 
                 this.add(maintenanceOrder);
 
+                equipment.setLastMaintenanceDatetime(maintenanceDate.atStartOfDay());
+                equipmentService.update(equipment);
             }
         }
         log.info("完成生成设备保养工单");
