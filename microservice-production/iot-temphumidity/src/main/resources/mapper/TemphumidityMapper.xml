@@ -133,43 +133,43 @@
         select A.building_no as buildingNo, A.floor_no as floorNo, A.work_date as workDate
               ,  ISNULL(B.temp1, '-100') AS temp1, ISNULL(CC.temp2, '-100') AS temp2, ISNULL(D.temp3, '-100') AS temp3, ISNULL(E.temp4, '-100') AS temp4
               ,  ISNULL(B.humidity1, '-100') AS humidity1, ISNULL(CC.humidity2, '-100') AS humidity2, ISNULL(D.humidity3, '-100') AS humidity3, ISNULL(E.humidity4, '-100') AS humidity4
-        FROM ( SELECT TOP 1 * FROM z_temphumidity_data WHERE 1=1
+        FROM ( SELECT building_no, floor_no, work_date, dev_id FROM z_temphumidity_data WHERE 1=1
         AND building_no = #{buildingNo}
         AND floor_no = #{floorNo}
         AND work_date >= #{startDate}
-        AND work_date <![CDATA[ <= ]]>  #{endDate} ) A
+        AND work_date <![CDATA[ <= ]]>  #{endDate} GROUP BY building_no, floor_no, work_date, dev_id ) A
         LEFT JOIN
-         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp1, humidity as humidity1
-            FROM z_temphumidity_data WHERE collect_time LIKE '%01:30:%'
+         (   SELECT * FROM (SELECT building_no, floor_no, work_date, temperature as temp1, humidity as humidity1, collect_time, ROW_NUMBER() over (partition by building_no,floor_no,work_date ORDER BY collect_time ASC) AS RN
+            FROM z_temphumidity_data
+            WHERE collect_time LIKE '%01:30:%'
             AND building_no = #{buildingNo}
             AND floor_no = #{floorNo}
             AND work_date >= #{startDate}
-            AND work_date <![CDATA[ <= ]]>  #{endDate}
-        order by collect_time asc) B ON A.building_no = B.building_no AND A.floor_no = B.floor_no AND A.work_date = B.work_date
+            AND work_date <![CDATA[ <= ]]>  #{endDate} ) B0 WHERE RN = 1 ) B ON A.building_no = B.building_no AND A.floor_no = B.floor_no AND A.work_date = B.work_date
         LEFT JOIN
-         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp2, humidity as humidity2
-            FROM z_temphumidity_data WHERE collect_time LIKE '%07:30:%'
+         (   SELECT * FROM (SELECT building_no, floor_no, work_date, temperature as temp2, humidity as humidity2, collect_time, ROW_NUMBER() over (partition by building_no,floor_no,work_date ORDER BY collect_time ASC) AS RN
+            FROM z_temphumidity_data
+            WHERE collect_time LIKE '%07:30:%'
             AND building_no = #{buildingNo}
             AND floor_no = #{floorNo}
             AND work_date >= #{startDate}
-            AND work_date <![CDATA[ <= ]]>  #{endDate}
-        order by collect_time asc) CC ON A.building_no = CC.building_no AND A.floor_no = CC.floor_no AND A.work_date = CC.work_date
+            AND work_date <![CDATA[ <= ]]>  #{endDate} ) C0 WHERE RN = 1 ) CC ON A.building_no = CC.building_no AND A.floor_no = CC.floor_no AND A.work_date = CC.work_date
         LEFT JOIN
-         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp3, humidity as humidity3
-            FROM z_temphumidity_data WHERE collect_time LIKE '%13:30:%'
+         (   SELECT * FROM (SELECT building_no, floor_no, work_date, temperature as temp3, humidity as humidity3, collect_time, ROW_NUMBER() over (partition by building_no,floor_no,work_date ORDER BY collect_time ASC) AS RN
+            FROM z_temphumidity_data
+            WHERE collect_time LIKE '%13:30:%'
             AND building_no = #{buildingNo}
             AND floor_no = #{floorNo}
             AND work_date >= #{startDate}
-            AND work_date <![CDATA[ <= ]]>  #{endDate}
-        order by collect_time asc) D ON A.building_no = D.building_no AND A.floor_no = D.floor_no AND A.work_date = D.work_date
+            AND work_date <![CDATA[ <= ]]>  #{endDate} ) D0 WHERE RN = 1 ) D ON A.building_no = D.building_no AND A.floor_no = D.floor_no AND A.work_date = D.work_date
         LEFT JOIN
-         (  SELECT top 1 building_no, floor_no, work_date, temperature as temp4, humidity as humidity4
-            FROM z_temphumidity_data WHERE collect_time LIKE '%19:30:%'
+         (  SELECT * FROM (SELECT building_no, floor_no, work_date, temperature as temp4, humidity as humidity4, collect_time, ROW_NUMBER() over (partition by building_no,floor_no,work_date ORDER BY collect_time ASC) AS RN
+            FROM z_temphumidity_data
+            WHERE collect_time LIKE '%19:30:%'
             AND building_no = #{buildingNo}
             AND floor_no = #{floorNo}
             AND work_date >= #{startDate}
-            AND work_date <![CDATA[ <= ]]>  #{endDate}
-        order by collect_time asc) E ON A.building_no = E.building_no AND A.floor_no = E.floor_no AND A.work_date = E.work_date
+            AND work_date <![CDATA[ <= ]]>  #{endDate} ) E0 WHERE RN = 1 ) E ON A.building_no = E.building_no AND A.floor_no = E.floor_no AND A.work_date = E.work_date
         ORDER BY A.work_date ASC, A.dev_id ASC
     </select>
 </mapper>
