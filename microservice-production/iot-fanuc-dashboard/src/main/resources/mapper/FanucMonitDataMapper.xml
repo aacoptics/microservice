@@ -14,4 +14,14 @@
         where inde = 1
         order by monit_mc_name
     </select>
+
+
+    <select id="getAnalysisData" resultType="com.aacoptics.fanuc.dashboard.entity.FanucMonitData">
+        select *
+          FROM z_fanuc_monit_data
+          where dbCreateTime between #{startTime} and #{endTime}
+          and monit_mc_name = #{machineName}
+        order by monit_mc_name
+    </select>
+
 </mapper>
