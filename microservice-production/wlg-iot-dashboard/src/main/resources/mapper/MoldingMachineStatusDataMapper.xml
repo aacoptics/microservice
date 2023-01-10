@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.wlg.dashboard.mapper.MoldingMachineStatusDataMapper">
+
+    <select id="getTopOneMachineStatusData" resultType="com.aacoptics.wlg.dashboard.entity.po.MoldingMachineStatusData">
+        SELECT top 1 id, site, machine_name, status_id, status_value, start_time, end_time, create_time
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
+        where machine_name = #{machineName}
+        and status_id = 5
+        order by start_time desc
+    </select>
+
+    <select id="getMachineActivatedTime" resultType="long">
+        SELECT isnull(sum(datediff(SS, start_time, end_time)), 0)
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
+        where machine_name = #{machineName}
+        and status_id = 5
+        and machine_name = #{machineName}
+        and status_value = 'ACTIVATED'
+        and start_time >= #{startTime}
+    </select>
+
+    <select id="getMachineStatusSummary" resultType="map">
+            select status_value, count(1) status_count
+            from t_wlg_molding_machine_status_data
+            where  status_id = 5
+              and start_time >= #{startTime}
+              and start_time &lt; #{endTime}
+            group by status_value
+            order by status_value
+    </select>
+
+</mapper>
