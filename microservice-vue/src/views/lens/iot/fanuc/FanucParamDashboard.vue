@@ -56,7 +56,7 @@
                 </el-select>
               </el-form-item>
             </el-row>
-            
+
           </el-form>
 
           <el-form :inline="true" :size="size">
@@ -77,7 +77,7 @@
             <el-card class="box-card" style="margin-top: 10px; width:100%">
                    <div :id="val"
                         style="margin-top: 5px;height: 400px;  width: 100%"></div>
-  
+
           </el-card>
         </el-row>
 
@@ -94,14 +94,14 @@ import * as echarts from 'echarts';
 export default {
   name: "fanucParamDashboard",
   computed: {
-    
+
   },
   data() {
     return {
       size: 'default',
       machineNameArray: [],
 
-      
+
       analysisData: [],
       queryFormRules: {
         machineName: [{required: true, message: "请选择机台号", trigger: "change"}],
@@ -196,7 +196,7 @@ export default {
           else{
             this.paramNameArray.forEach(item => {
               this.drawLineChart(item.key);
-            })            
+            })
           }
         }
       })
@@ -262,6 +262,7 @@ export default {
           yAxis: {
             name: '值',
             type: 'value',
+            scale: true
           },
           // yAxis: yAxisList,
           grid: {
