@@ -189,6 +189,13 @@ public class SendMessageServiceImpl implements SendMessageService {
                             } else {
                                 log.error("推送订阅消息失败！");
                             }
+
+//                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+//                                JSONObject batchSendFileResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+//
+//                                if (batchSendFileResult.get("code", Integer.class) != 0)
+//                                    log.error("推送订阅消息文件失败！");
+//                            }
                         }
                         //发送订阅信息结束
                     }
