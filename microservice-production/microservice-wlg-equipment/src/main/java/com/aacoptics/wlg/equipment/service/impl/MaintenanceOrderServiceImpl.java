@@ -209,7 +209,15 @@ public class MaintenanceOrderServiceImpl extends ServiceImpl<MaintenanceOrderMap
                 {
                     continue;
                 }
-                LocalDate maintenanceDate = lastMaintenanceDatetime.toLocalDate().plusWeeks(maintenancePeriod);
+
+                LocalDate maintenanceDate = null;
+                if(lastMaintenanceDatetime != null) {
+                    maintenanceDate = lastMaintenanceDatetime.toLocalDate().plusWeeks(maintenancePeriod);
+                }
+                else
+                {
+                    maintenanceDate = currentDate.plusWeeks(maintenancePeriod);
+                }
 
                 MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
                 maintenanceOrder.setOrderNumber(this.getNextOrderNumber(currentDateStr));
