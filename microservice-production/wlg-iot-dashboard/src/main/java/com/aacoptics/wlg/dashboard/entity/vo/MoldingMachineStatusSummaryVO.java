@@ -18,9 +18,9 @@ public class MoldingMachineStatusSummaryVO {
 
     private List<Map<String, Object>> currentOutput;
 
-    private List<Map<String, Object>> equipStatus;
+    private Map<String, Integer> equipStatus;
 
-    private List<Map<String, Object>> environment;
+    private Map<String, Integer> environment;
 
     private String oee;
 

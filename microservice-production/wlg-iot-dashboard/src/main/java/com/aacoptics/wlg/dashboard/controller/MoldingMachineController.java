@@ -84,7 +84,7 @@ public class MoldingMachineController {
 
     @ApiOperation(value = "获取机台状态汇总信息", notes = "获取机台状态汇总信息")
     @GetMapping(value = "/getMachineStatusSummaryInfo")
-    public Result getMachineStatusSummaryInfo(@RequestParam(required = true) String summaryDate) {
-        return Result.success(moldingMachineService.getMachineStatusSummaryInfo(summaryDate));
+    public Result getMachineStatusSummaryInfo() {
+        return Result.success(moldingMachineService.getMachineStatusSummaryInfo());
     }
 }

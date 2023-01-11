@@ -23,8 +23,7 @@ public interface MoldingMachineService {
     /**
      * 获取机台状态汇总信息
      *
-     * @param summaryDate 日期
      * @return
      */
-    MoldingMachineStatusSummaryVO getMachineStatusSummaryInfo(String summaryDate);
+    MoldingMachineStatusSummaryVO getMachineStatusSummaryInfo();
 }

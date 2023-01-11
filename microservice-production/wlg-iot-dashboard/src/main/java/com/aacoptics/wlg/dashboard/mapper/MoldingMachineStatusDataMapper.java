@@ -25,14 +25,29 @@ public interface MoldingMachineStatusDataMapper extends BaseMapper<MoldingMachin
 
 
     /**
-     * 获取ACTIVATED 总时长
+     * 获取ACTIVATED总时长
      * @param machineName
      * @return
      */
     Long getMachineActivatedTime(@Param("machineName") String machineName, @Param("startTime") LocalDateTime startTime);
 
     /**
+     * 获取ACTIVATED总时长
+     * @param startTime
+     * @return
+     */
+    Long getMachineActivatedTotalTime(@Param("startTime") LocalDateTime startTime);
+
+    /**
+     * 获取ACTIVATED总机台数
+     *
+     * @param startTime
+     * @return
+     */
+    Long getMachineActivatedCount(@Param("startTime") LocalDateTime startTime);
+
+    /**
      * 统计设备状态数量
      */
-    List<Map<String, Object>> getMachineStatusSummary(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime);
+    List<Map<String, Object>> getMachineStatusSummary();
 }
