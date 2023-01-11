@@ -617,7 +617,7 @@ export default {
             }
           })
           .catch(() => {
-            this.$message({message: '操作失败', type: 'error'})
+
           })
     },
     IsStarContent(row){
