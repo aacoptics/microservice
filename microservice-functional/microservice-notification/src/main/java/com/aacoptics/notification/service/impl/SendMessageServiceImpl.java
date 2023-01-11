@@ -189,6 +189,15 @@ public class SendMessageServiceImpl implements SendMessageService {
                             } else {
                                 log.error("推送订阅消息失败！");
                             }
+                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                                for (String subscriptionUserId : subscriptionUserIds) {
+                                    JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, subscriptionUserId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+                                    if (resultByFile.get("code", Integer.class) != 0)
+                                        throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                                    logFeishuMsg(resultByFile, messageBatch);
+                                }
+                            }
 
 //                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
 //                                JSONObject batchSendFileResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
