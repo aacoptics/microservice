@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aacoptics.notification.mapper.NotificationJobSubscriptionMapper">
-    <select id="getSubscriptionUsers" resultType="java.util.List">
+    <select id="getSubscriptionUsers" resultType="java.lang.String">
         SELECT a.subscription_person
         FROM notification_job_subscription a
                  join notification_job_info b

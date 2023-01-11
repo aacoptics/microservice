@@ -139,7 +139,7 @@ public class FeishuServiceImpl implements FeishuService {
         if (StrUtil.isEmpty(accessToken)) return null;
         JSONObject jsonObject = JSONUtil.createObj()
                 .set("user_ids", receiveId)
-                .set("content", JSONUtil.toJsonStr(message))
+                .set("card", message)
                 .set("msg_type", messageType);
         final JSONObject result = feishuApiProvider.fetchBatchSendMessageKey(accessToken, jsonObject);
         final String throwable = result.get("Throwable", String.class);
