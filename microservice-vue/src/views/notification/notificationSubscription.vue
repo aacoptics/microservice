@@ -432,15 +432,14 @@ export default {
       ],
       columns: [
         {prop: "productLine", label: "产品线", minWidth: 80},
-        {prop: "planKey", label: "任务名", minWidth: 110},
-        {prop: "jobDesc", label: "描述", minWidth: 100},
+        {prop: "planKey", label: "消息Key", minWidth: 110},
+        {prop: "jobDesc", label: "消息名称", minWidth: 100},
+        {prop: "remark", label: "消息描述", minWidth: 100},
+        {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat},
         {prop: "executeTime", label: "执行时间", minWidth: 100},
-        {prop: "remark", label: "备注", minWidth: 100},
         {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat},
         {prop: "responsiblePersonName", label: "审批人", minWidth: 80},
-        {prop: "author", label: "IT责任人", minWidth: 80},
-        {prop: "scheduleType", label: "调度类型", minWidth: 80},
-        {prop: "scheduleConf", label: "调度Cron", minWidth: 100}
+        {prop: "author", label: "IT责任人", minWidth: 80}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -454,8 +453,8 @@ export default {
         productLine: [{required: true, message: '请选择产品线', trigger: 'change'}],
         responsiblePerson: [{required: true, message: '请选择责任人', trigger: 'change'}],
         onlineTime: [{required: true, message: '请选择上线时间', trigger: 'change'}],
-        jobDesc: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
-        planKey: [{required: true, message: '请输入任务Key', trigger: 'blur'}],
+        jobDesc: [{required: true, message: '请输入消息名称', trigger: 'blur'}],
+        planKey: [{required: true, message: '请输入消息Key', trigger: 'blur'}],
         scheduleType: [{required: true, message: '请选择调度类型', trigger: 'change'}],
         scheduleConf: [{required: true, message: '请输入任务调度时间', trigger: 'blur'}],
         executeTime: [{required: true, message: '请描述执行时间，如：每天10点', trigger: 'blur'}],
@@ -500,6 +499,7 @@ export default {
       },
       searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
+      environmentOption: [{"title": "正式", "value": "PROD"}, {"title": "测试", "value": "QAS"}],
       productionLineOption: [
         {
           value: "手机LENS"
@@ -917,6 +917,18 @@ export default {
     dateTimeFormat: function (row, column) {
       if (row[column.property])
         return this.$moment(row[column.property]).format("YYYY/MM/DD");
+      else
+        return ''
+    },
+    environmentFormat: function (row, column) {
+      if (row[column.property]){
+        const newArr = this.environmentOption.filter(function (p) {
+          return p.value === row[column.property];
+        });
+        if(newArr.length > 0)
+          return newArr[0].title
+        else return ''
+      }
       else
         return ''
     },
