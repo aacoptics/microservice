@@ -142,4 +142,7 @@ public class XxlJobInfo implements Serializable {
 
     @TableField(exist = false)
     private String jobEnvironment;
+
+    @TableField(exist = false)
+    private String notificationNo;
 }

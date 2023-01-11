@@ -179,6 +179,16 @@ public class SendMessageServiceImpl implements SendMessageService {
                             }
                         }
 
+                        if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
+                            JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                                    chatId, FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
+
+                            if (fileResult.get("code", Integer.class) != 0)
+                                throw new BusinessException("推送云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                            logFeishuMsg(fileResult, messageBatch);
+                        }
+
                         //发送订阅信息
                         List<String> subscriptionUserIds = notificationJobSubscriptionService.listSubscriptionUsers(notificationEntity.getPlanKey());
                         if (subscriptionUserIds.size() > 0) {
@@ -193,10 +203,16 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 for (String subscriptionUserId : subscriptionUserIds) {
                                     JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, subscriptionUserId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
                                     if (resultByFile.get("code", Integer.class) != 0)
-                                        throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
-
-                                    logFeishuMsg(resultByFile, messageBatch);
+                                        log.error("推送订阅EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
                                 }
+                            }
+
+                            if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
+                                JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                                        chatId, FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
+
+                                if (fileResult.get("code", Integer.class) != 0)
+                                    log.error("推送订阅云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
 
 //                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
@@ -315,13 +331,19 @@ public class SendMessageServiceImpl implements SendMessageService {
                 }
 
                 if (!StrUtil.isBlank(messageValue.getIsUrl()) && messageValue.getIsUrl().equals("Y")) {
-                    markdownGroupMessage.addContent("[查看详情](" + msgContent + ")");
+                    if (StrUtil.isBlank(messageValue.getIsUrlName()))
+                        markdownGroupMessage.addContent("[查看详情](" + msgContent + ")");
+                    else
+                        markdownGroupMessage.addContent("[" + messageValue.getIsUrlName() + "](" + msgContent + ")");
                 } else {
                     markdownGroupMessage.addContent(msgContent);
                 }
             }
             if (!StrUtil.isBlank(messageBatch.getLinkUrl())) {
-                markdownGroupMessage.addContent("[查看详情](" + messageBatch.getLinkUrl() + ")");
+                if (StrUtil.isBlank(messageBatch.getLinkUrlName()))
+                    markdownGroupMessage.addContent("[查看详情](" + messageBatch.getLinkUrl() + ")");
+                else
+                    markdownGroupMessage.addContent("[" + messageBatch.getLinkUrlName() + "](" + messageBatch.getLinkUrl() + ")");
             }
             return markdownGroupMessage.toString();
         } else {

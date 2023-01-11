@@ -40,6 +40,10 @@ public class UmsContent implements Serializable {
 
     private String linkUrl;
 
+    private String  linkUrlName;
+
+    private String isYunUrl;
+
     private String sendType;
 
     private String userNum;

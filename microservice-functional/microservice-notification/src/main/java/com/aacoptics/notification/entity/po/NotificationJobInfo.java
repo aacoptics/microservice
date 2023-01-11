@@ -43,4 +43,6 @@ public class NotificationJobInfo extends BasePo {
     private String executeTime;
 
     private String jobEnvironment;
+
+    private String notificationNo;
 }
