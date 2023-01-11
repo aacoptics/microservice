@@ -41,4 +41,6 @@ public class NotificationJobInfo extends BasePo {
     private Boolean subscriptionEnabled;
 
     private String executeTime;
+
+    private String jobEnvironment;
 }
