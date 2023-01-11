@@ -37,6 +37,7 @@
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
+                size="small"
                 @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
           <!--          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"-->
@@ -105,8 +106,33 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="任务Key" prop="planKey">
+              <el-form-item label="消息Key" prop="planKey">
                 <el-input v-model="dataForm.planKey" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="消息环境" prop="jobEnvironment">
+                <el-select v-model="dataForm.jobEnvironment" placeholder="请选择">
+                  <el-option
+                      v-for="item in environmentOption"
+                      :key="item.value"
+                      :label="item.title"
+                      :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="上线时间" prop="onlineTime">
+                <el-date-picker
+                    v-model="dataForm.onlineTime"
+                    :editable="false"
+                    placeholder="请选择上线时间"
+                    size="small"
+                    type="date"
+                    value-format="YYYY-MM-DD 00:00:00"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -124,7 +150,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="审批人" prop="responsiblePerson">
+              <el-form-item label="消息责任人（审批人）" prop="responsiblePerson">
                 <el-select ref="select"
                            v-model="dataForm.responsiblePerson"
                            :remote-method="remoteMethod"
@@ -164,7 +190,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="任务描述" prop="jobDesc">
+              <el-form-item label="消息名称" prop="jobDesc">
                 <el-input v-model="dataForm.jobDesc" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
@@ -175,20 +201,9 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="备注" prop="remark">
+            <el-col :span="24">
+              <el-form-item label="消息描述" prop="remark">
                 <el-input v-model="dataForm.remark" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="上线时间" prop="onlineTime">
-                <el-date-picker
-                    v-model="dataForm.onlineTime"
-                    :editable="false"
-                    placeholder="请选择上线时间"
-                    size="small"
-                    type="date"
-                    value-format="YYYY-MM-DD 00:00:00"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -431,15 +446,16 @@ export default {
         }
       ],
       columns: [
-        {prop: "productLine", label: "产品线", minWidth: 80},
-        {prop: "planKey", label: "消息Key", minWidth: 110},
-        {prop: "jobDesc", label: "消息名称", minWidth: 100},
-        {prop: "remark", label: "消息描述", minWidth: 100},
-        {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat},
-        {prop: "executeTime", label: "执行时间", minWidth: 100},
-        {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat},
-        {prop: "responsiblePersonName", label: "审批人", minWidth: 80},
-        {prop: "author", label: "IT责任人", minWidth: 80}
+        {prop: "notificationNo", label: "消息编码", minWidth: 80, sortable: false},
+        {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
+        {prop: "planKey", label: "消息Key", minWidth: 100, sortable: false},
+        {prop: "jobDesc", label: "消息名称", minWidth: 100, sortable: false},
+        {prop: "remark", label: "消息描述", minWidth: 120,  sortable: false},
+        {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
+        {prop: "executeTime", label: "执行时间", minWidth: 100,  sortable: false},
+        {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat, sortable: false},
+        {prop: "responsiblePersonName", label: "消息责任人（审批人）", minWidth: 80,  sortable: false},
+        {prop: "author", label: "IT责任人", minWidth: 80,  sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -450,6 +466,7 @@ export default {
       editLoading: false,
       dataFormRules: {
         jobGroup: [{required: true, message: '请选择执行器', trigger: 'change'}],
+        jobEnvironment: [{required: true, message: '请选择消息环境', trigger: 'change'}],
         productLine: [{required: true, message: '请选择产品线', trigger: 'change'}],
         responsiblePerson: [{required: true, message: '请选择责任人', trigger: 'change'}],
         onlineTime: [{required: true, message: '请选择上线时间', trigger: 'change'}],
@@ -495,7 +512,8 @@ export default {
         itPerson: '',
         jobStatus: true,
         subscriptionEnabled: true,
-        executeTime: ''
+        executeTime: '',
+        jobEnvironment: ''
       },
       searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
@@ -775,7 +793,8 @@ export default {
         itPerson: '',
         jobStatus: true,
         subscriptionEnabled: true,
-        executeTime: ''
+        executeTime: '',
+        jobEnvironment: ''
       }
     },
     // 显示编辑界面

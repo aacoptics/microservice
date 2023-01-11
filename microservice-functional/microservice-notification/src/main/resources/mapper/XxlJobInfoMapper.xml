@@ -47,6 +47,7 @@
              , subscription_enabled
              , execute_time
              , job_environment
+             , notification_no
              , isnull((select approve_status
                          from notification_job_subscription
                          where notification_job_id = a.id
@@ -122,6 +123,7 @@
              , subscription_enabled
              , execute_time
              , job_environment
+             , notification_no
              , isnull((select approve_status
                 from notification_job_subscription
                 where notification_job_id = a.id
@@ -198,6 +200,7 @@
              , subscription_enabled
              , execute_time
              , job_environment
+             , notification_no
              , 1                                       as subscription_status
         from (SELECT id
                    , job_group
