@@ -39,7 +39,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
         xxlJobInfo.setGlueUpdatetime(new Date());
         //return this.save(xxlJobInfo);
         XxlJobResult xxlJobResult = xxlJobProvider.add(xxlJobInfo);
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("添加成功");
         else
             return Result.fail(xxlJobResult);
@@ -49,7 +49,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     public Result update(XxlJobInfo xxlJobInfo) {
         xxlJobInfo.setUpdateTime(new Date());
         XxlJobResult xxlJobResult = xxlJobProvider.update(xxlJobInfo);
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("更新成功");
         else
             return Result.fail(xxlJobResult);
@@ -60,7 +60,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     public Result delete(Integer id) {
         //return this.removeById(id);
         XxlJobResult xxlJobResult = xxlJobProvider.remove(id);
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("删除成功");
         else
             return Result.fail(xxlJobResult);
@@ -70,7 +70,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     public Result start(Integer id) {
         //return this.removeById(id);
         XxlJobResult xxlJobResult = xxlJobProvider.start(id);
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("启动成功");
         else
             return Result.fail(xxlJobResult);
@@ -80,7 +80,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     public Result stop(Integer id) {
         //return this.removeById(id);
         XxlJobResult xxlJobResult = xxlJobProvider.stop(id);
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("停止成功");
         else
             return Result.fail(xxlJobResult);
@@ -94,8 +94,15 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     }
 
     @Override
-    public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo) {
-        return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey());
+    public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo, Integer searchOption, String username) {
+        if (searchOption == 0)
+            return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey(), username);
+        else if (searchOption == 1)
+            return xxlJobInfoMapper.listSubNotificationTask(page, xxlJobInfo.getPlanKey(), username);
+        else if (searchOption == 2)
+            return xxlJobInfoMapper.listSubNotificationTaskByUser(page, xxlJobInfo.getPlanKey(), username);
+        else
+            return new Page<>();
     }
 
     @Override
@@ -103,7 +110,7 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
         XxlJobResult xxlJobResult = xxlJobProvider.triggerJob(triggerJobForm.getJobId(),
                 triggerJobForm.getExecutorParam(),
                 triggerJobForm.getAddressList());
-        if(xxlJobResult.getCode() == 200)
+        if (xxlJobResult.getCode() == 200)
             return Result.success("触发成功");
         else
             return Result.fail(xxlJobResult);

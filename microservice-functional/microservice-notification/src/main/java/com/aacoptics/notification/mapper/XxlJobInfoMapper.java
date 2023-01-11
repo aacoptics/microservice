@@ -18,5 +18,11 @@ public interface XxlJobInfoMapper extends BaseMapper<XxlJobInfo> {
     int maxId();
 
     @DS("msg_db")
-    Page<XxlJobInfo> listNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey);
+    Page<XxlJobInfo> listNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
+
+    @DS("msg_db")
+    Page<XxlJobInfo> listSubNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
+
+    @DS("msg_db")
+    Page<XxlJobInfo> listSubNotificationTaskByUser(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
 }

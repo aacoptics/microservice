@@ -3,11 +3,13 @@ package com.aacoptics.notification.entity.po;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -100,4 +102,41 @@ public class XxlJobInfo implements Serializable {
 
     @TableField(exist = false)
     private String planKey;
+
+    @TableField(exist = false)
+    private Integer xxlJobId;
+
+    @TableField(exist = false)
+    private String productLine;
+
+    @TableField(exist = false)
+    private String remark;
+
+    @TableField(exist = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime onlineTime;
+
+    @TableField(exist = false)
+    private String responsiblePerson;
+
+    @TableField(exist = false)
+    private String responsiblePersonName;
+
+    @TableField(exist = false)
+    private String itPerson;
+
+    @TableField(exist = false)
+    private Boolean jobStatus;
+
+    @TableField(exist = false)
+    private Boolean subscriptionEnabled;
+
+    @TableField(exist = false)
+    private String executeTime;
+
+    @TableField(exist = false)
+    private Integer subscriptionStatus;
+
+    @TableField(exist = false)
+    private Long notificationId;
 }

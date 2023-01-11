@@ -95,6 +95,17 @@ export function queryMessageHistory(conditions) {
     })
 }
 
+export function sendFeishuApprove(param) {
+    return request({
+        url: '/notification-server/notification/sendApproveInfo',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: param
+    })
+}
+
 export function deleteMessage(deleteForm) {
     return request({
         url: '/notification-server/notification/deleteMessage/' + deleteForm.id,
@@ -103,5 +114,31 @@ export function deleteMessage(deleteForm) {
             'Content-Type': 'application/json'
         },
         data: deleteForm
+    })
+}
+
+export function getFeishuUsers(userInfo) {
+    return request({
+        url: '/okr-server/aacOkrFeishu/getFeishuUsers',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            userInfo: userInfo
+        }
+    })
+}
+
+export function getFeishuUser(employeeNo) {
+    return request({
+        url: '/okr-server/aacOkrFeishu/getFeishuUser',
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            employeeNo: employeeNo
+        }
     })
 }

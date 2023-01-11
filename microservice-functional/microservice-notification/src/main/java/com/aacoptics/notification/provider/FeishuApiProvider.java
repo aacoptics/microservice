@@ -49,7 +49,7 @@ public interface FeishuApiProvider {
                                @RequestParam("user_id_type") String userIdType,
                                @RequestBody JSONObject jsonObject);
 
-    @PostMapping(value = "/task/v1/tasks",
+    @PostMapping(value = "/approval/v4/instances",
             headers = {"Content-Type=application/json;charset=UTF-8"})
     JSONObject fetchCreateApproveInstance(@RequestHeader("Authorization") String authorization,
                                @RequestBody JSONObject jsonObject);

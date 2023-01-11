@@ -200,6 +200,18 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
+    public JSONObject createApproveInstance(JSONObject jsonObject) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token失败！");
+        final JSONObject result = feishuApiProvider.fetchCreateApproveInstance(accessToken, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
+    @Override
     public JSONObject getTaskInfo(String taskId) {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken))

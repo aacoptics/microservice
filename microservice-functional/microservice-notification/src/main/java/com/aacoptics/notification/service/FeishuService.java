@@ -63,6 +63,8 @@ public interface FeishuService {
     JSONObject createTask(String userIdType,
                           JSONObject jsonObject);
 
+    JSONObject createApproveInstance(JSONObject jsonObject);
+
     JSONObject getTaskInfo(String taskId);
 
     JSONObject getTaskCommentsInfo(String taskId,
