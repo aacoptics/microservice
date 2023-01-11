@@ -577,7 +577,7 @@ export default {
 
       let msg = ''
       if(row.subscriptionStatus === 3){
-        this.$message({message: '正在审批中！', type: 'success'})
+        this.$message({message: '正在审批中！', type: 'warning'})
         return
       }else if(row.subscriptionStatus === 1){
         msg = '确认取消 ' + row.jobDesc + ' 的订阅吗，取消再订阅需要重新进行审批！'
