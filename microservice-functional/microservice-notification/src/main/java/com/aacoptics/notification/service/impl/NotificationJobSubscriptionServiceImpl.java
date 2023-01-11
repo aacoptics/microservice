@@ -7,6 +7,7 @@ import com.aacoptics.common.core.vo.Result;
 import com.aacoptics.notification.entity.po.FeishuUser;
 import com.aacoptics.notification.entity.po.NotificationJobInfo;
 import com.aacoptics.notification.entity.po.NotificationJobSubscription;
+import com.aacoptics.notification.mapper.FeishuUserMapper;
 import com.aacoptics.notification.mapper.NotificationJobSubscriptionMapper;
 import com.aacoptics.notification.service.FeishuService;
 import com.aacoptics.notification.service.NotificationJobInfoService;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
 import java.sql.Array;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -30,6 +32,11 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
 
     @Resource
     FeishuService feishuService;
+    @Resource
+    NotificationJobSubscriptionMapper notificationJobSubscriptionMapper;
+
+    @Resource
+    FeishuUserMapper feishuUserMapper;
 
     @Override
     public Result add(NotificationJobSubscription notificationJobSubscription) {
@@ -98,6 +105,12 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
         updateWrapper.set("approve_status", status);
         updateWrapper.eq("approve_id", approveId);
         return this.update(updateWrapper);
+    }
+
+    @Override
+    public List<String> listSubscriptionUsers(String planKey){
+        List<String> employeeNos = notificationJobSubscriptionMapper.getSubscriptionUsers(planKey);
+        return feishuUserMapper.getFeishuUserIds(employeeNos);
     }
 
     private JSONObject createApproveJson(String username, String notificationDesc, String approveUsername){

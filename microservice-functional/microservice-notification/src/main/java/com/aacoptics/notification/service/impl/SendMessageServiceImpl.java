@@ -41,6 +41,9 @@ public class SendMessageServiceImpl implements SendMessageService {
     @Resource
     UmsContentFeishuMsgHistoryService umsContentFeishuMsgHistoryService;
 
+    @Resource
+    NotificationJobSubscriptionService notificationJobSubscriptionService;
+
 
     @Resource
     FeishuApi feishuApi;
@@ -61,7 +64,6 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
         if (messageBatches.size() <= 0) {
             String msg = "当前没有需要推送的批次号！";
-            log.error(msg);
             throw new BusinessException(msg);
         }
         for (UmsContent messageBatch : messageBatches) {
@@ -152,7 +154,6 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageJson = JSONUtil.parseObj(message);
                             } catch (Exception err) {
                                 String msg = "解析返回值失败！{" + err.getMessage() + "}";
-                                log.error(msg);
                                 throw new BusinessException(msg);
                             }
                             if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
@@ -162,7 +163,6 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 String errorMsg;
                                 if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getStr("msg"))) {
                                     errorMsg = messageJson.getStr("msg");
-                                    log.error(errorMsg);
                                     throw new BusinessException(errorMsg);
                                 }
                             }
@@ -178,6 +178,19 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
                         }
+
+                        //发送订阅信息
+                        List<String> subscriptionUserIds = notificationJobSubscriptionService.listSubscriptionUsers(notificationEntity.getPlanKey());
+                        if (subscriptionUserIds.size() > 0) {
+                            JSONObject sendSubMsgResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+
+                            if (sendSubMsgResult.get("code", Integer.class) == 0) {
+                                log.info("推送订阅消息成功！");
+                            } else {
+                                log.error("推送订阅消息失败！");
+                            }
+                        }
+                        //发送订阅信息结束
                     }
                 } else if (messageBatch.getSendType().equals(SendMessageService.PERSONAL_MESSAGE)) {
                     if (StrUtil.isBlank(messageBatch.getUserNum()))
@@ -287,7 +300,7 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                 if (!StrUtil.isBlank(messageValue.getIsUrl()) && messageValue.getIsUrl().equals("Y")) {
                     markdownGroupMessage.addContent("[查看详情](" + msgContent + ")");
-                }else{
+                } else {
                     markdownGroupMessage.addContent(msgContent);
                 }
             }

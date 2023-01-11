@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.notification.mapper.NotificationJobSubscriptionMapper">
+    <select id="getSubscriptionUsers" resultType="java.util.List">
+        SELECT a.subscription_person
+        FROM notification_job_subscription a
+                 join notification_job_info b
+                      on a.notification_job_id = b.id
+        where b.plan_key = #{planKey}
+    </select>
+</mapper>
