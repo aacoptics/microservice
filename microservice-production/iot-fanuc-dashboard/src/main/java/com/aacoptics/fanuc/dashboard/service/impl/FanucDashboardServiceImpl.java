@@ -1,10 +1,8 @@
 package com.aacoptics.fanuc.dashboard.service.impl;
 
 import com.aacoptics.fanuc.dashboard.config.MqttConfig;
-import com.aacoptics.fanuc.dashboard.entity.FanucDataEntity;
-import com.aacoptics.fanuc.dashboard.entity.FanucDigitalData;
-import com.aacoptics.fanuc.dashboard.entity.FanucOneHourShotCountData;
-import com.aacoptics.fanuc.dashboard.entity.RealFanucStatusInfo;
+import com.aacoptics.fanuc.dashboard.dao.FanucMonitDataMapper;
+import com.aacoptics.fanuc.dashboard.entity.*;
 import com.aacoptics.fanuc.dashboard.exception.MachineNotFoundException;
 import com.aacoptics.fanuc.dashboard.service.FanucDashboardService;
 import com.aacoptics.fanuc.dashboard.service.FanucOneHourShotCountDataService;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,9 @@ public class FanucDashboardServiceImpl implements FanucDashboardService {
 
     @Autowired
     FanucOneHourShotCountDataService fanucOneHourShotCountDataService;
+
+    @Autowired
+    FanucMonitDataMapper fanucMonitDataMapper;
 
     @Override
     public FanucDataEntity getDetailInfo(String machineName) {
@@ -152,5 +154,14 @@ public class FanucDashboardServiceImpl implements FanucDashboardService {
             currentOee.put("expectedValue", "100");
         }
         return currentOee;
+    }
+
+    @Override
+    public List<FanucMonitData> getAnalysisData(String machineName,
+                                                List<String> paramNames,
+                                                LocalDateTime startTime,
+                                                LocalDateTime endTime) {
+        List<FanucMonitData> fanucMonitDataList = fanucMonitDataMapper.getAnalysisData(startTime, endTime, machineName, paramNames);
+        return fanucMonitDataList;
     }
 }

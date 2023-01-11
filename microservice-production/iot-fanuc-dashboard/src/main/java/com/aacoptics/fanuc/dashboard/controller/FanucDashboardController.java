@@ -1,6 +1,7 @@
 package com.aacoptics.fanuc.dashboard.controller;
 
 import com.aacoptics.common.core.vo.Result;
+import com.aacoptics.fanuc.dashboard.entity.param.FanucAnalysisDataParam;
 import com.aacoptics.fanuc.dashboard.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -115,4 +116,14 @@ public class FanucDashboardController {
         return Result.success(fanucMonitDataService.getAllCycleList(params.get("startTime"),
                 params.get("endTime")));
     }
+
+    @ApiOperation(value = "获取注塑机统计数据", notes = "获取注塑机统计数据")
+    @PostMapping(value = "/getAnalysisData")
+    public Result getAnalysisData(@RequestBody FanucAnalysisDataParam fanucAnalysisDataParam) {
+        return Result.success(fanucDashboardService.getAnalysisData(fanucAnalysisDataParam.getMachineName(),
+                fanucAnalysisDataParam.getParamNames(),
+                fanucAnalysisDataParam.getStartTime(),
+                fanucAnalysisDataParam.getEndTime()));
+    }
+
 }

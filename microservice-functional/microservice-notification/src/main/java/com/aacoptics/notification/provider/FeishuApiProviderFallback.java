@@ -41,6 +41,13 @@ public class FeishuApiProviderFallback implements FallbackFactory<FeishuApiProvi
             }
 
             @Override
+            public JSONObject fetchCreateApproveInstance(@RequestHeader("Authorization") String authorization,
+                                                  @RequestBody JSONObject jsonObject) {
+                throwable.printStackTrace();
+                return JSONUtil.createObj().set("Throwable", throwable.toString());
+            }
+
+            @Override
             public JSONObject fetchSendMessageKey(String authorization, String receiveIdType, JSONObject message) {
                 throwable.printStackTrace();
                 return JSONUtil.createObj().set("Throwable", throwable.toString());

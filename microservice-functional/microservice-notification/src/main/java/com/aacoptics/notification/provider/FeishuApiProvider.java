@@ -49,6 +49,11 @@ public interface FeishuApiProvider {
                                @RequestParam("user_id_type") String userIdType,
                                @RequestBody JSONObject jsonObject);
 
+    @PostMapping(value = "/task/v1/tasks",
+            headers = {"Content-Type=application/json;charset=UTF-8"})
+    JSONObject fetchCreateApproveInstance(@RequestHeader("Authorization") String authorization,
+                               @RequestBody JSONObject jsonObject);
+
     @DeleteMapping(value = "/im/v1/messages/{messageId}",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
     JSONObject fetchDeleteMessage(@RequestHeader("Authorization") String authorization,

@@ -50,6 +50,12 @@ public class FeishuEventController {
             throw new RuntimeException("签名不一致！");
         JSONObject bodyJson = JSONObject.parseObject(bodyString, JSONObject.class);
         JSONObject msgJson = JSONObject.parseObject(d.decrypt(bodyJson.getString("encrypt")), JSONObject.class);
+
+        if(msgJson.containsKey("event") && msgJson.getJSONObject("event").getString("type").equals("approval_instance")){
+            log.info(JSONObject.toJSONString(msgJson));
+            return Result.success();
+        }
+
         FeishuTaskEvent feishuTaskEvent = JSONObject.parseObject(msgJson.toJSONString(), FeishuTaskEvent.class);
 
         boolean res;

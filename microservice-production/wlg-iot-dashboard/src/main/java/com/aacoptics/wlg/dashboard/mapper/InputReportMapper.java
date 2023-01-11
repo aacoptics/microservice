@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @Mapper
@@ -18,4 +19,14 @@ public interface InputReportMapper extends BaseMapper<InputReport> {
                                                       @Param("machineNames") List<String> machineNames);
 
     InputReport getTwoHourSum();
+
+
+    /**
+     * 获取output汇总
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<Map<String, Object>> getMachineOutputSummary(@Param("startTime") LocalDateTime startTime,
+                                                      @Param("endTime") LocalDateTime endTime);
 }

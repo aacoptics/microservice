@@ -74,4 +74,17 @@ public class MoldingMachineController {
                                    @RequestParam Long size) {
         return Result.success(moldingParamThresholdService.query(new Page(current, size), machineId));
     }
+
+
+    @ApiOperation(value = "获取机台当前状态信息", notes = "获取机台当前状态信息")
+    @GetMapping(value = "/getMachineStatusInfo")
+    public Result getMachineStatusInfo(@RequestParam(required = true) String equipName) {
+        return Result.success(moldingMachineService.getMachineStatusInfo(equipName));
+    }
+
+    @ApiOperation(value = "获取机台状态汇总信息", notes = "获取机台状态汇总信息")
+    @GetMapping(value = "/getMachineStatusSummaryInfo")
+    public Result getMachineStatusSummaryInfo(@RequestParam(required = true) String summaryDate) {
+        return Result.success(moldingMachineService.getMachineStatusSummaryInfo(summaryDate));
+    }
 }

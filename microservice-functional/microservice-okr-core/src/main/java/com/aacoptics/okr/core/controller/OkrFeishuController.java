@@ -38,6 +38,13 @@ public class OkrFeishuController {
         return Result.success(feishuService.getFeishuUsers(userInfo));
     }
 
+    @ApiOperation(value = "搜索飞书人员", notes = "搜索飞书人员")
+    @ApiImplicitParam(name = "employeeNo", required = true, dataType = "String")
+    @GetMapping("/getFeishuUser")
+    public Result getFeishuUser(@Valid @RequestParam String employeeNo) {
+        return Result.success(feishuService.getFeishuUser(employeeNo));
+    }
+
     @ApiOperation(value = "搜索所有飞书人员", notes = "搜索所有飞书人员")
     @GetMapping("/getAllFeishuUsers")
     public Result getAllFeishuUsers() {
