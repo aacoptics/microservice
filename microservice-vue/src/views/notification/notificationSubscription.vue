@@ -72,11 +72,10 @@
           <el-table-column align="center" fixed="left" header-align="center" label="消息名称"
                            width="200">
             <template v-slot="scope">
-              <el-tooltip :content="scope.row.remark" placement="top">
-                <span>{{
-                    scope.row.jobDesc
-                  }}</span>
+              <el-tooltip v-if="scope.row.remark && scope.row.remark != null && scope.row.remark.trim() !== ''" :content="scope.row.remark" placement="top">
+                <span>{{scope.row.jobDesc}}</span>
               </el-tooltip>
+              <el-span>{{scope.row.jobDesc}}</el-span>
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
