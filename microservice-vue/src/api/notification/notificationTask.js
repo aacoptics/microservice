@@ -11,6 +11,17 @@ export function findTaskInfoPage(conditions) {
     })
 }
 
+export function findTaskInfoPageProd(conditions) {
+    return request({
+        url: '/notification-server/notification/prodConditions',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: conditions
+    })
+}
+
 export function deleteTask(deleteForm) {
     return request({
         url: '/notification-server/notification/' + deleteForm.id,

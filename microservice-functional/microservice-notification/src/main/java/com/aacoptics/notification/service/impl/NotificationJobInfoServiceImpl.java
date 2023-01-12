@@ -21,9 +21,7 @@ public class NotificationJobInfoServiceImpl extends ServiceImpl<NotificationJobI
 
     @Override
     public boolean add(NotificationJobInfo notificationJobInfo) {
-        String jobNo = notificationJobInfoMapper.getMaxNo();
-        String notificationNo = String.format("%03d", Integer.parseInt(jobNo) + 1);
-        notificationJobInfo.setNotificationNo(notificationNo);
+        getNextNotificationNo(notificationJobInfo);
         return this.save(notificationJobInfo);
     }
 
@@ -41,9 +39,24 @@ public class NotificationJobInfoServiceImpl extends ServiceImpl<NotificationJobI
 
     @Override
     public boolean updateByXxlJobId(Integer id, NotificationJobInfo notificationJobInfo){
-        UpdateWrapper<NotificationJobInfo> wrapper = new UpdateWrapper<>();
+        QueryWrapper<NotificationJobInfo> wrapper = new QueryWrapper<>();
         wrapper.eq("xxl_job_id", id);
+        NotificationJobInfo searchResult = this.getOne(wrapper);
+        if(searchResult != null && searchResult.getInList() != notificationJobInfo.getInList()){
+            getNextNotificationNo(notificationJobInfo);
+        }
         return this.update(notificationJobInfo, wrapper);
+    }
+
+    private void getNextNotificationNo(NotificationJobInfo notificationJobInfo) {
+        String jobNo = notificationJobInfoMapper.getMaxNo(notificationJobInfo.getInList());
+        String notificationNo;
+        if(notificationJobInfo.getInList()){
+            notificationNo = String.format("%03d", Integer.parseInt(jobNo) + 1);
+        }else{
+            notificationNo = "C" + String.format("%03d", Integer.parseInt(jobNo.replace("C", "")) + 1);
+        }
+        notificationJobInfo.setNotificationNo(notificationNo);
     }
 
     @Override

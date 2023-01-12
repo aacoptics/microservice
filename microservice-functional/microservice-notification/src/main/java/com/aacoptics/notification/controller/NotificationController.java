@@ -117,7 +117,25 @@ public class NotificationController {
         return Result.success(xxlJobInfoService.listNotificationTask(xxlJobInfoQueryForm.getPage(),
                 xxlJobInfoQueryForm.toParam(),
                 xxlJobInfoQueryForm.getSearchOption(),
-                xxlJobInfoQueryForm.getUsername()));
+                xxlJobInfoQueryForm.getUsername(),
+                xxlJobInfoQueryForm.getProductLine(),
+                xxlJobInfoQueryForm.getJobEnvironment(),
+                xxlJobInfoQueryForm.getInList()));
+    }
+
+    @ApiOperation(value = "搜索正式清单消息推送计划", notes = "根据条件搜索正式清单消息推送计划信息")
+    @ApiImplicitParam(name = "xxlJobInfoQueryForm", value = "消息推送计划查询参数", required = true, dataType = "XxlJobInfoQueryForm")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "处理成功", response = Result.class)
+    )
+    @PostMapping(value = "/prodConditions")
+    public Result queryProd(@Valid @RequestBody XxlJobInfoQueryForm xxlJobInfoQueryForm) {
+        return Result.success(xxlJobInfoService.listNotificationTaskProd(xxlJobInfoQueryForm.getPage(),
+                xxlJobInfoQueryForm.toParam(),
+                xxlJobInfoQueryForm.getSearchOption(),
+                xxlJobInfoQueryForm.getUsername(),
+                xxlJobInfoQueryForm.getProductLine(),
+                xxlJobInfoQueryForm.getJobEnvironment()));
     }
 
     @ApiOperation(value = "获取Group", notes = "获取Group")

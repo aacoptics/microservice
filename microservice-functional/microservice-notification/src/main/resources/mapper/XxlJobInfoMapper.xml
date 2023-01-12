@@ -34,8 +34,8 @@
              , t.trigger_status
              , t.trigger_last_time
              , t.trigger_next_time
-             , JSON_VALUE(executor_param, '$.planKey') as 'plan_key'
-             , a.id as notification_id
+             , JSON_VALUE(executor_param, '$.planKey')              as 'plan_key'
+             , a.id                                                 as notification_id
              , xxl_job_id
              , product_line
              , remark
@@ -48,10 +48,12 @@
              , execute_time
              , job_environment
              , notification_no
+             , push_type
+             , in_list
              , isnull((select approve_status
-                         from notification_job_subscription
-                         where notification_job_id = a.id
-                           and subscription_person = #{username}), 0)  as subscription_status
+                       from notification_job_subscription
+                       where notification_job_id = a.id
+                         and subscription_person = #{username}), 0) as subscription_status
         from (SELECT id
                    , job_group
                    , job_desc
@@ -80,9 +82,16 @@
               where executor_handler = 'RobotHandle') t
                  join notification_job_info a
                       on t.id = a.xxl_job_id
-        where #{planKey} is null
-           or #{planKey} = ''
-           or JSON_VALUE(executor_param, '$.planKey') = #{planKey}
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = #{inList}
     </select>
 
     <select id="listSubNotificationTask" resultType="com.aacoptics.notification.entity.po.XxlJobInfo">
@@ -110,8 +119,8 @@
              , t.trigger_status
              , t.trigger_last_time
              , t.trigger_next_time
-             , JSON_VALUE(executor_param, '$.planKey') as 'plan_key'
-             , a.id as notification_id
+             , JSON_VALUE(executor_param, '$.planKey')              as 'plan_key'
+             , a.id                                                 as notification_id
              , xxl_job_id
              , product_line
              , remark
@@ -124,10 +133,12 @@
              , execute_time
              , job_environment
              , notification_no
+             , push_type
+             , in_list
              , isnull((select approve_status
-                from notification_job_subscription
-                where notification_job_id = a.id
-                  and subscription_person = #{username}), 0)  as subscription_status
+                       from notification_job_subscription
+                       where notification_job_id = a.id
+                         and subscription_person = #{username}), 0) as subscription_status
         from (SELECT id
                    , job_group
                    , job_desc
@@ -157,9 +168,16 @@
                  join notification_job_info a
                       on t.id = a.xxl_job_id
                           and a.subscription_enabled = 1
-        where #{planKey} is null
-           or #{planKey} = ''
-           or JSON_VALUE(executor_param, '$.planKey') = #{planKey}
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = #{inList}
     </select>
 
     <select id="listSubNotificationTaskByUser" resultType="com.aacoptics.notification.entity.po.XxlJobInfo">
@@ -188,7 +206,7 @@
              , t.trigger_last_time
              , t.trigger_next_time
              , JSON_VALUE(executor_param, '$.planKey') as 'plan_key'
-             , a.id as notification_id
+             , a.id                                    as notification_id
              , xxl_job_id
              , product_line
              , remark
@@ -201,6 +219,8 @@
              , execute_time
              , job_environment
              , notification_no
+             , push_type
+             , in_list
              , 1                                       as subscription_status
         from (SELECT id
                    , job_group
@@ -235,8 +255,273 @@
                       on a.id = b.notification_job_id
                           and b.subscription_person = #{username}
                           and b.approve_status = 1
-        where #{planKey} is null
-           or #{planKey} = ''
-           or JSON_VALUE(executor_param, '$.planKey') = #{planKey}
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = #{inList}
+    </select>
+
+    <select id="listNotificationTaskProd" resultType="com.aacoptics.notification.entity.po.XxlJobInfo">
+        SELECT t.id
+             , t.job_group
+             , t.job_desc
+             , t.add_time
+             , t.update_time
+             , t.author
+             , t.alarm_email
+             , t.schedule_type
+             , t.schedule_conf
+             , t.misfire_strategy
+             , t.executor_route_strategy
+             , t.executor_handler
+             , t.executor_param
+             , t.executor_block_strategy
+             , t.executor_timeout
+             , t.executor_fail_retry_count
+             , t.glue_type
+             , t.glue_source
+             , t.glue_remark
+             , t.glue_updatetime
+             , t.child_jobid
+             , t.trigger_status
+             , t.trigger_last_time
+             , t.trigger_next_time
+             , JSON_VALUE(executor_param, '$.planKey')              as 'plan_key'
+             , a.id                                                 as notification_id
+             , xxl_job_id
+             , product_line
+             , remark
+             , online_time
+             , responsible_person
+             , responsible_person_name
+             , it_person
+             , job_status
+             , subscription_enabled
+             , execute_time
+             , job_environment
+             , notification_no
+             , push_type
+             , in_list
+             , isnull((select approve_status
+                       from notification_job_subscription
+                       where notification_job_id = a.id
+                         and subscription_person = #{username}), 0) as subscription_status
+        from (SELECT id
+                   , job_group
+                   , job_desc
+                   , add_time
+                   , update_time
+                   , author
+                   , alarm_email
+                   , schedule_type
+                   , schedule_conf
+                   , misfire_strategy
+                   , executor_route_strategy
+                   , executor_handler
+                   , executor_param
+                   , executor_block_strategy
+                   , executor_timeout
+                   , executor_fail_retry_count
+                   , glue_type
+                   , glue_source
+                   , glue_remark
+                   , glue_updatetime
+                   , child_jobid
+                   , trigger_status
+                   , trigger_last_time
+                   , trigger_next_time
+              FROM xxl_job_info
+              where executor_handler = 'RobotHandle') t
+                 join notification_job_info a
+                      on t.id = a.xxl_job_id
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = 1
+    </select>
+
+    <select id="listSubNotificationTaskProd" resultType="com.aacoptics.notification.entity.po.XxlJobInfo">
+        SELECT t.id
+             , t.job_group
+             , t.job_desc
+             , t.add_time
+             , t.update_time
+             , t.author
+             , t.alarm_email
+             , t.schedule_type
+             , t.schedule_conf
+             , t.misfire_strategy
+             , t.executor_route_strategy
+             , t.executor_handler
+             , t.executor_param
+             , t.executor_block_strategy
+             , t.executor_timeout
+             , t.executor_fail_retry_count
+             , t.glue_type
+             , t.glue_source
+             , t.glue_remark
+             , t.glue_updatetime
+             , t.child_jobid
+             , t.trigger_status
+             , t.trigger_last_time
+             , t.trigger_next_time
+             , JSON_VALUE(executor_param, '$.planKey')              as 'plan_key'
+             , a.id                                                 as notification_id
+             , xxl_job_id
+             , product_line
+             , remark
+             , online_time
+             , responsible_person
+             , responsible_person_name
+             , it_person
+             , job_status
+             , subscription_enabled
+             , execute_time
+             , job_environment
+             , notification_no
+             , push_type
+             , in_list
+             , isnull((select approve_status
+                       from notification_job_subscription
+                       where notification_job_id = a.id
+                         and subscription_person = #{username}), 0) as subscription_status
+        from (SELECT id
+                   , job_group
+                   , job_desc
+                   , add_time
+                   , update_time
+                   , author
+                   , alarm_email
+                   , schedule_type
+                   , schedule_conf
+                   , misfire_strategy
+                   , executor_route_strategy
+                   , executor_handler
+                   , executor_param
+                   , executor_block_strategy
+                   , executor_timeout
+                   , executor_fail_retry_count
+                   , glue_type
+                   , glue_source
+                   , glue_remark
+                   , glue_updatetime
+                   , child_jobid
+                   , trigger_status
+                   , trigger_last_time
+                   , trigger_next_time
+              FROM xxl_job_info
+              where executor_handler = 'RobotHandle') t
+                 join notification_job_info a
+                      on t.id = a.xxl_job_id
+                          and a.subscription_enabled = 1
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = 1
+    </select>
+
+    <select id="listSubNotificationTaskByUserProd" resultType="com.aacoptics.notification.entity.po.XxlJobInfo">
+        SELECT t.id
+             , t.job_group
+             , t.job_desc
+             , t.add_time
+             , t.update_time
+             , t.author
+             , t.alarm_email
+             , t.schedule_type
+             , t.schedule_conf
+             , t.misfire_strategy
+             , t.executor_route_strategy
+             , t.executor_handler
+             , t.executor_param
+             , t.executor_block_strategy
+             , t.executor_timeout
+             , t.executor_fail_retry_count
+             , t.glue_type
+             , t.glue_source
+             , t.glue_remark
+             , t.glue_updatetime
+             , t.child_jobid
+             , t.trigger_status
+             , t.trigger_last_time
+             , t.trigger_next_time
+             , JSON_VALUE(executor_param, '$.planKey') as 'plan_key'
+             , a.id                                    as notification_id
+             , xxl_job_id
+             , product_line
+             , remark
+             , online_time
+             , responsible_person
+             , responsible_person_name
+             , it_person
+             , job_status
+             , subscription_enabled
+             , execute_time
+             , job_environment
+             , notification_no
+             , push_type
+             , in_list
+             , 1                                       as subscription_status
+        from (SELECT id
+                   , job_group
+                   , job_desc
+                   , add_time
+                   , update_time
+                   , author
+                   , alarm_email
+                   , schedule_type
+                   , schedule_conf
+                   , misfire_strategy
+                   , executor_route_strategy
+                   , executor_handler
+                   , executor_param
+                   , executor_block_strategy
+                   , executor_timeout
+                   , executor_fail_retry_count
+                   , glue_type
+                   , glue_source
+                   , glue_remark
+                   , glue_updatetime
+                   , child_jobid
+                   , trigger_status
+                   , trigger_last_time
+                   , trigger_next_time
+              FROM xxl_job_info
+              where executor_handler = 'RobotHandle') t
+                 join notification_job_info a
+                      on t.id = a.xxl_job_id
+                          and a.subscription_enabled = 1
+                 join notification_job_subscription b
+                      on a.id = b.notification_job_id
+                          and b.subscription_person = #{username}
+                          and b.approve_status = 1
+        where (#{planKey} is null
+            or #{planKey} = ''
+            or JSON_VALUE(executor_param, '$.planKey') = #{planKey})
+          and (#{productLine} is null
+            or #{productLine} = ''
+            or product_line = #{productLine})
+          and (#{jobEnvironment} is null
+            or #{jobEnvironment} = ''
+            or job_environment = #{jobEnvironment})
+          and in_list = 1
     </select>
 </mapper>

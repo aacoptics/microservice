@@ -15,8 +15,30 @@
             </el-select>
           </el-form-item>
           <el-form-item>
+            <el-select v-model="filters.productLine" placeholder="请选择产品线" @change="findPage(null)">
+              <el-option
+                  v-for="item in productionLineOption"
+                  :key="item.value"
+                  :label="item.value"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-select v-model="filters.jobEnvironment" placeholder="请选择环境" @change="findPage(null)">
+              <el-option
+                  v-for="item in environmentOption"
+                  :key="item.value"
+                  :label="item.title"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
             <el-input v-model="filters.planKey" placeholder="任务名称"></el-input>
           </el-form-item>
+        </el-form>
+        <el-form :inline="true" :size="size">
           <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
               <template #icon>
@@ -38,6 +60,7 @@
                 :stripe="false"
                 @findPage="findPage"
                 size="small"
+                :show-operation="false"
                 @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
           <!--          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"-->
@@ -64,41 +87,20 @@
           <el-table-column align="center" fixed="left" header-align="center" label="消息编码"
                            width="80">
             <template v-slot="scope">
-                <el-tag>{{
-                    scope.row.notificationNo
-                  }}</el-tag>
+              <el-tag>{{
+                  scope.row.notificationNo
+                }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="left" header-align="center" label="消息名称"
                            width="200">
             <template v-slot="scope">
-              <el-tooltip v-if="scope.row.remark && scope.row.remark != null && scope.row.remark.trim() !== ''" :content="scope.row.remark" placement="top">
-                <span>{{scope.row.jobDesc}}</span>
+              <el-tooltip v-if="scope.row.remark && scope.row.remark != null && scope.row.remark.trim() !== ''"
+                          :content="scope.row.remark" placement="top">
+                <span>{{ scope.row.jobDesc }}</span>
               </el-tooltip>
-              <el-span v-else>{{scope.row.jobDesc}}</el-span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
-                           width="80">
-            <template v-slot="scope">
-              <el-switch
-                  v-model="scope.row.triggerStatus"
-                  :active-value="1"
-                  :inactive-value="0"
-                  active-text="启用"
-                  inactive-text="停用"
-                  inline-prompt
-                  width="60px"
-                  @change="handleStatusChange(scope.row)"
-              ></el-switch>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" fixed="right" header-align="center" label="执行"
-                           width="80">
-            <template v-slot="scope">
-              <el-button size="small" type="warning" @click="handleTrigger(scope.row)">
-                执行一次
-              </el-button>
+              <el-span v-else>{{ scope.row.jobDesc }}</el-span>
             </template>
           </el-table-column>
         </template>
@@ -221,6 +223,25 @@
             <el-col :span="24">
               <el-form-item label="消息描述" prop="remark">
                 <el-input v-model="dataForm.remark" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="推送形式" prop="pushType">
+                <el-input v-model="dataForm.pushType" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="加入正式清单" prop="inList">
+                <el-switch
+                    v-model="dataForm.inList"
+                    inline-prompt
+                    active-text="是"
+                    :active-value="true"
+                    inactive-text="否"
+                    :inactive-value="false"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -423,7 +444,7 @@
 import SysTable from "@/components/SysTable";
 import {
   deleteTask,
-  findTaskInfoPage, getFeishuUser, getFeishuUsers,
+  findTaskInfoPageProd, getFeishuUser, getFeishuUsers,
   handleAdd,
   handleUpdate, sendFeishuApprove,
   startTask,
@@ -446,7 +467,10 @@ export default {
       expression: "",
       filters: {
         selectedType: 0,
-        planKey: ''
+        planKey: '',
+        productLine: '',
+        jobEnvironment: '',
+        inList: true
       },
       starOptions: [
         {
@@ -467,6 +491,7 @@ export default {
         {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
         {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
         {prop: "executeTime", label: "执行时间", minWidth: 100, sortable: false},
+        {prop: "pushType", label: "推送形式", minWidth: 120, sortable: false},
         {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat, sortable: false},
         {prop: "responsiblePersonName", label: "消息责任人（审批人）", minWidth: 80, sortable: false},
         {prop: "author", label: "IT责任人", minWidth: 80, sortable: false}
@@ -527,7 +552,9 @@ export default {
         jobStatus: true,
         subscriptionEnabled: true,
         executeTime: '',
-        jobEnvironment: ''
+        jobEnvironment: '',
+        pushType: '',
+        inList: false
       },
       searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
@@ -713,9 +740,12 @@ export default {
         this.pageRequest = data.pageRequest
       }
       this.pageRequest.planKey = this.filters.planKey
+      this.pageRequest.productLine = this.filters.productLine
+      this.pageRequest.jobEnvironment = this.filters.jobEnvironment
       this.pageRequest.username = getUsername()
       this.pageRequest.searchOption = this.filters.selectedType
-      findTaskInfoPage(this.pageRequest).then((res) => {
+      this.pageRequest.inList = this.filters.inList
+      findTaskInfoPageProd(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
@@ -808,7 +838,9 @@ export default {
         jobStatus: true,
         subscriptionEnabled: true,
         executeTime: '',
-        jobEnvironment: ''
+        jobEnvironment: '',
+        pushType: '',
+        inList: false
       }
     },
     // 显示编辑界面

@@ -45,4 +45,8 @@ public class NotificationJobInfo extends BasePo {
     private String jobEnvironment;
 
     private String notificationNo;
+
+    private String pushType;
+
+    private Boolean inList;
 }

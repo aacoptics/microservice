@@ -18,11 +18,20 @@ public interface XxlJobInfoMapper extends BaseMapper<XxlJobInfo> {
     int maxId();
 
     @DS("msg_db")
-    Page<XxlJobInfo> listNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
+    Page<XxlJobInfo> listNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment, @Param("inList") Boolean inList);
 
     @DS("msg_db")
-    Page<XxlJobInfo> listSubNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
+    Page<XxlJobInfo> listSubNotificationTask(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment, @Param("inList") Boolean inList);
 
     @DS("msg_db")
-    Page<XxlJobInfo> listSubNotificationTaskByUser(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username);
+    Page<XxlJobInfo> listSubNotificationTaskByUser(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment, @Param("inList") Boolean inList);
+
+    @DS("msg_db")
+    Page<XxlJobInfo> listNotificationTaskProd(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment);
+
+    @DS("msg_db")
+    Page<XxlJobInfo> listSubNotificationTaskProd(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment);
+
+    @DS("msg_db")
+    Page<XxlJobInfo> listSubNotificationTaskByUserProd(Page<XxlJobInfo> iPage, @Param("planKey") String planKey, @Param("username") String username, @Param("productLine") String productLine, @Param("jobEnvironment") String jobEnvironment);
 }

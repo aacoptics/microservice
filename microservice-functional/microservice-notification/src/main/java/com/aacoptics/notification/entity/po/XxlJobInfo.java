@@ -145,4 +145,10 @@ public class XxlJobInfo implements Serializable {
 
     @TableField(exist = false)
     private String notificationNo;
+
+    @TableField(exist = false)
+    private String pushType;
+
+    @TableField(exist = false)
+    private Boolean inList;
 }

@@ -4,51 +4,7 @@
       <div class="toolbar" style="float:left;padding-top:10px;padding-left:15px;">
         <el-form :inline="true" :size="size">
           <el-form-item>
-            <el-select v-model="filters.selectedType" placeholder="请选择" @change="findPage(null)">
-              <el-option
-                  v-for="item in starOptions"
-                  :key="item.value"
-                  :label="item.title"
-                  :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select v-model="filters.productLine" placeholder="请选择产品线" @change="findPage(null)">
-              <el-option
-                  v-for="item in productionLineOption"
-                  :key="item.value"
-                  :label="item.value"
-                  :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-select v-model="filters.jobEnvironment" placeholder="请选择环境" @change="findPage(null)">
-              <el-option
-                  v-for="item in environmentOption"
-                  :key="item.value"
-                  :label="item.title"
-                  :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
             <el-input v-model="filters.planKey" placeholder="任务名称"></el-input>
-          </el-form-item>
-        </el-form>
-        <el-form :inline="true" :size="size">
-          <el-form-item label="正式清单">
-            <el-switch
-                v-model="filters.inList"
-                inline-prompt
-                active-text="是"
-                :active-value="true"
-                inactive-text="否"
-                :inactive-value="false"
-                @change="findPage(null)"
-            />
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="findPage(null)">查询
@@ -70,7 +26,6 @@
                 :height="400" :highlightCurrentRow="true" :showBatchDelete="false"
                 :stripe="false"
                 @findPage="findPage"
-                size="small"
                 @handleCurrentChange="handleTaskSelectChange" @handleDelete="handleDelete" @handleEdit="handleEdit">
         <template v-slot:custom-column>
           <!--          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"-->
@@ -85,34 +40,6 @@
           <!--              </el-button>-->
           <!--            </template>-->
           <!--          </el-table-column>-->
-          <el-table-column align="center" fixed="left" header-align="center" label="订阅"
-                           width="60">
-            <template v-slot="scope">
-              <el-tooltip v-if="scope.row.subscriptionEnabled" :content="IsStarContent(scope.row)" placement="bottom">
-                <font-awesome-icon :class="isStarClass(scope.row)" :icon="isStarIcon(scope.row)"
-                                   class="ml-1 cursor-pointer h-6" fixed-width size="2x" @click="star(scope.row)"/>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" fixed="left" header-align="center" label="消息编码"
-                           width="80">
-            <template v-slot="scope">
-              <el-tag>{{
-                  scope.row.notificationNo
-                }}
-              </el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" fixed="left" header-align="center" label="消息名称"
-                           width="200">
-            <template v-slot="scope">
-              <el-tooltip v-if="scope.row.remark && scope.row.remark != null && scope.row.remark.trim() !== ''"
-                          :content="scope.row.remark" placement="top">
-                <span>{{ scope.row.jobDesc }}</span>
-              </el-tooltip>
-              <el-span v-else>{{ scope.row.jobDesc }}</el-span>
-            </template>
-          </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
             <template v-slot="scope">
@@ -158,123 +85,20 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="消息Key" prop="planKey">
+              <el-form-item label="任务Key" prop="planKey">
                 <el-input v-model="dataForm.planKey" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="消息环境" prop="jobEnvironment">
-                <el-select v-model="dataForm.jobEnvironment" placeholder="请选择">
-                  <el-option
-                      v-for="item in environmentOption"
-                      :key="item.value"
-                      :label="item.title"
-                      :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="上线时间" prop="onlineTime">
-                <el-date-picker
-                    v-model="dataForm.onlineTime"
-                    :editable="false"
-                    placeholder="请选择上线时间"
-                    size="small"
-                    type="date"
-                    value-format="YYYY-MM-DD 00:00:00"/>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="产品线" prop="productLine">
-                <el-select v-model="dataForm.productLine" placeholder="请选择">
-                  <el-option
-                      v-for="item in productionLineOption"
-                      :key="item.value"
-                      :label="item.value"
-                      :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="消息责任人（审批人）" prop="responsiblePerson">
-                <el-select ref="select"
-                           v-model="dataForm.responsiblePerson"
-                           :remote-method="remoteMethod"
-                           filterable
-                           placeholder="请选择审批人"
-                           remote
-                           remote-show-suffix
-                           @change="setResponsiblePersonName(dataForm)">
-                  <el-option
-                      v-for="item in searchUserList"
-                      :key="item['employeeNo']"
-                      :label="item.name"
-                      :value="item['employeeNo']"
-                  />
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="执行时间" prop="executeTime">
-                <el-input v-model="dataForm.executeTime" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="可订阅" prop="subscriptionEnabled">
-                <el-switch
-                    v-model="dataForm.subscriptionEnabled"
-                    inline-prompt
-                    active-text="是"
-                    :active-value="true"
-                    inactive-text="否"
-                    :inactive-value="false"
-                />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="消息名称" prop="jobDesc">
+              <el-form-item label="任务描述" prop="jobDesc">
                 <el-input v-model="dataForm.jobDesc" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="IT负责人" prop="author">
+              <el-form-item label="负责人" prop="author">
                 <el-input v-model="dataForm.author" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="消息描述" prop="remark">
-                <el-input v-model="dataForm.remark" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="推送形式" prop="pushType">
-                <el-input v-model="dataForm.pushType" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="加入正式清单" prop="inList">
-                <el-switch
-                    v-model="dataForm.inList"
-                    inline-prompt
-                    active-text="是"
-                    :active-value="true"
-                    inactive-text="否"
-                    :inactive-value="false"
-                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -477,9 +301,9 @@
 import SysTable from "@/components/SysTable";
 import {
   deleteTask,
-  findTaskInfoPage, getFeishuUser, getFeishuUsers,
+  findTaskInfoPage,
   handleAdd,
-  handleUpdate, sendFeishuApprove,
+  handleUpdate,
   startTask,
   stopTask,
   triggerNotificationJob
@@ -487,9 +311,6 @@ import {
 import {getDict} from "@/api/system/dictData";
 import {findByIds, getAllRobotInfo} from "@/api/notification/robot";
 import Crontab from '@/components/Crontab'
-import {debounce} from "@/utils/commonUtils";
-import {getUsername} from "@/utils/auth";
-import {ElMessageBox} from "element-plus";
 
 export default {
   name: "user",
@@ -499,35 +320,14 @@ export default {
       size: 'default',
       expression: "",
       filters: {
-        selectedType: 0,
-        planKey: '',
-        productLine: '',
-        jobEnvironment: '',
-        inList: true
+        planKey: ''
       },
-      starOptions: [
-        {
-          title: '所有消息',
-          value: 0
-        },
-        {
-          title: '可订阅的消息',
-          value: 1
-        },
-        {
-          title: '我订阅的',
-          value: 2
-        }
-      ],
       columns: [
-        {prop: "planKey", label: "消息Key", minWidth: 100, sortable: false},
-        {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
-        {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
-        {prop: "executeTime", label: "执行时间", minWidth: 100, sortable: false},
-        {prop: "pushType", label: "推送形式", minWidth: 120, sortable: false},
-        {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat, sortable: false},
-        {prop: "responsiblePersonName", label: "消息责任人（审批人）", minWidth: 80, sortable: false},
-        {prop: "author", label: "IT责任人", minWidth: 80, sortable: false}
+        {prop: "planKey", label: "任务名", minWidth: 110},
+        {prop: "jobDesc", label: "描述", minWidth: 100},
+        {prop: "author", label: "责任人", minWidth: 120},
+        {prop: "scheduleType", label: "调度类型", minWidth: 120},
+        {prop: "scheduleConf", label: "调度Cron", minWidth: 120}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -538,15 +338,10 @@ export default {
       editLoading: false,
       dataFormRules: {
         jobGroup: [{required: true, message: '请选择执行器', trigger: 'change'}],
-        jobEnvironment: [{required: true, message: '请选择消息环境', trigger: 'change'}],
-        productLine: [{required: true, message: '请选择产品线', trigger: 'change'}],
-        responsiblePerson: [{required: true, message: '请选择责任人', trigger: 'change'}],
-        onlineTime: [{required: true, message: '请选择上线时间', trigger: 'change'}],
-        jobDesc: [{required: true, message: '请输入消息名称', trigger: 'blur'}],
-        planKey: [{required: true, message: '请输入消息Key', trigger: 'blur'}],
+        jobDesc: [{required: true, message: '请输入任务描述', trigger: 'blur'}],
+        planKey: [{required: true, message: '请输入任务Key', trigger: 'blur'}],
         scheduleType: [{required: true, message: '请选择调度类型', trigger: 'change'}],
         scheduleConf: [{required: true, message: '请输入任务调度时间', trigger: 'blur'}],
-        executeTime: [{required: true, message: '请描述执行时间，如：每天10点', trigger: 'blur'}],
         executorRouteStrategy: [{required: true, message: '请选择路由策略', trigger: 'change'}],
         executorBlockStrategy: [{required: true, message: '请选择阻塞处理策略', trigger: 'change'}],
         author: [{required: true, message: '请输入负责人', trigger: 'blur'}],
@@ -574,53 +369,9 @@ export default {
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
-        triggerStatus: 0,
-        xxlJobId: 0,
-        productLine: '',
-        remark: '',
-        onlineTime: '',
-        responsiblePerson: '',
-        responsiblePersonName: '',
-        itPerson: '',
-        jobStatus: true,
-        subscriptionEnabled: true,
-        executeTime: '',
-        jobEnvironment: '',
-        pushType: '',
-        inList: false
+        triggerStatus: 0
       },
-      searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
-      environmentOption: [{"title": "正式", "value": "PROD"}, {"title": "测试", "value": "QAS"}],
-      productionLineOption: [
-        {
-          value: "手机LENS"
-        },
-        {
-          value: "非手机LENS"
-        },
-        {
-          value: "镜头WLG"
-        },
-        {
-          value: "模组MOD"
-        },
-        {
-          value: "传动VCM"
-        },
-        {
-          value: "财务"
-        },
-        {
-          value: "采购与供应链"
-        },
-        {
-          value: "人力"
-        },
-        {
-          value: "其他"
-        },
-      ],
       robotOptions: [],
       executorHandlerOptions: [],
       currentRobotsInfo: [],
@@ -631,106 +382,6 @@ export default {
     }
   },
   methods: {
-    remoteMethod: async function (query) {
-      if (query != null && query.trim() !== '') {
-        let res = await getFeishuUsers(query)
-        const ResponseData = res.data
-        if (ResponseData.code === '000000') {
-          this.searchUserList = ResponseData.data
-        } else {
-          this.searchUserList = []
-        }
-      } else {
-        this.searchUserList = []
-      }
-    },
-    setResponsiblePersonName(row) {
-      const idx = this.searchUserList.findIndex(item => item.employeeNo === row.responsiblePerson)
-      if (idx > -1) {
-        row.responsiblePersonName = this.searchUserList[idx].name
-      }
-    },
-    getFeishuUser: function (query) {
-      if (query != null && query.trim() !== '') {
-        getFeishuUser(query).then((res) => {
-          const ResponseData = res.data
-          if (ResponseData.code === '000000') {
-            this.searchUserList = []
-            this.searchUserList.push(ResponseData.data)
-          } else {
-            this.searchUserList = []
-          }
-        })
-      } else {
-        this.searchUserList = []
-      }
-    },
-    async star(row) {
-
-      let msg = ''
-      if (row.subscriptionStatus === 3) {
-        this.$message({message: '正在审批中！', type: 'warning'})
-        return
-      } else if (row.subscriptionStatus === 1) {
-        msg = '确认取消 ' + row.jobDesc + ' 的订阅吗，取消再订阅需要重新进行审批！'
-      } else {
-        msg = '确认订阅 ' + row.jobDesc + ' 吗，如确认，将发送审批至消息责任人 ' + row.responsiblePersonName + '！'
-      }
-
-      ElMessageBox.confirm(
-          msg,
-          'Warning',
-          {
-            confirmButtonText: '确认',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-      )
-          .then(async () => {
-            const subscriptionInfo = {
-              notificationJobId: row.notificationId,
-              subscriptionPerson: getUsername(),
-              notificationDesc: row.jobDesc + '：' + row.remark,
-              approveUser: row.responsiblePerson,
-              subscriptionStatus: row.subscriptionStatus
-            }
-            let res = await sendFeishuApprove(subscriptionInfo)
-            // let res = await deleteOrCreate(this.owner['employeeNo'], this.username)
-            const ResponseData = res.data
-            if (ResponseData.code === '000000') {
-              this.$message({message: ResponseData.data, type: 'success'})
-              if (row.subscriptionStatus !== 1)
-                row.subscriptionStatus = 3
-              else
-                this.findPage(null)
-
-            } else {
-              this.$message({message: '操作失败', type: 'error'})
-            }
-          })
-          .catch(() => {
-
-          })
-    },
-    IsStarContent(row) {
-      if (row.subscriptionStatus === 1)
-        return '取消订阅'
-      else if (row.subscriptionStatus === 3)
-        return '审批中'
-      else
-        return '订阅'
-    },
-    isStarIcon(row) {
-      if (row.subscriptionStatus === 1)
-        return ['fas', 'star']
-      else if (row.subscriptionStatus === 3)
-        return ['fab', 'bilibili']
-      else
-        return ['far', 'star']
-    },
-    isStarClass(row) {
-      return row.subscriptionStatus === 1 ? 'text-yellow-500' : 'text-gray-500'
-    },
     // 任务状态修改
     handleStatusChange(row) {
       let text = row.triggerStatus === 1 ? "启用" : "停用";
@@ -773,11 +424,6 @@ export default {
         this.pageRequest = data.pageRequest
       }
       this.pageRequest.planKey = this.filters.planKey
-      this.pageRequest.productLine = this.filters.productLine
-      this.pageRequest.jobEnvironment = this.filters.jobEnvironment
-      this.pageRequest.username = getUsername()
-      this.pageRequest.searchOption = this.filters.selectedType
-      this.pageRequest.inList = this.filters.inList
       findTaskInfoPage(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
@@ -860,20 +506,7 @@ export default {
         glueType: 'BEAN',
         glueSource: '',
         glueRemark: 'GLUE代码初始化',
-        triggerStatus: 0,
-        xxlJobId: 0,
-        productLine: '手机LENS',
-        remark: '',
-        onlineTime: this.$moment(new Date()).format("YYYY-MM-DD 00:00:00"),
-        responsiblePerson: '',
-        responsiblePersonName: '',
-        itPerson: '',
-        jobStatus: true,
-        subscriptionEnabled: true,
-        executeTime: '',
-        jobEnvironment: '',
-        pushType: '',
-        inList: false
+        triggerStatus: 0
       }
     },
     // 显示编辑界面
@@ -881,7 +514,6 @@ export default {
       this.dialogVisible = true
       this.operation = false
       this.dataForm = Object.assign({}, params.row)
-      this.getFeishuUser(this.dataForm.responsiblePerson)
     },
     handleTrigger: function (params) {
       this.triggerDialogVisible = true
@@ -1011,36 +643,7 @@ export default {
     // 时间格式化
     dateFormat: function (row, column) {
       return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm')
-    },
-    dateTimeFormat: function (row, column) {
-      if (row[column.property])
-        return this.$moment(row[column.property]).format("YYYY/MM/DD");
-      else
-        return ''
-    },
-    environmentFormat: function (row, column) {
-      if (row[column.property]) {
-        const newArr = this.environmentOption.filter(function (p) {
-          return p.value === row[column.property];
-        });
-        if (newArr.length > 0)
-          return newArr[0].title
-        else return ''
-      } else
-        return ''
-    },
-  },
-  computed: {
-    computedHeight() {
-      debounce(() => {
-        return Math.max(...[this.changeHeight, this.height])
-      }, 100);
-    },
-    computedMaxHeight() {
-      debounce(() => {
-        return Math.max(...[this.changeMaxHeight, this.maxHeight])
-      }, 100);
-    },
-  },
+    }
+  }
 }
 </script>
