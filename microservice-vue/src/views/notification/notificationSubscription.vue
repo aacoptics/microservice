@@ -46,13 +46,6 @@
               </template>
             </el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="handleAdd">新增
-              <template #icon>
-                <font-awesome-icon :icon="['fas', 'plus']"/>
-              </template>
-            </el-button>
-          </el-form-item>
         </el-form>
       </div>
       <SysTable ref="sysTable" :columns="columns" :data="pageResult"
