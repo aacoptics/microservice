@@ -96,6 +96,7 @@
           stripe
           style="width: 100%">
         <el-table-column label="机台名" min-width="85" prop="monitMcName"></el-table-column>
+        <el-table-column label="时间" min-width="180" prop="monitDateTime"></el-table-column>
         <el-table-column label="vp压力" min-width="85" prop="monitVPPrs"></el-table-column>
         <el-table-column label="vp位置" min-width="85" prop="monitVPPos"></el-table-column>
         <el-table-column label="逆流" min-width="85" prop="monitBackflw"></el-table-column>
