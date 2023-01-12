@@ -31,4 +31,9 @@ public interface MoldingEventDataService {
                                              Page page);
 
     IPage<MoldingMK4Data> getMoldingMK4Data(List<String> machineNameList, LocalDateTime startTime, LocalDateTime endTime, Page page);
+
+    IPage<MoldingEventData> getMachineSingleStatus(List<String> machineNameList,
+                                                   LocalDateTime startTime,
+                                                   LocalDateTime endTime,
+                                                   Page page);
 }

@@ -301,3 +301,26 @@ export function exportMoldingMK4DataExcel(queryForm) {
         responseType: 'blob'
     })
 }
+
+export function exportMoldingSingleStatusExcel(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/exportSingleExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
+    })
+}
+
+export function getMachineSingleStatus(queryForm) {
+    return request({
+        url: '/wlg-iot-dashboard/moldingMachineParam/getMachineSingleStatus',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+    })
+}
