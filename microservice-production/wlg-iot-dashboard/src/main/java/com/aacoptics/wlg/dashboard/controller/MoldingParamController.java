@@ -95,6 +95,17 @@ public class MoldingParamController {
 //                LocalDateTime.parse(startTime, df),
 //                LocalDateTime.parse(endTime, df), new Page(current, size)));
 //    }
+    @ApiOperation(value = "获取这段时间的机台状态列表", notes = "获取这段时间的机台状态列表")
+    @PostMapping(value = "/getMachineSingleStatus")
+    public Result getMachineSingleStatus(@RequestBody MoldingDataPageParam moldingDataPageParam) {
+        List<String> machineNameList = moldingDataPageParam.getMachineName();
+        if(machineNameList == null || machineNameList.size() == 0) {
+            machineNameList.add("");
+        }
+        return Result.success(moldingEventDataService.getMachineSingleStatus(machineNameList,
+                moldingDataPageParam.getStartTime(),
+                moldingDataPageParam.getEndTime(), new Page(moldingDataPageParam.getCurrent(), moldingDataPageParam.getSize())));
+    }
 
     @ApiOperation(value = "获取这段时间的异常数据", notes = "获取这段时间的异常数据")
     @GetMapping(value = "/getMachineAbnormalData")
@@ -163,6 +174,41 @@ public class MoldingParamController {
             throw e;
         }
         ExcelUtil.exportXlsx(response, workbook, "模造机状态报表.xlsx");
+    }
+
+    @ApiOperation(value = "导出Excel列表", notes = "导出Excel列表")
+    @PostMapping(value = "/exportSingleExcel")
+    public void exportSingleExcel(@RequestBody MoldingQueryDataParam moldingQueryDataParam, HttpServletResponse response) throws Exception{
+        List<Map<String, Object>> data = moldingMachineParamDataService.getMoldingSingleStatusData(moldingQueryDataParam.getMachineName(), moldingQueryDataParam.getStartTime(), moldingQueryDataParam.getEndTime());
+        //创建工作簿
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        //创建工作表
+        XSSFSheet wbSheet = workbook.createSheet("模造机状态报表");
+        XSSFRow titleRow = wbSheet.createRow(0);
+        titleRow.createCell(0).setCellValue("机台号");
+        titleRow.createCell(1).setCellValue("状态");
+        titleRow.createCell(2).setCellValue("开始时间");
+        titleRow.createCell(3).setCellValue("结束时间");
+        titleRow.createCell(4).setCellValue("持续时间");
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            if(data != null && data.size() > 0) {
+                for(int i = 0; i < data.size(); i++) {
+                    Map<String, Object> dataMap = data.get(i);
+                    XSSFRow dataRow = wbSheet.createRow(i + 1);
+                    dataRow.createCell(0).setCellValue(dataMap.get("machine_name") + "");
+                    dataRow.createCell(1).setCellValue(dataMap.get("alarm_info") + "");
+                    dataRow.createCell(2).setCellValue(dataMap.get("start_time") + "");
+                    dataRow.createCell(3).setCellValue(dataMap.get("end_time") + "");
+                    dataRow.createCell(4).setCellValue(DateUtil.formatSeconds(Integer.parseInt(String.valueOf(dataMap.get("duration")))));
+                }
+            }
+            ExcelUtil.setSheetColumnWidth(wbSheet, new int[] {256*10, 256*15, 256*15, 256*15, 256*15});
+        } catch(Exception e) {
+            throw e;
+        }
+        ExcelUtil.exportXlsx(response, workbook, "模造机状态列表报表.xlsx");
+
     }
 
     @ApiOperation(value = "获取这段时间的机台状态", notes = "获取这段时间的机台状态")

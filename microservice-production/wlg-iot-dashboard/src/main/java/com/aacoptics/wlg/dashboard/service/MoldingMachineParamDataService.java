@@ -35,4 +35,6 @@ public interface MoldingMachineParamDataService {
     List<Map<String, Object>> getMoldingStatusData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime);
 
     List<Map<String, Object>> getMoldingMk4ExportData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime);
+
+    List<Map<String, Object>> getMoldingSingleStatusData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime);
 }

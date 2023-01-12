@@ -10,7 +10,7 @@
                 <el-select v-model="formParam.machineName"
                            :size="size"
                            placeholder="请选择机台号" clearable filterable multiple
-                            style="width:300px">
+                           style="width:300px">
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item.machineName"
@@ -61,20 +61,22 @@
 </template>
 
 <script>
-
-import {getMachineStatus, getMachineName, exportMoldingStatusExcel} from "@/api/wlg/iot/moldingMachineParamData";
-import SysTable from "@/components/SysTable";
-
+import {
+  getMachineName,
+  getMachineSingleStatus,
+  exportMoldingSingleStatusExcel
+} from "@/api/wlg/iot/moldingMachineParamData";
+import SysTable from "@/components/SysTable.vue";
 export default {
-  name: "WlgMoldingEvent",
+  name: "WlgMoldingSingleStatus",
   components: {SysTable},
   data() {
     return {
       columns: [
         {prop: "machineName", label: "机台号", minWidth: 110},
         {prop: "alarmInfo", label: "状态", minWidth: 100},
-        // {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
-        // {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "startTime", label: "开始时间", minWidth: 120, formatter: this.dateTimeFormat},
+        {prop: "endTime", label: "结束时间", minWidth: 120, formatter: this.dateTimeFormat},
         {prop: "duration", label: "持续时间", minWidth: 120, formatter: this.formatSeconds}
       ],
       pageRequest: {current: 1, size: 10},
@@ -139,6 +141,17 @@ export default {
       //  }
       return result
     },
+    getMachineName() {
+      getMachineName().then((response) => {
+        const responseData = response.data
+        if (responseData.code === '000000') {
+          this.machineNameArray = responseData.data
+        }
+      })
+    },
+    dateTimeFormat: function (row, column) {
+      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
+    },
     findPage: function (data) {
       if (data !== null) {
         this.pageRequest = data.pageRequest
@@ -152,42 +165,32 @@ export default {
       params.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
       params.current = this.pageRequest.current;
       params.size = this.pageRequest.size;
-      getMachineStatus(params).then((res) => {
+      getMachineSingleStatus(params).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
         }
       }).then(data != null ? data.callback : '')
     },
-    getMachineName() {
-      getMachineName().then((response) => {
-        const responseData = response.data
-        if (responseData.code === '000000') {
-          this.machineNameArray = responseData.data
-        }
-      })
-    },
-    dateTimeFormat: function (row, column) {
-      return this.$moment(row[column.property]).format('YYYY-MM-DD HH:mm:ss')
-    },
     exportExcel() {
       let params = {};
       params.machineName = this.formParam.machineName;
       params.startTime = this.$moment(this.dateTimePickerValue[0]).format('YYYY-MM-DD HH:mm:ss');
       params.endTime = this.$moment(this.dateTimePickerValue[1]).format('YYYY-MM-DD HH:mm:ss');
-      exportMoldingStatusExcel(params).then(res => {
+      exportMoldingSingleStatusExcel(params).then(res => {
         let url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
         let link = document.createElement('a');
         link.style.display = 'none';
         link.href = url;
-        link.setAttribute('download', "模造机状态汇总报表-" + new Date().getTime() + ".xlsx");
+        link.setAttribute('download', "模造机状态报表-" + new Date().getTime() + ".xlsx");
         document.body.appendChild(link);
         link.click();
       });
     }
   },
-  mounted() {
-    this.getMachineName();
-  }
 }
 </script>
+
+<style scoped>
+
+</style>
