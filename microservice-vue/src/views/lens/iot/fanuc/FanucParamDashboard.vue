@@ -68,6 +68,12 @@
                   <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
                 </template>
               </el-button>
+              <el-button type="success"
+                     @click="exportExcel('#paramDataList', 'paramDataList.xlsx')">导出
+            <template #icon>
+              <font-awesome-icon :icon="['fas','download']"/>
+            </template>
+          </el-button>
             </el-form-item>
           </el-form>
 
@@ -80,7 +86,42 @@
 
           </el-card>
         </el-row>
-
+        <el-card class="box-card" style="margin-top: 10px; width:100%">
+        <el-table
+          id="paramDataList"
+          v-loading="queryLoading"
+          :data="analysisData"
+          border
+          height="600"
+          stripe
+          style="width: 100%">
+        <el-table-column label="机台名" min-width="85" prop="monitMcName"></el-table-column>
+        <el-table-column label="时间" min-width="180" prop="monitDateTime"></el-table-column>
+        <el-table-column label="vp压力" min-width="85" prop="monitVPPrs"></el-table-column>
+        <el-table-column label="vp位置" min-width="85" prop="monitVPPos"></el-table-column>
+        <el-table-column label="逆流" min-width="85" prop="monitBackflw"></el-table-column>
+        <el-table-column label="计量时间" min-width="85" prop="monitRecovTime"></el-table-column>
+        <el-table-column label="峰值时间" min-width="85" prop="monitPeakT"></el-table-column>
+        <el-table-column label="峰值压力" min-width="85" prop="monitPeakPrs"></el-table-column>
+        <el-table-column label="最小缓冲" min-width="85" prop="monitPeakPos"></el-table-column>
+        <el-table-column label="模温1" min-width="85" prop="monitMold1"></el-table-column>
+        <el-table-column label="模温2" min-width="85" prop="monitMold2"></el-table-column>
+        <el-table-column label="模温3" min-width="85" prop="monitMold3"></el-table-column>
+        <el-table-column label="模温4" min-width="85" prop="monitMold4"></el-table-column>
+        <el-table-column label="模温5" min-width="85" prop="monitMold5"></el-table-column>
+        <el-table-column label="模温6" min-width="85" prop="monitMold6"></el-table-column>
+        <el-table-column label="模温7" min-width="85" prop="monitMold7"></el-table-column>
+        <el-table-column label="模温8" min-width="85" prop="monitMold8"></el-table-column>
+        <el-table-column label="射出时间" min-width="85" prop="monitInjTime"></el-table-column>
+        <el-table-column label="射出开始位置" min-width="150" prop="monitInjStartPos"></el-table-column>
+        <el-table-column label="周期" min-width="85" prop="monitCycle"></el-table-column>
+        <el-table-column label="料筒1温度" min-width="100" prop="monitBarrel1"></el-table-column>
+        <el-table-column label="料筒2温度" min-width="100" prop="monitBarrel2"></el-table-column>
+        <el-table-column label="料筒3温度" min-width="100" prop="monitBarrel3"></el-table-column>
+        <el-table-column label="料筒4温度" min-width="100" prop="monit_barrel4"></el-table-column>
+        <el-table-column label="喷嘴温度" min-width="85" prop="monitNozzle"></el-table-column>
+      </el-table>
+    </el-card>
     </div>
   </div>
 </template>
@@ -90,6 +131,8 @@
 import {getAnalysisData} from "@/api/lens/iot/fanucParamData";
 import {selectEquips} from "@/api/lens/iot/fanucNe";
 import * as echarts from 'echarts';
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 
 export default {
   name: "fanucParamDashboard",
@@ -155,6 +198,17 @@ export default {
     }
   },
   methods: {
+    exportExcel(tableId, excelFileName) {
+      const wb = XLSX.utils.table_to_book(document.querySelector(tableId));
+      const wbOut = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
+      try {
+        FileSaver.saveAs(new Blob([wbOut], {type: 'application/octet-stream'}), excelFileName)
+      } catch (e) {
+        if (typeof console !== 'undefined') console.log(e, wbOut)
+      }
+      return wbOut
+    },
+
     selectEquips() {
       selectEquips().then((response) => {
         const responseData = response.data
