@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="filters.productLine" placeholder="请选择产品线" @change="findPage(null)">
+            <el-select clearable v-model="filters.productLine" placeholder="请选择产品线" @change="findPage(null)">
               <el-option
                   v-for="item in productionLineOption"
                   :key="item.value"
@@ -25,7 +25,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select v-model="filters.jobEnvironment" placeholder="请选择环境" @change="findPage(null)">
+            <el-select clearable v-model="filters.jobEnvironment" placeholder="请选择环境" @change="findPage(null)">
               <el-option
                   v-for="item in environmentOption"
                   :key="item.value"
