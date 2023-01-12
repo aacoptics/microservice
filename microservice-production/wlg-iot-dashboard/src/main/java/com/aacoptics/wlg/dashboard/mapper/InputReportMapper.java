@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,13 @@ public interface InputReportMapper extends BaseMapper<InputReport> {
     /**
      * 获取output汇总
      * @param startTime
-     * @param endTime
      * @return
      */
-    List<Map<String, Object>> getMachineOutputSummary(@Param("startTime") LocalDateTime startTime,
-                                                      @Param("endTime") LocalDateTime endTime);
+    List<Map<String, Object>> getMachineOutputSummary(@Param("startTime") LocalDateTime startTime);
+
+
+    Map<String, Object> getMoldingMachineTotalQty(@Param("startTime") LocalDateTime startTime);
+
+
+
 }

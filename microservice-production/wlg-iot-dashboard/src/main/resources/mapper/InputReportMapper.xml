@@ -50,10 +50,16 @@
         select CONVERT(varchar(100), start_time, 20) time, sum(cast(SUBSTRING(end_wafer_id, 2, LEN(end_wafer_id)) as int)) output
         from t_wlg_molding_machine_input_per_six_hour
         where start_time >= #{startTime}
-        and start_time &lt; #{endTime}
         and end_wafer_id is not null
         group by start_time
-        order by start_time desc;
+        order by start_time;
+    </select>
+
+    <select id="getMoldingMachineTotalQty" resultType="map">
+        select sum(output_qty) total_output_qty,  sum(input_qty) total_input_qty
+        from t_wlg_molding_machine_input_per_six_hour
+        where start_time >= #{startTime}
+        and end_wafer_id is not null
     </select>
 
 

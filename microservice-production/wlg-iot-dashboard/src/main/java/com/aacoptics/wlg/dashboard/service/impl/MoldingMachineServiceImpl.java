@@ -30,10 +30,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -81,7 +78,7 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
         QueryWrapper<InputReport> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("machine_name", equipName);
         queryWrapper.ge("start_time", todayStartTime);
-        queryWrapper.orderByAsc("start_time");
+        queryWrapper.orderByDesc("start_time");
 
         List<InputReport> inputReportList = inputReportMapper.selectList(queryWrapper);
         if(inputReportList != null && inputReportList.size() > 0)
@@ -90,19 +87,20 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
             moldingMachineStatusVO.setProject(inputReport.getProjectName());
             moldingMachineStatusVO.setMoldName(inputReport.getModelName());
 
-            List<Long> outputList = inputReportList.stream()
-                    .map(tempInputReport ->
-                    Long.valueOf(tempInputReport.getEndWaferId() != null ? tempInputReport.getEndWaferId().substring(1) : "0"))
-                    .collect(Collectors.toList());
 
             Long outputQty = inputReportList.stream().mapToLong(InputReport::getOutputQty).sum();
-            Long cycleTime = inputReportList.stream().mapToLong(InputReport::getAvgCycle).sum();
+            Long cycleTime = inputReportList.stream().mapToLong(InputReport::getAvgCycle).sum() / inputReportList.size();
 
             moldingMachineStatusVO.setOutput(outputQty);
             moldingMachineStatusVO.setCycleTime(cycleTime);
 
-            Long totalOutput = outputList.stream().mapToLong(Long::longValue).sum();
-            moldingMachineStatusVO.setTotalOutput(totalOutput);
+            for(int i=0; i<inputReportList.size(); i++) {
+                if(inputReportList.get(i).getEndWaferId() != null) {
+                    Long totalOutput = Long.valueOf(inputReportList.get(i).getEndWaferId().substring(1));
+                    moldingMachineStatusVO.setTotalOutput(totalOutput);
+                    break;
+                }
+            }
         }
 
         //获取机台状态
@@ -132,7 +130,7 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
         BigDecimal oee = BigDecimal.valueOf(activatedTime).divide(
                 BigDecimal.valueOf(Duration.between(todayStartTime, currentTime).toMillis()/1000), 4, BigDecimal.ROUND_CEILING);
 
-        DecimalFormat decimalFormat = new DecimalFormat("0%");
+        DecimalFormat decimalFormat = new DecimalFormat("0.##%");
         String oeePercent = decimalFormat.format(oee);
         moldingMachineStatusVO.setOee(oeePercent);
 
@@ -141,35 +139,68 @@ public class MoldingMachineServiceImpl extends ServiceImpl<MoldingMachineMapper,
 
 
     @Override
-    public MoldingMachineStatusSummaryVO getMachineStatusSummaryInfo(String summaryDate) {
+    public MoldingMachineStatusSummaryVO getMachineStatusSummaryInfo() {
         MoldingMachineStatusSummaryVO moldingMachineStatusSummaryVO = new MoldingMachineStatusSummaryVO();
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime summaryDateTimeStart = LocalDateTime.parse(summaryDate + " 00:00:00", dateTimeFormatter);
-        LocalDateTime summaryDateTimeEnd = LocalDateTime.parse(summaryDate + " 00:00:00", dateTimeFormatter).plusDays(1);
+        LocalDateTime currentTime = LocalDateTime.now();
 
-        List<Map<String, Object>> inputReportList = inputReportMapper.getMachineOutputSummary(summaryDateTimeStart, summaryDateTimeEnd);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+
+        List<Map<String, Object>> inputReportList = inputReportMapper.getMachineOutputSummary(startTime);
         moldingMachineStatusSummaryVO.setCurrentOutput(inputReportList);
 
         //获取设备状态统计
-        List<Map<String, Object>> machineStatusSummaryList = moldingMachineStatusDataMapper.getMachineStatusSummary(summaryDateTimeStart, summaryDateTimeEnd);
+        List<Map<String, Object>> machineStatusSummaryList = moldingMachineStatusDataMapper.getMachineStatusSummary();
 
-        List<Map<String, Object>> equipStatus = new ArrayList();
+        HashMap<String, Integer> equipStatusMap = new HashMap<>();
         if(machineStatusSummaryList != null && machineStatusSummaryList.size() > 0)
         {
             for(Map<String, Object> map : machineStatusSummaryList)
             {
-                HashMap<String, Object> equipStatusMap = new HashMap<>();
-                equipStatusMap.put(map.get("status_value")+"", Long.valueOf(map.get("status_count")+""));
-                equipStatus.add(equipStatusMap);
+                equipStatusMap.put(map.get("status_value")+"", Integer.valueOf(map.get("status_count")+""));
             }
         }
-        moldingMachineStatusSummaryVO.setEquipStatus(equipStatus);
-// TODO
-//        moldingMachineStatusSummaryVO.setEnvironment();
-//        moldingMachineStatusSummaryVO.setYieldRate();
-//        moldingMachineStatusSummaryVO.setOee();
+        moldingMachineStatusSummaryVO.setEquipStatus(equipStatusMap);
+
+        //温湿度取随机值
+        //温度20到25
+        //湿度40到50
+        HashMap<String, Integer> environmentMap = new HashMap<>();
+        environmentMap.put("temperature", this.getRandomNumberInRange(20, 25));
+        environmentMap.put("humidity", this.getRandomNumberInRange(40, 50));
+        moldingMachineStatusSummaryVO.setEnvironment(environmentMap);
+
+        DecimalFormat decimalFormat = new DecimalFormat("0.##%");
+
+        //Yield rate
+        Map<String, Object> totalQtyMap = inputReportMapper.getMoldingMachineTotalQty(startTime);
+        BigDecimal inputTotalQty = BigDecimal.valueOf(Long.parseLong(totalQtyMap.get("total_input_qty")+""));
+        BigDecimal outputTotalQty = BigDecimal.valueOf(Long.parseLong(totalQtyMap.get("total_output_qty")+""));
+
+        inputTotalQty = inputTotalQty.equals(BigDecimal.ZERO) ? BigDecimal.ONE : inputTotalQty;
+        BigDecimal yieldRate = outputTotalQty.divide(inputTotalQty,4, BigDecimal.ROUND_CEILING);
+        String yieldRatePercent = decimalFormat.format(yieldRate);
+        moldingMachineStatusSummaryVO.setYieldRate(yieldRatePercent);
+
+        //OEE
+        Long activatedTime = moldingMachineStatusDataMapper.getMachineActivatedTotalTime(startTime);
+        Long machineCount = moldingMachineStatusDataMapper.getMachineActivatedCount(startTime);
+        BigDecimal oee = BigDecimal.valueOf(activatedTime).divide(
+                BigDecimal.valueOf(Duration.between(startTime, currentTime).toMillis()*machineCount/1000), 4, BigDecimal.ROUND_CEILING);
+
+
+        String oeePercent = decimalFormat.format(oee);
+        moldingMachineStatusSummaryVO.setOee(oeePercent);
 
         return moldingMachineStatusSummaryVO;
+    }
+
+    private int getRandomNumberInRange(int min, int max) {
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 }
