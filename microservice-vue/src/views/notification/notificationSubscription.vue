@@ -61,6 +61,24 @@
               </el-tooltip>
             </template>
           </el-table-column>
+          <el-table-column align="center" fixed="left" header-align="center" label="消息编码"
+                           width="80">
+            <template v-slot="scope">
+                <el-tag>{{
+                    scope.row.notificationNo
+                  }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" fixed="left" header-align="center" label="消息名称"
+                           width="200">
+            <template v-slot="scope">
+              <el-tooltip :content="scope.row.remark" placement="top">
+                <span>{{
+                    scope.row.jobDesc
+                  }}</span>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
             <template v-slot="scope">
@@ -446,16 +464,13 @@ export default {
         }
       ],
       columns: [
-        {prop: "notificationNo", label: "消息编码", minWidth: 80, sortable: false},
+        {prop: "planKey", label: "消息Key", minWidth: 120, sortable: false},
         {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
-        {prop: "planKey", label: "消息Key", minWidth: 100, sortable: false},
-        {prop: "jobDesc", label: "消息名称", minWidth: 100, sortable: false},
-        {prop: "remark", label: "消息描述", minWidth: 120,  sortable: false},
         {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
-        {prop: "executeTime", label: "执行时间", minWidth: 100,  sortable: false},
+        {prop: "executeTime", label: "执行时间", minWidth: 100, sortable: false},
         {prop: "onlineTime", label: "上线时间", minWidth: 80, formatter: this.dateTimeFormat, sortable: false},
-        {prop: "responsiblePersonName", label: "消息责任人（审批人）", minWidth: 80,  sortable: false},
-        {prop: "author", label: "IT责任人", minWidth: 80,  sortable: false}
+        {prop: "responsiblePersonName", label: "消息责任人（审批人）", minWidth: 80, sortable: false},
+        {prop: "author", label: "IT责任人", minWidth: 80, sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
       pageResult: {},
@@ -594,12 +609,12 @@ export default {
     async star(row) {
 
       let msg = ''
-      if(row.subscriptionStatus === 3){
+      if (row.subscriptionStatus === 3) {
         this.$message({message: '正在审批中！', type: 'warning'})
         return
-      }else if(row.subscriptionStatus === 1){
+      } else if (row.subscriptionStatus === 1) {
         msg = '确认取消 ' + row.jobDesc + ' 的订阅吗，取消再订阅需要重新进行审批！'
-      }else{
+      } else {
         msg = '确认订阅 ' + row.jobDesc + ' 吗，如确认，将发送审批至消息责任人 ' + row.responsiblePersonName + '！'
       }
 
@@ -625,7 +640,7 @@ export default {
             const ResponseData = res.data
             if (ResponseData.code === '000000') {
               this.$message({message: ResponseData.data, type: 'success'})
-              if(row.subscriptionStatus !== 1)
+              if (row.subscriptionStatus !== 1)
                 row.subscriptionStatus = 3
               else
                 this.findPage(null)
@@ -638,18 +653,18 @@ export default {
 
           })
     },
-    IsStarContent(row){
-      if(row.subscriptionStatus === 1)
+    IsStarContent(row) {
+      if (row.subscriptionStatus === 1)
         return '取消订阅'
-      else if(row.subscriptionStatus === 3)
+      else if (row.subscriptionStatus === 3)
         return '审批中'
       else
         return '订阅'
     },
     isStarIcon(row) {
-      if(row.subscriptionStatus === 1)
+      if (row.subscriptionStatus === 1)
         return ['fas', 'star']
-      else if(row.subscriptionStatus === 3)
+      else if (row.subscriptionStatus === 3)
         return ['fab', 'bilibili']
       else
         return ['far', 'star']
@@ -940,15 +955,14 @@ export default {
         return ''
     },
     environmentFormat: function (row, column) {
-      if (row[column.property]){
+      if (row[column.property]) {
         const newArr = this.environmentOption.filter(function (p) {
           return p.value === row[column.property];
         });
-        if(newArr.length > 0)
+        if (newArr.length > 0)
           return newArr[0].title
         else return ''
-      }
-      else
+      } else
         return ''
     },
   },
