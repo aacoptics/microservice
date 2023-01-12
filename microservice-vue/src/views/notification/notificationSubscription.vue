@@ -464,7 +464,7 @@ export default {
         }
       ],
       columns: [
-        {prop: "planKey", label: "消息Key", minWidth: 120, sortable: false},
+        {prop: "planKey", label: "消息Key", minWidth: 100, sortable: false},
         {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
         {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
         {prop: "executeTime", label: "执行时间", minWidth: 100, sortable: false},
