@@ -129,4 +129,9 @@ public class MoldingMachineParamDataServiceImpl extends ServiceImpl<MoldingMachi
     public List<Map<String, Object>> getMoldingMk4ExportData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime) {
         return moldingMachineParamDataMapper.getMoldingMk4ExportData(machineName, startTime, endTime);
     }
+
+    @Override
+    public List<Map<String, Object>> getMoldingSingleStatusData(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime) {
+        return moldingMachineParamDataMapper.getMoldingSingleStatusData(machineName, startTime, endTime);
+    }
 }

@@ -59,5 +59,10 @@ public class MoldingEventDataServiceImpl extends ServiceImpl<MoldingEventDataMap
         return moldingEventDataMapper.getMoldingMK4Data(page, machineName, startTime, endTime);
     }
 
+    @Override
+    public IPage<MoldingEventData> getMachineSingleStatus(List<String> machineName, LocalDateTime startTime, LocalDateTime endTime, Page page) {
+        return moldingEventDataMapper.getMachineSingleStatus(page, machineName, startTime, endTime);
+    }
+
 
 }
