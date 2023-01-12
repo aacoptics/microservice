@@ -61,7 +61,7 @@
     </select>
 
     <select id="getMoldingSingleStatusData" resultType="Map">
-        select machine_name, status_value as alarm_info, datediff(second , start_time, end_time) as duration, start_time, end_time
+        select machine_name, status_value as alarm_info, datediff(second , start_time, end_time) as duration, convert(varchar(45), start_time, 20) as start_time, convert(varchar(45), end_time, 20) as end_time
         FROM t_wlg_molding_machine_status_data
         where machine_name in
         <foreach collection="machineName" separator="," open="(" close=")" item="machine">
