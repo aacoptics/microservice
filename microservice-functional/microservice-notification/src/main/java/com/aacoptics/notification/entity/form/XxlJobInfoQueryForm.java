@@ -19,6 +19,10 @@ public class XxlJobInfoQueryForm extends XxlJobInfo {
      */
     private long size = 10;
 
+    private Integer searchOption = 0;
+
+    private String username;
+
     public XxlJobInfo toParam() {
         XxlJobInfo p = new XxlJobInfo();
         BeanUtils.copyProperties(this, p);

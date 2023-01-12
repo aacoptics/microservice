@@ -50,6 +50,8 @@ public class UmsContentSub implements Serializable {
 
     private String isUrl;
 
+    private String isUrlName;
+
     private String isColour;
 
     private String isTypeface;

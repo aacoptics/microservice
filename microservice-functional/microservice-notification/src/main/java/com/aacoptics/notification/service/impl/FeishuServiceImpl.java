@@ -134,6 +134,24 @@ public class FeishuServiceImpl implements FeishuService {
     }
 
     @Override
+    public JSONObject batchSendMessage(List<String> receiveId, String messageType, JSONObject message) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken)) return null;
+        JSONObject jsonObject = JSONUtil.createObj()
+                .set("user_ids", receiveId)
+                .set("card", message)
+                .set("msg_type", messageType);
+        final JSONObject result = feishuApiProvider.fetchBatchSendMessageKey(accessToken, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+
+        return result;
+//
+//        return result.get("code", Integer.class) == 0;
+    }
+
+    @Override
     public boolean deleteMessage(String messageId) {
         final String accessToken = fetchAccessToken();
         if (StrUtil.isEmpty(accessToken)) return false;
@@ -193,6 +211,18 @@ public class FeishuServiceImpl implements FeishuService {
         if (StrUtil.isEmpty(accessToken))
             throw new BusinessException("获取access token失败！");
         final JSONObject result = feishuApiProvider.fetchCreateTask(accessToken, userIdType, jsonObject);
+        final String throwable = result.get("Throwable", String.class);
+        if (StrUtil.isNotEmpty(throwable))
+            throw new BusinessException(throwable);
+        return result;
+    }
+
+    @Override
+    public JSONObject createApproveInstance(JSONObject jsonObject) {
+        final String accessToken = fetchAccessToken();
+        if (StrUtil.isEmpty(accessToken))
+            throw new BusinessException("获取access token失败！");
+        final JSONObject result = feishuApiProvider.fetchCreateApproveInstance(accessToken, jsonObject);
         final String throwable = result.get("Throwable", String.class);
         if (StrUtil.isNotEmpty(throwable))
             throw new BusinessException(throwable);

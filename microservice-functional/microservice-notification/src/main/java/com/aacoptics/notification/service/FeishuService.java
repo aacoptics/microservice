@@ -58,10 +58,14 @@ public interface FeishuService {
 
     JSONObject sendMessage(String receiveIdType, String receiveId, String messageType, JSONObject message);
 
+    JSONObject batchSendMessage(List<String> receiveId, String messageType, JSONObject message);
+
     boolean deleteMessage(String messageId);
 
     JSONObject createTask(String userIdType,
                           JSONObject jsonObject);
+
+    JSONObject createApproveInstance(JSONObject jsonObject);
 
     JSONObject getTaskInfo(String taskId);
 

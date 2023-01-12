@@ -23,7 +23,7 @@ public interface XxlJobInfoService extends IService<XxlJobInfo> {
 
     IPage<XxlJobInfo> query(Page page, XxlJobInfo xxlJobInfo);
 
-    IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo);
+    IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo, Integer searchOption, String username);
 
     Result triggerJob(TriggerJobForm triggerJobForm);
 }

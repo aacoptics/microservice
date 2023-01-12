@@ -36,6 +36,10 @@ public interface FeishuApiProvider {
                                    @RequestParam("receive_id_type") String receiveIdType,
                                    @RequestBody JSONObject message);
 
+    @PostMapping(value = "/message/v4/batch_send", headers = {"Content-Type=application/json;charset=UTF-8"})
+    JSONObject fetchBatchSendMessageKey(@RequestHeader("Authorization") String authorization,
+                                   @RequestBody JSONObject message);
+
     @GetMapping(value = "/im/v1/chats",
             headers = {"Content-Type=multipart/form-data;charset=UTF-8"})
     JSONObject fetchChats(@RequestHeader("Authorization") String authorization,
@@ -49,7 +53,7 @@ public interface FeishuApiProvider {
                                @RequestParam("user_id_type") String userIdType,
                                @RequestBody JSONObject jsonObject);
 
-    @PostMapping(value = "/task/v1/tasks",
+    @PostMapping(value = "/approval/v4/instances",
             headers = {"Content-Type=application/json;charset=UTF-8"})
     JSONObject fetchCreateApproveInstance(@RequestHeader("Authorization") String authorization,
                                @RequestBody JSONObject jsonObject);

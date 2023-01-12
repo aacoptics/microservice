@@ -15,19 +15,36 @@
         FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
         where machine_name = #{machineName}
         and status_id = 5
-        and machine_name = #{machineName}
         and status_value = 'ACTIVATED'
         and start_time >= #{startTime}
     </select>
 
+
+    <select id="getMachineActivatedTotalTime" resultType="long">
+        SELECT isnull(sum(datediff(SS, start_time, end_time)), 0)
+        FROM [WLGIOT].[dbo].[t_wlg_molding_machine_status_data]
+        where status_id = 5
+        and status_value = 'ACTIVATED'
+        and start_time >= #{startTime}
+    </select>
+
+    <select id="getMachineActivatedCount" resultType="long">
+        select isnull(count(distinct machine_name), 0)
+        from t_wlg_molding_machine_status_data
+        where status_id = 5
+          and status_value = 'ACTIVATED'
+        and start_time >= #{startTime}
+    </select>
+
+
     <select id="getMachineStatusSummary" resultType="map">
-            select status_value, count(1) status_count
-            from t_wlg_molding_machine_status_data
-            where  status_id = 5
-              and start_time >= #{startTime}
-              and start_time &lt; #{endTime}
-            group by status_value
-            order by status_value
+    select status_value, COUNT(1) status_count
+        from (
+                 select *, ROW_NUMBER() over ( partition by machine_name order by start_time desc ) ROW_NUM
+                 from t_wlg_molding_machine_status_data
+                 where status_id = 5) A
+        where A.ROW_NUM = 1
+        GROUP BY status_value
     </select>
 
 </mapper>
