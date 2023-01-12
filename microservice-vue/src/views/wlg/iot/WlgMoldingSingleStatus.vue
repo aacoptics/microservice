@@ -188,6 +188,9 @@ export default {
       });
     }
   },
+  mounted() {
+    this.getMachineName();
+  }
 }
 </script>
 
