@@ -367,7 +367,7 @@ public class InspectionOrderServiceImpl extends ServiceImpl<InspectionOrderMappe
         equipmentService.update(equipment);
 
 
-        boolean isSuccess = this.updateById(targetInspectionOrder);
+        boolean isSuccess = this.update(targetInspectionOrder);
         return isSuccess;
     }
 
