@@ -80,7 +80,7 @@
           <el-table-column align="center" fixed="left" header-align="center" label="消息编码"
                            width="80">
             <template v-slot="scope">
-              <el-tag>{{
+              <el-tag effect="dark">{{
                   scope.row.notificationNo
                 }}
               </el-tag>
