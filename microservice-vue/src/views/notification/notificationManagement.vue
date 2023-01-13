@@ -18,9 +18,10 @@
             <el-select clearable v-model="filters.productLine" placeholder="请选择产品线" @change="findPage(null)">
               <el-option
                   v-for="item in productionLineOption"
-                  :key="item.value"
-                  :label="item.value"
-                  :value="item.value">
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -28,9 +29,10 @@
             <el-select clearable v-model="filters.fieldName" placeholder="请选择领域" @change="findPage(null)">
               <el-option
                   v-for="item in fieldOption"
-                  :key="item.value"
-                  :label="item.value"
-                  :value="item.value">
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
+              >
               </el-option>
             </el-select>
           </el-form-item>
@@ -194,9 +196,10 @@
                 <el-select v-model="dataForm.productLine" placeholder="请选择">
                   <el-option
                       v-for="item in productionLineOption"
-                      :key="item.value"
-                      :label="item.value"
-                      :value="item.value">
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -206,9 +209,10 @@
                 <el-select v-model="dataForm.fieldName" placeholder="请选择">
                   <el-option
                       v-for="item in fieldOption"
-                      :key="item.value"
-                      :label="item.value"
-                      :value="item.value">
+                      :key="item.dictValue"
+                      :label="item.dictLabel"
+                      :value="item.dictValue"
+                  >
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -593,70 +597,8 @@ export default {
       },
       searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
-      productionLineOption: [
-        {
-          value: "手机LENS"
-        },
-        {
-          value: "非手机LENS"
-        },
-        {
-          value: "镜头WLG"
-        },
-        {
-          value: "模组MOD"
-        },
-        {
-          value: "传动VCM"
-        },
-        {
-          value: "财务"
-        },
-        {
-          value: "采购与供应链"
-        },
-        {
-          value: "人力"
-        },
-        {
-          value: "其他"
-        },
-      ],
-      fieldOption: [
-        {
-          value: "研发"
-        },
-        {
-          value: "生产"
-        },
-        {
-          value: "销售"
-        },
-        {
-          value: "财务"
-        },
-        {
-          value: "采购"
-        },
-        {
-          value: "人事"
-        },
-        {
-          value: "办公运营"
-        },
-        {
-          value: "IT"
-        },
-        {
-          value: "数据"
-        },
-        {
-          value: "行政后勤"
-        },
-        {
-          value: "跨领域"
-        },
-      ],
+      productionLineOption: [],
+      fieldOption: [],
       robotOptions: [],
       executorHandlerOptions: [],
       currentRobotsInfo: [],
@@ -1055,7 +997,7 @@ export default {
         return ''
     },
     environmentFormat: function (row, column) {
-      if(row[column.property] === 'PROD')
+      if (row[column.property] === 'PROD')
         return '正式'
       else
         return '测试'
@@ -1073,5 +1015,13 @@ export default {
       }, 100);
     },
   },
+  mounted() {
+    getDict("product_line").then(response => {
+      this.productionLineOption = response.data.data
+    })
+    getDict("field_name").then(response => {
+      this.fieldOption = response.data.data
+    })
+  }
 }
 </script>
