@@ -111,9 +111,9 @@
         JSON_VALUE(data_str, '$.CncStatus') as cncStatus
         from device_original_data
         where 1=1
-        and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data )
-        and dev_id in (select dev_id from device_mapping where device_name like '温湿度%')
+        and dev_id in (69027,69041,79582,79587,79588,79590,79592)
         and create_time > GETDATE() - 9
+        and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data) 
         order by id asc
     </select>
 
