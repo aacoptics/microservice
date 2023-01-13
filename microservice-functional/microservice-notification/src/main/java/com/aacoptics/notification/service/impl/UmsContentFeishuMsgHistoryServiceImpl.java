@@ -9,6 +9,7 @@ import com.aacoptics.notification.service.FeishuService;
 import com.aacoptics.notification.service.UmsContentFeishuMsgHistoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,7 @@ public class UmsContentFeishuMsgHistoryServiceImpl extends ServiceImpl<UmsConten
         QueryWrapper<UmsContentFeishuMsgHistory> queryWrapper = umsContentFeishuMsgHistoryQueryParam.build();
         queryWrapper.eq(StringUtils.isNotBlank(umsContentFeishuMsgHistoryQueryParam.getBatchId()), "batch_id", umsContentFeishuMsgHistoryQueryParam.getBatchId());
         queryWrapper.eq(StringUtils.isNotBlank(umsContentFeishuMsgHistoryQueryParam.getConType()), "con_type", umsContentFeishuMsgHistoryQueryParam.getConType());
-        queryWrapper.orderByDesc("id");
-        return this.page(page, queryWrapper);
+        return this.page(page.addOrder(OrderItem.desc("id")), queryWrapper);
     }
 
     @Override
