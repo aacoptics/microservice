@@ -112,8 +112,8 @@
         from device_original_data
         where 1=1
         and dev_id in (69027,69041,79582,79587,79588,79590,79592)
-        and create_time > GETDATE() - 9
-        and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data) 
+        and create_time > GETDATE() - 13
+        and id > (SELECT ISNULL(max(data_id),0) from z_temphumidity_data)
         order by id asc
     </select>
 
