@@ -653,6 +653,9 @@ export default {
         {
           value: "行政后勤"
         },
+        {
+          value: "跨领域"
+        },
       ],
       robotOptions: [],
       executorHandlerOptions: [],
