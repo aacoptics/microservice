@@ -5,6 +5,6 @@
     <select id="getMaxNo" resultType="java.lang.String">
         SELECT max(notification_no) as notification_no
         FROM notification_job_info
-        where in_list = #{inList}
+        where job_environment = #{jobEnvironment}
     </select>
 </mapper>

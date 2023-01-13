@@ -3,7 +3,6 @@ package com.aacoptics.notification.service.impl;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.entity.po.*;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.exception.BusinessException;
@@ -13,6 +12,9 @@ import com.aacoptics.notification.provider.XxlJobProvider;
 import com.aacoptics.notification.service.*;
 import com.spire.xls.Worksheet;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -229,6 +231,91 @@ public class UmsContentServiceImplTest {
         robots.add(robot);
         notificationEntity.setMsgTypeInfo(robots);
         sendMessageService.sendHandledMessage(notificationEntity);
+
+
+    }
+
+    @Test
+    public void test222() {
+        String sql = "SELECT t.id\n" +
+                "             , t.job_group\n" +
+                "             , t.job_desc\n" +
+                "             , t.add_time\n" +
+                "             , t.update_time\n" +
+                "             , t.author\n" +
+                "             , t.alarm_email\n" +
+                "             , t.schedule_type\n" +
+                "             , t.schedule_conf\n" +
+                "             , t.misfire_strategy\n" +
+                "             , t.executor_route_strategy\n" +
+                "             , t.executor_handler\n" +
+                "             , t.executor_param\n" +
+                "             , t.executor_block_strategy\n" +
+                "             , t.executor_timeout\n" +
+                "             , t.executor_fail_retry_count\n" +
+                "             , t.glue_type\n" +
+                "             , t.glue_source\n" +
+                "             , t.glue_remark\n" +
+                "             , t.glue_updatetime\n" +
+                "             , t.child_jobid\n" +
+                "             , t.trigger_status\n" +
+                "             , t.trigger_last_time\n" +
+                "             , t.trigger_next_time\n" +
+                "             , JSON_VALUE(executor_param, '$.planKey')              as 'plan_key'\n" +
+                "             , a.id                                                 as notification_id\n" +
+                "             , xxl_job_id\n" +
+                "             , product_line\n" +
+                "             , remark\n" +
+                "             , online_time\n" +
+                "             , responsible_person\n" +
+                "             , responsible_person_name\n" +
+                "             , it_person\n" +
+                "             , job_status\n" +
+                "             , subscription_enabled\n" +
+                "             , execute_time\n" +
+                "             , job_environment\n" +
+                "             , notification_no\n" +
+                "             , push_type\n" +
+                "             , field_name\n" +
+                "             , ISNULL((select approve_status\n" +
+                "                       from notification_job_subscription\n" +
+                "                       where notification_job_id = a.id\n" +
+                "                         and subscription_person = '60054916'), 0) as subscription_status\n" +
+                "        from (SELECT id\n" +
+                "                   , job_group\n" +
+                "                   , job_desc\n" +
+                "                   , add_time\n" +
+                "                   , update_time\n" +
+                "                   , author\n" +
+                "                   , alarm_email\n" +
+                "                   , schedule_type\n" +
+                "                   , schedule_conf\n" +
+                "                   , misfire_strategy\n" +
+                "                   , executor_route_strategy\n" +
+                "                   , executor_handler\n" +
+                "                   , executor_param\n" +
+                "                   , executor_block_strategy\n" +
+                "                   , executor_timeout\n" +
+                "                   , executor_fail_retry_count\n" +
+                "                   , glue_type\n" +
+                "                   , glue_source\n" +
+                "                   , glue_remark\n" +
+                "                   , glue_updatetime\n" +
+                "                   , child_jobid\n" +
+                "                   , trigger_status\n" +
+                "                   , trigger_last_time\n" +
+                "                   , trigger_next_time\n" +
+                "              FROM xxl_job_info\n" +
+                "              where executor_handler = 'RobotHandle') t\n" +
+                "                 join notification_job_info a\n" +
+                "                      on t.id = a.xxl_job_id\n" +
+                "        where job_environment = 'QAS'";
+        try {
+            Statement test = CCJSqlParserUtil.parse(sql);
+            String asd = "";
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
+        }
 
 
     }

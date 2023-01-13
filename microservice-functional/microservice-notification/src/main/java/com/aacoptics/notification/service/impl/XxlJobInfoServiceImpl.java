@@ -94,25 +94,13 @@ public class XxlJobInfoServiceImpl extends ServiceImpl<XxlJobInfoMapper, XxlJobI
     }
 
     @Override
-    public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo, Integer searchOption, String username, String productLine, String jobEnvironment, Boolean inList) {
+    public IPage<XxlJobInfo> listNotificationTask(Page page, XxlJobInfo xxlJobInfo, Integer searchOption, String username, String productLine, String jobEnvironment, String fieldName) {
         if (searchOption == 0)
-            return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, inList);
+            return xxlJobInfoMapper.listNotificationTask(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, fieldName);
         else if (searchOption == 1)
-            return xxlJobInfoMapper.listSubNotificationTask(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, inList);
+            return xxlJobInfoMapper.listSubNotificationTask(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, fieldName);
         else if (searchOption == 2)
-            return xxlJobInfoMapper.listSubNotificationTaskByUser(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, inList);
-        else
-            return new Page<>();
-    }
-
-    @Override
-    public IPage<XxlJobInfo> listNotificationTaskProd(Page page, XxlJobInfo xxlJobInfo, Integer searchOption, String username, String productLine, String jobEnvironment) {
-        if (searchOption == 0)
-            return xxlJobInfoMapper.listNotificationTaskProd(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment);
-        else if (searchOption == 1)
-            return xxlJobInfoMapper.listSubNotificationTaskProd(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment);
-        else if (searchOption == 2)
-            return xxlJobInfoMapper.listSubNotificationTaskByUserProd(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment);
+            return xxlJobInfoMapper.listSubNotificationTaskByUser(page, xxlJobInfo.getPlanKey(), username, productLine, jobEnvironment, fieldName);
         else
             return new Page<>();
     }

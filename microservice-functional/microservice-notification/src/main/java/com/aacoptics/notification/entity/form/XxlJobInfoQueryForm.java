@@ -1,6 +1,7 @@
 package com.aacoptics.notification.entity.form;
 
 import com.aacoptics.notification.entity.po.XxlJobInfo;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,6 +36,6 @@ public class XxlJobInfoQueryForm extends XxlJobInfo {
      * @return
      */
     public Page getPage() {
-        return new Page(this.getCurrent(), this.getSize());
+        return new Page(this.getCurrent(), this.getSize()).addOrder(OrderItem.asc("notification_no"));
     }
 }

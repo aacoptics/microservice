@@ -15,5 +15,5 @@ import java.util.List;
 public interface NotificationJobInfoMapper extends BaseMapper<NotificationJobInfo> {
 
     @DS("msg_db")
-    String getMaxNo(@Param("inList") Boolean inList);
+    String getMaxNo(@Param("jobEnvironment") String jobEnvironment);
 }

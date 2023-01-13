@@ -48,5 +48,5 @@ public class NotificationJobInfo extends BasePo {
 
     private String pushType;
 
-    private Boolean inList;
+    private String fieldName;
 }

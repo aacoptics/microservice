@@ -150,5 +150,5 @@ public class XxlJobInfo implements Serializable {
     private String pushType;
 
     @TableField(exist = false)
-    private Boolean inList;
+    private String fieldName;
 }

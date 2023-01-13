@@ -25,11 +25,11 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-select clearable v-model="filters.jobEnvironment" placeholder="请选择环境" @change="findPage(null)">
+            <el-select clearable v-model="filters.fieldName" placeholder="请选择领域" @change="findPage(null)">
               <el-option
-                  v-for="item in environmentOption"
+                  v-for="item in fieldOption"
                   :key="item.value"
-                  :label="item.title"
+                  :label="item.value"
                   :value="item.value">
               </el-option>
             </el-select>
@@ -99,7 +99,7 @@
         </template>
       </SysTable>
       <el-dialog v-model="dialogVisible" :close-on-click-modal="false" :title="operation?'新增':'编辑'"
-                 width="60%" @open="handleDialogOpen">
+                 width="60%" @open="handleDialogOpen" destroy-on-close>
         <el-form ref="dataForm" :model="dataForm" :rules="dataFormRules" :size="size" label-width="110px">
           <el-form-item v-if="false" label="Id" prop="id">
             <el-input v-model="dataForm.id" auto-complete="off"></el-input>
@@ -126,14 +126,14 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="消息环境" prop="jobEnvironment">
-                <el-select v-model="dataForm.jobEnvironment" placeholder="请选择">
-                  <el-option
-                      v-for="item in environmentOption"
-                      :key="item.value"
-                      :label="item.title"
-                      :value="item.value">
-                  </el-option>
-                </el-select>
+                <el-switch
+                    v-model="dataForm.jobEnvironment"
+                    active-text="正式"
+                    active-value="PROD"
+                    inactive-text="测试"
+                    inactive-value="QAS"
+                    style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff8c00"
+                />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -162,6 +162,20 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item label="领域" prop="fieldName">
+                <el-select v-model="dataForm.fieldName" placeholder="请选择">
+                  <el-option
+                      v-for="item in fieldOption"
+                      :key="item.value"
+                      :label="item.value"
+                      :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
               <el-form-item label="消息责任人（审批人）" prop="responsiblePerson">
                 <el-select ref="select"
                            v-model="dataForm.responsiblePerson"
@@ -178,6 +192,11 @@
                       :value="item['employeeNo']"
                   />
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="IT负责人" prop="author">
+                <el-input v-model="dataForm.author" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -207,8 +226,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="IT负责人" prop="author">
-                <el-input v-model="dataForm.author" auto-complete="off"></el-input>
+              <el-form-item label="推送形式" prop="pushType">
+                <el-input v-model="dataForm.pushType" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -216,25 +235,6 @@
             <el-col :span="24">
               <el-form-item label="消息描述" prop="remark">
                 <el-input v-model="dataForm.remark" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="推送形式" prop="pushType">
-                <el-input v-model="dataForm.pushType" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="加入正式清单" prop="inList">
-                <el-switch
-                    v-model="dataForm.inList"
-                    inline-prompt
-                    active-text="是"
-                    :active-value="true"
-                    inactive-text="否"
-                    :inactive-value="false"
-                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -437,7 +437,7 @@
 import SysTable from "@/components/SysTable";
 import {
   deleteTask,
-  findTaskInfoPageProd, getFeishuUser, getFeishuUsers,
+  findTaskInfoPage, getFeishuUser, getFeishuUsers,
   handleAdd,
   handleUpdate, sendFeishuApprove,
   startTask,
@@ -462,8 +462,7 @@ export default {
         selectedType: 0,
         planKey: '',
         productLine: '',
-        jobEnvironment: '',
-        inList: true
+        fieldName: ''
       },
       starOptions: [
         {
@@ -482,6 +481,7 @@ export default {
       columns: [
         {prop: "planKey", label: "消息Key", minWidth: 100, sortable: false},
         {prop: "productLine", label: "产品线", minWidth: 80, sortable: false},
+        {prop: "fieldName", label: "领域", minWidth: 80, sortable: false},
         {prop: "jobEnvironment", label: "环境", minWidth: 60, formatter: this.environmentFormat, sortable: false},
         {prop: "executeTime", label: "执行时间", minWidth: 100, sortable: false},
         {prop: "pushType", label: "推送形式", minWidth: 120, sortable: false},
@@ -500,6 +500,7 @@ export default {
         jobGroup: [{required: true, message: '请选择执行器', trigger: 'change'}],
         jobEnvironment: [{required: true, message: '请选择消息环境', trigger: 'change'}],
         productLine: [{required: true, message: '请选择产品线', trigger: 'change'}],
+        fieldName: [{required: true, message: '请选择领域', trigger: 'change'}],
         responsiblePerson: [{required: true, message: '请选择责任人', trigger: 'change'}],
         onlineTime: [{required: true, message: '请选择上线时间', trigger: 'change'}],
         jobDesc: [{required: true, message: '请输入消息名称', trigger: 'blur'}],
@@ -543,15 +544,14 @@ export default {
         responsiblePersonName: '',
         itPerson: '',
         jobStatus: true,
-        subscriptionEnabled: true,
+        subscriptionEnabled: false,
         executeTime: '',
-        jobEnvironment: '',
+        jobEnvironment: 'QAS',
         pushType: '',
-        inList: false
+        fieldName: ''
       },
       searchUserList: [],
       executorInfo: [{"id": 4, "appName": "notification-center", "title": "统一消息中心"}],
-      environmentOption: [{"title": "正式", "value": "PROD"}, {"title": "测试", "value": "QAS"}],
       productionLineOption: [
         {
           value: "手机LENS"
@@ -579,6 +579,38 @@ export default {
         },
         {
           value: "其他"
+        },
+      ],
+      fieldOption: [
+        {
+          value: "研发"
+        },
+        {
+          value: "生产"
+        },
+        {
+          value: "销售"
+        },
+        {
+          value: "财务"
+        },
+        {
+          value: "采购"
+        },
+        {
+          value: "人事"
+        },
+        {
+          value: "办公运营"
+        },
+        {
+          value: "IT"
+        },
+        {
+          value: "数据"
+        },
+        {
+          value: "行政后勤"
         },
       ],
       robotOptions: [],
@@ -734,11 +766,11 @@ export default {
       }
       this.pageRequest.planKey = this.filters.planKey
       this.pageRequest.productLine = this.filters.productLine
-      this.pageRequest.jobEnvironment = this.filters.jobEnvironment
+      this.pageRequest.jobEnvironment = 'PROD'
       this.pageRequest.username = getUsername()
       this.pageRequest.searchOption = this.filters.selectedType
-      this.pageRequest.inList = this.filters.inList
-      findTaskInfoPageProd(this.pageRequest).then((res) => {
+      this.pageRequest.fieldName = this.filters.fieldName
+      findTaskInfoPage(this.pageRequest).then((res) => {
         const responseData = res.data
         if (responseData.code === '000000') {
           this.pageResult = responseData.data
@@ -829,11 +861,11 @@ export default {
         responsiblePersonName: '',
         itPerson: '',
         jobStatus: true,
-        subscriptionEnabled: true,
+        subscriptionEnabled: false,
         executeTime: '',
-        jobEnvironment: '',
+        jobEnvironment: 'QAS',
         pushType: '',
-        inList: false
+        fieldName: ''
       }
     },
     // 显示编辑界面
@@ -979,15 +1011,10 @@ export default {
         return ''
     },
     environmentFormat: function (row, column) {
-      if (row[column.property]) {
-        const newArr = this.environmentOption.filter(function (p) {
-          return p.value === row[column.property];
-        });
-        if (newArr.length > 0)
-          return newArr[0].title
-        else return ''
-      } else
-        return ''
+      if(row[column.property] === 'PROD')
+        return '正式'
+      else
+        return '测试'
     },
   },
   computed: {

@@ -42,16 +42,16 @@ public class NotificationJobInfoServiceImpl extends ServiceImpl<NotificationJobI
         QueryWrapper<NotificationJobInfo> wrapper = new QueryWrapper<>();
         wrapper.eq("xxl_job_id", id);
         NotificationJobInfo searchResult = this.getOne(wrapper);
-        if(searchResult != null && searchResult.getInList() != notificationJobInfo.getInList()){
+        if(searchResult != null && !searchResult.getJobEnvironment().equals(notificationJobInfo.getJobEnvironment())){
             getNextNotificationNo(notificationJobInfo);
         }
         return this.update(notificationJobInfo, wrapper);
     }
 
     private void getNextNotificationNo(NotificationJobInfo notificationJobInfo) {
-        String jobNo = notificationJobInfoMapper.getMaxNo(notificationJobInfo.getInList());
+        String jobNo = notificationJobInfoMapper.getMaxNo(notificationJobInfo.getJobEnvironment());
         String notificationNo;
-        if(notificationJobInfo.getInList()){
+        if(notificationJobInfo.getJobEnvironment().equals("PROD")){
             notificationNo = String.format("%03d", Integer.parseInt(jobNo) + 1);
         }else{
             notificationNo = "C" + String.format("%03d", Integer.parseInt(jobNo.replace("C", "")) + 1);
