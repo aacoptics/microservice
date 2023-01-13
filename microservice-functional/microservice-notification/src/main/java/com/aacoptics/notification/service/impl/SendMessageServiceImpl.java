@@ -16,6 +16,7 @@ import com.spire.xls.Worksheet;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -188,41 +189,6 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                             logFeishuMsg(fileResult, messageBatch);
                         }
-
-                        //发送订阅信息
-                        List<String> subscriptionUserIds = notificationJobSubscriptionService.listSubscriptionUsers(notificationEntity.getPlanKey());
-                        if (subscriptionUserIds.size() > 0) {
-                            JSONObject sendSubMsgResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
-
-                            if (sendSubMsgResult.get("code", Integer.class) == 0) {
-                                log.info("推送订阅消息成功！");
-                            } else {
-                                log.error("推送订阅消息失败！");
-                            }
-                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-                                for (String subscriptionUserId : subscriptionUserIds) {
-                                    JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, subscriptionUserId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
-                                    if (resultByFile.get("code", Integer.class) != 0)
-                                        log.error("推送订阅EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
-                                }
-                            }
-
-                            if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
-                                JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-                                        chatId, FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
-
-                                if (fileResult.get("code", Integer.class) != 0)
-                                    log.error("推送订阅云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
-                            }
-
-//                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-//                                JSONObject batchSendFileResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
-//
-//                                if (batchSendFileResult.get("code", Integer.class) != 0)
-//                                    log.error("推送订阅消息文件失败！");
-//                            }
-                        }
-                        //发送订阅信息结束
                     }
                 } else if (messageBatch.getSendType().equals(SendMessageService.PERSONAL_MESSAGE)) {
                     if (StrUtil.isBlank(messageBatch.getUserNum()))
@@ -248,12 +214,53 @@ public class SendMessageServiceImpl implements SendMessageService {
                     } else {
                         throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                     }
+
+                    //发送订阅信息
+                    sendSubscriptionNotification(notificationEntity, messageBatch, fileKey, cardJson);
+                    //发送订阅信息结束
                 }
 
                 if (!StrUtil.isBlank(messageBatch.getIsDaiban()) && messageBatch.getIsDaiban().equals("Y")) {
                     createTask(messageBatch.getBatchId());
                 }
             }
+        }
+    }
+
+    @Async
+    @Override
+    public void sendSubscriptionNotification(NotificationEntity notificationEntity, UmsContent messageBatch, String fileKey, JSONObject cardJson) {
+        List<String> subscriptionUserIds = notificationJobSubscriptionService.listSubscriptionUsers(notificationEntity.getPlanKey());
+        if (subscriptionUserIds.size() > 0) {
+            JSONObject sendSubMsgResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+
+            if (sendSubMsgResult.get("code", Integer.class) == 0) {
+                log.info("推送订阅消息成功！");
+            } else {
+                log.error("推送订阅消息失败！");
+            }
+            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                for (String subscriptionUserId : subscriptionUserIds) {
+                    JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, subscriptionUserId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+                    if (resultByFile.get("code", Integer.class) != 0)
+                        log.error("推送订阅EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                }
+            }
+
+            if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
+                JSONObject fileResult = feishuService.batchSendMessage(subscriptionUserIds,
+                        FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
+
+                if (fileResult.get("code", Integer.class) != 0)
+                    log.error("推送订阅云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
+            }
+
+//                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+//                                JSONObject batchSendFileResult = feishuService.batchSendMessage(subscriptionUserIds, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+//
+//                                if (batchSendFileResult.get("code", Integer.class) != 0)
+//                                    log.error("推送订阅消息文件失败！");
+//                            }
         }
     }
 
