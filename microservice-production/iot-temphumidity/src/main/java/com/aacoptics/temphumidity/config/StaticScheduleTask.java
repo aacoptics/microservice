@@ -42,7 +42,7 @@ public class StaticScheduleTask {
         }
     }
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     //或直接指定时间间隔，例如：5秒
     public void updateTempHumidityData()  {
         String timer2 = memberConfig.getTimer2();
