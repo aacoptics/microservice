@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +41,11 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
 
     @Override
     public Result add(NotificationJobSubscription notificationJobSubscription) {
-        if(notificationJobSubscription.getSubscriptionStatus() == 1){
+        if (notificationJobSubscription.getSubscriptionStatus() == 1) {
             return removeSubscription(notificationJobSubscription) ?
                     Result.success("移除消息订阅成功") :
                     Result.fail();
-        }else{
+        } else {
             QueryWrapper<NotificationJobSubscription> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("notification_job_id", notificationJobSubscription.getNotificationJobId());
             queryWrapper.eq("subscription_person", notificationJobSubscription.getSubscriptionPerson());
@@ -57,10 +58,10 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
 
             JSONObject res = feishuService.createApproveInstance(approveJson);
 
-            if(res.getInt("code") == 0){
+            if (res.getInt("code") == 0) {
                 notificationJobSubscription.setApproveId(res.getJSONObject("data").getStr("instance_code"));
                 notificationJobSubscription.setApproveStatus(0);
-                if(info != null)
+                if (info != null)
                     return this.update(notificationJobSubscription, queryWrapper) ?
                             Result.success("发送审批成功，待审批完成即可成功订阅消息") :
                             Result.fail();
@@ -68,7 +69,7 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
                     return this.save(notificationJobSubscription) ?
                             Result.success("发送审批成功，待审批完成即可成功订阅消息") :
                             Result.fail();
-            }else
+            } else
                 return Result.fail();
         }
     }
@@ -82,7 +83,7 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
 
         NotificationJobSubscription info = this.getOne(queryWrapper);
 
-        if(info != null){
+        if (info != null) {
             info.setApproveStatus(0);
             return this.updateById(info);
         }
@@ -108,12 +109,15 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
     }
 
     @Override
-    public List<String> listSubscriptionUsers(String planKey){
+    public List<String> listSubscriptionUsers(String planKey) {
         List<String> employeeNos = notificationJobSubscriptionMapper.getSubscriptionUsers(planKey);
-        return feishuUserMapper.getFeishuUserIds(employeeNos);
+        if (employeeNos.size() > 0)
+            return feishuUserMapper.getFeishuUserIds(employeeNos);
+        else
+            return new ArrayList<>();
     }
 
-    private JSONObject createApproveJson(String username, String notificationDesc, String approveUsername){
+    private JSONObject createApproveJson(String username, String notificationDesc, String approveUsername) {
         FeishuUser user = feishuService.getFeishuUser(username);
         FeishuUser approveUser = feishuService.getFeishuUser(approveUsername);
 
