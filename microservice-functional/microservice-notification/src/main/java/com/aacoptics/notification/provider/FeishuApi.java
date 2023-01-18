@@ -41,6 +41,12 @@ public class FeishuApi {
             elements.add(elementImg);
         }
 
+        JSONObject subscriptionText = new JSONObject();
+        subscriptionText.set("content", "**如需订阅更多机器人信息，请查看[消息订阅平台](https://uds.aacoptics.com/notificationSubscription)**");
+        subscriptionText.set("tag", "markdown");
+
+        //elements.add(subscriptionText);
+
         JSONObject card = new JSONObject();
         card.set("config", config);
         card.set("elements", elements);

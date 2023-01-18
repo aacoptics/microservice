@@ -76,6 +76,17 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         MarkdownMessage markdownGroupMessage = new MarkdownMessage();
         String title = null;
         switch (msgJson.getString("Message")) {
+            case "DoMcPressureAlarm":
+                title = "真空异常报警";
+                markdownGroupMessage.setTitle(title);
+                float startMcPressure = dataJson.getFloatValue("startMcPressure");
+                float endMcPressure = dataJson.getFloatValue("endMcPressure");
+                markdownGroupMessage.addBlobContent(machineName + " " + projectName + " " + modelName);
+                markdownGroupMessage.addBlobContent(localTimeStr);
+                markdownGroupMessage.addContent("真空异常，起始压力：" +
+                        startMcPressure + "，结束压力：" +
+                        endMcPressure + "，请排查腔室密闭性!");
+                break;
             case "DoMonitorTempAlarm":
                 title = "加热棒/模具温度报警";
                 markdownGroupMessage.setTitle(title);
