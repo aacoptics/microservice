@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,164 +68,175 @@ public class SendMessageServiceImpl implements SendMessageService {
             String msg = "当前没有需要推送的批次号！";
             throw new BusinessException(msg);
         }
+        CountDownLatch latch = new CountDownLatch(messageBatches.size());
         for (UmsContent messageBatch : messageBatches) {
-            if (messageBatch.getSendType().equals(SendMessageService.TASK_MESSAGE)) {
-                try {
-                    createTask(messageBatch.getBatchId());
-                    messageBatch.setIsStatus("1");
-                    umsContentService.updateById(messageBatch);
-                } catch (Exception err) {
-                    throw new BusinessException("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
-                }
-            } else {
-                String markdownGroupMessage = getMarkDownMessage(messageBatch);
-                if (markdownGroupMessage == null) {
-                    String msg = "拼接消息失败，请检查！";
-                    log.error(msg);
-                    throw new BusinessException(msg);
-                }
-
-                String imageKey = null;
-                String fileKey = null;
-                String tempDir = System.getProperty("java.io.tmpdir");
-                long currentTimeMillis = System.currentTimeMillis();
-                if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+            new Thread(() -> {
+                if (messageBatch.getSendType().equals(SendMessageService.TASK_MESSAGE)) {
                     try {
-
-                        String excelFileName1 = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
-                                messageBatch.getConTypeDesc()
-                                : messageBatch.getSendFileName())
-                                + "-" + currentTimeMillis + ".xlsx";
-                        URL url = new URL(messageBatch.getSendFilePath());
-                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
-                        fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
-                    } catch (IOException err) {
-                        String msg = "解析http文件异常！{" + err.getMessage() + "}";
-                        log.error(msg);
-                        throw new BusinessException(msg);
-                    }
-                }
-                if (!StrUtil.isBlank(messageBatch.getSendPicturePath())) {
-                    try {
-                        String pngExcelFileName = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
-                                messageBatch.getConTypeDesc()
-                                : messageBatch.getSendFileName())
-                                + "-PNG-" + currentTimeMillis + ".xlsx";
-                        String pngFileName = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
-                                messageBatch.getConTypeDesc()
-                                : messageBatch.getSendFileName())
-                                + "-" + currentTimeMillis + ".png";
-                        URL url = new URL(messageBatch.getSendPicturePath());
-                        FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
-                        com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
-                        spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
-                        Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
-                        worksheet.saveToImage(tempDir + "/" + pngFileName);
-                        imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
-                    } catch (IOException err) {
-                        String msg = "解析http文件异常！{" + err.getMessage() + "}";
-                        log.error(msg);
-                        throw new BusinessException(msg);
-                    }
-                }
-                JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage, imageKey);
-                if (messageBatch.getSendType().equals(SendMessageService.GROUP_MESSAGE)) {
-                    if (notificationEntity.getMsgTypeInfo() == null || notificationEntity.getMsgTypeInfo().size() <= 0) {
-                        String msg = "未配置消息类型，请检查！";
-                        log.error(msg);
-                        throw new BusinessException(msg);
-                    }
-                    List<Long> robotIds = notificationEntity.getMsgTypeInfo().stream().map(Robot::getId).collect(Collectors.toList());
-                    List<Robot> robotList = robotService.findByIds(robotIds);
-                    for (Robot messageTypeInfo : robotList) {
-                        String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getRobotName());
-
-                        if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-                            JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
-
-                            if (fileResult.get("code", Integer.class) != 0)
-                                throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
-
-                            logFeishuMsg(fileResult, messageBatch);
-                        }
-
-                        if (messageTypeInfo.getRobotType().equals(RobotService.GROUP_ROBOT)) {
-                            String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), cardJson);
-                            JSONObject messageJson;
-                            try {
-                                messageJson = JSONUtil.parseObj(message);
-                            } catch (Exception err) {
-                                String msg = "解析返回值失败！{" + err.getMessage() + "}";
-                                throw new BusinessException(msg);
-                            }
-                            if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
-                                messageBatch.setIsStatus("1");
-                                umsContentService.updateById(messageBatch);
-                            } else {
-                                String errorMsg;
-                                if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getStr("msg"))) {
-                                    errorMsg = messageJson.getStr("msg");
-                                    throw new BusinessException(errorMsg);
-                                }
-                            }
-                        } else if (messageTypeInfo.getRobotType().equals(RobotService.APPLICATION_ROBOT)) {
-
-                            JSONObject sendMsgResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
-
-                            if (sendMsgResult.get("code", Integer.class) == 0) {
-                                messageBatch.setIsStatus("1");
-                                umsContentService.updateById(messageBatch);
-                                logFeishuMsg(sendMsgResult, messageBatch);
-                            } else {
-                                throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
-                            }
-                        }
-
-                        if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
-                            JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
-                                    chatId, FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
-
-                            if (fileResult.get("code", Integer.class) != 0)
-                                throw new BusinessException("推送云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
-
-                            logFeishuMsg(fileResult, messageBatch);
-                        }
-                    }
-                } else if (messageBatch.getSendType().equals(SendMessageService.PERSONAL_MESSAGE)) {
-                    if (StrUtil.isBlank(messageBatch.getUserNum()))
-                        throw new BusinessException("推送消息失败！人员工号为空，批次号：{" + messageBatch.getBatchId() + "}");
-                    final FeishuUser feishuUser = feishuService.getFeishuUser(messageBatch.getUserNum());
-                    if (ObjectUtil.isNull(feishuUser))
-                        throw new BusinessException("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
-
-                    if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
-                        JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
-                        if (resultByFile.get("code", Integer.class) != 0)
-                            throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
-
-                        logFeishuMsg(resultByFile, messageBatch);
-                    }
-
-                    JSONObject resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
-
-                    if (resultBySendMsg.get("code", Integer.class) == 0) {
+                        createTask(messageBatch.getBatchId());
                         messageBatch.setIsStatus("1");
                         umsContentService.updateById(messageBatch);
-                        logFeishuMsg(resultBySendMsg, messageBatch);
-                    } else {
-                        throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
+                    } catch (Exception err) {
+                        throw new BusinessException("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
                     }
-                }
+                } else {
+                    String markdownGroupMessage = getMarkDownMessage(messageBatch);
+                    if (markdownGroupMessage == null) {
+                        String msg = "拼接消息失败，请检查！";
+                        log.error(msg);
+                        throw new BusinessException(msg);
+                    }
 
-                if (!StrUtil.isBlank(messageBatch.getIsDaiban()) && messageBatch.getIsDaiban().equals("Y")) {
-                    createTask(messageBatch.getBatchId());
-                }
+                    String imageKey = null;
+                    String fileKey = null;
+                    String tempDir = System.getProperty("java.io.tmpdir");
+                    long currentTimeMillis = System.currentTimeMillis();
+                    if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                        try {
 
-                //发送订阅信息
-                sendSubscriptionNotification(notificationEntity, messageBatch, fileKey, cardJson);
-                //发送订阅信息结束
-            }
+                            String excelFileName1 = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
+                                    messageBatch.getConTypeDesc()
+                                    : messageBatch.getSendFileName())
+                                    + "-" + currentTimeMillis + ".xlsx";
+                            URL url = new URL(messageBatch.getSendFilePath());
+                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + excelFileName1));
+                            fileKey = feishuService.fetchUploadFileKey(FeishuService.FILE_TYPE_XLS, tempDir + "/" + excelFileName1, 0);
+                        } catch (IOException err) {
+                            String msg = "解析http文件异常！{" + err.getMessage() + "}";
+                            log.error(msg);
+                            throw new BusinessException(msg);
+                        }
+                    }
+                    if (!StrUtil.isBlank(messageBatch.getSendPicturePath())) {
+                        try {
+                            String pngExcelFileName = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
+                                    messageBatch.getConTypeDesc()
+                                    : messageBatch.getSendFileName())
+                                    + "-PNG-" + currentTimeMillis + ".xlsx";
+                            String pngFileName = (StrUtil.isBlank(messageBatch.getSendFileName()) ?
+                                    messageBatch.getConTypeDesc()
+                                    : messageBatch.getSendFileName())
+                                    + "-" + currentTimeMillis + ".png";
+                            URL url = new URL(messageBatch.getSendPicturePath());
+                            FileUtils.copyURLToFile(url, new File(tempDir + "/" + pngExcelFileName));
+                            com.spire.xls.Workbook spireXlsWorkbook = new com.spire.xls.Workbook();
+                            spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
+                            Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
+                            worksheet.saveToImage(tempDir + "/" + pngFileName);
+                            imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
+                        } catch (IOException err) {
+                            String msg = "解析http文件异常！{" + err.getMessage() + "}";
+                            log.error(msg);
+                            throw new BusinessException(msg);
+                        }
+                    }
+                    JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage, imageKey);
+                    if (messageBatch.getSendType().equals(SendMessageService.GROUP_MESSAGE)) {
+                        if (notificationEntity.getMsgTypeInfo() == null || notificationEntity.getMsgTypeInfo().size() <= 0) {
+                            String msg = "未配置消息类型，请检查！";
+                            log.error(msg);
+                            throw new BusinessException(msg);
+                        }
+                        List<Long> robotIds = notificationEntity.getMsgTypeInfo().stream().map(Robot::getId).collect(Collectors.toList());
+                        List<Robot> robotList = robotService.findByIds(robotIds);
+                        for (Robot messageTypeInfo : robotList) {
+                            String chatId = feishuService.fetchChatIdByRobot(messageTypeInfo.getRobotName());
+
+                            if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                                JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+
+                                if (fileResult.get("code", Integer.class) != 0)
+                                    throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                                logFeishuMsg(fileResult, messageBatch);
+                            }
+
+                            if (messageTypeInfo.getRobotType().equals(RobotService.GROUP_ROBOT)) {
+                                String message = feishuApi.SendGroupMessage(messageTypeInfo.getRobotUrl(), cardJson);
+                                JSONObject messageJson;
+                                try {
+                                    messageJson = JSONUtil.parseObj(message);
+                                } catch (Exception err) {
+                                    String msg = "解析返回值失败！{" + err.getMessage() + "}";
+                                    throw new BusinessException(msg);
+                                }
+                                if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
+                                    messageBatch.setIsStatus("1");
+                                    umsContentService.updateById(messageBatch);
+                                } else {
+                                    String errorMsg;
+                                    if (messageJson.containsKey("msg") && !StringUtils.isEmpty(messageJson.getStr("msg"))) {
+                                        errorMsg = messageJson.getStr("msg");
+                                        throw new BusinessException(errorMsg);
+                                    }
+                                }
+                            } else if (messageTypeInfo.getRobotType().equals(RobotService.APPLICATION_ROBOT)) {
+
+                                JSONObject sendMsgResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID, chatId, FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+
+                                if (sendMsgResult.get("code", Integer.class) == 0) {
+                                    messageBatch.setIsStatus("1");
+                                    umsContentService.updateById(messageBatch);
+                                    logFeishuMsg(sendMsgResult, messageBatch);
+                                } else {
+                                    throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
+                                }
+                            }
+
+                            if (!StrUtil.isBlank(messageBatch.getIsYunUrl())) {
+                                JSONObject fileResult = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_CHAT_ID,
+                                        chatId, FeishuService.MSG_TYPE_TEXT, JSONUtil.createObj().set("text", messageBatch.getIsYunUrl()));
+
+                                if (fileResult.get("code", Integer.class) != 0)
+                                    throw new BusinessException("推送云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                                logFeishuMsg(fileResult, messageBatch);
+                            }
+                        }
+                    } else if (messageBatch.getSendType().equals(SendMessageService.PERSONAL_MESSAGE)) {
+                        if (StrUtil.isBlank(messageBatch.getUserNum()))
+                            throw new BusinessException("推送消息失败！人员工号为空，批次号：{" + messageBatch.getBatchId() + "}");
+                        final FeishuUser feishuUser = feishuService.getFeishuUser(messageBatch.getUserNum());
+                        if (ObjectUtil.isNull(feishuUser))
+                            throw new BusinessException("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
+
+                        if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
+                            JSONObject resultByFile = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_FILE, JSONUtil.createObj().set("file_key", fileKey));
+                            if (resultByFile.get("code", Integer.class) != 0)
+                                throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+
+                            logFeishuMsg(resultByFile, messageBatch);
+                        }
+
+                        JSONObject resultBySendMsg = feishuService.sendMessage(FeishuService.RECEIVE_ID_TYPE_USER_ID, feishuUser.getUserId(), FeishuService.MSG_TYPE_INTERACTIVE, cardJson);
+
+                        if (resultBySendMsg.get("code", Integer.class) == 0) {
+                            messageBatch.setIsStatus("1");
+                            umsContentService.updateById(messageBatch);
+                            logFeishuMsg(resultBySendMsg, messageBatch);
+                        } else {
+                            throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
+                        }
+                    }
+
+                    if (!StrUtil.isBlank(messageBatch.getIsDaiban()) && messageBatch.getIsDaiban().equals("Y")) {
+                        createTask(messageBatch.getBatchId());
+                    }
+
+                    //发送订阅信息
+                    sendSubscriptionNotification(notificationEntity, messageBatch, fileKey, cardJson);
+                    //发送订阅信息结束
+                }
+                latch.countDown();
+            }).start();
         }
+        log.info("飞书消息推送开始！");
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new BusinessException("推送消息失败！：" + e);
+        }
+        log.info("飞书消息推送结束！");
     }
 
     @Async
