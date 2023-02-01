@@ -193,6 +193,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 }
                                 if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
                                     messageBatch.setIsStatus("1");
+                                    messageBatch.setUpdatedTime(LocalDateTime.now());
                                     umsContentService.updateById(messageBatch);
                                 } else {
                                     String errorMsg;
@@ -211,6 +212,7 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                                 if (sendMsgResult.get("code", Integer.class) == 0) {
                                     messageBatch.setIsStatus("1");
+                                    messageBatch.setUpdatedTime(LocalDateTime.now());
                                     umsContentService.updateById(messageBatch);
                                     logFeishuMsg(sendMsgResult, messageBatch);
                                 } else {
@@ -271,6 +273,7 @@ public class SendMessageServiceImpl implements SendMessageService {
 
                         if (resultBySendMsg.get("code", Integer.class) == 0) {
                             messageBatch.setIsStatus("1");
+                            messageBatch.setUpdatedTime(LocalDateTime.now());
                             umsContentService.updateById(messageBatch);
                             logFeishuMsg(resultBySendMsg, messageBatch);
                         } else {
