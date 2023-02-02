@@ -28,6 +28,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.hutool.json.JSONObject.*;
+import static com.alibaba.fastjson.JSON.parseObject;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
@@ -557,6 +560,19 @@ public class UmsContentServiceImplTest {
             String asd = "";
         } catch (JSQLParserException e) {
             e.printStackTrace();
+        }
+
+
+    }
+
+    @Test
+    public void test333() {
+        String param = "{\"planKey\":\"ums_hr_attendance_worker_remind\",\"batchId\":\"\",\"msgTypeInfo\":[]}"; //执行参数
+        NotificationEntity jobParam = parseObject(param, NotificationEntity.class);
+        try {
+            sendMessageService.sendHandledMessage(jobParam);
+        } catch (Exception e) {
+           String asd  = e.getMessage();
         }
 
 
