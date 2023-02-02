@@ -172,9 +172,9 @@ public class InspectionMainServiceImpl extends ServiceImpl<InspectionMainMapper,
                 }
             }
 
-            if (StringUtils.isEmpty(checkItemStandard)) {
-                throw new BusinessException("第" + (i + 1) + "行点检项判断标准不能为空");
-            }
+//            if (StringUtils.isEmpty(checkItemStandard)) {
+//                throw new BusinessException("第" + (i + 1) + "行点检项判断标准不能为空");
+//            }
 //            if (StringUtils.isEmpty(minValue)) {
 //                throw new BusinessException("第" + (i + 1) + "行起始范围值不能为空");
 //            }
