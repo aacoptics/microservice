@@ -1,5 +1,6 @@
 package com.aacoptics.notification.service.impl;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
@@ -136,6 +137,16 @@ public class SendMessageServiceImpl implements SendMessageService {
                         spireXlsWorkbook.loadFromFile(tempDir + "/" + pngExcelFileName);
                         Worksheet worksheet = spireXlsWorkbook.getWorksheets().get(0);
                         worksheet.saveToImage(tempDir + "/" + pngFileName);
+                        for (File l : FileUtil.ls(tempDir)) {
+                            if (l.getName().startsWith("+~") && l.getName().endsWith(".tmp")) {
+                                try {
+                                    FileUtil.del(l);
+                                } catch (Exception e) {
+                                    log.error("删除临时文件失败！" + e.getMessage());
+                                }
+                            }
+                        }
+
                         imageKey = feishuService.fetchUploadMessageImageKey(tempDir + "/" + pngFileName);
                     } catch (IOException err) {
                         String msg = "解析http文件异常！{" + err.getMessage() + "}";
@@ -291,6 +302,16 @@ public class SendMessageServiceImpl implements SendMessageService {
                 //发送订阅信息
                 sendSubscriptionNotification(notificationEntity, messageBatch, fileKey, cardJson);
                 //发送订阅信息结束
+            }
+        }
+
+        for (File l : FileUtil.ls(System.getProperty("java.io.tmpdir"))) {
+            if (l.getName().startsWith("+~") && l.getName().endsWith(".tmp")) {
+                try {
+                    FileUtil.del(l);
+                } catch (Exception e) {
+                    log.error("删除临时文件失败！" + e.getMessage());
+                }
             }
         }
     }
