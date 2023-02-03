@@ -15,7 +15,7 @@ public interface SendMessageService {
 
     String TASK_MESSAGE = "103";
 
-    void sendHandledMessage(NotificationEntity notificationEntity) throws BusinessException;
+    void sendHandledMessage(NotificationEntity notificationEntity) throws Exception;
 
     @Async
     void sendSubscriptionNotification(NotificationEntity notificationEntity, UmsContent messageBatch, String fileKey, JSONObject cardJson);

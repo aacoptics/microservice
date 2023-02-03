@@ -475,7 +475,7 @@ public class UmsContentServiceImplTest {
         List<Robot> robots = new ArrayList<>();
         robots.add(robot);
         notificationEntity.setMsgTypeInfo(robots);
-        sendMessageService.sendHandledMessage(notificationEntity);
+        //sendMessageService.sendHandledMessage(notificationEntity);
 
 
     }

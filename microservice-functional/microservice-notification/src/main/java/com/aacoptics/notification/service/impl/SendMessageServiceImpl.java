@@ -10,7 +10,6 @@ import com.aacoptics.notification.entity.po.*;
 import com.aacoptics.notification.entity.vo.FeishuMessage;
 import com.aacoptics.notification.entity.vo.MarkdownGroupMessage;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
-import com.aacoptics.notification.exception.BusinessException;
 import com.aacoptics.notification.provider.FeishuApi;
 import com.aacoptics.notification.service.*;
 import com.spire.xls.Worksheet;
@@ -58,7 +57,7 @@ public class SendMessageServiceImpl implements SendMessageService {
     FeishuService feishuService;
 
     @Override
-    public void sendHandledMessage(NotificationEntity notificationEntity) throws BusinessException {
+    public void sendHandledMessage(NotificationEntity notificationEntity) throws Exception {
         List<UmsContent> messageBatches;
         if (StrUtil.isBlank(notificationEntity.getBatchId())) {
             messageBatches = umsContentService.getUmsContent(notificationEntity.getPlanKey());
@@ -68,7 +67,7 @@ public class SendMessageServiceImpl implements SendMessageService {
         log.error(String.valueOf(messageBatches.size()));
         if (messageBatches.size() <= 0) {
             String msg = "当前没有需要推送的批次号！";
-            throw new BusinessException(msg);
+            throw new Exception(msg);
         }
 
         for (UmsContent messageBatch : messageBatches) {
@@ -83,7 +82,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                     messageBatch.setIsStatus("2");
                     messageBatch.setUpdatedTime(LocalDateTime.now());
                     umsContentService.updateById(messageBatch);
-                    throw new BusinessException("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
+                    throw new Exception("创建任务失败！批次号：{" + messageBatch.getBatchId() + "}");
                 }
             } else {
                 String markdownGroupMessage = getMarkDownMessage(messageBatch);
@@ -93,7 +92,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                     messageBatch.setIsStatus("2");
                     messageBatch.setUpdatedTime(LocalDateTime.now());
                     umsContentService.updateById(messageBatch);
-                    throw new BusinessException(msg);
+                    throw new Exception(msg);
                 }
 
                 String imageKey = null;
@@ -116,7 +115,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException(msg);
+                        throw new Exception(msg);
                     }
                 }
                 if (!StrUtil.isBlank(messageBatch.getSendPicturePath())) {
@@ -152,7 +151,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException(msg);
+                        throw new Exception(msg);
                     }
                 }
                 JSONObject cardJson = feishuApi.getMarkdownMessage(markdownGroupMessage, imageKey);
@@ -163,7 +162,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException(msg);
+                        throw new Exception(msg);
                     }
                     List<Long> robotIds = notificationEntity.getMsgTypeInfo().stream().map(Robot::getId).collect(Collectors.toList());
                     List<Robot> robotList = robotService.findByIds(robotIds);
@@ -177,7 +176,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageBatch.setIsStatus("2");
                                 messageBatch.setUpdatedTime(LocalDateTime.now());
                                 umsContentService.updateById(messageBatch);
-                                throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                                throw new Exception("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
 
                             logFeishuMsg(fileResult, messageBatch);
@@ -193,7 +192,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageBatch.setIsStatus("2");
                                 messageBatch.setUpdatedTime(LocalDateTime.now());
                                 umsContentService.updateById(messageBatch);
-                                throw new BusinessException(msg);
+                                throw new Exception(msg);
                             }
                             if (messageJson.containsKey("StatusCode") && messageJson.getInt("StatusCode") == 0) {
                                 messageBatch.setIsStatus("1");
@@ -206,7 +205,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                     messageBatch.setIsStatus("2");
                                     messageBatch.setUpdatedTime(LocalDateTime.now());
                                     umsContentService.updateById(messageBatch);
-                                    throw new BusinessException(errorMsg);
+                                    throw new Exception(errorMsg);
                                 }
                             }
                         } else if (messageTypeInfo.getRobotType().equals(RobotService.APPLICATION_ROBOT)) {
@@ -222,7 +221,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageBatch.setIsStatus("2");
                                 messageBatch.setUpdatedTime(LocalDateTime.now());
                                 umsContentService.updateById(messageBatch);
-                                throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
+                                throw new Exception("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
                         }
 
@@ -234,7 +233,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                                 messageBatch.setIsStatus("2");
                                 messageBatch.setUpdatedTime(LocalDateTime.now());
                                 umsContentService.updateById(messageBatch);
-                                throw new BusinessException("推送云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
+                                throw new Exception("推送云文档URL失败！批次号：{" + messageBatch.getBatchId() + "}");
                             }
 
                             logFeishuMsg(fileResult, messageBatch);
@@ -245,14 +244,14 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException("推送消息失败！人员工号为空，批次号：{" + messageBatch.getBatchId() + "}");
+                        throw new Exception("推送消息失败！人员工号为空，批次号：{" + messageBatch.getBatchId() + "}");
                     }
                     final FeishuUser feishuUser = feishuService.getFeishuUser(messageBatch.getUserNum());
                     if (ObjectUtil.isNull(feishuUser)) {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
+                        throw new Exception("推送消息失败！飞书用户不存在，批次号：{" + messageBatch.getBatchId() + "}");
                     }
 
                     if (!StrUtil.isBlank(messageBatch.getSendFilePath())) {
@@ -261,7 +260,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                             messageBatch.setIsStatus("2");
                             messageBatch.setUpdatedTime(LocalDateTime.now());
                             umsContentService.updateById(messageBatch);
-                            throw new BusinessException("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
+                            throw new Exception("推送EXCEL文件失败！批次号：{" + messageBatch.getBatchId() + "}");
                         }
 
                         logFeishuMsg(resultByFile, messageBatch);
@@ -278,7 +277,7 @@ public class SendMessageServiceImpl implements SendMessageService {
                         messageBatch.setIsStatus("2");
                         messageBatch.setUpdatedTime(LocalDateTime.now());
                         umsContentService.updateById(messageBatch);
-                        throw new BusinessException("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
+                        throw new Exception("推送消息失败！批次号：{" + messageBatch.getBatchId() + "}");
                     }
                 }
 
@@ -344,13 +343,13 @@ public class SendMessageServiceImpl implements SendMessageService {
         }
     }
 
-    private void createTask(String batchId) {
+    private void createTask(String batchId) throws Exception {
         List<UmsContentSubDaiban> taskBatches = umsContentSubDaibanService.getUmsContentSubDaiban(batchId);
 
         if (taskBatches.size() == 0) {
             String msg = "当前没有需要推送任务，请检查！";
             log.error(msg);
-            throw new BusinessException(msg);
+            throw new Exception(msg);
         }
 
         for (UmsContentSubDaiban taskBatch : taskBatches) {
@@ -358,7 +357,7 @@ public class SendMessageServiceImpl implements SendMessageService {
             JSONObject resultByCreateTask = feishuService.createTask(FeishuService.RECEIVE_ID_TYPE_USER_ID, taskJson);
             if (resultByCreateTask.getInt("code") != 0) {
                 taskBatch.setIsStatus("2");
-                throw new BusinessException("创建任务失败！批次号：{" + batchId + "}");
+                throw new Exception("创建任务失败！批次号：{" + batchId + "}");
             }
 
             String taskId = resultByCreateTask.getJSONObject("data").getJSONObject("task").getStr("id");
