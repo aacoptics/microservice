@@ -1,6 +1,7 @@
 package com.aacoptics.notification.scheduler;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.aacoptics.notification.entity.vo.NotificationEntity;
 import com.aacoptics.notification.service.SendMessageService;
 import com.alibaba.fastjson.JSONObject;
@@ -26,6 +27,7 @@ public class NotificationHandle {
             sendMessageService.sendHandledMessage(jobParam);
             XxlJobHelper.handleSuccess();
         } catch (Exception e) {
+            log.info(JSONUtil.toJsonStr(e));
             if (!StrUtil.isBlank(e.getMessage()) && e.getMessage().equals("当前没有需要推送的批次号！"))
                 XxlJobHelper.handleSuccess("当前没有需要推送的批次号！");
             else{
