@@ -49,4 +49,8 @@ public class NotificationJobInfo extends BasePo {
     private String pushType;
 
     private String fieldName;
+
+    private Integer approveStatus;
+
+    private String approveId;
 }
