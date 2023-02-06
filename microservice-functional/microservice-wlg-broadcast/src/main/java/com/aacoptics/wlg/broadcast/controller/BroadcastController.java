@@ -21,6 +21,12 @@ import java.net.URLEncoder;
 @Slf4j
 public class BroadcastController {
 
+    @ApiOperation(value = "测试", notes = "测试")
+    @GetMapping(value = "/helloWorld")
+    public Result downloadVoiceFile() {
+        return Result.success("hello world!");
+    }
+
 
     @ApiOperation(value = "下载mp3语音文件", notes = "下载mp3语音文件")
     @GetMapping(value = "/downloadPerformanceDataAvailable")
