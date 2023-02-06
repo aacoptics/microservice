@@ -95,10 +95,11 @@ public class BroadcastServiceImpl implements BroadcastService {
         }
 
         try {
-            String outFileName = "performanceDataAvailable_" + Calendar.getInstance().getTimeInMillis();
-            String outFilePath = voiceFilePath.replace(voiceFileName, outFileName);
+//            String outFileName = "performanceDataAvailable_" + Calendar.getInstance().getTimeInMillis();
+//            String outFilePath = voiceFilePath.replace(voiceFileName, outFileName);
+//            this.formatVoiceFile(file, outFilePath);
+            String outFileUrl = StrUtil.format("http://{}:8888/{}",getLocalhostAddress(), voiceFileName + ".mp3");
 
-            String outFileUrl = this.formatVoiceFile(file, outFilePath);
             JSONObject jsonObject = JSONUtil.createObj()
                     .set("type", "req")
                     .set("name", "songs_queue_append")
@@ -108,7 +109,7 @@ public class BroadcastServiceImpl implements BroadcastService {
                     .set("vol", 100);
             JSONArray urlArray = JSONUtil.createArray();
             urlArray.add(JSONUtil.createObj()
-                    .set("name", outFileName + ".mp3")
+                    .set("name", voiceFileName + ".mp3")
                     .set("uri", outFileUrl));
             paramsObject.set("urls", urlArray);
             jsonObject.set("params", paramsObject);
