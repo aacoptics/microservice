@@ -17,6 +17,7 @@
         <module>microservice-hikvision-api</module>
         <module>microservice-ldap-sync</module>
         <module>microservice-okr-core</module>
+        <module>microservice-wlg-broadcast</module>
     </modules>
 
     <packaging>pom</packaging>
