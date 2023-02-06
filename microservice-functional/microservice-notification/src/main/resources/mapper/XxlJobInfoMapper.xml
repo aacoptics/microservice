@@ -50,6 +50,8 @@
              , notification_no
              , push_type
              , field_name
+             , approve_status
+             , approve_id
              , isnull((select approve_status
                        from notification_job_subscription
                        where notification_job_id = a.id
@@ -135,6 +137,8 @@
              , notification_no
              , push_type
              , field_name
+             , approve_status
+             , approve_id
              , isnull((select approve_status
                        from notification_job_subscription
                        where notification_job_id = a.id
@@ -221,6 +225,8 @@
              , notification_no
              , push_type
              , field_name
+             , approve_status
+             , approve_id
              , 1                                       as subscription_status
         from (SELECT id
                    , job_group
