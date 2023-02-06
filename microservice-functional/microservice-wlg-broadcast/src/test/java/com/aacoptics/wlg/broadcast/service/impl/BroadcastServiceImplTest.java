@@ -74,5 +74,7 @@ class BroadcastServiceImplTest {
         String outFilePath = voiceFilePath.replace(voiceFileName, outFileName);
 
         String outFileUrl = broadcastService.formatVoiceFile(file, outFilePath);
+
+        System.out.println(outFileUrl);
     }
 }
