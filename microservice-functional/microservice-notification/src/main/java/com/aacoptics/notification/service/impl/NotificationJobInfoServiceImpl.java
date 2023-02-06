@@ -37,7 +37,7 @@ public class NotificationJobInfoServiceImpl extends ServiceImpl<NotificationJobI
         getNextNotificationNo(notificationJobInfo);
         String username = UserContextHolder.getInstance().getUsername();
         JSONObject approveJson = createApproveJson(username, notificationJobInfo.getJobDesc() + "-" + notificationJobInfo.getRemark(),
-        "60054916", "1D357EE9-AC60-403E-A302-A5AEBCF9A735");
+        "80000128", "1D357EE9-AC60-403E-A302-A5AEBCF9A735");
 
         JSONObject res = feishuService.createApproveInstance(approveJson);
 

@@ -115,7 +115,7 @@
               <el-span v-else>{{ scope.row.jobDesc }}</el-span>
             </template>
           </el-table-column>
-          <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
+          <el-table-column align="center" fixed="right" header-align="center" label="状态"
                            width="80">
             <template v-slot="scope">
               <el-switch v-if="scope.row.approveStatus === 1"
@@ -132,7 +132,7 @@
                 审批中
               </el-tag>
               <el-tag type="danger" size="small" v-else>
-                审批中
+                拒绝
               </el-tag>
             </template>
           </el-table-column>
@@ -862,10 +862,14 @@ export default {
     },
     // 显示编辑界面
     handleEdit: function (params) {
-      this.dialogVisible = true
-      this.operation = false
-      this.dataForm = Object.assign({}, params.row)
-      this.getFeishuUser(this.dataForm.responsiblePerson)
+      if(params.row.approveStatus !== 1){
+        this.$message({message: '无法编辑未审批通过的消息任务', type: 'error'})
+      }else{
+        this.dialogVisible = true
+        this.operation = false
+        this.dataForm = Object.assign({}, params.row)
+        this.getFeishuUser(this.dataForm.responsiblePerson)
+      }
     },
     handleTrigger: function (params) {
       this.triggerDialogVisible = true
