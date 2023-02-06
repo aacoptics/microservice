@@ -118,7 +118,7 @@
           <el-table-column align="center" fixed="right" header-align="center" label="定时状态"
                            width="80">
             <template v-slot="scope">
-              <el-switch
+              <el-switch v-if="scope.row.approveStatus === 1"
                   v-model="scope.row.triggerStatus"
                   :active-value="1"
                   :inactive-value="0"
@@ -128,12 +128,18 @@
                   width="60px"
                   @change="handleStatusChange(scope.row)"
               ></el-switch>
+              <el-tag size="small" v-else-if="scope.row.approveStatus === 0">
+                审批中
+              </el-tag>
+              <el-tag type="danger" size="small" v-else>
+                审批中
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column align="center" fixed="right" header-align="center" label="执行"
                            width="80">
             <template v-slot="scope">
-              <el-button size="small" type="warning" @click="handleTrigger(scope.row)">
+              <el-button v-if="scope.row.approveStatus === 1" size="small" type="warning" @click="handleTrigger(scope.row)">
                 执行一次
               </el-button>
             </template>
