@@ -30,7 +30,7 @@ public class BroadcastController {
 
     @ApiOperation(value = "下载mp3语音文件", notes = "下载mp3语音文件")
     @GetMapping(value = "/downloadPerformanceDataAvailable")
-    public Result downloadVoiceFile(HttpServletResponse response) {
+    public void downloadVoiceFile(HttpServletResponse response) {
         try {
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("voice/performanceDataAvailable.mp3");
             if(inputStream == null)
@@ -38,7 +38,7 @@ public class BroadcastController {
                 throw new BusinessException("mp3文件不存在");
             }
             //强制下载不打开
-            response.setContentType("application/force-download");
+//            response.setContentType("application/force-download");
             OutputStream out = response.getOutputStream();
             //使用URLEncoder来防止文件名乱码或者读取错误
             response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("性能数据已出.mp3", "UTF-8"));
@@ -53,12 +53,9 @@ public class BroadcastController {
             inputStream.close();
             out.close();
             out.flush();
-            return Result.success("文件下载成功");
         } catch (IOException e) {
             log.error("mp3文件下载异常", e);
-            return Result.fail("文件下载错误" + e.getLocalizedMessage());
         }
-
     }
 
 }
