@@ -21,6 +21,12 @@ import java.net.URLEncoder;
 @Slf4j
 public class BroadcastController {
 
+    @ApiOperation(value = "测试", notes = "测试")
+    @GetMapping(value = "/helloWorld")
+    public Result helloWorld() {
+        return Result.success("hello world!");
+    }
+
 
     @ApiOperation(value = "下载mp3语音文件", notes = "下载mp3语音文件")
     @GetMapping(value = "/downloadPerformanceDataAvailable")
@@ -35,7 +41,7 @@ public class BroadcastController {
             response.setContentType("application/force-download");
             OutputStream out = response.getOutputStream();
             //使用URLEncoder来防止文件名乱码或者读取错误
-            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("性能数据已出", "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode("性能数据已出.mp3", "UTF-8"));
             int b = 0;
             byte[] buffer = new byte[1000000];
             while (b != -1) {

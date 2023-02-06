@@ -54,7 +54,7 @@ public class BroadcastServiceImpl implements BroadcastService {
         String voiceFileName = "performanceDataAvailable_" + Calendar.getInstance().getTimeInMillis();
 
         try {
-            String outFileUrl = StrUtil.format("https://{}:8443/{}","uds.aacoptics.com", "/wlg-broadcast/broadcast/downloadPerformanceDataAvailable");
+            String outFileUrl = StrUtil.format("https://{}:8443/{}","uds.aacoptics.com", "wlg-broadcast/broadcast/downloadPerformanceDataAvailable");
 
             JSONObject jsonObject = JSONUtil.createObj()
                     .set("type", "req")
