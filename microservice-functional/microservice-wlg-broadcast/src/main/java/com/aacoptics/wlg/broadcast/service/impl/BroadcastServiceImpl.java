@@ -115,6 +115,7 @@ public class BroadcastServiceImpl implements BroadcastService {
             okHttpCli.doPostJsonSpeaker(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), jsonObject);
             file.delete();
         } catch (Exception e) {
+            log.error("发送至扬声器失败", e);
             throw new BusinessException("文件[" + voiceFileName + "]发送至扬声器失败");
         }
     }
