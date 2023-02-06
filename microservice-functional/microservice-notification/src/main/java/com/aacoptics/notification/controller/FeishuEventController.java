@@ -37,6 +37,9 @@ public class FeishuEventController {
     private NotificationJobSubscriptionService notificationJobSubscriptionService;
 
     @Resource
+    private NotificationJobInfoService notificationJobInfoService;
+
+    @Resource
     private FeishuTaskInfoService feishuTaskInfoService;
 
 
@@ -56,16 +59,31 @@ public class FeishuEventController {
 
         if(msgJson.containsKey("event") && msgJson.getJSONObject("event").getString("type").equals("approval_instance")){
             JSONObject event = msgJson.getJSONObject("event");
-            String approveId = event.getString("instance_code");
-            String status = event.getString("status");
-            if(status.equals("REJECTED"))
-                notificationJobSubscriptionService.updateApproveStatus(approveId, 2);
-            else if(status.equals("APPROVED"))
-                notificationJobSubscriptionService.updateApproveStatus(approveId, 1);
-            else if(status.equals("PENDING"))
-                notificationJobSubscriptionService.updateApproveStatus(approveId, 3);
-            log.info(JSONObject.toJSONString(msgJson));
-            return Result.success();
+            String approveCode = event.getString("approval_code");
+            if(approveCode.equals("69D4A4EE-D374-4262-8E49-8F94CEB7400E")){
+                String approveId = event.getString("instance_code");
+                String status = event.getString("status");
+                if(status.equals("REJECTED"))
+                    notificationJobSubscriptionService.updateApproveStatus(approveId, 2);
+                else if(status.equals("APPROVED"))
+                    notificationJobSubscriptionService.updateApproveStatus(approveId, 1);
+                else if(status.equals("PENDING"))
+                    notificationJobSubscriptionService.updateApproveStatus(approveId, 3);
+                log.info(JSONObject.toJSONString(msgJson));
+                return Result.success();
+            }else{
+                String approveId = event.getString("instance_code");
+                String status = event.getString("status");
+                if(status.equals("REJECTED"))
+                    notificationJobInfoService.updateApproveStatus(approveId, 2);
+                else if(status.equals("APPROVED"))
+                    notificationJobInfoService.updateApproveStatus(approveId, 1);
+                else if(status.equals("PENDING"))
+                    notificationJobInfoService.updateApproveStatus(approveId, 0);
+                log.info(JSONObject.toJSONString(msgJson));
+                return Result.success();
+            }
+
         }
 
         FeishuTaskEvent feishuTaskEvent = JSONObject.parseObject(msgJson.toJSONString(), FeishuTaskEvent.class);

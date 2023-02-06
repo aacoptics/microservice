@@ -16,6 +16,8 @@ public interface NotificationJobInfoService {
 
     boolean deleteByXxlJobId(Integer id);
 
+    boolean updateApproveStatus(String approveId, Integer status);
+
     boolean updateByXxlJobId(Integer id, NotificationJobInfo notificationJobInfo);
 
     boolean update(NotificationJobInfo notificationJobInfo);

@@ -54,7 +54,8 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
 
             JSONObject approveJson = createApproveJson(notificationJobSubscription.getSubscriptionPerson(),
                     notificationJobSubscription.getNotificationDesc(),
-                    notificationJobSubscription.getApproveUser());
+                    notificationJobSubscription.getApproveUser(),
+                    "69D4A4EE-D374-4262-8E49-8F94CEB7400E");
 
             JSONObject res = feishuService.createApproveInstance(approveJson);
 
@@ -117,7 +118,7 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
             return new ArrayList<>();
     }
 
-    private JSONObject createApproveJson(String username, String notificationDesc, String approveUsername) {
+    private JSONObject createApproveJson(String username, String notificationDesc, String approveUsername, String approveId) {
         FeishuUser user = feishuService.getFeishuUser(username);
         FeishuUser approveUser = feishuService.getFeishuUser(approveUsername);
 
@@ -127,7 +128,7 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
         formJson.set("value", notificationDesc);
 
         JSONObject json = JSONUtil.createObj();
-        json.set("approval_code", "69D4A4EE-D374-4262-8E49-8F94CEB7400E");
+        json.set("approval_code", approveId);
         json.set("user_id", user.getUserId());
         JSONArray formList = new JSONArray();
         formList.add(formJson);
@@ -144,6 +145,5 @@ public class NotificationJobSubscriptionServiceImpl extends ServiceImpl<Notifica
         json.set("node_approver_user_id_list", userList);
 
         return json;
-
     }
 }

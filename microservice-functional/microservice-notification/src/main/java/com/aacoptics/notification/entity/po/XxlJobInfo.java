@@ -151,4 +151,10 @@ public class XxlJobInfo implements Serializable {
 
     @TableField(exist = false)
     private String fieldName;
+
+    @TableField(exist = false)
+    private Integer approveStatus;
+
+    @TableField(exist = false)
+    private String approveId;
 }
