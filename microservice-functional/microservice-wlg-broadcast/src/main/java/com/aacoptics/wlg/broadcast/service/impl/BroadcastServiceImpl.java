@@ -50,55 +50,11 @@ public class BroadcastServiceImpl implements BroadcastService {
 
     @Override
     public void broadcastPerformanceDataAvailable(SpeakerVoiceFileInfo speakerVoiceFileInfo) {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("voice/performanceDataAvailable.mp3");
 
-        BufferedOutputStream bufferedOutputStream = null;
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         String voiceFileName = "performanceDataAvailable_" + Calendar.getInstance().getTimeInMillis();
 
-        String tempDir = System.getProperty("java.io.tmpdir");
-
-        String voiceFilePath = tempDir + "\\" + voiceFileName + ".mp3";
-        File file = new File(voiceFilePath);
         try {
-            bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-            int bytesRead = 0;
-            byte[] buffer = new byte[8192];
-            while ((bytesRead = bufferedInputStream.read(buffer, 0, 8192)) != -1) {
-                bufferedOutputStream.write(buffer, 0, bytesRead);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new BusinessException(e.getMessage());
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                }
-                inputStream = null;
-            }
-            if (bufferedOutputStream != null) {
-                try {
-                    bufferedOutputStream.close();
-                } catch (IOException e) {
-                }
-                bufferedOutputStream = null;
-            }
-            if (bufferedInputStream != null) {
-                try {
-                    bufferedInputStream.close();
-                } catch (IOException e) {
-                }
-                bufferedInputStream = null;
-            }
-        }
-
-        try {
-//            String outFileName = "performanceDataAvailable_" + Calendar.getInstance().getTimeInMillis();
-//            String outFilePath = voiceFilePath.replace(voiceFileName, outFileName);
-//            this.formatVoiceFile(file, outFilePath);
-            String outFileUrl = StrUtil.format("http://{}:8888/{}",getLocalhostAddress(), voiceFileName + ".mp3");
+            String outFileUrl = StrUtil.format("https://{}:8443/{}","uds.aacoptics.com", "/wlg-broadcast/broadcast/downloadPerformanceDataAvailable");
 
             JSONObject jsonObject = JSONUtil.createObj()
                     .set("type", "req")
@@ -114,7 +70,7 @@ public class BroadcastServiceImpl implements BroadcastService {
             paramsObject.set("urls", urlArray);
             jsonObject.set("params", paramsObject);
             okHttpCli.doPostJsonSpeaker(StrUtil.format("http://{}:{}", speakerVoiceFileInfo.getSpeakerIp(), speakerVoiceFileInfo.getSpeakerPort()), jsonObject);
-            file.delete();
+//            file.delete();
         } catch (Exception e) {
             log.error("发送至扬声器失败", e);
             throw new BusinessException("文件[" + voiceFileName + "]发送至扬声器失败");

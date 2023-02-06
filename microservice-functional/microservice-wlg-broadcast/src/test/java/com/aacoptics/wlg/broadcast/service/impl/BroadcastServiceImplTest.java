@@ -24,7 +24,7 @@ class BroadcastServiceImplTest {
     private BroadcastService broadcastService;
 
     @Test
-    void formatVoiceFile() throws UnknownHostException, EncoderException {
+    void test() throws UnknownHostException, EncoderException {
 
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("voice/performanceDataAvailable.mp3");
 
@@ -76,5 +76,12 @@ class BroadcastServiceImplTest {
         String outFileUrl = broadcastService.formatVoiceFile(file, outFilePath);
 
         System.out.println(outFileUrl);
+    }
+
+
+    @Test
+    void broadcastAllSpeaker() {
+        broadcastService.broadcastAllSpeaker();
+
     }
 }
