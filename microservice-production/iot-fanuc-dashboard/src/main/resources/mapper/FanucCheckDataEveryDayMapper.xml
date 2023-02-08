@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.fanuc.dashboard.dao.FanucCheckDataEveryDayMapper">
+
+    <select id="getAllMachineName" resultType="string">
+        SELECT
+        distinct machine_name
+        FROM z_fanuc_check_data_every_day
+        ORDER BY machine_name
+    </select>
+
+    <select id="getAllMoldFileName" resultType="string">
+        SELECT
+        distinct mold_file_name
+        FROM z_fanuc_check_data_every_day
+        ORDER BY mold_file_name
+    </select>
+</mapper>
