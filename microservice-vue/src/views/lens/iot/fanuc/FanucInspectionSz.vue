@@ -58,7 +58,7 @@
                 </template>
               </el-button>
               <el-button type="success"
-                     @click="exportExcel('#paramDataList', 'paramDataList.xlsx')">导出
+                     @click="exportExcel('#inspectionDataList', '注塑每日点检表.xlsx')">导出
             <template #icon>
               <font-awesome-icon :icon="['fas','download']"/>
             </template>
@@ -69,60 +69,60 @@
         </div>
       </el-row>
         <el-table
-          id="paramDataList"
+          id="inspectionDataList"
           v-loading="queryLoading"
           :data="analysisData"
           border
           height="600"
           stripe
           style="width: 100%">
-        <el-table-column label="机台名" min-width="85" prop="monitMcName"></el-table-column>
-        <el-table-column label="班次" min-width="180" prop="monitDateTime"></el-table-column>
-        <el-table-column label="项目号" min-width="85" prop="monitVPPrs"></el-table-column>
-        <el-table-column label="循环时间(s)" min-width="100" prop="monitVPPos"></el-table-column>
-        <el-table-column label="循环数" min-width="85" prop="monitBackflw"></el-table-column>
-        <el-table-column label="V-P压力(kgf/cm2)" min-width="150" prop="monitRecovTime"></el-table-column>
-        <el-table-column label="V-P位置(mm)" min-width="110" prop="monitPeakT"></el-table-column>
-        <el-table-column label="计量时间(s)	" min-width="100" prop="monitPeakPrs"></el-table-column>
-        <el-table-column label="射出时间(s)" min-width="100" prop="monitPeakPos"></el-table-column>
-        <el-table-column label="最小缓冲(mm)" min-width="120" prop="monitMold1"></el-table-column>
-        <el-table-column label="取数时间" min-width="85" prop="monitMold2"></el-table-column>
-        <el-table-column label="喷嘴1温度(℃)" min-width="120" prop="monitMold3"></el-table-column>
-        <el-table-column label="料筒1温度(℃)" min-width="120" prop="monitMold4"></el-table-column>
-        <el-table-column label="料筒2温度(℃)" min-width="120" prop="monitMold5"></el-table-column>
-        <el-table-column label="料筒3温度(℃)" min-width="120" prop="monitMold6"></el-table-column>
-        <el-table-column label="料斗下温度(℃)" min-width="120" prop="monitMold7"></el-table-column>
-        <el-table-column label="自动模厚锁模力(TON)" min-width="180" prop="monitMold8"></el-table-column>
-        <el-table-column label="喷嘴1设定温度(℃)" min-width="150" prop="monitInjTime"></el-table-column>
-        <el-table-column label="料筒1设定温度(℃)" min-width="150" prop="monitInjStartPos"></el-table-column>
-        <el-table-column label="料筒2设定温度(℃)" min-width="150" prop="monitCycle"></el-table-column>
-        <el-table-column label="料筒3设定温度(℃)" min-width="150" prop="monitBarrel1"></el-table-column>
-        <el-table-column label="料斗下设定温度(℃)" min-width="150" prop="monitBarrel2"></el-table-column>
-        <el-table-column label="背压1(kgf/cm2)" min-width="130" prop="monitBarrel3"></el-table-column>
-        <el-table-column label="螺杆转速1(mm/s)" min-width="150" prop="monit_barrel4"></el-table-column>
-        <el-table-column label="计量切换位置1(mm)" min-width="160" prop="monitNozzle"></el-table-column>
-        <el-table-column label="减压距离(mm)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="减压速度(mm/s)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="冷却时间(s)" min-width="120" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出速度1(mm/s)" min-width="140" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出速度2(mm/s)" min-width="140" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出速度3(mm/s)" min-width="140" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出速度4(mm/s)" min-width="140" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出速度5(mm/s)" min-width="140" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出切换位置1(mm)" min-width="180" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出切换位置2(mm)" min-width="180" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出切换位置3(mm)" min-width="180" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出切换位置4(mm)" min-width="180" prop="monitNozzle"></el-table-column>
-        <el-table-column label="射出控制模式" min-width="120" prop="monitNozzle"></el-table-column>
-        <el-table-column label="切换位置" min-width="85" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压1(kgf/cm2)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压2(kgf/cm2)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压3(kgf/cm2)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压4(kgf/cm2)" min-width="130" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压时间1(s)" min-width="120" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压时间2(s)" min-width="120" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压时间3(s)" min-width="120" prop="monitNozzle"></el-table-column>
-        <el-table-column label="保压时间4(s)" min-width="120" prop="monitNozzle"></el-table-column>
+        <el-table-column label="机台名" min-width="85" prop="machineName"></el-table-column>
+        <el-table-column label="班次" min-width="180" prop="shiftDate"></el-table-column>
+        <el-table-column label="项目号" min-width="180" prop="moldFileName"></el-table-column>
+        <el-table-column label="循环时间(s)" min-width="100" prop="monitCycle"></el-table-column>
+        <el-table-column label="循环数" min-width="85" prop="monitCycleCount"></el-table-column>
+        <el-table-column label="V-P压力(kgf/cm2)" min-width="150" prop="monitVPPrs"></el-table-column>
+        <el-table-column label="V-P位置(mm)" min-width="110" prop="monitVPPos"></el-table-column>
+        <el-table-column label="计量时间(s)	" min-width="100" prop="monitRecovTime"></el-table-column>
+        <el-table-column label="射出时间(s)" min-width="100" prop="monitInjTime"></el-table-column>
+        <el-table-column label="最小缓冲(mm)" min-width="120" prop="monitMCushion"></el-table-column>
+        <el-table-column label="取数时间" min-width="180" prop="dbCreateTime"></el-table-column>
+        <el-table-column label="喷嘴1温度(℃)" min-width="120" prop="monitNozzle"></el-table-column>
+        <el-table-column label="料筒1温度(℃)" min-width="120" prop="monitBarrel1"></el-table-column>
+        <el-table-column label="料筒2温度(℃)" min-width="120" prop="monitBarrel2"></el-table-column>
+        <el-table-column label="料筒3温度(℃)" min-width="120" prop="monitBarrel3"></el-table-column>
+        <el-table-column label="料斗下温度(℃)" min-width="120" prop="monitFeedTh"></el-table-column>
+        <el-table-column label="自动模厚锁模力(TON)" min-width="180" prop="condAutoDieHForce"></el-table-column>
+        <el-table-column label="喷嘴1设定温度(℃)" min-width="150" prop="condNozzle1Set"></el-table-column>
+        <el-table-column label="料筒1设定温度(℃)" min-width="150" prop="condBarrel1Set"></el-table-column>
+        <el-table-column label="料筒2设定温度(℃)" min-width="150" prop="condBarrel2Set"></el-table-column>
+        <el-table-column label="料筒3设定温度(℃)" min-width="150" prop="condBarrel3Set"></el-table-column>
+        <el-table-column label="料斗下设定温度(℃)" min-width="150" prop="condFeedThroatSet"></el-table-column>
+        <el-table-column label="背压1(kgf/cm2)" min-width="130" prop="condBackPres1"></el-table-column>
+        <el-table-column label="螺杆转速1(mm/s)" min-width="150" prop="condScrewRotate1"></el-table-column>
+        <el-table-column label="计量切换位置1(mm)" min-width="160" prop="condExtrdSwPos1"></el-table-column>
+        <el-table-column label="减压距离(mm)" min-width="130" prop="condDcmpDist"></el-table-column>
+        <el-table-column label="减压速度(mm/s)" min-width="130" prop="condDcmpVel"></el-table-column>
+        <el-table-column label="冷却时间(s)" min-width="120" prop="condCoolTime1"></el-table-column>
+        <el-table-column label="射出速度1(mm/s)" min-width="140" prop="condInjSpeed1"></el-table-column>
+        <el-table-column label="射出速度2(mm/s)" min-width="140" prop="condInjSpeed2"></el-table-column>
+        <el-table-column label="射出速度3(mm/s)" min-width="140" prop="condInjSpeed3"></el-table-column>
+        <el-table-column label="射出速度4(mm/s)" min-width="140" prop="condInjSpeed4"></el-table-column>
+        <el-table-column label="射出速度5(mm/s)" min-width="140" prop="condInjSpeed5"></el-table-column>
+        <el-table-column label="射出切换位置1(mm)" min-width="180" prop="condInjSwitchPos1"></el-table-column>
+        <el-table-column label="射出切换位置2(mm)" min-width="180" prop="condInjSwitchPos2"></el-table-column>
+        <el-table-column label="射出切换位置3(mm)" min-width="180" prop="condInjSwitchPos3"></el-table-column>
+        <el-table-column label="射出切换位置4(mm)" min-width="180" prop="condInjSwitchPos4"></el-table-column>
+        <el-table-column label="射出控制模式" min-width="120" prop="condInjectMode"></el-table-column>
+        <el-table-column label="切换位置" min-width="85" prop="condTransPosition"></el-table-column>
+        <el-table-column label="保压1(kgf/cm2)" min-width="130" prop="condPackPres1"></el-table-column>
+        <el-table-column label="保压2(kgf/cm2)" min-width="130" prop="condPackPres2"></el-table-column>
+        <el-table-column label="保压3(kgf/cm2)" min-width="130" prop="condPackPres3"></el-table-column>
+        <el-table-column label="保压4(kgf/cm2)" min-width="130" prop="condPackPres4"></el-table-column>
+        <el-table-column label="保压时间1(s)" min-width="120" prop="condPackTime1"></el-table-column>
+        <el-table-column label="保压时间2(s)" min-width="120" prop="condPackTime2"></el-table-column>
+        <el-table-column label="保压时间3(s)" min-width="120" prop="condPackTime3"></el-table-column>
+        <el-table-column label="保压时间4(s)" min-width="120" prop="condPackTime4"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -149,31 +149,6 @@ export default {
         dateTimePickerValue: [
           {required: true, type: 'array',  message: "请选择时间", trigger: "change", },
         ]},
-      paramNameArray: [
-        {key: "monitVPPrs", value: "vp压力"},
-        {key: "monitVPPos", value: "vp位置"},
-        {key: "monitBackflw", value: "逆流"},
-        {key: "monitRecovTime", value: "计量时间"},
-        {key: "monitPeakT", value: "峰值时间"},
-        {key: "monitPeakPrs", value: "峰值压力"},
-        {key: "monitPeakPos", value: "最小缓冲"},
-        {key: "monitMold8", value: "模温8"},
-        {key: "monitMold7", value: "模温7"},
-        {key: "monitMold6", value: "模温6"},
-        {key: "monitMold5", value: "模温5"},
-        {key: "monitMold4", value: "模温4"},
-        {key: "monitMold3", value: "模温3"},
-        {key: "monitMold2", value: "模温2"},
-        {key: "monitMold1", value: "模温1"},
-        {key: "monitInjTime", value: "射出时间"},
-        {key: "monitInjStartPos", value: "射出开始位置"},
-        {key: "monitCycle", value: "周期"},
-        {key: "monitBarrel1", value: "料筒1温度"},
-        {key: "monitBarrel2", value: "料筒2温度"},
-        {key: "monitBarrel3", value: "料筒3温度"},
-        {key: "monit_barrel4", value: "料筒4温度"},
-        {key: "monitNozzle", value: "喷嘴温度"}
-      ],
       queryLoading: false,
       formParam: {
         machineNames: null,
