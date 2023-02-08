@@ -10,6 +10,8 @@
                            :size="size" 
                            filterable 
                            clearable
+                           collapse-tags
+                           multiple
                            placeholder="请选择机台号">
                   <el-option
                       v-for="item in machineNameArray"
@@ -24,6 +26,8 @@
                            :size="size" 
                            filterable 
                            clearable
+                           multiple
+                           collapse-tags
                            placeholder="请选择项目号">
                   <el-option
                       v-for="item in moldFileNameArray"
