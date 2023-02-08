@@ -29,7 +29,7 @@ public class FanucCheckDataEveryDayController {
 
     @ApiOperation(value = "获取所有项目", notes = "获取所有项目")
     @GetMapping("/getAllMoldFileName")
-    public Result getAllMoldFileName(@RequestBody Map<String, String> params) {
+    public Result getAllMoldFileName() {
         return Result.success(fanucCheckDataEveryDayService.getAllMoldFileName());
     }
 
