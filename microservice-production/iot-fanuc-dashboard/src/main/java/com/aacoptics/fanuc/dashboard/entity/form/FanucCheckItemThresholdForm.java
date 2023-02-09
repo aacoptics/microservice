@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @ApiModel
 @Data
@@ -28,7 +29,7 @@ public class FanucCheckItemThresholdForm extends BaseForm<FanucCheckItemThreshol
     private String checkItemName;
 
 
-    @NotBlank(message = "偏移量不能为空")
+    @NotNull(message = "偏移量不能为空")
     @ApiModelProperty(value = "偏移量名称")
     private Double offsetValue;
 
