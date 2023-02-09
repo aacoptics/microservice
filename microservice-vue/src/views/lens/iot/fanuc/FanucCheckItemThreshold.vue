@@ -9,8 +9,8 @@
           <el-form-item label="项目号" prop="moldFileName">
             <el-input v-model="filters.moldFileName" clearable placeholder="项目号"></el-input>
           </el-form-item>
-          <el-form-item label="检查项" prop="checkItemName">
-            <el-input v-model="filters.checkItemName" clearable placeholder="检查项"></el-input>
+          <el-form-item label="点检项" prop="checkItemName">
+            <el-input v-model="filters.checkItemName" clearable placeholder="点检项"></el-input>
           </el-form-item>
         </el-form>
         <el-form :inline="true" :size="size">
@@ -107,8 +107,8 @@ export default {
       columns: [
         {prop: "machineName", label: "机台号", minWidth: 150},
         {prop: "moldFileName", label: "项目号", minWidth: 150},
-        {prop: "checkItem", label: "检查项", minWidth: 150},
-        {prop: "checkItemName", label: "检查项名称", minWidth: 150},
+        // {prop: "checkItem", label: "点检项", minWidth: 150},
+        {prop: "checkItemName", label: "点检项", minWidth: 150},
         {prop: "offsetValue", label: "偏移量", minWidth: 150},
         {prop: "updatedBy", label: "更新人", minWidth: 100},
         {prop: "updatedTime", label: "更新时间", minWidth: 120, formatter: this.dateTimeFormat},
@@ -156,7 +156,9 @@ export default {
       if (data !== null) {
         this.pageRequest = data.pageRequest;
       }
-      this.pageRequest.fanucCheckItemThreshold = this.filters.fanucCheckItemThreshold;
+      this.pageRequest.machineName = this.filters.machineName;
+      this.pageRequest.moldFileName = this.filters.moldFileName;
+      this.pageRequest.checkItemName = this.filters.checkItemName;
 
       this.findLoading = true;
       findFanucCheckItemThresholdPage(this.pageRequest)
@@ -195,7 +197,7 @@ export default {
     // 显示编辑界面
     handleEdit: function (params) {
       this.dialogVisible = true;
-      this.isInsubClasstionAddOperation = false;
+      this.isFanucCheckItemThresholdAddOperation = false;
       this.dataForm = Object.assign({}, params.row);
     },
 
@@ -204,7 +206,7 @@ export default {
     submitFanucCheckItemThreshold: function () {
       let checkItemObj = this.checkItemOptions.find((item)=> item.key === this.dataForm.checkItem);
       this.dataForm.checkItemName = checkItemObj.value;
-      
+
       this.$refs.dataForm.validate((valid) => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {

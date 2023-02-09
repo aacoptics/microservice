@@ -34,7 +34,9 @@ public class FanucCheckItemThresholdServiceImpl extends ServiceImpl<FanucCheckIt
         queryWrapper.like(StringUtils.isNotBlank(fanucCheckItemThresholdParam.getMachineName()), "machine_name", fanucCheckItemThresholdParam.getMachineName());
         queryWrapper.like(StringUtils.isNotBlank(fanucCheckItemThresholdParam.getMoldFileName()), "mold_file_name", fanucCheckItemThresholdParam.getMoldFileName());
         queryWrapper.like(StringUtils.isNotBlank(fanucCheckItemThresholdParam.getCheckItemName()), "check_item_name", fanucCheckItemThresholdParam.getCheckItemName());
-        queryWrapper.orderByAsc("exception_type");
+        queryWrapper.orderByAsc("machine_name");
+        queryWrapper.orderByAsc("mold_file_name");
+        queryWrapper.orderByAsc("check_item_name");
 
         return this.page(page, queryWrapper);
     }
