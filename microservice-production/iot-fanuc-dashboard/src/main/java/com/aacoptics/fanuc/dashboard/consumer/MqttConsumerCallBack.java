@@ -54,10 +54,10 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         JSONObject msgJson = JSONObject.parseObject(new String(message.getPayload()));
         if (StrUtil.isBlank(msgJson.getString("Message")))
             return;
-        log.info("message:", message);
+        log.info("Message:", message);
 
         //当前时间转换String
-        JSONObject dataJson = msgJson.getJSONObject("data");
+        JSONObject dataJson = msgJson.getJSONObject("Data");
         String machineName = dataJson.getString("machineName"); //机台
 
         String dateTime = dataJson.getString("dateTime");//时间
@@ -65,14 +65,14 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
         MarkdownMessage markdownGroupMessage = new MarkdownMessage();
         String title = null;
         switch (msgJson.getString("Message")) {
-            case "bufferException":
+            case "abnormalCushion":
                 title = "注塑机最小缓冲异常";
                 markdownGroupMessage.setTitle(title);
                 markdownGroupMessage.addContent("设备：" + machineName);
                 markdownGroupMessage.addContent("检查时间：" + dateTime);
                 markdownGroupMessage.addContent("最小缓冲值等于0");
                 break;
-            case "temperatureAnomaly":
+            case "abnormalTemp":
                 title = "注塑机检测温度异常";
                 markdownGroupMessage.setTitle(title);
 
@@ -84,13 +84,13 @@ public class MqttConsumerCallBack implements MqttCallbackExtended {
                 markdownGroupMessage.addContent("检查项：" + abnormalParam);
                 markdownGroupMessage.addContent("检查时间：" + dateTime);
                 markdownGroupMessage.addContent("设定值：" + setValue);
-                markdownGroupMessage.addContent("当前值：" + currentValue);
+                markdownGroupMessage.addContent("当前值：" + currentValue + "，超出设定值：" + setValue);
                 break;
         }
 
         if(markdownGroupMessage == null || StrUtil.isBlank(markdownGroupMessage.toString()))
             return;
-        String chatName = "零件注塑机每日点监IOT系统";
+        String chatName = "零件注塑机每日点监IOT系统（苏州）";
         try {
             if (StrUtil.isBlank(title)) {
                 log.error("title为空");
