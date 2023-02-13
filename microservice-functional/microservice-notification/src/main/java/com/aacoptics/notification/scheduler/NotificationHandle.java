@@ -30,6 +30,7 @@ public class NotificationHandle {
             if (!StrUtil.isBlank(e.getMessage()) && e.getMessage().equals("当前没有需要推送的批次号！"))
                 XxlJobHelper.handleSuccess("当前没有需要推送的批次号！");
             else{
+                log.error(JSONUtil.toJsonStr(e));
                 XxlJobHelper.handleFail(e.getMessage());
             }
         }
