@@ -162,7 +162,7 @@ public class FanucCheckItemThresholdServiceImpl extends ServiceImpl<FanucCheckIt
 
         if(markdownGroupMessage == null || StrUtil.isBlank(markdownGroupMessage.toString()))
             return;
-        String chatName = "零件注塑机每日点监IOT系统（苏州）";
+        String chatName = "零件注塑机每日点检IOT系统（苏州）";
         try {
             if (StrUtil.isBlank(title)) {
                 log.error("title为空");
