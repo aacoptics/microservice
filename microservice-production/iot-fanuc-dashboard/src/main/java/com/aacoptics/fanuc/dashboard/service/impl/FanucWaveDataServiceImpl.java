@@ -57,7 +57,7 @@ public class FanucWaveDataServiceImpl extends ServiceImpl<FanucWaveDataMapper, F
 
         for (FanucWaveData fanucWaveData : fanucWaveDataList) {
             JSONArray singleArray = new JSONArray();
-            singleArray.add(fanucWaveData.getCycleCount());
+            singleArray.add(fanucWaveData.getCycleCount().toString());
             singleArray.add(fanucWaveData.getInjectPressure());
             singleArray.add(fanucWaveData.getTimeStamp());
             injectPressureJson.add(singleArray);

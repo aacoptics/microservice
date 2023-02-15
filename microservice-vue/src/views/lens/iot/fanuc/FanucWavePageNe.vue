@@ -244,7 +244,7 @@ export default {
               config: {
                 and: [
                   { dimension: 'timeStamp', gte: 0 },
-                  { dimension: 'cycleCount', '=': item }
+                  { dimension: 'cycleCount', '=': item.toString() }
                 ]
               }
             }
