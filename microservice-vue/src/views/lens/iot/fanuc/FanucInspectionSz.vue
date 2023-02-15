@@ -7,8 +7,8 @@
             <el-row>
               <el-form-item label="机台号" prop="machineNames">
                 <el-select v-model="formParam.machineNames"
-                           :size="size" 
-                           filterable 
+                           :size="size"
+                           filterable
                            clearable
                            :filter-method="machineNameFilter"
                            collapse-tags
@@ -16,7 +16,7 @@
                            @clear="clearMachineNameFilter"
                            @blur="resetMachineNameArray"
                            placeholder="请选择机台号">
-                  <el-checkbox v-model="okAllMachineNameChecked" @change='okSelectAllMachineName'>全选</el-checkbox>
+                  <el-checkbox v-model="okAllMachineNameChecked" style="padding-left: 5px" @change='okSelectAllMachineName'>全选</el-checkbox>
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item"
@@ -27,8 +27,8 @@
               </el-form-item>
               <el-form-item label="项目号" prop="moldFileNames">
                 <el-select v-model="formParam.moldFileNames"
-                           :size="size" 
-                           filterable 
+                           :size="size"
+                           filterable
                            :filter-method="moldFileNameFilter"
                            clearable
                            @clear="clearMoldFileNameFilter"
@@ -36,7 +36,7 @@
                            multiple
                            collapse-tags
                            placeholder="请选择项目号">
-                  <el-checkbox v-model="okAllMoldFileNameChecked" @change='okSelectAllMoldFileName'>全选</el-checkbox>
+                  <el-checkbox v-model="okAllMoldFileNameChecked" style="padding-left: 5px" @change='okSelectAllMoldFileName'>全选</el-checkbox>
                   <el-option
                       v-for="item in moldFileNameArray"
                       :key="item"
@@ -266,7 +266,7 @@ export default {
       this.moldFileNameArray = this.moldFileNameArrayCopy;
       this.okAllMoldFileNameChecked = false;
     },
-    
+
     getAllMachineName() {
       getAllMachineName().then((response) => {
         const responseData = response.data
