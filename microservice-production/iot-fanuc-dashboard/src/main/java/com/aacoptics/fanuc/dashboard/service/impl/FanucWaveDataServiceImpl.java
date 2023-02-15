@@ -49,7 +49,6 @@ public class FanucWaveDataServiceImpl extends ServiceImpl<FanucWaveDataMapper, F
 //        String tempWaferId = "0";
 //        LocalDateTime minDateTime = LocalDateTime.MIN;
         JSONArray firstArray = new JSONArray();
-        firstArray.add("machineNo");
         firstArray.add("cycleCount");
         firstArray.add("paramValue");
         firstArray.add("timeStamp");
@@ -58,13 +57,11 @@ public class FanucWaveDataServiceImpl extends ServiceImpl<FanucWaveDataMapper, F
 
         for (FanucWaveData fanucWaveData : fanucWaveDataList) {
             JSONArray singleArray = new JSONArray();
-            singleArray.add(fanucWaveData.getMachineNo());
             singleArray.add(fanucWaveData.getCycleCount());
             singleArray.add(fanucWaveData.getInjectPressure());
             singleArray.add(fanucWaveData.getTimeStamp());
 
             JSONArray singleArray2 = new JSONArray();
-            singleArray2.add(fanucWaveData.getMachineNo());
             singleArray2.add(fanucWaveData.getCycleCount());
             singleArray2.add(fanucWaveData.getAnalogInput1());
             singleArray2.add(fanucWaveData.getTimeStamp());

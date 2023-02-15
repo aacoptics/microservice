@@ -219,78 +219,99 @@ export default {
     },
 
     drawLineChart(elementId) {
-      const xAxisInfo = [];
-      const serialData = [];
-
-      let titleText = "注塑机参数曲线"
-      this.paramNameArray.forEach(item =>{
-        if(item.key === elementId)
-        {
-          titleText = "注塑机参数曲线[" +  item.value + "]";
-          return;
-        }
-      })
-
-
-      this.waveData.forEach(item => {
-        xAxisInfo.push(item.monitDateTime);
-        serialData.push(item[elementId]);
-      })
-
       const chartDom = document.getElementById(elementId);
       const myChart = echarts.init(chartDom);
-      let option = {
-        title: {
-          text: titleText
-        },
-        legend: {
-          data: ["参数"],
-          bottom: 0,
-          type: 'scroll',
-          orient: 'horizontal'
-        },
-        toolbox: {
-          feature: {
-            dataZoom: {
-              yAxisIndex: 'none'
-            },
-            restore: {},
-            saveAsImage: {}
+      let option;
+
+      run(this.waveData)
+
+      function run(_rawData) {
+
+        const _dataSet = [
+          {
+            id: 'dataset_raw',
+            source: _rawData
           }
-        },
-        tooltip: {
-          order: 'valueDesc',
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross'
+        ]
+        this.cycleNos.forEach((item) =>{
+
+        })
+
+        option = {
+          dataset: [
+            {
+              id: 'dataset_raw',
+              source: _rawData
+            },
+            {
+              id: 'dataset_since_1950_of_germany',
+              fromDatasetId: 'dataset_raw',
+              transform: {
+                type: 'filter',
+                config: {
+                  and: [
+                    { dimension: 'Year', gte: 1950 },
+                    { dimension: 'Country', '=': 'Germany' }
+                  ]
+                }
+              }
+            },
+            {
+              id: 'dataset_since_1950_of_france',
+              fromDatasetId: 'dataset_raw',
+              transform: {
+                type: 'filter',
+                config: {
+                  and: [
+                    { dimension: 'Year', gte: 1950 },
+                    { dimension: 'Country', '=': 'France' }
+                  ]
+                }
+              }
+            }
+          ],
+          title: {
+            text: 'Income of Germany and France since 1950'
           },
-          confine: true,
-        },
-        xAxis: {
-          type: 'category',
-          name: '时间',
-          nameTextStyle: {
-            fontSize: '16px',
-            padding: [0, 0, 0, 15]
+          tooltip: {
+            trigger: 'axis'
           },
-          data: xAxisInfo
-        },
-        yAxis: {
-          name: '值',
-          type: 'value',
-          scale: true
-        },
-        // yAxis: yAxisList,
-        grid: {
-          right: 140
-        },
-        series: {
-          data: serialData,
-          type: 'line',
-          smooth: true
-        }
-      };
-      myChart.setOption(option, true);
+          xAxis: {
+            type: 'category',
+            nameLocation: 'middle'
+          },
+          yAxis: {
+            name: 'Income'
+          },
+          series: [
+            {
+              type: 'line',
+              datasetId: 'dataset_since_1950_of_germany',
+              showSymbol: false,
+              encode: {
+                x: 'Year',
+                y: 'Income',
+                itemName: 'Year',
+                tooltip: ['Income']
+              }
+            },
+            {
+              type: 'line',
+              datasetId: 'dataset_since_1950_of_france',
+              showSymbol: false,
+              encode: {
+                x: 'Year',
+                y: 'Income',
+                itemName: 'Year',
+                tooltip: ['Income']
+              }
+            }
+          ]
+        };
+        myChart.setOption(option);
+      }
+
+      option && myChart.setOption(option);
     },
 
   }
