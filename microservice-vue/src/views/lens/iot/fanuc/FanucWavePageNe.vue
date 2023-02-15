@@ -239,7 +239,7 @@ export default {
               config: {
                 and: [
                   { dimension: 'timeStamp', gte: 0 },
-                  { dimension: 'cycleCount', '=': item.toString() }
+                  { dimension: '模次号', '=': item.toString() }
                 ]
               }
             }
@@ -247,14 +247,15 @@ export default {
 
           seriesList.push({
             type: 'line',
+            name: item.toString(),
             datasetId: datasetId,
             showSymbol: false,
             encode: {
               x: 'timeStamp',
-              y: 'paramValue',
+              y: '参数值',
               itemName: 'timeStamp',
-              label: ['cycleCount', 'paramValue'],
-              tooltip: ['cycleCount', 'paramValue']
+              label: ['模次号', '参数值'],
+              tooltip: ['模次号', '参数值']
             }
           });
         })
@@ -269,6 +270,9 @@ export default {
           ],
           legend: {
             data: cycleNos,
+            bottom: 0,
+            type: 'scroll',
+            orient: 'horizontal'
           },
           title: {
             text: paramName
@@ -292,8 +296,10 @@ export default {
           },
           xAxis: {
             type: 'category',
-            nameLocation: 'right',
-            name: '时间'
+            name: '毫秒',
+            nameTextStyle: {
+              padding: [0, 0, 0, 15]
+            }
 
           },
           yAxis: {
