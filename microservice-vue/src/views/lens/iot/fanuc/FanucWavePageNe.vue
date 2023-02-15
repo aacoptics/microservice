@@ -102,7 +102,7 @@
       </el-row>
           <el-row v-for="(val, key, index) in formParam.paramNames" :key="index">
             <el-card class="box-card" style="margin-top: 10px; width:100%">
-                   <div :id="val"
+                   <div id="injectPressure"
                         style="margin-top: 5px;height: 400px;  width: 100%"></div>
 
           </el-card>
@@ -137,8 +137,8 @@ export default {
       },
 
       paramNameArray: [
-        {key: "射出压", value: "injectPressure"},
-        {key: "喷嘴压", value: "analogInput1"}
+        {key: "injectPressure", value: "射出压"},
+        {key: "analogInput1", value: "喷嘴压"}
       ],
 
       cycleNoArray:[],
@@ -197,6 +197,7 @@ export default {
         return;
       }});
       this.queryLoading = true;
+      console.log(this.formParam)
       getWaveDataByCycleNo(this.formParam).then((response) => {
         this.queryLoading = false;
         const responseData = response.data
@@ -219,13 +220,15 @@ export default {
     },
 
     drawLineChart(elementId) {
+      console.log(elementId)
       const chartDom = document.getElementById(elementId);
       const myChart = echarts.init(chartDom);
       let option;
 
-      run(this.waveData)
+      console.log(this.waveData["injectPressure"])
+      run(this.waveData[elementId], this.formParam.cycleNos)
 
-      function run(_rawData) {
+      function run(_rawData, _cycleNos) {
 
         const _dataSet = [
           {
@@ -233,43 +236,39 @@ export default {
             source: _rawData
           }
         ]
-        this.cycleNos.forEach((item) =>{
+        const _serials = []
+        _cycleNos.forEach((item) =>{
+          const singleData = {
+            id: item,
+            fromDatasetId: 'dataset_raw',
+            transform: {
+              type: 'filter',
+              config: {
+                and: [
+                  { dimension: 'timeStamp', gte: 0 },
+                  { dimension: 'cycleCount', '=': item }
+                ]
+              }
+            }
+          }
 
+          const singleSerial = {
+            type: 'line',
+            datasetId: 'dataset_' + item,
+            showSymbol: true,
+            encode: {
+              x: 'timeStamp',
+              y: 'paramValue',
+              itemName: 'timeStamp',
+              tooltip: ['cycleCount', 'paramValue']
+            }
+          }
+          _dataSet.push(singleData)
+          _serials.push(singleSerial)
         })
 
         option = {
-          dataset: [
-            {
-              id: 'dataset_raw',
-              source: _rawData
-            },
-            {
-              id: 'dataset_since_1950_of_germany',
-              fromDatasetId: 'dataset_raw',
-              transform: {
-                type: 'filter',
-                config: {
-                  and: [
-                    { dimension: 'Year', gte: 1950 },
-                    { dimension: 'Country', '=': 'Germany' }
-                  ]
-                }
-              }
-            },
-            {
-              id: 'dataset_since_1950_of_france',
-              fromDatasetId: 'dataset_raw',
-              transform: {
-                type: 'filter',
-                config: {
-                  and: [
-                    { dimension: 'Year', gte: 1950 },
-                    { dimension: 'Country', '=': 'France' }
-                  ]
-                }
-              }
-            }
-          ],
+          dataset: _dataSet,
           title: {
             text: 'Income of Germany and France since 1950'
           },
@@ -278,35 +277,14 @@ export default {
           },
           xAxis: {
             type: 'category',
-            nameLocation: 'middle'
+            nameLocation: 'middle',
+
           },
           yAxis: {
-            name: 'Income'
+            name: 'paramValue',
+            scale: true
           },
-          series: [
-            {
-              type: 'line',
-              datasetId: 'dataset_since_1950_of_germany',
-              showSymbol: false,
-              encode: {
-                x: 'Year',
-                y: 'Income',
-                itemName: 'Year',
-                tooltip: ['Income']
-              }
-            },
-            {
-              type: 'line',
-              datasetId: 'dataset_since_1950_of_france',
-              showSymbol: false,
-              encode: {
-                x: 'Year',
-                y: 'Income',
-                itemName: 'Year',
-                tooltip: ['Income']
-              }
-            }
-          ]
+          series: _serials
         };
         myChart.setOption(option);
       }
