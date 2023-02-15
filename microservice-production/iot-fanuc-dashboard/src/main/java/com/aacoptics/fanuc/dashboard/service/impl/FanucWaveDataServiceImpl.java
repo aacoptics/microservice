@@ -6,6 +6,7 @@ import com.aacoptics.fanuc.dashboard.entity.FanucMasterData;
 import com.aacoptics.fanuc.dashboard.entity.po.FanucWaveData;
 import com.aacoptics.fanuc.dashboard.service.FanucMasterDataService;
 import com.aacoptics.fanuc.dashboard.service.FanucWaveDataService;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -40,14 +41,40 @@ public class FanucWaveDataServiceImpl extends ServiceImpl<FanucWaveDataMapper, F
     }
 
     @Override
-    public Map<Integer, List<FanucWaveData>> getFanucWaveData(List<Integer> cycleNos) {
+    public Map<String, JSONArray> getFanucWaveData(List<Integer> cycleNos) {
         List<FanucWaveData> fanucWaveDataList = fanucWaveDataMapper.getFanucWaveData(cycleNos);
-        Map<Integer, List<FanucWaveData>> fanucWaveDataMap = new HashMap<>();
-        for (Integer cycleNo : cycleNos) {
-            fanucWaveDataMap.put(cycleNo, fanucWaveDataList.stream()
-                    .filter(fanucWaveData -> fanucWaveData.getCycleCount().equals(cycleNo))
-                    .collect(Collectors.toList()));
+
+        JSONArray injectPressureJson = new JSONArray();
+        JSONArray analogInput1Json = new JSONArray();
+//        String tempWaferId = "0";
+//        LocalDateTime minDateTime = LocalDateTime.MIN;
+        JSONArray firstArray = new JSONArray();
+        firstArray.add("machineNo");
+        firstArray.add("cycleCount");
+        firstArray.add("paramValue");
+        firstArray.add("timeStamp");
+        injectPressureJson.add(firstArray);
+        analogInput1Json.add(firstArray);
+
+        for (FanucWaveData fanucWaveData : fanucWaveDataList) {
+            JSONArray singleArray = new JSONArray();
+            singleArray.add(fanucWaveData.getMachineNo());
+            singleArray.add(fanucWaveData.getCycleCount());
+            singleArray.add(fanucWaveData.getInjectPressure());
+            singleArray.add(fanucWaveData.getTimeStamp());
+
+            JSONArray singleArray2 = new JSONArray();
+            singleArray2.add(fanucWaveData.getMachineNo());
+            singleArray2.add(fanucWaveData.getCycleCount());
+            singleArray2.add(fanucWaveData.getAnalogInput1());
+            singleArray2.add(fanucWaveData.getTimeStamp());
+            analogInput1Json.add(singleArray2);
         }
+
+        Map<String, JSONArray> fanucWaveDataMap = new HashMap<>();
+        fanucWaveDataMap.put("injectPressure", injectPressureJson);
+        fanucWaveDataMap.put("analogInput1", analogInput1Json);
+
         return fanucWaveDataMap;
     }
 }
