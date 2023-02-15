@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aacoptics.fanuc.dashboard.dao.FanucWaveDataMapper">
+    <select id="getFanucWaveData" resultType="com.aacoptics.fanuc.dashboard.entity.po.FanucWaveData">
+        SELECT a.machine_no
+        ,a.cycle_count
+        ,a.start_time
+        ,b.time_stamp
+        ,b.inject_pressure
+        ,b.analog_input_1
+        FROM Z_Fanuc_Special_Wave_Base_Info a
+        join Z_Fanuc_Special_Wave_Data b
+        on a.id = b.bind_id
+        where a.cycle_count in
+        <foreach item='cycleNo' index='index' collection='cycleNos' open='(' separator=',' close=')'>
+            #{cycleNo}
+        </foreach>
+    </select>
+</mapper>
