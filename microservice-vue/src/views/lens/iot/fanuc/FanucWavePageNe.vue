@@ -253,7 +253,7 @@ export default {
           const singleSerial = {
             type: 'line',
             datasetId: 'dataset_' + item,
-            showSymbol: true,
+            showSymbol: false,
             encode: {
               x: 'timeStamp',
               y: 'paramValue',
@@ -284,6 +284,7 @@ export default {
           },
           series: _serials
         };
+        console.log(option)
         myChart.setOption(option);
       }
 
