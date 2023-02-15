@@ -102,7 +102,7 @@
       </el-row>
           <el-row v-for="(val, key, index) in formParam.paramNames" :key="index">
             <el-card class="box-card" style="margin-top: 10px; width:100%">
-                   <div id="injectPressure"
+                   <div :id="val"
                         style="margin-top: 5px;height: 400px;  width: 100%"></div>
 
           </el-card>
@@ -197,7 +197,6 @@ export default {
         return;
       }});
       this.queryLoading = true;
-      console.log(this.formParam)
       getWaveDataByCycleNo(this.formParam).then((response) => {
         this.queryLoading = false;
         const responseData = response.data
@@ -220,13 +219,12 @@ export default {
     },
 
     drawLineChart(elementId) {
-      console.log(elementId)
       const chartDom = document.getElementById(elementId);
       const myChart = echarts.init(chartDom);
       let option;
-
-      console.log(this.waveData["injectPressure"])
+      console.log(this.waveData[elementId])
       run(this.waveData[elementId], this.formParam.cycleNos)
+
 
       function run(_rawData, _cycleNos) {
 
