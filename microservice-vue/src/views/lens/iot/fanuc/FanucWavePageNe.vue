@@ -89,8 +89,9 @@
                   <font-awesome-icon :icon="['fas', 'magnifying-glass']"/>
                 </template>
               </el-button>
-              <el-button type="success"
-                     @click="exportExcel('#paramDataList', 'paramDataList.xlsx')">导出
+              <el-button :loading="exportLoading"
+                         type="success"
+                     @click="handleDownload">导出
             <template #icon>
               <font-awesome-icon :icon="['fas','download']"/>
             </template>
@@ -113,10 +114,8 @@
 
 <script>
 
-import {getCycleNosByTime, getWaveDataByCycleNo} from "@/api/lens/iot/fanucParamData";
+import {getCycleNosByTime, getWaveDataByCycleNo, downloadExcel} from "@/api/lens/iot/fanucParamData";
 import * as echarts from 'echarts';
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 
 export default {
   name: "FanucWavePageNe",
@@ -142,6 +141,7 @@ export default {
 
       cycleNoArray:[],
       queryLoading: false,
+      exportLoading: false,
       formParam: {
         machineNo: "4FM01",
         dateTimePickerValue: null,
@@ -175,21 +175,9 @@ export default {
         }
       })
     },
-    exportExcel(tableId, excelFileName) {
-      const wb = XLSX.utils.table_to_book(document.querySelector(tableId));
-      const wbOut = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'array'});
-      try {
-        FileSaver.saveAs(new Blob([wbOut], {type: 'application/octet-stream'}), excelFileName)
-      } catch (e) {
-        if (typeof console !== 'undefined') console.log(e, wbOut)
-      }
-      return wbOut
-    },
-
     drawAllChart() {
       this.getFanucWaveData()
     },
-
     getFanucWaveData() {
       this.$refs.formParam.validate((valid) => {
       if (!valid) {
@@ -316,6 +304,28 @@ export default {
       }
 
       option && myChart.setOption(option);
+    },
+
+    handleDownload: function () {
+      this.$refs.formParam.validate((valid) => {
+        if (!valid) {
+          return;
+        }});
+      this.exportLoading = true;
+      downloadExcel(this.formParam)
+          .then((response) => {
+            this.exportLoading = false;
+            if (response.headers['content-type'] === 'APPLICATION/OCTET-STREAM') {
+              let filename = '注塑机波形明细.xlsx'
+              let url = window.URL.createObjectURL(new Blob([response.data]))
+              let link = document.createElement('a')
+              link.style.display = 'none'
+              link.href = url
+              link.setAttribute('download', filename)
+              document.body.appendChild(link)
+              link.click()
+            }
+          })
     },
 
   }

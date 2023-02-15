@@ -35,3 +35,15 @@ export function getWaveDataByCycleNo(queryForm) {
         data: queryForm
     })
 }
+
+export function downloadExcel(queryForm) {
+    return request({
+        url: '/lens-fanuc-ne/fanucWaveData/downloadExcel',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: queryForm,
+        responseType: 'blob'
+    })
+}
