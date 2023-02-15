@@ -103,7 +103,7 @@
           <el-row v-for="(val, key, index) in formParam.paramNames" :key="index">
             <el-card class="box-card" style="margin-top: 10px; width:100%">
                    <div :id="val"
-                        style="margin-top: 5px;height: 400px;  width: 100%"></div>
+                        style="margin-top: 5px;height: 600px;  width: 100%"></div>
 
           </el-card>
         </el-row>
@@ -113,8 +113,7 @@
 
 <script>
 
-import {getAnalysisData, getCycleNosByTime, getWaveDataByCycleNo} from "@/api/lens/iot/fanucParamData";
-import {selectEquips} from "@/api/lens/iot/fanucNe";
+import {getCycleNosByTime, getWaveDataByCycleNo} from "@/api/lens/iot/fanucParamData";
 import * as echarts from 'echarts';
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
@@ -221,23 +220,19 @@ export default {
     drawLineChart(elementId) {
       const chartDom = document.getElementById(elementId);
       const myChart = echarts.init(chartDom);
+      const paramName = this.paramNameArray.filter(x => x.key === elementId)[0].value
       let option;
-      console.log(this.waveData[elementId])
-      run(this.waveData[elementId], this.formParam.cycleNos)
+      run(this.waveData[elementId], this.formParam.cycleNos, paramName)
+      function run(_rawData, _cycleNos, _paramName) {
+        const datasetWithFilters = []
+        const seriesList = []
+        const cycleNos = []
 
-
-      function run(_rawData, _cycleNos) {
-
-        const _dataSet = [
-          {
-            id: 'dataset_raw',
-            source: _rawData
-          }
-        ]
-        const _serials = []
-        _cycleNos.forEach((item) =>{
-          const singleData = {
-            id: item,
+        echarts.util.each(_cycleNos, function (item) {
+          const datasetId = 'dataset_' + item;
+          cycleNos.push(item.toString())
+          datasetWithFilters.push({
+            id: datasetId,
             fromDatasetId: 'dataset_raw',
             transform: {
               type: 'filter',
@@ -248,43 +243,69 @@ export default {
                 ]
               }
             }
-          }
+          })
 
-          const singleSerial = {
+          seriesList.push({
             type: 'line',
-            datasetId: 'dataset_' + item,
+            datasetId: datasetId,
             showSymbol: false,
             encode: {
               x: 'timeStamp',
               y: 'paramValue',
               itemName: 'timeStamp',
+              label: ['cycleCount', 'paramValue'],
               tooltip: ['cycleCount', 'paramValue']
             }
-          }
-          _dataSet.push(singleData)
-          _serials.push(singleSerial)
+          });
         })
 
         option = {
-          dataset: _dataSet,
+          dataset: [
+            {
+              id: 'dataset_raw',
+              source: _rawData
+            },
+            ...datasetWithFilters
+          ],
+          legend: {
+            data: cycleNos,
+          },
           title: {
-            text: 'Income of Germany and France since 1950'
+            text: paramName
           },
           tooltip: {
-            trigger: 'axis'
+            order: 'valueDesc',
+            trigger: 'axis',
+            axisPointer: {
+              type: 'cross'
+            },
+            confine: true,
+          },
+          toolbox: {
+            feature: {
+              dataZoom: {
+                yAxisIndex: 'none'
+              },
+              restore: {},
+              saveAsImage: {}
+            }
           },
           xAxis: {
             type: 'category',
-            nameLocation: 'middle',
+            nameLocation: 'right',
+            name: '时间'
 
           },
           yAxis: {
-            name: 'paramValue',
-            scale: true
+            type: 'value',
+            name: '值',
+            scale: true,
+            axisLine: {
+              show: true
+            },
           },
-          series: _serials
+          series: seriesList
         };
-        console.log(option)
         myChart.setOption(option);
       }
 

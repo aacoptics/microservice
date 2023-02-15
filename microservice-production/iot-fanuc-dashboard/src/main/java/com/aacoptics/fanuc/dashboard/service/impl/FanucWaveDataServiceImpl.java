@@ -49,8 +49,8 @@ public class FanucWaveDataServiceImpl extends ServiceImpl<FanucWaveDataMapper, F
 //        String tempWaferId = "0";
 //        LocalDateTime minDateTime = LocalDateTime.MIN;
         JSONArray firstArray = new JSONArray();
-        firstArray.add("cycleCount");
-        firstArray.add("paramValue");
+        firstArray.add("模次号");
+        firstArray.add("参数值");
         firstArray.add("timeStamp");
         injectPressureJson.add(firstArray);
         analogInput1Json.add(firstArray);
