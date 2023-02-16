@@ -258,7 +258,6 @@ export default {
           ],
           legend: {
             data: cycleNos,
-            bottom: 0,
             type: 'scroll',
             orient: 'horizontal'
           },
