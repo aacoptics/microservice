@@ -54,7 +54,7 @@ public class ProcessConditionData extends BasePo {
     private String holdTime5;
     private String holdPressure6;
     private String holdTime6;
-    private String holdPressureVelocity;
+    // private String holdPressureVelocity; // 保压速度
     private String platenPosition;
     private String openingSpeed;
     private String ejectionSpeed;

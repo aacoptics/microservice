@@ -76,4 +76,8 @@ public class ShapingResultData extends BasePo {
     private String dvtCost; //项目DVT费用
     private String evtDvtCost; //项目(EVT+DVT)费用
     private String projectMassProduction; //项目量产
+    private String mtfAvgYield;// MTF平均良率
+    private String massProductionTime;// 量产时长（首次）
+    private String massProductionShipment;// 量产出货量（首次）
+    private String projectInitiationTime;//项目立项时间
 }

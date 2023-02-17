@@ -382,19 +382,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="保压速度(mm/s)" prop="holdPressureVelocity">
-                <el-input v-model="dataForm.holdPressureVelocity" auto-complete="off" clearable
-                          type="textarea"></el-input>
+              <el-form-item label="压板位置(mm)" prop="platenPosition">
+                <el-input v-model="dataForm.platenPosition" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="压板位置(mm)" prop="platenPosition">
-                <el-input v-model="dataForm.platenPosition" auto-complete="off" clearable type="textarea"></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :span="8">
               <el-form-item label="开模速度(mm/s)" prop="openingSpeed">
                 <el-input v-model="dataForm.openingSpeed" auto-complete="off" clearable type="textarea"></el-input>
@@ -405,14 +399,14 @@
                 <el-input v-model="dataForm.ejectionSpeed" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-
-          <el-row>
             <el-col :span="8">
               <el-form-item label="工艺冷却时间(s)" prop="coolingTime">
                 <el-input v-model="dataForm.coolingTime" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+
+          <el-row>
             <el-col :span="8">
               <el-form-item label="锁模力(Ton)" prop="clampingForce">
                 <el-input v-model="dataForm.clampingForce" auto-complete="off" clearable type="textarea"></el-input>
@@ -471,12 +465,12 @@ export default {
         lensNumber: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
@@ -496,7 +490,7 @@ export default {
         {prop: "mfHoldTime5", label: "模流-保压5时间(s)", minWidth: 100},
         {prop: "mfHoldPressure6", label: "模流-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "mfHoldTime6", label: "模流-保压6时间(s)", minWidth: 100},
-        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100},
+        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100, sortable: false},
         {prop: "moldTemp", label: "实际-模温(℃)", minWidth: 100},
         {prop: "materialTemp", label: "实际-料温(℃)", minWidth: 100},
         {prop: "jetVelocity", label: "实际-射速(mm/s)", minWidth: 100},
@@ -513,12 +507,11 @@ export default {
         {prop: "holdTime5", label: "实际-保压5时间(s)", minWidth: 100},
         {prop: "holdPressure6", label: "实际-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "holdTime6", label: "实际-保压6时间(s)", minWidth: 100},
-        {prop: "holdPressureVelocity", label: "保压速度(mm/s", minWidth: 100},
         {prop: "platenPosition", label: "压板位置(mm)", minWidth: 100},
         {prop: "openingSpeed", label: "开模速度(mm/s)", minWidth: 100},
         {prop: "ejectionSpeed", label: "顶出速度(mm/s)", minWidth: 100},
-        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100},
-        {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100},
+        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100, sortable: false},
+        {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100, sortable: false},
         {prop: "passivation", label: "钝化工艺", minWidth: 100, sortable: false},
       ],
       pageRequest: {current: 1, size: 10},
@@ -572,7 +565,6 @@ export default {
         holdTime5: "",
         holdPressure6: "",
         holdTime6: "",
-        holdPressureVelocity: "",
         platenPosition: "",
         openingSpeed: "",
         ejectionSpeed: "",
@@ -695,7 +687,8 @@ export default {
               responseData.data.records.map((value) => {
                 for (let key in value) {
                   if (key !== 'category' && key !== 'project' && key !== 'partName' &&
-                      key !== 'material' && key !== 'moldNo' && key !== 'id' &&
+                      key !== 'material' && key !== 'moldNo' && key !== 'id' && key !== 'mfCoolingTime' &&
+                      key !== 'coolingTime' && key !== 'clampingForce' &&
                       key !== 'createdBy' && key !== 'createdTime' && key !== 'updatedBy' &&
                       key !== 'updatedTime' && key !== 'passivation' && key !== 'department' &&
                       key !== 'lensNumber' && key !== 'moldType') {

@@ -5,8 +5,7 @@ import com.aacoptics.data.analysis.entity.po.MoldData;
 import com.aacoptics.data.analysis.entity.po.MoldFlowData;
 import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.aacoptics.data.analysis.exception.BusinessException;
-import com.aacoptics.data.analysis.mapper.MoldDataMapper;
-import com.aacoptics.data.analysis.mapper.StructureDataMapper;
+import com.aacoptics.data.analysis.mapper.*;
 import com.aacoptics.data.analysis.service.IMoldDataService;
 import com.aacoptics.data.analysis.service.IStructureDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
@@ -29,6 +28,12 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
 
     @Autowired
     MoldDataMapper moldDataMapper;
+    @Autowired
+    MoldFlowMapper moldFlowMapper;
+    @Autowired
+    private ShapingResultDataMapper shapingResultDataMapper;
+    @Autowired
+    private ProcessConditionDataMapper processConditionDataMapper;
 
 
     @Override
@@ -80,22 +85,23 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
 
             String moldNo = dataArray[6];
             String moldType = dataArray[7];
-            String moldCorePassivation = dataArray[8];
-            String runnerType = dataArray[9];
-            String cavityInnerDiameter = dataArray[10];
-            String cavityInnerDiameterRange = dataArray[11];
-            String firstRunner = ExcelUtil.handleDecimal(dataArray[12], 1);
-            String secondRunner = ExcelUtil.handleDecimal(dataArray[13], 1);
-            String thirdRunner = ExcelUtil.handleDecimal(dataArray[14], 1);
-            String partingSurface = ExcelUtil.handleDecimal(dataArray[15], 1);
-            String splitPositionR1 = ExcelUtil.handleDecimal(dataArray[16], 1);
-            String splitPositionR2 = ExcelUtil.handleDecimal(dataArray[17], 1);
-            String gateType = dataArray[18];
-            String gateWidth = ExcelUtil.handleDecimal(dataArray[19], 2);
-            String gateThickness = ExcelUtil.handleDecimal(dataArray[20], 2);
-            String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[21], 2);
-            String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[22], 2);
-            String moldOpeningType = dataArray[23];
+            String moldTypeTotal = dataArray[8];
+            String moldCorePassivation = dataArray[9];
+            String runnerType = dataArray[10];
+            String cavityInnerDiameter = dataArray[11];
+            String cavityInnerDiameterRange = dataArray[12];
+            String thirdRunner = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String firstRunner = ExcelUtil.handleDecimal(dataArray[14], 1);
+            String secondRunner = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String partingSurface = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String splitPositionR1 = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String splitPositionR2 = ExcelUtil.handleDecimal(dataArray[18], 1);
+            String gateType = dataArray[19];
+            String gateWidth = ExcelUtil.handleDecimal(dataArray[20], 2);
+            String gateThickness = ExcelUtil.handleDecimal(dataArray[21], 2);
+            String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[22], 2);
+            String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[23], 2);
+            String moldOpeningType = dataArray[24];
 
             // 设置参数
             moldData.setDepartment(department);
@@ -106,6 +112,7 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
             moldData.setMaterial(material);
             moldData.setMoldNo(moldNo);
             moldData.setMoldType(moldType);
+            moldData.setMoldTypeTotal(moldTypeTotal);
             moldData.setMoldCorePassivation(moldCorePassivation);
             moldData.setRunnerType(runnerType);
             moldData.setCavityInnerDiameter(cavityInnerDiameter);
@@ -125,6 +132,11 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
 
             this.saveOrUpdate(moldData);
 
+            // 上传之后强制同步数据
+            moldDataMapper.syncData();
+            moldFlowMapper.syncMoldType();
+            shapingResultDataMapper.syncMoldType();
+            processConditionDataMapper.syncMoldType();
         }
 
     }

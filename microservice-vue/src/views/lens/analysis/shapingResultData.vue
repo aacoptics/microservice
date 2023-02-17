@@ -324,7 +324,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="白片外径偏心(%/规格)" prop="outerDiameterEcc">
+              <el-form-item label="白片外径偏心(%/规格)-泰勒" prop="outerDiameterEcc">
                 <el-input v-model="dataForm.outerDiameterEcc" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -332,17 +332,17 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="白片坎合偏心(%/规格)" prop="kanheEcc">
+              <el-form-item label="白片坎合偏心(%/规格)-400T" prop="kanheEcc">
                 <el-input v-model="dataForm.kanheEcc" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="白片面间偏心(%/规格)" prop="faceEcc">
+              <el-form-item label="白片面间偏心(%/规格)-泰勒" prop="faceEcc">
                 <el-input v-model="dataForm.faceEcc" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="退火制程" prop="annealingProcess">
+              <el-form-item label="退火制程（退火温度/时间）" prop="annealingProcess">
                 <el-input v-model="dataForm.annealingProcess" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -350,17 +350,17 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="BP坎合圆度(um)" prop="bpKanheRoundness">
+              <el-form-item label="BP坎合圆度(um)-400T" prop="bpKanheRoundness">
                 <el-input v-model="dataForm.bpKanheRoundness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="DMP坎合圆度(um)" prop="dmpKanheRoundness">
+              <el-form-item label="DMP坎合圆度(um)-400T" prop="dmpKanheRoundness">
                 <el-input v-model="dataForm.dmpKanheRoundness" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="白片外径均值(um)" prop="outerDiameterAverage">
+              <el-form-item label="白片外径均值(um)-三坐标" prop="outerDiameterAverage">
                 <el-input v-model="dataForm.outerDiameterAverage" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
@@ -369,19 +369,19 @@
 
           <el-row>
             <el-col :span="8">
-              <el-form-item label="白片外径极差(um)" prop="outerDiameterRange">
+              <el-form-item label="白片外径极差(um)-三坐标" prop="outerDiameterRange">
                 <el-input v-model="dataForm.outerDiameterRange" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="白片外径圆度(um)" prop="outerDiameterRoundness">
+              <el-form-item label="白片外径圆度(um)-三坐标" prop="outerDiameterRoundness">
                 <el-input v-model="dataForm.outerDiameterRoundness" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="白片外径收缩率(‰)" prop="outerDiameterShrinkage">
+              <el-form-item label="白片外径收缩率(‰)-三坐标" prop="outerDiameterShrinkage">
                 <el-input v-model="dataForm.outerDiameterShrinkage" auto-complete="off" clearable
                           type="textarea"></el-input>
               </el-form-item>
@@ -496,6 +496,97 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="ABC档合格数分布" prop="abcFilesNo">
+                <el-input v-model="dataForm.abcFilesNo" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结构方案总数" prop="structureNo">
+                <el-input v-model="dataForm.structureNo" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="模具类型总数" prop="moldTypeNo">
+                <el-input v-model="dataForm.moldTypeNo" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="模具费用" prop="moldCost">
+                <el-input v-model="dataForm.moldCost" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目EVT耗时" prop="evtTime">
+                <el-input v-model="dataForm.evtTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目DVT耗时" prop="dvtTime">
+                <el-input v-model="dataForm.dvtTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="项目(EVT+DVT)耗时" prop="evtDvtTime">
+                <el-input v-model="dataForm.evtDvtTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目EVT费用" prop="evtCost">
+                <el-input v-model="dataForm.evtCost" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目DVT费用" prop="dvtCost">
+                <el-input v-model="dataForm.dvtCost" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="项目(EVT+DVT)费用" prop="evtDvtCost">
+                <el-input v-model="dataForm.evtDvtCost" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目量产" prop="projectMassProduction">
+                <el-input v-model="dataForm.projectMassProduction" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="MTF平均良率" prop="mtfAvgYield">
+                <el-input v-model="dataForm.mtfAvgYield" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="量产时长（首次）" prop="massProductionTime">
+                <el-input v-model="dataForm.massProductionTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="量产出货量（首次）" prop="massProductionShipment">
+                <el-input v-model="dataForm.massProductionShipment" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="项目立项时间" prop="projectInitiationTime">
+                <el-input v-model="dataForm.projectInitiationTime" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -556,12 +647,12 @@ export default {
         endValue: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
@@ -571,21 +662,21 @@ export default {
         {prop: "r1VectorHeightRange", label: "R1矢高极差(um)", minWidth: 100},
         {prop: "r2VectorHeight", label: "R2矢高(um)", minWidth: 100},
         {prop: "r2VectorHeightRange", label: "R2矢高极差(um)", minWidth: 100},
-        {prop: "outerDiameterEcc", label: "白片外径偏心(%/规格）", minWidth: 100},
-        {prop: "kanheEcc", label: "白片坎合偏心(%/规格）", minWidth: 100},
-        {prop: "faceEcc", label: "白片面间偏心(%/规格）", minWidth: 100},
-        {prop: "annealingProcess", label: "退火制程", minWidth: 100},
-        {prop: "bpKanheRoundness", label: "BP坎合圆度(um)", minWidth: 100},
-        {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)", minWidth: 100},
-        {prop: "outerDiameterAverage", label: "白片外径均值(um)", minWidth: 100},
-        {prop: "outerDiameterRange", label: "白片外径极差(um)", minWidth: 100},
-        {prop: "outerDiameterRoundness", label: "白片外径圆度(um)", minWidth: 100},
-        {prop: "outerDiameterShrinkage", label: "白片外径收缩率(‰)", minWidth: 100},
-        {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100},
+        {prop: "outerDiameterEcc", label: "白片外径偏心(%/规格)-泰勒", minWidth: 100, sortable: false},
+        {prop: "kanheEcc", label: "白片坎合偏心(%/规格)-400T", minWidth: 100, sortable: false},
+        {prop: "faceEcc", label: "白片面间偏心(%/规格)-泰勒", minWidth: 100, sortable: false},
+        {prop: "annealingProcess", label: "退火制程（退火温度/时间）", minWidth: 100, sortable: false},
+        {prop: "bpKanheRoundness", label: "BP坎合圆度(um)-400T", minWidth: 100},
+        {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)-400T", minWidth: 100},
+        {prop: "outerDiameterAverage", label: "白片外径均值(um)-三坐标", minWidth: 100},
+        {prop: "outerDiameterRange", label: "白片外径极差(um)-三坐标", minWidth: 100},
+        {prop: "outerDiameterRoundness", label: "白片外径圆度(um)-三坐标", minWidth: 100},
+        {prop: "outerDiameterShrinkage", label: "白片外径收缩率(‰)-三坐标", minWidth: 100},
+        {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100, sortable: false},
         {prop: "r1Flatness", label: "白片平面度R1(um)", minWidth: 100},
         {prop: "r2Flatness", label: "白片平面度R2(um)", minWidth: 100},
-        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100},
-        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100},
+        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100, sortable: false},
+        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100, sortable: false},
         {prop: "wftR1", label: "R1(白片面型nm)", minWidth: 100},
         {prop: "wftR2", label: "R2(白片面型nm)", minWidth: 100},
         {prop: "wftConsistency", label: "全穴一致性(白片面型nm)", minWidth: 100},
@@ -595,21 +686,25 @@ export default {
         {prop: "cftR2", label: "R2(镀膜片面型nm)", minWidth: 100},
         {prop: "cftConsistency", label: "全穴一致性(镀膜片面型nm)", minWidth: 100},
         {prop: "cftMaxAs", label: "最大AS(镀膜片面型nm)", minWidth: 100},
-        {prop: "burr", label: "分型面毛边(um)", minWidth: 100},
+        {prop: "burr", label: "分型面毛边(um)", minWidth: 100, sortable: false},
         {prop: "weldline", label: "熔接线", minWidth: 100, sortable: false},
         {prop: "remarks", label: "备注", minWidth: 100, sortable: false},
         {prop: "appearanceProblem", label: "外观问题", minWidth: 100, sortable: false},
         {prop: "abcFilesNo", label: "ABC档合格数分布", minWidth: 100, sortable: false},
-        {prop: "structureNo", label: "结构方案总数", minWidth: 100},
+        {prop: "structureNo", label: "结构方案总数", minWidth: 100, sortable: false},
         {prop: "moldTypeNo", label: "模具类型总数", minWidth: 100},
-        {prop: "moldCost", label: "模具费用", minWidth: 100},
-        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100},
-        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100},
-        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100},
-        {prop: "evtCost", label: "项目EVT费用", minWidth: 100},
-        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100},
-        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100},
-        {prop: "projectMassProduction", label: "项目量产", minWidth: 100, sortable: false}
+        {prop: "moldCost", label: "模具费用", minWidth: 100, sortable: false},
+        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100, sortable: false},
+        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100, sortable: false},
+        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100, sortable: false},
+        {prop: "evtCost", label: "项目EVT费用", minWidth: 100, sortable: false},
+        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100, sortable: false},
+        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100, sortable: false},
+        {prop: "projectMassProduction", label: "项目量产", minWidth: 100, sortable: false},
+        {prop: "mtfAvgYield", label: "MTF平均良率", minWidth: 100, sortable: false},
+        {prop: "massProductionTime", label: "量产时长（首次）", minWidth: 100, sortable: false},
+        {prop: "massProductionShipment", label: "量产出货量（首次）", minWidth: 100, sortable: false},
+        {prop: "projectInitiationTime", label: "项目立项时间", minWidth: 100, sortable: false}
 
       ],
       pageRequest: {current: 1, size: 10},
@@ -680,6 +775,10 @@ export default {
         dvtCost: "",
         evtDvtCost: "",
         projectMassProduction: "",
+        mtfAvgYield: "",
+        massProductionTime: "",
+        massProductionShipment: "",
+        projectInitiationTime: "",
         createdBy: "",
         updatedBy: "",
         createdTime: "",
@@ -848,16 +947,12 @@ export default {
                 for (let key in value) {
                   if (key === 'coreThickness' || key === 'coreThicknessRange' || key === 'r1VectorHeight' ||
                       key === 'r1VectorHeightRange' || key === 'r2VectorHeight' || key === 'r2VectorHeightRange' ||
-                      key === 'outerDiameterEcc' || key === 'kanheEcc' || key === 'faceEcc' ||
                       key === 'bpKanheRoundness' || key === 'dmpKanheRoundness' || key === 'outerDiameterAverage' ||
                       key === 'outerDiameterRange' || key === 'outerDiameterRoundness' || key === 'outerDiameterShrinkage' ||
-                      key === 'outerDiameterRoughness' || key === 'r1Flatness' || key === 'r2Flatness' ||
-                      key === 'r1SplitAverage' || key === 'r2SplitAverage' || key === 'burr' || key === 'wftR1' ||
-                      key === 'wftR2' || key === 'wftConsistency' || key === 'wftMaxAs' || key === 'wftStability' ||
+                      key === 'r1Flatness' || key === 'r2Flatness' || key === 'wftR1' || key === 'wftR2' || 
+                      key === 'wftConsistency' || key === 'wftMaxAs' || key === 'wftStability' ||
                       key === 'cftR1' || key === 'cftR2' || key === 'cftConsistency' || key === 'cftMaxAs' || 
-                      key === 'annealingProcess' || key === 'structureNo' || key === 'moldTypeNo' ||
-                      key === 'moldCost' || key === 'evtTime' || key === 'dvtTime' || key === 'evtDvtTime' ||
-                      key === 'evtCost' || key === 'dvtCost' || key === 'evtDvtCost' ) {
+                      key === 'moldTypeNo') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])

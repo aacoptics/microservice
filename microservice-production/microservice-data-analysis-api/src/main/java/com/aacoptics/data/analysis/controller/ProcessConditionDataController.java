@@ -161,13 +161,12 @@ public class ProcessConditionDataController {
                     row.createCell(38).setCellValue(p.getHoldTime5());
                     row.createCell(39).setCellValue(p.getHoldPressure6());
                     row.createCell(40).setCellValue(p.getHoldTime6());
-                    row.createCell(41).setCellValue(p.getHoldPressureVelocity());
-                    row.createCell(42).setCellValue(p.getPlatenPosition());
-                    row.createCell(43).setCellValue(p.getOpeningSpeed());
-                    row.createCell(44).setCellValue(p.getEjectionSpeed());
-                    row.createCell(45).setCellValue(p.getCoolingTime());
-                    row.createCell(46).setCellValue(p.getClampingForce());
-                    row.createCell(47).setCellValue(p.getPassivation());
+                    row.createCell(41).setCellValue(p.getPlatenPosition());
+                    row.createCell(42).setCellValue(p.getOpeningSpeed());
+                    row.createCell(43).setCellValue(p.getEjectionSpeed());
+                    row.createCell(44).setCellValue(p.getCoolingTime());
+                    row.createCell(45).setCellValue(p.getClampingForce());
+                    row.createCell(46).setCellValue(p.getPassivation());
                 }
             }
 

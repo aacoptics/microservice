@@ -158,14 +158,32 @@ public class MoldFlowController {
                     } else {
                         row.createCell(20).setCellValue("");
                     }
-                    row.createCell(21).setCellValue(p.getCompetitorName());
-                    row.createCell(22).setCellValue(p.getCompetitorLink());
-                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
-                        row.createCell(23).setCellValue("");
-                    } else if (p.getAssemblyDrawing().indexOf(".") != -1) {
-                        row.createCell(23).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+
+                    if (StringUtils.isEmpty(p.getPreFrontR1())) {
+                        row.createCell(21).setCellValue("");
+                    } else if (p.getPreFrontR1().indexOf(".") != -1) {
+                        row.createCell(21).setCellValue(picPath + p.getPreFrontR1().substring(0, p.getPreFrontR1().indexOf(".")));
                     } else {
-                        row.createCell(23).setCellValue("");
+                        row.createCell(21).setCellValue("");
+                    }
+
+                    if (StringUtils.isEmpty(p.getPreFrontR2())) {
+                        row.createCell(22).setCellValue("");
+                    } else if (p.getPreFrontR2().indexOf(".") != -1) {
+                        row.createCell(22).setCellValue(picPath + p.getPreFrontR2().substring(0, p.getPreFrontR2().indexOf(".")));
+                    } else {
+                        row.createCell(22).setCellValue("");
+                    }
+
+
+                    row.createCell(23).setCellValue(p.getCompetitorName());
+                    row.createCell(24).setCellValue(p.getCompetitorLink());
+                    if (StringUtils.isEmpty(p.getAssemblyDrawing())) {
+                        row.createCell(25).setCellValue("");
+                    } else if (p.getAssemblyDrawing().indexOf(".") != -1) {
+                        row.createCell(25).setCellValue(picPath + p.getAssemblyDrawing().substring(0, p.getAssemblyDrawing().indexOf(".")));
+                    } else {
+                        row.createCell(25).setCellValue("");
                     }
 
                 }

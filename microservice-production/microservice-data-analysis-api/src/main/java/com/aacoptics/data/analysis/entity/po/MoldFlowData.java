@@ -34,6 +34,8 @@ public class MoldFlowData extends BasePo {
     private String refractiveR2;
     private String refractivePicR1; //模拟面型图R1
     private String refractivePicR2; //模拟面型图R2
+    private String preFrontR1; // 预补正面型R1
+    private String preFrontR2; // 预补正面型R2
     private String competitorName;
     private String competitorLink;
     private String assemblyDrawing;

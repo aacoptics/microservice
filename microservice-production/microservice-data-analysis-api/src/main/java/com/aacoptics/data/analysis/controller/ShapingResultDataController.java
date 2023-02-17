@@ -226,6 +226,10 @@ public class ShapingResultDataController {
                     row.createCell(59).setCellValue(p.getDvtCost());
                     row.createCell(60).setCellValue(p.getEvtDvtCost());
                     row.createCell(61).setCellValue(p.getProjectMassProduction());
+                    row.createCell(62).setCellValue(p.getMtfAvgYield());
+                    row.createCell(63).setCellValue(p.getMassProductionTime());
+                    row.createCell(64).setCellValue(p.getMassProductionShipment());
+                    row.createCell(65).setCellValue(p.getProjectInitiationTime());
                 }
             }
 
