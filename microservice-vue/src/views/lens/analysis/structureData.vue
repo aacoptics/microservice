@@ -402,6 +402,11 @@
                 <el-input v-model="dataForm.mechanismTrou" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="结构方案总数" prop="structureSchemesNo">
+                <el-input v-model="dataForm.structureSchemesNo" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
 
         </el-form>
@@ -463,13 +468,14 @@ export default {
         endValue: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
+        {prop: "structureSchemesNo", label: "结构方案总数", minWidth: 100, sortable: false},
         {prop: "coreThicknessLens", label: "光学芯厚(um)", minWidth: 100},
         {prop: "maxWallThickness", label: "光学最厚壁厚(um)", minWidth: 100},
         {prop: "minWallThickness", label: "光学最薄壁厚(um)", minWidth: 100},
@@ -487,14 +493,14 @@ export default {
         {prop: "maxAngleR2", label: "整体最大角度R2(°)", minWidth: 100},
         {prop: "r1MaxHeightDifference", label: "整体R1最大高度差(um)", minWidth: 100},
         {prop: "r2MaxHeightDifference", label: "整体R2最大高度差(um)", minWidth: 100},
-        {prop: "r1R2Distance", label: "R1终端到R2坎合根部距离(um)", minWidth: 100},
-        {prop: "middlePartThickness", label: "机构中间部分厚度(um)", minWidth: 100},
-        {prop: "bottomDiameterDistance", label: "坎合底部到外径距离(um)", minWidth: 100},
-        {prop: "mechanismDiameterThicknessRatio", label: "机构径厚比", minWidth: 100},
-        {prop: "r1KanheAngle", label: "R1坎合角度(°)", minWidth: 100},
-        {prop: "r1KanheHeight", label: "R1坎合高度(um)", minWidth: 100},
-        {prop: "r2KanheAngle", label: "R2坎合角度(°)", minWidth: 100},
-        {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100},
+        {prop: "r1R2Distance", label: "R1终端到R2坎合根部距离(um)", minWidth: 100, sortable: false},
+        {prop: "middlePartThickness", label: "机构中间部分厚度(um)", minWidth: 100, sortable: false},
+        {prop: "bottomDiameterDistance", label: "坎合底部到外径距离(um)", minWidth: 100, sortable: false},
+        {prop: "mechanismDiameterThicknessRatio", label: "机构径厚比", minWidth: 100, sortable: false},
+        {prop: "r1KanheAngle", label: "R1坎合角度(°)", minWidth: 100, sortable: false},
+        {prop: "r1KanheHeight", label: "R1坎合高度(um)", minWidth: 100, sortable: false},
+        {prop: "r2KanheAngle", label: "R2坎合角度(°)", minWidth: 100, sortable: false},
+        {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100, sortable: false},
         {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r1SplitPosition", label: "R1分割位位置", minWidth: 100, sortable: false},
@@ -519,6 +525,7 @@ export default {
         project: "",
         partName: "",
         material: "",
+        structureSchemesNo: "",
         coreThicknessLens: "",
         maxWallThickness: "",
         minWallThickness: "",
@@ -697,10 +704,7 @@ export default {
                       key === 'maxCoreRatio' || key === 'maxMinRatio' || key === 'outerDiameter' ||
                       key === 'edgeThickness' || key === 'wholeMinWallThickness' || key === 'wholeMaxWallThickness' ||
                       key === 'wholeMaxMinRatio' || key === 'wholeDiameterThicknessRatio' || key === 'maxAngleR1' ||
-                      key === 'maxAngleR2' || key === 'r1MaxHeightDifference' || key === 'r2MaxHeightDifference' ||
-                      key === 'r1R2Distance' || key === 'middlePartThickness' || key === 'bottomDiameterDistance' ||
-                      key === 'mechanismDiameterThicknessRatio' || key === 'r1KanheAngle' || key === 'r1KanheHeight' ||
-                      key === 'r2KanheAngle' || key === 'r2KanheHeight') {
+                      key === 'maxAngleR2' || key === 'r1MaxHeightDifference' || key === 'r2MaxHeightDifference') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])

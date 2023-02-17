@@ -4,7 +4,7 @@ import com.aacoptics.data.analysis.entity.form.QueryParams;
 import com.aacoptics.data.analysis.entity.po.ShapingResultData;
 import com.aacoptics.data.analysis.entity.po.StructureData;
 import com.aacoptics.data.analysis.exception.BusinessException;
-import com.aacoptics.data.analysis.mapper.StructureDataMapper;
+import com.aacoptics.data.analysis.mapper.*;
 import com.aacoptics.data.analysis.service.IStructureDataService;
 import com.aacoptics.data.analysis.util.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,6 +28,14 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
 
     @Autowired
     StructureDataMapper structureDataMapper;
+    @Autowired
+    MoldDataMapper moldDataMapper;
+    @Autowired
+    MoldFlowMapper moldFlowMapper;
+    @Autowired
+    private ProcessConditionDataMapper processConditionDataMapper;
+    @Autowired
+    private ShapingResultDataMapper shapingResultDataMapper;
 
 
     @Override
@@ -81,39 +89,40 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             }
 
 
-            String coreThickness = ExcelUtil.handleDecimal(dataArray[6], 1);
-            String maxWallThickness = ExcelUtil.handleDecimal(dataArray[7], 1);
-            String minWallThickness = ExcelUtil.handleDecimal(dataArray[8], 1);
-            String maxCoreRatio = ExcelUtil.handleDecimal(dataArray[9], 1);
-            String maxMinRatio = ExcelUtil.handleDecimal(dataArray[10], 1);
-            String opticsMaxAngleR1 = ExcelUtil.handleDecimal(dataArray[11], 1);
-            String opticsMaxAngleR2 = ExcelUtil.handleDecimal(dataArray[12], 1);
-            String outerDiameter = ExcelUtil.handleDecimal(dataArray[13], 1);
-            String edgeThickness = ExcelUtil.handleDecimal(dataArray[14], 1);
-            String wholeMinWallThickness = ExcelUtil.handleDecimal(dataArray[15], 1);
-            String wholeMaxWallThickness = ExcelUtil.handleDecimal(dataArray[16], 1);
-            String wholeMaxMinRatio = ExcelUtil.handleDecimal(dataArray[17], 1);
-            String wholeDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[18], 1);
-            String maxAngleR1 = ExcelUtil.handleDecimal(dataArray[19], 1);
-            String maxAngleR2 = ExcelUtil.handleDecimal(dataArray[20], 1);
-            String r1MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[21], 1);
-            String r2MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[22], 1);
-            String r1R2Distance = ExcelUtil.handleDecimal(dataArray[23], 1);
-            String middlePartThickness = ExcelUtil.handleDecimal(dataArray[24], 1);
-            String bottomDiameterDistance = ExcelUtil.handleDecimal(dataArray[25], 1);
-            String mechanismDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[26], 1);
-            String r1KanheAngle = ExcelUtil.handleDecimal(dataArray[27], 1);
-            String r1KanheHeight = ExcelUtil.handleDecimal(dataArray[28], 1);
-            String r2KanheAngle = ExcelUtil.handleDecimal(dataArray[29], 1);
-            String r2KanheHeight = ExcelUtil.handleDecimal(dataArray[30], 1);
-            String r1Srtm = dataArray[31];
-            String r2Srtm = dataArray[32];
-            String r1SplitPosition = dataArray[33];
-            String r2SplitPosition = dataArray[34];
-            String outerDiameterSrtm = dataArray[35];
-            String partSurfaceLiftRatio = dataArray[36];
-            String mechanismTrou = dataArray[37];
-            String assemblyDrawing = pathsMap.get(i + "_" + 38); // 图片路径
+            String structureSchemesNo = ExcelUtil.handleDecimal(dataArray[6], 1);
+            String coreThickness = ExcelUtil.handleDecimal(dataArray[7], 1);
+            String maxWallThickness = ExcelUtil.handleDecimal(dataArray[8], 1);
+            String minWallThickness = ExcelUtil.handleDecimal(dataArray[9], 1);
+            String maxCoreRatio = ExcelUtil.handleDecimal(dataArray[10], 1);
+            String maxMinRatio = ExcelUtil.handleDecimal(dataArray[11], 1);
+            String opticsMaxAngleR1 = ExcelUtil.handleDecimal(dataArray[12], 1);
+            String opticsMaxAngleR2 = ExcelUtil.handleDecimal(dataArray[13], 1);
+            String outerDiameter = ExcelUtil.handleDecimal(dataArray[14], 1);
+            String edgeThickness = ExcelUtil.handleDecimal(dataArray[15], 1);
+            String wholeMinWallThickness = ExcelUtil.handleDecimal(dataArray[16], 1);
+            String wholeMaxWallThickness = ExcelUtil.handleDecimal(dataArray[17], 1);
+            String wholeMaxMinRatio = ExcelUtil.handleDecimal(dataArray[18], 1);
+            String wholeDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[19], 1);
+            String maxAngleR1 = ExcelUtil.handleDecimal(dataArray[20], 1);
+            String maxAngleR2 = ExcelUtil.handleDecimal(dataArray[21], 1);
+            String r1MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[22], 1);
+            String r2MaxHeightDifference = ExcelUtil.handleDecimal(dataArray[23], 1);
+            String r1R2Distance = ExcelUtil.handleDecimal(dataArray[24], 1);
+            String middlePartThickness = ExcelUtil.handleDecimal(dataArray[25], 1);
+            String bottomDiameterDistance = ExcelUtil.handleDecimal(dataArray[26], 1);
+            String mechanismDiameterThicknessRatio = ExcelUtil.handleDecimal(dataArray[27], 1);
+            String r1KanheAngle = ExcelUtil.handleDecimal(dataArray[28], 1);
+            String r1KanheHeight = ExcelUtil.handleDecimal(dataArray[29], 1);
+            String r2KanheAngle = ExcelUtil.handleDecimal(dataArray[30], 1);
+            String r2KanheHeight = ExcelUtil.handleDecimal(dataArray[31], 1);
+            String r1Srtm = dataArray[32];
+            String r2Srtm = dataArray[33];
+            String r1SplitPosition = dataArray[34];
+            String r2SplitPosition = dataArray[35];
+            String outerDiameterSrtm = dataArray[36];
+            String partSurfaceLiftRatio = dataArray[37];
+            String mechanismTrou = dataArray[38];
+            String assemblyDrawing = pathsMap.get(i + "_" + 39); // 图片路径
             if (assemblyDrawing == null) {
                 assemblyDrawing = "";
             }
@@ -125,6 +134,7 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             structureData.setProject(project);
             structureData.setPartName(partName);
             structureData.setMaterial(material);
+            structureData.setStructureSchemesNo(structureSchemesNo);
             structureData.setCoreThicknessLens(coreThickness);
             structureData.setMaxWallThickness(maxWallThickness);
             structureData.setMinWallThickness(minWallThickness);
@@ -160,6 +170,11 @@ public class StructureDataService extends ServiceImpl<StructureDataMapper, Struc
             structureData.setAssemblyDrawing(assemblyDrawing);
             this.saveOrUpdate(structureData);
 
+            // 强制数据同步
+            moldDataMapper.syncData();
+            moldFlowMapper.syncData();
+            processConditionDataMapper.syncData();
+            shapingResultDataMapper.syncData();
         }
 
     }

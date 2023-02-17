@@ -111,12 +111,12 @@ export default {
         lensNumber: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
 
         {prop: "pcMoldNo", label: "模具序号(工艺条件)", minWidth: 100, sortable: false},
@@ -137,7 +137,7 @@ export default {
         {prop: "mfHoldTime5", label: "模流-保压5时间(s)", minWidth: 100},
         {prop: "mfHoldPressure6", label: "模流-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "mfHoldTime6", label: "模流-保压6时间(s)", minWidth: 100},
-        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100},
+        {prop: "mfCoolingTime", label: "模流冷却时间(s)", minWidth: 100, sortable: false},
         {prop: "moldTemp", label: "实际-模温(℃)", minWidth: 100},
         {prop: "materialTemp", label: "实际-料温(℃)", minWidth: 100},
         {prop: "jetVelocity", label: "实际-射速(mm/s)", minWidth: 100},
@@ -154,12 +154,11 @@ export default {
         {prop: "holdTime5", label: "实际-保压5时间(s)", minWidth: 100},
         {prop: "holdPressure6", label: "实际-保压6(Kgf/cm2)", minWidth: 100},
         {prop: "holdTime6", label: "实际-保压6时间(s)", minWidth: 100},
-        {prop: "holdPressureVelocity", label: "保压速度(mm/s", minWidth: 100},
         {prop: "platenPosition", label: "压板位置(mm)", minWidth: 100},
         {prop: "openingSpeed", label: "开模速度(mm/s)", minWidth: 100},
         {prop: "ejectionSpeed", label: "顶出速度(mm/s)", minWidth: 100},
-        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100},
-        {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100},
+        {prop: "coolingTime", label: "工艺冷却时间(s)", minWidth: 100, sortable: false},
+        {prop: "clampingForce", label: "锁模力(Ton)", minWidth: 100, sortable: false},
         {prop: "passivation", label: "钝化工艺", minWidth: 100, sortable: false},
 
         {prop: "srMoldNo", label: "模具序号(成型结果)", minWidth: 100, sortable: false},
@@ -170,21 +169,21 @@ export default {
         {prop: "r1VectorHeightRange", label: "R1矢高极差(um)", minWidth: 100},
         {prop: "r2VectorHeight", label: "R2矢高(um)", minWidth: 100},
         {prop: "r2VectorHeightRange", label: "R2矢高极差(um)", minWidth: 100},
-        {prop: "outerDiameterEcc", label: "白片外径偏心(%/规格）", minWidth: 100},
-        {prop: "kanheEcc", label: "白片坎合偏心(%/规格）", minWidth: 100},
-        {prop: "faceEcc", label: "白片面间偏心(%/规格）", minWidth: 100},
-        {prop: "annealingProcess", label: "退火制程", minWidth: 100},
+        {prop: "outerDiameterEcc", label: "白片外径偏心(%/规格）", minWidth: 100, sortable: false},
+        {prop: "kanheEcc", label: "白片坎合偏心(%/规格）", minWidth: 100, sortable: false},
+        {prop: "faceEcc", label: "白片面间偏心(%/规格）", minWidth: 100, sortable: false},
+        {prop: "annealingProcess", label: "退火制程", minWidth: 100, sortable: false},
         {prop: "bpKanheRoundness", label: "BP坎合圆度(um)", minWidth: 100},
         {prop: "dmpKanheRoundness", label: "DMP坎合圆度(um)", minWidth: 100},
         {prop: "outerDiameterAverage", label: "白片外径均值(um)", minWidth: 100},
         {prop: "outerDiameterRange", label: "白片外径极差(um)", minWidth: 100},
         {prop: "outerDiameterRoundness", label: "白片外径圆度(um)", minWidth: 100},
         {prop: "outerDiameterShrinkage", label: "白片外径收缩率(‰)", minWidth: 100},
-        {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100},
+        {prop: "outerDiameterRoughness", label: "白片外径粗糙度(um)", minWidth: 100, sortable: false},
         {prop: "r1Flatness", label: "白片平面度R1(um)", minWidth: 100},
         {prop: "r2Flatness", label: "白片平面度R2(um)", minWidth: 100},
-        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100},
-        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100},
+        {prop: "r1SplitAverage", label: "R1分割位台阶均值(um)", minWidth: 100, sortable: false},
+        {prop: "r2SplitAverage", label: "R2分割位台阶均值(um)", minWidth: 100, sortable: false},
         {prop: "wftR1", label: "R1(白片面型nm)", minWidth: 100},
         {prop: "wftR2", label: "R2(白片面型nm)", minWidth: 100},
         {prop: "wftConsistency", label: "全穴一致性(白片面型nm)", minWidth: 100},
@@ -194,22 +193,27 @@ export default {
         {prop: "cftR2", label: "R2(镀膜片面型nm)", minWidth: 100},
         {prop: "cftConsistency", label: "全穴一致性(镀膜片面型nm)", minWidth: 100},
         {prop: "cftMaxAs", label: "最大AS(镀膜片面型nm)", minWidth: 100},
-        {prop: "burr", label: "分型面毛边(um)", minWidth: 100},
+        {prop: "burr", label: "分型面毛边(um)", minWidth: 100, sortable: false},
         {prop: "weldline", label: "熔接线", minWidth: 100, sortable: false},
         {prop: "appearanceProblem", label: "外观问题", minWidth: 100, sortable: false},
         {prop: "remarks", label: "备注", minWidth: 100, sortable: false},
         {prop: "abcFilesNo", label: "ABC档合格数分布", minWidth: 100, sortable: false},
-        {prop: "structureNo", label: "结构方案总数", minWidth: 100},
+        {prop: "structureNo", label: "结构方案总数", minWidth: 100, sortable: false},
         {prop: "moldTypeNo", label: "模具类型总数", minWidth: 100},
-        {prop: "moldCost", label: "模具费用", minWidth: 100},
-        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100},
-        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100},
-        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100},
-        {prop: "evtCost", label: "项目EVT费用", minWidth: 100},
-        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100},
-        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100},
+        {prop: "moldCost", label: "模具费用", minWidth: 100, sortable: false},
+        {prop: "evtTime", label: "项目EVT耗时", minWidth: 100, sortable: false},
+        {prop: "dvtTime", label: "项目DVT耗时", minWidth: 100, sortable: false},
+        {prop: "evtDvtTime", label: "项目(EVT+DVT)耗时", minWidth: 100, sortable: false},
+        {prop: "evtCost", label: "项目EVT费用", minWidth: 100, sortable: false},
+        {prop: "dvtCost", label: "项目DVT费用", minWidth: 100, sortable: false},
+        {prop: "evtDvtCost", label: "项目(EVT+DVT)费用", minWidth: 100, sortable: false},
         {prop: "projectMassProduction", label: "项目量产", minWidth: 100, sortable: false},
+        {prop: "mtfAvgYield", label: "MTF平均良率", minWidth: 100, sortable: false},
+        {prop: "massProductionTime", label: "量产时长（首次）", minWidth: 100, sortable: false},
+        {prop: "massProductionShipment", label: "量产出货量（首次）", minWidth: 100, sortable: false},
+        {prop: "projectInitiationTime", label: "项目立项时间", minWidth: 100, sortable: false},
 
+        {prop: "structureSchemesNo", label: "结构方案总数", minWidth: 100, sortable: false},
         {prop: "coreThicknessLens", label: "光学芯厚(um)", minWidth: 100},
         {prop: "maxWallThickness", label: "光学最厚壁厚(um)", minWidth: 100},
         {prop: "minWallThickness", label: "光学最薄壁厚(um)", minWidth: 100},
@@ -227,14 +231,14 @@ export default {
         {prop: "maxAngleR2", label: "整体最大角度R2(°)", minWidth: 100},
         {prop: "r1MaxHeightDifference", label: "整体R1最大高度差(um)", minWidth: 100},
         {prop: "r2MaxHeightDifference", label: "整体R2最大高度差(um)", minWidth: 100},
-        {prop: "r1R2Distance", label: "R1终端到R2坎合根部距离(um)", minWidth: 100},
-        {prop: "middlePartThickness", label: "机构中间部分厚度(um)", minWidth: 100},
-        {prop: "bottomDiameterDistance", label: "坎合底部到外径距离(um)", minWidth: 100},
-        {prop: "mechanismDiameterThicknessRatio", label: "机构径厚比", minWidth: 100},
-        {prop: "r1KanheAngle", label: "R1坎合角度(°)", minWidth: 100},
-        {prop: "r1KanheHeight", label: "R1坎合高度(um)", minWidth: 100},
-        {prop: "r2KanheAngle", label: "R2坎合角度(°)", minWidth: 100},
-        {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100},
+        {prop: "r1R2Distance", label: "R1终端到R2坎合根部距离(um)", minWidth: 100, sortable: false},
+        {prop: "middlePartThickness", label: "机构中间部分厚度(um)", minWidth: 100, sortable: false},
+        {prop: "bottomDiameterDistance", label: "坎合底部到外径距离(um)", minWidth: 100, sortable: false},
+        {prop: "mechanismDiameterThicknessRatio", label: "机构径厚比", minWidth: 100, sortable: false},
+        {prop: "r1KanheAngle", label: "R1坎合角度(°)", minWidth: 100, sortable: false},
+        {prop: "r1KanheHeight", label: "R1坎合高度(um)", minWidth: 100, sortable: false},
+        {prop: "r2KanheAngle", label: "R2坎合角度(°)", minWidth: 100, sortable: false},
+        {prop: "r2KanheHeight", label: "R2坎合高度(um)", minWidth: 100, sortable: false},
         {prop: "r1Srtm", label: "R1消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r2Srtm", label: "R2消光位置(粗糙度SRTM)", minWidth: 100, sortable: false},
         {prop: "r1SplitPosition", label: "R1分割位位置", minWidth: 100, sortable: false},
@@ -246,37 +250,38 @@ export default {
 
         {prop: "mfMoldType", label: "模具类型(模流)", minWidth: 100, sortable: false},
         {prop: "mfRunnerType", label: "流道类型(模流)", minWidth: 100, sortable: false},
-        {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100},
-        {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100},
-        {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100},
-        {prop: "simulateWireLength", label: "模拟熔接线长度(mm)", minWidth: 100},
-        {prop: "wholePercent", label: "整体平均体积收缩率差值(%)", minWidth: 100},
-        {prop: "effectiveR1", label: "R1有效径四点极差(%)", minWidth: 100},
-        {prop: "effectiveR2", label: "R2有效径四点极差(%)", minWidth: 100},
-        {prop: "ridgeR1", label: "R1坎合四点极差(%)", minWidth: 100},
-        {prop: "ridgeR2", label: "R2坎合四点极差(%)", minWidth: 100},
-        {prop: "refractiveR1", label: "模拟面型R1(nm)", minWidth: 100},
-        {prop: "refractiveR2", label: "模拟面型R2(nm)", minWidth: 100},
+        {prop: "moldDiameterRate", label: "模流外径收缩率(‰)", minWidth: 100, sortable: false},
+        {prop: "flowFrontTemperature", label: "流动前沿温度(℃)", minWidth: 100, sortable: false},
+        {prop: "vpChangePressure", label: "VP切换压力(MPa)", minWidth: 100, sortable: false},
+        {prop: "simulateWireLength", label: "模拟熔接线长度(mm)", minWidth: 100, sortable: false},
+        {prop: "wholePercent", label: "整体平均体积收缩率差值(%)", minWidth: 100, sortable: false},
+        {prop: "effectiveR1", label: "R1有效径四点极差(%)", minWidth: 100, sortable: false},
+        {prop: "effectiveR2", label: "R2有效径四点极差(%)", minWidth: 100, sortable: false},
+        {prop: "ridgeR1", label: "R1坎合四点极差(%)", minWidth: 100, sortable: false},
+        {prop: "ridgeR2", label: "R2坎合四点极差(%)", minWidth: 100, sortable: false},
+        {prop: "refractiveR1", label: "模拟面型R1(nm)", minWidth: 100, sortable: false},
+        {prop: "refractiveR2", label: "模拟面型R2(nm)", minWidth: 100, sortable: false},
         {prop: "competitorName", label: "竞品名称", minWidth: 100, sortable: false},
         {prop: "competitorLink", label: "竞品链接", minWidth: 100, sortable: false},
 
         {prop: "mdMoldNo", label: "模具序号(模具)", minWidth: 100, sortable: false},
         {prop: "mdMoldType", label: "模具类型(模具)", minWidth: 100, sortable: false},
+        {prop: "moldTypeTotal", label: "模具类型总数", minWidth: 100, sortable: false},
         {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100, sortable: false},
         {prop: "mdRunnerType", label: "流道类型(模具)", minWidth: 100, sortable: false},
-        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100},
-        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100},
-        {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
-        {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
-        {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
-        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100},
-        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100},
-        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100},
+        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100, sortable: false},
+        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100, sortable: false},
+        {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100, sortable: false},
+        {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100, sortable: false},
+        {prop: "thirdRunner", label: "主流道(mm)", minWidth: 100, sortable: false},
+        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100, sortable: false},
+        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100, sortable: false},
+        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100, sortable: false},
         {prop: "gateType", label: "浇口类型", minWidth: 100, sortable: false},
         {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
         {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
-        {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100},
-        {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100},
+        {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100, sortable: false},
+        {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100, sortable: false},
         {prop: "moldOpeningType", label: "开模方式", minWidth: 100, sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
@@ -380,20 +385,27 @@ export default {
             if (responseData.code === "000000") {
               responseData.data.records.map((value) => {
                 for (let key in value) {
-                  if (key !== 'category' && key !== 'project' && key !== 'partName' &&
-                      key !== 'material' && key !== 'moldNo' && key !== 'id' &&
-                      key !== 'createdBy' && key !== 'createdTime' && key !== 'updatedBy' &&
-                      key !== 'updatedTime' && key !== 'passivation' && key !== 'coatingTrend' &&
-                      key !== 'cfsrR1' && key !== 'cfsrR2' && key !== 'cfsrR1R2' &&
-                      key !== 'weldline' && key !== 'appearanceProblem' && key !== 'appearanceImg' &&
-                      key !== 'remarks' && key !== 'r1Srtm' && key !== 'r2Srtm' &&  key !== 'mdMoldNo' &&
-                      key !== 'outerDiameterSrtm' && key !== 'assemblyDrawing'  &&
-                      key !== 'competitorName' && key !== 'competitorLink' && key !== 'competitorAssemblyDrawing' &&
-                      key !== 'moldCorePassivation' && key !== 'mdRunnerType' && key !== 'gateType' && key !== 'moldOpeningType' &&
-                      key !== 'department' && key !== 'lensNumber' && key !== 'pcMoldNo' && key !== 'pcMoldType' &&
-                      key !== 'srMoldNo' && key !== 'srMoldType' && key !== 'abcFilesNo' && key !== 'projectMassProduction' &&
-                      key !== 'r1SplitPosition' && key !== 'r2SplitPosition' && key !== 'partSurfaceLiftRatio' && key !== 'mechanismTrou' &&
-                      key !== 'mfMoldType' && key !== 'mfRunnerType' && key !== 'mdMoldType') {
+                  if (key === 'coreThickness' || key === 'coreThicknessRange' || key === 'r1VectorHeight' ||
+                      key === 'r1VectorHeightRange' || key === 'r2VectorHeight' || key === 'r2VectorHeightRange' ||
+                      key === 'bpKanheRoundness' || key === 'dmpKanheRoundness' || key === 'outerDiameterAverage' ||
+                      key === 'outerDiameterRange' || key === 'outerDiameterRoundness' || key === 'outerDiameterShrinkage' ||
+                      key === 'r1Flatness' || key === 'r2Flatness' || key === 'wftR1' || key === 'wftR2' || 
+                      key === 'wftConsistency' || key === 'wftMaxAs' || key === 'wftStability' ||
+                      key === 'cftR1' || key === 'cftR2' || key === 'cftConsistency' || key === 'cftMaxAs' || 
+                      key === 'moldTypeNo' || key === 'coreThicknessLens' || key === 'maxWallThickness' || key === 'minWallThickness' ||
+                      key === 'maxCoreRatio' || key === 'maxMinRatio' || key === 'outerDiameter' ||
+                      key === 'edgeThickness' || key === 'wholeMinWallThickness' || key === 'wholeMaxWallThickness' ||
+                      key === 'wholeMaxMinRatio' || key === 'wholeDiameterThicknessRatio' || key === 'maxAngleR1' ||
+                      key === 'maxAngleR2' || key === 'r1MaxHeightDifference' || key === 'r2MaxHeightDifference' ||
+                      key === 'gateWidth' || key === 'gateThickness' || key === 'mfMoldTemp' || key === 'mfMaterialTemp' ||
+                      key === 'mfJetVelocity' || key === 'mfVpSwitch' || key === 'mfHoldPressure1' || key === 'mfHoldTime1' ||
+                      key === 'mfHoldPressure2' || key === 'mfHoldTime2' || key === 'mfHoldPressure3' || key === 'mfHoldTime3' ||
+                      key === 'mfHoldPressure4' || key === 'mfHoldTime4' || key === 'mfHoldPressure5' || key === 'mfHoldTime5' ||
+                      key === 'mfHoldPressure6' || key === 'mfHoldTime6' || key === 'moldTemp' || key === 'materialTemp' ||
+                      key === 'jetVelocity' || key === 'vpSwitch' || key === 'holdPressure1' || key === 'holdTime1' || key === 'holdPressure2' ||
+                      key === 'holdTime2' || key === 'holdPressure3' || key === 'holdTime3' || key === 'holdPressure4' || key === 'holdTime4' ||
+                      key === 'holdPressure5' || key === 'holdTime5' || key === 'holdPressure6' || key === 'holdTime6' || key === 'platenPosition' ||
+                      key === 'openingSpeed' || key === 'ejectionSpeed') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])

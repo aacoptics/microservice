@@ -167,6 +167,10 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
             String dvtCost = dataArray[59];
             String evtDvtCost = dataArray[60];
             String projectMassProduction = dataArray[61];
+            String mtfAvgYield = dataArray[62];
+            String massProductionTime = dataArray[63];
+            String massProductionShipment = dataArray[64];
+            String projectInitiationTime = dataArray[65];
 
 
             // 设置参数
@@ -232,8 +236,16 @@ public class ShapingResultDataService extends ServiceImpl<ShapingResultDataMappe
             shapingResultData.setDvtCost(dvtCost);
             shapingResultData.setEvtDvtCost(evtDvtCost);
             shapingResultData.setProjectMassProduction(projectMassProduction);
+            shapingResultData.setMtfAvgYield(mtfAvgYield);
+            shapingResultData.setMassProductionTime(massProductionTime);
+            shapingResultData.setMassProductionShipment(massProductionShipment);
+            shapingResultData.setProjectInitiationTime(projectInitiationTime);
 
             this.saveOrUpdate(shapingResultData);
+
+            // 上传之后强制同步数据
+            shapingResultDataMapper.syncData();
+            shapingResultDataMapper.syncMoldType();
 
         }
     }
