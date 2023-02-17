@@ -7,12 +7,16 @@
             <el-row>
               <el-form-item label="机台号" prop="machineNames">
                 <el-select v-model="formParam.machineNames"
-                           :size="size" 
-                           filterable 
+                           :size="size"
+                           filterable
                            clearable
+                           :filter-method="machineNameFilter"
                            collapse-tags
                            multiple
+                           @clear="clearMachineNameFilter"
+                           @blur="resetMachineNameArray"
                            placeholder="请选择机台号">
+                  <el-checkbox v-model="okAllMachineNameChecked" style="padding-left: 5px" @change='okSelectAllMachineName'>全选</el-checkbox>
                   <el-option
                       v-for="item in machineNameArray"
                       :key="item"
@@ -23,12 +27,16 @@
               </el-form-item>
               <el-form-item label="项目号" prop="moldFileNames">
                 <el-select v-model="formParam.moldFileNames"
-                           :size="size" 
-                           filterable 
+                           :size="size"
+                           filterable
+                           :filter-method="moldFileNameFilter"
                            clearable
+                           @clear="clearMoldFileNameFilter"
+                           @blur="resetMoldFileNameArray"
                            multiple
                            collapse-tags
                            placeholder="请选择项目号">
+                  <el-checkbox v-model="okAllMoldFileNameChecked" style="padding-left: 5px" @change='okSelectAllMoldFileName'>全选</el-checkbox>
                   <el-option
                       v-for="item in moldFileNameArray"
                       :key="item"
@@ -147,8 +155,14 @@ export default {
     return {
       size: 'default',
       machineNameArray: [],
+      machineNameArrayCopy: [],
       moldFileNameArray:[],
+      moldFileNameArrayCopy:[],
       analysisData: [],
+
+      okAllMachineNameChecked: false,
+      okAllMoldFileNameChecked: false,
+
       queryFormRules: {
         dateTimePickerValue: [
           {required: true, type: 'array',  message: "请选择时间", trigger: "change", },
@@ -184,12 +198,81 @@ export default {
       }
       return wbOut
     },
+    okSelectAllMachineName() {
+      this.formParam.machineNames = []
+      if (this.okAllMachineNameChecked) {
+        this.machineNameArray.map(item => {
+          this.formParam.machineNames.push(item)
+        })
+      } else {
+        this.formParam.machineNames = []
+        this.machineNameArray = this.machineNameArrayCopy;
+      }
+    },
+    okSelectAllMoldFileName() {
+      this.formParam.moldFileNames = []
+      if (this.okAllMoldFileNameChecked) {
+        this.moldFileNameArray.map(item => {
+          this.formParam.moldFileNames.push(item)
+        })
+      } else {
+        this.formParam.moldFileNames = []
+        this.moldFileNameArray = this.moldFileNameArrayCopy;
+      }
+    },
+    machineNameFilter(val) {
+      if (val) { //val存在
+        this.machineNameArray = this.machineNameArrayCopy.filter((item) => {
+          if (!!~item.indexOf(val) || !!~item.toUpperCase().indexOf(val.toUpperCase())) {
+            return true
+          }
+        })
+      } else { //val为空时，还原数组
+        this.machineNameArray = this.machineNameArrayCopy;
+      }
+    },
+    clearMachineNameFilter()
+    {
+      this.machineNameArray = this.machineNameArrayCopy;
+      this.okAllMachineNameChecked = false;
+    },
+    resetMachineNameArray()
+    {
+      if(this.machineNameArray == null || this.machineNameArray.length == 0)
+      {
+        this.machineNameArray = this.machineNameArrayCopy;
+      }
+    },
+    resetMoldFileNameArray()
+    {
+      if(this.moldFileNameArray == null || this.moldFileNameArray.length == 0)
+      {
+        this.moldFileNameArray = this.moldFileNameArrayCopy;
+      }
+    },
+    moldFileNameFilter(val) {
+      if (val) { //val存在
+        this.moldFileNameArray = this.moldFileNameArrayCopy.filter((item) => {
+          if (!!~item.indexOf(val) || !!~item.toUpperCase().indexOf(val.toUpperCase())) {
+            return true
+          }
+        })
+      } else { //val为空时，还原数组
+        this.moldFileNameArray = this.moldFileNameArrayCopy;
+      }
+    },
+    clearMoldFileNameFilter()
+    {
+      this.moldFileNameArray = this.moldFileNameArrayCopy;
+      this.okAllMoldFileNameChecked = false;
+    },
 
     getAllMachineName() {
       getAllMachineName().then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
-          this.machineNameArray = responseData.data
+          this.machineNameArray = responseData.data;
+          this.machineNameArrayCopy = this.machineNameArray
         }
       })
     },
@@ -197,7 +280,8 @@ export default {
       getAllMoldFileName().then((response) => {
         const responseData = response.data
         if (responseData.code === '000000') {
-          this.moldFileNameArray = responseData.data
+          this.moldFileNameArray = responseData.data;
+          this.moldFileNameArrayCopy = this.moldFileNameArray;
         }
       })
     },

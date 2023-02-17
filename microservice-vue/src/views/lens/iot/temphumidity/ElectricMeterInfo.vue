@@ -123,6 +123,8 @@ export default {
       });
 
       getElectricMeterPowerQty(this.param.startDate, this.param.endDate).then((response) => {
+        this.workDate = [];
+        this.powerQty = [];
         const responseData = response.data
         if (responseData.code === '000000') {
           responseData.data.forEach(item => {

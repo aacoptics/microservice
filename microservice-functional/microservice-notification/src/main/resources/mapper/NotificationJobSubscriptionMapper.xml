@@ -8,6 +8,6 @@
                  join notification_job_info b
                       on a.notification_job_id = b.id
         where b.plan_key = #{planKey}
-        and approve_status = 1
+        and a.approve_status = 1
     </select>
 </mapper>

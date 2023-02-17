@@ -35,15 +35,19 @@ public class NotificationJobInfoServiceImpl extends ServiceImpl<NotificationJobI
     @Override
     public boolean add(NotificationJobInfo notificationJobInfo) {
         getNextNotificationNo(notificationJobInfo);
-        String username = UserContextHolder.getInstance().getUsername();
-        JSONObject approveJson = createApproveJson(username, notificationJobInfo.getJobDesc() + "-" + notificationJobInfo.getRemark(),
-        "80000128", "1D357EE9-AC60-403E-A302-A5AEBCF9A735");
+        if(notificationJobInfo.getJobEnvironment().equals("PROD")){
+            String username = UserContextHolder.getInstance().getUsername();
+            JSONObject approveJson = createApproveJson(username, notificationJobInfo.getJobDesc() + "-" + notificationJobInfo.getRemark(),
+                    "80000128", "1D357EE9-AC60-403E-A302-A5AEBCF9A735");
 
-        JSONObject res = feishuService.createApproveInstance(approveJson);
+            JSONObject res = feishuService.createApproveInstance(approveJson);
 
-        if (res.getInt("code") == 0) {
-            notificationJobInfo.setApproveId(res.getJSONObject("data").getStr("instance_code"));
-            notificationJobInfo.setApproveStatus(0);
+            if (res.getInt("code") == 0) {
+                notificationJobInfo.setApproveId(res.getJSONObject("data").getStr("instance_code"));
+                notificationJobInfo.setApproveStatus(0);
+            }
+        }else{
+            notificationJobInfo.setApproveStatus(1);
         }
         return this.save(notificationJobInfo);
     }

@@ -1,6 +1,7 @@
 package com.aacoptics.fanuc.dashboard.config;
 
 import com.aacoptics.fanuc.dashboard.entity.FanucDataEntity;
+import com.aacoptics.fanuc.dashboard.service.FanucCheckItemThresholdService;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -57,6 +59,10 @@ public class MqttConfig {
     @Value("${mqtt.topic}")
     private String defaultTopic;
 
+    @Resource
+    private FanucCheckItemThresholdService fanucCheckItemThresholdService;
+
+
     @PostConstruct
     public void init() {
         log.debug("username:{} password:{} hostUrl:{} clientId :{} defaultTopic :{}",
@@ -75,6 +81,7 @@ public class MqttConfig {
         options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
         final DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
         factory.setConnectionOptions(options);
+
         return factory;
     }
 
@@ -140,6 +147,12 @@ public class MqttConfig {
                 case "monitData":
                     fanucDataEntity.setMonitData(msgJson.getJSONObject("Data"));
                     FanucMachineDataMap.put(msgJson.getString("ClientId"), fanucDataEntity);
+                    break;
+                case "abnormalCushion":
+                    fanucCheckItemThresholdService.sendFeishuMessage(msgJson);
+                    break;
+                case "abnormalTemp":
+                    fanucCheckItemThresholdService.sendFeishuMessage(msgJson);
                     break;
             }
         };

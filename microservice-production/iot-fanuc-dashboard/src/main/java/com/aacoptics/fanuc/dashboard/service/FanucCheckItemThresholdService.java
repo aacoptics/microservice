@@ -2,9 +2,11 @@ package com.aacoptics.fanuc.dashboard.service;
 
 import com.aacoptics.fanuc.dashboard.entity.param.FanucCheckItemThresholdParam;
 import com.aacoptics.fanuc.dashboard.entity.po.FanucCheckItemThreshold;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.util.List;
 
@@ -57,6 +59,11 @@ public interface FanucCheckItemThresholdService extends IService<FanucCheckItemT
      * @return
      */
     List<FanucCheckItemThreshold> findFanucCheckItemThresholdList();
+
+    /**
+     * 推送飞书消息
+     */
+    void sendFeishuMessage(JSONObject msgJson);
 
 
 }
