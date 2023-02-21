@@ -242,8 +242,8 @@ export default {
               x: 'timeStamp',
               y: '参数值',
               itemName: 'timeStamp',
-              label: ['模次号', '参数值'],
-              tooltip: ['模次号', '参数值']
+              label: ['参数值'],
+              tooltip: ['参数值']
             }
           });
         })
