@@ -103,9 +103,17 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             if (refractivePicR2 == null) {
                 refractivePicR2 = "";
             }
-            String competitorName = dataArray[21];
-            String competitorLink = dataArray[22];
-            String assemblyDrawing = pathsMap.get(i + "_" + 23); // 图片路径
+            String preFrontR1 =  pathsMap.get(i + "_" + 21);
+            if(preFrontR1 == null){
+                preFrontR1 = "";
+            }
+            String preFrontR2 =  pathsMap.get(i + "_" + 22);
+            if(preFrontR2 == null){
+                preFrontR2 = "";
+            }
+            String competitorName = dataArray[23];
+            String competitorLink = dataArray[24];
+            String assemblyDrawing = pathsMap.get(i + "_" + 25); // 图片路径
             if (assemblyDrawing == null) {
                 assemblyDrawing = "";
             }
@@ -131,6 +139,8 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             moldFlowData.setRidgeR2(ridgeR2);
             moldFlowData.setRefractiveR1(refractiveR1);
             moldFlowData.setRefractiveR2(refractiveR2);
+            moldFlowData.setPreFrontR1(preFrontR1);
+            moldFlowData.setPreFrontR2(preFrontR2);
             moldFlowData.setRefractivePicR1(refractivePicR1);
             moldFlowData.setRefractivePicR2(refractivePicR2);
             moldFlowData.setCompetitorName(competitorName);
@@ -138,6 +148,10 @@ public class MoldFlowService extends ServiceImpl<MoldFlowMapper, MoldFlowData> i
             moldFlowData.setAssemblyDrawing(assemblyDrawing);
 
             this.saveOrUpdate(moldFlowData);
+
+            // 上传之后强制同步数据
+            moldFlowMapper.syncData();
+            moldFlowMapper.syncMoldType();
 
         }
 

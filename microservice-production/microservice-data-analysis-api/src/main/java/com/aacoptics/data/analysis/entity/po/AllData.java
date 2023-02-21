@@ -53,7 +53,7 @@ public class AllData {
     private String holdTime5;
     private String holdPressure6;
     private String holdTime6;
-    private String holdPressureVelocity;
+//    private String holdPressureVelocity;
     private String platenPosition;
     private String openingSpeed;
     private String ejectionSpeed;
@@ -118,8 +118,13 @@ public class AllData {
     private String dvtCost;
     private String evtDvtCost;
     private String projectMassProduction;
+    private String mtfAvgYield;// MTF平均良率
+    private String massProductionTime;// 量产时长（首次）
+    private String massProductionShipment;// 量产出货量（首次）
+    private String projectInitiationTime;//项目立项时间
 
     // 结构数据
+    private String structureSchemesNo; // 结构方案总数
     private String coreThicknessLens;
     private String maxWallThickness;
     private String minWallThickness;
@@ -170,6 +175,8 @@ public class AllData {
     private String refractiveR2;
     private String refractivePicR1;
     private String refractivePicR2;
+    private String preFrontR1; // 预补正面型R1
+    private String preFrontR2; // 预补正面型R2
     private String competitorName;
     private String competitorLink;
     private String competitorAssemblyDrawing;// 竞品组立图
@@ -177,6 +184,7 @@ public class AllData {
     // 模具数据
     private String mdMoldNo;
     private String mdMoldType;
+    private String moldTypeTotal; // 模具类型总数
     private String moldCorePassivation;
     private String mdRunnerType;
     private String cavityInnerDiameter; // 型腔内径

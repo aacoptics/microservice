@@ -21,6 +21,7 @@ public class MoldData extends BasePo {
     private String material;
     private String moldNo; // 模具序号
     private String moldType;
+    private String moldTypeTotal;
     private String moldCorePassivation;
     private String runnerType;
     private String cavityInnerDiameter; // 型腔内径

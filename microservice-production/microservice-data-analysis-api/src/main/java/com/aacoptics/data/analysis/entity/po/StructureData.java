@@ -19,6 +19,7 @@ public class StructureData extends BasePo {
     private String project;
     private String partName;
     private String material;
+    private String structureSchemesNo; // 结构方案总数
     private String coreThicknessLens;
     private String maxWallThickness;
     private String minWallThickness;

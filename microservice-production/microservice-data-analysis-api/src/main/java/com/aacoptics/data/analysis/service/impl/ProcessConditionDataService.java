@@ -107,13 +107,13 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             String holdTime5 = ExcelUtil.handleDecimal(dataArray[38], 0);
             String holdPressure6 = ExcelUtil.handleDecimal(dataArray[39], 0);
             String holdTime6 = ExcelUtil.handleDecimal(dataArray[40], 0);
-            String holdPressureVelocity = ExcelUtil.handleDecimal(dataArray[41], 0);
-            String platenPosition = ExcelUtil.handleDecimal(dataArray[42], 0);
-            String openingSpeed = ExcelUtil.handleDecimal(dataArray[43], 0);
-            String ejectionSpeed = ExcelUtil.handleDecimal(dataArray[44], 0);
-            String coolingTime = ExcelUtil.handleDecimal(dataArray[45], 0);
-            String clampingForce = ExcelUtil.handleDecimal(dataArray[46], 0);
-            String passivation = dataArray[47];
+            //String holdPressureVelocity = ExcelUtil.handleDecimal(dataArray[41], 0);
+            String platenPosition = ExcelUtil.handleDecimal(dataArray[41], 0);
+            String openingSpeed = ExcelUtil.handleDecimal(dataArray[42], 0);
+            String ejectionSpeed = ExcelUtil.handleDecimal(dataArray[43], 0);
+            String coolingTime = ExcelUtil.handleDecimal(dataArray[44], 0);
+            String clampingForce = ExcelUtil.handleDecimal(dataArray[45], 0);
+            String passivation = dataArray[46];
 
             // 设置参数
             processConditionData.setDepartment(department);
@@ -157,7 +157,7 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             processConditionData.setHoldTime4(holdTime4);
             processConditionData.setHoldTime5(holdTime5);
             processConditionData.setHoldTime6(holdTime6);
-            processConditionData.setHoldPressureVelocity(holdPressureVelocity);
+            //processConditionData.setHoldPressureVelocity(holdPressureVelocity);
             processConditionData.setPlatenPosition(platenPosition);
             processConditionData.setOpeningSpeed(openingSpeed);
             processConditionData.setEjectionSpeed(ejectionSpeed);
@@ -166,6 +166,9 @@ public class ProcessConditionDataService extends ServiceImpl<ProcessConditionDat
             processConditionData.setPassivation(passivation);
 
             this.saveOrUpdate(processConditionData);
+            // 上传之后强制同步数据
+            processConditionDataMapper.syncData();
+            processConditionDataMapper.syncMoldType();
 
         }
 

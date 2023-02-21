@@ -129,22 +129,23 @@ public class MoldDataController {
                     row.createCell(5).setCellValue(p.getMaterial());
                     row.createCell(6).setCellValue(p.getMoldNo());
                     row.createCell(7).setCellValue(p.getMoldType());
-                    row.createCell(8).setCellValue(p.getMoldCorePassivation());
-                    row.createCell(9).setCellValue(p.getRunnerType());
-                    row.createCell(10).setCellValue(p.getCavityInnerDiameter());
-                    row.createCell(11).setCellValue(p.getCavityInnerDiameterRange());
-                    row.createCell(12).setCellValue(p.getFirstRunner());
-                    row.createCell(13).setCellValue(p.getSecondRunner());
-                    row.createCell(14).setCellValue(p.getThirdRunner());
-                    row.createCell(15).setCellValue(p.getPartingSurface());
-                    row.createCell(16).setCellValue(p.getSplitPositionR1());
-                    row.createCell(17).setCellValue(p.getSplitPositionR2());
-                    row.createCell(18).setCellValue(p.getGateType());
-                    row.createCell(19).setCellValue(p.getGateWidth());
-                    row.createCell(20).setCellValue(p.getGateThickness());
-                    row.createCell(21).setCellValue(p.getGateR1Thickness());
-                    row.createCell(22).setCellValue(p.getGateR2Thickness());
-                    row.createCell(23).setCellValue(p.getMoldOpeningType());
+                    row.createCell(8).setCellValue(p.getMoldTypeTotal());
+                    row.createCell(9).setCellValue(p.getMoldCorePassivation());
+                    row.createCell(10).setCellValue(p.getRunnerType());
+                    row.createCell(11).setCellValue(p.getCavityInnerDiameter());
+                    row.createCell(12).setCellValue(p.getCavityInnerDiameterRange());
+                    row.createCell(13).setCellValue(p.getThirdRunner());
+                    row.createCell(14).setCellValue(p.getFirstRunner());
+                    row.createCell(15).setCellValue(p.getSecondRunner());
+                    row.createCell(16).setCellValue(p.getPartingSurface());
+                    row.createCell(17).setCellValue(p.getSplitPositionR1());
+                    row.createCell(18).setCellValue(p.getSplitPositionR2());
+                    row.createCell(19).setCellValue(p.getGateType());
+                    row.createCell(20).setCellValue(p.getGateWidth());
+                    row.createCell(21).setCellValue(p.getGateThickness());
+                    row.createCell(22).setCellValue(p.getGateR1Thickness());
+                    row.createCell(23).setCellValue(p.getGateR2Thickness());
+                    row.createCell(24).setCellValue(p.getMoldOpeningType());
                 }
             }
 

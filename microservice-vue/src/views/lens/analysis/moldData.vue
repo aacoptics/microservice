@@ -223,7 +223,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="三级分流道(mm) " prop="thirdRunner">
+              <el-form-item label="主流道(mm)" prop="thirdRunner">
                 <el-input v-model="dataForm.thirdRunner" auto-complete="off" clearable type="textarea"></el-input>
               </el-form-item>
             </el-col>
@@ -282,6 +282,15 @@
               </el-form-item>
             </el-col>
           </el-row>
+
+          
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="模具类型总数" prop="moldTypeTotal">
+                <el-input v-model="dataForm.moldTypeTotal" auto-complete="off" clearable type="textarea"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <div class="dialog-footer" style="padding-top: 20px;text-align: end">
           <slot name="footer">
@@ -328,30 +337,31 @@ export default {
         lensNumber: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false},
+        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
+        {prop: "moldTypeTotal", label: "模具类型总数", minWidth: 100, sortable: false},
         {prop: "moldCorePassivation", label: "模仁钝化工艺", minWidth: 100, sortable: false},
         {prop: "runnerType", label: "流道类型", minWidth: 100, sortable: false},
-        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100},
-        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100},
-        {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100},
-        {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100},
-        {prop: "thirdRunner", label: "三级分流道(mm)", minWidth: 100},
-        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100},
-        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100},
-        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100},
-        {prop: "gateType", label: "浇口类型", minWidth: 100, sortable: false},
+        {prop: "cavityInnerDiameter", label: "型腔内径", minWidth: 100, sortable: false},
+        {prop: "cavityInnerDiameterRange", label: "型腔内径极差", minWidth: 100, sortable: false},
+        {prop: "firstRunner", label: "一级分流道(mm)", minWidth: 100, sortable: false},
+        {prop: "secondRunner", label: "二级分流道(mm)", minWidth: 100, sortable: false},
+        {prop: "thirdRunner", label: "主流道(mm)", minWidth: 100, sortable: false},
+        {prop: "partingSurface", label: "分型面排气(um)", minWidth: 100, sortable: false},
+        {prop: "splitPositionR1", label: "R1分割位排气(um)", minWidth: 100, sortable: false},
+        {prop: "splitPositionR2", label: "R2分割位排气(um)", minWidth: 100, sortable: false},
+        {prop: "gateType", label: "浇口类型", minWidth: 100, sortable: false, sortable: false},
         {prop: "gateWidth", label: "浇口宽度(mm)", minWidth: 100},
         {prop: "gateThickness", label: "浇口厚度(mm)", minWidth: 100},
-        {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100},
-        {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100},
+        {prop: "gateR1Thickness", label: "浇口R1面厚度(mm)", minWidth: 100, sortable: false},
+        {prop: "gateR2Thickness", label: "浇口R2面厚度(mm)", minWidth: 100, sortable: false},
         {prop: "moldOpeningType", label: "开模方式", minWidth: 100, sortable: false}
       ],
       pageRequest: {current: 1, size: 10},
@@ -370,6 +380,7 @@ export default {
         material: "",
         moldNo: "",
         moldType: "",
+        moldTypeTotal: "",
         moldCorePassivation: "",
         runnerType: "",
         cavityInnerDiameter: "",
@@ -490,10 +501,7 @@ export default {
             if (responseData.code === "000000") {
               responseData.data.records.map((value) => {
                 for (let key in value) {
-                  if (key === 'firstRunner' || key === 'secondRunner' || key === 'thirdRunner' ||
-                      key === 'partingSurface' || key === 'splitPositionR1' || key === 'gateWidth' ||
-                      key === 'gateThickness' || key === 'gateR1Thickness' || key === 'gateR2Thickness' ||
-                      key === 'cavityInnerDiameter' || key === 'cavityInnerDiameterRange' || key === 'splitPositionR2') {
+                  if (key === 'gateWidth' || key === 'gateThickness') {
                     //过滤不需要转换类型的值
                     //纯数字列排序需要转换为Number类型，否者经常出现升降排序混乱
                     value[key] = Number(value[key])
