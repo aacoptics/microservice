@@ -27,4 +27,7 @@ public interface MoldFlowMapper extends BaseMapper<MoldFlowData> {
             "FROM t_mold_flow tmf,t_mold_data tmd\n" +
             "WHERE tmf.project=tmd.project AND tmf.part_name=tmd.part_name")
     void syncMoldType();
+
+    @Update("TRUNCATE TABLE t_mold_flow")
+    void deleteData();
 }

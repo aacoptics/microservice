@@ -111,4 +111,9 @@ public interface IShapingResultDataService extends IService<ShapingResultData> {
      * @return
      */
     List<ShapingResultData> getLensNumber();
+
+    /**
+     *  清空数据表
+     */
+    void deleteData();
 }

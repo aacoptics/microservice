@@ -105,4 +105,9 @@ public interface IMoldDataService extends IService<MoldData> {
      */
     List<MoldData> getLensNumber();
 
+    /**
+     *  删除数据
+     */
+    void deleteData();
+
 }

@@ -111,4 +111,10 @@ public interface IProcessConditionDataService extends IService<ProcessConditionD
      */
     List<ProcessConditionData> getLensNumber();
 
+
+    /**
+     *  清空数据表
+     */
+    void deleteData();
+
 }
