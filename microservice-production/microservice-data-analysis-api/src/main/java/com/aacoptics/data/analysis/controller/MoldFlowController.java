@@ -256,4 +256,11 @@ public class MoldFlowController {
         return Result.success(moldFlowService.getLensNumber());
     }
 
+    @ApiOperation(value = "清空数据", notes = "清空数据")
+    @DeleteMapping(value = "/deleteData")
+    public Result deleteData() {
+        moldFlowService.deleteData();
+        return Result.success();
+    }
+
 }

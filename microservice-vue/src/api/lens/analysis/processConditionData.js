@@ -148,3 +148,15 @@ export function getLensNumber() {
         }
     })
 }
+
+// 清空数据
+export function deleteData() {
+    return request({
+        url: `/moldflow-data-analysis/processConditionData/deleteData`,
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+

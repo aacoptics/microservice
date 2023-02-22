@@ -111,12 +111,12 @@ export default {
         lensNumber: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
+        {type: "index", label: "序号", minWidth: 40, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 50, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
 
         {prop: "pcMoldNo", label: "模具序号(工艺条件)", minWidth: 100, sortable: false},
@@ -414,7 +414,8 @@ export default {
               });
               this.pageResult = responseData.data;
             } else {
-              this.$message({message: getResponseDataMessage(responseData), type: "error"});
+              // this.$message({message: getResponseDataMessage(responseData), type: "error"});
+              this.pageResult = {}
             }
           }).then(data != null ? data.callback : "");
     },

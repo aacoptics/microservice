@@ -111,4 +111,9 @@ public interface IMoldFlowService extends IService<MoldFlowData> {
     List<MoldFlowData> getLensNumber();
 
 
+    /**
+     *  清空数据表
+     */
+    void deleteData();
+
 }

@@ -84,6 +84,13 @@
                 </template>
               </el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="danger" @click="deleteData">删除
+                <template #icon>
+                  <font-awesome-icon :icon="['fas', 'trash']"/>
+                </template>
+              </el-button>
+            </el-form-item>
           </el-row>
         </el-form>
       </div>
@@ -318,7 +325,8 @@ import {
   handleUpdate,
   uploadExcel,
   getDepartment,
-  getLensNumber
+  getLensNumber,
+  deleteData
 } from "@/api/lens/analysis/moldData";
 import {ElMessageBox} from "element-plus";
 
@@ -337,12 +345,12 @@ export default {
         lensNumber: ""
       },
       columns: [
-        {type: "index", label: "序号", minWidth: 50, fixed: "left"},
-        {prop: "department", label: "事业部", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "category", label: "类别", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "lensNumber", label: "镜片数", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "project", label: "项目", minWidth: 100, sortable: false, fixed: "left"},
-        {prop: "partName", label: "零件名称", minWidth: 100, sortable: false, fixed: "left"},
+        {type: "index", label: "序号", minWidth: 40, fixed: "left"},
+        {prop: "department", label: "事业部", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "category", label: "类别", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "lensNumber", label: "镜片数", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "project", label: "项目", minWidth: 55, sortable: false, fixed: "left"},
+        {prop: "partName", label: "零件名称", minWidth: 50, sortable: false, fixed: "left"},
         {prop: "material", label: "材料", minWidth: 100, sortable: false},
         {prop: "moldNo", label: "模具序号", minWidth: 100, sortable: false},
         {prop: "moldType", label: "模具类型", minWidth: 100, sortable: false},
@@ -511,6 +519,7 @@ export default {
               this.pageResult = responseData.data;
             } else {
               this.$message({message: getResponseDataMessage(responseData), type: "error"});
+              this.pageResult = {}
             }
           })
           .then(data != null ? data.callback : "");
@@ -638,6 +647,31 @@ export default {
           }
         });
       }).catch((err) => {
+        console.log(err)
+      })
+    },
+
+    deleteData() {
+      this.$confirm('确认删除全部记录吗？','提示',{
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(
+        () => {
+          deleteData().then(res => {
+          const responseData = res.data
+          if (responseData.code === '000000') {
+            this.pageResult = {}
+            this.$message({message: '删除成功', type: 'success'})
+          } else {
+            this.$message({
+              message: `操作失败${getResponseDataMessage(responseData)}`,
+              type: 'error'
+            })
+          }
+        });
+      }
+      ).catch((err) => {
         console.log(err)
       })
     }
