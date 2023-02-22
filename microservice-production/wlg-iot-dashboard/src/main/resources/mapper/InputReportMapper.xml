@@ -36,7 +36,7 @@
         <foreach item='machineName' index='index' collection='machineNames' open='(' separator=',' close=')'>
             #{machineName}
         </foreach>
-        order by a.start_time, a.machine_name
+        order by a.project_name,a.start_time, a.model_name, a.machine_name
     </select>
 
     <select id="getTwoHourSum" resultType="com.aacoptics.wlg.dashboard.entity.po.InputReport">
