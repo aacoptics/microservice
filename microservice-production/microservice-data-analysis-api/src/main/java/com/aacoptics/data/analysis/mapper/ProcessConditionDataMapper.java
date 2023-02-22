@@ -27,4 +27,8 @@ public interface ProcessConditionDataMapper extends BaseMapper<ProcessConditionD
             "FROM t_process_condition_data pcd,t_mold_data tmd\n" +
             "WHERE pcd.project=tmd.project AND pcd.part_name=tmd.part_name")
     void syncMoldType();
+
+
+    @Update("TRUNCATE TABLE t_process_condition_data")
+    void deleteData();
 }

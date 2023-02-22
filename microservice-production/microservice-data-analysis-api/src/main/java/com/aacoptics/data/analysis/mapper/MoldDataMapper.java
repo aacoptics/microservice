@@ -17,4 +17,8 @@ public interface MoldDataMapper extends BaseMapper<MoldData> {
             "FROM t_mold_data tmd,`t_structure_data` tsd \n" +
             "WHERE tmd.project=tsd.project AND tmd.part_name=tsd.part_name")
     void syncData();
+
+
+    @Update("TRUNCATE TABLE t_mold_data")
+    void deleteData();
 }

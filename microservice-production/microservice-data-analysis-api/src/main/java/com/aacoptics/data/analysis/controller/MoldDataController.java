@@ -207,5 +207,11 @@ public class MoldDataController {
         return Result.success(moldDataService.getLensNumber());
     }
 
+    @ApiOperation(value = "清空数据", notes = "清空数据")
+    @DeleteMapping(value = "/deleteData")
+    public Result deleteData() {
+        moldDataService.deleteData();
+        return Result.success();
+    }
 
 }

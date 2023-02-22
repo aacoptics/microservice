@@ -45,100 +45,106 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
         if (!"项目量产模具数据表".equals(title)) {
             throw new BusinessException("Excel模板错误，请确认!");
         }
-        for (int i = 3; i < excelDataList.size(); i++) {
-            String[] dataArray = excelDataList.get(i);
-            if (dataArray == null || dataArray.length == 0) {
-                break;
-            }
+        int line = 3;
+        try {
+            for (int i = 3; i < excelDataList.size(); i++) {
+                line = i + 1;
+                String[] dataArray = excelDataList.get(i);
+                if (dataArray == null || dataArray.length == 0) {
+                    break;
+                }
 
-            String department = dataArray[0];
-            String category = dataArray[1];
-            String lensNumber = dataArray[2];
-            String project = dataArray[3];
-            String partName = dataArray[4];
-            String material = dataArray[5];
+                String department = dataArray[0];
+                String category = dataArray[1];
+                String lensNumber = dataArray[2];
+                String project = dataArray[3];
+                String partName = dataArray[4];
+                String material = dataArray[5];
 
-            if (StringUtils.isEmpty(department)) {
-                throw new BusinessException("第" + (i + 1) + "行，事业部不能为空");
-            }
-            if (StringUtils.isEmpty(category)) {
-                throw new BusinessException("第" + (i + 1) + "行，类别不能为空");
-            }
-            if (StringUtils.isEmpty(lensNumber)) {
-                throw new BusinessException("第" + (i + 1) + "行，镜片数不能为空");
-            }
-            if (StringUtils.isEmpty(project)) {
-                throw new BusinessException("第" + (i + 1) + "行，项目名不能为空");
-            }
-            if (StringUtils.isEmpty(partName)) {
-                throw new BusinessException("第" + (i + 1) + "行，零件名称不能为空");
-            }
-            if (StringUtils.isEmpty(material)) {
-                throw new BusinessException("第" + (i + 1) + "行，材料不能为空");
-            }
+                if (StringUtils.isEmpty(department)) {
+                    throw new BusinessException("事业部不能为空");
+                }
+                if (StringUtils.isEmpty(category)) {
+                    throw new BusinessException("类别不能为空");
+                }
+                if (StringUtils.isEmpty(lensNumber)) {
+                    throw new BusinessException("镜片数不能为空");
+                }
+                if (StringUtils.isEmpty(project)) {
+                    throw new BusinessException("项目名不能为空");
+                }
+                if (StringUtils.isEmpty(partName)) {
+                    throw new BusinessException("零件名称不能为空");
+                }
+                if (StringUtils.isEmpty(material)) {
+                    throw new BusinessException("材料不能为空");
+                }
 
-            MoldData moldData = this.getMoldData(category, project, partName, material, department, lensNumber);
-            if (moldData == null) {
-                moldData = new MoldData();
+                MoldData moldData = this.getMoldData(project, partName);
+                if (moldData == null) {
+                    moldData = new MoldData();
+                }
+
+
+                String moldNo = dataArray[6];
+                String moldType = dataArray[7];
+                String moldTypeTotal = dataArray[8];
+                String moldCorePassivation = dataArray[9];
+                String runnerType = dataArray[10];
+                String cavityInnerDiameter = dataArray[11];
+                String cavityInnerDiameterRange = dataArray[12];
+                String thirdRunner = ExcelUtil.handleDecimal(dataArray[13], 1);
+                String firstRunner = ExcelUtil.handleDecimal(dataArray[14], 1);
+                String secondRunner = ExcelUtil.handleDecimal(dataArray[15], 1);
+                String partingSurface = ExcelUtil.handleDecimal(dataArray[16], 1);
+                String splitPositionR1 = ExcelUtil.handleDecimal(dataArray[17], 1);
+                String splitPositionR2 = ExcelUtil.handleDecimal(dataArray[18], 1);
+                String gateType = dataArray[19];
+                String gateWidth = ExcelUtil.handleDecimal(dataArray[20], 2);
+                String gateThickness = ExcelUtil.handleDecimal(dataArray[21], 2);
+                String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[22], 2);
+                String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[23], 2);
+                String moldOpeningType = dataArray[24];
+
+                // 设置参数
+                moldData.setDepartment(department);
+                moldData.setCategory(category);
+                moldData.setLensNumber(lensNumber);
+                moldData.setProject(project);
+                moldData.setPartName(partName);
+                moldData.setMaterial(material);
+                moldData.setMoldNo(moldNo);
+                moldData.setMoldType(moldType);
+                moldData.setMoldTypeTotal(moldTypeTotal);
+                moldData.setMoldCorePassivation(moldCorePassivation);
+                moldData.setRunnerType(runnerType);
+                moldData.setCavityInnerDiameter(cavityInnerDiameter);
+                moldData.setCavityInnerDiameterRange(cavityInnerDiameterRange);
+                moldData.setFirstRunner(firstRunner);
+                moldData.setSecondRunner(secondRunner);
+                moldData.setThirdRunner(thirdRunner);
+                moldData.setPartingSurface(partingSurface);
+                moldData.setSplitPositionR1(splitPositionR1);
+                moldData.setSplitPositionR2(splitPositionR2);
+                moldData.setGateType(gateType);
+                moldData.setGateWidth(gateWidth);
+                moldData.setGateThickness(gateThickness);
+                moldData.setGateR1Thickness(gateR1Thickness);
+                moldData.setGateR2Thickness(gateR2Thickness);
+                moldData.setMoldOpeningType(moldOpeningType);
+
+                this.saveOrUpdate(moldData);
             }
-
-
-            String moldNo = dataArray[6];
-            String moldType = dataArray[7];
-            String moldTypeTotal = dataArray[8];
-            String moldCorePassivation = dataArray[9];
-            String runnerType = dataArray[10];
-            String cavityInnerDiameter = dataArray[11];
-            String cavityInnerDiameterRange = dataArray[12];
-            String thirdRunner = ExcelUtil.handleDecimal(dataArray[13], 1);
-            String firstRunner = ExcelUtil.handleDecimal(dataArray[14], 1);
-            String secondRunner = ExcelUtil.handleDecimal(dataArray[15], 1);
-            String partingSurface = ExcelUtil.handleDecimal(dataArray[16], 1);
-            String splitPositionR1 = ExcelUtil.handleDecimal(dataArray[17], 1);
-            String splitPositionR2 = ExcelUtil.handleDecimal(dataArray[18], 1);
-            String gateType = dataArray[19];
-            String gateWidth = ExcelUtil.handleDecimal(dataArray[20], 2);
-            String gateThickness = ExcelUtil.handleDecimal(dataArray[21], 2);
-            String gateR1Thickness = ExcelUtil.handleDecimal(dataArray[22], 2);
-            String gateR2Thickness = ExcelUtil.handleDecimal(dataArray[23], 2);
-            String moldOpeningType = dataArray[24];
-
-            // 设置参数
-            moldData.setDepartment(department);
-            moldData.setCategory(category);
-            moldData.setLensNumber(lensNumber);
-            moldData.setProject(project);
-            moldData.setPartName(partName);
-            moldData.setMaterial(material);
-            moldData.setMoldNo(moldNo);
-            moldData.setMoldType(moldType);
-            moldData.setMoldTypeTotal(moldTypeTotal);
-            moldData.setMoldCorePassivation(moldCorePassivation);
-            moldData.setRunnerType(runnerType);
-            moldData.setCavityInnerDiameter(cavityInnerDiameter);
-            moldData.setCavityInnerDiameterRange(cavityInnerDiameterRange);
-            moldData.setFirstRunner(firstRunner);
-            moldData.setSecondRunner(secondRunner);
-            moldData.setThirdRunner(thirdRunner);
-            moldData.setPartingSurface(partingSurface);
-            moldData.setSplitPositionR1(splitPositionR1);
-            moldData.setSplitPositionR2(splitPositionR2);
-            moldData.setGateType(gateType);
-            moldData.setGateWidth(gateWidth);
-            moldData.setGateThickness(gateThickness);
-            moldData.setGateR1Thickness(gateR1Thickness);
-            moldData.setGateR2Thickness(gateR2Thickness);
-            moldData.setMoldOpeningType(moldOpeningType);
-
-            this.saveOrUpdate(moldData);
-
+        } catch (Exception e) {
+            throw new BusinessException("第" + line + "行保存数据失败！" + e.getMessage());
+        } finally {
             // 上传之后强制同步数据
             moldDataMapper.syncData();
             moldFlowMapper.syncMoldType();
             shapingResultDataMapper.syncMoldType();
             processConditionDataMapper.syncMoldType();
-        }
 
+        }
     }
 
     @Override
@@ -226,15 +232,16 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
         return moldDatas;
     }
 
-    private MoldData getMoldData(String category, String project, String partName, String material, String department, String lensNumber) {
+    @Override
+    public void deleteData() {
+        moldDataMapper.deleteData();
+    }
+
+    private MoldData getMoldData(String project, String partName) {
 
         QueryWrapper<MoldData> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(StringUtils.isNotBlank(category), "category", category)
-                .eq(StringUtils.isNotBlank(project), "project", project)
-                .eq(StringUtils.isNotBlank(partName), "part_name", partName)
-                .eq(StringUtils.isNotBlank(material), "material", material)
-                .eq(StringUtils.isNotBlank(department), "department", department)
-                .eq(StringUtils.isNotBlank(lensNumber), "lens_number", lensNumber);
+        queryWrapper.eq(StringUtils.isNotBlank(project), "project", project)
+                .eq(StringUtils.isNotBlank(partName), "part_name", partName);
 
         List<MoldData> moldDataList = moldDataMapper.selectList(queryWrapper);
         if (moldDataList != null && moldDataList.size() > 0) {
@@ -242,4 +249,5 @@ public class MoldDataService extends ServiceImpl<MoldDataMapper, MoldData> imple
         }
         return null;
     }
+
 }

@@ -26,4 +26,8 @@ public interface ShapingResultDataMapper extends BaseMapper<ShapingResultData> {
             "FROM t_shaping_result_data srd,t_mold_data tmd\n" +
             "WHERE srd.project=tmd.project AND srd.part_name=tmd.part_name")
     void syncMoldType();
+
+
+    @Update("TRUNCATE TABLE t_shaping_result_data")
+    void deleteData();
 }

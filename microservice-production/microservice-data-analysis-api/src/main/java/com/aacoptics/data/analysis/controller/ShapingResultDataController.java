@@ -311,4 +311,12 @@ public class ShapingResultDataController {
         return Result.success(shapingResultDataService.getLensNumber());
     }
 
+    @ApiOperation(value = "清空数据", notes = "清空数据")
+    @DeleteMapping(value = "/deleteData")
+    public Result deleteData() {
+        shapingResultDataService.deleteData();
+        return Result.success();
+    }
+
+
 }

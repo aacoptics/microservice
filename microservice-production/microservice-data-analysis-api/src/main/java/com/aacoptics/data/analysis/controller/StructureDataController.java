@@ -239,5 +239,12 @@ public class StructureDataController {
         return Result.success(structureDataService.getLensNumber());
     }
 
+    @ApiOperation(value = "清空数据", notes = "清空数据")
+    @DeleteMapping(value = "/deleteData")
+    public Result deleteData() {
+        structureDataService.deleteData();
+        return Result.success();
+    }
+
 
 }

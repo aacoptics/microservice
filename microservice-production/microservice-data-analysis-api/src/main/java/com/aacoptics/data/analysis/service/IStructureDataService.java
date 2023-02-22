@@ -105,4 +105,9 @@ public interface IStructureDataService extends IService<StructureData> {
      */
     List<StructureData> getLensNumber();
 
+    /**
+     *  清空数据表
+     */
+    void deleteData();
+
 }

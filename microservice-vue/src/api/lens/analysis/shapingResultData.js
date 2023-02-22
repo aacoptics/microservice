@@ -149,4 +149,15 @@ export function getLensNumber() {
     })
 }
 
+// 清空数据
+export function deleteData() {
+    return request({
+        url: `/moldflow-data-analysis/shapingResultData/deleteData`,
+        method: 'delete',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 
